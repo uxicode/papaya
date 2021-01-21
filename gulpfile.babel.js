@@ -6,7 +6,6 @@ import watch from 'gulp-watch';
 import autoPrefixer from 'gulp-autoprefixer';
 import sourceMaps from 'gulp-sourcemaps';
 import Fiber from 'fibers';
-import _ from 'lodash';
 
 
 const autoPreFixerBrowsers = ["last 4 version", "not IE 8"];
