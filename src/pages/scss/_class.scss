@@ -198,7 +198,7 @@
               padding-top:90px;
               font-size:16px;
               color:#c9cad5;
-              background:url(../../dist/images/class.png) no-repeat center top;
+              background:url(../images/class.png) no-repeat center top;
             }
           }
         }
@@ -402,12 +402,12 @@
             padding:15px 0 15px 74px;
             color:#57576d;
 
-            &.type1 {background:url(../../dist/images/classhome.png) no-repeat 34px 12px;}
-            &.type2 {background:url(../../dist/images/classnote.png) no-repeat 34px 12px;}
-            &.type3 {background:url(../../dist/images/classnote.png) no-repeat 34px 12px;}
-            &.type4 {background:url(../../dist/images/classnote.png) no-repeat 34px 12px;}
-            &.type5 {background:url(../../dist/images/classnote.png) no-repeat 34px 12px;}
-            &.type6 {background:url(../../dist/images/classnote.png) no-repeat 34px 12px;}
+            &.type1 {background:url(../images/classhome.png) no-repeat 34px 12px;}
+            &.type2 {background:url(../images/classnote.png) no-repeat 34px 12px;}
+            &.type3 {background:url(../images/classnote.png) no-repeat 34px 12px;}
+            &.type4 {background:url(../images/classnote.png) no-repeat 34px 12px;}
+            &.type5 {background:url(../images/classnote.png) no-repeat 34px 12px;}
+            &.type6 {background:url(../images/classnote.png) no-repeat 34px 12px;}
 
             &.active, &:hover {
               color:#0f0f15;
@@ -479,12 +479,12 @@
               height:18px;
               top:0;
               left:0;
-              background:url(../../dist/images/star.png) no-repeat left top -2px/ 100% 100%;
+              background:url(../images/star.png) no-repeat left top -2px/ 100% 100%;
             }
 
             &.crown {
               &:before {
-                background:url(../../dist/images/bg-crown.png) no-repeat left top/ 100% 100%;
+                background:url(../images/bg-crown.png) no-repeat left top/ 100% 100%;
               }
             }
           }
@@ -606,7 +606,7 @@
             top:50%;
             left:12px;
             transform:translateY(-50%);
-            background:url(../../dist/images/pic7.png) no-repeat;
+            background:url(../images/pic7.png) no-repeat;
           }
         }
       }
@@ -615,7 +615,7 @@
         padding:14px 20px 14px 48px;
         border-radius: 5px;
         border: solid 1px #c9cad5;
-        background:url(../../dist/images/star.png) no-repeat left 23px top 14px; //icon 수정필요
+        background:url(../images/star.png) no-repeat left 23px top 14px; //icon 수정필요
 
         li{
           color:#57576d;
@@ -637,7 +637,7 @@
           height:24px;
           top:12px;
           left:12px;
-          background:url(../../dist/images/pic6.png) no-repeat;
+          background:url(../images/pic6.png) no-repeat;
         }
 
         .vote-tit {
@@ -778,7 +778,7 @@
         background-repeat:no-repeat;
         background-position:30px 30px;
 
-        &.cal {background-image: url(../../dist/images/btn-round-cal.svg)}
+        &.cal {background-image: url(../images/btn-round-cal.svg)}
       }
 
       .fd-foot {
@@ -859,24 +859,24 @@
           &:last-child {margin-right:0;}
 
           &.type1 {
-            background:url(../../dist/images/school.png) no-repeat top 18px center;
+            background:url(../images/school.png) no-repeat top 18px center;
 
             &.active {
-              background:url(../../dist/images/school-on.png) no-repeat top 18px center;
+              background:url(../images/school-on.png) no-repeat top 18px center;
             }
           }
           &.type2 {
-            background:url(../../dist/images/institute.png) no-repeat top 18px center;
+            background:url(../images/institute.png) no-repeat top 18px center;
 
             &.active {
-              background:url(../../dist/images/institute-on.png) no-repeat top 18px center;
+              background:url(../images/institute-on.png) no-repeat top 18px center;
             }
           }
           &.type3 {
-            background:url(../../dist/images/group.png) no-repeat top 18px center;
+            background:url(../images/group.png) no-repeat top 18px center;
 
             &.active {
-              background:url(../../dist/images/group-on.png) no-repeat top 18px center;
+              background:url(../images/group-on.png) no-repeat top 18px center;
             }
           }
         }

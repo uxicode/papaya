@@ -16275,7 +16275,7 @@
     padding-top: 90px;
     font-size: 16px;
     color: #c9cad5;
-    background: url(../../dist/images/class.png) no-repeat center top;
+    background: url(../images/class.png) no-repeat center top;
 }
 
 .classes .class-photo {
@@ -16490,27 +16490,27 @@
 }
 
 .classes .class-home .class-menu .menu-list li a.type1 {
-    background: url(../../dist/images/classhome.png) no-repeat 34px 12px;
+    background: url(../images/classhome.png) no-repeat 34px 12px;
 }
 
 .classes .class-home .class-menu .menu-list li a.type2 {
-    background: url(../../dist/images/classnote.png) no-repeat 34px 12px;
+    background: url(../images/classnote.png) no-repeat 34px 12px;
 }
 
 .classes .class-home .class-menu .menu-list li a.type3 {
-    background: url(../../dist/images/classnote.png) no-repeat 34px 12px;
+    background: url(../images/classnote.png) no-repeat 34px 12px;
 }
 
 .classes .class-home .class-menu .menu-list li a.type4 {
-    background: url(../../dist/images/classnote.png) no-repeat 34px 12px;
+    background: url(../images/classnote.png) no-repeat 34px 12px;
 }
 
 .classes .class-home .class-menu .menu-list li a.type5 {
-    background: url(../../dist/images/classnote.png) no-repeat 34px 12px;
+    background: url(../images/classnote.png) no-repeat 34px 12px;
 }
 
 .classes .class-home .class-menu .menu-list li a.type6 {
-    background: url(../../dist/images/classnote.png) no-repeat 34px 12px;
+    background: url(../images/classnote.png) no-repeat 34px 12px;
 }
 
 .classes .class-home .class-menu .menu-list li a.active, .classes .class-home .class-menu .menu-list li a:hover {
@@ -16591,11 +16591,11 @@
     height: 18px;
     top: 0;
     left: 0;
-    background: url(../../dist/images/star.png) no-repeat left top -2px/100% 100%;
+    background: url(../images/star.png) no-repeat left top -2px/100% 100%;
 }
 
 .classes .class-feed .fd-writer.type2 .writer .name.crown:before {
-    background: url(../../dist/images/bg-crown.png) no-repeat left top/100% 100%;
+    background: url(../images/bg-crown.png) no-repeat left top/100% 100%;
 }
 
 .classes .class-feed .feed-item {
@@ -16719,14 +16719,14 @@
     -webkit-transform: translateY(-50%);
         -ms-transform: translateY(-50%);
             transform: translateY(-50%);
-    background: url(../../dist/images/pic7.png) no-repeat;
+    background: url(../images/pic7.png) no-repeat;
 }
 
 .classes .class-feed .fd-inner .schedule-list {
     padding: 14px 20px 14px 48px;
     border-radius: 5px;
     border: solid 1px #c9cad5;
-    background: url(../../dist/images/star.png) no-repeat left 23px top 14px;
+    background: url(../images/star.png) no-repeat left 23px top 14px;
 }
 
 .classes .class-feed .fd-inner .schedule-list li {
@@ -16749,7 +16749,7 @@
     height: 24px;
     top: 12px;
     left: 12px;
-    background: url(../../dist/images/pic6.png) no-repeat;
+    background: url(../images/pic6.png) no-repeat;
 }
 
 .classes .class-feed .fd-inner .vote-area .vote-tit {
@@ -16896,7 +16896,7 @@
 }
 
 .classes .class-feed.home .feed-item.cal {
-    background-image: url(../../dist/images/btn-round-cal.svg);
+    background-image: url(../images/btn-round-cal.svg);
 }
 
 .classes .class-feed.home .fd-foot {
@@ -16964,27 +16964,27 @@
 }
 
 .classes .class-created .class-type .type-list li.type1 {
-    background: url(../../dist/images/school.png) no-repeat top 18px center;
+    background: url(../images/school.png) no-repeat top 18px center;
 }
 
 .classes .class-created .class-type .type-list li.type1.active {
-    background: url(../../dist/images/school-on.png) no-repeat top 18px center;
+    background: url(../images/school-on.png) no-repeat top 18px center;
 }
 
 .classes .class-created .class-type .type-list li.type2 {
-    background: url(../../dist/images/institute.png) no-repeat top 18px center;
+    background: url(../images/institute.png) no-repeat top 18px center;
 }
 
 .classes .class-created .class-type .type-list li.type2.active {
-    background: url(../../dist/images/institute-on.png) no-repeat top 18px center;
+    background: url(../images/institute-on.png) no-repeat top 18px center;
 }
 
 .classes .class-created .class-type .type-list li.type3 {
-    background: url(../../dist/images/group.png) no-repeat top 18px center;
+    background: url(../images/group.png) no-repeat top 18px center;
 }
 
 .classes .class-created .class-type .type-list li.type3.active {
-    background: url(../../dist/images/group-on.png) no-repeat top 18px center;
+    background: url(../images/group-on.png) no-repeat top 18px center;
 }
 
 .login {
@@ -17001,7 +17001,7 @@
 
 .login .login-form {
     margin-top: 40px;
-    background: url(../../dist/images/illust-login.png) no-repeat left bottom 94px;
+    background: url(../images/illust-login.png) no-repeat left bottom 94px;
 }
 
 .login .login-form .form-cnt {
@@ -17128,11 +17128,11 @@
 }
 
 .login .login-form .form-cnt .find-card.result {
-    background: url(../../dist/images/illust-confirm.png) no-repeat bottom center;
+    background: url(../images/illust-confirm.png) no-repeat bottom center;
 }
 
 .login .login-form .form-cnt .find-card.send {
-    background: url(../../dist/images/illust-email.png) no-repeat bottom center;
+    background: url(../images/illust-email.png) no-repeat bottom center;
 }
 
 .login .login-form .form-cnt .reset-pw-input {
@@ -17200,7 +17200,7 @@
     font-size: 0;
     text-indent: -9999px;
     overflow: hidden;
-    background: #fff url(../../dist/images/arrow-right.png) no-repeat 13px 13px;
+    background: #fff url(../images/arrow-right.png) no-repeat 13px 13px;
     border-radius: 50%;
 }
 
@@ -17299,7 +17299,7 @@
     -webkit-transform: translateY(-50%);
         -ms-transform: translateY(-50%);
             transform: translateY(-50%);
-    background: url(../../dist/images/bg-crown.png) no-repeat left/100% 100%;
+    background: url(../images/bg-crown.png) no-repeat left/100% 100%;
 }
 
 .search .result-cnt .result-table table tr th .class-tag, .search .result-cnt .result-table table tr td .class-tag {

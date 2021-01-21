@@ -16290,7 +16290,7 @@ body {
 .classpage .header-inner .logo a {
     width: 80px;
     height: 18px;
-    background: url(../../dist/images/logo-logotype-red.png) no-repeat 0 0;
+    background: url(../images/logo-logotype-red.png) no-repeat 0 0;
 }
 
 /*===========================================================================
@@ -16330,7 +16330,7 @@ body {
     float: left;
     width: 77px;
     height: 14px;
-    background: url(../../dist/images/logo-inition.png) no-repeat 0 0;
+    background: url(../images/logo-inition.png) no-repeat 0 0;
 }
 
 #footer .footer-inner .footer-left {
@@ -16378,7 +16378,7 @@ body {
     float: left;
     width: 77px;
     height: 14px;
-    background: url(../../dist/images/logo-inition-white.png) no-repeat 0 0;
+    background: url(../images/logo-inition-white.png) no-repeat 0 0;
 }
 
 #footer .footer-inner .footer-left {
@@ -16613,7 +16613,7 @@ body {
 }
 
 .select-wrap .arrow-g {
-    background: url(../../dist/images/arrow-down-g.png) no-repeat 230px 13px;
+    background: url(../images/arrow-down-g.png) no-repeat 230px 13px;
 }
 
 .wrapper-progressBar {
@@ -16872,7 +16872,7 @@ body {
 }
 
 .btn.basic.ico-btn .icon.heart {
-    background: url(../../dist/images/heart.png) no-repeat;
+    background: url(../images/heart.png) no-repeat;
 }
 
 .btn.basic.ico-btn.ico-right {
@@ -17178,7 +17178,7 @@ label {
 }
 
 .btn-checkbox input:checked + label:after {
-    background: url(../../dist/images/check.png) no-repeat center;
+    background: url(../images/check.png) no-repeat center;
     opacity: 1;
 }
 
@@ -17271,7 +17271,7 @@ label {
     -webkit-transition: all 0.2s ease;
     -o-transition: all 0.2s ease;
     transition: all 0.2s ease;
-    background: url(../../dist/images/arrowdown.png) no-repeat center;
+    background: url(../images/arrowdown.png) no-repeat center;
 }
 
 .accordion .accordion-tit button.accordion-btn.collapsed {
@@ -17304,7 +17304,7 @@ label {
     -webkit-transition: all 0.2s ease;
     -o-transition: all 0.2s ease;
     transition: all 0.2s ease;
-    background: url(../../dist/images/arrowdown.png) no-repeat center;
+    background: url(../images/arrowdown.png) no-repeat center;
 }
 
 .accordion .accordion-tit a.accordion-btn.collapsed:after {
@@ -17489,7 +17489,7 @@ header .breadcrumbs .breadcrumbs-inner ul li:last-child:after {
 
 .contents .contents-inner .main-txt {
     padding: 80px 0 180px 30px;
-    background: url(../../dist/images/illust-welcome.png) no-repeat right top;
+    background: url(../images/illust-welcome.png) no-repeat right top;
 }
 
 .contents .contents-inner .main-txt.pd-desc {
@@ -17654,7 +17654,7 @@ header .breadcrumbs .breadcrumbs-inner ul li:last-child:after {
     -webkit-transform: translateX(-50%);
         -ms-transform: translateX(-50%);
             transform: translateX(-50%);
-    background: url(../../dist/images/illust-confirm-small.png) no-repeat center bottom;
+    background: url(../images/illust-confirm-small.png) no-repeat center bottom;
 }
 
 .contents .all-form .form-cnt .form-card.bg2:after {
@@ -17668,7 +17668,7 @@ header .breadcrumbs .breadcrumbs-inner ul li:last-child:after {
     -webkit-transform: translateX(-50%);
         -ms-transform: translateX(-50%);
             transform: translateX(-50%);
-    background: url(../../dist/images/illust-welcome-small.png) no-repeat center bottom;
+    background: url(../images/illust-welcome-small.png) no-repeat center bottom;
 }
 
 .contents .all-form .all-form-data {

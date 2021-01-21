@@ -21,7 +21,7 @@
     width: 667px;
     height: 378px;
     margin-top: 200px;
-    background: url(../../dist/images/illust-login.png) no-repeat 0 0;
+    background: url(../images/illust-login.png) no-repeat 0 0;
 }
 
 .login .con-inner .login-main-wrap {
@@ -418,7 +418,7 @@
     right: 0;
     width: 390px;
     height: 402px;
-    background: url(../../dist/images/illust-welcome.png) no-repeat 0 0;
+    background: url(../images/illust-welcome.png) no-repeat 0 0;
 }
 
 .signup-box {
@@ -464,7 +464,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: url(../../dist/images/arrow-right.png) no-repeat 13px 13px #fff;
+    background: url(../images/arrow-right.png) no-repeat 13px 13px #fff;
 }
 
 .membertxt {
@@ -549,7 +549,7 @@
 .contents-list > input[type="checkbox"]:checked + label {
     width: 20px;
     height: 20px;
-    background: url(../../dist/images/check.png) no-repeat -9px -9px;
+    background: url(../images/check.png) no-repeat -9px -9px;
     border: 1.5px solid #57576d;
 }
 
@@ -562,11 +562,11 @@
 }
 
 .btn-check {
-    background: url(../../dist/images/arrowdown.png) no-repeat right;
+    background: url(../images/arrowdown.png) no-repeat right;
 }
 
 .btn-check.on {
-    background: url(../../dist/images/arrow-up.png) no-repeat right;
+    background: url(../images/arrow-up.png) no-repeat right;
 }
 
 .btn-box {
@@ -671,7 +671,7 @@
     width: 233px;
     height: 199px;
     margin-top: 20px;
-    background: url(../../dist/images/illust-confirm-small.png) no-repeat 0 0;
+    background: url(../images/illust-confirm-small.png) no-repeat 0 0;
 }
 
 .signUp-form {
@@ -787,7 +787,7 @@
 .form-checkbox > input[type="checkbox"]:checked + label {
     width: 23px;
     height: 23px;
-    background: url(../../dist/images/arrowdown.png) no-repeat -2px -3px;
+    background: url(../images/arrowdown.png) no-repeat -2px -3px;
 }
 
 .btn-agree {
@@ -907,7 +907,7 @@
     width: 50px;
     height: 50px;
     margin-bottom: 10px;
-    background: url(../../dist/images/popup-icon.png) no-repeat 0 0;
+    background: url(../images/popup-icon.png) no-repeat 0 0;
 }
 
 .container-popup .pop-txt {
@@ -1041,7 +1041,7 @@
     right: 0;
     width: 390px;
     height: 402px;
-    background: url(../../dist/images/illust-welcome.png) no-repeat 0 0;
+    background: url(../images/illust-welcome.png) no-repeat 0 0;
 }
 
 .class-group {
@@ -1076,7 +1076,7 @@
     display: inline-block;
     width: 40px;
     height: 20px;
-    background: url(../../dist/images/arrowdown.png) no-repeat 8px 2px;
+    background: url(../images/arrowdown.png) no-repeat 8px 2px;
 }
 
 .class-group .class-g-list {
@@ -1104,7 +1104,7 @@
     margin: 0 auto 10px auto;
     width: 80px;
     height: 80px;
-    background: url(../../dist/images/class.png) no-repeat 0 0;
+    background: url(../images/class.png) no-repeat 0 0;
 }
 
 .class-group .class-g-list .new-class .new-class-txt {
@@ -1137,7 +1137,7 @@
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: url(../../dist/images/bg-icon.png) no-repeat 0 0;
+    background: url(../images/bg-icon.png) no-repeat 0 0;
 }
 
 .class-group .class-g-list .classes .class-txt .txt-p {
@@ -1212,11 +1212,11 @@
     display: inline-block;
     width: 40px;
     height: 40px;
-    background: url(../../dist/images/btn-round.png) no-repeat 0 0;
+    background: url(../images/btn-round.png) no-repeat 0 0;
 }
 
 .box-group li a.image-on1 {
-    background: url(../../dist/images/school-on.png) no-repeat 53px 15px;
+    background: url(../images/school-on.png) no-repeat 53px 15px;
     color: #0f0f15;
     font-weight: 500;
 }
@@ -1274,13 +1274,13 @@
 }
 
 .box-group li a.image-on2 {
-    background: url(../../dist/images/institute-on.png) no-repeat 53px 15px;
+    background: url(../images/institute-on.png) no-repeat 53px 15px;
     color: #0f0f15;
     font-weight: 500;
 }
 
 .box-group li a.image-on3 {
-    background: url(../../dist/images/group-on.png) no-repeat 53px 15px;
+    background: url(../images/group-on.png) no-repeat 53px 15px;
     color: #0f0f15;
     font-weight: 500;
 }
@@ -1398,7 +1398,7 @@
     right: 50px;
     width: 24px;
     height: 24px;
-    background: url(../../dist/images/arrowdown.png) no-repeat 0 0;
+    background: url(../images/arrowdown.png) no-repeat 0 0;
 }
 
 .inform-box .bg-notice {
@@ -1415,7 +1415,7 @@
     right: 0;
     width: 15px;
     height: 15px;
-    background: url(../../dist/images/notice.png) no-repeat 0 0;
+    background: url(../images/notice.png) no-repeat 0 0;
 }
 
 .inform-box .radio-box {
@@ -1430,7 +1430,7 @@
     display: block;
     width: 240px;
     height: 232px;
-    background: url(../../dist/images/illust-welcome-small.png) no-repeat 0 0;
+    background: url(../images/illust-welcome-small.png) no-repeat 0 0;
     margin: 20px auto;
 }
 
@@ -1520,7 +1520,7 @@
     margin: 0 auto;
     width: 80px;
     height: 80px;
-    background: url(../../dist/images/bg-icon.png) no-repeat 0 0;
+    background: url(../images/bg-icon.png) no-repeat 0 0;
 }
 
 .classpage .con-size .left-group .left-box .left-maintxt {
@@ -1604,7 +1604,7 @@
     display: inline-block;
     width: 16px;
     height: 16px;
-    background: url(../../dist/images/heart.png) no-repeat 0 0;
+    background: url(../images/heart.png) no-repeat 0 0;
 }
 
 .classpage .con-size .left-group .class-box {
@@ -1633,7 +1633,7 @@
     left: 0;
     width: 150px;
     height: 50px;
-    background: url(../../dist/images/classhome.png) no-repeat 30px 12px;
+    background: url(../images/classhome.png) no-repeat 30px 12px;
 }
 
 .classpage .con-size .left-group .class-box .class-list li {
@@ -1656,7 +1656,7 @@
     left: 0;
     width: 150px;
     height: 50px;
-    background: url(../../dist/images/classnote.png) no-repeat 30px 12px;
+    background: url(../images/classnote.png) no-repeat 30px 12px;
 }
 
 .classpage .con-size .right-group {
@@ -1688,7 +1688,7 @@
     left: 25px;
     width: 40px;
     height: 40px;
-    background: url(../../dist/images/notice2.png) no-repeat 0 0;
+    background: url(../images/notice2.png) no-repeat 0 0;
 }
 
 .classpage .con-size .right-group .notice-list > span {
@@ -1725,7 +1725,7 @@
     display: inline-block;
     width: 32px;
     height: 32px;
-    background: url(../../dist/images/date-round.png) no-repeat 0 0;
+    background: url(../images/date-round.png) no-repeat 0 0;
     position: absolute;
     top: 29px;
     left: 30px;
@@ -1760,7 +1760,7 @@
     height: 19px;
     content: "";
     clear: both;
-    background: url(../../dist/images/star.png) no-repeat 0 0;
+    background: url(../images/star.png) no-repeat 0 0;
 }
 
 .classpage .con-size .right-group .notice-contents .notice-txt .time-txt {
@@ -1832,7 +1832,7 @@
     display: inline-block;
     width: 24px;
     height: 24px;
-    background: url(../../dist/images/pic7.png) no-repeat;
+    background: url(../images/pic7.png) no-repeat;
 }
 
 .classpage .con-size .right-group .notice-contents .link-wrap > span .pd-left2 {
@@ -1849,7 +1849,7 @@
     display: inline-block;
     width: 24px;
     height: 24px;
-    background: url(../../dist/images/pic6.png) no-repeat;
+    background: url(../images/pic6.png) no-repeat;
 }
 
 .classpage .con-size .right-group .notice-contents .txt-wrap {
@@ -1885,7 +1885,7 @@
     left: 25px;
     width: 40px;
     height: 40px;
-    background: url(../../dist/images/notice2.png) no-repeat 0 0;
+    background: url(../images/notice2.png) no-repeat 0 0;
 }
 
 .right-group-1 .notice-list-1 > span {
@@ -1933,7 +1933,7 @@
     height: 19px;
     content: "";
     clear: both;
-    background: url(../../dist/images/star.png) no-repeat 0 0;
+    background: url(../images/star.png) no-repeat 0 0;
 }
 
 .right-group-1 .conbox .bg-crown {
@@ -1949,7 +1949,7 @@
     height: 19px;
     content: "";
     clear: both;
-    background: url(../../dist/images/bg-crown.png) no-repeat 0 0;
+    background: url(../images/bg-crown.png) no-repeat 0 0;
 }
 
 .right-group-1 .conbox .more {
@@ -2082,7 +2082,7 @@
     right: 0;
     width: 390px;
     height: 402px;
-    background: url(../../dist/images/illust-welcome.png) no-repeat 0 0;
+    background: url(../images/illust-welcome.png) no-repeat 0 0;
 }
 
 .all-notice .con-size {
@@ -2130,7 +2130,7 @@
     left: 0;
     width: 150px;
     height: 50px;
-    background: url(../../dist/images/profile-class.png) no-repeat 28px 15px;
+    background: url(../images/profile-class.png) no-repeat 28px 15px;
 }
 
 .all-notice .con-size .left-group .class-box .class-list li {
@@ -2152,7 +2152,7 @@
     left: 0;
     width: 150px;
     height: 50px;
-    background: url(../../dist/images/profile-class.png) no-repeat 28px 13px;
+    background: url(../images/profile-class.png) no-repeat 28px 13px;
 }
 
 .all-notice .con-size .right-group {
@@ -2188,7 +2188,7 @@
     left: 15px;
     width: 40px;
     height: 40px;
-    background: url(../../dist/images/pic8.png) no-repeat 0 0;
+    background: url(../images/pic8.png) no-repeat 0 0;
 }
 
 .all-notice .con-size .right-group .notice-contents {
@@ -2236,7 +2236,7 @@
     height: 15px;
     content: "";
     clear: both;
-    background: url(../../dist/images/star.png) no-repeat 0 0;
+    background: url(../images/star.png) no-repeat 0 0;
 }
 
 .all-notice .con-size .right-group .notice-contents .notice-txt > span .time-txt {
@@ -2311,7 +2311,7 @@
     display: inline-block;
     width: 24px;
     height: 24px;
-    background: url(../../dist/images/pic7.png) no-repeat;
+    background: url(../images/pic7.png) no-repeat;
 }
 
 .all-notice .con-size .right-group .notice-contents .link-wrap > span .pd-left2 {
@@ -2328,7 +2328,7 @@
     display: inline-block;
     width: 24px;
     height: 24px;
-    background: url(../../dist/images/pic6.png) no-repeat;
+    background: url(../images/pic6.png) no-repeat;
 }
 
 .all-notice .con-size .right-group .notice-contents .link-wrap .vote-txt {
@@ -2407,7 +2407,7 @@
     display: inline-block;
     width: 18px;
     height: 18px;
-    background: url(../../dist/images/pic9.png) no-repeat 0 0;
+    background: url(../images/pic9.png) no-repeat 0 0;
 }
 
 .after-line:after {
@@ -2439,7 +2439,7 @@
 .location .lo-list li {
     display: inline-block;
     padding-left: 24px;
-    background: url(../../dist/images/arrow-right-small.png) no-repeat 2px 11px;
+    background: url(../images/arrow-right-small.png) no-repeat 2px 11px;
 }
 
 .box-group {
@@ -2464,15 +2464,15 @@
 }
 
 .box-group li a.classimage1 {
-    background: url(../../dist/images/school.png) no-repeat 53px 15px;
+    background: url(../images/school.png) no-repeat 53px 15px;
 }
 
 .box-group li a.classimage2 {
-    background: url(../../dist/images/institute.png) no-repeat 53px 15px;
+    background: url(../images/institute.png) no-repeat 53px 15px;
 }
 
 .box-group li a.classimage3 {
-    background: url(../../dist/images/group.png) no-repeat 53px 15px;
+    background: url(../images/group.png) no-repeat 53px 15px;
 }
 
 .pd-box {
@@ -2567,7 +2567,7 @@
 }
 
 .right-group .scd-contents .round-select .bg-arrow {
-    background: url(../../dist/images/arrow-down-w.png) no-repeat 50px 9px;
+    background: url(../images/arrow-down-w.png) no-repeat 50px 9px;
 }
 
 .right-group .scd-con2 {

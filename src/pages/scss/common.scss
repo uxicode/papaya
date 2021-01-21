@@ -252,7 +252,7 @@ body {
       a {
         width: 80px;
         height: 18px;
-        background: url(../../dist/images/logo-logotype-red.png) no-repeat 0 0;
+        background: url(../images/logo-logotype-red.png) no-repeat 0 0;
       }
     }
   }
@@ -310,7 +310,7 @@ body {
       float: left;
       width: 77px;
       height: 14px;
-      background: url(../../dist/images/logo-inition.png) no-repeat 0 0;
+      background: url(../images/logo-inition.png) no-repeat 0 0;
     }
     .footer-left {
       display: inline-block;
@@ -351,7 +351,7 @@ body {
       float: left;
       width: 77px;
       height: 14px;
-      background: url(../../dist/images/logo-inition-white.png) no-repeat 0 0;
+      background: url(../images/logo-inition-white.png) no-repeat 0 0;
     }
     .footer-left {
       display: inline-block;
@@ -564,7 +564,7 @@ body {
     border-radius: 20px;
   }
   .arrow-g {
-    background: url(../../dist/images/arrow-down-g.png) no-repeat 230px 13px;
+    background: url(../images/arrow-down-g.png) no-repeat 230px 13px;
   }
 }
 
@@ -757,7 +757,7 @@ body {
         height:18px;
         //background-color:#ff4d4d; // 제거 필요
 
-        &.heart {background:url(../../dist/images/heart.png) no-repeat;}
+        &.heart {background:url(../images/heart.png) no-repeat;}
       }
 
       &.ico-right {
@@ -1044,7 +1044,7 @@ label {
           background-color:#57576d;
         }
         &:after {
-          background:url(../../dist/images/check.png) no-repeat center; //이미지 수정 필요
+          background:url(../images/check.png) no-repeat center; //이미지 수정 필요
           opacity:1;
         }
       }
@@ -1137,7 +1137,7 @@ label {
       transform: translateY(-50%) rotate(-180deg);
       -webkit-transition: all 0.5s ease;
       transition: all 0.2s ease;
-      background:url(../../dist/images/arrowdown.png) no-repeat center;
+      background:url(../images/arrowdown.png) no-repeat center;
 
       &.collapsed {
         transform: translateY(-50%) rotate(0deg);
@@ -1161,7 +1161,7 @@ label {
         transform: translateY(-50%) rotate(-180deg);
         -webkit-transition: all 0.5s ease;
         transition: all 0.2s ease;
-        background:url(../../dist/images/arrowdown.png) no-repeat center;
+        background:url(../images/arrowdown.png) no-repeat center;
       }
 
       &.collapsed {
@@ -1349,7 +1349,7 @@ header {
 
     .main-txt {
       padding:80px 0 180px 30px;
-      background:url(../../dist/images/illust-welcome.png) no-repeat right top;
+      background:url(../images/illust-welcome.png) no-repeat right top;
 
       &.pd-desc {
         padding:80px 0 200px 0;
@@ -1511,7 +1511,7 @@ header {
             bottom:0;
             left:50%;
             transform:translateX(-50%);
-            background:url(../../dist/images/illust-confirm-small.png) no-repeat center bottom;
+            background:url(../images/illust-confirm-small.png) no-repeat center bottom;
           }
         }
 
@@ -1525,7 +1525,7 @@ header {
             bottom:0;
             left:50%;
             transform:translateX(-50%);
-            background:url(../../dist/images/illust-welcome-small.png) no-repeat center bottom;
+            background:url(../images/illust-welcome-small.png) no-repeat center bottom;
           }
         }
       }
