@@ -15,7 +15,7 @@ header,footer {
 
 .login-form {
   margin-top:40px;
-  background: url(../../assets/images/illust-login.png) no-repeat left bottom 94px;
+  //background: url(../../assets/images/illust-login.png) no-repeat left bottom 94px;
 
   .form-cnt {
     position:relative;
@@ -130,10 +130,10 @@ header,footer {
       }
 
       &.result {
-        background:url('../../assets/images/illust-confirm.png') no-repeat bottom center;
+        //background:url('../../assets/images/illust-confirm.png') no-repeat bottom center;
       }
       &.send {
-        background:url('../../assets/images/illust-email.png') no-repeat bottom center;
+        //background:url('../../assets/images/illust-email.png') no-repeat bottom center;
       }
     }
 

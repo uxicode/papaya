@@ -12,15 +12,13 @@ import './App.scss';
     },
     components: {
         AppHeader,
-        AppFooter
+        AppFooter,
     },
 })
 export  default class App extends Vue {
-
     private updated(){
         // @ts-ignore
         console.log('현재페이지 상태', this.pageHistory );
     }
-
 }
 

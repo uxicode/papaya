@@ -1,5 +1,5 @@
-import 'babel-polyfill'
-import 'es6-promise/auto' //적어도 Vuex 나 axios 를 사용하는 시점보다는 빨리 불러와야 정상 동작한다
+import 'babel-polyfill';
+import 'es6-promise/auto'; //적어도 Vuex 나 axios 를 사용하는 시점보다는 빨리 불러와야 정상 동작한다
 import Vue from 'vue';
 import App from './App';
 import router from './router';
