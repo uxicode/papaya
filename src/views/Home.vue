@@ -1,18 +1,28 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <p style="text-align:left">로그인 상태 : {{ isAuth  }}</p>
+    <p style="text-align:left">token : {{ tokenStatus }}</p>
+
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import {Vue, Component, Prop} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 
-export default {
-  name: 'Home',
-  components: {
-    HelloWorld
-  }
+const Auth = namespace('Auth');
+
+@Component
+export default class Home extends Vue {
+
+
+  @Auth.Getter
+  private isAuth!:boolean;
+
+  @Auth.Getter
+  private tokenStatus!:string | null;
+
+
 }
 </script>

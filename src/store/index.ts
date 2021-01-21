@@ -1,15 +1,19 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import AuthModule from '@/store/auth.module';
+import PageHistoryStatus from '@/store/PageHistoryStatus';
+import {GET_TOKEN} from '@/store/mutation-auth-types';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
+const store = new Vuex.Store({
+  state: {},
   modules: {
+    Auth: AuthModule,
+    PageHistoryStatus,
   },
 });
+
+const { token } = localStorage;
+store.commit(`Auth/${GET_TOKEN}`, token );
+export default store;

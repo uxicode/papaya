@@ -1,0 +1,619 @@
+@charset "utf-8";
+@import "./_variable.scss";
+
+/* css reset */
+html,
+body,
+div,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+sub,
+sup,
+tt,
+var,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+br,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+strong,
+time,
+mark,
+audio,
+video,
+button,
+input {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-touch-callout: none;
+  -webkit-touch-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 165, 181, 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+a {
+  display: inline-block;
+  text-decoration: none;
+  color: inherit;
+}
+
+a:link,
+a:visited {
+  text-decoration: none;
+}
+
+a:hover,
+a:active {
+  text-decoration: none;
+}
+
+address,
+em,
+i {
+  font-style: normal;
+}
+
+img {
+  border: none;
+  vertical-align: middle;
+}
+
+ol,
+ul,
+li {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+fieldset {
+  border: none;
+}
+
+legend,
+caption {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  visibility: hidden;
+  line-height: 0;
+  font-size: 0;
+  position: absolute;
+  left: -999px;
+}
+
+input,
+select,
+button,
+textarea {
+  outline: none;
+}
+
+textarea {
+  resize: none;
+}
+
+button,
+input[type="button"] {
+  padding: 0;
+  margin: 0;
+  border: none;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+input {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: middle;
+}
+
+input[type="text"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+button:focus {
+  outline: 0;
+}
+
+button {
+  background: none;
+}
+
+.clearfix {
+  *zoom: 1;
+}
+
+.clearfix:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+/*===========================================================================
+	FONT
+============================================================================*/
+html,
+body {
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #1d1d1d;
+  letter-spacing: -0.5px;
+  background-color: #f6f7fa;
+}
+
+//폰트컬러
+.color-57576d {
+  color: #57576d;
+}
+
+/*===========================================================================
+	HEADER
+============================================================================*/
+
+.wrapper-header {
+  width: 1040px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 10px 0;
+}
+.logo {
+  display: inline-block;
+}
+
+//4.5.1 클래스 페이지-홈 (빨간색 로고 사용)
+.classpage {
+  .header-inner {
+    .logo {
+      a {
+        width: 80px;
+        height: 18px;
+        background: url(../../dist/images/logo-logotype-red.png) no-repeat 0 0;
+      }
+    }
+  }
+}
+
+/*===========================================================================
+	container
+============================================================================*/
+
+// .container{
+//   width: 100%;
+//   min-height: 680px;
+//   margin-top: 40px;
+//   margin-bottom: 100px;
+// }
+.wrapper {
+  background-color: #1d1d4c;
+  width: 100%;
+  position: relative;
+}
+
+.container-fluid {
+  padding: 0;
+  width: 100%;
+}
+
+.con-mt {
+  margin-top: 40px;
+}
+
+// #container {
+//   width: 100%;
+//   min-height: 850px;
+//   height: calc(100vh - 280px);
+//   margin-top: 40px;
+// }
+/*===========================================================================
+	FOOTER
+============================================================================*/
+
+//2.
+#footer {
+  width: 100%;
+  height: 180px;
+  border-top: 1px solid #c9cad5;
+  .footer-inner {
+    padding: 30px 0;
+    width: 1040px;
+    margin: 0 auto;
+    .footer-logo {
+      float: left;
+      width: 77px;
+      height: 14px;
+      background: url(../../dist/images/logo-inition.png) no-repeat 0 0;
+    }
+    .footer-left {
+      display: inline-block;
+      margin-left: 60px;
+      .items {
+        float: left;
+        margin-right: 30px;
+        .item-txt {
+          font-size: 12px;
+          color: #57576d;
+        }
+      }
+    }
+    .footer-right {
+      float: right;
+      li {
+        float: left;
+        padding: 0 20px;
+        a {
+          font-size: 16px;
+          color: #57576d;
+        }
+      }
+    }
+  }
+}
+
+//3.
+#footer {
+  width: 100%;
+  height: 180px;
+  border-top: 1px solid #b0b0b84f;
+  .footer-inner {
+    padding: 30px 0;
+    width: 1040px;
+    margin: 0 auto;
+    .footer-logo-w {
+      float: left;
+      width: 77px;
+      height: 14px;
+      background: url(../../dist/images/logo-inition-white.png) no-repeat 0 0;
+    }
+    .footer-left {
+      display: inline-block;
+      margin-left: 60px;
+      .items {
+        float: left;
+        margin-right: 30px;
+        .item-txt-w {
+          opacity: 0.5;
+          font-size: 12px;
+          color: #ffffff;
+        }
+      }
+    }
+    .footer-right {
+      float: right;
+      li {
+        float: left;
+        padding: 0 20px;
+        .item-txt-w {
+          opacity: 0.5;
+          font-size: 16px;
+          color: #ffffff;
+        }
+      }
+    }
+  }
+}
+
+/*===========================================================================
+	component
+============================================================================*/
+
+//2.1.3 일반 회원가입 - 개인정보 입력
+
+.radio-list > input[type="radio"]:checked,
+.radio-list > input[type="radio"]:not(:checked) {
+  position: absolute;
+  left: -9999px;
+  z-index: -1;
+}
+.radio-list > input[type="radio"]:checked + label,
+.radio-list > input[type="radio"]:not(:checked) + label {
+  position: relative;
+  padding-left: 32px;
+  cursor: pointer;
+  font-weight: 400;
+  line-height: 24px;
+  display: inline-block;
+  opacity: 0.2;
+  color: #57576d;
+}
+.radio-list > input[type="radio"]:checked + label:before,
+.radio-list > input[type="radio"]:not(:checked) + label:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid #57576d;
+  border-radius: 50%;
+  background: #fff;
+}
+.radio-list > input[type="radio"]:checked + label:after,
+.radio-list > input[type="radio"]:not(:checked) + label:after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  background-color: #57576d;
+}
+.radio-list > input[type="radio"]:not(:checked) + label:after {
+  opacity: 0;
+  -webkit-transform: scale(0);
+  transform: scale(0);
+}
+.radio-list > input[type="radio"]:checked + label:after {
+  opacity: 1;
+  -webkit-transform: scale(1);
+  transform: scale(1);
+}
+// }
+
+//3.2.1 - 3.3.2 로그인 페이지 - 레디오버튼
+
+.find-wrap-txt > input[type="radio"]:checked,
+.find-wrap-txt > input[type="radio"]:not(:checked) {
+  position: absolute;
+  left: -9999px;
+  z-index: -1;
+}
+.find-wrap-txt > input[type="radio"]:checked + label,
+.find-wrap-txt > input[type="radio"]:not(:checked) + label {
+  position: relative;
+  padding-left: 32px;
+  cursor: pointer;
+  line-height: 24px;
+  display: inline-block;
+  color: #666;
+}
+.find-wrap-txt > input[type="radio"]:checked + label:before,
+.find-wrap-txt > input[type="radio"]:not(:checked) + label:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid #57576d;
+  border-radius: 50%;
+  background: #fff;
+}
+.find-wrap-txt > input[type="radio"]:checked + label:after,
+.find-wrap-txt > input[type="radio"]:not(:checked) + label:after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background: #57576d;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  border-radius: 50%;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+.find-wrap-txt > input[type="radio"]:not(:checked) + label:after {
+  opacity: 0;
+  -webkit-transform: scale(0);
+  transform: scale(0);
+}
+.find-wrap-txt > input[type="radio"]:checked + label:after {
+  opacity: 1;
+  -webkit-transform: scale(1);
+  transform: scale(1);
+}
+
+//4.3.2 새로운클래스 생성 - 레디오버튼
+
+.radio-box > input[type="radio"]:checked,
+.radio-box > input[type="radio"]:not(:checked) {
+  position: absolute;
+  left: -9999px;
+  z-index: -1;
+}
+.radio-box > input[type="radio"]:checked + label,
+.radio-box > input[type="radio"]:not(:checked) + label {
+  position: relative;
+  padding-left: 32px;
+  cursor: pointer;
+  line-height: 24px;
+  display: inline-block;
+  color: #666;
+}
+.radio-box > input[type="radio"]:checked + label:before,
+.radio-box > input[type="radio"]:not(:checked) + label:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid #57576d;
+  border-radius: 50%;
+  background: #fff;
+}
+.radio-box > input[type="radio"]:checked + label:after,
+.radio-box > input[type="radio"]:not(:checked) + label:after {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background: #57576d;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  border-radius: 50%;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+.radio-box > input[type="radio"]:not(:checked) + label:after {
+  opacity: 0;
+  -webkit-transform: scale(0);
+  transform: scale(0);
+}
+.radio-box > input[type="radio"]:checked + label:after {
+  opacity: 1;
+  -webkit-transform: scale(1);
+  transform: scale(1);
+}
+
+//select 4.5.1, 4.5.1.1 - 꿈꾸는 5학년 1반
+.select-wrap {
+  display: inline-block;
+  .option-list {
+    width: 266px;
+    height: 40px;
+    line-height: 42px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #0f0f15;
+    padding-left: 20px;
+    -webkit-appearance: none;
+    margin-left: 10px;
+    opacity: 0.8;
+    border-radius: 20px;
+  }
+  .arrow-g {
+    background: url(../../dist/images/arrow-down-g.png) no-repeat 230px 13px;
+  }
+}
+
+//스테퍼
+.wrapper-progressBar {
+  width: 100%;
+  margin: 20px 0 30px 0;
+}
+
+.progressBar {
+  overflow: hidden;
+  width: 110px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.progressBar li {
+  position: relative;
+  float: left;
+  width: 35px;
+}
+
+.progressBar li:before {
+  content: " ";
+  position: relative;
+  border-radius: 50%;
+  width: 6px;
+  height: 6px;
+  border: solid #0f0f15;
+  display: inline-block;
+  background-color: white;
+  z-index: 2;
+}
+
+.progressBar li:after {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: 3px;
+  width: 16px;
+  height: 1px;
+  background-color: #c9cad5;
+  z-index: 1;
+  margin-left: 24px;
+}
+
+.progressBar li:last-child:after {
+  content: none;
+}
+
+.progressBar li.active:before {
+  width: 19px;
+  height: 19px;
+  border: 7px solid #ff4d4d;
+}
+
+//end 스테퍼
