@@ -50,6 +50,7 @@ export default class AuthModule extends VuexModule{
     }
     @Action({commit: LOGIN, rawError:true})
     public login( payload:{ uid:string, password:string } ):Promise<any>{
+        console.log(payload);
         return AuthService.login(payload.uid, payload.password)
           .then((data: any) => {
               console.log(data);

@@ -11,6 +11,10 @@ export default class Login extends Vue {
 
   private userId: string = '';
   private userPw: string = '';
+  private STATUS_LOGIN: string = 'status_login';
+  private STATUS_FIND_ID: string = 'status_find_id';
+  private STATUS_PWD_RESET: string = 'status_pwd_reset';
+  private currentStatus: string = this.STATUS_LOGIN;
 
   @Auth.Getter
   private isAuth!:boolean;
@@ -42,6 +46,19 @@ export default class Login extends Vue {
     }).catch( ( error ) => {
       console.log(error);
     });
+  }
+
+ get loginStatus():boolean{
+    console.log(this.currentStatus===this.STATUS_LOGIN)
+    return this.currentStatus===this.STATUS_LOGIN;
+ }
+
+ get findStatus():boolean{
+    return ( this.currentStatus === this.STATUS_FIND_ID ) || (this.currentStatus === this.STATUS_PWD_RESET );
+ }
+
+  private setAccountStatus( status:string ):void{
+    this.currentStatus=status;
   }
 
 }

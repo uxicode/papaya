@@ -32,12 +32,12 @@ const onUnauthorized = () => {
 const setAuthorization = ( token: string ) => {
     axios.defaults.headers.common.Authorization = ( token )? `Bearer ${token}` : null;
 };
-const request = ( method:string, url:string, data:any ) => {
+const request = ( method:string, url:string, data:any | null=null ) => {
     // console.log( 'data status=', method, data, url );
     let reqObj:object;
 
     if ( method === 'get' ){
-        if (data !== undefined) {
+        if (data !== null ) {
             reqObj={method, url, params:data};
         }else{
             // console.log( 'data status=', data, url );
