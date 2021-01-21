@@ -1,0 +1,127 @@
+.search {
+
+  .contents-inner {
+    width:1020px;
+  }
+  .result-top {
+    margin-top:30px;
+
+    h2{
+      padding:0 0 27px 20px;
+      font-size:18px;
+      letter-spacing:0;
+
+      span {
+        font-weight:bold;
+
+        &.search-num {
+          color:#ff4d4d;
+        }
+      }
+    }
+
+    .result-filter {
+      padding:20px 32px;
+      border-radius:5px;
+      background-color:#fff;
+
+      input {
+        + label {
+          color:#50506a;
+        }
+        &:checked {
+          + label {
+            font-weight:500;
+          }
+        }
+      }
+    }
+
+  }
+
+  .result-cnt {
+    position:relative;
+    min-height:580px;
+    margin-bottom:100px;
+    background-color:#fff;
+
+    .result-table {
+      table {
+        width:100%;
+
+        tr {
+          th {
+            padding:11px 0 11px 10px;
+            font-size:12px;
+            font-weight:500;
+            background-color:#f4f5f6;
+          }
+
+          td {
+            padding:14px 10px;
+            border-bottom:1px solid #f4f5f6;
+            background-color:#fff;
+          }
+
+          th, td {
+            vertical-align:top;
+            font-size:12px;
+            color:#2d2d45;
+
+            &:first-child {
+              padding-left:30px;
+            }
+
+            .class-name {
+              font-size:14px;
+              font-weight:500;
+            }
+
+            .class-admin, .class-tag {
+              padding:6px 0;
+            }
+
+            .class-admin {
+              position:relative;
+              padding-left:20px;
+
+              &:before {
+                content:'';
+                position:absolute;
+                display:block;
+                width:14px;
+                height:14px;
+                left:0;
+                top:50%;
+                transform: translateY(-50%);
+                background:url(../../dist/images/bg-crown.png) no-repeat left /100% 100%;
+              }
+            }
+
+            .class-tag {
+              position:relative;
+
+              p {width:340px;}
+
+              .search-more {
+                position:absolute;
+                top:5px;
+                right:30px;
+              }
+
+              &.none {
+                p {opacity:0.2;}
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .pagination {
+      position:absolute;
+      bottom:0;
+      left:0;
+    }
+  }
+}

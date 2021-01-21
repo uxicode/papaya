@@ -1,5 +1,10 @@
 # papaya-webapp
 
+## Web publishing  ( scss compile )
+```
+gulp dev 
+```
+
 ## Project setup
 ```
 npm install
