@@ -3,7 +3,6 @@ import {mapGetters} from 'vuex';
 import AppHeader from '@/components/header/header.vue';
 import AppFooter from '@/components/footer/footer.vue';
 import WithRender from './App.html';
-import './App.scss';
 
 @WithRender
 @Component({

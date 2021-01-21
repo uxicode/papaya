@@ -45,8 +45,8 @@ function localSassToCss() {
 }
 const paths = {
     root: 'src',
-    css: 'src/pages/css',
-    scss:'src/pages/scss/*'
+    css: 'src/pages/assets/css',
+    scss:'src/pages/assets/scss/*'
 };
 const cleanClientCss = () => del([`${paths.css}`], {force: true});
 const localWatch = () => {
