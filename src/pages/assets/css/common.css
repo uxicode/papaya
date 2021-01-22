@@ -16277,6 +16277,7 @@ body {
 
 .wrapper {
     min-height: 100vh;
+    background-color: #f4f5f6;
 }
 
 .wrapper .contents {
@@ -16658,6 +16659,7 @@ label {
 .form-group .form-control {
     padding: 0 0 10px 0;
     line-height: 20px;
+    font-size: 16px;
     border: none;
     border-bottom: 1px solid #c9cad5;
     border-radius: 0;
@@ -16710,6 +16712,10 @@ label {
 .form-group label {
     color: #57576d;
     margin-bottom: 10px;
+}
+
+.form-group label + .form-control {
+    margin-top: 10px;
 }
 
 .form-group.inline .form-control {
@@ -16984,9 +16990,9 @@ label {
     height: 24px;
     top: 50%;
     right: 20px;
-    -webkit-transform: translateY(-50%) rotate(-180deg);
-        -ms-transform: translateY(-50%) rotate(-180deg);
-            transform: translateY(-50%) rotate(-180deg);
+    -webkit-transform: translateY(-50%) rotate(0deg);
+        -ms-transform: translateY(-50%) rotate(0deg);
+            transform: translateY(-50%) rotate(0deg);
     -webkit-transition: all 0.5s ease;
     -webkit-transition: all 0.2s ease;
     -o-transition: all 0.2s ease;
@@ -16994,10 +17000,10 @@ label {
     background: url(../images/arrowdown.png) no-repeat center;
 }
 
-.accordion .accordion-tit button.accordion-btn.collapsed {
-    -webkit-transform: translateY(-50%) rotate(0deg);
-        -ms-transform: translateY(-50%) rotate(0deg);
-            transform: translateY(-50%) rotate(0deg);
+.accordion .accordion-tit button.accordion-btn.active {
+    -webkit-transform: translateY(-50%) rotate(-180deg);
+        -ms-transform: translateY(-50%) rotate(-180deg);
+            transform: translateY(-50%) rotate(-180deg);
     -webkit-transition: all 0.5s ease;
     -webkit-transition: all 0.2s ease;
     -o-transition: all 0.2s ease;
@@ -17027,7 +17033,7 @@ label {
     background: url(../images/arrowdown.png) no-repeat center;
 }
 
-.accordion .accordion-tit a.accordion-btn.collapsed:after {
+.accordion .accordion-tit a.accordion-btn.close:after {
     -webkit-transform: translateY(-50%) rotate(0deg);
         -ms-transform: translateY(-50%) rotate(0deg);
             transform: translateY(-50%) rotate(0deg);
@@ -17037,8 +17043,16 @@ label {
     transition: all 0.2s ease;
 }
 
+.accordion .accordion-cnt {
+    display: none;
+}
+
+.accordion .accordion-cnt.active {
+    display: block;
+}
+
 header {
-    background-color: rgba(243, 245, 246, 0.8);
+    background-color: #f4f5f6;
 }
 
 header.dark {
