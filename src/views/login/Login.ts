@@ -1,9 +1,15 @@
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import WithRender from './Login.html';
 import './Login.scss';
 import {namespace} from 'vuex-class';
 
 const Auth = namespace('Auth');
+
+interface IFormData{
+  radioValue:string;
+  email:string;
+  mobile:string;
+}
 
 @WithRender
 @Component
@@ -15,6 +21,13 @@ export default class Login extends Vue {
   private STATUS_FIND_ID: string = 'status_find_id';
   private STATUS_PWD_RESET: string = 'status_pwd_reset';
   private currentStatus: string = this.STATUS_LOGIN;
+
+  //아이디 찾기 관련
+  private formData:IFormData = {
+    radioValue:'mobile',
+    email:'',
+    mobile:'',
+  };
 
   @Auth.Getter
   private isAuth!:boolean;
@@ -49,7 +62,7 @@ export default class Login extends Vue {
   }
 
  get loginStatus():boolean{
-    console.log(this.currentStatus===this.STATUS_LOGIN)
+    console.log(this.currentStatus===this.STATUS_LOGIN);
     return this.currentStatus===this.STATUS_LOGIN;
  }
 
@@ -61,55 +74,10 @@ export default class Login extends Vue {
     this.currentStatus=status;
   }
 
+  get userMobileState() {
+    const userMobile=/^\d{3}\d{3,4}\d{4}$/;
+    return userMobile.test(this.formData.mobile );
+  }
+
 }
-
- /* export default {
-    name: 'Login',
-    data () {
-      return {
-        formValid: true,
-        pwChk: false,
-        formModels: {
-          userId: null,
-          userPw: ''
-        },
-        rules: {
-          required: value => !!value || '비밀번호를 입력해 주세요.',
-          min: v => ( v.length >= 8 ) || '최소 8글자 이상 입력해 주세요.'
-        }
-      }
-    },
-    created () {
-      this.rPath = this.$route.query.rqPath || '/';
-      this.$vuetify.theme.dark = true;
-    },
-    methods: {
-      ...mapActions([
-        LOGIN
-      ]),
-      validate () {
-        this.$refs.loginForm.validate();
-        // console.log( this.formValid );
-        if (!this.formValid) {
-          return false;
-        }
-
-        this.LOGIN({
-          uid: this.formModels.userId,
-          password: this.formModels.userPw
-        })
-          .then(() => {
-            // localStorage.setItem('token', res.access_token );
-            // setAuthorization(res.access_token);
-            //이미 action.js 에서 직접 api 호출하고 리턴된 값을 mutation.js(상태변이)로 전달시키고 있다.
-            //따라서 이 구간에서 프라미스 반환값은 없고 성공된 후의 타이밍만 맞추어 실행시킬 함수 등을 선언하면 된다.
-            //만약 데이터에 결과값에 대한 작업이 필요하다면 action.js 에서 작업해야 한다.
-            this.$router.push(this.rPath);
-            // eslint-disable-next-line handle-callback-err
-          }).catch( (error) => {
-            this.formValid = false;
-          });
-      }
-    }
-  };*/
 

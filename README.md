@@ -1,5 +1,8 @@
 # papaya-webapp
 
+## Swagger api URL
+- http://211.254.212.184:8089/api-docs/#/
+
 ## Web publishing  ( scss compile )
 ```
 gulp dev 
