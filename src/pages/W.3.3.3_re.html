@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
-	<head>
+		<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
@@ -12,27 +12,16 @@
 		<meta content="website" property="og:type" />
 		<meta content="" property="og:site_name" />
 
-		<link rel="stylesheet" href="./dist/css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="./assets/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="./assets/css/pages.css" />
-
-		<!-- bootstrap -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-		<script type="text/javascript" src="./dist/js/bootstrap.min.js"></script>
-
-		<!-- jquery //  -->
-
-		<!-- handlbarsJS //   -->
-
-		<!--//end: 기존 공통 소스( 작업 연동을 위해 상대경로로 변경) -->
 	</head>
 
 	<body>
-		<div class="wrapper login">
+		<div class="wrapper">
 			<!-- start: header -->
 			<header class="dark">
 				<div class="header-container">
-					<h1 class="logo"><a href="#"><img src="images/logo-logotype-white.png" alt="papaya" /></a></h1>
+					<h1 class="logo"><a href="#"><img src="./assets/images/logo-logotype-white.png" alt="papaya" /></a></h1>
 					<div class="nav">
 						<nav id="gnb">
 							<ul class="menu">
@@ -46,50 +35,56 @@
 
 			<!-- start: container -->
 			<div class="container-fluid">
-				<div class="contents">
-					<div class="contents-inner">
-						<div class="login-form clearfix">
-							<div class="form-cnt pd-desc">
-								<!-- Nav tabs -->
-								<div class="form-tab">
-									<ul class="tabs-line" role="tablist" data-column="2">
-										<li class="item"><a href="#a5" role="tab" data-toggle="tab">아이디 찾기</a></li>
-										<li class="item active"><a href="#a6" role="tab" data-toggle="tab">비밀번호 재설정</a></li>
-									</ul>
-								</div>
 
-								<!-- Tab panes -->
-								<div class="tab-content">
-									<div role="tabpanel" class="tab-pane fade in active" id="a6">
-										<div class="reset-pw-input">
-											<p class="reset-txt">새로운 비밀번호를 설정해 주세요.</p>
+				<!-- start: login -->
+				<div class="login">
+					<div class="contents">
+						<div class="contents-inner">
+							<div class="login-form clearfix">
+								<div class="form-cnt pd-desc">
+									<!-- Nav tabs -->
+									<div class="form-tab">
+										<ul class="tabs-line" role="tablist" data-column="2">
+											<li class="item"><a href="#a5" role="tab" data-toggle="tab">아이디 찾기</a></li>
+											<li class="item active"><a href="#a6" role="tab" data-toggle="tab">비밀번호 재설정</a></li>
+										</ul>
+									</div>
 
-											<div class="form-group">
-												<input type="password" class="form-control" placeholder="비밀번호를 입력해 주세요."  style="width:306px">
+									<!-- Tab panes -->
+									<div class="tab-content">
+										<div role="tabpanel" class="tab-pane fade in active" id="a6">
+											<div class="reset-pw-input">
+												<p class="reset-txt">새로운 비밀번호를 설정해 주세요.</p>
+
+												<div class="form-group">
+													<input type="password" class="form-control" placeholder="비밀번호를 입력해 주세요."  style="width:306px">
+												</div>
+												<div class="form-group">
+													<input type="password" class="form-control" placeholder="비밀번호를 다시 입력해 주세요."  style="width:306px">
+												</div>
 											</div>
-											<div class="form-group">
-												<input type="password" class="form-control" placeholder="비밀번호를 다시 입력해 주세요."  style="width:306px">
+
+											<div class="find-btn">
+												<div class="btn-group">
+													<button type="button" class="btn basic big primary red" disabled>확인</button>
+												</div>
 											</div>
+											<div class="page-back"><a href="">로그인으로 돌아가기</a></div>
 										</div>
-
-										<div class="find-btn">
-											<div class="btn-group">
-												<button type="button" class="btn basic big primary red" disabled>확인</button>
-											</div>
-										</div>
-										<div class="page-back"><a href="">로그인으로 돌아가기</a></div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				<!-- //end : login -->
+
 			</div>
 			<!-- //end : container -->
 			
 
 			<!-- start: footer -->
-			<footer id="footer">
+			<footer id="footer" class="dark">
 				<div class="footer-inner clearfix">
 					<div class="footer-logo-w"></div>
 

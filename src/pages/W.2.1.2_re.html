@@ -12,27 +12,16 @@
 		<meta content="website" property="og:type" />
 		<meta content="" property="og:site_name" />
 
-		<link rel="stylesheet" href="./dist/css/bootstrap.min.css" />
 		<link rel="stylesheet" type="text/css" href="./assets/css/common.css" />
 		<link rel="stylesheet" type="text/css" href="./assets/css/pages.css" />
-
-		<!-- bootstrap -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-		<script type="text/javascript" src="./dist/js/bootstrap.min.js"></script>
-
-		<!-- jquery //  -->
-
-		<!-- handlbarsJS //   -->
-
-		<!--//end: 기존 공통 소스( 작업 연동을 위해 상대경로로 변경) -->
 	</head>
 
 	<body>
-		<div class="wrapper join">
+		<div class="wrapper">
 			<!-- start: header -->
 			<header>
 				<div class="header-container">
-					<h1 class="logo"><a href="#"><img src="images/logo-logotype-black.png" alt="papaya" /></a></h1>
+					<h1 class="logo"><a href="#"><img src="./assets/images/logo-logotype-black.png" alt="papaya" /></a></h1>
 					<nav id="gnb">
 						<ul class="menu">
 							<li><a href="">회원가입</a></li>
@@ -45,39 +34,45 @@
 
 			<!-- start: container -->
 			<div class="container-fluid">
-				<div class="contents">
-					<div class="contents-inner">
-						<div class="all-form">
-							<h2 class="main-tit">일반 회원가입</h2>
 
-							<div class="form-progress">
-								<ul class="progress-list clearfix">
-									<li class="item"></li>
-									<li class="item active"></li>
-									<li class="item"></li>
-								</ul>
-							</div>
+				<!-- start: join -->
+				<div class="join">
+					<div class="contents">
+						<div class="contents-inner">
+							<div class="all-form">
+								<h2 class="main-tit">일반 회원가입</h2>
 
-							<div class="form-wrapper">
-								<h3 class="form-sub-tit ct">본인인증</h3>
-								<div class="form-cnt ">
-									<div class="form-card">
-										<p class="card-tit">본인 인증을 해주세요.</p>
-										<p class="card-txt">14세 이상의 개인은 본인 인증을 통해 가입이 가능합니다.</p>
-
-										<div class="mgt-30"><button type="button" class="btn basic x40 primary red">본인 인증하기</button></div>
-									</div>
+								<div class="form-progress">
+									<ul class="progress-list clearfix">
+										<li class="item"></li>
+										<li class="item active"></li>
+										<li class="item"></li>
+									</ul>
 								</div>
-								<div class="form-btm">
-									<div class="btn-group rt">
-										<button type="button" class="btn basic x40 sm secondary line">이전</button>
-										<button type="button" class="btn basic x40 sm primary navi" disabled>다음</button>
+
+								<div class="form-wrapper">
+									<h3 class="form-sub-tit ct">본인인증</h3>
+									<div class="form-cnt ">
+										<div class="form-card">
+											<p class="card-tit">본인 인증을 해주세요.</p>
+											<p class="card-txt">14세 이상의 개인은 본인 인증을 통해 가입이 가능합니다.</p>
+
+											<div class="mgt-30"><button type="button" class="btn basic x40 primary red">본인 인증하기</button></div>
+										</div>
+									</div>
+									<div class="form-btm">
+										<div class="btn-group rt">
+											<button type="button" class="btn basic x40 sm secondary line">이전</button>
+											<button type="button" class="btn basic x40 sm primary navi" disabled>다음</button>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				<!-- //end : join -->
+
 			</div>
 			<!-- //end : container -->
 

@@ -89,6 +89,12 @@ input {
   box-sizing: border-box;
 }
 
+:after, :before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 html {
   -webkit-touch-callout: none;
   -webkit-touch-select: none;
@@ -223,76 +229,18 @@ body {
   font-weight: 400;
   color: #1d1d1d;
   letter-spacing: -0.5px;
+  line-height:1.4;
   background-color: #f6f7fa;
 }
 
-//폰트컬러
-.color-57576d {
-  color: #57576d;
-}
-
-/*===========================================================================
-	HEADER
-============================================================================*/
-
-.wrapper-header {
-  width: 1040px;
-  margin: 0 auto;
-  overflow: hidden;
-  padding: 10px 0;
-}
-.logo {
-  display: inline-block;
-}
-
-//4.5.1 클래스 페이지-홈 (빨간색 로고 사용)
-.classpage {
-  .header-inner {
-    .logo {
-      a {
-        width: 80px;
-        height: 18px;
-        background: url(../images/logo-logotype-red.png) no-repeat 0 0;
-      }
-    }
-  }
-}
-
-/*===========================================================================
-	container
-============================================================================*/
-
-// .container{
-//   width: 100%;
-//   min-height: 680px;
-//   margin-top: 40px;
-//   margin-bottom: 100px;
-// }
 .wrapper {
-  width: 100%;
-  background-color:#f4f5f6;
-  position: relative;
+  min-height:100vh;
 
-  &.join {
-
+  .contents {
+    min-height:calc(100vh - 238px)
   }
 }
 
-.container-fluid {
-  padding: 0;
-  width: 100%;
-}
-
-.con-mt {
-  margin-top: 40px;
-}
-
-// #container {
-//   width: 100%;
-//   min-height: 850px;
-//   height: calc(100vh - 280px);
-//   margin-top: 40px;
-// }
 /*===========================================================================
 	FOOTER
 ============================================================================*/
@@ -335,6 +283,10 @@ body {
         }
       }
     }
+  }
+
+  &.dark {
+    background-color:#1d1d4c;
   }
 }
 
@@ -380,249 +332,6 @@ body {
     }
   }
 }
-
-/*===========================================================================
-	component
-============================================================================*/
-
-//2.1.3 일반 회원가입 - 개인정보 입력
-
-.radio-list > input[type="radio"]:checked,
-.radio-list > input[type="radio"]:not(:checked) {
-  position: absolute;
-  left: -9999px;
-  z-index: -1;
-}
-.radio-list > input[type="radio"]:checked + label,
-.radio-list > input[type="radio"]:not(:checked) + label {
-  position: relative;
-  padding-left: 32px;
-  cursor: pointer;
-  font-weight: 400;
-  line-height: 24px;
-  display: inline-block;
-  opacity: 0.2;
-  color: #57576d;
-}
-.radio-list > input[type="radio"]:checked + label:before,
-.radio-list > input[type="radio"]:not(:checked) + label:before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 22px;
-  height: 22px;
-  border: 1.5px solid #57576d;
-  border-radius: 50%;
-  background: #fff;
-}
-.radio-list > input[type="radio"]:checked + label:after,
-.radio-list > input[type="radio"]:not(:checked) + label:after {
-  content: "";
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  -webkit-transition: all 0.2s ease;
-  transition: all 0.2s ease;
-  background-color: #57576d;
-}
-.radio-list > input[type="radio"]:not(:checked) + label:after {
-  opacity: 0;
-  -webkit-transform: scale(0);
-  transform: scale(0);
-}
-.radio-list > input[type="radio"]:checked + label:after {
-  opacity: 1;
-  -webkit-transform: scale(1);
-  transform: scale(1);
-}
-// }
-
-//3.2.1 - 3.3.2 로그인 페이지 - 레디오버튼
-
-.find-wrap-txt > input[type="radio"]:checked,
-.find-wrap-txt > input[type="radio"]:not(:checked) {
-  position: absolute;
-  left: -9999px;
-  z-index: -1;
-}
-.find-wrap-txt > input[type="radio"]:checked + label,
-.find-wrap-txt > input[type="radio"]:not(:checked) + label {
-  position: relative;
-  padding-left: 32px;
-  cursor: pointer;
-  line-height: 24px;
-  display: inline-block;
-  color: #666;
-}
-.find-wrap-txt > input[type="radio"]:checked + label:before,
-.find-wrap-txt > input[type="radio"]:not(:checked) + label:before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 22px;
-  height: 22px;
-  border: 1.5px solid #57576d;
-  border-radius: 50%;
-  background: #fff;
-}
-.find-wrap-txt > input[type="radio"]:checked + label:after,
-.find-wrap-txt > input[type="radio"]:not(:checked) + label:after {
-  content: "";
-  width: 14px;
-  height: 14px;
-  background: #57576d;
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  border-radius: 50%;
-  -webkit-transition: all 0.2s ease;
-  transition: all 0.2s ease;
-}
-.find-wrap-txt > input[type="radio"]:not(:checked) + label:after {
-  opacity: 0;
-  -webkit-transform: scale(0);
-  transform: scale(0);
-}
-.find-wrap-txt > input[type="radio"]:checked + label:after {
-  opacity: 1;
-  -webkit-transform: scale(1);
-  transform: scale(1);
-}
-
-//4.3.2 새로운클래스 생성 - 레디오버튼
-
-.radio-box > input[type="radio"]:checked,
-.radio-box > input[type="radio"]:not(:checked) {
-  position: absolute;
-  left: -9999px;
-  z-index: -1;
-}
-.radio-box > input[type="radio"]:checked + label,
-.radio-box > input[type="radio"]:not(:checked) + label {
-  position: relative;
-  padding-left: 32px;
-  cursor: pointer;
-  line-height: 24px;
-  display: inline-block;
-  color: #666;
-}
-.radio-box > input[type="radio"]:checked + label:before,
-.radio-box > input[type="radio"]:not(:checked) + label:before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 22px;
-  height: 22px;
-  border: 1.5px solid #57576d;
-  border-radius: 50%;
-  background: #fff;
-}
-.radio-box > input[type="radio"]:checked + label:after,
-.radio-box > input[type="radio"]:not(:checked) + label:after {
-  content: "";
-  width: 14px;
-  height: 14px;
-  background: #57576d;
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  border-radius: 50%;
-  -webkit-transition: all 0.2s ease;
-  transition: all 0.2s ease;
-}
-.radio-box > input[type="radio"]:not(:checked) + label:after {
-  opacity: 0;
-  -webkit-transform: scale(0);
-  transform: scale(0);
-}
-.radio-box > input[type="radio"]:checked + label:after {
-  opacity: 1;
-  -webkit-transform: scale(1);
-  transform: scale(1);
-}
-
-//select 4.5.1, 4.5.1.1 - 꿈꾸는 5학년 1반
-.select-wrap {
-  display: inline-block;
-  .option-list {
-    width: 266px;
-    height: 40px;
-    line-height: 42px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #0f0f15;
-    padding-left: 20px;
-    -webkit-appearance: none;
-    margin-left: 10px;
-    opacity: 0.8;
-    border-radius: 20px;
-  }
-  .arrow-g {
-    background: url(../images/arrow-down-g.png) no-repeat 230px 13px;
-  }
-}
-
-//스테퍼
-.wrapper-progressBar {
-  width: 100%;
-  margin: 20px 0 30px 0;
-}
-
-.progressBar {
-  overflow: hidden;
-  width: 110px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.progressBar li {
-  position: relative;
-  float: left;
-  width: 35px;
-}
-
-.progressBar li:before {
-  content: " ";
-  position: relative;
-  border-radius: 50%;
-  width: 6px;
-  height: 6px;
-  border: solid #0f0f15;
-  display: inline-block;
-  background-color: white;
-  z-index: 2;
-}
-
-.progressBar li:after {
-  content: "";
-  position: absolute;
-  top: 9px;
-  left: 3px;
-  width: 16px;
-  height: 1px;
-  background-color: #c9cad5;
-  z-index: 1;
-  margin-left: 24px;
-}
-
-.progressBar li:last-child:after {
-  content: none;
-}
-
-.progressBar li.active:before {
-  width: 19px;
-  height: 19px;
-  border: 7px solid #ff4d4d;
-}
-
-//end 스테퍼
-
 
 // 20210104
 .ct {text-align:center !important;}
@@ -1321,7 +1030,6 @@ header {
 
 // contents inner
 .contents {
-  min-height:760px;
 
   &.pd-desc {
     padding-top:100px;
