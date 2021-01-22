@@ -12,27 +12,17 @@
 		<meta content="website" property="og:type" />
 		<meta content="" property="og:site_name" />
 
-		<link rel="stylesheet" href="./dist/css/bootstrap.min.css" />
-		<link rel="stylesheet" type="text/css" href="./css/common.css" />
-		<link rel="stylesheet" type="text/css" href="./css/sub.css" />
+		<link rel="stylesheet" type="text/css" href="./assets/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="./assets/css/pages.css" />
 
-		<!-- bootstrap -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-		<script type="text/javascript" src="./dist/js/bootstrap.min.js"></script>
-
-		<!-- jquery //  -->
-
-		<!-- handlbarsJS //   -->
-
-		<!--//end: 기존 공통 소스( 작업 연동을 위해 상대경로로 변경) -->
 	</head>
 
 	<body>
-		<div class="wrapper login">
+		<div class="wrapper">
 			<!-- start: header -->
 			<header class="dark">
 				<div class="header-container">
-					<h1 class="logo"><a href="#"><img src="images/logo-logotype-white.png" alt="papaya" /></a></h1>
+					<h1 class="logo"><a href="#"><img src="./assets/images/logo-logotype-white.png" alt="papaya" /></a></h1>
 					<nav id="gnb">
 						<ul class="menu">
 							<li><a href="">회원가입</a></li>
@@ -44,47 +34,53 @@
 
 			<!-- start: container -->
 			<div class="container-fluid">
-				<div class="contents">
-					<div class="contents-inner">
-						<div class="login-form clearfix">
-							<div class="form-cnt">
-								<h2 class="login-tit">로그인</h2>
 
-								<div class="form-input">
-									<div class="form-group" style="width:340px">
-										<label for="input1">아이디</label>
-										<input type="text" class="form-control" id="input1" placeholder="아이디를 입력해 주세요.">
-									</div>
-									<div class="form-group" style="width:340px">
-										<label for="input2">비밀번호</label>
-										<input type="text" class="form-control" id="input2" placeholder="비밀번호를 입력해 주세요.">
+				<!-- start: login -->
+				<div class="login">
+					<div class="contents">
+						<div class="contents-inner">
+							<div class="login-form clearfix">
+								<div class="form-cnt">
+									<h2 class="login-tit">로그인</h2>
+
+									<div class="form-input">
+										<div class="form-group">
+											<label for="input1">아이디</label>
+											<input type="text" class="form-control" id="input1" placeholder="아이디를 입력해 주세요." style="width:340px">
+										</div>
+										<div class="form-group">
+											<label for="input2">비밀번호</label>
+											<input type="password" class="form-control" id="input2" placeholder="비밀번호를 입력해 주세요." style="width:340px">
+										</div>
+
+										<div class="btn-group mgt-40">
+											<button type="button" class="btn basic big primary red">로그인</button>
+										</div>
 									</div>
 
-									<div class="btn-group mgt-40">
-										<button type="button" class="btn basic big primary red">로그인</button>
-									</div>
-								</div>
-
-								<div class="login-helper">
-									<div class="find-info">
-										<a href="" class="after-line">아이디 찾기</a>
-										<a href="">비밀번호 재설정하기</a>
-									</div>
-									<div class="join">
-										<span>아직 회원이 아니신가요?</span>
-										<a href="">회원가입</a>
+									<div class="login-helper">
+										<div class="find-info">
+											<a href="" class="after-line">아이디 찾기</a>
+											<a href="">비밀번호 재설정하기</a>
+										</div>
+										<div class="join">
+											<span>아직 회원이 아니신가요?</span>
+											<a href="">회원가입</a>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				<!-- //end: login -->
+
 			</div>
 			<!-- //end : container -->
 			
 
 			<!-- start: footer -->
-			<footer id="footer">
+			<footer id="footer" class="dark">
 				<div class="footer-inner clearfix">
 					<div class="footer-logo-w"></div>
 

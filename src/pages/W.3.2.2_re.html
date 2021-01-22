@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
-	<head>
+		<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
@@ -12,19 +12,8 @@
 		<meta content="website" property="og:type" />
 		<meta content="" property="og:site_name" />
 
-		<link rel="stylesheet" href="./dist/css/bootstrap.min.css" />
-		<link rel="stylesheet" type="text/css" href="./css/common.css" />
-		<link rel="stylesheet" type="text/css" href="./css/sub.css" />
-
-		<!-- bootstrap -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-		<script type="text/javascript" src="./dist/js/bootstrap.min.js"></script>
-
-		<!-- jquery //  -->
-
-		<!-- handlbarsJS //   -->
-
-		<!--//end: 기존 공통 소스( 작업 연동을 위해 상대경로로 변경) -->
+		<link rel="stylesheet" type="text/css" href="./assets/css/common.css" />
+		<link rel="stylesheet" type="text/css" href="./assets/css/pages.css" />
 	</head>
 
 	<body>
@@ -32,7 +21,7 @@
 			<!-- start: header -->
 			<header class="dark">
 				<div class="header-container">
-					<h1 class="logo"><a href="#"><img src="images/logo-logotype-white.png" alt="papaya" /></a></h1>
+					<h1 class="logo"><a href="#"><img src="./assets/images/logo-logotype-white.png" alt="papaya" /></a></h1>
 					<nav id="gnb">
 						<ul class="menu">
 							<li><a href="">회원가입</a></li>
@@ -44,62 +33,68 @@
 
 			<!-- start: container -->
 			<div class="container-fluid">
-				<div class="contents">
-					<div class="contents-inner">
-						<div class="login-form clearfix">
-							<div class="form-cnt pd-desc">
-								<!-- Nav tabs -->
-								<div class="form-tab">
-									<ul class="tabs-line" role="tablist" data-column="2">
-										<li class="item active"><a href="#a5" role="tab" data-toggle="tab">아이디 찾기</a></li>
-										<li class="item"><a href="#a6" role="tab" data-toggle="tab">비밀번호 재설정</a></li>
-									</ul>
-								</div>
 
-								<!-- Tab panes -->
-								<div class="tab-content">
-									<div role="tabpanel" class="tab-pane fade in active" id="a5">
-										<p class="find-txt">아이디 찾기를 위한 방법을 선택해 주세요.</p>
-										<div class="find-info">
-											<div class="find-type">
-												<div class="btn-radio">
-													<input type="radio" id="radio1">
-													<label for="radio1">전체 회원 정보에 등록된 모바일 번호로 아이디 찾기</label>
-												</div>
-											</div>
-											<div class="find-info-input">
-												<div class="form-group inline">
-													<input type="text" class="form-control" placeholder="모바일 번호 ‘-‘없이 입력해 주세요."  style="width:216px">
-													<button type="button" class="btn basic x32 sm secondary fill" disabled>인증</button>
-												</div>
-											</div>
-										</div>
-										<div class="find-info">
-											<div class="find-type">
-												<div class="btn-radio">
-													<input type="radio" id="radio2" checked>
-													<label for="radio2">회원 정보에 등록된 이메일로 아이디 찾기</label>
-												</div>
-											</div>
-											<div class="find-info-input active">
-												<div class="form-group">
-													<input type="text" class="form-control" placeholder="이메일 주소를 입력해 주세요."  style="width:306px">
-												</div>
-											</div>
-										</div>
+				<!-- start: login -->
+				<div class="login">
+					<div class="contents">
+						<div class="contents-inner">
+							<div class="login-form clearfix">
+								<div class="form-cnt pd-desc">
+									<!-- Nav tabs -->
+									<div class="form-tab">
+										<ul class="tabs-line" role="tablist" data-column="2">
+											<li class="item active"><a href="#a5" role="tab" data-toggle="tab">아이디 찾기</a></li>
+											<li class="item"><a href="#a6" role="tab" data-toggle="tab">비밀번호 재설정</a></li>
+										</ul>
+									</div>
 
-										<div class="find-btn">
-											<div class="btn-group">
-												<button type="button" class="btn basic big primary red" disabled>확인</button>
+									<!-- Tab panes -->
+									<div class="tab-content">
+										<div role="tabpanel" class="tab-pane fade in active" id="a5">
+											<p class="find-txt">아이디 찾기를 위한 방법을 선택해 주세요.</p>
+											<div class="find-info">
+												<div class="find-type">
+													<div class="btn-radio">
+														<input type="radio" name="radio" id="radio1">
+														<label for="radio1">전체 회원 정보에 등록된 모바일 번호로 아이디 찾기</label>
+													</div>
+												</div>
+												<div class="find-info-input">
+													<div class="form-group inline">
+														<input type="text" class="form-control" placeholder="모바일 번호 ‘-‘없이 입력해 주세요."  style="width:216px">
+														<button type="button" class="btn basic x32 sm secondary fill" disabled>인증</button>
+													</div>
+												</div>
 											</div>
+											<div class="find-info">
+												<div class="find-type">
+													<div class="btn-radio">
+														<input type="radio" name="radio" id="radio2" checked>
+														<label for="radio2">회원 정보에 등록된 이메일로 아이디 찾기</label>
+													</div>
+												</div>
+												<div class="find-info-input active">
+													<div class="form-group">
+														<input type="text" class="form-control" placeholder="이메일 주소를 입력해 주세요."  style="width:306px">
+													</div>
+												</div>
+											</div>
+
+											<div class="find-btn">
+												<div class="btn-group">
+													<button type="button" class="btn basic big primary red" disabled>확인</button>
+												</div>
+											</div>
+											<div class="page-back"><a href="">로그인으로 돌아가기</a></div>
 										</div>
-										<div class="page-back"><a href="">로그인으로 돌아가기</a></div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+				<!-- //end: login -->
+
 			</div>
 			<!-- //end : container -->
 			
