@@ -1,19 +1,12 @@
-.login {
+.login{
   background-color:#1d1d4c;
-
-  header,footer {
-    .header-container {
-      width:1060px;
-    }
-  }
-}
-.contents-inner {
-  width:1060px;
 }
 
 .login-form {
-  margin-top:40px;
-  background: url(../../assets/images/illust-login.png) no-repeat left bottom 94px;
+  width:1020px;
+  margin:0 auto;
+  padding-top:40px;
+  background: url(../../assets/images/illust-login.png) no-repeat left bottom 84px / 62%;
 
   .form-cnt {
     position:relative;

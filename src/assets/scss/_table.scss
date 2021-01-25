@@ -1,0 +1,29 @@
+// table
+.tb-cnt {
+  .tb {
+    .top {vertical-align:top;}
+    .mid {vertical-align:middle;}
+    .btm {vertical-align:bottom;}
+
+    &.tb-form {
+      tr{
+        th, td {
+          padding-top:45px;
+
+          .form-group {
+            + .form-group {
+              margin-top:40px;
+            }
+          }
+        }
+
+        &:first-child {
+          th, td {
+            padding-top:0;
+          }
+        }
+      }
+    }
+  }
+
+}

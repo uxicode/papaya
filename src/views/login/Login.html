@@ -3,22 +3,24 @@
     <div class="login-form clearfix">
 
       <!-- start: 로그인 부분 -->
-      <div class="form-cnt" v-if="loginStatus">
+      <div class="form-cnt" v-show="loginStatus">
         <h2 class="login-tit">로그인</h2>
+
         <div class="form-input">
-          <div class="form-group" style="width:340px">
-            <label for="input1">아이디</label>
-            <input type="text" class="form-control" v-model="userId" placeholder="아이디를 입력해 주세요.">
+          <div class="form-group">
+            <label for="userID">아이디</label>
+            <input type="text" class="form-control" v-model="userId" id="userID" placeholder="아이디를 입력해 주세요." >
           </div>
-          <div class="form-group" style="width:340px">
-            <label for="input2">비밀번호</label>
-            <input type="text" class="form-control" v-model="userPw" placeholder="비밀번호를 입력해 주세요.">
+          <div class="form-group">
+            <label for="userPW">비밀번호</label>
+            <input type="password" class="form-control" v-model="userPw" id="userPW" placeholder="비밀번호를 입력해 주세요." >
           </div>
 
           <div class="btn-group mgt-40">
-            <button type="button" class="btn basic big primary red" @click="validate">로그인</button>
+            <button type="button" class="btn basic big primary red"  @click="validate">로그인</button>
           </div>
         </div>
+
         <div class="login-helper">
           <div class="find-info">
             <a href="" class="after-line" @click.stop.prevent="setAccountStatus(STATUS_FIND_ID)">아이디 찾기</a>
@@ -33,7 +35,7 @@
       <!-- end: 로그인 부분 -->
 
       <!-- start: 아이디 찾기 부분 / 비밀번호 재설정 -->
-      <div class="form-cnt pd-desc" v-if="findStatus && !verifyComplete">
+      <div class="form-cnt pd-desc" v-show="findStatus && !verifyComplete">
         <!-- Nav tabs -->
         <div class="form-tab">
           <ul class="tabs-line" role="tablist" data-column="2">
@@ -123,7 +125,6 @@
         </div>
 
       </div>
-
 
     </div>
   </div>

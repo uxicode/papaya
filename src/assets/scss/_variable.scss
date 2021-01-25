@@ -1,46 +1,38 @@
-$font-family:'Noto Sans KR', 'Malgun Gothic', '맑은 고딕', '돋움', 'dotum', '굴림', 'gulim', serif;
-$baseFontSize:14px;
-$indentValue:-9999em;
-$marginPaddingTotal : 100;
-$red : #ff4d4d;
 
 $border-bt: 1px solid #f4f5f6;
 $mb: 210px;
 $main-red: #ff4d4d;
-.b-bt {
-  border-bottom: $border-bt;
-  padding: 20px 40px;
-}
-.m-bt {
-  margin-bottom: $mb;
-}
-.main-red{
-    color: $main-red;
-}
 
-@for $i from 0 through $marginPaddingTotal{
+//margin,padding
+$total:500;
+
+@for $i from 0 through $total {
+  $unit: if($i == 0,  !important, px !important);
+
+
   .mgt-#{$i} {
-    margin-top:  #{$i}px !important;
+    margin-top:  #{$i}#{$unit};
   }
   .mgb-#{$i} {
-    margin-bottom:  #{$i}px !important;
+    margin-bottom:  #{$i}#{$unit};
   }
   .mgl-#{$i} {
-    margin-left:  #{$i}px !important;
+    margin-left:  #{$i}#{$unit};
   }
   .mgr-#{$i} {
-    margin-right:  #{$i}px !important;
+    margin-right:  #{$i}#{$unit};
   }
   .pdt-#{$i} {
-    padding-top:  #{$i}px !important;
+    padding-top:  #{$i}#{$unit};
   }
   .pdb-#{$i} {
-    padding-bottom:  #{$i}px !important;
+    padding-bottom:  #{$i}#{$unit};
   }
   .pdl-#{$i} {
-    padding-left:  #{$i}px !important;
+    padding-left:  #{$i}#{$unit};
   }
   .pdr-#{$i} {
-    padding-right:  #{$i}px !important;
+    padding-right:  #{$i}#{$unit};
   }
 }
+
