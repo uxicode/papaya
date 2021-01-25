@@ -6,22 +6,6 @@ $main-red: #ff4d4d;
 //margin,padding
 $total:500;
 
-
-
-.b-bt {
-  border-bottom: $border-bt;
-  padding: 20px 40px;
-}
-
-
-.m-bt {
-  margin-bottom: $mb;
-}
-
-.main-red{
-    color: $main-red;
-}
-
 @for $i from 0 through $total {
   $unit: if($i == 0,  !important, px !important);
 
