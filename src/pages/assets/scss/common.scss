@@ -72,8 +72,6 @@ embed,
 br,
 figure,
 figcaption,
-footer,
-header,
 hgroup,
 menu,
 nav,
@@ -218,7 +216,7 @@ button {
   *zoom: 1;
 }
 
-.clearfix:after, .tabs-line:after, contents-inner:after{
+.clearfix:after, .footer-inner:after, .tabs-line:after, contents-inner:after{
   content: "";
   display: block;
   clear: both;
