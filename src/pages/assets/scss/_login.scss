@@ -4,7 +4,7 @@
   width:1020px;
   margin:0 auto;
   padding-top:40px;
-  background: url(../images/illust-login.png) no-repeat left bottom 84px / 62%;
+  background: url(../../assets/images/illust-login.png) no-repeat left bottom 84px / 62%;
 
   .form-cnt {
     position:relative;
@@ -119,10 +119,10 @@
       }
 
       &.result {
-        background:url(../images/illust-confirm.png) no-repeat bottom center;
+        background:url(../../assets/images/illust-confirm.png) no-repeat bottom center;
       }
       &.send {
-        background:url(../images/illust-email.png) no-repeat bottom center;
+        background:url(../../assets/images/illust-email.png) no-repeat bottom center;
       }
     }
 
