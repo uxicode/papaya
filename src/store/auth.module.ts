@@ -1,7 +1,7 @@
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 import {LOGIN, LOGOUT, GET_TOKEN} from '@/store/mutation-auth-types';
-import AuthService from '@/api/service/AuthService';
 import {IUser} from '@/api/model/user.model';
+import AuthService from '@/api/service/AuthService';
 
 @Module({
     namespaced: true,
@@ -36,10 +36,11 @@ export default class AuthModule extends VuexModule{
     }
 
     @Mutation
-    public [GET_TOKEN]( token:string ):void{
+    public [GET_TOKEN]( token:string | null ):void{
         this.token=token;
+        if ( this.token === null) {return;}
+        // AuthService.setAuthToken(this.token);
         localStorage.setItem('token', this.token);
-        AuthService.setAuthToken( this.token );
     }
 
     @Mutation

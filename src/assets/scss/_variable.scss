@@ -1,21 +1,46 @@
+$font-family:'Noto Sans KR', 'Malgun Gothic', '맑은 고딕', '돋움', 'dotum', '굴림', 'gulim', serif;
+$baseFontSize:14px;
+$indentValue:-9999em;
+$marginPaddingTotal : 100;
+$red : #ff4d4d;
 
 $border-bt: 1px solid #f4f5f6;
 $mb: 210px;
 $main-red: #ff4d4d;
-
-
-
 .b-bt {
   border-bottom: $border-bt;
   padding: 20px 40px;
 }
-
-
 .m-bt {
   margin-bottom: $mb;
 }
-
 .main-red{
     color: $main-red;
 }
 
+@for $i from 0 through $marginPaddingTotal{
+  .mgt-#{$i} {
+    margin-top:  #{$i}px !important;
+  }
+  .mgb-#{$i} {
+    margin-bottom:  #{$i}px !important;
+  }
+  .mgl-#{$i} {
+    margin-left:  #{$i}px !important;
+  }
+  .mgr-#{$i} {
+    margin-right:  #{$i}px !important;
+  }
+  .pdt-#{$i} {
+    padding-top:  #{$i}px !important;
+  }
+  .pdb-#{$i} {
+    padding-bottom:  #{$i}px !important;
+  }
+  .pdl-#{$i} {
+    padding-left:  #{$i}px !important;
+  }
+  .pdr-#{$i} {
+    padding-right:  #{$i}px !important;
+  }
+}

@@ -2,7 +2,7 @@
   <div class="login-form clearfix">
 
     <!-- start: 로그인 부분 -->
-    <div class="form-cnt" v-show="loginStatus">
+    <div class="form-cnt" v-if="loginStatus">
       <h2 class="login-tit">로그인</h2>
       <div class="form-input">
         <div class="form-group" style="width:340px">
@@ -31,8 +31,8 @@
     </div>
     <!-- end: 로그인 부분 -->
 
-    <!-- start: 아이디 찾기 부분 -->
-    <div class="form-cnt pd-desc" v-show="findStatus">
+    <!-- start: 아이디 찾기 부분 / 비밀번호 재설정 -->
+    <div class="form-cnt pd-desc" v-if="findStatus && !verifyComplete">
       <!-- Nav tabs -->
       <div class="form-tab">
         <ul class="tabs-line" role="tablist" data-column="2">
@@ -48,17 +48,43 @@
           <div class="find-info">
             <div class="find-type">
               <div class="btn-radio">
-                <input type="radio" name="radio" id="radio1" checked>
+                <input type="radio" name="radio" id="radio1" @click="radioBtnChanges">
                 <label for="radio1">전체 회원 정보에 등록된 모바일 번호로 아이디 찾기</label>
               </div>
             </div>
             <div class="find-info-input active">
               <div class="form-group inline">
-                <input type="text" class="form-control" placeholder="모바일 번호 ‘-‘없이 입력해 주세요."  style="width:216px">
-                <button type="button" class="btn basic x32 sm secondary fill" disabled>인증</button>
+                <!--<input type="text" class="form-control" placeholder="모바일 번호 ‘-‘없이 입력해 주세요."  style="width:216px">
+                <button type="button" class="btn basic x32 sm secondary fill" disabled>인증</button>-->
+                <p v-if="formData.radioValue ==='mobile'">
+                  <input type="text"
+                         class="form-control"
+                          v-model="formData.mobile"
+                          :placeholder="messages.mobile"
+                          style="width:216px;"
+                          name="mobileVerification" />
+                  <label for="mobileVerification" class="blind"></label>
+                  <button type="button"
+                          class="btn basic x32 sm secondary fill"
+                          :disabled="!userMobileState"
+                          @click.stop="getAuthMobileNum">{{ isMobileChk? '재전송':'인증' }}</button>
+                </p>
+
+                <p v-if="isMobileChk">
+                  <input type="text"
+                         class="form-control"
+                          v-model="mVerificationVal"
+                          ref="mVerificationVal" />
+                  <button type="button"
+                          class="btn basic x32 sm secondary fill"
+                          :disabled="mVerificationVal===''"
+                          @click.stop="mVerificationConfirm">확인</button>
+                </p>
+                <small v-if="mVerificationComplete" >모바일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</small>
               </div>
             </div>
           </div>
+
           <div class="find-info">
             <div class="find-type">
               <div class="btn-radio">
@@ -75,14 +101,27 @@
 
           <div class="find-btn">
             <div class="btn-group">
-              <button type="button" class="btn basic big primary red" disabled>확인</button>
+              <button type="button" class="btn basic big primary red" @click.stop="verificationConfirm" :disabled="!isMobileChk">확인</button>
             </div>
           </div>
           <div class="page-back"><a href="" @click.stop.prevent="setAccountStatus(STATUS_LOGIN)">로그인으로 돌아가기</a></div>
         </div>
       </div>
     </div>
-    <!-- end: 아이디 찾기 부분 -->
+    <!-- end: 아이디 찾기 부분  / 비밀번호 재설정  -->
+
+
+    <div  class="form-cnt pd-desc" v-show="verifyComplete">
+      <div style="padding:30px 40px;border-top:1px solid #f4f5f6;">
+        <p class="guide-cmt">회원님의 아이디는 </p>
+        <p class="guide-cmt"><strong class="red-color">{{findUserID}}</strong>입니다.</p>
+        <div class="mgt-90">
+          <img src="../../assets/images/illust-login.png" alt="">
+          <div class="page-back"><a href="" @click.stop.prevent="gotoLogin">로그인으로 돌아가기</a></div>
+        </div>
+      </div>
+
+    </div>
 
 
   </div>

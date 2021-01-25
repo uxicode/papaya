@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import Home from '../views/Home.vue';
 import Login from '@/views/login/Login';
+import SignInHeader from '@/components/header/signinHeader.vue';
+import SignUpHeader from '@/components/header/signupHeader.vue';
 import {getIsAuth} from '@/router/AuthGuard';
 
 Vue.use(VueRouter);
@@ -16,12 +18,18 @@ const routes: RouteConfig[] = [
   {
     path: '/login',
     name: 'Login',
-    component: Login,
+    components: {
+      header:SignInHeader,
+      default:Login,
+    },
   },
   {
     path:'/signup',
     name:'signup',
-    component: () => import('../views/signup/signup.vue'),
+    components:{
+      header:SignUpHeader,
+      default:() => import('../views/signup/signup.vue'),
+    },
   },
   {
     path:'*',
