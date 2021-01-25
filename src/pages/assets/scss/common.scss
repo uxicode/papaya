@@ -251,6 +251,8 @@ body {
 .fs-16 {font-size:16px !important;}
 .fs-18 {font-size:18px !important;}
 
+.vt {vertical-align: top !important;}
+
 .required {
   &:after {
     content:'';
@@ -445,27 +447,19 @@ label {
     opacity: 0;
 
     + label {
-      padding-left:30px;
+      padding-left:35px;
       vertical-align:middle;
 
-      &:before, &:after {
+      &:before {
         content:'';
         position:absolute;
+        display:block;
+        width:24px;
+        height:24px;
         top:50%;
         left:0;
         transform:translateY(-50%);
-        width:20px;
-        height:20px;
-      }
-      &:before {
-        border: 1px solid #c9cad5;
-        background-color:#fff;
-
-      }
-
-      &:after {
-        transition: opacity 0.2s ease-in-out;
-        opacity: 0;
+        background:url(../../assets/images/checkbox-outline.svg) no-repeat;
       }
 
       &.big {
@@ -481,12 +475,7 @@ label {
     &:checked {
       + label {
         &:before {
-          border-color:#57576d;
-          background-color:#57576d;
-        }
-        &:after {
-          background:url(../images/check.png) no-repeat center; //이미지 수정 필요
-          opacity:1;
+          background:url(../../assets/images/checkbox-marked.svg) no-repeat;
         }
       }
     }
@@ -515,28 +504,16 @@ label {
       padding-left:30px;
       vertical-align:middle;
 
-      &:before, &:after {
+      &:before {
         content:'';
         position:absolute;
+        width:24px;
+        height:24px;
         top:50%;
         left:0;
         transform:translateY(-50%);
         border-radius:50%;
-      }
-      &:before {
-        width:20px;
-        height:20px;
-        border: 1px solid #57576d;
-        background-color:#fff;
-      }
-
-      &:after {
-        width:14px;
-        height:14px;
-        left:3px;
-        transition: opacity 0.2s ease-in-out;
-        opacity: 0;
-        background-color:#57576d;
+        background:url(../../assets/images/checkbox-circle-outline.svg) no-repeat;
       }
     }
 
@@ -551,10 +528,7 @@ label {
     &:checked {
       + label {
         &:before {
-          border-color:#57576d;
-        }
-        &:after {
-          opacity:1;
+          background:url(../../assets/images/checkbox-circle-radio.svg) no-repeat;
         }
       }
     }
@@ -578,7 +552,7 @@ label {
       transform: translateY(-50%) rotate(0deg);
       -webkit-transition: all 0.5s ease;
       transition: all 0.2s ease;
-      background:url(../images/arrowdown.png) no-repeat center;
+      background:url(../../assets/images/arrow-down.svg) no-repeat center;
 
       &.active {
         transform: translateY(-50%) rotate(-180deg);
@@ -602,7 +576,7 @@ label {
         transform: translateY(-50%) rotate(-180deg);
         -webkit-transition: all 0.5s ease;
         transition: all 0.2s ease;
-        background:url(../images/arrowdown.png) no-repeat center;
+        background:url(../../assets/images/arrowdown.png) no-repeat center;
       }
 
       &.close {
@@ -662,7 +636,7 @@ label {
 
 .main-txt {
   padding:80px 0 180px 30px;
-  background:url(../images/illust-welcome.png) no-repeat right top;
+  background:url(../../assets/images/illust-welcome.png) no-repeat right top;
 
   &.pd-desc {
     padding:80px 0 200px 0;
@@ -854,7 +828,7 @@ label {
             bottom:0;
             left:50%;
             transform:translateX(-50%);
-            background:url(../images/illust-confirm-small.png) no-repeat center bottom;
+            background:url(../../assets/images/illust-confirm-small.png) no-repeat center bottom;
           }
         }
 
@@ -868,7 +842,7 @@ label {
             bottom:0;
             left:50%;
             transform:translateX(-50%);
-            background:url(../images/illust-welcome-small.png) no-repeat center bottom;
+            background:url(../../assets/images/illust-welcome-small.png) no-repeat center bottom;
           }
         }
       }
