@@ -13,6 +13,25 @@ class AuthService{
   public setAuthToken(token:string):void {
     setAuthorization(token);
   }
+
+  public getAuthMobileNum( mobile:string ):Promise<any>{
+    return request('get', `${AUTH_BASE_URL}/sms/${ mobile }`);
+  }
+
+  public getAuthEmail( email:string ):Promise<any> {
+    return request('get', `${AUTH_BASE_URL}/email/${email}`);
+  }
+
+  public getVerification( verify:{ key:string, num:string }):Promise<any> {
+    return request('post', '/verifications', {
+      verification_key: verify.key,
+      auth_number: verify.num,
+    });
+  }
+  public getUserId( mobile:string ):Promise<any>{
+    return request( 'get', `/users/bymobile/${mobile}`);
+  }
+
 }
 /* getAuthMobileNum( mobile ){
     return request('get', `${AUTH_BASE_URL}/sms/${ mobile }`);

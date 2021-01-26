@@ -3,19 +3,36 @@ $border-bt: 1px solid #f4f5f6;
 $mb: 210px;
 $main-red: #ff4d4d;
 
+//margin,padding
+$total:500;
+
+@for $i from 0 through $total {
+  $unit: if($i == 0,  !important, px !important);
 
 
-.b-bt {
-  border-bottom: $border-bt;
-  padding: 20px 40px;
-}
-
-
-.m-bt {
-  margin-bottom: $mb;
-}
-
-.main-red{
-    color: $main-red;
+  .mgt-#{$i} {
+    margin-top:  #{$i}#{$unit};
+  }
+  .mgb-#{$i} {
+    margin-bottom:  #{$i}#{$unit};
+  }
+  .mgl-#{$i} {
+    margin-left:  #{$i}#{$unit};
+  }
+  .mgr-#{$i} {
+    margin-right:  #{$i}#{$unit};
+  }
+  .pdt-#{$i} {
+    padding-top:  #{$i}#{$unit};
+  }
+  .pdb-#{$i} {
+    padding-bottom:  #{$i}#{$unit};
+  }
+  .pdl-#{$i} {
+    padding-left:  #{$i}#{$unit};
+  }
+  .pdr-#{$i} {
+    padding-right:  #{$i}#{$unit};
+  }
 }
 

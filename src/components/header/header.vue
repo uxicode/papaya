@@ -8,6 +8,7 @@
     </template>
     <button class="membership" @click.stop.prevent="isLogout" v-else>로그아웃</button>
   </nav>
+
 </template>
 
 <script lang="ts">
