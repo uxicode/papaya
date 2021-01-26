@@ -50,7 +50,23 @@ class UserService {
   }
 
   /**
-   * 사용자 정보 조회
+   * 사용자 핸폰 번호로 아이디 찾기
+   * @param mobile
+   */
+  public getUserIdByMobile(mobile: string): Promise<any> {
+    return request('get', `${USER_BASE_URL}/bymobile/${mobile}`);
+  }
+
+  /**
+   * 사용자 이메일로 아이디 찾기
+   * @param email
+   */
+  public getUserIdByEmail(email: string): Promise<any> {
+    return request('get', `${USER_BASE_URL}/byemail/${email}/check`);
+  }
+
+  /**
+   * id 로 사용자 정보 조회
    * @param id
    */
   public getFindUser(id:string):Promise<any>{

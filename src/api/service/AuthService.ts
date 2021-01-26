@@ -14,9 +14,6 @@ class AuthService{
     setAuthorization(token);
   }
 
-  public getUserIdByMobile(mobile: string): Promise<any> {
-    return request('get', `${USER_BASE_URL}/bymobile/${mobile}`);
-  }
 
   /**
    * 핸드폰 번호로 인증번호 전송

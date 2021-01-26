@@ -1,11 +1,9 @@
-.login{
-  background-color:#1d1d4c;
-}
+.login {background-color:#1d1d4c;}
 
 .login-form {
   width:1020px;
   margin:0 auto;
-  padding-top:40px;
+  padding:40px 0 60px;
   background: url(../../assets/images/illust-login.png) no-repeat left bottom 84px / 62%;
 
   .form-cnt {
@@ -69,7 +67,10 @@
     }
 
     .find-info {
-      border-bottom:1px solid #f4f5f6;
+
+      .txt-btn {
+
+      }
 
       .find-type {
         padding:20px 40px;

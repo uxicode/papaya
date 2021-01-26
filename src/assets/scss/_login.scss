@@ -3,7 +3,7 @@
 .login-form {
   width:1020px;
   margin:0 auto;
-  padding-top:40px;
+  padding:40px 0 60px;
   background: url(../../assets/images/illust-login.png) no-repeat left bottom 84px / 62%;
 
   .form-cnt {
@@ -41,16 +41,6 @@
       line-height:1.57;
       color:#57576d;
 
-      a {
-        font-weight:500;
-        color:#0f0f15;
-        padding-left:10px;
-
-        &:hover {
-          color:#23527c;
-        }
-      }
-
       .find-info {
         margin-bottom:5px;
         a {
@@ -77,7 +67,10 @@
     }
 
     .find-info {
-      border-bottom:1px solid #f4f5f6;
+
+      .txt-btn {
+
+      }
 
       .find-type {
         padding:20px 40px;
