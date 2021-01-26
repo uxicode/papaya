@@ -8,7 +8,7 @@ label {
   width:100%;
   padding:0 0 10px 0;
   line-height:20px;
-  font-size:16px;
+  font-size:14px;
   border:none;
   border-bottom:1px solid #c9cad5;
   border-radius:0;
@@ -31,6 +31,23 @@ label {
       &.pw-show {opacity: 1;}
     }
   }
+
+  &[type="number"] {
+    width:40px;
+    padding:4px 2px;
+    border:none;
+    text-align: right;
+    background-color:#fff;
+
+    &::-webkit-inner-spin-button{
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    &:focus {
+      background-color:#f4f5f6;
+    }
+  }
 }
 
 .form-message {
@@ -45,7 +62,7 @@ label {
   &.approval {color:#629f00;}
 
   /* form-control focus시 활성화 */
-  &.time {
+  &.ms-time {
     display:none;
     bottom:10px;
     left:auto;
@@ -70,6 +87,21 @@ label {
   }
 }
 
+.form-textarea {
+  width:100%;
+  min-height:80px;
+  padding:10px 14px;
+  border:1px solid #c9cad5;
+  resize:none;
+  line-height: 22px;
+  font-family: "Noto Sans KR", sans-serif;
+  color:#373749;
+  background-color:#fff;
+
+  &::-moz-placeholder {color: rgba(55,55,73,0.2);}
+  &:-ms-input-placeholder {color: #d0d0d0;}
+  &::-webkit-input-placeholder {color: #d0d0d0;}
+}
 
 .form-group {
   position: relative;
@@ -77,10 +109,57 @@ label {
   .form-control {margin-top:10px;}
   +.form-group{margin-top:30px;}
 
+  .btn {
+    &.form-delete {
+      left:0;
+      margin-left:0;
+
+      +.time-control, +.date-area {
+        margin-left:34px;
+      }
+    }
+  }
+
   &.inline {
     label {
       display:inline-block;
       width:120px;
+    }
+
+    .form-control {
+      +.btn {margin-left:6px;}
+    }
+  }
+
+  &.time {
+    display:inline-block;
+    padding-right:34px;
+
+    .time-control {
+      font-size:14px;
+
+      &.no-time {
+        color:#848499;
+      }
+
+      &:focus {
+        padding:4px 10px;
+        background-color:#f4f5f6;
+        + .btn.form-time {
+          background:url(../../assets/images/time.svg) no-repeat
+        }
+      }
+    }
+  }
+
+  &.date {
+    display:inline-block;
+    padding-right:34px;
+
+    .form-control {display:none;}
+    .date-area {
+      font-size:14px;
+      vertical-align:middle;
     }
   }
 }

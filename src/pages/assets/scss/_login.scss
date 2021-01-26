@@ -67,18 +67,18 @@
     }
 
     .find-info {
-
-      .txt-btn {
-
-      }
+      padding:0 40px;
+      margin-top:-1px;
+      border-top:1px solid #f4f5f6;
+      border-bottom:1px solid #f4f5f6;
 
       .find-type {
-        padding:20px 40px;
+        padding:20px 0;
       }
 
       .find-info-input {
         display:none;
-        padding:0 0 40px 74px;
+        padding:0 0 40px 30px;
 
         &.active {
           display:block;
@@ -88,15 +88,18 @@
 
     .find-btn {
       position:absolute;
+      width:100%;
+      padding:0 40px;
       bottom:60px;
       left:50%;
       transform:translateX(-50%);
     }
     .page-back {
       position:absolute;
-      width:340px;
+      width:100%;
       bottom:30px;
       left:50%;
+      padding:0 40px;
       transform:translateX(-50%);
       text-align:right;
       font-weight:500;

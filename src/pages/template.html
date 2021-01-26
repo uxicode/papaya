@@ -17,6 +17,7 @@
 
 
 		<style>
+			.wrapper {background-color:#fff;}
 			h2 {font-size:26px; background-color:#1d1d4c; padding:5px 10px; margin-bottom:20px; color:#fff;}
 			h3 {font-size:20px; margin:50px 0 20px 0; font-weight:500; border-bottom:2px solid #999;}
 			h4 {font-size: 15px;font-weight: 400;color: #fff;display: inline-block;padding: 5px;line-height: 1;margin-top: 15px;background: darkcyan;}
@@ -95,6 +96,12 @@
 								<button type="button" class="btn ico-btn ico-right"><span class="icon arrow"></span>BUTTON</button>
 								<button type="button" class="btn ico-btn ico-right" disabled><span class="icon arrow"></span>BUTTON</button>
 							</div>
+
+							<h3>only-icon-btn</h3>
+							<div class="cnt-container">
+								<button type="button" class="btn only-ico-btn heart"></button>
+								<button type="button" class="btn only-ico-btn camera"></button>
+							</div>
 						</div>
 
 						<div class="mgt-50">
@@ -122,7 +129,7 @@
 								<h4>focus-time</h4> <!-- input 포커스 시 활성화 -->
 								<div class="form-group">
 									<input type="text" class="form-control" placeholder="text">
-									<p class="form-message time">3:00</p>
+									<p class="form-message ms-time">3:00</p>
 								</div>
 							</div>
 
@@ -157,6 +164,14 @@
 							</div>
 
 							<div class="cnt-container">
+								<h3>with button</h3>
+								<div class="form-group inline">
+									<input type="text" class="form-control" id="input3" placeholder="text"  style="width:390px">
+									<button type="button" class="btn secondary fill sm" disabled>중복확인</button>
+								</div>
+							</div>
+
+							<div class="cnt-container">
 								<h3>Title</h3>
 								<div class="form-group inline">
 									<label for="input1">Title left</label>
@@ -166,6 +181,81 @@
 								<div class="form-group">
 									<label for="input2">Title top</label>
 									<input type="text" class="form-control" id="input2" placeholder="text">
+								</div>
+							</div>
+
+							<div class="cnt-container">
+								<h3>Number</h3>
+								<div class="form-group">
+									<input type="number" class="form-control" value="10">
+								</div>
+							</div>
+						</div>
+
+						<div class="mgt-50">
+							<h2>textarea</h2>
+							<div class="cnt-container">
+								<div class="form-group">
+									<textarea class="form-textarea" placeholder="text"></textarea>
+									<p class="form-message count">0/0</p>
+								</div>
+							</div>
+						</div>
+
+						<div class="mgt-50">
+							<h2>input(time)</h2>
+							<div class="memo">
+								<p>- 추후 수정 예정</p>
+							</div>
+							<div class="cnt-container">
+								<h3>default</h3>
+								<div class="form-group time">
+									<input type="text" class="time-control" size="12" value="오후 12시 00분">
+									<button type="button" class="btn form-btn form-time"></button>
+								</div>
+
+								<h3>no data</h3>
+								<div class="form-group time">
+									<input type="text" class="time-control no-time" size="7" value="시간 없음">
+									<button type="button" class="btn form-btn form-time"></button>
+								</div>
+
+								<h3>with delete</h3>
+								<div class="form-group time">
+									<button type="button" class="btn form-btn form-delete"></button>
+									<input type="text" class="time-control" size="12" value="오후 12시 00분">
+									<button type="button" class="btn form-btn form-time"></button>
+								</div>
+							</div>
+						</div>
+
+						<div class="mgt-50">
+							<h2>input(date)</h2>
+							<div class="memo">
+								<p>- input 태그는 display:none</p>
+								<p>- calendar 'active' 클래스명 추가 시 활성화</p>
+							</div>
+							<div class="cnt-container">
+								<h3>default</h3>
+								<div class="form-group date">
+									<input type="text" class="form-control" size="10" value="2020. 2. 28">
+									<span class="date-area">2020. 2. 28</span>
+									<button type="button" class="btn form-btn form-calendar"></button>
+								</div>
+
+								<h3>no data</h3>
+								<div class="form-group date">
+									<input type="text" class="form-control no-date" size="7" value="날짜 없음">
+									<span class="date-area">날짜 없음</span>
+									<button type="button" class="btn form-btn form-calendar"></button>
+								</div>
+
+								<h3>with delete</h3>
+								<div class="form-group date">
+									<button type="button" class="btn form-btn form-delete"></button>
+									<span class="date-area">2020. 2. 28</span>
+									<input type="text" class="form-control" size="10" value="2020. 2. 28">
+									<button type="button" class="btn form-btn form-calendar"></button>
 								</div>
 							</div>
 						</div>
