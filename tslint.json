@@ -15,8 +15,8 @@
     "object-literal-sort-keys": false,
     "ordered-imports": false,
     "quotemark": [true, "single"],
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+//    "esModuleInterop": true,
+//    "allowSyntheticDefaultImports": true,
     "one-line": false,
     "no-trailing-whitespace": false,
     "whitespace": [
@@ -38,6 +38,7 @@
       }
     ],
     "comment-format": false,
-    "no-console": false
+    "no-console": false,
+    "allowUnusedLabels": false
   }
 }

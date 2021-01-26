@@ -1,5 +1,5 @@
 import {request, setAuthorization} from '@/api/service/axiosService';
-import {AUTH_BASE_URL} from '@/api/base';
+import {AUTH_BASE_URL, USER_BASE_URL} from '@/api/base';
 
 class AuthService{
 
@@ -14,14 +14,30 @@ class AuthService{
     setAuthorization(token);
   }
 
+  public getUserIdByMobile(mobile: string): Promise<any> {
+    return request('get', `${USER_BASE_URL}/bymobile/${mobile}`);
+  }
+
+  /**
+   * 핸드폰 번호로 인증번호 전송
+   * @param mobile
+   */
   public getAuthMobileNum( mobile:string ):Promise<any>{
     return request('get', `${AUTH_BASE_URL}/sms/${ mobile }`);
   }
 
+  /**
+   * 메일 주소로 인증 번호 전송
+   * @param email
+   */
   public getAuthEmail( email:string ):Promise<any> {
     return request('get', `${AUTH_BASE_URL}/email/${email}`);
   }
 
+  /**
+   * 인증하기
+   * @param verify
+   */
   public getVerification( verify:{ key:string, num:string }):Promise<any> {
     return request('post', '/verifications', {
       verification_key: verify.key,

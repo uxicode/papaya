@@ -6,10 +6,19 @@ class UserService {
   public getUserURLById(id:string):string {
     return `${USER_BASE_URL}/${id}`;
   }
+
+  /**
+   * 사용자 ID가 존재하는지 체크한다.
+   * @param id
+   */
   public getIDCheck(id:string):Promise<any> {
     return request('get', `${this.getUserURLById(id)}/check`);
   }
 
+  /**
+   * 회원가입
+   * @param info
+   */
   public signUp( info:{
     user_id:string,
     user_password:string,
@@ -31,18 +40,36 @@ class UserService {
     return request('post', `${USER_BASE_URL}`, info );
   }
 
+  /**
+   * 사용자 리스트
+   * @param offset
+   * @param limit
+   */
   public getUsers(offset:number, limit:number):Promise<any> {
     return request('get', USER_BASE_URL, {offset, limit});
   }
 
+  /**
+   * 사용자 정보 조회
+   * @param id
+   */
   public getFindUser(id:string):Promise<any>{
     return request('get', this.getUserURLById(id));
   }
 
+  /**
+   * 사용자 정보 수정.
+   * @param id
+   * @param data
+   */
   public setUserInfo(id:string, data:any ):Promise<any> {
     return request('put', this.getUserURLById(id), data);
   }
 
+  /**
+   *
+   * @param id
+   */
   public deleteUser(id:string):Promise<any> {
     return request('delete', this.getUserURLById(id), { user_id: id });
   }

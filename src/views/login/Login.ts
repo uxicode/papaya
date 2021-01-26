@@ -118,18 +118,18 @@ export default class Login extends Vue {
       this.formData.mobile = '';
     }
   }
-  // 모바일 번호 인증
-  private getAuthMobileNum():void{
-    AuthService.getAuthMobileNum( `${this.formData.mobile}` )
-      .then( (data:any) => {
-        console.log( data );
-        this.isMobileChk=true;
-        this.mVerificationKey=data.verification_key;
-      })
-      .catch( (error:any) => {
-        // this.isErrorModal=true;
-        // this.errorTitle='sms 전송 에러.';
-        this.messages.error=error.data.message;
+
+  private getUserIdByMobile() {
+    AuthService.getUserIdByMobile(this.formData.mobile)
+      .then((data:any)=>{
+        /*{
+          "mobile_no": "01031992443",
+          "user_id": "jbc2119",
+          "message": "아이디 조회 성공."
+        }*/
+        console.log('모바일번호로 아이디조회=', data );
+        this.mVerificationComplete=true;
+        this.findUserID=data.user_id;
       });
   }
 //모바일 인증 번호 전송
