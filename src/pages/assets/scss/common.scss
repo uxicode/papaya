@@ -212,7 +212,7 @@ button {
   *zoom: 1;
 }
 
-.clearfix:after, .footer-inner:after, .tabs-line:after, contents-inner:after{
+.clearfix:after, .footer-inner:after, .tabs-line:after, .contents-group:after{
   content: "";
   display: block;
   clear: both;
@@ -249,6 +249,9 @@ body {
 
 .vt {vertical-align: top !important;}
 
+.bd-none {border:none !important;}
+.pd-none {padding:0 !important;}
+
 .required {
   &:after {
     content:'';
@@ -277,6 +280,8 @@ body {
     background-color:#848499;
   }
 }
+
+.thumb, .icon-img {width:100%;}
 
 // tab-list
 .tabs-line {
@@ -500,7 +505,7 @@ body {
         background:url(../../assets/images/arrowdown.png) no-repeat center;
       }
 
-      &.close {
+      &.acti {
         &:after {
           transform: translateY(-50%) rotate(0deg);
           -webkit-transition: all 0.5s ease;
@@ -559,10 +564,6 @@ body {
   padding:80px 0 180px 30px;
   background:url(../../assets/images/illust-welcome.png) no-repeat right top;
 
-  &.pd-desc {
-    padding:80px 0 200px 0;
-  }
-
   p {
     font-size:16px;
     color:#57576d;
@@ -576,30 +577,6 @@ body {
   font-size:26px;
   font-weight:500;
   line-height:1.5;
-}
-
-
-.contents-left {
-  float:left;
-  margin-top:20px;
-}
-
-.contents-right {
-  float:right;
-  margin-top:20px;
-}
-
-.cnt-top {
-  position:relative;
-
-  .cnt-tit {
-    font-size:18px;
-    font-weight:500;
-  }
-}
-
-.thumb {
-  width:100%;
 }
 
 
@@ -702,7 +679,7 @@ body {
       text-align:center;
 
       .card-tit {
-        font-size:16px;
+        font-size:18px;
         color:#0f0f15;
 
         &.fw-500 {

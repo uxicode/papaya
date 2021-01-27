@@ -1,6 +1,8 @@
 // table
 .tb-cnt {
   .tb {
+    width:100%;
+
     .top {vertical-align:top;}
     .mid {vertical-align:middle;}
     .btm {vertical-align:bottom;}
@@ -17,9 +19,40 @@
           }
         }
 
+        th {
+          font-weight:500;
+          color:#57576d;
+        }
+
         &:first-child {
           th, td {
             padding-top:0;
+          }
+        }
+      }
+    }
+
+    &.tb-search {
+      tr {
+        th, td {
+          padding:15px 0;
+          border-bottom:1px solid #f4f5f6;
+          text-align:left;
+        }
+
+        th {
+          padding-left:40px;
+          font-weight:400;
+          strong {font-weight:500;}
+        }
+        td {
+          padding-left:20px;
+          color:#848499;
+        }
+
+        &:last-child {
+          th, td {
+            border-bottom:none;
           }
         }
       }

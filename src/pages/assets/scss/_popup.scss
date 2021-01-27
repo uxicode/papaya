@@ -11,16 +11,187 @@
   position:absolute;
   left:50%;
   top:50%;
-  transform:translate(-50%);
+  transform:translate(-50%, -50%);
   box-shadow: 0 0 10px 0 rgba(15, 15, 21, 0.05);
   background-color: #ffffff;
 
-  .popup-icon {
-    width:50px;
-    height:50px;
+  .popup-header {
+    position:relative;
+    padding:30px 40px 20px;
 
-    &.error {
-      background:url(../../assets/images/popup-icon-error.png) no-repeat;
+    .popup-header-tit {
+      font-size:18px;
+      font-weight:500;
+    }
+
+    .popup-icon {
+      width:50px;
+      height:50px;
+
+      &.error {background:url(../../assets/images/popup-icon-error.png) no-repeat;}
+      &.search {background:url(../../assets/images/popup-icon-search.png) no-repeat;}
+      &.profile {background:url(../../assets/images/popup-icon-profile.png) no-repeat;}
+    }
+
+    .popup-close {
+      position:absolute;
+      right:40px;
+      top:30px;
+    }
+  }
+
+  .popup-body {
+    .popup-cnt {
+      padding:10px 40px;
+    }
+    .popup-search {
+      padding:10px 40px 20px;
+    }
+
+    .popup-tit {
+      padding-bottom:20px;
+      font-size:18px;
+      font-weight:500;
+    }
+
+    .popup-txt {
+      letter-spacing:0;
+      color:#57576d;
+    }
+
+    .popup-search-result {
+      position:relative;
+      height:320px;
+
+      .popup-search-list {
+        height:100%;
+        overflow-y:auto;
+        border-top:1px solid #f4f5f6;
+        border-bottom:1px solid #f4f5f6;
+      }
+
+      .search-none {
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform: translate(-50%, -50%);
+        font-size:16px;
+        letter-spacing: 0;
+        color:#848499;
+      }
+    }
+
+    .popup-input {
+      padding:30px 0;
+    }
+
+    .write-notify {
+      .write-header {
+        margin:0 40px;
+        border-top:1px solid #f4f5f6;
+
+        .class-select {
+          position:relative;
+          padding:20px 0 20px 42px;
+          border-bottom:1px solid #f4f5f6;
+
+          .select-tit {color:#848499;}
+
+          .list-popup {
+            position:absolute;
+            right:0;
+            top:50%;
+            transform:translateY(-50%);
+
+            .list-popup-list {
+              .item {
+                a {
+                  padding-left:72px;
+
+                  .profile-img {
+                    position:absolute;
+                    display:inline-block;
+                    width:32px;
+                    height:32px;
+                    top:50%;
+                    left:20px;
+                    transform:translateY(-50%);
+                  }
+                }
+              }
+            }
+          }
+
+          .icon {
+            position:absolute;
+            width:32px;
+            height:32px;
+            top:50%;
+            left:0;
+            transform:translateY(-50%);
+
+            &.icon-class {background-image:url(../../assets/images/profile-class.png);}
+            &.icon-schedule {background-image:url(../../assets/images/profile-myplan.png);}
+
+            .color-mark {
+              position:absolute;
+              display: block;
+              width:12px;
+              height:12px;
+              bottom:0;
+              right:0;
+              border-radius:50%;
+              border:2px solid #fff;
+              &.red {
+                background-color:red;
+              }
+            }
+          }
+        }
+
+        .write-tit {
+          padding:18px 0;
+        }
+      }
+
+      .write-body {
+        height:354px;
+        padding:20px 40px;
+        border-top:1px solid #f4f5f6;
+      }
+
+      .write-footer {
+        position:relative;
+        padding:13px 40px;
+        border-top:1px solid #f4f5f6;
+        border-bottom:1px solid #f4f5f6;
+
+        .notify-type-list {
+          overflow:hidden;
+
+          li {
+            float:left;
+            margin-right:20px;
+          }
+        }
+
+        .notify-btn-save {
+          @include pos-abs( $top: 50%, $right: 40px );
+          transform:translateY(-50%);
+        }
+      }
+    }
+  }
+
+  .popup-footer {
+    position:relative;
+    padding:30px 40px;
+
+    .popup-search-input {
+      position:absolute;
+      top:50%;
+      left:40px;
+      transform:translateY(-50%);
     }
   }
 }

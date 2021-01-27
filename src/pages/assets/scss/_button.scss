@@ -14,7 +14,7 @@
 
   &.sm {
     min-width:80px;
-    padding:9px 0;
+    padding:10px 0;
     font-size:12px;
   }
 
@@ -99,6 +99,15 @@
       .icon {left:20px;}
     }
 
+    &.sm {
+      min-width:80px;
+      padding:10px 0 10px 17px;
+
+      &.ico-right {
+        padding-right:40px;
+      }
+    }
+
     &:hover {
       border-color:#57576d;
     }
@@ -127,18 +136,19 @@
     height:32px;
     border-radius:50%;
     padding:0;
+    background-repeat: no-repeat;
 
     &.heart {
-      background:url(../../assets/images/btn-round-heart-off.svg) no-repeat;
+      background-image:url(../../assets/images/btn-round-heart-off.svg);
 
       &:active, &.active {
         background-image:url(../../assets/images/btn-round-heart.svg)
       }
     }
 
-    &.camera {
-      background:#1d1d4c url(../../assets/images/camera.svg) no-repeat center;
-    }
+    &.camera {background:#1d1d4c url(../../assets/images/camera.svg) no-repeat center;}
+    &.prev {background-image:url(../../assets/images/btn-round-prev.svg);}
+    &.next {background-image:url(../../assets/images/btn-round-next.svg);}
   }
 
   &.form-btn {
@@ -201,6 +211,49 @@
     li {
       a {
         padding:13px 0 13px 20px;
+      }
+    }
+  }
+}
+
+// list popup
+.list-popup {
+  .list-popup-btn {
+    min-width:24px;
+    height:24px;
+    background:url(../../assets/images/arrow-right.svg) no-repeat;
+  }
+
+  .list-popup-cnt {
+    position:absolute;
+    display:none;
+    top:0;
+    background-color:#fff;
+    border-radius:5px;
+    box-shadow: 0 0 20px 0 rgba(15, 15, 21, 0.05);
+
+    &.active {display:block;}
+
+    .list-popup-tit {
+      padding:18px 20px;
+      font-size:16px;
+      font-weight:500;
+      color:#0f0f15;
+    }
+
+    .list-popup-list {
+      overflow-y: auto;
+
+      .item {
+        a {
+          position:relative;
+          display:block;
+          padding:15px 20px;
+
+          &:hover, &:active {
+            background-color:#f4f5f6;
+          }
+        }
       }
     }
   }

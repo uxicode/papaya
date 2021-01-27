@@ -20,7 +20,7 @@
 	</head>
 
 	<body>
-		<div class="wrapper classes">
+		<div class="wrapper">
 			<!-- start: header -->
 			<header class="dark">
 				<div class="header-container">
@@ -39,7 +39,7 @@
 						<li><a href="#"><img src="./assets/images/search-white.png" alt="" /></a></li>
 						<li><a href="#"><img src="./assets/images/alert-white-on.png" alt="" /></a></li>
 						<li><a href="#"><img src="./assets/images/mypage-white.png" alt="" /></a></li>
-						<li><a href="#" class="arrow-down"><img src="./dist/images/a-down.png" alt="" /></a></li>
+						<li><a href="#" class="arrow-down"><img src="assets/images/a-down.png" alt="" /></a></li>
 					</ul>
 
 				</div>
@@ -48,103 +48,135 @@
 
 			<!-- start: container -->
 			<div class="container-fluid">
-				<div class="contents">
+				<div class="contents home">
 					<div class="contents-inner">
-						<section class="contents-left">
-							<div class="class-notify">
-								<div class="notify-top">
-									<p class="class-tit">클래스별 알림</p>
-								</div>
-								<div class="notify-cnt">
-									<ul class="notify-list">
-										<li>
-											<a href="" class="all-class active">
-												<span class="class-photo"><img src="./dist/images/profile-class.png" class="thumb" alt=""></span>
-												<span class="class-name">모든 클래스 알림</span>
-											</a>
-										</li>
-										<li>
-											<a href="">
-												<span class="class-photo"><img src="./dist/images/bg-icon.png" class="thumb" alt=""></span>
-												<span class="class-name">1학년 3반 수학</span>
-											</a>
-										</li>
-										<li>
-											<a href="">
-												<span class="class-photo"><img src="./dist/images/pic5.png" class="thumb" alt=""></span>
-												<span class="class-name">특목 고등학교 입시 미술반</span>
-											</a>
-										</li>
-										<li>
-											<a href="">
-												<span class="class-photo"><img src="./dist/images/bg-icon.png" class="thumb" alt=""></span>
-												<span class="class-name">미술 아동반</span>
-											</a>
-										</li>
-										<li>
-											<a href="">
-												<span class="class-photo"><img src="./dist/images/pic5.png" class="thumb" alt=""></span>
-												<span class="class-name">6학년 3반 독서부</span>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</div>
 
-							<!-- 다가오는 일정 영역 -->
-							<div class="class-schedule">
-								<div class="schedule-top">
-									<p class="class-tit">다가오는 일정</p>
+						<div class="contents-group">
+							<section class="contents-left">
+								<div class="class-notify">
+									<div class="notify-top">
+										<p class="class-tit">클래스별 알림</p>
+									</div>
+									<div class="notify-cnt">
+										<ul class="notify-list">
+											<li>
+												<a href="" class="all-class active">
+													<span class="class-photo"><img src="assets/images/profile-class.png" class="thumb" alt=""></span>
+													<span class="class-name">모든 클래스 알림</span>
+												</a>
+											</li>
+											<li>
+												<a href="">
+													<span class="class-photo"><img src="assets/images/bg-icon.png" class="thumb" alt=""></span>
+													<span class="class-name">1학년 3반 수학</span>
+												</a>
+											</li>
+											<li>
+												<a href="">
+													<span class="class-photo"><img src="assets/images/pic5.png" class="thumb" alt=""></span>
+													<span class="class-name">특목 고등학교 입시 미술반</span>
+												</a>
+											</li>
+											<li>
+												<a href="">
+													<span class="class-photo"><img src="assets/images/bg-icon.png" class="thumb" alt=""></span>
+													<span class="class-name">미술 아동반</span>
+												</a>
+											</li>
+											<li>
+												<a href="">
+													<span class="class-photo"><img src="assets/images/pic5.png" class="thumb" alt=""></span>
+													<span class="class-name">6학년 3반 독서부</span>
+												</a>
+											</li>
+										</ul>
+									</div>
 								</div>
-								<div class="schedule-cnt">
-									<ul class="schedule-list">
-										<li>
-											<div class="date"><span>2. 29</span></div>
 
-											<div class="detail">
-												<div class="detail-list">
-													<div class="item">
-														<span class="bullet red"></span>
-														<p class="schedule-tit">서울여대 동창회 모임</p>
-														<span class="time">오후 5시 - 8시</span>
+								<!-- 다가오는 일정 영역 -->
+								<div class="classes-todo">
+									<div class="schedule-top">
+										<p class="class-tit">다가오는 일정</p>
+									</div>
+									<div class="schedule-cnt">
+										<ul class="schedule-list">
+											<li>
+												<div class="date"><span>2. 29</span></div>
+
+												<div class="detail">
+													<div class="detail-list">
+														<div class="item">
+															<span class="bullet orange"></span>
+															<p class="schedule-tit">서울여대 동창회 모임</p>
+															<span class="time">오후 5시 - 8시</span>
+														</div>
+													</div>
+												</div>
+											</li>
+
+											<li>
+												<div class="date">
+													<p>3. 2</p>
+												</div>
+												<div class="detail">
+													<div class="detail-list">
+														<div class="item">
+															<span class="bullet green"></span>
+															<p class="schedule-tit">주말 독서 (1/2)</p>
+															<span class="time">2020. 3. 2 - 2020. 3. 3</span>
+														</div>
+
+														<div class="item">
+															<span class="bullet ps-blue"></span>
+															<p class="schedule-tit">미술대회 일정 안내</p>
+															<span class="time">2020. 3. 2 - 2020. 3. 3</span>
+														</div>
+													</div>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<!-- 다가오는 일정 영역 -->
+							</section>
+							<section class="contents-right">
+								<div class="classes-schedule">
+									<div class="cnt-top">
+										<h2 class="cnt-tit">모든 클래스 일정</h2>
+										<div class="cnt-top-btn"><a href=""><img src="assets/images/classmenu-setting-outline.svg" alt=""></a></div>
+									</div>
+
+									<div class="schedule-calendar">
+										<div class="calendar-top">
+											<div class="tb-style full">
+												<div class="tb-cell" style="width:74px;">
+													<div class="calendar-arrow-btn">
+														<button type="button" class="btn only-ico-btn prev"></button>
+														<button type="button" class="btn only-ico-btn next"></button>
+													</div>
+												</div>
+												<div class="tb-cell">
+													<p class="calendar-date">2020년 2월 29일 - 2020년 3월 4일</p>
+												</div>
+												<div class="tb-cell rt">
+													<div class="form-group">
+														<button type="button" class="btn secondary fill sm">오늘</button>
+														<select class="form-select">
+															<option value="">월간</option>
+															<option value="" selected>주간</option>
+															<option value="">일간</option>
+														</select>
 													</div>
 												</div>
 											</div>
-										</li>
-
-										<li>
-											<div class="date">
-												<p>3. 2</p>
-											</div>
-											<div class="detail">
-												<div class="detail-list">
-													<div class="item">
-														<span class="bullet sky-blue"></span>
-														<p class="schedule-tit">주말 독서 (1/2)</p>
-														<span class="time">2020. 3. 2 - 2020. 3. 3</span>
-													</div>
-
-													<div class="item">
-														<span class="bullet blue"></span>
-														<p class="schedule-tit">미술대회 일정 안내</p>
-														<span class="time">2020. 3. 2 - 2020. 3. 3</span>
-													</div>
-												</div>
-											</div>
-										</li>
-									</ul>
+										</div>
+									</div>
 								</div>
-							</div>
-							<!-- 다가오는 일정 영역 -->
-						</section>
+							</section>
+						</div>
 
-						<section class="contents-right">
-							<div class="cnt-top">
-								<h2 class="cnt-tit pdt-14">모든 클래스 일정</h2>
-								<div class="cnt-top-btn"><a href=""><img src="./dist/images/btn-round-big.png" alt=""></a></div>
-							</div>
-
-						</section>
+						<!-- 스크립트로 right 조절 필요 -->
+						<a href="" class="classes-add-btn"></a>
 					</div>
 				</div>
 			</div>

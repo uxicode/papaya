@@ -174,3 +174,30 @@ footer {
   }
 
 }
+
+// contents-right/left
+.contents-inner {
+  position:relative;
+  width:1020px;
+  margin:0 auto;
+
+  .contents-group{
+    margin-top:20px;
+    padding: 0 50px 150px;
+    .contents-left {
+      width:300px;
+      float:left;
+    }
+
+    .contents-right {
+      width:600px;
+      float:right;
+
+      .cnt-top {position:relative;}
+      .cnt-tit {
+        font-size:18px;
+        font-weight:500;
+      }
+    }
+  }
+}
