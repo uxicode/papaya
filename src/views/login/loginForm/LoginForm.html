@@ -1,0 +1,29 @@
+<div class="form-cnt">
+  <h2 class="login-tit">로그인</h2>
+
+  <div class="form-input">
+    <div class="form-group">
+      <label for="userID">아이디</label>
+      <input type="text" class="form-control" v-model="userId" id="userID" placeholder="아이디를 입력해 주세요." >
+    </div>
+    <div class="form-group">
+      <label for="userPW">비밀번호</label>
+      <input type="password" class="form-control" v-model="userPw" id="userPW" placeholder="비밀번호를 입력해 주세요." >
+    </div>
+
+    <div class="btn-group mgt-40">
+      <button type="button" class="btn primary red big wd-full"  @click="validate">로그인</button>
+    </div>
+  </div>
+
+  <div class="login-helper">
+    <div class="find-info">
+      <a href="" class="txt-btn after-line" @click.prevent="findIdHandler">아이디 찾기</a>
+      <a href="" class="txt-btn pdl-10" @click.prevent="">비밀번호 재설정하기</a>
+    </div>
+    <div class="join">
+      <span>아직 회원이 아니신가요?</span>
+      <router-link class="txt-btn" :to="{name:'/signup'}">회원가입</router-link>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,6 @@
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 import {LOGIN, LOGOUT, GET_TOKEN} from '@/store/mutation-auth-types';
+import {LOGIN_ACTION} from '@/store/action-auth-types';
 import {IUser} from '@/api/model/user.model';
 import AuthService from '@/api/service/AuthService';
 
@@ -8,15 +9,25 @@ import AuthService from '@/api/service/AuthService';
 })
 export default class AuthModule extends VuexModule{
     private token: any = ''; //멤버 변수는 state 로 이용된다.
+    private findId: string = '';
     private user:object= {};
-
     private count: number=0;
+
     get isAuth():boolean{
         return !!this.token;
     }
 
     get tokenStatus():string | null{
         return this.token;
+    }
+
+    get findUserId():string{
+        return this.findId;
+    }
+
+    @Mutation
+    public setUserId( userId:string ):void{
+        this.findId=userId;
     }
 
     @Mutation
@@ -49,8 +60,9 @@ export default class AuthModule extends VuexModule{
         delete localStorage.token;
         delete localStorage.user;
     }
+
     @Action({commit: LOGIN, rawError:true})
-    public login( payload:{ uid:string, password:string } ):Promise<any>{
+    public [LOGIN_ACTION]( payload:{ uid:string, password:string } ):Promise<any>{
         console.log(payload);
         return AuthService.login(payload.uid, payload.password)
           .then((data: any) => {

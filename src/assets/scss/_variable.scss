@@ -3,7 +3,6 @@ $border-bt: 1px solid #f4f5f6;
 $mb: 210px;
 $main-red: #ff4d4d;
 
-//margin,padding
 $total:500;
 
 @for $i from 0 through $total {
@@ -33,6 +32,10 @@ $total:500;
   }
   .pdr-#{$i} {
     padding-right:  #{$i}#{$unit};
+  }
+
+  .wd-#{$i} {
+    width:  #{$i}#{$unit};
   }
 }
 
