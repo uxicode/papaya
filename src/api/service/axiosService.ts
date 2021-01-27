@@ -1,11 +1,14 @@
-import axios, { AxiosResponse} from 'axios';
+import axios, { AxiosResponse, AxiosRequestConfig} from 'axios';
 import router from '@/router';
 import store from '@/store';
 import {LOGOUT} from '@/store/mutation-auth-types';
 
 // 파파야 swagger http://211.254.212.184:8089/api-docs/#/
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
-/*axios.interceptors.request.use( ( config: AxiosRequestConfig ) => {
+/**
+ * request interceptor
+ */
+axios.interceptors.request.use( ( config: AxiosRequestConfig ) => {
     // Do something before request is sent
     config.headers.Authorization =`Bearer ${ localStorage.getItem('token') }`;
     return config;
@@ -14,14 +17,16 @@ axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
     return Promise.reject(error);
 });
 
-// Add a response interceptor
+/**
+ * response interceptor
+ */
 axios.interceptors.response.use( (response: AxiosResponse ) => {
     // Do something with response data
     return response;
 },  ( error:any ) => {
     // Do something with response error
     return Promise.reject( error );
-});*/
+});
 const onUnauthorized = () => {
     router.push(`/login?rPath=${encodeURIComponent( location.pathname )}`)
         .then(  ( ) => {

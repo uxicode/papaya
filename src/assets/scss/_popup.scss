@@ -1,0 +1,26 @@
+.popup {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color:rgba(15, 15, 21, 0.2);
+}
+
+.popup-dialog {
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%);
+  box-shadow: 0 0 10px 0 rgba(15, 15, 21, 0.05);
+  background-color: #ffffff;
+
+  .popup-icon {
+    width:50px;
+    height:50px;
+
+    &.error {
+      background:url(../../assets/images/popup-icon-error.png) no-repeat;
+    }
+  }
+}

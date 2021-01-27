@@ -1,6 +1,7 @@
 import { Vue, Component } from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import AuthService from '@/api/service/AuthService';
+import UserService from '@/api/service/UserService';
 import WithRender from './Login.html';
 import './Login.scss';
 
@@ -70,9 +71,20 @@ export default class Login extends Vue {
     return (this.$route.query.rqPath) ? this.$route.query.rqPath as string : '/';
   }
 
+  /**
+   * 유효한 모바일 번호인지 체크
+   */
   get userMobileState():boolean{
     const userMobile=/^\d{3}\d{3,4}\d{4}$/;
     return userMobile.test(this.formData.mobile );
+  }
+
+  /**
+   * 유요한 이메일인지 체크
+   */
+  get userEmailState():boolean{
+    const userEmail=/^[a-z0-9!#$%&'*+\\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/ig;
+    return userEmail.test(this.formData.email);
   }
 
   get loginStatus():boolean{
@@ -118,19 +130,34 @@ export default class Login extends Vue {
       this.formData.mobile = '';
     }
   }
-  // 모바일 번호 인증
-  private getAuthMobileNum():void{
-    AuthService.getAuthMobileNum( `${this.formData.mobile}` )
-      .then( (data:any) => {
-        console.log( data );
-        this.isMobileChk=true;
-        this.mVerificationKey=data.verification_key;
-      })
-      .catch( (error:any) => {
-        // this.isErrorModal=true;
-        // this.errorTitle='sms 전송 에러.';
-        this.messages.error=error.data.message;
+
+  /**
+   * 사용자 mobile 번호로 아이디 찾기
+   * @private
+   */
+  private getUserIdByMobile() {
+    this.mVerificationComplete=false;
+    UserService.getUserIdByMobile(this.formData.mobile)
+      .then((data:any)=>{
+        /*{
+          "mobile_no": "01031992443",
+          "user_id": "jbc2119",
+          "message": "아이디 조회 성공."
+        }*/
+        console.log('모바일번호로 아이디조회=', data );
+        this.mVerificationComplete=true;
+        this.findUserID=data.user_id;
       });
+  }
+
+  private getUserIdByEmail() {
+    this.mVerificationComplete=false;
+    UserService.getUserIdByEmail(this.formData.email)
+      .then( (data:any) => {
+        console.log('이메일로 아이디조회=', data );
+        this.mVerificationComplete=true;
+        this.findUserID=data.user_id;
+    });
   }
 //모바일 인증 번호 전송
   private mVerificationConfirm():void{

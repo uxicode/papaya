@@ -1,0 +1,86 @@
+label {
+  display:block;
+  font-weight:500;
+  color:#57576d;
+}
+
+.form-control {
+  width:100%;
+  padding:0 0 10px 0;
+  line-height:20px;
+  font-size:16px;
+  border:none;
+  border-bottom:1px solid #c9cad5;
+  border-radius:0;
+  box-shadow:none;
+  background-color:transparent;
+
+  &::-moz-placeholder {color: rgba(55,55,73,0.2);}
+  &:-ms-input-placeholder {color: #d0d0d0;}
+  &::-webkit-input-placeholder {color: #d0d0d0;}
+
+  &[disabled], &[readonly] {color:#848499;}
+
+  &:focus {
+    border-color:#0f0f15;
+    box-shadow:none;
+
+    +.form-message {
+      &.count {color:#57576d;}
+      &.time {display:block;}
+      &.pw-show {opacity: 1;}
+    }
+  }
+}
+
+.form-message {
+  position:absolute;
+  left:0;
+  margin-top:2px;
+  font-size:12px;
+  color:#57576d;
+
+  &.count {left:auto; right:0; color:#848499;}
+  &.error {color:#ff4d4d;}
+  &.approval {color:#629f00;}
+
+  /* form-control focus시 활성화 */
+  &.time {
+    display:none;
+    bottom:10px;
+    left:auto;
+    right:0;
+    font-size:14px;
+    color:#ff4d4d;
+  }
+
+  /* form-control password focus시 활성화 */
+  &.pw-show {
+    width:24px;
+    height:24px;
+    left:auto;
+    right:0;
+    bottom:6px;
+    opacity: 0.2;
+    background:url(../../assets/images/eye.svg) no-repeat;
+
+    &.active {
+      background:url(../../assets/images/eye-off.svg) no-repeat;
+    }
+  }
+}
+
+
+.form-group {
+  position: relative;
+
+  .form-control {margin-top:10px;}
+  +.form-group{margin-top:30px;}
+
+  &.inline {
+    label {
+      display:inline-block;
+      width:120px;
+    }
+  }
+}

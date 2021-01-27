@@ -48,42 +48,21 @@
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane fade in active" id="a5">
             <p class="find-txt">아이디 찾기를 위한 방법을 선택해 주세요.</p>
+
             <div class="find-info">
               <div class="find-type">
                 <div class="btn-radio">
-                  <input type="radio" name="radio" id="radio1" @click="radioBtnChanges">
+                  <input type="radio" name="radio" id="radio1"  v-model="formData.radioValue" value="mobile" @click="radioBtnChanges">
                   <label for="radio1">전체 회원 정보에 등록된 모바일 번호로 아이디 찾기</label>
                 </div>
               </div>
-              <div class="find-info-input active">
+              <div class="find-info-input" v-bind:class="{'active':formData.radioValue ==='mobile'}">
                 <div class="form-group inline">
                   <!--<input type="text" class="form-control" placeholder="모바일 번호 ‘-‘없이 입력해 주세요."  style="width:216px">
                   <button type="button" class="btn basic x32 sm secondary fill" disabled>인증</button>-->
-                  <p v-if="formData.radioValue ==='mobile'">
-                    <input type="text"
-                           class="form-control"
-                           v-model="formData.mobile"
-                           :placeholder="messages.mobile"
-                           style="width:216px;"
-                           name="mobileVerification" />
-                    <label for="mobileVerification" class="blind"></label>
-                    <button type="button"
-                            class="btn basic x32 sm secondary fill"
-                            :disabled="!userMobileState"
-                            @click.stop="getAuthMobileNum">{{ isMobileChk? '재전송':'인증' }}</button>
-                  </p>
-
-                  <p v-if="isMobileChk">
-                    <input type="text"
-                           class="form-control"
-                           v-model="mVerificationVal"
-                           ref="mVerificationVal" />
-                    <button type="button"
-                            class="btn basic x32 sm secondary fill"
-                            :disabled="mVerificationVal===''"
-                            @click.stop="mVerificationConfirm">확인</button>
-                  </p>
-                  <small v-if="mVerificationComplete" >모바일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</small>
+                  <input type="text" class="form-control" v-model="formData.mobile" :placeholder="messages.mobile" style="width:216px;"/>
+                  <button type="button" class="btn basic x32 sm secondary fill" :disabled="!userMobileState" @click.stop="getUserIdByMobile">인증</button>
+                  <small v-if="mVerificationComplete">모바일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</small>
                 </div>
               </div>
             </div>
@@ -91,13 +70,15 @@
             <div class="find-info">
               <div class="find-type">
                 <div class="btn-radio">
-                  <input type="radio" name="radio" id="radio2">
+                  <input type="radio" name="radio" id="radio2"  v-model="formData.radioValue" value="email">
                   <label for="radio2">회원 정보에 등록된 이메일로 아이디 찾기</label>
                 </div>
               </div>
-              <div class="find-info-input">
+              <div class="find-info-input" v-bind:class="{'active':formData.radioValue ==='email'}">
                 <div class="form-group">
-                  <input type="text" class="form-control" placeholder="이메일 주소를 입력해 주세요."  style="width:306px">
+                  <input type="text" class="form-control" v-model="formData.email" :placeholder="messages.email" >
+                  <button type="button" class="btn basic x32 sm secondary fill" :disabled="!userEmailState" @click.stop="getUserIdByEmail">인증</button>
+                  <small v-if="mVerificationComplete">이메일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</small>
                 </div>
               </div>
             </div>
