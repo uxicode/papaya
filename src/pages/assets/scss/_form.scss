@@ -110,6 +110,46 @@ select {
   }
 }
 
+.form-switcher {
+  display: inline-block;
+  position: relative;
+
+  input {
+    visibility: hidden;
+    position: absolute;
+    &:checked + label {
+      background-color: #adc500;
+    }
+    &:checked + label:after {
+      transform: translateX(100%);
+    }
+  }
+
+  label {
+    background-color: #f4f5f6;
+    border-radius: 20px;
+    display: inline-block;
+    position: relative;
+    transition: all 0.3s ease;
+    width: 42px;
+    height: 24px;
+
+    &:after {
+      z-index: 3;
+      content: '';
+      position: absolute;
+      top:3px;
+      left:3px;
+      width: 18px;
+      height: 18px;
+      background-color: #fff;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      transform: translateX(0);
+    }
+  }
+}
+
 .form-textarea {
   width:100%;
   min-height:80px;
@@ -117,6 +157,7 @@ select {
   border:1px solid #c9cad5;
   resize:none;
   line-height: 22px;
+  font-size:14px;
   font-family: "Noto Sans KR", sans-serif;
   color:#373749;
   background-color:#fff;
@@ -136,7 +177,7 @@ select {
 .form-group {
   position: relative;
 
-  +.form-group{margin-top:30px;}
+  //+.form-group{margin-top:30px;}
 
   .btn {
     &.form-delete {
@@ -187,12 +228,15 @@ select {
 
   &.date {
     display:inline-block;
-    padding-right:34px;
 
     .form-control {display:none;}
     .date-area {
       font-size:14px;
       vertical-align:middle;
+
+      + .form-btn {margin-left:6px;}
+
+      &.placeholder {color:#848499;}
     }
   }
 }

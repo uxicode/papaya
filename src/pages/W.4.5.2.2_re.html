@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+	<title></title>
+	<meta content="" property="og:title" />
+	<meta content="" property="og:url" />
+	<meta content="" property="og:description" />
+	<meta content="" property="og:image" />
+	<meta content="website" property="og:type" />
+	<meta content="" property="og:site_name" />
+
+	<link rel="stylesheet" type="text/css" href="./assets/css/common.css" />
+	<link rel="stylesheet" type="text/css" href="./assets/css/pages.css" />
+</head>
+
+<body>
+<div class="popup">
+	<!-- popup-dialog : active 시 화면 노출 -->
+	<div class="popup-dialog active" style="width:600px;">
+		<!-- popup header -->
+		<div class="popup-header">
+			<p class="popup-header-tit">새 알림 작성</p>
+			<div class="popup-close">
+				<button class="close"><img src="assets/images/close.svg" alt=""></button>
+			</div>
+		</div>
+		<!--// popup header -->
+
+		<!-- popup-body -->
+		<div class="popup-body">
+			<div class="write-notify">
+				<div class="write-header">
+					<div class="write-user">
+						<span class="profile-img"><img src="assets/images/bg-icon.png" class="thumb" alt=""></span>
+						<div class="user-info">
+							<span>파파야초등학교</span>
+							<p>꿈꾸는 5학년 1반</p>
+						</div>
+					</div>
+					<div class="write-tit">
+						<input type="text" class="form-control bd-none pd-none fs-16" placeholder="제목을 20자 이내로 작성해 주세요.">
+					</div>
+				</div>
+
+				<div class="write-inner">
+					<div class="write-cnt" style="height:354px;">
+						<textarea class="form-textarea bd-none pd-none h-full" placeholder="알림 내용을 작성해 주세요."></textarea>
+					</div>
+				</div>
+
+				<div class="write-footer">
+					<ul class="notify-type-list">
+						<li><a href=""><img src="assets/images/image.svg" alt=""></a></li>
+						<li><a href=""><img src="assets/images/file.svg" alt=""></a></li>
+						<li><a href=""><img src="assets/images/vote.svg" alt=""></a></li>
+						<li><a href=""><img src="assets/images/link.svg" alt=""></a></li>
+						<li><a href=""><img src="assets/images/time-outline.svg" alt=""></a></li>
+					</ul>
+
+					<div class="notify-btn-save"><a href="" class="txt-btn">임시저장</a></div>
+				</div>
+			</div>
+		</div>
+		<!--// popup-body -->
+
+		<!-- popup footer -->
+		<div class="popup-footer">
+			<div class="btn-group rt">
+				<button type="button" class="btn primary navi" disabled>등록</button>
+			</div>
+		</div>
+		<!--// popup footer -->
+	</div>
+</div>
+</body>
+</html>

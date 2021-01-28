@@ -283,6 +283,30 @@ body {
 
 .thumb, .icon-img {width:100%;}
 
+.color-mark {
+  position:absolute;
+  display: block;
+  width:12px;
+  height:12px;
+  bottom:0;
+  right:0;
+  border-radius:50%;
+  border:2px solid #fff;
+
+  &.red {background-color:#ff4d4d;}
+  &.yellow {background-color:#ffd100;}
+  &.blue {background-color:#2183de;}
+  &.pink {background-color:#ff90aa;}
+  &.aqua {background-color:#1cdbc9;}
+  &.black {background-color:#0f0f15;}
+}
+
+.profile-img {
+  width:32px;
+  height:32px;
+  display:inline-block;
+}
+
 // tab-list
 .tabs-line {
   border-bottom:1px solid #f4f5f6;
@@ -499,15 +523,15 @@ body {
         height:24px;
         top:50%;
         right:0;
-        transform: translateY(-50%) rotate(-180deg);
+        transform: translateY(-50%) rotate(0deg);
         -webkit-transition: all 0.5s ease;
         transition: all 0.2s ease;
-        background:url(../../assets/images/arrowdown.png) no-repeat center;
+        background:url(../../assets/images/arrow-down.svg) no-repeat center;
       }
 
-      &.acti {
+      &.active {
         &:after {
-          transform: translateY(-50%) rotate(0deg);
+          transform: translateY(-50%) rotate(-180deg);
           -webkit-transition: all 0.5s ease;
           transition: all 0.2s ease;
         }
