@@ -73,8 +73,23 @@ header {
         display:inline-block;
         margin:0 6px;
 
-        &:last-child {
-          margin:0;
+        &:last-child {margin:0;}
+        &.active {
+          position:relative;
+
+          &:after {
+            content:'';
+            position:absolute;
+            display:block;
+            width: 0px;
+            height: 0px;
+            bottom:-13px;
+            left:50%;
+            transform:translateX(-50%);
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 7px solid #fff;
+          }
         }
       }
     }

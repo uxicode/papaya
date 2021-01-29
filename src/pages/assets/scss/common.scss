@@ -509,6 +509,14 @@ body {
         -webkit-transition: all 0.5s ease;
         transition: all 0.2s ease;
       }
+
+      &.sm {
+        width:18px;
+        height:18px;
+        background-size:18px 18px;
+      }
+
+      &.rt-10 {right:10px;}
     }
 
     a.accordion-btn {
@@ -522,7 +530,7 @@ body {
         width:24px;
         height:24px;
         top:50%;
-        right:0;
+        right:20px;
         transform: translateY(-50%) rotate(0deg);
         -webkit-transition: all 0.5s ease;
         transition: all 0.2s ease;
@@ -550,6 +558,7 @@ body {
 // pagination
 .pagination {
   width:100%;
+  padding:14px 0;
   text-align:center;
 
   ul {
@@ -569,15 +578,23 @@ body {
         text-align:center;
       }
 
-      &.active {
-        a{
-          background-color:#ff4d4d;
-          color:#fff;
+      &.num {
+        &.active {
+          a{
+            background-color:#ff4d4d;
+            color:#fff;
+          }
         }
       }
 
       &.arrow {
         margin:0 10px;
+        opacity:0.2;
+        vertical-align: middle;
+
+        &.active {
+          opacity: 1;
+        }
       }
     }
   }
