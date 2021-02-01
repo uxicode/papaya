@@ -30,6 +30,15 @@ export default  class LoginForm extends Vue{
   }
 
   private findIdHandler():void{
-    this.$emit('findIdStatusEvent');
+    // this.$emit('findIdStatusEvent');
+    this.$router.push('/login/findId').then( (r) => {
+      console.log('findId 로 이동 ');
+    });
+  }
+
+  private resetPwHandler():void{
+    this.$router.push('/login/resetPw').then((r)=>{
+      console.log( 'reset pw 로 이동 ');
+    });
   }
 }

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import VueRouter, { RouteConfig } from 'vue-router';
+import VueRouter, {RawLocation, RouteConfig} from 'vue-router';
 import Home from '../views/Home.vue';
 import Login from '@/views/login/Login';
 import SignInHeader from '@/components/header/signinHeader.vue';
@@ -8,6 +8,7 @@ import {getIsAuth} from '@/router/AuthGuard';
 
 Vue.use(VueRouter);
 
+// @ts-ignore
 const routes: RouteConfig[] = [
   {
     path: '/',
@@ -17,19 +18,23 @@ const routes: RouteConfig[] = [
   },
   {
     path: '/login',
-    name: 'Login',
-    components: {
-      header:SignInHeader,
-      default:Login,
-    },
+    components: { default:Login, header:SignInHeader},
+    children:[
+      { path:'', component:()=> import('../views/login/loginForm/LoginForm') },
+      {
+        path:'findId',
+        component:()=> import('../views/login/account/IdPwContainer'),
+        children:[
+          {path:'', component:()=>import('../views/login/findId/FindId') },
+          {path:'resetPw', component:()=> import('../views/login/resetPw/ResetPassword') },
+        ],
+      },
+    ],
   },
   {
     path:'/signup',
     name:'signup',
-    components:{
-      header:SignUpHeader,
-      default:() => import('../views/signup/signup.vue'),
-    },
+    components:{ default:() => import('../views/signup/signup.vue'),  header:SignUpHeader },
   },
   {
     path:'*',
@@ -44,4 +49,14 @@ const router = new VueRouter({
   routes,
 });
 
+/*$router.push 로 같은 링크 재차 클릭 에러 방지.*/
+const originalPath=VueRouter.prototype.push;
+VueRouter.prototype.push = function( url:RawLocation) {
+  // @ts-ignore
+  return originalPath.call(this, url).catch( (error:any) => {
+    if( error.name !=='NavigationDuplicated'){
+      location.reload();
+    }
+  });
+};
 export default router;

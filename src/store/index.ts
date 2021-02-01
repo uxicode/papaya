@@ -15,5 +15,6 @@ const store = new Vuex.Store({
 });
 
 const { token } = localStorage;
-store.commit(`Auth/${GET_TOKEN}`, token );
+
+store.commit(`Auth/${GET_TOKEN}`, localStorage.getItem('token') );
 export default store;

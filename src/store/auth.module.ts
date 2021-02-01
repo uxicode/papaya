@@ -12,6 +12,7 @@ export default class AuthModule extends VuexModule{
     private findId: string = '';
     private user:object= {};
     private count: number=0;
+    private inputUserEmail: string = '';
 
     get isAuth():boolean{
         return !!this.token;
@@ -23,6 +24,15 @@ export default class AuthModule extends VuexModule{
 
     get findUserId():string{
         return this.findId;
+    }
+
+    get findInputUserEmail():string{
+        return this.inputUserEmail;
+    }
+
+    @Mutation
+    public setInputUserEmail( value:string ):void{
+        this.inputUserEmail=value;
     }
 
     @Mutation
@@ -62,7 +72,7 @@ export default class AuthModule extends VuexModule{
     }
 
     @Action({commit: LOGIN, rawError:true})
-    public [LOGIN_ACTION]( payload:{ uid:string, password:string } ):Promise<any>{
+    public login( payload:{ uid:string, password:string } ):Promise<any>{
         console.log(payload);
         return AuthService.login(payload.uid, payload.password)
           .then((data: any) => {
