@@ -293,6 +293,11 @@ body {
   border-radius:50%;
   border:2px solid #fff;
 
+  &.pos-rel {
+    position:relative;
+    display:inline-block;
+  }
+
   &.red {background-color:#ff4d4d;}
   &.yellow {background-color:#ffd100;}
   &.blue {background-color:#2183de;}
