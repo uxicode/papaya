@@ -20,13 +20,13 @@ const routes: RouteConfig[] = [
     path: '/login',
     components: { default:Login, header:SignInHeader},
     children:[
-      { path:'', component:()=> import('../views/login/loginForm/LoginForm') },
+      { path:'', name:'loginForm', component:()=> import('../views/login/loginForm/LoginForm') },
       {
         path:'findId',
         component:()=> import('../views/login/account/IdPwContainer'),
         children:[
-          {path:'', component:()=>import('../views/login/findId/FindId') },
-          {path:'resetPw', component:()=> import('../views/login/resetPw/ResetPassword') },
+          {path:'', name:'findId', component:()=>import('../views/login/findId/FindId') },
+          {path:'resetPw', name:'resetPw', component:()=> import('../views/login/resetPw/ResetPassword') },
         ],
       },
     ],

@@ -1,6 +1,6 @@
 <div class="contents login">
   <div class="contents-inner">
-    <div class="login-form clearfix">
+    <div class="login-form clearfix" >
 
       <!-- start: 로그인 부분 -->
 <!--      <login-form v-show="loginStatus"
@@ -10,7 +10,10 @@
       <!-- start: 아이디 찾기 부분 / 비밀번호 재설정 -->
       <!--<find-id v-show="findStatus"
                @loginStatusEvent="gotoLogin"></find-id>-->
-      <router-view></router-view>
+      <transition name="page-change" mode="out-in">
+        <router-view></router-view>
+      </transition>
+
       <!-- end: 아이디 찾기 부분  / 비밀번호 재설정  -->
 
     </div>

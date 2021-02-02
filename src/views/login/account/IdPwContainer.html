@@ -11,5 +11,8 @@
   </div>
 
   <!-- 같은 컴포넌트에서 링크 이동( ex- 입력화면 / 수정화면 )시 이동안될때 :key=$route.fullpath 를 넣어주면된다. -->
-  <router-view></router-view>
+  <transition name="page-change">
+    <router-view></router-view>
+  </transition>
+
 </div>
