@@ -90,6 +90,13 @@ class UserService {
     return request('delete', this.getUserURLById(id), { user_id: id });
   }
 
+  /**
+   * 로그인 안된 상태에서 비번 재설정을 위한 모바일번호로 인증
+   */
+  public getAuthByMobileNum( userId:string, mobile:string ):Promise<any>{
+    return request('get', `${USER_BASE_URL}/${userId}/${mobile}/authnumber`);
+  }
+
 }
 
 

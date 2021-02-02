@@ -59,7 +59,7 @@ const request = ( method:string, url:string, data:any | null=null ) => {
         //data.error_code 가 존재한다.
         if ( status === 401) {
             alert('사용자 세션이 만료되었습니다. 다시 로그인 해주세요~');
-            // onUnauthorized();
+            onUnauthorized();
         }else{
             // let errorCode=parseInt(`${ data.error_code }`);
             // alert( `${ data.message }` );

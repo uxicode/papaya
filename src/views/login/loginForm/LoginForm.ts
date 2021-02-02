@@ -11,14 +11,14 @@ export default  class LoginForm extends Vue{
   private userPw: string = '';
 
   @Auth.Action
-  private login!: (data: any) => Promise<any>;
+  private LOGIN_ACTION!: (data: any) => Promise<any>;
 
   get rPath():string{
     return (this.$route.query.rqPath) ? this.$route.query.rqPath as string : '/';
   }
 
   private validate():void{
-    this.login({
+    this.LOGIN_ACTION({
       uid:this.userId,
       password:this.userPw,
     }).then( ( data:any ) => {
@@ -30,6 +30,15 @@ export default  class LoginForm extends Vue{
   }
 
   private findIdHandler():void{
-    this.$emit('findIdStatusEvent');
+    // this.$emit('findIdStatusEvent');
+    this.$router.push('/login/findId').then( (r) => {
+      console.log('findId 로 이동 ');
+    });
+  }
+
+  private resetPwHandler():void{
+    this.$router.push('/login/resetPw').then((r)=>{
+      console.log( 'reset pw 로 이동 ');
+    });
   }
 }
