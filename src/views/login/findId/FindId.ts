@@ -6,6 +6,7 @@ import UserService from '@/api/service/UserService';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import {namespace} from 'vuex-class';
 import WithRender from './FindId.html';
+import {FIND_ID_BY_EMAIL} from '@/store/action-auth-types';
 
 const Auth = namespace('Auth');
 
@@ -47,10 +48,17 @@ export default class FindId extends Vue{
   private findUserId!:string; //아이디 찾기를 통해  store 에  저장된 아이디 값 호출
 
   @Auth.Mutation
-  private setInputUserEmail!:( value:string ) => void;
+  private USER_ID!: ( userId:string ) => void; //아이디 찾기를 통해 해당 값을 store 에 값 저장
 
   @Auth.Mutation
-  private setUserId!: ( userId:string ) => void; //아이디 찾기를 통해 해당 값을 store 에 값 지정
+  private USER_EMAIL!:( value:string ) => void; // 이메일 찾기를 통해 해당 값을 store 에 저장
+
+  @Auth.Action
+  private FIND_ID_BY_MOBILE!:(mobile:string)=>Promise<any>;
+
+  @Auth.Action
+  private FIND_ID_BY_EMAIL!: (email: string) => Promise<any>;
+
 
   /**
    * 유효한 모바일 번호인지 체크
@@ -106,20 +114,20 @@ export default class FindId extends Vue{
    * @private
    */
   private getUserIdByMobile() {
-    UserService.getUserIdByMobile(this.formData.mobile )
-      .then((data:any)=>{
+    //UserService.getUserIdByMobile(this.formData.mobile )
+    this.FIND_ID_BY_MOBILE( this.formData.mobile )
+      .then( (data: any) => {
         /*{
-          "mobile_no": "01031992443",
+        "mobile_no": "01031992443",
           "user_id": "jbc2119",
           "message": "아이디 조회 성공."
-        }*/
-        // console.log('모바일번호로 아이디조회=', data );
-        this.setUserId( data.user_id ); //찾은 아이디 값을 store 에 기록
-        this.isMobileChk=true; //모바일번호로 아이디찾기 완료했음을 기록.
-      }).catch((error:any)=>{
-        console.log('error', error );
-        this.setErrorMessage( error.data.message );
-      });
+      }*/
+        console.log('모바일번호로 아이디조회=', data );
+        this.isMobileChk = true; //모바일번호로 아이디찾기 완료했음을 기록.
+      }).catch((error: any) => {
+      console.log('error', error);
+      this.setErrorMessage(error.data.message);
+    });
   }
 
   /**
@@ -127,14 +135,12 @@ export default class FindId extends Vue{
    * @private
    */
   private getUserIdByEmail() {
-    UserService.getUserIdByEmail(this.formData.email)
+    // UserService.getUserIdByEmail(this.formData.email)
+    this.FIND_ID_BY_EMAIL(this.formData.email)
       .then( (data:any) => {
         // console.log('이메일로 아이디조회=', data );
-        // this.mVerificationComplete=true;
         // this.findUserID=data.user_id;
-        this.setUserId( data.user_id );  //찾은 아이디 값을 store 에 기록
         this.isEmailChk=true; //이메일로 아이디찾기 완료했음을 기록.
-        this.setInputUserEmail(this.formData.email);
       }).catch((error:any)=>{
       console.log('error', error );
       this.setErrorMessage( error.data.message );
@@ -150,12 +156,6 @@ export default class FindId extends Vue{
     this.resetFormData(); //라디오데이터 초기화
     this.setErrorMessage(); //에러메세지 초기화
     this.$router.push('/login');
-  }
-
-  private gotoResetPassWordHandler(){
-    this.$router.push('/login/resetPw').then( (r:Route) => {
-      console.log('비밀번호 재설정으로 이동 ');
-    });
   }
 
   /**

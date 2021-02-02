@@ -11,14 +11,14 @@ export default  class LoginForm extends Vue{
   private userPw: string = '';
 
   @Auth.Action
-  private login!: (data: any) => Promise<any>;
+  private LOGIN_ACTION!: (data: any) => Promise<any>;
 
   get rPath():string{
     return (this.$route.query.rqPath) ? this.$route.query.rqPath as string : '/';
   }
 
   private validate():void{
-    this.login({
+    this.LOGIN_ACTION({
       uid:this.userId,
       password:this.userPw,
     }).then( ( data:any ) => {

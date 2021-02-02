@@ -1,8 +1,9 @@
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
-import {LOGIN, LOGOUT, GET_TOKEN} from '@/store/mutation-auth-types';
-import {LOGIN_ACTION} from '@/store/action-auth-types';
+import {LOGIN, LOGOUT, GET_TOKEN, USER_ID, USER_EMAIL} from '@/store/mutation-auth-types';
+import {LOGIN_ACTION, FIND_ID_BY_MOBILE, FIND_ID_BY_EMAIL} from '@/store/action-auth-types';
 import {IUser} from '@/api/model/user.model';
 import AuthService from '@/api/service/AuthService';
+import UserService from '@/api/service/UserService';
 
 @Module({
     namespaced: true,
@@ -31,12 +32,12 @@ export default class AuthModule extends VuexModule{
     }
 
     @Mutation
-    public setInputUserEmail( value:string ):void{
+    public [USER_EMAIL]( value:string ):void{
         this.inputUserEmail=value;
     }
 
     @Mutation
-    public setUserId( userId:string ):void{
+    public [USER_ID]( userId:string ):void{
         this.findId=userId;
     }
 
@@ -71,8 +72,8 @@ export default class AuthModule extends VuexModule{
         delete localStorage.user;
     }
 
-    @Action({commit: LOGIN, rawError:true})
-    public login( payload:{ uid:string, password:string } ):Promise<any>{
+    @Action({rawError:true})
+    public [LOGIN_ACTION]( payload:{ uid:string, password:string } ):Promise<any>{
         console.log(payload);
         return AuthService.login(payload.uid, payload.password)
           .then((data: any) => {
@@ -93,5 +94,34 @@ export default class AuthModule extends VuexModule{
           }).catch((error) => {
               return Promise.reject(error);
           });
+    }
+
+    @Action({rawError:true})
+    public [FIND_ID_BY_MOBILE](mobile:string ):Promise<any>{
+        return UserService.getUserIdByMobile( mobile )
+          .then((data:any)=>{
+              /*{
+                "mobile_no": "01031992443",
+                "user_id": "jbc2119",
+                "message": "아이디 조회 성공."
+              }*/
+              // console.log('모바일번호로 아이디조회=', data );
+              this.context.commit( USER_ID, data.user_id  ); //찾은 아이디 값을 store 에 기록
+              return Promise.resolve(data);
+          }).catch((error:any)=>{
+              return Promise.reject(error);
+          });
+    }
+
+    @Action({rawError:true})
+    public [FIND_ID_BY_EMAIL](email:string):Promise<any>{
+        return UserService.getUserIdByEmail(email)
+          .then((data:any)=>{
+              this.context.commit( USER_ID, data.user_id );
+              this.context.commit( USER_EMAIL, email );
+              return Promise.resolve(data);
+          }).catch((error:any)=>{
+              return Promise.reject(error);
+          })
     }
 }
