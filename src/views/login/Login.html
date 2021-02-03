@@ -1,27 +1,20 @@
 <div class="contents login">
   <div class="contents-inner">
-    <div class="login-form clearfix">
+    <div class="login-form clearfix" >
 
       <!-- start: 로그인 부분 -->
-      <login-form v-show="loginStatus" v-on:findIdStatusEvent="setAccountStatus( STATUS_FIND_ID )"></login-form>
+<!--      <login-form v-show="loginStatus"
+                  @findIdStatusEvent="setAccountStatus( STATUS_FIND_ID )"></login-form>-->
       <!-- end: 로그인 부분 -->
 
       <!-- start: 아이디 찾기 부분 / 비밀번호 재설정 -->
-      <find-id v-show="findStatus && !verifyComplete" v-on:loginStatusEvent="gotoLogin" v-on:findIdCompleteEvent="findIdComplete"></find-id>
+      <!--<find-id v-show="findStatus"
+               @loginStatusEvent="gotoLogin"></find-id>-->
+      <transition name="page-change" mode="out-in">
+        <router-view></router-view>
+      </transition>
+
       <!-- end: 아이디 찾기 부분  / 비밀번호 재설정  -->
-
-
-      <div  class="form-cnt pd-desc" v-show="verifyComplete">
-        <div style="padding:30px 40px;border-top:1px solid #f4f5f6;">
-          <p class="guide-cmt">회원님의 아이디는 </p>
-          <p class="guide-cmt"><strong class="red-color">{{findUserId}}</strong>입니다.</p>
-          <div class="mgt-90">
-            <img src="../../assets/images/illust-login.png" alt="">
-            <div class="page-back"><a href="" @click.stop.prevent="gotoLogin">로그인으로 돌아가기</a></div>
-          </div>
-        </div>
-
-      </div>
 
     </div>
   </div>

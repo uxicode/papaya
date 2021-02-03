@@ -286,27 +286,42 @@ body {
 
   .item {
     float:left;
-    margin-bottom:10px;
+    //margin-bottom:10px;//jbc
     text-align:center;
     font-size:16px;
     color:#57576d;
     letter-spacing:0;
 
+    //jbc
+    a{
+      position:relative;
+      display:inline-block;
+      padding:10px 6px;
+      &:after {
+        content:'';
+        position:absolute;
+        width:100%;
+        height:2px;
+        bottom:0; //jbc
+        left:0;
+        background-color:#0f0f15;
+        transition:all .35s ease-out;
+        transform-origin: 50% 0;
+        transform:scaleX(0);
+      }
+    }
     &.active {
       a {
-        position:relative;
-        display:inline-block;
-        padding:0 6px;
         font-weight:500;
-
         &:after {
+          transform: scaleX(1);
+          /* //jbc
           content:'';
           position:absolute;
-          width:100%;
           height:2px;
-          bottom:-11px;
+          bottom:0;
           left:0;
-          background-color:#0f0f15;
+          background-color:#0f0f15;*/
         }
       }
     }
@@ -446,12 +461,8 @@ body {
       }
     }
 
-    &:checked {
-      + label {
-        &:before {
-          background:url(../../assets/images/checkbox-circle-radio.svg) no-repeat;
-        }
-      }
+    &:checked ~ label:before{
+      background:url(../../assets/images/checkbox-circle-radio.svg) no-repeat;
     }
   }
 }
@@ -756,6 +767,45 @@ body {
     margin-top:30px;
   }
 }
+
+
+// -enter-active( enter, enter-to )
+/* router page change motion */
+.page-change-enter-active {
+  transition: all 0.35s ease;
+}
+.page-change-leave-active {
+  transition: all 0.75s ease;
+}
+// -leave-active( leave, leave-to )
+.page-change{
+  position:relative;
+}
+.page-change-enter{
+  opacity: 0;
+  transform: scale(0.8);
+}
+.page-change-leave-to{
+  position: absolute; // 비활성화 되어 있는 엘리먼트가 relative 가 되어 있기에 등장시 삐걱거림이 있기에 포지션을 절대값으로 해둔다.
+  opacity: 0;
+  transform: translateY(100%) rotateZ(15deg);
+}
+/* slide out motion */
+.slide-out-enter-active {
+  transition: all 1s ease;
+}
+.slide-out-leave-active {
+  transition: all .35s;
+}
+// -leave-active( leave, leave-to )
+.slide-out-enter{
+  opacity: 0;
+}
+.slide-out-leave-to{
+  opacity: 0;
+  transform: translateX(-100%);
+}
+
 @import "./layout.scss";
 @import "./form.scss";
 @import "./button.scss";

@@ -41,31 +41,12 @@ export default class Login extends Vue {
   private STATUS_PWD_RESET: string = 'status_pwd_reset';
   private currentStatus: string = this.STATUS_LOGIN;
 
-  private isMobileChk:boolean=false;
   // private mVerificationKey: string = '';
   // private mVerificationVal: string = '';
 
   private verifyComplete:boolean=false; //인증 완료 체크
   // private findUserID: string = '';
-
-  //아이디 찾기 관련
-  /*private formData:IFormData = {
-    radioValue:'mobile',
-    email:'',
-    mobile:'',
-  };*/
-
-/*  private messages:IMessage={
-    mobile:'모바일 번호 "-" 없이 입력해 주세요.',
-    email:'이메일 주소를 입력해 주세요',
-    mobileReq:'모바일 번호를 입력해 주세요',
-    equal:'값이 일치하지 않습니다.',
-    notMobile:'유효하지 않은 번호입니다.',
-    notEmail:'유효하지 않은 이메일입니다.',
-    warnNum:'인증번호가 일치하지 않습니다.',
-    verify:'인증번호를 입력해 주세요.',
-    error:'',
-  };*/
+  private checkType: string = 'mobile';
 
   @Auth.Getter
   private isAuth!:boolean;
@@ -104,8 +85,5 @@ export default class Login extends Vue {
     this.setAccountStatus(this.STATUS_LOGIN);
   }
 
-  private findIdComplete() {
-    this.verifyComplete=true;
-  }
 }
 

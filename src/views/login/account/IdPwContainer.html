@@ -1,0 +1,18 @@
+<div class="form-cnt pd-desc">
+  <!-- Nav tabs -->
+  <div class="form-tab">
+    <ul class="tabs-line" data-column="2">
+      <li class="item"  v-for="( item, index ) in listInfos" :key="item.id" :class="{'active':isActive(index) }">
+        <a href="" @click.prevent="gotoLink(index)">{{ item.title }}</a>
+      </li>
+      <!--<li class="item active"><a href="#a5" role="tab" data-toggle="tab"  @click.prevent="gotoFindIdHandler">아이디 찾기</a></li>
+      <li class="item"><a href="#a6" role="tab" data-toggle="tab" @click.prevent="gotoResetPassWordHandler">비밀번호 재설정</a></li>-->
+    </ul>
+  </div>
+
+  <!-- 같은 컴포넌트에서 링크 이동( ex- 입력화면 / 수정화면 )시 이동안될때 :key=$route.fullpath 를 넣어주면된다. -->
+  <transition name="page-change">
+    <router-view></router-view>
+  </transition>
+
+</div>
