@@ -1,9 +1,14 @@
 import {Vue, Component} from 'vue-property-decorator';
+import {Route} from 'vue-router';
 import {IFormAuthData} from '@/views/login/model/formdata.model';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import WithRender from './ResetPassword.html';
-import {Route} from 'vue-router';
 import UserService from '@/api/service/UserService';
+import {AUTH_BY_MOBILE} from '@/store/action-auth-types';
+
+import {namespace} from 'vuex-class';
+import AuthService from '@/api/service/AuthService';
+const Auth = namespace('Auth');
 
 @WithRender
 @Component({
@@ -17,13 +22,23 @@ export default class ResetPassword extends Vue{
   private isEmailChk:boolean=false;
   private isMobileChk:boolean=false;
   private isConfirmComplete:boolean=false;
+  private isVerifiedCode:boolean=false;
   private errorMessage: string = '';
+
+
+  @Auth.Getter
+  private resetPwVerifyInfo!:any;
+
+  @Auth.Action
+  private AUTH_BY_MOBILE!: (payload: any) => Promise<any>;
+
   //비밀번호 재설정 관련
   private formData:IFormAuthData = {
     radioValue:'mobile',
     email:'',
     mobile:'',
     userId:'',
+    verifiedCode:'',
   };
 
 
@@ -92,8 +107,11 @@ export default class ResetPassword extends Vue{
 
   private getUserAuthByMobile():void{
     //this.isMobileChk
-    UserService.getAuthByMobileNum(this.formData.userId, this.formData.mobile)
-      .then( (data:any) => {
+    // UserService.getAuthByMobileNum(this.formData.userId, this.formData.mobile)
+    this.AUTH_BY_MOBILE( {
+      userId:this.formData.userId,
+      mobile: this.formData.mobile,
+    }).then( (data:any) => {
         console.log('핸폰번호와 아이디로 인증=', data );
         //{verification_key: "3091612168945547", message: "sms 로 인증번호 발송 성공"}
         // this.mVerificationComplete=true;
@@ -103,6 +121,23 @@ export default class ResetPassword extends Vue{
       console.log('error', error );
       this.setErrorMessage( error.data.message );
     });
+  }
+
+  private verifyCompleteByMobile():void{
+     //
+    if( this.isMobileChk ){
+      AuthService.getVerification({
+        key: this.resetPwVerifyInfo.key,
+        num:this.formData.verifiedCode,
+      }).then((data:any)=>{
+        console.log(data);
+        alert('인증이 완료 되었습니다.');
+        this.isVerifiedCode=true;
+      }).catch((error)=>{
+
+      });
+    }
+
   }
 
   private getUserAuthByEmail():void{
@@ -141,6 +176,7 @@ export default class ResetPassword extends Vue{
       email:'',
       mobile:'',
       userId:'',
+      verifiedCode:'',
     };
   }
 }

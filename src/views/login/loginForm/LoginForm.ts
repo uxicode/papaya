@@ -37,7 +37,7 @@ export default  class LoginForm extends Vue{
   }
 
   private resetPwHandler():void{
-    this.$router.push('/login/resetPw').then((r)=>{
+    this.$router.push('/login/findId/resetPw').then((r)=>{
       console.log( 'reset pw 로 이동 ');
     });
   }

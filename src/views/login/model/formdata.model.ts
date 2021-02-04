@@ -6,6 +6,7 @@ interface IFormData{
 
 interface IFormAuthData extends IFormData{
   userId:string;
+  verifiedCode:string;
 }
 
 interface IMessage{
