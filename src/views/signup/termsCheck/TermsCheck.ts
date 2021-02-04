@@ -1,73 +1,19 @@
-<template>
-  <!-- start: join -->
-  <div class="join">
-    <div class="contents">
-      <div class="contents-inner">
-        <div class="all-form">
-          <h2 class="main-tit">{{ pageTitle }}</h2>
+import {Vue, Component, Prop} from "vue-property-decorator";
+import WithRender from './TermsCheck.html';
 
-          <div class="form-progress">
-            <ul class="progress-list clearfix">
-              <li v-for="idx in stepTotal" :key="idx" class="item" :class="{'active':step===idx}"></li>
-            </ul>
-          </div>
-
-          <div class="form-wrapper">
-            <h3 class="form-sub-tit ct">{{ currentTitle }}</h3>
-            <div class="form-cnt">
-              <div class="accordion">
-                <div class="accordion-tit form-tit">
-                  <div class="btn-checkbox">
-                    <input type="checkbox" id="allCheck">
-                    <label for="allCheck">전체 동의</label>
-                  </div>
-                </div>
-                <div v-for="item in terms_list" :key="item.idx">
-                  <!-- accordion -->
-                  <div class="accordion-tit form-tit">
-                    <div class="btn-checkbox">
-                      <input type="checkbox" :id="'check'+item.idx"  @click.native="check($event, item.type )">
-                      <label :for="'check'+item.idx">{{ item.tit }}</label>
-                    </div>
-
-                    <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
-                    <button class="accordion-btn" @click="accordionToggle(item)" :class="{ 'active': item.isActive }" data-toggle="collapse" :data-target="'#accordion'+item.idx"></button>
-                  </div>
-                  <!-- class="active" 일 경우 open -->
-                  <div class="accordion-cnt" :class="{ 'active': item.isActive }" :id="'accordion'+item.idx">
-                    <div class="agreement" v-html="item.desc"></div>
-                  </div>
-                  <!-- //accordion -->
-                </div>
-              </div>
-            </div>
-            <div class="form-btm">
-              <div class="btn-group rt">
-                <button type="button" class="btn basic x40 sm primary navi" disabled>다음</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- //end: join -->
-</template>
-
-<script>
-export default {
-  name: 'termsCheck',
-  data() {
-    return {
-      pageTitle:'일반 회원가입',
-      step:1,
-      stepTotal:3,
-      terms_list: [
+@WithRender
+@Component
+export default class TermsCheck extends Vue {
+    private step : number = 1;
+    private stepTotal : number = 3;
+    private pageTitle : string = '일반 회원가입';
+    private isNext : boolean = true;
+    private terms_list : object = [
         {
-          idx: 1,
-          tit: '서비스 이용약관(필수)',
-          isActive: false,
-          desc: `<p>제 1 조 (목적)</p>
+            idx: 1,
+            tit: '서비스 이용약관(필수)',
+            isActive: false,
+            desc: `<p>제 1 조 (목적)</p>
                     <ul>
                       <li>1. 본 약관은 기업마당 사이트가 제공하는 모든 서비스(이하 "서비스")의 이용조건 및 절차, 이용자와 기업마당 사이트의 권리, 의무, 책임사항과 기타 필요한 사항을 규정함을 목적으로 합니다.</li>
                     </ul>
@@ -91,10 +37,10 @@ export default {
                     </ul>`,
         },
         {
-          idx: 2,
-          tit: '개인정보 처리방침(필수)',
-          isActive: false,
-          desc: `<p>제 1 조 (목적)</p>
+            idx: 2,
+            tit: '개인정보 처리방침(필수)',
+            isActive: false,
+            desc: `<p>제 1 조 (목적)</p>
                     <ul>
                       <li>1. 본 약관은 기업마당 사이트가 제공하는 모든 서비스(이하 "서비스")의 이용조건 및 절차, 이용자와 기업마당 사이트의 권리, 의무, 책임사항과 기타 필요한 사항을 규정함을 목적으로 합니다.</li>
                     </ul>
@@ -118,10 +64,10 @@ export default {
                     </ul>`,
         },
         {
-          idx: 3,
-          tit: '마케팅 정보 수집 동의(선택)',
-          isActive: false,
-          desc: `<p>제 1 조 (목적)</p>
+            idx: 3,
+            tit: '마케팅 정보 수집 동의(선택)',
+            isActive: false,
+            desc: `<p>제 1 조 (목적)</p>
                     <ul>
                       <li>1. 본 약관은 기업마당 사이트가 제공하는 모든 서비스(이하 "서비스")의 이용조건 및 절차, 이용자와 기업마당 사이트의 권리, 의무, 책임사항과 기타 필요한 사항을 규정함을 목적으로 합니다.</li>
                     </ul>
@@ -143,35 +89,24 @@ export default {
                       <li>4. 비밀번호 : 이용자와 회원ID가 일치하는지를 확인하고 통신상의 자신의 비밀보호를 위하여 이용자 자신이 선정한 문자와 숫자의 조합.</li>
                       <li>5. 탈퇴 : 회원이 이용계약을 종료시키는 행위.</li>
                     </ul>`,
-        },
-      ],
-    };
-  },
-  methods: {
-    accordionToggle(item) {
-      item.isActive = !item.isActive;
-    },
-  },
-  computed: {
-    currentTitle() {
-      let result = '';
-      switch (this.step) {
-        case 1:
-          result = '약관 동의';
-          break;
-        case 2:
-          result = '본인 인증';
-          break;
-        default:
-          result = '개인 정보 입력';
-          break;
-      }
-      return result;
-    },
-  },
-};
-</script>
+        }
+    ];
 
-<style scoped>
-
-</style>
+    private accordionToggle(item: any) : void {
+        item.isActive = !item.isActive;
+    }
+    currentTitle(result: string) : string {
+        switch (this.step) {
+            case 1:
+                result = '약관 동의';
+                break;
+            case 2:
+                result = '본인 인증';
+                break;
+            default:
+                result = '개인 정보 입력';
+                break;
+        }
+        return result;
+    }
+}

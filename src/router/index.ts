@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter, {RawLocation, RouteConfig} from 'vue-router';
 import Home from '../views/Home.vue';
 import Login from '@/views/login/Login';
+import SignUp from '@/views/signup/SignUp'
 import SignInHeader from '@/components/header/signinHeader.vue';
 import SignUpHeader from '@/components/header/signupHeader.vue';
 import {getIsAuth} from '@/router/AuthGuard';
@@ -33,44 +34,19 @@ const routes: RouteConfig[] = [
   },
   {
     path:'/signup',
-    name:'signup',
-    components:{ default:() => import('../views/signup/signup.vue'),  header:SignUpHeader },
-  },
-  // 일반 회원가입-약관동의
-  {
-    path:'/signup/termsCheck',
-    name:'terms',
-    components:{
-      header:SignUpHeader,
-      default:() => import('../views/signup/termsCheck/termsCheck.vue'),
-    },
-  },
-  // 일반 회원가입-본인인증
-  {
-    path:'/signup/verify',
-    name:'verify',
-    components:{
-      header:SignUpHeader,
-      default:() => import('../views/signup/verify/verify.vue'),
-    },
-  },
-  // 일반 회원가입-본인인증-인증완료
-  {
-    path:'/signup/verify/complete',
-    name:'complete',
-    components:{
-      header:SignUpHeader,
-      default:() => import('../views/signup/verify/complete/complete.vue'),
-    },
-  },
-  // 일반 회원가입-개인정보 입력
-  {
-    path:'/signup/info',
-    name:'info',
-    components:{
-      header:SignUpHeader,
-      default:() => import('../views/signup/info/info.vue'),
-    },
+    components:{ default:SignUp, header:SignUpHeader },
+    children:[
+      { path:'', name:'signUpIntro', component:()=> import('../views/signup/signUpIntro/SignUpIntro') },
+      { path:'termsCheck', component:()=>import('../views/signup/termsCheck/TermsCheck') },
+      {
+        path:'verify',
+        component:()=>import('../views/signup/verify/Verify'),
+        children: [
+          { path:'complete', component:()=>import('../views/signup/verify/complete/Complete')}
+        ],
+      },
+      { path: 'info', component:()=>import('../views/signup/info/Info') },
+    ],
   },
   {
     path:'*',
