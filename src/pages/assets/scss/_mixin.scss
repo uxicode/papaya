@@ -30,3 +30,12 @@
   right:$right;
   bottom:$bottom;
 }
+
+/* absolute vertical align center */
+@mixin pos-center ($left:null, $right:null,){
+  position:absolute;
+  top:50%;
+  left:$left;
+  right:$right;
+  transform:translateY(-50%);
+}

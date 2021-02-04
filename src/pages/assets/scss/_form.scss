@@ -111,8 +111,8 @@ select {
 }
 
 .form-switcher {
-  display: inline-block;
   position: relative;
+  display: block;
 
   input {
     visibility: hidden;
@@ -128,7 +128,7 @@ select {
   label {
     background-color: #f4f5f6;
     border-radius: 20px;
-    display: inline-block;
+    display: block;
     position: relative;
     transition: all 0.3s ease;
     width: 42px;
@@ -207,7 +207,6 @@ select {
 
   &.time {
     display:inline-block;
-    padding-right:34px;
 
     .time-control {
       font-size:14px;

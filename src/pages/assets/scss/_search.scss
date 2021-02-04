@@ -24,8 +24,11 @@
 
   .search-word-list {
     li {
-      padding:13px 0 13px 42px;
-      font-size:16px;
+      a {
+        display:block;
+        padding:13px 0 13px 42px;
+        font-size:16px;
+      }
     }
   }
 }
