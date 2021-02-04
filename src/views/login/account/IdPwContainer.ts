@@ -23,7 +23,7 @@ export default class IdPwContainer extends Vue {
   ];
 
   private created(){
-    console.log( 'this.$route=', this.$route.name );
+    // console.log( 'this.$route=', this.$route.name );
     if( this.$route.name === 'resetPw' ){
       // this.gotoLink(1);
       this.gotoLink( this.findMenuIdxByKey( 'resetPw') );

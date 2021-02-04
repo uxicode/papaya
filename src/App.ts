@@ -16,8 +16,7 @@ import WithRender from './App.html';
 })
 export  default class App extends Vue {
     private updated(){
-        // @ts-ignore
-        console.log('현재페이지 상태', this.pageHistory );
+        // console.log('현재페이지 상태', this.pageHistory );
     }
 }
 

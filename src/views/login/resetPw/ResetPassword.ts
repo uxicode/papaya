@@ -10,6 +10,11 @@ import {namespace} from 'vuex-class';
 import AuthService from '@/api/service/AuthService';
 const Auth = namespace('Auth');
 
+interface IPwd{
+  nPwd:string;
+  rePwd:string;
+}
+
 @WithRender
 @Component({
   components:{
@@ -25,13 +30,6 @@ export default class ResetPassword extends Vue{
   private isVerifiedCode:boolean=false;
   private errorMessage: string = '';
 
-
-  @Auth.Getter
-  private resetPwVerifyInfo!:any;
-
-  @Auth.Action
-  private AUTH_BY_MOBILE!: (payload: any) => Promise<any>;
-
   //비밀번호 재설정 관련
   private formData:IFormAuthData = {
     radioValue:'mobile',
@@ -40,7 +38,17 @@ export default class ResetPassword extends Vue{
     userId:'',
     verifiedCode:'',
   };
+  private pwdFormData:IPwd={
+    nPwd:'',
+    rePwd:'',
+  }
 
+
+  @Auth.Getter
+  private resetPwVerifyInfo!:any;
+
+  @Auth.Action
+  private AUTH_BY_MOBILE!: (payload: any) => Promise<any>;
 
   get errorMsg():string{
     return this.errorMessage;
@@ -62,11 +70,32 @@ export default class ResetPassword extends Vue{
     return userEmail.test(this.formData.email);
   }
 
-  private setErrorMessage( msg:string='' ):void{
-    this.errorMessage=msg;
+  get getUseMobileState():boolean{
+    return this.formData.userId==='';
   }
 
 
+  get pwState () {
+    //정규표현식을 아래와 같이 변수를 연동하는 등의 동적 표현시엔 RegExp 생성자를 사용한다.
+    const userPWRegx=new RegExp(`(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9_])(?=.*[0-9]).{8,20}$`);
+    return userPWRegx.test(this.pwdFormData.nPwd);
+  }
+
+  get equalRePwd():boolean{
+    return this.pwdFormData.rePwd === this.pwdFormData.nPwd;
+  }
+
+  public minValue(value:string):boolean{
+    return (value!==null && value.length >= 8);
+  }
+
+  public required( value:string ):boolean{
+   return !!value;
+  }
+
+  private setErrorMessage( msg:string='' ):void{
+    this.errorMessage=msg;
+  }
 
   private gotoFindIdHandler():void{
     this.$router.push('/login/findId').then( (r:Route)=>{
@@ -84,7 +113,7 @@ export default class ResetPassword extends Vue{
    */
   private optionFindChange( value:string ):void{
     this.formData.radioValue=value;
-    console.log(this.formData.radioValue);
+    // console.log(this.formData.radioValue);
     if ( this.errorMsg !== '') {
       this.setErrorMessage();
       if( this.formData.radioValue === 'mobile'){
@@ -101,11 +130,13 @@ export default class ResetPassword extends Vue{
    * @private
    */
   private verificationConfirm():boolean{
-    return ( this.formData.radioValue==='mobile' && this.isMobileChk) ||
+    return ( this.formData.radioValue==='mobile' && this.isVerifiedCode) ||
       (this.formData.radioValue ==='email' && this.isEmailChk );
   }
 
   private getUserAuthByMobile():void{
+    // console.log( !this.userMobileState , this.formData.userId===''  )
+    if( !this.userMobileState ||  this.formData.userId===''){return;}
     //this.isMobileChk
     // UserService.getAuthByMobileNum(this.formData.userId, this.formData.mobile)
     this.AUTH_BY_MOBILE( {
@@ -134,7 +165,7 @@ export default class ResetPassword extends Vue{
         alert('인증이 완료 되었습니다.');
         this.isVerifiedCode=true;
       }).catch((error)=>{
-
+        this.setErrorMessage( error.data.message );
       });
     }
 
@@ -143,6 +174,12 @@ export default class ResetPassword extends Vue{
   private getUserAuthByEmail():void{
     //this.isEmailChk
   }
+
+  private passwordSubmit():void{
+
+  }
+
+
 
   /**
    * 로그인으로 돌아갈 수 있게끔 이벤트 전송
