@@ -14,9 +14,8 @@ interface IPath{
 @Component
 export default class IdPwContainer extends Vue {
 
-
-
   private activeItem: number =0;
+
   private listInfos: IPath[] = [
     {id: 0, url: '/login/findId', title: '아이디 찾기', key:'findId'},
     {id: 1, url: '/login/findId/resetPw', title: '비밀번호 재설정', key:'resetPw'},

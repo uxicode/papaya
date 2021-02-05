@@ -1,14 +1,10 @@
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import {mapGetters} from 'vuex';
+import {Vue, Component, Prop } from 'vue-property-decorator';
 import AppHeader from '@/components/header/header.vue';
 import AppFooter from '@/components/footer/footer.vue';
 import WithRender from './App.html';
 
 @WithRender
 @Component({
-    computed:{
-        ...mapGetters('PageHistoryStatus', ['pageHistory']),
-    },
     components: {
         AppHeader,
         AppFooter,

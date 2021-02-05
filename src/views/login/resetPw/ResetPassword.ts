@@ -41,7 +41,7 @@ export default class ResetPassword extends Vue{
   private pwdFormData:IPwd={
     nPwd:'',
     rePwd:'',
-  }
+  };
 
 
   @Auth.Getter
@@ -75,7 +75,7 @@ export default class ResetPassword extends Vue{
   }
 
 
-  get pwState () {
+  get pwState() {
     //정규표현식을 아래와 같이 변수를 연동하는 등의 동적 표현시엔 RegExp 생성자를 사용한다.
     const userPWRegx=new RegExp(`(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9_])(?=.*[0-9]).{8,20}$`);
     return userPWRegx.test(this.pwdFormData.nPwd);
@@ -175,9 +175,9 @@ export default class ResetPassword extends Vue{
     //this.isEmailChk
   }
 
-  private passwordSubmit():void{
+  /*private passwordSubmit():void{
 
-  }
+  }*/
 
 
 

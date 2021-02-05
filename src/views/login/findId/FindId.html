@@ -18,8 +18,9 @@
           </div>
           <div class="find-info-input" :class="{'active':activeInputField('mobile')}">
             <div class="form-group inline">
-              <input type="text" class="form-control"
+              <input type="text" class="form-control" name="전화번호"
                      v-model="formData.mobile" :placeholder="messages.mobile" style="width:216px;"/>
+                <small>{{ errors[0] }}</small>
               <button type="button" class="btn basic x32 sm secondary fill"
                       :disabled="!userMobileState" @click.stop="getUserIdByMobile">인증</button>
               <p class="form-message approval" v-if="isMobileChk">모바일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</p>

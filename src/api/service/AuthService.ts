@@ -41,6 +41,7 @@ class AuthService{
       auth_number: verify.num,
     });
   }
+
   public getUserId( mobile:string ):Promise<any>{
     return request( 'get', `/users/bymobile/${mobile}`);
   }
