@@ -28,7 +28,7 @@
 </head>
 
 <body>
-<div class="wrapper classes">
+<div class="wrapper">
 	<!-- start: header -->
 	<header class="white">
 		<div class="header-container">
@@ -47,7 +47,7 @@
 				<li><a href="#"><img src="./assets/images/search.png" alt="" /></a></li>
 				<li><a href="#"><img src="./assets/images/alert.png" alt="" /></a></li>
 				<li><a href="#"><img src="./assets/images/mypage.png" alt="" /></a></li>
-				<li><a href="#" class="arrow-down"><img src="./dist/images/arrow-down-w.png" alt="" /></a></li>
+				<li><a href="#" class="arrow-down"><img src="assets/images/arrow-down-w.png" alt="" /></a></li>
 			</ul>
 
 		</div>
@@ -56,54 +56,79 @@
 
 	<!-- start: container -->
 	<div class="container-fluid">
-		<div class="contents">
-			<div class="contents-inner type2">
-				<section class="contents-left">
-					<div class="class-home">
-						<div class="class-home-info">
-							<div class="info-img">
-								<img src="./dist/images/bg-icon.png" alt="">
-								<a href="" class="img-change"><img src="./dist/images/btn-round 2.png" alt=""></a>
+		<div class="contents home">
+			<div class="contents-inner">
+				<div class="contents-group">
+					<section class="contents-left">
+						<div class="class-home">
+							<div class="class-home-info">
+								<div class="info-img">
+									<img src="assets/images/bg-icon.png" alt="">
+									<a href="" class="img-change"><img src="assets/images/btn-round 2.png" alt=""></a>
+								</div>
+								<div class="info-txt">
+									<p class="info-cn">꿈꾸는 5학년 1반</p>
+									<span class="info-or">파파야초등학교</span>
+									<ul class="info-list">
+										<li>2019</li>
+										<li>비공개클래스</li>
+										<li><a href="">멤버 2122</a></li>
+									</ul>
+									<p class="info-tag">
+										#꿈꾸는아이들 #파파야초등학교 #재미있는 #파파야 #어드벤처
+									</p>
+								</div>
+								<div class="class-bookmark">
+									<a type="button" class="btn ico-btn ico-left active"><span class="icon heart"></span>즐겨찾기</a>
+								</div>
 							</div>
-							<div class="info-txt">
-								<p class="info-cn">꿈꾸는 5학년 1반</p>
-								<span class="info-or">파파야초등학교</span>
-								<ul class="info-list">
-									<li>2019</li>
-									<li>비공개클래스</li>
-									<li><a href="">멤버 2122</a></li>
+							<div class="class-menu">
+								<ul class="menu-list">
+									<li><a href="" class="type1">클래스 홈</a></li>
+									<li><a href="" class="type2">알림</a></li>
+									<li><a href="" class="type3 active">일정</a></li>
+									<li><a href="" class="type4">파일함</a></li>
+									<li><a href="" class="type5">교육과정</a></li>
+									<li><a href="" class="type6">클래스 설정</a></li>
 								</ul>
-								<p class="info-tag">
-									#꿈꾸는아이들 #파파야초등학교 #재미있는 #파파야 #어드벤처
-								</p>
-							</div>
-							<div class="class-bookmark">
-								<a type="button" class="btn basic ico-btn ico-right fs-12 fc-red"><span class="icon heart"></span>즐겨찾기</a>
 							</div>
 						</div>
-						<div class="class-menu">
-							<ul class="menu-list">
-								<li><a href="" class="type1">클래스 홈</a></li>
-								<li><a href="" class="type2">알림</a></li>
-								<li><a href="" class="type3 active">일정</a></li>
-								<li><a href="" class="type4">파일함</a></li>
-								<li><a href="" class="type5">교육과정</a></li>
-								<li><a href="" class="type6">클래스 설정</a></li>
-							</ul>
-						</div>
-					</div>
-				</section>
+					</section>
+					<section class="contents-right">
+						<div class="classes-schedule">
+							<div class="cnt-top">
+								<h2 class="cnt-tit">일정 <span class="color-mark yellow"></span></h2>
+								<div class="cnt-top-btn"><a href=""><img src="assets/images/classmenu-setting-outline.svg" alt=""></a></div>
+							</div>
 
-				<section class="contents-right">
-					<div class="class-scheduler">
-						<div class="cnt-top">
-							<h2 class="cnt-tit pdt-10">일정</h2>
-							<div class="cnt-top-btn">
-								<button type="button" class="btn-calendar"><img src="./dist/images/btn-round-big.png" alt=""></button>
+							<div class="schedule-calendar">
+								<div class="calendar-top">
+									<div class="tb-style full">
+										<div class="tb-cell" style="width:74px;">
+											<div class="calendar-arrow-btn">
+												<button type="button" class="btn only-ico-btn prev"></button>
+												<button type="button" class="btn only-ico-btn next"></button>
+											</div>
+										</div>
+										<div class="tb-cell">
+											<p class="calendar-date">2020년 2월</p>
+										</div>
+										<div class="tb-cell rt">
+											<div class="form-group">
+												<button type="button" class="btn secondary fill sm">오늘</button>
+												<select class="form-select">
+													<option value="" selected>월간</option>
+													<option value="">주간</option>
+													<option value="">일간</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
-					</div>
-				</section>
+					</section>
+				</div>
 			</div>
 		</div>
 	</div>
