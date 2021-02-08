@@ -1,88 +1,93 @@
+<!-- Tab panes -->
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane fade in active" id="a5">
 
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane fade in active" id="a5" >
+    <!-- start: 아이디 찾기 -->
+    <div v-if="!isConfirmComplete">
+      <p class="find-txt">아이디 찾기를 위한 방법을 선택해 주세요.</p>
 
-      <!-- start: 아이디 찾기 -->
-      <div v-if="!isConfirmComplete">
-        <p class="find-txt">아이디 찾기를 위한 방법을 선택해 주세요.</p>
-
-        <!-- 모바일 번호로 아이디 찾기 -->
-        <div class="find-info">
-          <div class="find-type">
-            <radio-button btn-id="radio1"
-                          radio-name="radio"
-                          btn-value="mobile"
-                          :radio-data="formData.radioValue"
-                          @click="optionFindChange">전체 회원 정보에 등록된 모바일 번호로 아이디 찾기</radio-button>
-          </div>
-          <div class="find-info-input" :class="{'active':activeInputField('mobile')}">
-            <div class="form-group inline">
-              <input type="text" class="form-control"
-                     v-model="formData.mobile" :placeholder="messages.mobile" style="width:216px;"/>
-              <button type="button" class="btn basic x32 sm secondary fill"
-                      :disabled="!userMobileState" @click.stop="getUserIdByMobile">인증</button>
-              <p class="form-message approval" v-if="isMobileChk">모바일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</p>
-              <p class="form-message error" v-else>{{ errorMsg }}</p>
-            </div>
-          </div>
+      <!-- 모바일 번호로 아이디 찾기 -->
+      <div class="find-info">
+        <div class="find-type">
+          <radio-button btn-id="radio1"
+                        radio-name="radio"
+                        btn-value="mobile"
+                        :radio-data="formData.radioValue"
+                        @click="optionFindChange">전체 회원 정보에 등록된 모바일 번호로 아이디 찾기
+          </radio-button>
         </div>
-
-        <!-- 이메일로 아이디 찾기 -->
-        <div class="find-info">
-          <div class="find-type">
-            <radio-button btn-id="radio2"
-                          radio-name="radio"
-                          btn-value="email"
-                          :radio-data="formData.radioValue"
-                          @click="optionFindChange">회원 정보에 등록된 이메일로 아이디 찾기</radio-button>
-          </div>
-          <div class="find-info-input" :class="{'active':activeInputField('email')}">
-            <div class="form-group">
-              <input type="text" class="form-control"
-                     v-model="formData.email" :placeholder="messages.email" style="width:216px;">
-              <button type="button" class="btn basic x32 sm secondary fill"
-                      :disabled="!userEmailState" @click.stop="getUserIdByEmail">인증</button>
-              <p class="form-message approval" v-if="isEmailChk">이메일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</p>
-              <p class="form-message error" v-else>{{ errorMsg }}</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="find-btn">
-          <div class="btn-group">
-            <button type="button" class="btn basic big primary red wd-full"
-                    :class="{'disabled':!verificationConfirm() }" @click="confirmClickHandler">확인</button>
-          </div>
-        </div>
-        <div class="page-back"><a href="" @click.prevent="gotoLoginHandler">로그인으로 돌아가기</a></div>
-      </div>
-      <!-- end: 아이디 찾기 -->
-
-      <!-- start: 아이디 찾기 / 비밀번호 재설정 결과 화면 -->
-      <div v-else>
-        <div class="find-card result" v-if="isMobileChk">
-          <p class="card-tit">
-            회원님의 아이디는<br>
-            <span class="fc-red">{{ findUserId }}</span>입니다.
-          </p>
-        </div>
-        <div class="find-card send" v-else>
-          <p class="card-tit">
-            회원님의 이메일( {{findInputUserEmail}} )로<br>
-            아이디가 전송되었습니다.
-          </p>
-        </div>
-
-        <div class="find-btn">
-          <div class="btn-group">
-            <button type="button" class="btn primary red big wd-full" @click.prevent="gotoLoginHandler">로그인으로 돌아가기</button>
+        <div class="find-info-input" :class="{'active':activeInputField('mobile')}">
+          <div class="form-group inline">
+            <input type="text" class="form-control"
+                   v-model="formData.mobile" :placeholder="messages.mobile" style="width:216px;"/>
+            <button type="button" class="btn basic x32 sm secondary fill"
+                    :disabled="!userMobileState" @click.stop="getUserIdByMobile">인증
+            </button>
+            <p class="form-message approval" v-if="isMobileChk">모바일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</p>
+            <p class="form-message error" v-else>{{ errorMsg }}</p>
           </div>
         </div>
       </div>
-      <!-- end: 아이디 찾기 / 비밀번호 재설정 결과 화면 -->
 
+      <!-- 이메일로 아이디 찾기 -->
+      <div class="find-info">
+        <div class="find-type">
+          <radio-button btn-id="radio2"
+                        radio-name="radio"
+                        btn-value="email"
+                        :radio-data="formData.radioValue"
+                        @click="optionFindChange">회원 정보에 등록된 이메일로 아이디 찾기
+          </radio-button>
+        </div>
+        <div class="find-info-input" :class="{'active':activeInputField('email')}">
+          <div class="form-group">
+            <input type="text" class="form-control"
+                   v-model="formData.email" :placeholder="messages.email" style="width:216px;">
+            <button type="button" class="btn basic x32 sm secondary fill"
+                    :disabled="!userEmailState" @click.stop="getUserIdByEmail">인증
+            </button>
+            <p class="form-message approval" v-if="isEmailChk">이메일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</p>
+            <p class="form-message error" v-else>{{ errorMsg }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="find-btn">
+        <div class="btn-group">
+          <button type="button" class="btn basic big primary red wd-full"
+                  :class="{'disabled':!verificationConfirm() }" @click="confirmClickHandler">확인
+          </button>
+        </div>
+      </div>
+      <div class="page-back"><a href="" @click.prevent="gotoLoginHandler">로그인으로 돌아가기</a></div>
     </div>
+    <!-- end: 아이디 찾기 -->
+
+    <!-- start: 아이디 찾기 / 비밀번호 재설정 결과 화면 -->
+    <div v-else>
+      <div class="find-card result" v-if="isMobileChk">
+        <p class="card-tit">
+          회원님의 아이디는<br>
+          <span class="fc-red">{{ findUserId }}</span>입니다.
+        </p>
+      </div>
+      <div class="find-card send" v-else>
+        <p class="card-tit">
+          회원님의 이메일( {{ findInputUserEmail }} )로<br>
+          아이디가 전송되었습니다.
+        </p>
+      </div>
+
+      <div class="find-btn">
+        <div class="btn-group">
+          <button type="button" class="btn primary red big wd-full" @click.prevent="gotoLoginHandler">로그인으로 돌아가기
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- end: 아이디 찾기 / 비밀번호 재설정 결과 화면 -->
 
   </div>
+
+</div>
 

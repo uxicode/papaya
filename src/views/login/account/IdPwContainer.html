@@ -2,7 +2,7 @@
   <!-- Nav tabs -->
   <div class="form-tab">
     <ul class="tabs-line" data-column="2">
-      <li class="item"  v-for="( item, index ) in listInfos" :key="item.id" :class="{'active':isActive(index) }">
+      <li class="item" v-for="( item, index ) in listInfos" :key="item.id" :class="{'active':isActive(index) }">
         <a href="" @click.prevent="gotoLink(index)">{{ item.title }}</a>
       </li>
       <!--<li class="item active"><a href="#a5" role="tab" data-toggle="tab"  @click.prevent="gotoFindIdHandler">아이디 찾기</a></li>
@@ -10,7 +10,7 @@
     </ul>
   </div>
 
-  <transition name="slide-out"  mode="out-in">
+  <transition name="slide-out" mode="out-in">
     <router-view></router-view>
   </transition>
 

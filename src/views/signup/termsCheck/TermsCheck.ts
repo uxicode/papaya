@@ -2,7 +2,6 @@ import {Vue, Component, Prop} from 'vue-property-decorator';
 import WithRender from './TermsCheck.html';
 import TermsService from '@/api/service/TermsService';
 import any = jasmine.any;
-import It = jest.It;
 
 interface ITermsData {
     name: string;

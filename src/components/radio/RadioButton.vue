@@ -6,44 +6,46 @@
            :value="btnValue"
            v-model="radioData"
            :checked="checkedState"
-           @click="update" >
-    <label :for="btnId"><slot></slot></label>
+           @click="update">
+    <label :for="btnId">
+      <slot></slot>
+    </label>
   </div>
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop } from 'vue-property-decorator';
+import {Vue, Component, Prop} from 'vue-property-decorator';
 
 @Component
-export default class RadioButton extends Vue{
+export default class RadioButton extends Vue {
 
   @Prop(String)
-  public btnId!:string;
+  public btnId!: string;
 
   @Prop(String)
-  public radioName!:string;
+  public radioName!: string;
 
   @Prop(String)
-  public btnValue!:string;
+  public btnValue!: string;
 
   @Prop(String)
-  public label!:string;
+  public label!: string;
 
   @Prop(String)
-  private radioData!:string;
+  private radioData!: string;
 
-  private update(event:any){
-    this.btnValue=event.target.value;
+  private update(event: any) {
+    this.btnValue = event.target.value;
     // this.btnValue=value;
     this.$emit('click', this.btnValue);
   }
 
-  private checkedState():boolean{
+  private checkedState(): boolean {
     // console.log( '라디오체크상태', this.radioData === this.btnValue );
     return this.radioData === this.btnValue;
   }
 
-  private mounted(){
+  private mounted() {
     // console.log( '라디오체크상태', this.radioData );
   }
 
