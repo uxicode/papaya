@@ -17,7 +17,7 @@ export default class IdPwContainer extends Vue {
   private activeItem: number =0;
 
   private listInfos: IPath[] = [
-    {id: 0, url: '/login/findId', title: '아이디 찾기', key:'findId'},
+    {id: 0, url: '/login/findId', title: '아이디 찾기', key:'findIdForm'},
     {id: 1, url: '/login/findId/resetPw', title: '비밀번호 재설정', key:'resetPw'},
   ];
 
@@ -40,6 +40,7 @@ export default class IdPwContainer extends Vue {
 
   private gotoLink(idx: number): void {
     this.activeItem = idx;
+    console.log( idx );
     this.$router.push(this.listInfos[idx].url).then((r: Route) => {
       console.log(this.listInfos[idx].title);
     });

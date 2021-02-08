@@ -1,12 +1,8 @@
 import {Vue, Component } from 'vue-property-decorator';
-import {Route} from 'vue-router';
-// import AuthService from '@/api/service/AuthService';
 import {IFormData, IMessage} from '@/views/login/model/formdata.model';
-import UserService from '@/api/service/UserService';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import {namespace} from 'vuex-class';
 import WithRender from './FindId.html';
-import {FIND_ID_BY_EMAIL} from '@/store/action-auth-types';
 
 const Auth = namespace('Auth');
 

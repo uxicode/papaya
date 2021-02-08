@@ -20,7 +20,6 @@ extend('minmax', {
   message:'글자 {_field_}는 최소 {min} 최대 {max}이여야 합니다.',
 });
 
-
 extend('confirmed', {
   params: ['target'],
   validate( value, { target }:Record<string | number, any>) {
