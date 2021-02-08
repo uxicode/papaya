@@ -1,5 +1,5 @@
 import {Vue} from 'vue-property-decorator';
-import { ValidationProvider, ValidationObserver, extend} from 'vee-validate';
+import {extend, ValidationObserver, ValidationProvider} from 'vee-validate';
 import { required } from 'vee-validate/dist/rules';
 
 Vue.component('ValidationProvider', ValidationProvider);
@@ -22,6 +22,7 @@ extend('minmax', {
 
 extend('confirmed', {
   params: ['target'],
+  // @ts-ignore
   validate( value, { target }:Record<string | number, any>) {
     return value === target;
   },

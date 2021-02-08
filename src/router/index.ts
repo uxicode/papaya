@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter, {RawLocation, RouteConfig} from 'vue-router';
 import Home from '../views/Home.vue';
 import Login from '@/views/login/Login';
-import SignUp from '@/views/signup/SignUp'
+import SignUp from '@/views/signup/SignUp';
 import SignInHeader from '@/components/header/signinHeader.vue';
 import SignUpHeader from '@/components/header/signupHeader.vue';
 import {getIsAuth} from '@/router/AuthGuard';
@@ -42,7 +42,7 @@ const routes: RouteConfig[] = [
         path:'verify',
         component:()=>import('../views/signup/verify/Verify'),
         children: [
-          { path:'complete', component:()=>import('../views/signup/verify/complete/Complete')}
+          { path:'complete', component:()=>import('../views/signup/verify/complete/Complete')},
         ],
       },
       { path: 'signUpForm', component:()=>import('../views/signup/signUpForm/SignUpForm') },
