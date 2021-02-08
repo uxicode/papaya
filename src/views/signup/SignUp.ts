@@ -12,4 +12,6 @@ import WithRender from './SignUp.html';
         SignUpForm,
     },
 })
-export default class SignUp extends Vue {}
+export default class SignUp extends Vue {
+
+}

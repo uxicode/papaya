@@ -36,16 +36,17 @@ const routes: RouteConfig[] = [
     path:'/signup',
     components:{ default:SignUp, header:SignUpHeader },
     children:[
-      { path:'', name:'signUpIntro', component:()=> import('../views/signup/signUpIntro/SignUpIntro') },
-      { path:'termsCheck', component:()=>import('../views/signup/termsCheck/TermsCheck') },
+      { path:'', component:()=> import('../views/signup/signUpIntro/SignUpIntro') },
+      { path:'termsCheck', name:'termsCheck', component:()=>import('../views/signup/termsCheck/TermsCheck') },
       {
         path:'verify',
+        name:'verify',
         component:()=>import('../views/signup/verify/Verify'),
         children: [
-          { path:'complete', component:()=>import('../views/signup/verify/complete/Complete')},
+          { path:'verifyComplete', name:'verifyComplete', component:()=>import('../views/signup/verify/verifyComplete/VerifyComplete')},
         ],
       },
-      { path: 'signUpForm', component:()=>import('../views/signup/signUpForm/SignUpForm') },
+      { path: 'signUpForm', name: 'signUpForm', component:()=>import('../views/signup/signUpForm/SignUpForm') },
     ],
   },
   {
