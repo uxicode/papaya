@@ -25,7 +25,7 @@ const routes: RouteConfig[] = [
         path:'findId',
         component:()=> import('../views/login/account/IdPwContainer'),
         children:[
-          {path:'', name:'findId', component:()=>import('../views/login/findId/FindId') },
+          {path:'', name:'findIdForm', component:()=>import('../views/login/findId/FindId') },
           {path:'resetPw', name:'resetPw', component:()=> import('../views/login/resetPw/ResetPassword') },
         ],
       },

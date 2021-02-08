@@ -12,10 +12,12 @@ import './components/validation/validation';
 
 Vue.config.productionTip = false;
 Vue.config.errorHandler=( err:Error, vm:Vue, info:string ) => {
-  console.log(`Error ${err.toString()}\n info: ${info}`, err );
+  console.log(`Error ${err.toString()}\n info: ${info}`, err, vm);
 };
 new Vue({
   router,
   store,
   render: (h) => h(App),
 }).$mount('#app');
+
+
