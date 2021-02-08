@@ -1,5 +1,5 @@
 import {Vue} from 'vue-property-decorator';
-import { ValidationProvider, ValidationObserver, extend} from 'vee-validate';
+import {ValidationProvider, ValidationObserver, extend} from 'vee-validate';
 import { required } from 'vee-validate/dist/rules';
 
 Vue.component('ValidationProvider', ValidationProvider);
@@ -22,7 +22,7 @@ extend('minmax', {
 
 extend('confirmed', {
   params: ['target'],
-  validate( value, { target }:Record<string | number, any>) {
+  validate( value:string | number, { target }:Record<string | number, any>) {
     return value === target;
   },
   message: '비밀번호가 일치하지 않습니다.',

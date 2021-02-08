@@ -13,5 +13,4 @@ import WithRender from './SignUp.html';
     },
 })
 export default class SignUp extends Vue {
-
 }
