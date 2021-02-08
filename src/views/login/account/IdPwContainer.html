@@ -1,4 +1,4 @@
-<div class="form-cnt pd-desc">
+<div class="form-cnt pd-desc" style="overflow:hidden;">
   <!-- Nav tabs -->
   <div class="form-tab">
     <ul class="tabs-line" data-column="2">
@@ -10,8 +10,7 @@
     </ul>
   </div>
 
-  <!-- 같은 컴포넌트에서 링크 이동( ex- 입력화면 / 수정화면 )시 이동안될때 :key=$route.fullpath 를 넣어주면된다. -->
-  <transition name="page-change">
+  <transition name="slide-out"  mode="out-in">
     <router-view></router-view>
   </transition>
 

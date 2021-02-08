@@ -74,7 +74,7 @@ export default class Login extends Vue {
     return !!val || '비밀번호를 입력해 주세요.';
   }
   private created() {
-    console.log(this.isAuth);
+    // console.log(this.isAuth);
   }
   private setAccountStatus( status:string ):void{
     this.currentStatus=status;
