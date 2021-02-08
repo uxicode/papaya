@@ -18360,26 +18360,40 @@ body {
 }
 .tabs-line .item {
   float: left;
-  margin-bottom: 10px;
   text-align: center;
   font-size: 16px;
   color: #57576d;
   letter-spacing: 0;
 }
-.tabs-line .item.active a {
+.tabs-line .item a {
   position: relative;
   display: inline-block;
-  padding: 0 6px;
-  font-weight: 500;
+  padding: 10px 6px;
 }
-.tabs-line .item.active a:after {
+.tabs-line .item a:after {
   content: "";
   position: absolute;
   width: 100%;
   height: 2px;
-  bottom: -11px;
+  bottom: 0;
   left: 0;
   background-color: #0f0f15;
+  transition: all 0.35s ease-out;
+  transform-origin: 50% 0;
+  transform: scaleX(0);
+}
+.tabs-line .item.active a {
+  font-weight: 500;
+}
+.tabs-line .item.active a:after {
+  transform: scaleX(1);
+  /* //jbc
+  content:'';
+  position:absolute;
+  height:2px;
+  bottom:0;
+  left:0;
+  background-color:#0f0f15;*/
 }
 
 .tb-style {
@@ -18492,7 +18506,7 @@ body {
 .btn-radio input[disabled]:checked + label:before, .btn-radio input[disabled]:checked + label:after {
   opacity: 0.2;
 }
-.btn-radio input:checked + label:before {
+.btn-radio input:checked ~ label:before {
   background: url(../../assets/images/checkbox-circle-radio.svg) no-repeat;
 }
 
@@ -18743,6 +18757,48 @@ body {
 }
 .all-form .form-btm {
   margin-top: 30px;
+}
+
+/* router page change motion */
+.page-change-enter-active {
+  transition: all 0.35s ease;
+}
+
+.page-change-leave-active {
+  transition: all 0.75s ease;
+}
+
+.page-change {
+  position: relative;
+}
+
+.page-change-enter {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.page-change-leave-to {
+  position: absolute;
+  opacity: 0;
+  transform: translateY(100%) rotateZ(15deg);
+}
+
+/* slide out motion */
+.slide-out-enter-active {
+  transition: all 1s ease;
+}
+
+.slide-out-leave-active {
+  transition: all 0.35s;
+}
+
+.slide-out-enter {
+  opacity: 0;
+}
+
+.slide-out-leave-to {
+  opacity: 0;
+  transform: translateX(-100%);
 }
 
 .wrapper {

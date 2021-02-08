@@ -1,0 +1,51 @@
+<div class="contents">
+    <div class="contents-inner">
+        <div class="all-form">
+            <h2 class="main-tit">{{ pageTitle }}</h2>
+
+            <div class="form-progress">
+                <ul class="progress-list clearfix">
+                    <li v-for="idx in stepTotal" :key="idx" class="item" :class="{'active':step===idx}"></li>
+                </ul>
+            </div>
+
+            <div class="form-wrapper">
+                <h3 class="form-sub-tit ct">{{ currentTitle() }}</h3>
+                <div class="form-cnt">
+                    <div class="accordion">
+                        <div class="accordion-tit form-tit">
+                            <div class="btn-checkbox">
+                                <input type="checkbox" id="allCheck">
+                                <label for="allCheck">전체 동의</label>
+                            </div>
+                        </div>
+                        <div v-for="item in termsList" :key="item.idx">
+                            <!-- accordion -->
+                            <div class="accordion-tit form-tit">
+                                <div class="btn-checkbox">
+                                    <input type="checkbox" :id="'check'+item.idx">
+                                    <label :for="'check'+item.idx">{{ item.tit }}</label>
+                                </div>
+
+                                <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
+                                <button class="accordion-btn" @click="accordionToggle(item)" :class="{ 'active': item.isActive }" data-toggle="collapse" :data-target="'#accordion'+item.idx"></button>
+                            </div>
+                            <!-- class="active" 일 경우 open -->
+                            <div class="accordion-cnt" :class="{ 'active': item.isActive }" :id="'accordion'+item.idx">
+                                <div class="agreement">
+                                    <p v-html="item.desc"></p>
+                                </div>
+                            </div>
+                            <!-- //accordion -->
+                        </div>
+                    </div>
+                </div>
+                <div class="form-btm">
+                    <div class="btn-group rt">
+                        <button type="button" class="btn basic x40 sm primary navi" disabled>다음</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
