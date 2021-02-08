@@ -6,6 +6,8 @@
   padding:40px 0 60px;
   background: url(../../assets/images/illust-login.png) no-repeat left bottom 84px / 62%;
 
+  .form-group + .form-group {margin-top:30px;}
+
   .form-cnt {
     position:relative;
     width: 420px;
@@ -50,7 +52,7 @@
     }
 
     .form-tab {
-      padding-top:30px;
+      padding-top:40px;
       border-bottom:1px solid #f4f5f6;
 
       .tabs-line {
