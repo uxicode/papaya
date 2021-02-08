@@ -1,6 +1,7 @@
 import {Vue, Component, Prop} from "vue-property-decorator";
 import WithRender from './TermsCheck.html';
 import TermsService from "@/api/service/TermsService";
+import any = jasmine.any;
 
 interface ITermsData {
     name: string;
@@ -25,18 +26,21 @@ export default class TermsCheck extends Vue {
             idx: 1,
             tit: '서비스 이용약관(필수)',
             isActive: false,
+            isChecked: false,
             desc: ['test'],
         },
         {
             idx: 2,
             tit: '개인정보 처리방침(필수)',
             isActive: false,
+            isChecked: false,
             desc: ['test']
         },
         {
             idx: 3,
             tit: '마케팅 정보 수집 동의(선택)',
             isActive: false,
+            isChecked: false,
             desc: ['test']
         }
     ];

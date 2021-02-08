@@ -45,7 +45,7 @@ const routes: RouteConfig[] = [
           { path:'complete', component:()=>import('../views/signup/verify/complete/Complete')}
         ],
       },
-      { path: 'info', component:()=>import('../views/signup/info/Info') },
+      { path: 'signUpForm', component:()=>import('../views/signup/signUpForm/SignUpForm') },
     ],
   },
   {
