@@ -1,4 +1,4 @@
-import { Vue, Component } from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 
 import LoginForm from '@/views/login/loginForm/LoginForm';
@@ -27,15 +27,15 @@ const Auth = namespace('Auth');
 
 @WithRender
 @Component({
-  components:{
+  components: {
     LoginForm,
     FindId,
   },
 })
 export default class Login extends Vue {
 
- /* private userId: string = '';
-  private userPw: string = '';*/
+  /* private userId: string = '';
+   private userPw: string = '';*/
   private STATUS_LOGIN: string = 'status_login';
   private STATUS_FIND_ID: string = 'status_find_id';
   private STATUS_PWD_RESET: string = 'status_pwd_reset';
@@ -44,43 +44,43 @@ export default class Login extends Vue {
   // private mVerificationKey: string = '';
   // private mVerificationVal: string = '';
 
-  private verifyComplete:boolean=false; //인증 완료 체크
+  private verifyComplete: boolean = false; //인증 완료 체크
   // private findUserID: string = '';
   private checkType: string = 'mobile';
 
   @Auth.Getter
-  private isAuth!:boolean;
+  private isAuth!: boolean;
 
   @Auth.Getter
-  private findUserId!:string;
+  private findUserId!: string;
 
   @Auth.Action
   private login!: (data: any) => Promise<any>;
 
-  get loginStatus():boolean{
-    console.log(this.currentStatus===this.STATUS_LOGIN);
-    return this.currentStatus===this.STATUS_LOGIN;
+  get loginStatus(): boolean {
+    console.log(this.currentStatus === this.STATUS_LOGIN);
+    return this.currentStatus === this.STATUS_LOGIN;
   }
 
-  get findStatus():boolean{
-    return ( this.currentStatus === this.STATUS_FIND_ID ) || (this.currentStatus === this.STATUS_PWD_RESET );
+  get findStatus(): boolean {
+    return (this.currentStatus === this.STATUS_FIND_ID) || (this.currentStatus === this.STATUS_PWD_RESET);
   }
 
   // @ts-ignore
-  public getMinTxtValue( v: string ): boolean | string{
-    return ( v.length >= 8 ) || '최소 8글자 이상 입력해 주세요.';
+  public getMinTxtValue(v: string): boolean | string {
+    return (v.length >= 8) || '최소 8글자 이상 입력해 주세요.';
   }
-  public getRequired( val: string ): boolean | string {
+
+  public getRequired(val: string): boolean | string {
     return !!val || '비밀번호를 입력해 주세요.';
   }
-  private created() {
-    // console.log(this.isAuth);
+
+  private setAccountStatus(status: string): void {
+    this.currentStatus = status;
   }
-  private setAccountStatus( status:string ):void{
-    this.currentStatus=status;
-  }
-  private gotoLogin():void{
-    this.verifyComplete=false;
+
+  private gotoLogin(): void {
+    this.verifyComplete = false;
     // this.mVerificationComplete=false;
     this.setAccountStatus(this.STATUS_LOGIN);
   }

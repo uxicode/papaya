@@ -18769,7 +18769,7 @@ body {
 }
 
 .page-change {
-  position: relative;
+  position: absolute;
 }
 
 .page-change-enter {
@@ -18778,27 +18778,27 @@ body {
 }
 
 .page-change-leave-to {
-  position: absolute;
   opacity: 0;
-  transform: translateY(100%) rotateZ(15deg);
+  transform: translateY(100%) rotateZ(45deg);
 }
 
 /* slide out motion */
 .slide-out-enter-active {
-  transition: all 1s ease;
+  transition: all 0.75s ease;
 }
 
 .slide-out-leave-active {
-  transition: all 0.35s;
+  transition: all 0.75s;
 }
 
 .slide-out-enter {
   opacity: 0;
+  transform: translateX(-10%);
 }
 
 .slide-out-leave-to {
   opacity: 0;
-  transform: translateX(-100%);
+  transform: translateX(50%);
 }
 
 .wrapper {

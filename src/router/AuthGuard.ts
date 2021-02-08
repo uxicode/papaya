@@ -9,17 +9,17 @@ import {NavigationGuardNext, Route} from 'vue-router';
  * @param from 현재 라우트로 오기전 라우트
  * @param next 파이프라인의 다음 훅으로 이동. 훅이 없는 경우 네비게이션은 승인.
  */
-const getIsAuth = (to:Route, from:Route, next:NavigationGuardNext):void => {
-    console.log( to.path );
-    const loginPath:string = `/login?rqPath=${encodeURIComponent(to.path)}`;
-    console.log( store.getters['Auth/isAuth'] );
-    if( store.getters['Auth/isAuth'] ){
-        next();
-    }else{
-        //로그인 페이지라고 저장해둠.
-        store.commit('PageHistoryStatus/'+HISTORY_PAGE, {history:'login'});
-        next(loginPath);
-    }
+const getIsAuth = (to: Route, from: Route, next: NavigationGuardNext): void => {
+  console.log(to.path);
+  const loginPath: string = `/login?rqPath=${encodeURIComponent(to.path)}`;
+  console.log(store.getters['Auth/isAuth']);
+  if (store.getters['Auth/isAuth']) {
+    next();
+  } else {
+    //로그인 페이지라고 저장해둠.
+    store.commit('PageHistoryStatus/' + HISTORY_PAGE, {history: 'login'});
+    next(loginPath);
+  }
 };
 
-export { getIsAuth };
+export {getIsAuth};

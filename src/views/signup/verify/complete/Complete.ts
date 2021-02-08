@@ -1,4 +1,4 @@
-import {Vue, Component, Prop} from "vue-property-decorator";
+import {Vue, Component, Prop} from 'vue-property-decorator';
 import WithRender from './Complete.html';
 
 @WithRender

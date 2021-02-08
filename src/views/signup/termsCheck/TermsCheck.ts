@@ -1,6 +1,7 @@
-import {Vue, Component, Prop} from "vue-property-decorator";
+import {Vue, Component, Prop} from 'vue-property-decorator';
 import WithRender from './TermsCheck.html';
-import TermsService from "@/api/service/TermsService";
+import TermsService from '@/api/service/TermsService';
+import any = jasmine.any;
 
 interface ITermsData {
     name: string;
@@ -11,40 +12,45 @@ interface ITermsData {
 @WithRender
 @Component
 export default class TermsCheck extends Vue {
-    private step : number = 1
-    private stepTotal : number = 3
-    private pageTitle : string = '일반 회원가입'
-    private termsItems : any = []
-    private termsData : ITermsData = {
+    private step: number = 1;
+    private stepTotal: number = 3;
+    private pageTitle: string = '일반 회원가입';
+    private termsItems: object[]= [];
+    private termsData: ITermsData = {
         name: '',
         type: '',
-        bodytext: ''
+        bodytext: '',
     };
-    private termsList : any = [
+    private termsList: any = [
         {
             idx: 1,
             tit: '서비스 이용약관(필수)',
             isActive: false,
+            isChecked: false,
             desc: ['test'],
         },
         {
             idx: 2,
             tit: '개인정보 처리방침(필수)',
             isActive: false,
-            desc: ['test']
+            isChecked: false,
+            desc: ['test'],
         },
         {
             idx: 3,
             tit: '마케팅 정보 수집 동의(선택)',
             isActive: false,
-            desc: ['test']
-        }
+            isChecked: false,
+            desc: ['test'],
+        },
     ];
-
-    private accordionToggle(item: any) : void {
+    public created() {
+        this.getTerms();
+    }
+    private accordionToggle(item: any): void {
         item.isActive = !item.isActive;
     }
-    private currentTitle() : string {
+    private currentTitle(): string {
         let result;
         switch (this.step) {
             case 1:
@@ -59,27 +65,22 @@ export default class TermsCheck extends Vue {
         }
         return result;
     }
-
-    private getTerms () : any {
+    private getTerms(): any {
         const serviceTerms = TermsService.getServiceTerms();
         const privateTerms = TermsService.getPrivateTerms();
         const marketTerms = TermsService.getMarketTerms();
 
         // axios.all 로 처리해도 됨.
         Promise.all( [serviceTerms, privateTerms, marketTerms] )
-            .then( data => {
+            .then( (data) => {
                 this.termsItems=data;
             })
             .then(() => {
                 //Promise.all 로 처리하면 리턴값이 배열. 즉 별도 매칭이 필요.
-                this.termsItems.map( ( item : any, idx : number ) => {
+                this.termsItems.map( ( item: any, idx: number ) => {
                     this.termsList[idx].desc=item.terms_info.bodytext;
                     //console.log( item.terms_info.bodytext )
                 });
-            })
-    }
-
-    created() {
-        this.getTerms()
+            });
     }
 }
