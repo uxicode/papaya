@@ -25,7 +25,7 @@
 			.memo:before {content:'MEMO'; font-weight:bold; color:#999; font-size:16px; }
 			.memo p {color:#5b5b70; margin-top:5px; font-size:15px;}
 
-			.form-group + .form-group {margin-top:30px;}
+			.form-group + .form-group {margin-top:20px;}
 		</style>
 	</head>
 
@@ -122,16 +122,22 @@
 									<input type="text" class="form-control" value="text" readonly>
 								</div>
 
+								<div class="form-group">
+									<input type="text" class="form-control" id="input4" placeholder="text">
+									<!-- form-delete active 시 display:block; -->
+									<button type="button" class="btn only-ico-btn form-delete active" disabled><img src="assets/images/delete.svg" alt=""></button>
+								</div>
+
 								<h4>focus-count</h4>
 								<div class="form-group">
 									<input type="text" class="form-control" placeholder="text">
-									<p class="form-message count">0/0</p>
+									<small class="form-message count">0/0</small>
 								</div>
 
 								<h4>focus-time</h4> <!-- input 포커스 시 활성화 -->
 								<div class="form-group">
 									<input type="text" class="form-control" placeholder="text">
-									<p class="form-message ms-time">3:00</p>
+									<small class="form-message ms-time">3:00</small>
 								</div>
 							</div>
 
@@ -139,17 +145,17 @@
 								<h3>form-message</h3>
 								<div class="form-group">
 									<input type="text" class="form-control" value="text">
-									<p class="form-message">Normal Message.</p>
+									<small class="form-message">Normal Message.</small>
 								</div>
 
 								<div class="form-group">
 									<input type="text" class="form-control error" value="text">
-									<p class="form-message error">Error Message.</p>
+									<small class="form-message error">Error Message.</small>
 								</div>
 
 								<div class="form-group">
 									<input type="text" class="form-control approval" value="text">
-									<p class="form-message approval">Approval Message.</p>
+									<small class="form-message approval">Approval Message.</small>
 								</div>
 							</div>
 
@@ -209,7 +215,7 @@
 							<div class="cnt-container">
 								<div class="form-group">
 									<textarea class="form-textarea" placeholder="text"></textarea>
-									<p class="form-message count">0/0</p>
+									<small class="form-message count">0/0</small>
 								</div>
 							</div>
 						</div>

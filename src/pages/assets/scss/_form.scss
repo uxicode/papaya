@@ -47,7 +47,7 @@ select {
 
     +.form-message {
       &.count {color:#57576d;}
-      &.time {display:block;}
+      &.ms-time {display:block;}
       &.pw-show {opacity: 1;}
     }
   }
@@ -74,33 +74,30 @@ select {
 }
 
 .form-message {
-  position:absolute;
-  left:0;
-  margin-top:4px;
   font-size:12px;
   color:#57576d;
 
-  &.count {left:auto; right:0; color:#848499;}
+  &.count {
+    @include pos-center($right:0);
+    color:#848499;
+  }
   &.error {color:#ff4d4d;}
   &.approval {color:#629f00;}
 
   /* form-control focus시 활성화 */
   &.ms-time {
+    @include pos-center($right:0);
     display:none;
-    bottom:10px;
-    left:auto;
-    right:0;
     font-size:14px;
     color:#ff4d4d;
   }
 
   /* form-control password focus시 활성화 */
   &.pw-show {
+    @include pos-center($right:0);
+
     width:24px;
     height:24px;
-    left:auto;
-    right:0;
-    bottom:6px;
     opacity: 0.2;
     background:url(../../assets/images/eye.svg) no-repeat;
 
@@ -177,21 +174,15 @@ select {
 .form-group {
   position: relative;
 
-  //+.form-group{margin-top:30px;}
-
   .btn {
     &.form-delete {
-      left:0;
-      margin-left:0;
+      @include pos-center($right:0);
+      display:none;
 
-      +.time-control, +.date-area {
-        margin-left:34px;
-      }
+      &.active {display:block;}
     }
 
-    + .form-control {
-      margin-left:6px;
-    }
+    + .form-control {margin-left:6px;}
   }
 
   &.inline {
@@ -203,6 +194,14 @@ select {
     .form-control {
       +.btn {margin-left:6px;}
     }
+  }
+
+  &.time .form-delete, &.date .form-delete {
+    display:block;
+    right:auto;
+    left:0;
+
+    +.time-control, +.date-area {margin-left:34px;}
   }
 
   &.time {
@@ -235,7 +234,7 @@ select {
 
       + .form-btn {margin-left:6px;}
 
-      &.placeholder {color:#848499;}
+      &.placeholder {color:#848499; opacity: 0.2;}
     }
   }
 }
