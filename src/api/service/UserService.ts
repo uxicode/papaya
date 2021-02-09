@@ -3,7 +3,7 @@ import {USER_BASE_URL} from '@/api/base';
 
 class UserService {
 
-  public getUserURLById(id:string):string {
+  public getUserURLById(id: string): string {
     return `${USER_BASE_URL}/${id}`;
   }
 
@@ -11,7 +11,7 @@ class UserService {
    * 사용자 ID가 존재하는지 체크한다.
    * @param id
    */
-  public getIDCheck(id:string):Promise<any> {
+  public getIDCheck(id: string): Promise<any> {
     return request('get', `${this.getUserURLById(id)}/check`);
   }
 
@@ -19,15 +19,15 @@ class UserService {
    * 회원가입
    * @param info
    */
-  public signUp( info:{
-    user_id:string,
-    user_password:string,
-    fullname:string,
-    mobile_no:string,
-    email:string,
-    agree_marketing:boolean,
-    agree_email:boolean,
-  }):Promise<any>{
+  public signUp(info: {
+    user_id: string,
+    user_password: string,
+    fullname: string,
+    mobile_no: string,
+    email: string,
+    agree_marketing: boolean,
+    agree_email: boolean,
+  }): Promise<any> {
     /*{
       "user_id": "testuser1",
       "user_password": "12341234",
@@ -37,7 +37,7 @@ class UserService {
       "agree_marketing": false,
       "agree_email": true
     }*/
-    return request('post', `${USER_BASE_URL}`, info );
+    return request('post', `${USER_BASE_URL}`, info);
   }
 
   /**
@@ -45,7 +45,7 @@ class UserService {
    * @param offset
    * @param limit
    */
-  public getUsers(offset:number, limit:number):Promise<any> {
+  public getUsers(offset: number, limit: number): Promise<any> {
     return request('get', USER_BASE_URL, {offset, limit});
   }
 
@@ -69,7 +69,7 @@ class UserService {
    * id 로 사용자 정보 조회
    * @param id
    */
-  public getFindUser(id:string):Promise<any>{
+  public getFindUser(id: string): Promise<any> {
     return request('get', this.getUserURLById(id));
   }
 
@@ -78,7 +78,7 @@ class UserService {
    * @param id
    * @param data
    */
-  public setUserInfo(id:string, data:any ):Promise<any> {
+  public setUserInfo(id: string, data: any): Promise<any> {
     return request('put', this.getUserURLById(id), data);
   }
 
@@ -86,16 +86,13 @@ class UserService {
    *
    * @param id
    */
-  public deleteUser(id:string):Promise<any> {
-    return request('delete', this.getUserURLById(id), { user_id: id });
+  public deleteUser(id: string): Promise<any> {
+    return request('delete', this.getUserURLById(id), {user_id: id});
   }
 
-  /**
-   * 로그인 안된 상태에서 비번 재설정을 위한 모바일번호로 인증
-   */
-  public getAuthByMobileNum( userId:string, mobile:string ):Promise<any>{
-    return request('get', `${USER_BASE_URL}/${userId}/${mobile}/authnumber`);
-  }
+
+
+
 
 }
 
