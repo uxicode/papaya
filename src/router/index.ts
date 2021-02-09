@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter, {RawLocation, RouteConfig} from 'vue-router';
 import Home from '../views/Home.vue';
 import Login from '@/views/login/Login';
+import SignUp from '@/views/signup/SignUp';
 import SignInHeader from '@/components/header/signinHeader.vue';
 import SignUpHeader from '@/components/header/signupHeader.vue';
 import {getIsAuth} from '@/router/AuthGuard';
@@ -12,34 +13,45 @@ Vue.use(VueRouter);
 const routes: RouteConfig[] = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home,
     beforeEnter: getIsAuth,
   },
   {
     path: '/login',
-    components: { default:Login, header:SignInHeader},
-    children:[
-      { path:'', name:'loginForm', component:()=> import('../views/login/loginForm/LoginForm') },
+    components: {default: Login, header: SignInHeader},
+    children: [
+      {path: '', name: 'loginForm', component: () => import('../views/login/loginForm/LoginForm')},
       {
-        path:'findId',
-        component:()=> import('../views/login/account/IdPwContainer'),
-        children:[
-          {path:'', name:'findId', component:()=>import('../views/login/findId/FindId') },
-          {path:'resetPw', name:'resetPw', component:()=> import('../views/login/resetPw/ResetPassword') },
+        path: 'findId',
+        component: () => import('../views/login/account/IdPwContainer'),
+        children: [
+          {path: '', name: 'findIdForm', component: () => import('../views/login/findId/FindId')},
+          {path: 'resetPw', name: 'resetPw', component: () => import('../views/login/resetPw/ResetPassword')},
         ],
       },
     ],
   },
   {
-    path:'/signup',
-    name:'signup',
-    components:{ default:() => import('../views/signup/signup.vue'),  header:SignUpHeader },
+    path: '/signup',
+    components: {default: SignUp, header: SignUpHeader},
+    children: [
+      {path: '', name: 'signUpIntro', component: () => import('../views/signup/signUpIntro/SignUpIntro')},
+      {path: 'termsCheck', component: () => import('../views/signup/termsCheck/TermsCheck')},
+      {
+        path: 'verify',
+        component: () => import('../views/signup/verify/Verify'),
+        children: [
+          {path: 'complete', component: () => import('../views/signup/verify/complete/Complete')},
+        ],
+      },
+      {path: 'signUpForm', component: () => import('../views/signup/signUpForm/SignUpForm')},
+    ],
   },
   {
-    path:'*',
-    name:'notfound',
-    component:() => import('../views/NotFound.vue'),
+    path: '*',
+    name: 'notfound',
+    component: () => import('../views/NotFound.vue'),
   },
 ];
 
@@ -50,11 +62,11 @@ const router = new VueRouter({
 });
 
 /*$router.push 로 같은 링크 재차 클릭 에러 방지.*/
-const originalPath=VueRouter.prototype.push;
-VueRouter.prototype.push = function( url:RawLocation) {
+const originalPath = VueRouter.prototype.push;
+VueRouter.prototype.push = function(url: RawLocation) {
   // @ts-ignore
-  return originalPath.call(this, url).catch( (error:any) => {
-    if( error.name !=='NavigationDuplicated'){
+  return originalPath.call(this, url).catch((error: any) => {
+    if (error.name !== 'NavigationDuplicated') {
       location.reload();
     }
   });

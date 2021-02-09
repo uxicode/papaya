@@ -96,11 +96,11 @@ input {
 
 html {
   -webkit-touch-callout: none;
-  -webkit-touch-select: none;
+  //-webkit-touch-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-  -user-select: none;
+  //-user-select: none;
   -webkit-tap-highlight-color: rgba(0, 165, 181, 0.1);
 }
 
@@ -212,7 +212,7 @@ button {
   *zoom: 1;
 }
 
-.clearfix:after, .footer-inner:after, .tabs-line:after, contents-inner:after{
+.clearfix:after, .footer-inner:after, .tabs-line:after, .contents-group:after{
   content: "";
   display: block;
   clear: both;
@@ -249,6 +249,9 @@ body {
 
 .vt {vertical-align: top !important;}
 
+.bd-none {border:none !important;}
+.pd-none {padding:0 !important;}
+
 .required {
   &:after {
     content:'';
@@ -278,6 +281,37 @@ body {
   }
 }
 
+.thumb, .icon-img {width:100%;}
+
+.color-mark {
+  position:absolute;
+  display: block;
+  width:12px;
+  height:12px;
+  bottom:0;
+  right:0;
+  border-radius:50%;
+  border:2px solid #fff;
+
+  &.pos-rel {
+    position:relative;
+    display:inline-block;
+  }
+
+  &.red {background-color:#ff4d4d;}
+  &.yellow {background-color:#ffd100;}
+  &.blue {background-color:#2183de;}
+  &.pink {background-color:#ff90aa;}
+  &.aqua {background-color:#1cdbc9;}
+  &.black {background-color:#0f0f15;}
+}
+
+.profile-img {
+  width:32px;
+  height:32px;
+  display:inline-block;
+}
+
 // tab-list
 .tabs-line {
   border-bottom:1px solid #f4f5f6;
@@ -286,42 +320,27 @@ body {
 
   .item {
     float:left;
-    //margin-bottom:10px;//jbc
+    margin-bottom:10px;
     text-align:center;
     font-size:16px;
     color:#57576d;
     letter-spacing:0;
 
-    //jbc
-    a{
-      position:relative;
-      display:inline-block;
-      padding:10px 6px;
-      &:after {
-        content:'';
-        position:absolute;
-        width:100%;
-        height:2px;
-        bottom:0; //jbc
-        left:0;
-        background-color:#0f0f15;
-        transition:all .35s ease-out;
-        transform-origin: 50% 0;
-        transform:scaleX(0);
-      }
-    }
     &.active {
       a {
+        position:relative;
+        display:inline-block;
+        padding:0 6px;
         font-weight:500;
+
         &:after {
-          transform: scaleX(1);
-          /* //jbc
           content:'';
           position:absolute;
+          width:100%;
           height:2px;
-          bottom:0;
+          bottom:-11px;
           left:0;
-          background-color:#0f0f15;*/
+          background-color:#0f0f15;
         }
       }
     }
@@ -461,8 +480,12 @@ body {
       }
     }
 
-    &:checked ~ label:before{
-      background:url(../../assets/images/checkbox-circle-radio.svg) no-repeat;
+    &:checked {
+      + label {
+        &:before {
+          background:url(../../assets/images/checkbox-circle-radio.svg) no-repeat;
+        }
+      }
     }
   }
 }
@@ -491,6 +514,14 @@ body {
         -webkit-transition: all 0.5s ease;
         transition: all 0.2s ease;
       }
+
+      &.sm {
+        width:18px;
+        height:18px;
+        background-size:18px 18px;
+      }
+
+      &.rt-10 {right:10px;}
     }
 
     a.accordion-btn {
@@ -504,16 +535,16 @@ body {
         width:24px;
         height:24px;
         top:50%;
-        right:0;
-        transform: translateY(-50%) rotate(-180deg);
+        right:20px;
+        transform: translateY(-50%) rotate(0deg);
         -webkit-transition: all 0.5s ease;
         transition: all 0.2s ease;
-        background:url(../../assets/images/arrowdown.png) no-repeat center;
+        background:url(../../assets/images/arrow-down.svg) no-repeat center;
       }
 
-      &.close {
+      &.active {
         &:after {
-          transform: translateY(-50%) rotate(0deg);
+          transform: translateY(-50%) rotate(-180deg);
           -webkit-transition: all 0.5s ease;
           transition: all 0.2s ease;
         }
@@ -532,6 +563,7 @@ body {
 // pagination
 .pagination {
   width:100%;
+  padding:14px 0;
   text-align:center;
 
   ul {
@@ -551,15 +583,23 @@ body {
         text-align:center;
       }
 
-      &.active {
-        a{
-          background-color:#ff4d4d;
-          color:#fff;
+      &.num {
+        &.active {
+          a{
+            background-color:#ff4d4d;
+            color:#fff;
+          }
         }
       }
 
       &.arrow {
         margin:0 10px;
+        opacity:0.2;
+        vertical-align: middle;
+
+        &.active {
+          opacity: 1;
+        }
       }
     }
   }
@@ -569,10 +609,6 @@ body {
 .main-txt {
   padding:80px 0 180px 30px;
   background:url(../../assets/images/illust-welcome.png) no-repeat right top;
-
-  &.pd-desc {
-    padding:80px 0 200px 0;
-  }
 
   p {
     font-size:16px;
@@ -587,30 +623,6 @@ body {
   font-size:26px;
   font-weight:500;
   line-height:1.5;
-}
-
-
-.contents-left {
-  float:left;
-  margin-top:20px;
-}
-
-.contents-right {
-  float:right;
-  margin-top:20px;
-}
-
-.cnt-top {
-  position:relative;
-
-  .cnt-tit {
-    font-size:18px;
-    font-weight:500;
-  }
-}
-
-.thumb {
-  width:100%;
 }
 
 
@@ -713,7 +725,7 @@ body {
       text-align:center;
 
       .card-tit {
-        font-size:16px;
+        font-size:18px;
         color:#0f0f15;
 
         &.fw-500 {
@@ -779,32 +791,34 @@ body {
 }
 // -leave-active( leave, leave-to )
 .page-change{
-  position:relative;
+  position: absolute;
 }
 .page-change-enter{
   opacity: 0;
   transform: scale(0.8);
 }
 .page-change-leave-to{
-  position: absolute; // 비활성화 되어 있는 엘리먼트가 relative 가 되어 있기에 등장시 삐걱거림이 있기에 포지션을 절대값으로 해둔다.
+  // 비활성화 되어 있는 엘리먼트가 relative 가 되어 있기에 등장시 삐걱거림이 있기에 포지션을 절대값으로 해둔다.
   opacity: 0;
-  transform: translateY(100%) rotateZ(15deg);
+  transform:translateY(100%) rotateZ(45deg);
 }
 /* slide out motion */
 .slide-out-enter-active {
-  transition: all 1s ease;
+  transition: all .75s ease;
 }
 .slide-out-leave-active {
-  transition: all .35s;
+  transition: all .75s;
 }
 // -leave-active( leave, leave-to )
 .slide-out-enter{
   opacity: 0;
+  transform: translateX(-10%);
 }
 .slide-out-leave-to{
   opacity: 0;
-  transform: translateX(-100%);
+  transform: translateX(50%);
 }
+
 
 @import "./layout.scss";
 @import "./form.scss";
@@ -812,8 +826,6 @@ body {
 @import "./table.scss";
 @import "./popup.scss";
 @import "./class";
-//@import "./login";
+@import "./login";
 @import "./join";
 @import "./search";
-
-

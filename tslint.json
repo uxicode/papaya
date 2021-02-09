@@ -27,7 +27,8 @@
       "check-separator",
       "check-type"
     ],
-    "typedef-whitespace": [
+    "eofline": false,
+    "typedef-whitespace":  [
       true,
       {
         "call-signature": "nospace",
@@ -35,10 +36,18 @@
         "parameter": "nospace",
         "property-declaration": "nospace",
         "variable-declaration": "nospace"
+      },
+      {
+        "call-signature": "space",
+        "index-signature": "onespace",
+        "parameter": "space",
+        "property-declaration": "space",
+        "variable-declaration": "space"
       }
     ],
     "comment-format": false,
     "no-console": false,
-    "allowUnusedLabels": false
+    "allowUnusedLabels": false,
+    "trailing-comma": false
   }
 }
