@@ -34,16 +34,21 @@
       &:hover {background-color:#ff6464;}
       &:active, &.active {background-color:#d42b2b;}
     }*/
-
-    &.navi {
-      background-color:#1d1d4c;
-      &:hover {background-color:#57576d;}
-      &:active, &.active {background-color:#0f0f15;}
-    }
-
     &[disabled], &.disabled {
       opacity:0.2;
+      &:hover , &:active, &.active {background-color:#0f0f15;}
     }
+  }
+  &.grey {
+    color: #373749;
+    background-color: #f4f5f6;
+    &:hover,&:active, &.active{background-color:#c9cad5;}
+  }
+  &.navi {
+    color:#fff;
+    background-color:#1d1d4c;
+    &:hover {background-color:#57576d;}
+    &:active, &.active {background-color:#0f0f15;}
   }
 
   /*&.secondary {
@@ -79,7 +84,10 @@
       background-color:#f4f5f6;
       &:hover {background-color:rgba(201,202,213,0.5);}
       &:active, &.active {background-color:#c9cad5;}
-      &[disabled], &.disabled {color:rgba(55,55,73,0.2);}
+      &[disabled], &.disabled {
+        color:rgba(55,55,73,0.2);
+        &:hover, &:active, &.active {cursor:default; background-color:#f4f5f6;border-color:#c9cad5;}
+      }
     }
   }
 

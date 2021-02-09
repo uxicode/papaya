@@ -45,10 +45,6 @@ export default class RadioButton extends Vue {
     return this.radioData === this.btnValue;
   }
 
-  private mounted() {
-    // console.log( '라디오체크상태', this.radioData );
-  }
-
 }
 </script>
 

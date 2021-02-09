@@ -20,7 +20,7 @@
           <div class="form-group inline">
             <input type="text" class="form-control"
                    v-model="formData.mobile" :placeholder="messages.mobile" style="width:216px;"/>
-            <button type="button" class="btn basic x32 sm outline fill"
+            <button type="button" class="btn sm grey"
                     :disabled="!userMobileState" @click.stop="getUserIdByMobile">인증
             </button>
             <p class="form-message approval" v-if="isMobileChk">모바일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</p>
@@ -43,7 +43,7 @@
           <div class="form-group">
             <input type="text" class="form-control"
                    v-model="formData.email" :placeholder="messages.email" style="width:216px;">
-            <button type="button" class="btn basic x32 sm outline fill"
+            <button type="button" class="btn sm grey"
                     :disabled="!userEmailState" @click.stop="getUserIdByEmail">인증
             </button>
             <p class="form-message approval" v-if="isEmailChk">이메일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</p>
