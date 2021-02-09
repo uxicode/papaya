@@ -1,29 +1,11 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-
 import LoginForm from '@/views/login/loginForm/LoginForm';
 import FindId from '@/views/login/findId/FindId';
 import WithRender from './Login.html';
-import './Login.scss';
+// import './Login.scss';
 
 const Auth = namespace('Auth');
-
-/*interface IFormData{
-  radioValue:string;
-  email:string;
-  mobile:string;
-}*/
-/*interface IMessage{
-  mobile:string;
-  email:string;
-  mobileReq:string;
-  equal:string;
-  notMobile:string;
-  notEmail:string;
-  warnNum:string;
-  verify:string;
-  error:string;
-}*/
 
 @WithRender
 @Component({
