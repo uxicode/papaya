@@ -30,10 +30,10 @@
 
       &.error {background:url(../../assets/images/popup-icon-error.png) no-repeat;}
       &.search {background:url(../../assets/images/popup-icon-search.png) no-repeat;}
-      &.profile {background:url(../../assets/images/popup-icon-profile.png) no-repeat;}
-      &.link {background:url(../../assets/images/popup-icon-link.png) no-repeat;}
-      &.time {background:url(../../assets/images/popup-icon-time.png) no-repeat;}
-      &.vote {background:url(../../assets/images/popup-icon-vote.png) no-repeat;}
+      &.profile {background:url(../../assets/images/popup-icon-profile.svg) no-repeat;}
+      &.link {background:url(../../assets/images/popup-icon-link.svg) no-repeat;}
+      &.time {background:url(../../assets/images/popup-icon-time.svg) no-repeat;}
+      &.vote {background:url(../../assets/images/popup-icon-vote.svg) no-repeat;}
     }
 
     .popup-close {
@@ -47,11 +47,25 @@
 
     &.scroll-body {overflow-y:auto;}
 
+    .popup-type {
+      padding-bottom:0;
+      border-bottom:none;
+      font-size:16px;
+      color:#373737;
+
+      &.sm {font-size:14px;}
+    }
+
     .popup-cnt {
       padding:10px 40px;
 
       .write-tit {padding:18px 0 0 0;}
+
+      .form-item {
+        padding:18px 0;
+      }
     }
+
     .popup-search {
       padding:10px 40px 20px;
     }
@@ -90,11 +104,10 @@
     }
 
     .popup-input {
-      padding:30px 0;
+      padding:30px 0 10px 0;
     }
 
     .popup-form {
-
       .popup-form-top {
         margin:0 40px;
         border-bottom:1px solid #f4f5f6;
@@ -103,9 +116,7 @@
           padding:18px 0;
           border-top:1px solid #f4f5f6;
 
-          &.selected {
-            padding:10px 0;
-          }
+          &.selected {padding:10px 0;}
 
           &.post-classes {
             position:relative;
@@ -138,14 +149,12 @@
 
           &.post-tit {
             .form-control {
-              padding-bottom:0;
-              border-bottom:none;
-              font-size:16px;
-              color:#373737;
+
             }
           }
         }
       }
+
 
       .popup-form-cnt {
         .form-item {
@@ -175,6 +184,79 @@
             }
           }
         }
+
+        .form-create-list {
+          border-top:1px solid #f4f5f6;
+
+          .create-item-cnt {
+            padding:0 40px;
+
+            .create-sub-btn {
+              @include pos-center($right:0);
+
+              > a {
+                display:block;
+                float:left;
+                margin-left:20px;
+
+                &.add-img-btn {opacity:0.2;}
+              }
+            }
+
+            // start: 링크 만들기
+            .create-link-list {
+              li {
+                position:relative;
+                padding:15px 0;
+                border-bottom:1px solid #f4f5f6;
+
+                .create-form {
+                  overflow: hidden;
+                  .num {
+                    width:20px;
+                    float:left;
+                    margin-right:10px;
+                    vertical-align: middle;
+                    color: rgba(55,55,73,0.2);
+                  }
+
+                  &.active {
+                    .num {color:#57576d;}
+                  }
+
+                  .form-group {
+                    float:left;
+                  }
+                }
+              }
+            }
+            // end: 링크 만들기
+
+            // start: 알림 예약 설정
+            .create-notice-list {
+              li {
+                position:relative;
+                padding:15px 0;
+                border-bottom:1px solid #f4f5f6;
+              }
+            }
+            // end: 알림 예약 설정
+
+          }
+
+          .create-add-list {
+            a {
+              display:block;
+              padding:13px 0;
+              border-bottom:1px solid #f4f5f6;
+              text-align:center;
+
+              .btn-txt {vertical-align: middle;}
+            }
+          }
+        }
+
+        .form-type {}
       }
 
       .popup-form-btm {
@@ -322,7 +404,21 @@
 
             // start: file
             .add-file {
+              .add-file-list {
+                li {
+                  position:relative;
 
+                  p {
+                    padding:15px 0 15px 42px;
+                    border-bottom:1px solid #f4f5f6;
+                    background:url(../../assets/images/file.svg) no-repeat left center;
+                  }
+
+                  .add-file-delete {
+                    @include pos-center($right:0);
+                  }
+                }
+              }
             }
             // end: file
           }
@@ -338,12 +434,93 @@
         ul {
           li {
             float:left;
-            margin-right:20px;
+
+            a {
+              display:block;
+              margin-right:20px;
+            }
+
           }
         }
 
         .form-temp-save {
           @include pos-center($right:40px);
+        }
+      }
+    }
+
+    .popup-feed-detail {
+      padding:20px 40px 0;
+
+      .vote-area {
+        padding:14px 20px 20px;
+
+        &:before {
+          display:none;
+        }
+
+        .vote-top {
+          padding-bottom:10px;
+          border-bottom:1px solid #f4f5f6;
+        }
+
+        .vote-select {
+          position:relative;
+          padding:10px 20px;
+          border-radius: 5px;
+          background-color:#f4f5f6;
+
+          .btn-radio {
+            label {
+              padding-left:45px;
+
+              span {
+                font-size:12px;
+              }
+            }
+          }
+
+          + .vote-select {margin-top:10px;}
+
+          .vote-img {
+            width:40px;
+            height:40px;
+            overflow: hidden;
+            @include pos-center($right:10px);
+          }
+        }
+      }
+    }
+
+    .popup-feed-comment {
+      .comment-top {
+        padding:15px 40px;
+        border-top:6px solid #f4f5f6;
+        border-bottom:1px solid #f4f5f6;
+      }
+
+      .comment-cnt {
+        .comment {
+          padding:0 40px;
+
+          .main-comment {padding:20px 0 10px;}
+          .comment-writer {
+            .wr-time {
+              font-size:12px;
+              color:#57576d;
+            }
+          }
+          .comment-txt {
+            margin-top:10px;
+            line-height:1.6;
+            color:#57576d;
+          }
+
+          .reply-state {
+            padding:10px 0;
+
+            .txt-btn {margin-right:20px;}
+          }
         }
       }
     }

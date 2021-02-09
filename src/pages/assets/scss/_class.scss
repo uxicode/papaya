@@ -559,11 +559,20 @@
 }
 
 .fd-inner {
+  position:relative;
   margin-top:20px;
 
   .fd-inner-txt {
+    position:relative;
     padding:8px 0;
     font-weight:500;
+    color:#57576d;
+  }
+
+  .vote-count {
+    @include pos-center($right:0);
+
+    font-size:12px;
     color:#57576d;
   }
 }
@@ -681,24 +690,28 @@
 
 .flie-list {
   li {
-    position:relative;
     float:left;
     margin:0 10px 10px 0;
-    padding:14px 20px 14px 46px;
-    border:1px solid #c9cad5;
-    border-radius:5px;
-    background-color:#fff;
 
-    &:before {
-      content:'';
-      position: absolute;
+    a {
       display:block;
-      width:24px;
-      height:24px;
-      top:50%;
-      left:12px;
-      transform:translateY(-50%);
-      background:url(../../assets/images/pic7.png) no-repeat;
+      position:relative;
+      padding:14px 20px 14px 46px;
+      border:1px solid #c9cad5;
+      border-radius:5px;
+      background-color:#fff;
+
+      &:before {
+        content:'';
+        position: absolute;
+        display:block;
+        width:24px;
+        height:24px;
+        top:50%;
+        left:12px;
+        transform:translateY(-50%);
+        background:url(../../assets/images/pic7.png) no-repeat;
+      }
     }
   }
 }
