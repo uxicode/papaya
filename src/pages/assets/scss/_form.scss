@@ -78,7 +78,7 @@ select {
   color:#57576d;
 
   &.count {
-    @include pos-center($right:0);
+    @include pos-vertical($right:0);
     color:#848499;
   }
   &.error {color:#ff4d4d;}
@@ -86,7 +86,7 @@ select {
 
   /* form-control focus시 활성화 */
   &.ms-time {
-    @include pos-center($right:0);
+    @include pos-vertical($right:0);
     display:none;
     font-size:14px;
     color:#ff4d4d;
@@ -94,7 +94,7 @@ select {
 
   /* form-control password focus시 활성화 */
   &.pw-show {
-    @include pos-center($right:0);
+    @include pos-vertical($right:0);
 
     width:24px;
     height:24px;
@@ -176,7 +176,7 @@ select {
 
   .btn {
     &.form-delete {
-      @include pos-center($right:0);
+      @include pos-vertical($right:0);
       display:none;
 
       &.active {display:block;}

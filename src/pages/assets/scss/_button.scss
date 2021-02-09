@@ -168,7 +168,12 @@
     padding:0;
 
     &.form-delete {background:url(../../assets/images/delete.svg) no-repeat;}
-    &.form-time {background:url(../../assets/images/time-outline.svg) no-repeat;}
+    &.form-time {
+      background:url(../../assets/images/time-outline.svg) no-repeat;
+      &.active, &:active {
+        background:url(../../assets/images/time.svg) no-repeat;
+      }
+    }
     &.form-calendar {
       background:url(../../assets/images/calendar-outline.svg) no-repeat;
       &.active, &:active {
@@ -181,6 +186,7 @@
 // text button
 .txt-btn {
   font-weight:500;
+  vertical-align: middle;
   color:#0f0f15;
 
   &:hover {color:#57576d;}

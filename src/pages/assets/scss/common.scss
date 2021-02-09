@@ -322,17 +322,19 @@ body {
 
   .item {
     float:left;
-    margin-bottom:10px;
     text-align:center;
     font-size:16px;
     color:#57576d;
     letter-spacing:0;
 
+    a {
+      padding:0 6px 11px 6px;
+    }
+
     &.active {
       a {
         position:relative;
         display:inline-block;
-        padding:0 6px;
         font-weight:500;
 
         &:after {
@@ -340,7 +342,7 @@ body {
           position:absolute;
           width:100%;
           height:2px;
-          bottom:-11px;
+          bottom:0;
           left:0;
           background-color:#0f0f15;
         }

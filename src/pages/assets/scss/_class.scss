@@ -570,7 +570,7 @@
   }
 
   .vote-count {
-    @include pos-center($right:0);
+    @include pos-vertical($right:0);
 
     font-size:12px;
     color:#57576d;
