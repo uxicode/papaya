@@ -1,14 +1,21 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import Modal from '@/components/modal/modal.vue';
 import WithRender from './LoginForm.html';
+
 
 const Auth = namespace('Auth');
 
 @WithRender
-@Component
+@Component({
+  components:{
+    Modal
+  }
+})
 export default class LoginForm extends Vue {
   private userId: string = '';
   private userPw: string = '';
+  private isLoginFail: boolean=false;
 
   @Auth.Action
   private LOGIN_ACTION!: (data: any) => Promise<any>;
@@ -24,8 +31,10 @@ export default class LoginForm extends Vue {
     }).then((data: any) => {
       // console.log('this.rPath=', this.rPath);
       this.$router.push(this.rPath);
+
     }).catch((error) => {
       console.log(error);
+      this.isLoginFail=true;
     });
   }
 

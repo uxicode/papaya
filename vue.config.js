@@ -16,7 +16,16 @@ module.exports={
                 }
             ]
         }
-    }/* ,
+    },
+    css:{
+        loaderOptions: {
+            postcss: {
+                ident: 'postcss',
+                plugins: [ require('autoprefixer')]
+            }
+        }
+    }
+    /* ,
     css: {
         loaderOptions: {
             scss: {

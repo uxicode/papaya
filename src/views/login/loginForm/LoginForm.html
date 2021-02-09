@@ -2,17 +2,28 @@
   <h2 class="login-tit">로그인</h2>
 
   <div class="form-input">
+
     <div class="form-group">
-      <label for="userID">아이디</label>
-      <input type="text" class="form-control" v-model="userId" id="userID" placeholder="아이디를 입력해 주세요.">
+      <!-- ValidationProvider 의 name 은 고유 아이디  -->
+      <ValidationProvider name="아이디" rules="required" v-slot="{ errors }">
+        <label for="userID">아이디</label>
+        <input type="text" class="form-control" v-model="userId" id="userID" placeholder="아이디를 입력해 주세요.">
+        <p class="form-message error"">{{ errors[0] }}</p>
+      </ValidationProvider>
     </div>
+
     <div class="form-group">
-      <label for="userPW">비밀번호</label>
-      <input type="password" class="form-control" v-model="userPw" id="userPW" placeholder="비밀번호를 입력해 주세요.">
+      <!-- ValidationProvider 의 name 은 고유 아이디  -->
+      <ValidationProvider name="비밀번호" rules="required" v-slot="{ errors }">
+        <label for="userPW">비밀번호</label>
+        <input type="password" class="form-control" v-model="userPw" id="userPW" placeholder="비밀번호를 입력해 주세요.">
+        <p class="form-message error">{{ errors[0] }}</p>
+      </ValidationProvider>
+
     </div>
 
     <div class="btn-group mgt-40">
-      <button type="button" class="btn primary red big wd-full" @click="validate">로그인</button>
+      <button type="button" class="btn primary lg btn-block" @click="validate">로그인</button>
     </div>
   </div>
 
@@ -26,4 +37,15 @@
       <router-link class="txt-btn" :to="{path:'/signup'}">회원가입</router-link>
     </div>
   </div>
+
+  <modal v-if="isLoginFail" @modalClose="isLoginFail = false" >
+    <h3 slot="header">custom header</h3>
+    <div slot="body"> custom body </div>
+    <div slot="footer">
+      <div class="btn-group rt">
+        <button type="button" class="btn primary">확인</button>
+<!--        <button type="button" class="btn primary navi">처음으로</button>-->
+      </div>
+    </div>
+  </modal>
 </div>
