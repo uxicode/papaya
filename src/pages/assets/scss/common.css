@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .mgt-0 {
   margin-top: 0!important;
 }
@@ -18034,6 +18035,8 @@
   width: 500px !important;
 }
 
+/* absolute 설정 */
+/* absolute vertical align center */
 /* css reset */
 html,
 body,
@@ -18243,7 +18246,7 @@ button {
   *zoom: 1;
 }
 
-.clearfix:after, .footer-inner:after, .tabs-line:after, contents-inner:after {
+.clearfix:after, .footer-inner:after, .tabs-line:after, .contents-group:after {
   content: "";
   display: block;
   clear: both;
@@ -18307,6 +18310,14 @@ body {
   vertical-align: top !important;
 }
 
+.bd-none {
+  border: none !important;
+}
+
+.pd-none {
+  padding: 0 !important;
+}
+
 .required:after {
   content: "";
   display: inline-block;
@@ -18331,6 +18342,49 @@ body {
   right: 0;
   transform: translateY(-50%);
   background-color: #848499;
+}
+
+.thumb, .icon-img {
+  width: 100%;
+}
+
+.color-mark {
+  position: absolute;
+  display: block;
+  width: 12px;
+  height: 12px;
+  bottom: 0;
+  right: 0;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+.color-mark.pos-rel {
+  position: relative;
+  display: inline-block;
+}
+.color-mark.red {
+  background-color: #ff4d4d;
+}
+.color-mark.yellow {
+  background-color: #ffd100;
+}
+.color-mark.blue {
+  background-color: #2183de;
+}
+.color-mark.pink {
+  background-color: #ff90aa;
+}
+.color-mark.aqua {
+  background-color: #1cdbc9;
+}
+.color-mark.black {
+  background-color: #0f0f15;
+}
+
+.profile-img {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
 }
 
 .tabs-line {
@@ -18516,6 +18570,14 @@ body {
   -webkit-transition: all 0.5s ease;
   transition: all 0.2s ease;
 }
+.accordion .accordion-tit button.accordion-btn.sm {
+  width: 18px;
+  height: 18px;
+  background-size: 18px 18px;
+}
+.accordion .accordion-tit button.accordion-btn.rt-10 {
+  right: 10px;
+}
 .accordion .accordion-tit a.accordion-btn {
   position: relative;
   display: block;
@@ -18527,14 +18589,14 @@ body {
   width: 24px;
   height: 24px;
   top: 50%;
-  right: 0;
-  transform: translateY(-50%) rotate(-180deg);
+  right: 20px;
+  transform: translateY(-50%) rotate(0deg);
   -webkit-transition: all 0.5s ease;
   transition: all 0.2s ease;
-  background: url(../../assets/images/arrowdown.png) no-repeat center;
+  background: url(../../assets/images/arrow-down.svg) no-repeat center;
 }
-.accordion .accordion-tit a.accordion-btn.close:after {
-  transform: translateY(-50%) rotate(0deg);
+.accordion .accordion-tit a.accordion-btn.active:after {
+  transform: translateY(-50%) rotate(-180deg);
   -webkit-transition: all 0.5s ease;
   transition: all 0.2s ease;
 }
@@ -18547,6 +18609,7 @@ body {
 
 .pagination {
   width: 100%;
+  padding: 14px 0;
   text-align: center;
 }
 .pagination ul {
@@ -18565,20 +18628,22 @@ body {
   line-height: 32px;
   text-align: center;
 }
-.pagination ul li.active a {
+.pagination ul li.num.active a {
   background-color: #ff4d4d;
   color: #fff;
 }
 .pagination ul li.arrow {
   margin: 0 10px;
+  opacity: 0.2;
+  vertical-align: middle;
+}
+.pagination ul li.arrow.active {
+  opacity: 1;
 }
 
 .main-txt {
   padding: 80px 0 180px 30px;
   background: url(../../assets/images/illust-welcome.png) no-repeat right top;
-}
-.main-txt.pd-desc {
-  padding: 80px 0 200px 0;
 }
 .main-txt p {
   font-size: 16px;
@@ -18592,28 +18657,6 @@ body {
   font-size: 26px;
   font-weight: 500;
   line-height: 1.5;
-}
-
-.contents-left {
-  float: left;
-  margin-top: 20px;
-}
-
-.contents-right {
-  float: right;
-  margin-top: 20px;
-}
-
-.cnt-top {
-  position: relative;
-}
-.cnt-top .cnt-tit {
-  font-size: 18px;
-  font-weight: 500;
-}
-
-.thumb {
-  width: 100%;
 }
 
 .all-form {
@@ -18702,7 +18745,7 @@ body {
   text-align: center;
 }
 .all-form .form-cnt .form-card .card-tit {
-  font-size: 16px;
+  font-size: 18px;
   color: #0f0f15;
 }
 .all-form .form-cnt .form-card .card-tit.fw-500 {
