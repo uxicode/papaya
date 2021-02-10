@@ -1,6 +1,7 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {IFormData, IMessage} from '@/views/login/model/formdata.model';
 import RadioButton from '@/components/radio/RadioButton.vue';
+import Btn from '@/components/button/Btn.vue';
 import {namespace} from 'vuex-class';
 import WithRender from './FindId.html';
 
@@ -10,6 +11,7 @@ const Auth = namespace('Auth');
 @Component({
   components: {
     RadioButton,
+    Btn,
   },
 })
 
