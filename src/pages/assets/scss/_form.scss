@@ -64,7 +64,7 @@ select {
       margin: 0;
     }
 
-    &:focus {
+    &:focus, &:active, &.active {
       background-color:#f4f5f6;
     }
   }

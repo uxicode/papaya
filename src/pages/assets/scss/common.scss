@@ -212,7 +212,7 @@ button {
   *zoom: 1;
 }
 
-.clearfix:after, .footer-inner:after, .tabs-line:after, .contents-group:after{
+.clearfix:after, .footer-inner:after, .tabs-line:after, .contents-group:after, .add-curr-item:after{
   content: "";
   display: block;
   clear: both;
@@ -496,12 +496,43 @@ body {
 
 
 // accordion
-.accordion {
-  .accordion-tit {
-    position:relative;
-    border-bottom:1px solid #f4f5f6;
+.accordion-tit {
+  position:relative;
+  border-bottom:1px solid #f4f5f6;
 
-    button.accordion-btn {
+  button.accordion-btn {
+    position:absolute;
+    display:block;
+    width:24px;
+    height:24px;
+    top:50%;
+    right:20px;
+    transform: translateY(-50%) rotate(0deg);
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.2s ease;
+    background:url(../../assets/images/arrow-down.svg) no-repeat center;
+
+    &.active {
+      transform: translateY(-50%) rotate(-180deg);
+      -webkit-transition: all 0.5s ease;
+      transition: all 0.2s ease;
+    }
+
+    &.sm {
+      width:18px;
+      height:18px;
+      background-size:18px 18px;
+    }
+
+    &.rt-10 {right:10px;}
+  }
+
+  a.accordion-btn {
+    position:relative;
+    display:block;
+
+    &:after {
+      content:'';
       position:absolute;
       display:block;
       width:24px;
@@ -512,55 +543,22 @@ body {
       -webkit-transition: all 0.5s ease;
       transition: all 0.2s ease;
       background:url(../../assets/images/arrow-down.svg) no-repeat center;
+    }
 
-      &.active {
+    &.active {
+      &:after {
         transform: translateY(-50%) rotate(-180deg);
         -webkit-transition: all 0.5s ease;
         transition: all 0.2s ease;
       }
-
-      &.sm {
-        width:18px;
-        height:18px;
-        background-size:18px 18px;
-      }
-
-      &.rt-10 {right:10px;}
-    }
-
-    a.accordion-btn {
-      position:relative;
-      display:block;
-
-      &:after {
-        content:'';
-        position:absolute;
-        display:block;
-        width:24px;
-        height:24px;
-        top:50%;
-        right:20px;
-        transform: translateY(-50%) rotate(0deg);
-        -webkit-transition: all 0.5s ease;
-        transition: all 0.2s ease;
-        background:url(../../assets/images/arrow-down.svg) no-repeat center;
-      }
-
-      &.active {
-        &:after {
-          transform: translateY(-50%) rotate(-180deg);
-          -webkit-transition: all 0.5s ease;
-          transition: all 0.2s ease;
-        }
-      }
     }
   }
+}
 
-  .accordion-cnt {
-    display:none;
-    &.active {
-      display:block;
-    }
+.accordion-cnt {
+  display:none;
+  &.active {
+    display:block;
   }
 }
 
