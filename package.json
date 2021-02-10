@@ -37,6 +37,7 @@
     "@vue/cli-plugin-unit-jest": "^4.5.0",
     "@vue/cli-service": "^4.5.0",
     "@vue/test-utils": "^1.0.3",
+    "autoprefixer": "^9.8.6",
     "del": "^6.0.0",
     "fibers": "^5.0.0",
     "gulp": "^4.0.2",
