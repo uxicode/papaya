@@ -3,7 +3,9 @@ import {Vue, Component} from 'vue-property-decorator';
 import {extend} from 'vee-validate';
 import WithRender from './SignUpForm.html';
 
-interface IPwd {
+interface IFormData {
+    name: string;
+    id: string;
     pwd: string;
     rePwd: string;
 }
@@ -56,21 +58,22 @@ export default class SignUpForm extends Vue {
         error: '',
     };
 
-    private hints: IHints = {
+    public hints: IHints = {
         id: '5자 이상 20자 이하, 특수문자 불가능, 영문, 숫자만 기입 가능',
         pw: '8자 이상 16자 이하, 특수문자 가능, 영문, 숫자 혼합 필수',
     };
 
-    private pwdFormData: IPwd = {
+    public userIdMin: number = 5;
+    public userIdMax: number = 20;
+    public userPwMin: number = 8;
+    public userPwMax: number = 16;
+
+    private formData: IFormData = {
+        name: '',
+        id: '',
         pwd: '',
         rePwd: '',
     };
-
-    private userIdMin: number = 5;
-    private userIdMax: number = 20;
-    private userPwMin: number = 8;
-    private userPwMax: number = 16;
-
 }
 
 const signUpForm = new SignUpForm();
@@ -78,6 +81,20 @@ const signUpForm = new SignUpForm();
 extend('requiredName', {
     ...required,
     message: signUpForm.messages.name,
+});
+
+extend('requiredId', {
+    ...required,
+    message: signUpForm.messages.id,
+});
+
+extend('warnId', {
+    params: ['target'],
+    validate() {
+        const userIDRegx = new RegExp( `^(?=.*[a-zA-Z])(?!.*[^a-zA-Z0-9_])+[a-zA-Z0-9]{${signUpForm.userIdMin},${signUpForm.userIdMax}}$`);
+        return userIDRegx.test(signUpForm.messages.id);
+    },
+    message: signUpForm.messages.warnId,
 });
 
 extend('requiredPw', {
