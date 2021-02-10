@@ -239,3 +239,123 @@ select {
     }
   }
 }
+
+
+
+// checkbox group
+.checkbox-group {
+  .btn-radio:first-child,
+  .btn-checkbox:first-child{margin-left:0;}
+
+  .btn-radio,
+  .btn-checkbox{
+    display: inline-block;
+    margin-left:40px;
+  }
+
+  .disabled {
+    opacity:0.2;
+  }
+}
+
+// checkbox
+.btn-checkbox {
+  position: relative;
+  label {
+    position: relative;
+    font-size:14px;
+    color:#57576d;
+    font-weight:400;
+    //line-height:34px;
+  }
+
+  &.inline {
+    display:inline-block;
+  }
+
+  input {
+    display:none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    &:checked + label:before{
+      background:url(../../assets/images/checkbox-marked.svg) no-repeat;
+    }
+  }
+
+  input + label {
+    padding-left:35px;
+    vertical-align:middle;
+
+    &:before {
+      content:'';
+      position:absolute;
+      display:block;
+      width:24px;
+      height:24px;
+      top:50%;
+      left:0;
+      transform:translateY(-50%);
+      background:url(../../assets/images/checkbox-outline.svg) no-repeat;
+    }
+
+    &.big {
+      padding-left:37px;
+
+      &:before, &:after {
+        width:27px;
+        height:27px;
+      }
+    }
+  }
+}
+
+// radio box
+.btn-radio {
+  position: relative;
+  label {
+    position:relative;
+    font-size:14px;
+    color:#57576d;
+    font-weight:400;
+    //line-height:34px;
+  }
+
+  input {
+    display:none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    &[disabled]+ label {opacity:0.2;}
+    &[disabled]:checked + label {
+      opacity: 1;
+      &:before, &:after {opacity: 0.2;}
+    }
+
+    &:checked + label:before {
+      background:url(../../assets/images/checkbox-circle-radio.svg) no-repeat;
+    }
+  }
+  input + label {
+    padding-left:30px;
+    vertical-align:middle;
+
+    &:before {
+      content:'';
+      position:absolute;
+      width:24px;
+      height:24px;
+      top:50%;
+      left:0;
+      transform:translateY(-50%);
+      border-radius:50%;
+      background:url(../../assets/images/checkbox-circle-outline.svg) no-repeat;
+    }
+  }
+}
