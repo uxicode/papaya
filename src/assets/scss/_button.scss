@@ -10,7 +10,7 @@
 
   &:active, &.active {box-shadow: none;}
 
-  &.wd-full {width:100%;}
+  &.wd-full, &.btn-block {width:100%;}
 
   &.sm {
     min-width:80px;
@@ -18,33 +18,45 @@
     font-size:12px;
   }
 
-  &.big {
+  &.lg, &.big{
     min-width:160px;
     padding:15px 40px;
     font-size:16px;
   }
-
+  &[disabled], &.disabled {
+    opacity:0.2;
+    cursor: default;
+  }
   &.primary {
     color:#fff;
-
-    &.red {
-      background-color:#ff4d4d;
-      &:hover {background-color:#ff6464;}
-      &:active, &.active {background-color:#d42b2b;}
-    }
-
-    &.navi {
-      background-color:#1d1d4c;
-      &:hover {background-color:#57576d;}
-      &:active, &.active {background-color:#0f0f15;}
-    }
-
+    background-color:#ff4d4d;
+    &:hover {background-color:#ff6464;}
+    &:active, &.active {background-color:#d42b2b;}
+  }
+  &.grey {
+    color: #373749;
+    background-color: #f4f5f6;
+    &:hover,&:active, &.active{background-color:#c9cad5;}
     &[disabled], &.disabled {
-      opacity:0.2;
+      opacity: 1;
+      color:rgba(87,87,109,0.2);
+      &:hover {
+        background-color:#f4f5f6;
+      }
+    }
+
+  }
+  &.navi {
+    color:#fff;
+    background-color:#1d1d4c;
+    &:hover {background-color:#57576d;}
+    &:active, &.active {background-color:#0f0f15;}
+    &[disabled]:hover, &.disabled:hover {
+      background-color:#1d1d4c;
     }
   }
 
-  &.secondary {
+  /*&.secondary {
     &.line {
       color:#57576d;
       border:1px solid #c9cad5;
@@ -60,6 +72,31 @@
       &:hover {background-color:rgba(201,202,213,0.5);}
       &:active, &.active {background-color:#c9cad5;}
       &[disabled], &.disabled {color:rgba(55,55,73,0.2);}
+    }
+
+
+  }*/
+
+  &.outline {
+    color:#57576d;
+    border:1px solid #c9cad5;
+    background-color:#fff;
+    &:hover {border-color:#57576d;}
+    &:active, &.active {background-color:#f4f5f6; border-color:#c9cad5;}
+    &[disabled], &.disabled {
+      opacity: 1;
+      color:rgba(87,87,109,0.2);
+      &:hover, &:active, &.active {border-color:#c9cad5;}
+    }
+    &.fill {
+      color:#373749;
+      background-color:#f4f5f6;
+      &:hover {background-color:rgba(201,202,213,0.5);border-color:#c9cad5;}
+      &:active, &.active {background-color:#c9cad5;}
+      &[disabled], &.disabled {
+        color:rgba(55,55,73,0.2);
+        &:hover, &:active, &.active {background-color:#f4f5f6;}
+      }
     }
 
 
@@ -123,11 +160,11 @@
     }
 
     &[disabled], &.disabled {
-      color:rgba(87,87,109,0.2);
-
-      .icon {
-        opacity:0.2;
-      }
+      //color:rgba(87,87,109,0.2);
+      opacity:0.5;
+      /*.icon {
+        opacity:0.5;
+      }*/
     }
   }
 

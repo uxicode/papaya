@@ -105,7 +105,7 @@ export default class AuthModule extends VuexModule {
     console.log(payload);
     return AuthService.login(payload.uid, payload.password)
       .then((data: any) => {
-        console.log(data);
+        // console.log(data);
         /* jbc2119 로 접속 성공시~
         email: "jbc2119@gmail.com"
         fullname: "전봉철"

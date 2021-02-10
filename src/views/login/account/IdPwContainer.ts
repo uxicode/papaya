@@ -2,7 +2,6 @@ import {Component, Vue} from 'vue-property-decorator';
 import WithRender from './IdPwContainer.html';
 import {Route} from 'vue-router';
 
-
 interface IPath {
   id: number;
   url: string;
