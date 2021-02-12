@@ -6,6 +6,7 @@ import {namespace} from 'vuex-class';
 import WithRender from './FindId.html';
 
 const Auth = namespace('Auth');
+const History = namespace('History');
 
 @WithRender
 @Component({
@@ -59,6 +60,10 @@ export default class FindId extends Vue {
   @Auth.Action
   private FIND_ID_BY_EMAIL!: (email: string) => Promise<any>;
 
+  @History.Mutation
+  private HISTORY_PAGE!: (pageName: string) => void;
+
+
   /**
    * 유효한 모바일 번호인지 체크
    */
@@ -77,6 +82,10 @@ export default class FindId extends Vue {
 
   get errorMsg(): string {
     return this.errorMessage;
+  }
+
+  public created() {
+    this.HISTORY_PAGE('login');
   }
 
 

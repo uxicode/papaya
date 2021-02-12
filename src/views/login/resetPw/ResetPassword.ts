@@ -10,6 +10,7 @@ import {namespace} from 'vuex-class';
 import AuthService from '@/api/service/AuthService';
 
 const Auth = namespace('Auth');
+const History = namespace('History');
 
 interface IPwd {
   nPwd: string;
@@ -51,6 +52,9 @@ export default class ResetPassword extends Vue {
   @Auth.Action
   private AUTH_BY_MOBILE!: (payload: any) => Promise<any>;
 
+  @History.Mutation
+  private HISTORY_PAGE!: (pageName: string) => void;
+
   get errorMsg(): string {
     return this.errorMessage;
   }
@@ -85,6 +89,10 @@ export default class ResetPassword extends Vue {
   /*get equalRePwd(): boolean {
     return this.pwdFormData.rePwd === this.pwdFormData.nPwd;
   }*/
+
+  public created() {
+    this.HISTORY_PAGE('login');
+  }
 
   public minValue(value: string): boolean {
     return (value !== null && value.length >= 8);

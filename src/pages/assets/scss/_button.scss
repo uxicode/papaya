@@ -7,17 +7,13 @@
   float:none;
   line-height:1;
   border-radius:48px;
-
   &:active, &.active {box-shadow: none;}
-
   &.wd-full, &.btn-block {width:100%;}
-
   &.sm {
     min-width:80px;
     padding:10px 16px;
     font-size:12px;
   }
-
   &.lg, &.big{
     min-width:160px;
     padding:15px 40px;
@@ -36,7 +32,9 @@
   &.grey {
     color: #373749;
     background-color: #f4f5f6;
-    &:hover,&:active, &.active{background-color:#c9cad5;}
+    &:hover,&:active, &.active{
+      background-color:#c9cad5;
+    }
     &[disabled]:hover, &.disabled:hover {
       background-color:#f4f5f6;
     }
@@ -44,13 +42,16 @@
   &.navi {
     color:#fff;
     background-color:#1d1d4c;
-    &:hover {background-color:#57576d;}
-    &:active, &.active {background-color:#0f0f15;}
+    &:hover {
+      background-color:#57576d;
+    }
+    &:active, &.active {
+      background-color:#0f0f15;
+    }
     &[disabled]:hover, &.disabled:hover {
       background-color:#1d1d4c;
     }
   }
-
   /*&.secondary {
     &.line {
       color:#57576d;
@@ -60,7 +61,6 @@
       &:active, &.active {background-color:#f4f5f6; border-color:#c9cad5;}
       &[disabled], &.disabled {color:rgba(87,87,109,0.2);}
     }
-
     &.fill {
       color:#373749;
       background-color:#f4f5f6;
@@ -68,8 +68,6 @@
       &:active, &.active {background-color:#c9cad5;}
       &[disabled], &.disabled {color:rgba(55,55,73,0.2);}
     }
-
-
   }*/
 
   &.outline {

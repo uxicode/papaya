@@ -7,7 +7,7 @@
       <!-- ValidationProvider 의 name 은 고유 아이디  -->
       <ValidationProvider name="아이디" rules="required" v-slot="{ errors }">
         <label for="userID">아이디</label>
-        <input type="text" class="form-control" v-model="userId" id="userID" placeholder="아이디를 입력해 주세요.">
+        <input type="text" class="form-control mgt-10" v-model="userId" id="userID" placeholder="아이디를 입력해 주세요.">
         <p class="form-message error">{{ errors[0] }}</p>
       </ValidationProvider>
     </div>
@@ -16,7 +16,7 @@
       <!-- ValidationProvider 의 name 은 고유 아이디  -->
       <ValidationProvider name="비밀번호" rules="required" v-slot="{ errors }">
         <label for="userPW">비밀번호</label>
-        <input type="password" class="form-control" v-model="userPw" id="userPW" placeholder="비밀번호를 입력해 주세요.">
+        <input type="password" class="form-control mgt-10" v-model="userPw" id="userPW" placeholder="비밀번호를 입력해 주세요.">
         <p class="form-message error">{{ errors[0] }}</p>
       </ValidationProvider>
 
@@ -40,10 +40,16 @@
   </div>
 
   <!-- start: 로그인 실패시 팝업 -->
-  <modal v-if="isLoginFail" @modalClose="isLoginFail = false" >
-    <h3 slot="header">로그인 실패
-      <button class="close"><img src="./src/assets/images/close.svg" alt=""></button>
-    </h3>
+
+
+  <modal v-if="isLoginFail">
+
+    <div slot="header">
+      <h3>로그인 실패</h3>
+      <div class="popup-close" @click="isLoginFail = false">
+        <button type="button" class="close" ><img :src="require('@/assets/images/close.svg')" alt=""></button>
+      </div>
+    </div>
     <div slot="body"> {{ errorMsg }}</div>
     <div slot="footer">
       <div class="btn-group ct">

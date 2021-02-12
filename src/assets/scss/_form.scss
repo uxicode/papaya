@@ -41,15 +41,24 @@ select {
 
   &[disabled], &[readonly] {color:#848499;}
 
+  &:before {
+    content: '';
+    @include pos-abs($top: 0, $left: 0);
+    width:0;
+    height:1px;
+    background-color:#0f0f15;
+  }
   &:focus {
-    border-color:#0f0f15;
+    //border-color:#0f0f15;
     box-shadow:none;
-
-    +.form-message {
-      &.count {color:#57576d;}
-      &.time {display:block;}
-      &.pw-show {opacity: 1;}
+    &:before {
+      width:100%;
     }
+  }
+  &:focus+.form-message {
+    &.count {color:#57576d;}
+    &.time {display:block;}
+    &.pw-show {opacity: 1;}
   }
 
   &[type="number"] {
