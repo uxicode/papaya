@@ -690,6 +690,21 @@ body {
   transform: translateX(50%);
 }
 
+/* slide out motion */
+.fade-enter-active {
+  transition: all .75s ease;
+}
+.fade-leave-active {
+  transition: all .75s;
+}
+// -leave-active( leave, leave-to )
+.fade-enter{
+  opacity: 1;
+}
+.fade-leave-to{
+  opacity: 0;
+}
+
 
 @import "./layout.scss";
 @import "./form.scss";

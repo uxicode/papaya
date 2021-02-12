@@ -1,13 +1,28 @@
 <template>
-  <nav class="wrapper-header">
-    <h1 class="logo"><a href="#"><span class="blind">papaya 로고</span></a></h1>
-    <template v-if="!this.isAuth">
-      <!--      <button class="membership" @click.stop.prevent="gotoSignUpPage" v-if="this.getHistoryPage!=='signup'">회원가입</button>-->
-      <!--      v-else -->
-      <button class="membership" @click.stop.prevent="gotoLoginPage">로그인</button>
-    </template>
-    <button class="membership" @click.stop.prevent="isLogout" v-else>로그아웃</button>
-  </nav>
+  <!-- start: header -->
+  <header class="dark">
+    <div class="header-container">
+      <h1 class="logo"><a href="#"><img src="../../assets/images/logo-logotype-white.png" alt="papaya" /></a></h1>
+
+      <nav id="gnb" class="pd-desc">
+        <ul class="menu">
+          <li><a href="">홈</a></li>
+          <li><a href="">모든 알림</a></li>
+          <li><a href="">모든 일정</a></li>
+          <li><a href="">자료실</a></li>
+        </ul>
+      </nav>
+
+      <ul class="sub-menu">
+        <li><a href="#"><img src="../../assets/images/search-white.svg" alt="" /></a></li>
+        <li><a href="#"><img src="../../assets/images/icn-32-alert-white-on.svg" alt="" /></a></li>
+        <li><a href="#"><img src="../../assets/images/mypage-white.svg" alt="" /></a></li>
+        <li><a href="#" class="arrow-down"><img src="../../assets/images/a-down.png" alt="" /></a></li>
+      </ul>
+
+    </div>
+  </header>
+  <!-- //end: header -->
 
 </template>
 
