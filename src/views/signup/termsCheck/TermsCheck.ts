@@ -15,12 +15,7 @@ export default class TermsCheck extends Vue {
     private step: number = 1;
     private stepTotal: number = 3;
     private pageTitle: string = '일반 회원가입';
-    private termsItems: object[]= [];
-    private termsData: ITermsData = {
-        name: '',
-        type: '',
-        bodytext: '',
-    };
+    private termsItems: ITermsData[] = [];
     private termsList: any = [
         {
             idx: 1,
