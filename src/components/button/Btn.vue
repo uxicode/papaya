@@ -3,7 +3,7 @@
           class="btn"
           :disabled="state"
           :class="buttonType"
-          @click.stop="$emit('btnClick');">
+          @click.stop="buttonClick">
     <slot></slot>
   </button>
 </template>
@@ -37,6 +37,10 @@ export default class Btn extends Vue{
       'btn-block': this.size === 'full',
       'lg btn-block': this.size === 'wide',
     };
+  }
+
+  public buttonClick() {
+    this.$emit('btnClick');
   }
 
 }

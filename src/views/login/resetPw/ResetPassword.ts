@@ -2,6 +2,8 @@ import {Vue, Component} from 'vue-property-decorator';
 // import {Route} from 'vue-router';
 import {IFormAuthData} from '@/views/login/model/formdata.model';
 import RadioButton from '@/components/radio/RadioButton.vue';
+import Btn from '@/components/button/Btn.vue';
+import InputGroup from '@/components/form/InputGroup.vue';
 import WithRender from './ResetPassword.html';
 // import UserService from '@/api/service/UserService';
 // import {AUTH_BY_MOBILE} from '@/store/action-auth-types';
@@ -21,6 +23,8 @@ interface IPwd {
 @Component({
   components: {
     RadioButton,
+    Btn,
+    InputGroup,
   },
 })
 export default class ResetPassword extends Vue {
@@ -99,6 +103,7 @@ export default class ResetPassword extends Vue {
   }
 
   public required(value: string): boolean {
+    console.log( value, !!value);
     return !!value;
   }
 
@@ -167,6 +172,7 @@ export default class ResetPassword extends Vue {
 
   private verifyCompleteByMobile(): void {
     //
+    console.log('인증전송');
     if (this.isMobileChk) {
       AuthService.getVerification({
         key: this.resetPwVerifyInfo.key,
