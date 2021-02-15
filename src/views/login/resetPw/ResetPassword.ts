@@ -3,7 +3,8 @@ import {Vue, Component} from 'vue-property-decorator';
 import {IFormAuthData} from '@/views/login/model/formdata.model';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import Btn from '@/components/button/Btn.vue';
-import InputGroup from '@/components/form/InputGroup.vue';
+import TxtField from '@/components/form/txtField.vue';
+import Modal from '@/components/modal/modal.vue';
 import WithRender from './ResetPassword.html';
 // import UserService from '@/api/service/UserService';
 // import {AUTH_BY_MOBILE} from '@/store/action-auth-types';
@@ -24,7 +25,8 @@ interface IPwd {
   components: {
     RadioButton,
     Btn,
-    InputGroup,
+    TxtField,
+    Modal,
   },
 })
 export default class ResetPassword extends Vue {
@@ -35,6 +37,8 @@ export default class ResetPassword extends Vue {
   private isConfirmComplete: boolean = false;
   private isVerifiedCode: boolean = false;
   private errorMessage: string = '';
+  private isVerifiedStatus: boolean=false;
+  private isModifiedPwd: boolean=false;
 
   //비밀번호 재설정 관련
   private formData: IFormAuthData = {
@@ -103,7 +107,7 @@ export default class ResetPassword extends Vue {
   }
 
   public required(value: string): boolean {
-    console.log( value, !!value);
+    // console.log( value, !!value);
     return !!value;
   }
 
@@ -153,6 +157,17 @@ export default class ResetPassword extends Vue {
     if (!this.userMobileState || this.formData.userId === '') {
       return;
     }
+
+    //재전송 상태라면
+    if( this.isVerifiedCode ){
+      const verifiedCode=document.getElementById('verifiedCode') as HTMLInputElement;
+      verifiedCode.value = '';
+
+      const verifiedValue=this.$refs.verifiedValue as HTMLElement;
+      console.log( verifiedValue );
+      this.formData.verifiedCode = '';
+      this.isVerifiedCode=false;
+    }
     //this.isMobileChk
     // UserService.getAuthByMobileNum(this.formData.userId, this.formData.mobile)
     this.AUTH_BY_MOBILE({
@@ -179,36 +194,49 @@ export default class ResetPassword extends Vue {
         num: this.formData.verifiedCode,
       }).then((data: any) => {
         console.log(data);
-        alert('인증이 완료 되었습니다.');
+        // alert('인증이 완료 되었습니다.');
         this.isVerifiedCode = true;
+        this.formData.verifiedCode = '';
+        this.setErrorMessage('');
+        this.isVerifiedStatus=true;
       }).catch((error) => {
         this.setErrorMessage(error.data.message);
+        console.log(this.errorMsg);
       });
     }
 
   }
 
+  private getPwdEqual(): boolean {
+    return this.required(this.pwdFormData.nPwd) && this.required(this.pwdFormData.rePwd) &&
+      this.pwdFormData.nPwd===this.pwdFormData.rePwd;
+  }
+
   private pwdChangeSubmit(): void {
-    AuthService.pwdChange({
-      userId: this.resetPwVerifyInfo.userId,
-      mobile: this.resetPwVerifyInfo.mobile,
-      key: this.resetPwVerifyInfo.key,
-      pwd: this.pwdFormData.nPwd
-    }).then( () => {
-      alert('비밀번호가 변경 되었습니다.');
-      this.$router.push('/login').then(()=>{
-        console.log('로그인으로 이동 ');
+    if( this.getPwdEqual() ){
+      AuthService.pwdChange({
+        userId: this.resetPwVerifyInfo.userId,
+        mobile: this.resetPwVerifyInfo.mobile,
+        key: this.resetPwVerifyInfo.key,
+        pwd: this.pwdFormData.nPwd
+      }).then( () => {
+        // alert('비밀번호가 변경 되었습니다.');
+        this.isModifiedPwd=true;
       });
-    });
+    }
+
   }
 
   private getUserAuthByEmail(): void {
     //this.isEmailChk
   }
 
-  /*private passwordSubmit():void{
-
-  }*/
+  private changePwdComplete(): void{
+    this.isModifiedPwd = false;
+    this.$router.push('/login').then(()=>{
+      console.log('로그인으로 이동 ');
+    });
+  }
 
 
   /**
@@ -240,6 +268,7 @@ export default class ResetPassword extends Vue {
   private resetFormData(): void {
     this.isEmailChk = false;
     this.isMobileChk = false;
+    this.setErrorMessage('');
     this.formData = {
       radioValue: 'mobile',
       email: '',

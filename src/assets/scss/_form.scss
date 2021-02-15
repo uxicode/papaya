@@ -192,10 +192,10 @@ select {
     &.form-delete {
       left:0;
       margin-left:0;
-
-      +.time-control, +.date-area {
-        margin-left:34px;
-      }
+    }
+    &.form-delete+.time-control,
+    &.form-delete +.date-area {
+      margin-left:34px;
     }
 
     + .form-control {
@@ -209,9 +209,7 @@ select {
       width:120px;
     }
 
-    .form-control {
-      +.btn {margin-left:6px;}
-    }
+    .form-control +.btn {margin-left:6px;}
   }
 
   &.time {

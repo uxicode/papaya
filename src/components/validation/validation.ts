@@ -26,7 +26,7 @@ extend('required', {
   ...required,
   //placeholder 는 object 이며  _field_ , _rule_, _value_ 등을 가지고 있다.
   message: ( fieldName: string, placeholder: Record<string, any>) => {
-    return `${fieldName}를 채워 주세요~`;
+    return `${fieldName} 기입 필요.`;
   }
 });
 // validate(value, { min, max } 에서 {min,max}는
@@ -51,11 +51,19 @@ extend('confirmed', {
 });
 
 extend('mobile', (value: string ) => {
-  const userMobile = /^\d{3}\d{3,4}\d{4}$/;
-  if ( userMobile.test( value ) ) {
+  const mobileRegx = /^\d{3}\d{3,4}\d{4}$/;
+  if ( mobileRegx.test( value ) ) {
     return true;
   }
   return '유효하지 않은 번호입니다.';
+});
+
+extend('email', (value: string ) => {
+  const emailRegx = /^[a-z0-9!#$%&'*+\\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/ig;
+  if ( emailRegx.test( value ) ) {
+    return true;
+  }
+  return '유효하지 않은 이메일입니다.';
 });
 
 

@@ -2,6 +2,7 @@ import {Vue, Component} from 'vue-property-decorator';
 import {IFormData, IMessage} from '@/views/login/model/formdata.model';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import Btn from '@/components/button/Btn.vue';
+import TxtField from '@/components/form/txtField.vue';
 import {namespace} from 'vuex-class';
 import WithRender from './FindId.html';
 
@@ -13,6 +14,7 @@ const History = namespace('History');
   components: {
     RadioButton,
     Btn,
+    TxtField,
   },
 })
 

@@ -2,6 +2,7 @@ import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
+import TxtField from '@/components/form/txtField.vue';
 import WithRender from './LoginForm.html';
 
 
@@ -12,7 +13,8 @@ const History = namespace('History');
 @Component({
   components:{
     Modal,
-    Btn
+    Btn,
+    TxtField,
   }
 })
 export default class LoginForm extends Vue {
