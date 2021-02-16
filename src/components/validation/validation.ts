@@ -66,6 +66,21 @@ extend('email', (value: string ) => {
   return '유효하지 않은 이메일입니다.';
 });
 
+extend('id', (value: string ) => {
+  const userIDRegx = /^(?=.*[a-zA-Z])(?!.*[^a-zA-Z0-9_])+[a-zA-Z0-9]/;
+  if ( userIDRegx.test( value ) ) {
+    return true;
+  }
+  return '20자 이하, 특수문자 불가능, 영문, 숫자만 기입 가능';
+});
+
+extend('pwd', (value: string ) => {
+  const userPWRegx = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]/;
+  if ( userPWRegx.test( value ) ) {
+    return true;
+  }
+  return '16자 이하 / 특수문자 가능 / 영문, 숫자 혼합 필수';
+});
 
 /*
 //start: 기본  =====================
