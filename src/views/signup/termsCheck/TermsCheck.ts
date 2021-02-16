@@ -1,6 +1,7 @@
-import {Vue, Component, Prop} from 'vue-property-decorator';
-import WithRender from './TermsCheck.html';
+import {Vue, Component} from 'vue-property-decorator';
+import Btn from '@/components/button/Btn.vue';
 import TermsService from '@/api/service/TermsService';
+import WithRender from './TermsCheck.html';
 
 interface ITermsData {
     name: string;
@@ -8,15 +9,27 @@ interface ITermsData {
     bodytext: string;
 }
 
+interface ITermsList {
+    idx: number;
+    tit: string;
+    isActive: boolean;
+    isChecked: boolean;
+    desc: string[];
+}
+
 @WithRender
-@Component
+@Component({
+  components: {
+      Btn,
+  }
+})
 export default class TermsCheck extends Vue {
     private step: number = 1;
     private stepTotal: number = 3;
     private pageTitle: string = '일반 회원가입';
     private allChecked: boolean = false;
     private termsItems: ITermsData[] = [];
-    private termsList: any = [
+    private termsList: ITermsList[] = [
         {
             idx: 1,
             tit: '서비스 이용약관(필수)',
@@ -45,9 +58,9 @@ export default class TermsCheck extends Vue {
 
     /**
      * 화살표 버튼 클릭시 약관 내용 토글
-     * @private
+     * @public
      */
-    private accordionToggle(item: any): void {
+    public accordionToggle(item: any): void {
         item.isActive = !item.isActive;
     }
 
@@ -78,10 +91,10 @@ export default class TermsCheck extends Vue {
     private allCheck(checked: boolean): void {
         this.allChecked = checked;
         const chkList = this.termsList;
-        for (const i in chkList) {
-            chkList[i].selected = this.allChecked;
-            chkList[i].isChecked = !chkList[i].isChecked;
-            //console.log(chkList[i].isChecked);
+        // tslint:disable-next-line:prefer-for-of
+        for (let idx = 0; idx < chkList.length; idx++) {
+            chkList[idx].isChecked = this.allChecked;
+            //console.log(chkList[idx].isChecked);
         }
     }
 

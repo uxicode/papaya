@@ -23,7 +23,7 @@
                             <!-- accordion -->
                             <div class="accordion-tit form-tit">
                                 <div class="btn-checkbox">
-                                    <input type="checkbox" :id="'check'+item.idx" v-model="item.selected" @change="selected($event)">
+                                    <input type="checkbox" :id="'check'+item.idx" v-model="item.isChecked">
                                     <label :for="'check'+item.idx">{{ item.tit }}</label>
                                 </div>
 
@@ -42,7 +42,8 @@
                 </div>
                 <div class="form-btm">
                     <div class="btn-group rt">
-                        <router-link class="btn basic x40 sm primary navi ct" :to="{name:'verify'}" disabled>다음</router-link>
+                        <btn type="navi" size="sm" :state="true">다음</btn>
+                        <!--<router-link class="btn basic x40 sm primary navi ct" :to="{name:'verify'}" disabled>다음</router-link>-->
                     </div>
                 </div>
             </div>
