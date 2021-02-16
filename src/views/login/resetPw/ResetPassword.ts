@@ -1,6 +1,6 @@
 import {Vue, Component} from 'vue-property-decorator';
 // import {Route} from 'vue-router';
-import {IFormAuthData} from '@/views/login/model/formdata.model';
+import {IVerifiedFormData} from '@/views/login/model/authForm.model';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import Btn from '@/components/button/Btn.vue';
 import TxtField from '@/components/form/txtField.vue';
@@ -41,7 +41,7 @@ export default class ResetPassword extends Vue {
   private isModifiedPwd: boolean=false;
 
   //비밀번호 재설정 관련
-  private formData: IFormAuthData = {
+  private formData: IVerifiedFormData = {
     radioValue: 'mobile',
     email: '',
     mobile: '',
