@@ -1,5 +1,5 @@
 import {Vue, Component} from 'vue-property-decorator';
-import {IVerifiedForm} from '@/views/login/model/authForm.model';
+import {IVerifiedForm} from '@/views/login/model/member-form.model';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import Btn from '@/components/button/Btn.vue';
 import TxtField from '@/components/form/txtField.vue';

@@ -1,6 +1,5 @@
-import {required} from 'vee-validate/dist/rules';
 import {Vue, Component} from 'vue-property-decorator';
-import {IFormData, IMessage} from '@/views/signup/model/formdata.model';
+import {ISignUpForm} from '@/views/login/model/member-form.model';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './SignUpForm.html';
@@ -13,7 +12,7 @@ import WithRender from './SignUpForm.html';
     },
 })
 export default class SignUpForm extends Vue {
-    private formData: IFormData = {
+    private formData: ISignUpForm = {
         name: '',
         id: '',
         pwd: '',
