@@ -1,13 +1,10 @@
 import {Vue, Component} from 'vue-property-decorator';
-// import {Route} from 'vue-router';
-import {IVerifiedFormData} from '@/views/login/model/authForm.model';
+import {IVerifiedForm} from '@/views/login/model/authForm.model';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import Btn from '@/components/button/Btn.vue';
 import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
 import WithRender from './ResetPassword.html';
-// import UserService from '@/api/service/UserService';
-// import {AUTH_BY_MOBILE} from '@/store/action-auth-types';
 
 import {namespace} from 'vuex-class';
 import AuthService from '@/api/service/AuthService';
@@ -41,7 +38,7 @@ export default class ResetPassword extends Vue {
   private isModifiedPwd: boolean=false;
 
   //비밀번호 재설정 관련
-  private formData: IVerifiedFormData = {
+  private formData: IVerifiedForm = {
     radioValue: 'mobile',
     email: '',
     mobile: '',

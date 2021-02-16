@@ -1,5 +1,5 @@
 import {Vue, Component} from 'vue-property-decorator';
-import {IAuthFormData, IMessage} from '@/views/login/model/authForm.model';
+import {IAuthForm, IMessage} from '@/views/login/model/authForm.model';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import Btn from '@/components/button/Btn.vue';
 import TxtField from '@/components/form/txtField.vue';
@@ -26,7 +26,7 @@ export default class FindId extends Vue {
   private errorMessage: string = '';
 
   //아이디 찾기 관련
-  private formData: IAuthFormData = {
+  private formData: IAuthForm = {
     radioValue: 'mobile',
     email: '',
     mobile: '',

@@ -1,10 +1,10 @@
-interface IAuthFormData {
+interface IAuthForm {
   radioValue: string;
   email: string;
   mobile: string;
 }
 
-interface IVerifiedFormData extends IAuthFormData {
+interface IVerifiedForm extends IAuthForm {
   userId: string;
   verifiedCode: string;
 }
@@ -21,4 +21,4 @@ interface IMessage {
   error: string;
 }
 
-export {IAuthFormData, IMessage, IVerifiedFormData};
+export {IAuthForm, IMessage, IVerifiedForm};
