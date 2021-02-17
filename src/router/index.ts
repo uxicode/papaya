@@ -19,6 +19,9 @@ const routes: RouteConfig[] = [
     name: 'home',
     components: {default: Home, header: AppHeader, footer: AppFooter},
     beforeEnter: getIsAuth,
+    children: [
+      { path: '', component: () => import('../views/home/classList/ClassList') },
+    ],
   },
   {
     path: '/login',
