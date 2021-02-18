@@ -73,8 +73,23 @@ header {
         display:inline-block;
         margin:0 6px;
 
-        &:last-child {
-          margin:0;
+        &:last-child {margin:0;}
+        &.active {
+          position:relative;
+
+          &:after {
+            content:'';
+            position:absolute;
+            display:block;
+            width: 0px;
+            height: 0px;
+            bottom:-13px;
+            left:50%;
+            transform:translateX(-50%);
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 7px solid #fff;
+          }
         }
       }
     }
@@ -173,4 +188,31 @@ footer {
     }
   }
 
+}
+
+// contents-right/left
+.contents-inner {
+  position:relative;
+  width:1020px;
+  margin:0 auto;
+
+  .contents-group{
+    margin-top:20px;
+    padding: 0 50px 150px;
+    .contents-left {
+      width:300px;
+      float:left;
+    }
+
+    .contents-right {
+      width:600px;
+      float:right;
+
+      .cnt-top {position:relative;}
+      .cnt-tit {
+        font-size:18px;
+        font-weight:500;
+      }
+    }
+  }
 }
