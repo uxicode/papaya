@@ -20946,8 +20946,8 @@ select::-ms-expand {
   bottom: 40px;
   right: 0;
   border-radius: 50%;
-  background: #1d1d4c url(../../assets/images/add.svg) no-repeat;
-  background-size: contain;
+  background: #1d1d4c url(../../assets/images/add-white.svg) center no-repeat;
+  background-size: 32px;
 }
 
 .login {

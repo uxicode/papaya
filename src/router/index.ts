@@ -21,6 +21,7 @@ const routes: RouteConfig[] = [
     beforeEnter: getIsAuth,
     children: [
       { path: '', component: () => import('../views/home/classList/ClassList') },
+      { path: 'notify', component: () => import('../views/home/notify/Notify') },
     ],
   },
   {
