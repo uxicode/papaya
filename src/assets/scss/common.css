@@ -20607,10 +20607,8 @@ select::-ms-expand {
 }
 
 .schedule-list {
-  padding: 14px 20px 14px 48px;
+  padding: 14px 20px 14px 0;
   border-radius: 5px;
-  border: solid 1px #c9cad5;
-  background: url(../../assets/images/classmenu-plan-outline.svg) no-repeat left 23px top 14px/18px 18px;
 }
 .schedule-list li {
   color: #57576d;

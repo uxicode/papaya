@@ -22,6 +22,7 @@ const routes: RouteConfig[] = [
     children: [
       { path: '', component: () => import('../views/home/classList/ClassList') },
       { path: 'notify', component: () => import('../views/home/notify/Notify') },
+      { path: 'schedule', component: () => import('../views/home/schedule/Schedule') },
     ],
   },
   {
