@@ -19879,7 +19879,7 @@ select::-ms-expand {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.flie-list li {
+.file-list li {
   position: relative;
   float: left;
   margin: 0 10px 10px 0;
@@ -19888,7 +19888,7 @@ select::-ms-expand {
   border-radius: 5px;
   background-color: #fff;
 }
-.flie-list li:before {
+.file-list li:before {
   content: "";
   position: absolute;
   display: block;

@@ -93,7 +93,7 @@ export default class TxtField extends Vue{
   }
 
   private mounted() {
-    // console.log( this.$el.parentElement.classList.contains('inline') );
+    // console.log( this.$el.parentElement.myClass.contains('inline') );
     //타입 지정 안해주면 Object is possibly null 에러 난다.
     const parentElement = this.$el.parentElement as HTMLElement;
     const parentClassList = parentElement.classList;

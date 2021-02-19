@@ -1,13 +1,14 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 // @ts-ignore
 import {IUser} from '@/api/model/user.model';
-import WithRender from './ClassList.html';
+import WithRender from './MyClass.html';
 
 interface IUser {
     fullname: string;
 }
 
 interface IClassInfo {
+    classThumb: () => void;
     className: string;
     classOwner: string;
     createdYear: number;
@@ -20,13 +21,14 @@ interface IClassInfo {
 
 @WithRender
 @Component
-export default class ClassList extends Vue {
+export default class MyClass extends Vue {
     private userData: IUser = {
         fullname: '배혜진',
     };
 
-    private classList: IClassInfo[] = [
+    private myClass: IClassInfo[] = [
         {
+            classThumb: require('@/assets/images/bg-icon.png'),
             className: '꿈꾸는 5학년 1반',
             classOwner: '파파야초등학교',
             createdYear: 2019,
@@ -37,6 +39,7 @@ export default class ClassList extends Vue {
             isFavorite: true,
         },
         {
+            classThumb: require('@/assets/images/bg-icon.png'),
             className: '꿈꾸는 5학년 1반',
             classOwner: '파파야초등학교',
             createdYear: 2019,
@@ -47,6 +50,7 @@ export default class ClassList extends Vue {
             isFavorite: true,
         },
         {
+            classThumb: require('@/assets/images/bg-icon.png'),
             className: '꿈꾸는 5학년 1반',
             classOwner: '파파야초등학교',
             createdYear: 2019,
@@ -57,6 +61,7 @@ export default class ClassList extends Vue {
             isFavorite: true,
         },
         {
+            classThumb: require('@/assets/images/bg-icon.png'),
             className: '꿈꾸는 5학년 1반',
             classOwner: '파파야초등학교',
             createdYear: 2019,
@@ -67,6 +72,7 @@ export default class ClassList extends Vue {
             isFavorite: false,
         },
         {
+            classThumb: require('@/assets/images/bg-icon.png'),
             className: '꿈꾸는 5학년 1반',
             classOwner: '파파야초등학교',
             createdYear: 2019,
@@ -80,9 +86,9 @@ export default class ClassList extends Vue {
 
     /**
      * 하트 버튼 토글
-     * @private
+     * @public
      */
-    private heartToggle(item: any): void {
+    public heartToggle(item: any): void {
         item.isFavorite = !item.isFavorite;
     }
 }

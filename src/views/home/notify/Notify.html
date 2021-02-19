@@ -13,28 +13,10 @@
                                 <span class="class-name">모든 클래스 알림</span>
                             </a>
                         </li>
-                        <li>
+                        <li v-for="item in notifyList" :key="item">
                             <a href="">
-                                <span class="class-photo"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""></span>
-                                <span class="class-name">1학년 3반 수학</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                <span class="class-photo"><img :src="require('@/assets/images/pic5.png')" class="thumb" alt=""></span>
-                                <span class="class-name">특목 고등학교 입시 미술반</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                <span class="class-photo"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""></span>
-                                <span class="class-name">미술 아동반</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                <span class="class-photo"><img :src="require('@/assets/images/pic5.png')" class="thumb" alt=""></span>
-                                <span class="class-name">6학년 3반 독서부</span>
+                                <span class="class-photo"><img :src="item.classThumb" class="thumb" alt=""></span>
+                                <span class="class-name">{{ item.className }}</span>
                             </a>
                         </li>
                     </ul>
@@ -49,50 +31,29 @@
             <div class="classes-feed">
                 <h2 class="cnt-tit">모든 클래스 알림</h2>
                 <div class="top-notify">
-                    <div class="accordion">
-                        <!-- accordion 1-->
+                    <div class="accordion" v-model="notifyFeedList">
+                        <!-- accordion -->
                         <div class="accordion-tit">
                             <a href="javascript:void(0);" class="accordion-btn" :class="{'active': this.isActive}" @click="accordionToggle(this)" data-toggle="collapse" data-target="#accordion1">
                                 <span><img :src="require('@/assets/images/pic8.png')" alt=""></span>
-                                <span class="mgl-10">예약 알림 3</span>
+                                <span class="mgl-10">예약 알림 {{ notifyFeedList.length }}</span>
                             </a>
                         </div>
 
                         <div class="accordion-cnt" :class="{'active': this.isActive}"  id="accordion1">
                             <!-- 수정예정 -->
-                            <div class="notify-feed">
-                                <h3 class="fd-tit">파파야초등학교 10월 가을 체험학습</h3>
+                            <div v-for="item in notifyFeedList" :key="item" class="notify-feed">
+                                <h3 class="fd-tit">{{ item.feedTit }}</h3>
                                 <div class="fd-writer">
                                     <div class="tb-style">
                                         <div class="tb-cell">
-                                            <span class="class-photo"><img :src="require('@/assets/images/pic5.png')" class="thumb" alt=""></span>
+                                            <span class="class-photo"><img :src="item.classThumb" class="thumb" alt=""></span>
                                         </div>
                                         <div class="tb-cell">
-                                            <p class="class-name">꿈꾸는 5학년 1반</p>
+                                            <p class="class-name">{{ item.className }}</p>
                                             <p class="writer">
-                                                <span class="name">김미영선생님</span>
-                                                <span class="time">1분 전</span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="fd-btn">
-                                    <button type="button" class="bookmark"></button>
-                                    <button type="button" class="more"></button>
-                                </div>
-                            </div>
-                            <div class="notify-feed">
-                                <h3 class="fd-tit">파파야초등학교 10월 가을 체험학습</h3>
-                                <div class="fd-writer">
-                                    <div class="tb-style">
-                                        <div class="tb-cell">
-                                            <span class="class-photo"><img :src="require('@/assets/images/pic5.png')" class="thumb" alt=""></span>
-                                        </div>
-                                        <div class="tb-cell">
-                                            <p class="class-name">꿈꾸는 5학년 1반</p>
-                                            <p class="writer">
-                                                <span class="name">김미영선생님</span>
-                                                <span class="time">1분 전</span>
+                                                <span class="name">{{ item.writer }}</span>
+                                                <span class="time">{{ item.updatedDiffTime }}</span>
                                             </p>
                                         </div>
                                     </div>
@@ -104,7 +65,7 @@
                             </div>
                             <!-- // 수정예정 -->
                         </div>
-                        <!-- //accordion 1-->
+                        <!-- //accordion -->
                     </div>
                 </div>
 
@@ -220,7 +181,7 @@
                         <div class="fd-inner">
                             <p class="fd-inner-txt">첨부 파일 3</p>
 
-                            <ul class="flie-list clearfix">
+                            <ul class="file-list clearfix">
                                 <li><a href="">6학년 2학기 수학 II 3단원 .pdf</a></li>
                                 <li><a href="">수학 II 3단원 정리 .hwp</a></li>
                                 <li><a href="">수학 I 개념 정리.pdf</a></li>

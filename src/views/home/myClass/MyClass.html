@@ -18,7 +18,7 @@
 
     <div class="home-classes">
         <div class="cnt-top">
-            <h3 class="cnt-tit">MY 클래스 <span class="fc-red">{{ classList.length }}</span></h3>
+            <h3 class="cnt-tit">MY 클래스 <span class="fc-red">{{ myClass.length }}</span></h3>
         </div>
 
         <div class="classes-card">
@@ -29,10 +29,10 @@
                     </a>
                 </li>
 
-                <li v-for="item in classList" :key="item" class="item">
+                <li v-for="item in myClass" :key="item" class="item">
                     <a href="" class="class-info">
                         <div class="info-img crown">
-                            <span><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""></span>
+                            <span><img :src="item.classThumb" class="thumb" alt=""></span>
                         </div>
                         <div class="info-tit">
                             <p>{{ item.className }}</p>
