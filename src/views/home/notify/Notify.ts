@@ -1,16 +1,6 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
+import {INotifyList, INotifyFeedList} from '@/views/home/model/my-class.model';
 import WithRender from './Notify.html';
-
-interface INotifyList {
-    classThumb: () => void;
-    className: string;
-}
-
-interface INotifyFeedList extends INotifyList {
-    feedTit: string;
-    writer: string;
-    updatedDiffTime: string;
-}
 
 @WithRender
 @Component

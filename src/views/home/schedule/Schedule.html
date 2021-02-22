@@ -1,5 +1,4 @@
 <div class="contents-inner">
-
     <div class="contents-group">
         <section class="contents-left">
             <div class="class-notify">
@@ -14,28 +13,10 @@
                                 <span class="class-name">모든 클래스 알림</span>
                             </a>
                         </li>
-                        <li>
+                        <li v-for="item in notifyList" :key="item">
                             <a href="">
-                                <span class="class-photo"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""></span>
-                                <span class="class-name">1학년 3반 수학</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                <span class="class-photo"><img :src="require('@/assets/images/pic5.png')" class="thumb" alt=""></span>
-                                <span class="class-name">특목 고등학교 입시 미술반</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                <span class="class-photo"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""></span>
-                                <span class="class-name">미술 아동반</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="">
-                                <span class="class-photo"><img :src="require('@/assets/images/pic5.png')" class="thumb" alt=""></span>
-                                <span class="class-name">6학년 3반 독서부</span>
+                                <span class="class-photo"><img :src="item.classThumb" class="thumb" alt=""></span>
+                                <span class="class-name">{{ item.className }}</span>
                             </a>
                         </li>
                     </ul>
