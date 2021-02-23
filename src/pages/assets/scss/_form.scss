@@ -1,4 +1,4 @@
-label {
+label, .label {
   display:block;
   font-weight:500;
   color:#57576d;
@@ -160,6 +160,14 @@ select {
   background-color:#fff;
 
   &.h-full {height:100%;}
+
+  + .form-message {
+    &.count {
+      position:relative;
+      float:right;
+      transform:none;
+    }
+  }
 }
 
 .form-select {

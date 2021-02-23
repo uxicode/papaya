@@ -9,6 +9,12 @@
   &.photo-viewer {
     background-color:rgba(15, 15, 21, 0.8);
   }
+
+  .tip-info {
+    display:inline-block;
+    width:18px;
+    height:18px;
+  }
 }
 
 .popup-dialog {
@@ -39,6 +45,10 @@
       &.link {background:url(../../assets/images/popup-icon-link.svg) no-repeat;}
       &.time {background:url(../../assets/images/popup-icon-time.svg) no-repeat;}
       &.vote {background:url(../../assets/images/popup-icon-vote.svg) no-repeat;}
+      &.withdraw {background:url(../../assets/images/popup-icon-withdraw.png) no-repeat;} //svg 이미지 수정 필요
+      &.change {background:url(../../assets/images/popup-icon-change.svg) no-repeat;}
+      &.confirm {background:url(../../assets/images/popup-icon-confirm.svg) no-repeat;}
+      &.add {background:url(../../assets/images/popup-icon-add.svg) no-repeat;}
     }
 
     .popup-close, .popup-btn {
@@ -120,6 +130,7 @@
 
     .popup-txt {
       letter-spacing:0;
+      line-height:1.57;
       color:#57576d;
 
       &.type2 {
@@ -848,6 +859,191 @@
             line-height:1.58;
             background-color:#f4f5f6;
           }
+        }
+      }
+    }
+
+    .class-profile {
+      .profile-list {
+        .list-item {
+          padding:15px 40px;
+          border-bottom:1px solid #f4f5f6;
+
+          .list-tit {color:#848499;}
+
+          .basic-info {
+            text-align:right;
+
+            .basic-info-item {
+              display:none;
+
+              &.show {display:inline-block;}
+            }
+
+            .edit-btn {margin-left:10px;}
+
+            .list-popup {
+              text-align:left;
+              .list-popup-btn {
+                span {
+                  margin-right:0;
+                  font-size:12px;
+                  color:#57576d;
+                }
+              }
+            }
+
+          }
+        }
+      }
+    }
+
+    .profile-qna-setting {
+      .qan-setting-top {
+        position:relative;
+        padding:15px 40px;
+        border-bottom:1px solid #f4f5f6;
+
+        p {color:#848499;}
+
+        .qna-setting-btn {
+          @include pos-vertical($right:40px);
+        }
+      }
+
+      .qna-setting-list {
+        padding:0 40px;
+
+        > p {
+          padding:15px 0;
+          font-weight:500;
+          color:#57576d;
+        }
+
+        .qna-list {
+          .list-item {
+            overflow: hidden;
+            padding:15px 0;
+            border-bottom:1px solid #f4f5f6;
+
+            .num, .qna-input {float:left;}
+
+            .num {
+              display:inline-block;
+              width:20px;
+              margin-right:10px;
+              line-height:1.5;
+
+              &.disabled {
+                opacity:0.2;
+              }
+            }
+
+            .qna-input {
+              .form-control {font-size:14px;}
+            }
+          }
+        }
+
+        &.disabled {opacity: 0.2;}
+      }
+    }
+
+    .class-basic-info {
+      .info-top {
+        margin-top:10px;
+        text-align:center;
+
+        .group-type {
+          font-weight:700;
+        }
+      }
+
+      .info-form {
+        padding:20px 40px 12px;
+
+        label, .label {margin-bottom:10px;}
+      }
+    }
+
+    .tag-cnt {
+      margin-top:30px;
+
+      .tag-list {
+        display:inline-block;
+
+        .hashtag {
+          margin-right:10px;
+          margin-bottom:10px;
+        }
+      }
+    }
+
+    .apply-list, .member-management-list {
+      padding:0 40px;
+      border-top:1px solid #f4f5f6;
+
+      .apply-item, .member-item {
+        position:relative;
+        padding:15px 0;
+        border-bottom:1px solid #f4f5f6;
+
+        .apply-name, .member-name {font-weight:500;}
+        .apply-date, .member-date, .member-tit {
+          margin-top:2px;
+          font-size:12px;
+          color:#57576d;
+
+          span {
+            line-height:1.5;
+          }
+        }
+        .apply-more, .member-more {
+          @include pos-vertical($right:0);
+
+          &.clear {
+            font-weight:500;
+            color:#ff4d4d;
+          }
+        }
+
+        .member-type {
+          position:relative;
+          padding-left:40px;
+
+          &:before {
+            content:'';
+            display:block;
+            width:32px;
+            height:32px;
+            border-radius:50%;
+            @include pos-vertical($left:0);
+          }
+
+          &.manager:before {background:#ffba36 url(../../assets/images/btn-round-admin.svg) no-repeat center;}
+          &.staff:before {background:#c9cad5 url(../../assets/images/btn-round-staff.svg) no-repeat center;}
+          &.member:before {background:#57576d url(../../assets/images/btn-round-member.svg) no-repeat center;}
+
+        }
+
+      }
+    }
+
+    .member-activity {
+      .activity-tit {
+        position: relative;
+        padding:10px 40px;
+        color:#57576d;
+
+        &.grey {background-color:#f4f5f6;}
+
+        strong {
+          font-weight:500;
+          color:#0f0f15;
+        }
+
+        .more-btn {
+          @include pos-vertical($right:40px);
         }
       }
     }

@@ -1,7 +1,7 @@
 // button
 .btn {
   min-width:120px;
-  padding:13px 20px;
+  padding:12px 20px;
   font-size:14px;
   font-weight:500;
   float:none;
@@ -44,11 +44,10 @@
   &.navi {
     color:#fff;
     background-color:#1d1d4c;
+
     &:hover {background-color:#57576d;}
     &:active, &.active {background-color:#0f0f15;}
-    &[disabled]:hover, &.disabled:hover {
-      background-color:#1d1d4c;
-    }
+    &[disabled]:hover, &.disabled:hover {background-color:#1d1d4c;}
   }
 
   /*&.secondary {
@@ -83,16 +82,16 @@
       color:rgba(87,87,109,0.2);
       &:hover, &:active, &.active {border-color:#c9cad5;}
     }
-    &.fill {
-      color:#373749;
-      background-color:#f4f5f6;
-      &:hover {background-color:rgba(201,202,213,0.5);border-color:#c9cad5;}
-      &:active, &.active {background-color:#c9cad5;}
-      &[disabled], &.disabled {
-        color:rgba(55,55,73,0.2);
-        &:hover, &:active, &.active {background-color:#f4f5f6;}
-      }
-    }
+    //&.fill {
+    //  color:#373749;
+    //  background-color:#f4f5f6;
+    //  &:hover {background-color:rgba(201,202,213,0.5);border-color:#c9cad5;}
+    //  &:active, &.active {background-color:#c9cad5;}
+    //  &[disabled], &.disabled {
+    //    color:rgba(55,55,73,0.2);
+    //    &:hover, &:active, &.active {background-color:#f4f5f6;}
+    //  }
+    //}
 
 
   }
@@ -133,10 +132,13 @@
 
     &.sm {
       min-width:80px;
-      padding:10px 0 10px 17px;
+      padding:9px 16px;
 
-      &.ico-right {
-        padding-right:40px;
+      &.ico-right {padding-right:40px;}
+      &.ico-left {
+        padding-left:40px;
+
+        .icon {left:16px;}
       }
     }
 

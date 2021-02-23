@@ -283,7 +283,14 @@ body {
   }
 }
 
-.thumb, .icon-img {width:100%;}
+.thumb, .icon-img {
+  width:100%;
+
+  &.sm {
+    width:18px;
+    height:18px;
+  }
+}
 
 .color-mark {
   position:absolute;
@@ -653,6 +660,31 @@ body {
     margin-top:30px;
   }
 }
+
+.hashtag{
+  position:relative;
+  display:inline-block;
+  float:left;
+  font-size:12px;
+
+  .tag-label {
+    display: inline-block;
+    padding:6px 34px 6px 16px;
+    line-height: 1.45;
+    font-size:14px;
+    font-weight:500;
+    white-space: nowrap;
+    color:#373749;
+    border-radius: 32px;
+    background-color:#f4f5f6;
+  }
+
+  .tag-delete {
+    position:absolute;
+    @include pos-vertical($right:4px);
+  }
+}
+
 
 
 
