@@ -120,4 +120,12 @@ export default class TermsCheck extends Vue {
                 });
             });
     }
+
+    private gotoVerify(): void {
+        const chk1 = this.termsList[0].isChecked;
+        const chk2 = this.termsList[1].isChecked;
+        if (chk1 && chk2) {
+            this.$router.push('verify');
+        }
+    }
 }

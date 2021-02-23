@@ -4,17 +4,9 @@ import {IClassInfo} from '@/views/home/model/my-class.model';
 import {IUser} from '@/api/model/user.model';
 import WithRender from './MyClass.html';
 
-interface IUser {
-    fullname: string;
-}
-
 @WithRender
 @Component
 export default class MyClass extends Vue {
-    private userData: IUser = {
-        fullname: '',
-    };
-
     private myClass: IClassInfo[] = [
         {
             classThumb: require('@/assets/images/bg-icon.png'),
