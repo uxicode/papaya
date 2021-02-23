@@ -2,16 +2,19 @@ import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
+import TxtField from '@/components/form/txtField.vue';
 import WithRender from './LoginForm.html';
 
 
 const Auth = namespace('Auth');
+const History = namespace('History');
 
 @WithRender
 @Component({
   components:{
     Modal,
-    Btn
+    Btn,
+    TxtField,
   }
 })
 export default class LoginForm extends Vue {
@@ -20,6 +23,9 @@ export default class LoginForm extends Vue {
   private isLoginFail: boolean=false;
   private errorMsg: string = '';
 
+  @History.Mutation
+  private HISTORY_PAGE!: (pageName: string) => void;
+
   @Auth.Action
   private LOGIN_ACTION!: (data: any) => Promise<any>;
 
@@ -27,19 +33,37 @@ export default class LoginForm extends Vue {
     return (this.$route.query.rqPath) ? this.$route.query.rqPath as string : '/';
   }
 
-  private validate(): void {
-    this.LOGIN_ACTION({
-      uid: this.userId,
-      password: this.userPw,
-    }).then((data: any) => {
-      // console.log('this.rPath=', this.rPath);
-      this.$router.push(this.rPath);
+  get isFieldRequired(): boolean{
+    return this.userId !== '' && this.userPw !== '';
+  }
 
-    }).catch((error) => {
-      console.log(error.data.message, error.data.error.message);
-      this.errorMsg=error.data.error.message;
+  public created() {
+    this.HISTORY_PAGE('login');
+  }
+
+
+  private validate(): void {
+
+    //빈칸
+    if( this.isFieldRequired ){
+      this.LOGIN_ACTION({
+        uid: this.userId,
+        password: this.userPw,
+      }).then((data: any) => {
+        // console.log('this.rPath=', this.rPath);
+        this.$router.push(this.rPath);
+
+        this.isLoginFail=false;
+      }).catch((error) => {
+        // console.log(error.data.message, error.data.error);
+        this.errorMsg=error.data.error.message;
+        this.isLoginFail=true;
+      });
+    }else{
       this.isLoginFail=true;
-    });
+      this.errorMsg = '빈칸을 체크해 주세요.';
+    }
+
   }
 
   private findIdHandler(): void {
@@ -54,4 +78,5 @@ export default class LoginForm extends Vue {
       console.log('reset pw 로 이동 ');
     });
   }
+
 }

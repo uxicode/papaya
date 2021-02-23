@@ -1,17 +1,21 @@
 import {Vue, Component} from 'vue-property-decorator';
-import {IFormData, IMessage} from '@/views/login/model/formdata.model';
+import {IAuthTypeForm} from '@/views/login/model/member-form.model';
+import {IFindIdWarnMsg} from '@/views/login/model/msg-form.model';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import Btn from '@/components/button/Btn.vue';
+import TxtField from '@/components/form/txtField.vue';
 import {namespace} from 'vuex-class';
 import WithRender from './FindId.html';
 
 const Auth = namespace('Auth');
+const History = namespace('History');
 
 @WithRender
 @Component({
   components: {
     RadioButton,
     Btn,
+    TxtField,
   },
 })
 
@@ -23,13 +27,13 @@ export default class FindId extends Vue {
   private errorMessage: string = '';
 
   //아이디 찾기 관련
-  private formData: IFormData = {
+  private formData: IAuthTypeForm = {
     radioValue: 'mobile',
     email: '',
     mobile: '',
   };
 
-  private messages: IMessage = {
+  private messages: IFindIdWarnMsg = {
     mobile: '모바일 번호 "-" 없이 입력해 주세요.',
     email: '이메일 주소를 입력해 주세요',
     mobileReq: '모바일 번호를 입력해 주세요',
@@ -59,6 +63,10 @@ export default class FindId extends Vue {
   @Auth.Action
   private FIND_ID_BY_EMAIL!: (email: string) => Promise<any>;
 
+  @History.Mutation
+  private HISTORY_PAGE!: (pageName: string) => void;
+
+
   /**
    * 유효한 모바일 번호인지 체크
    */
@@ -77,6 +85,10 @@ export default class FindId extends Vue {
 
   get errorMsg(): string {
     return this.errorMessage;
+  }
+
+  public created() {
+    this.HISTORY_PAGE('login');
   }
 
 

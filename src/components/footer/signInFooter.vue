@@ -1,6 +1,6 @@
 <template>
   <!-- start: footer -->
-  <footer>
+  <footer class="dark">
     <div class="footer-inner clearfix">
       <div class="footer-logo"></div>
 
@@ -33,7 +33,7 @@ import {namespace} from 'vuex-class';
 const History = namespace('History');
 
 @Component
-export default class AppFooter extends Vue{
+export default class SignInFooter extends Vue{
 
   @History.Getter
   private pageHistory!: string;

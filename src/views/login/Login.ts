@@ -3,9 +3,11 @@ import {namespace} from 'vuex-class';
 import LoginForm from '@/views/login/loginForm/LoginForm';
 import FindId from '@/views/login/findId/FindId';
 import WithRender from './Login.html';
+import {HISTORY_PAGE} from '@/store/mutation-auth-types';
 // import './Login.scss';
 
 const Auth = namespace('Auth');
+const History = namespace('History');
 
 @WithRender
 @Component({
@@ -36,6 +38,9 @@ export default class Login extends Vue {
   @Auth.Getter
   private findUserId!: string;
 
+  @History.Mutation
+  private HISTORY_PAGE!: (pageName: string) => void;
+
   @Auth.Action
   private login!: (data: any) => Promise<any>;
 
@@ -46,6 +51,10 @@ export default class Login extends Vue {
 
   get findStatus(): boolean {
     return (this.currentStatus === this.STATUS_FIND_ID) || (this.currentStatus === this.STATUS_PWD_RESET);
+  }
+
+  public created() {
+    this.HISTORY_PAGE('login');
   }
 
   // @ts-ignore

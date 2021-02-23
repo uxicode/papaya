@@ -5,6 +5,9 @@ import Login from '@/views/login/Login';
 import SignUp from '@/views/signup/SignUp';
 import SignInHeader from '@/components/header/signinHeader.vue';
 import SignUpHeader from '@/components/header/signupHeader.vue';
+import SignInFooter from '@/components/footer/signInFooter.vue';
+import AppHeader from '@/components/header/header.vue';
+import AppFooter from '@/components/footer/footer.vue';
 import {getIsAuth} from '@/router/AuthGuard';
 
 Vue.use(VueRouter);
@@ -14,12 +17,12 @@ const routes: RouteConfig[] = [
   {
     path: '/',
     name: 'home',
-    component: Home,
+    components: {default: Home, header: AppHeader, footer: AppFooter},
     beforeEnter: getIsAuth,
   },
   {
     path: '/login',
-    components: {default: Login, header: SignInHeader},
+    components: {default: Login, header: SignInHeader, footer: SignInFooter},
     children: [
       {path: '', name: 'loginForm', component: () => import('../views/login/loginForm/LoginForm')},
       {
@@ -34,18 +37,19 @@ const routes: RouteConfig[] = [
   },
   {
     path: '/signup',
-    components: {default: SignUp, header: SignUpHeader},
-    children: [
-      {path: '', name: 'signUpIntro', component: () => import('../views/signup/signUpIntro/SignUpIntro')},
-      {path: 'termsCheck', component: () => import('../views/signup/termsCheck/TermsCheck')},
+    components:{ default: SignUp, header: SignUpHeader, footer: AppFooter },
+    children:[
+      { path: '', component: () => import('../views/signup/signUpIntro/SignUpIntro') },
+      { path: 'termsCheck', name: 'termsCheck', component: () =>import('../views/signup/termsCheck/TermsCheck') },
       {
         path: 'verify',
+        name: 'verify',
         component: () => import('../views/signup/verify/Verify'),
         children: [
-          {path: 'complete', component: () => import('../views/signup/verify/complete/Complete')},
+          { path: 'verifyComplete', name: 'verifyComplete', component: () =>import('../views/signup/verify/verifyComplete/VerifyComplete')},
         ],
       },
-      {path: 'signUpForm', component: () => import('../views/signup/signUpForm/SignUpForm')},
+      { path: 'signUpForm', name: 'signUpForm', component: () =>import('../views/signup/signUpForm/SignUpForm') },
     ],
   },
   {
