@@ -1,11 +1,11 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import WithRender from './Verify.html';
-import Complete from '@/views/signup/verify/complete/Complete';
+import VerifyComplete from '@/views/signup/verify/verifyComplete/VerifyComplete';
 
 @WithRender
 @Component({
     components:{
-        Complete,
+        Complete: VerifyComplete,
     },
 })
 export default class Verify extends Vue {

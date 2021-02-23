@@ -1,7 +1,6 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import WithRender from './TermsCheck.html';
 import TermsService from '@/api/service/TermsService';
-import any = jasmine.any;
 
 interface ITermsData {
     name: string;
@@ -15,12 +14,8 @@ export default class TermsCheck extends Vue {
     private step: number = 1;
     private stepTotal: number = 3;
     private pageTitle: string = '일반 회원가입';
-    private termsItems: object[]= [];
-    private termsData: ITermsData = {
-        name: '',
-        type: '',
-        bodytext: '',
-    };
+    private allChecked: boolean = false;
+    private termsItems: ITermsData[] = [];
     private termsList: any = [
         {
             idx: 1,
@@ -47,9 +42,19 @@ export default class TermsCheck extends Vue {
     public created() {
         this.getTerms();
     }
+
+    /**
+     * 화살표 버튼 클릭시 약관 내용 토글
+     * @private
+     */
     private accordionToggle(item: any): void {
         item.isActive = !item.isActive;
     }
+
+    /**
+     * 회원가입 단계별 타이틀
+     * @private
+     */
     private currentTitle(): string {
         let result;
         switch (this.step) {
@@ -65,6 +70,25 @@ export default class TermsCheck extends Vue {
         }
         return result;
     }
+
+    /**
+     * 약관 전체 동의/해제
+     * @private
+     */
+    private allCheck(checked: boolean): void {
+        this.allChecked = checked;
+        const chkList = this.termsList;
+        for (const i in chkList) {
+            chkList[i].selected = this.allChecked;
+            chkList[i].isChecked = !chkList[i].isChecked;
+            //console.log(chkList[i].isChecked);
+        }
+    }
+
+    /**
+     * 약관 내용 API 수신
+     * @private
+     */
     private getTerms(): any {
         const serviceTerms = TermsService.getServiceTerms();
         const privateTerms = TermsService.getPrivateTerms();
@@ -78,7 +102,7 @@ export default class TermsCheck extends Vue {
             .then(() => {
                 //Promise.all 로 처리하면 리턴값이 배열. 즉 별도 매칭이 필요.
                 this.termsItems.map( ( item: any, idx: number ) => {
-                    this.termsList[idx].desc=item.terms_info.bodytext;
+                    this.termsList[idx++].desc=item.terms_info.bodytext;
                     //console.log( item.terms_info.bodytext )
                 });
             });

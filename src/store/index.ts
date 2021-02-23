@@ -10,7 +10,7 @@ const store = new Vuex.Store({
   state: {},
   modules: {
     Auth: AuthModule,
-    PageHistoryStatus,
+    History: PageHistoryStatus,
   },
 });
 

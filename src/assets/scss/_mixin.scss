@@ -24,6 +24,7 @@
 
 /* absolute 설정 */
 @mixin pos-abs( $zIndex:null, $top:null, $left:null, $right:null, $bottom:null ){
+  z-index: $zIndex;
   position:absolute;
   top:$top;
   left:$left;
@@ -32,10 +33,17 @@
 }
 
 /* absolute vertical align center */
-@mixin pos-center ($left:null, $right:null,){
+@mixin pos-center ($left:null, $right:null){
   position:absolute;
   top:50%;
   left:$left;
   right:$right;
   transform:translateY(-50%);
+}
+@mixin abs-center($zIndex:null){
+  z-index: $zIndex;
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
 }

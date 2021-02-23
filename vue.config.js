@@ -5,6 +5,10 @@ module.exports={
             args[0].memoryLimit = 512;
             return args;
         });
+
+        /*const svgRule = config.module.rule('svg')
+        svgRule.uses.clear()
+        svgRule.use('vue-svg-loader').loader('vue-svg-loader')*/
     },
     configureWebpack:{
         module:{
@@ -14,6 +18,17 @@ module.exports={
                     loader:"vue-template-loader",
                     exclude:/index.html/
                 }
+                /*{
+                    test: /\.(png|jpg|gif)$/i,
+                    use: [
+                        {
+                            loader: 'url-loader',
+                            options: {
+                                esModule: false,
+                            },
+                        },
+                    ],
+                }*/
             ]
         }
     },

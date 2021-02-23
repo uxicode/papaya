@@ -1,6 +1,6 @@
 <!-- Tab panes -->
-<div class="tab-content">
-  <div role="tabpanel" class="tab-pane fade in active" id="a5">
+<div class="tab-content" style="height:588px;">
+  <div role="tabpanel">
 
     <!-- start: 아이디 찾기 -->
     <div v-if="!isConfirmComplete">
@@ -18,14 +18,25 @@
         </div>
         <div class="find-info-input" :class="{'active':activeInputField('mobile')}">
           <div class="form-group inline">
-            <input type="text" class="form-control"
+            <!--<ValidationProvider name="모바일인증" rules="require" v-slot="{ errors }">
+              <input type="text" class="form-control"
                    v-model="formData.mobile" :placeholder="messages.mobile" style="width:216px;"/>
-            <!--<button type="button" class="btn sm grey"
+            &lt;!&ndash;<button type="button" class="btn sm grey"
                     :disabled="!userMobileState" @click.stop="getUserIdByMobile">인증
-            </button>-->
+            </button>&ndash;&gt;
             <btn type="grey" size="sm" :state="!userMobileState" @btnClick="getUserIdByMobile">인증</btn>
             <p class="form-message approval" v-if="isMobileChk">모바일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</p>
-            <p class="form-message error" v-else>{{ errorMsg }}</p>
+            <p class="form-message error" v-else>{{ errors[0] }}</p>
+            </ValidationProvider>-->
+
+            <txt-field size="216"
+                    :placeholder="messages.mobile"
+                    v-model="formData.mobile"
+                    rules="required|mobile"
+                    valid-name="모바일번호"
+                    success-feedback="모바일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요."
+                    :success="isMobileChk"></txt-field>
+            <btn type="grey" size="sm" :state="!userMobileState" @btnClick="getUserIdByMobile">인증</btn>
           </div>
         </div>
       </div>
@@ -41,15 +52,24 @@
           </radio-button>
         </div>
         <div class="find-info-input" :class="{'active':activeInputField('email')}">
-          <div class="form-group">
-            <input type="text" class="form-control"
+          <div class="form-group inline">
+            <!--<input type="text" class="form-control"
                    v-model="formData.email" :placeholder="messages.email" style="width:216px;">
-            <!--<button type="button" class="btn sm grey"
+            &lt;!&ndash;<button type="button" class="btn sm grey"
                     :disabled="!userEmailState" @click.stop="getUserIdByEmail">인증
-            </button>-->
+            </button>&ndash;&gt;
             <btn type="grey" size="sm" :state="!userEmailState" @btnClick="getUserIdByEmail">인증</btn>
             <p class="form-message approval" v-if="isEmailChk">이메일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</p>
-            <p class="form-message error" v-else>{{ errorMsg }}</p>
+            <p class="form-message error" v-else>{{ errorMsg }}</p>-->
+
+            <txt-field size="216"
+                    :placeholder="messages.email"
+                    v-model="formData.email"
+                    rules="required|email"
+                    valid-name="이메일"
+                    success-feedback="이메일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요."
+                    :success="isEmailChk"></txt-field>
+            <btn type="grey" size="sm" :state="!userEmailState" @btnClick="getUserIdByEmail">인증</btn>
           </div>
         </div>
       </div>
@@ -84,7 +104,7 @@
       <div class="find-btn">
         <div class="btn-group">
           <!--<button type="button" class="btn primary red lg wd-full" @click.prevent="gotoLoginHandler">로그인으로 돌아가기</button>-->
-          <btn size="wide" @btnClick="gotoLoginHandler">로그인으로 돌아가기</btn>
+          <btn type="primary" size="wide" @btnClick="gotoLoginHandler">로그인으로 돌아가기</btn>
         </div>
       </div>
     </div>
