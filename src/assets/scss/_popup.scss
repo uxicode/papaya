@@ -57,9 +57,12 @@
     }
 
     .popup-tit {
-      padding-bottom:20px;
       font-size:18px;
       font-weight:500;
+
+      + .popup-txt {
+        padding-top:20px;
+      }
     }
 
     .popup-txt {
