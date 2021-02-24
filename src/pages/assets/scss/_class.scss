@@ -81,14 +81,15 @@
 
               &:before {
                 content:'';
-                position:absolute;
                 display:block;
                 width:20px;
                 height:20px;
-                top:2px;
-                right:2px;
                 border-radius:50%;
-                background:red;
+
+                @include pos-abs($top:2px, $right:2px);
+
+                background:#ffd100 url('../../assets/images/member-manager.svg') no-repeat center / 10px ;
+
               }
             }
           }

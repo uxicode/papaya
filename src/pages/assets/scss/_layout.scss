@@ -31,7 +31,7 @@ header {
     position:relative;
     width:1020px;
     margin:0 auto;
-    padding:20px 0;
+    padding:24px 0;
 
     &:after {
       content: "";
@@ -68,6 +68,7 @@ header {
       top:50%;
       right:0;
       transform:translateY(-50%);
+      z-index: 1000;
 
       li {
         display:inline-block;
@@ -79,16 +80,42 @@ header {
 
           &:after {
             content:'';
-            position:absolute;
             display:block;
             width: 0px;
             height: 0px;
-            bottom:-13px;
-            left:50%;
+
+            @include pos-abs($bottom:-13px, $left:50%);
+
             transform:translateX(-50%);
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
             border-bottom: 7px solid #fff;
+          }
+        }
+
+        .sub-menu-btn {
+          padding-right:18px;
+
+          &:after {
+            content:'';
+            display:block;
+            width:18px;
+            height:18px;
+            background:url(../../assets/images/icn-18-arrow-down-white.svg) no-repeat center;
+
+            @include pos-vertical($right:0);
+
+            transform: translateY(-50%) rotate(-180deg);
+            -webkit-transition: all 0.5s ease;
+            transition: all 0.2s ease;
+          }
+
+          &.active {
+            &:after {
+              transform: translateY(-50%) rotate(0deg);
+              -webkit-transition: all 0.5s ease;
+              transition: all 0.2s ease;
+            }
           }
         }
       }
