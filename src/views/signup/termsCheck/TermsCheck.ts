@@ -40,9 +40,9 @@ export default class TermsCheck extends Vue {
 
     /**
      * 화살표 버튼 클릭시 약관 내용 토글
-     * @private
+     * @public
      */
-    private accordionToggle(item: any): void {
+    public accordionToggle(item: any): void {
         item.isActive = !item.isActive;
     }
 
@@ -73,10 +73,11 @@ export default class TermsCheck extends Vue {
     private allCheck(checked: boolean): void {
         this.allChecked = checked;
         const chkList = this.termsList;
-        chkList.forEach ( ( chkData: ICheckData )=> {
-            chkData.isActive = this.allChecked;
-            chkData.isChecked = !chkData.isChecked;
-        } );
+        // tslint:disable-next-line:prefer-for-of
+        for (let idx = 0; idx < chkList.length; idx++) {
+            chkList[idx].isChecked = this.allChecked;
+            //console.log(chkList[idx].isChecked);
+        }
     }
 
     /**
@@ -100,5 +101,13 @@ export default class TermsCheck extends Vue {
                     //console.log( item.terms_info.bodytext )
                 });
             });
+    }
+
+    private gotoVerify(): void {
+        const chk1 = this.termsList[0].isChecked;
+        const chk2 = this.termsList[1].isChecked;
+        if (chk1 && chk2) {
+            this.$router.push('verify');
+        }
     }
 }

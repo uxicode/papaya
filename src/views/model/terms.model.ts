@@ -12,4 +12,4 @@ interface ICheckData{
   desc: string[];
 }
 
-export { ITermData, ICheckData};
+export { ITermsData, ICheckData};

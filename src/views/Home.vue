@@ -1,11 +1,16 @@
 <template>
-  <div class="home">
+  <div class="contents home">
+    <!--
     <p style="text-align:left">로그인 상태 : {{ isAuth }}</p>
     <p style="text-align:left">token : {{ tokenStatus }}</p>
 
     <p>
       <button type="button" @click="logout">로그아웃</button>
     </p>
+    -->
+    <transition name="fade" mode="out-in">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
