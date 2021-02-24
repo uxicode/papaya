@@ -87,13 +87,11 @@ export default class TxtField extends Vue{
     return this.inputType===undefined? 'text' : this.inputType;
   }
 
-  private inputChange(value: string) {
-    this.inputData=value;
-    this.$emit('input', value );
-  }
-
-  private mounted() {
-    // console.log( this.$el.parentElement.myClass.contains('inline') );
+  /**
+   * mounted - 화면 렌더링 후
+   */
+  public mounted(): void{
+    // console.log( this.$el.parentElement.classList.contains('inline') );
     //타입 지정 안해주면 Object is possibly null 에러 난다.
     const parentElement = this.$el.parentElement as HTMLElement;
     const parentClassList = parentElement.classList;
@@ -102,6 +100,12 @@ export default class TxtField extends Vue{
       this.$el.classList.add('inline');
     }
   }
+
+  private inputChange(value: string) {
+    this.inputData=value;
+    this.$emit('input', value );
+  }
+
 }
 </script>
 

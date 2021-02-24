@@ -1,6 +1,7 @@
 import {Vue} from 'vue-property-decorator';
 import {ValidationProvider, ValidationObserver, extend} from 'vee-validate';
 import {required} from 'vee-validate/dist/rules';
+import {Utils} from '@/utils/utils';
 
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
@@ -38,7 +39,7 @@ extend('minmax', {
     return value.length >= min && value.length <= max;
   },
   params: ['min', 'max'],
-  message: '글자 {_field_}는 최소 {min} 최대 {max}이여야 합니다.',
+  message: '{_field_}는 최소 {min}자 이상 최대 {max}자 이하 이여야 합니다.',
 });
 
 extend('confirmed', {
@@ -51,7 +52,7 @@ extend('confirmed', {
 });
 
 extend('mobile', (value: string ) => {
-  const mobileRegx = /^\d{3}\d{3,4}\d{4}$/;
+  const mobileRegx = Utils.getMobileRegx();
   if ( mobileRegx.test( value ) ) {
     return true;
   }
@@ -59,23 +60,25 @@ extend('mobile', (value: string ) => {
 });
 
 extend('email', (value: string ) => {
-  const emailRegx = /^[a-z0-9!#$%&'*+\\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/ig;
+  /////^[a-z0-9!#$%&'*+\\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/ig;
+  const emailRegx = Utils.getEmailRegx();
   if ( emailRegx.test( value ) ) {
     return true;
   }
   return '유효하지 않은 이메일입니다.';
 });
 
-extend('id', (value: string ) => {
-  const userIDRegx = /^(?=.*[a-zA-Z])(?!.*[^a-zA-Z0-9_])+[a-zA-Z0-9]/;
+extend('word', (value: string ) => {
+  const userIDRegx = Utils.getEnWordRegx();
   if ( userIDRegx.test( value ) ) {
     return true;
   }
-  return '20자 이하, 특수문자 불가능, 영문, 숫자만 기입 가능';
+  return '한글/특수문자 불가능. 영문, 숫자만 기입 가능';
 });
 
+
 extend('pwd', (value: string ) => {
-  const userPWRegx = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]/;
+  const userPWRegx =Utils.getPwdRegx(5, 16);
   if ( userPWRegx.test( value ) ) {
     return true;
   }

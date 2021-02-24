@@ -1,35 +1,17 @@
-import {Vue, Component} from 'vue-property-decorator';
-import Btn from '@/components/button/Btn.vue';
-import TermsService from '@/api/service/TermsService';
+import {Vue, Component, Prop} from 'vue-property-decorator';
 import WithRender from './TermsCheck.html';
-
-interface ITermsData {
-    name: string;
-    type: string;
-    bodytext: string;
-}
-
-interface ITermsList {
-    idx: number;
-    tit: string;
-    isActive: boolean;
-    isChecked: boolean;
-    desc: string[];
-}
+import TermsService from '@/api/service/TermsService';
+import {ITermsData, ICheckData} from '@/views/model/terms.model';
 
 @WithRender
-@Component({
-  components: {
-      Btn,
-  }
-})
+@Component
 export default class TermsCheck extends Vue {
     private step: number = 1;
     private stepTotal: number = 3;
     private pageTitle: string = '일반 회원가입';
     private allChecked: boolean = false;
-    private termsItems: ITermsData[] = [];
-    private termsList: ITermsList[] = [
+    private termsItems: ITermsData[]=[];
+    private termsList: ICheckData[] = [
         {
             idx: 1,
             tit: '서비스 이용약관(필수)',
@@ -109,8 +91,8 @@ export default class TermsCheck extends Vue {
 
         // axios.all 로 처리해도 됨.
         Promise.all( [serviceTerms, privateTerms, marketTerms] )
-            .then( (data) => {
-                this.termsItems=data;
+            .then( (data: ITermsData[] ) => {
+                this.termsItems = data;
             })
             .then(() => {
                 //Promise.all 로 처리하면 리턴값이 배열. 즉 별도 매칭이 필요.
