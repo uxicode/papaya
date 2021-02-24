@@ -1,5 +1,5 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
-import {INotifyList, INotifyFeedList, IFeedList} from '@/views/home/model/my-class.model';
+import {INotifyList, INotifyFeedList, IFeedList} from '@/views/model/my-class.model';
 import WithRender from './Notify.html';
 
 @WithRender
@@ -50,8 +50,51 @@ export default class Notify extends Vue {
             className: '꿈꾸는 5학년 1반',
             writer: '김미영선생님',
             updatedDiffTime: '1분 전',
-            imgList: [require('@/assets/images/pic.png'), require('@/assets/images/pic2.png'), require('@/assets/images/pic3.png')],
+            feedType: 'img',
+            // imgList: [require('@/assets/images/pic.png'),
+            //           require('@/assets/images/pic2.png'),
+            //           require('@/assets/images/pic3.png')],
             feedViewer: 124,
+            comment: 12,
+        },
+        {
+            feedTit: '수학 2단원 관련 공지사항',
+            classThumb: require('@/assets/images/pic5.png'),
+            className: '1학년 3반 수학',
+            writer: '박수한선생님',
+            updatedDiffTime: '5분 전',
+            feedType: '',
+            feedViewer: 124,
+            comment: 12,
+        },
+        {
+            feedTit: '6학년 2학기 수학 II 3단원',
+            classThumb: require('@/assets/images/pic5.png'),
+            className: '1학년 3반 수학',
+            writer: '박수한선생님',
+            updatedDiffTime: '5분 전',
+            feedType: 'file',
+            feedViewer: 1121,
+            comment: 12,
+        },
+        {
+            feedTit: '미술박물관 관람일 투표 부탁드립니다.',
+            classThumb: require('@/assets/images/pic5.png'),
+            className: '미술아동반',
+            writer: '김에린선생님',
+            updatedDiffTime: '5분 전',
+            feedType: 'vote',
+            feedViewer: 1121,
+            comment: 12,
+        },
+        {
+            feedTit: '제3회 초등학교 미술대회 안내사항',
+            classThumb: require('@/assets/images/pic5.png'),
+            className: '꿈꾸는 5학년 1반',
+            writer: '김미영선생님',
+            updatedDiffTime: '5분 전',
+            feedType: 'link',
+            feedViewer: 1121,
             comment: 12,
         },
     ];

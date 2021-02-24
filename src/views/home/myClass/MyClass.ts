@@ -1,5 +1,5 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
-import {IClassInfo} from '@/views/home/model/my-class.model';
+import {IClassInfo} from '@/views/model/my-class.model';
 // @ts-ignore
 import {IUser} from '@/api/model/user.model';
 import WithRender from './MyClass.html';

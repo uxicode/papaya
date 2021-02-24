@@ -1,5 +1,5 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
-import {INotifyList} from '@/views/home/model/my-class.model';
+import {INotifyList} from '@/views/model/my-class.model';
 import WithRender from './Schedule.html';
 
 @WithRender

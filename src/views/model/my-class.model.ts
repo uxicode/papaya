@@ -27,7 +27,8 @@ interface IFeedList {
     className: string;
     writer: string;
     updatedDiffTime: string;
-    imgList: Array<() => void>;
+    feedType: string;
+    //imgList: Array<() => void>;
     feedViewer: number;
     comment: number;
 }
