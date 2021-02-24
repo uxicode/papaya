@@ -1,6 +1,6 @@
 import {request} from '@/api/service/axiosService';
 import {TERMS_BASE_URL} from '@/api/base';
-import {ITermsData} from '@/views/model/terms.model';
+import {ITermData} from '@/views/model/terms.model';
 
 class TermsService {
   public getTermsURLById(id: string): string {
@@ -18,21 +18,21 @@ class TermsService {
   /**
    * 시비스 이용약관 조회
    */
-  public getServiceTerms(): Promise<ITermsData> {
+  public getServiceTerms(): Promise<ITermData> {
     return request('get', `${TERMS_BASE_URL}/type/service_use`);
   }
 
   /**
    * 개인정보 수집 및 이용에 대한 약관 조회
    */
-  public getPrivateTerms(): Promise<ITermsData> {
+  public getPrivateTerms(): Promise<ITermData> {
     return request('get', `${TERMS_BASE_URL}/type/personal_data_collect_and_use`);
   }
 
   /**
    * 마케팅정보 수신 동의 내용 조회
    */
-  public getMarketTerms(): Promise<ITermsData> {
+  public getMarketTerms(): Promise<ITermData> {
     return request('get', `${TERMS_BASE_URL}/type/marketting_use`);
   }
 }

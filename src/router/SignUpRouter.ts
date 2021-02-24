@@ -21,4 +21,4 @@ const SignUpRouter=[
     ],
   },
 ];
-export {SignUpRouter}
+export {SignUpRouter};

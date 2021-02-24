@@ -1,15 +1,10 @@
 import Vue from 'vue';
 import VueRouter, {RawLocation, RouteConfig} from 'vue-router';
 import Home from '../views/Home.vue';
-import Login from '@/views/login/Login';
-import SignUp from '@/views/signup/SignUp';
-import SignInHeader from '@/components/header/signinHeader.vue';
-import SignUpHeader from '@/components/header/signupHeader.vue';
-import SignInFooter from '@/components/footer/signInFooter.vue';
-import {LoginRouter} from '@/router/LoginRouter';
 import AppHeader from '@/components/header/header.vue';
 import AppFooter from '@/components/footer/footer.vue';
 import {getIsAuth} from '@/router/AuthGuard';
+import {LoginRouter} from '@/router/LoginRouter';
 import {SignUpRouter} from '@/router/SignUpRouter';
 
 Vue.use(VueRouter);
