@@ -19,6 +19,11 @@ const routes: RouteConfig[] = [
     name: 'home',
     components: {default: Home, header: AppHeader, footer: AppFooter},
     beforeEnter: getIsAuth,
+    children: [
+      { path: '', component: () => import('../views/home/myClass/MyClass') },
+      { path: 'notify', component: () => import('../views/home/notify/Notify') },
+      { path: 'schedule', component: () => import('../views/home/schedule/Schedule') },
+    ],
   },
   {
     path: '/login',

@@ -34,8 +34,22 @@
 }
 
 .home-classes {
-  margin-top:-132px;
+  position:relative;
+  margin-top:-110px;
   margin-bottom:432px;
+
+  .list-align {
+    @include pos-abs($right:0, $top:0);
+
+    .form-select {
+      padding: 10px 40px 10px 21px;
+      border:0;
+      font-size: 14px;
+      font-weight:500;
+      line-height: 1.45;
+      background-color:#fff;
+    }
+  }
 
   .classes-card {
     margin-top:20px;
@@ -689,7 +703,7 @@
   }
 }
 
-.flie-list {
+.file-list {
   li {
     float:left;
     margin:0 10px 10px 0;
@@ -829,6 +843,7 @@
 }
 
 .cnt-top {
+  position: relative;
   margin-bottom:26px;
 
   .cnt-tit {

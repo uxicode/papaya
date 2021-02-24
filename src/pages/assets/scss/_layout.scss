@@ -74,7 +74,7 @@ header {
         display:inline-block;
         margin:0 6px;
 
-        &:last-child {margin:0;}
+        &:last-child {margin-right:0;}
         &.active {
           position:relative;
 
@@ -93,31 +93,44 @@ header {
           }
         }
 
-        .sub-menu-btn {
-          padding-right:18px;
+        .list-popup {
+          .sub-menu-btn {
+            padding-right:18px;
 
-          &:after {
-            content:'';
-            display:block;
-            width:18px;
-            height:18px;
-            background:url(../../assets/images/icn-18-arrow-down-white.svg) no-repeat center;
-
-            @include pos-vertical($right:0);
-
-            transform: translateY(-50%) rotate(-180deg);
-            -webkit-transition: all 0.5s ease;
-            transition: all 0.2s ease;
-          }
-
-          &.active {
             &:after {
+              content:'';
+              display:block;
+              width:18px;
+              height:18px;
+              background:url(../../assets/images/icn-18-arrow-down-white.svg) no-repeat center;
+
+              @include pos-vertical($right:0);
+
               transform: translateY(-50%) rotate(0deg);
               -webkit-transition: all 0.5s ease;
               transition: all 0.2s ease;
             }
+
+            &.active {
+              &:after {
+                transform: translateY(-50%) rotate(-180deg);
+                -webkit-transition: all 0.5s ease;
+                transition: all 0.2s ease;
+              }
+            }
+          }
+
+          &.black {
+            .sub-menu-btn {
+              &:after {
+                background-image: url(../../assets/images/arrow-down.svg);
+                background-size:18px;
+              }
+            }
           }
         }
+
+
       }
     }
   }

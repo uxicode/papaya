@@ -32,6 +32,7 @@ export default class Btn extends Vue{
       'primary': this.type===undefined || this.type === 'primary',
       'outline': this.type ==='outline',
       'grey': this.type ==='grey',
+      'navi': this.type ==='navi',
       'sm': this.size ==='small' || this.size ==='sm',
       'lg': this.size ==='large' || this.size ==='big' || this.size ==='lg',
       'btn-block': this.size === 'full',
