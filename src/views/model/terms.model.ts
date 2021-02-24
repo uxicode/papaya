@@ -1,4 +1,4 @@
-interface ITermsData {
+interface ITermData {
   name: string;
   type: string;
   bodytext: string;
@@ -12,4 +12,4 @@ interface ICheckData{
   desc: string[];
 }
 
-export { ITermsData, ICheckData};
+export { ITermData, ICheckData};

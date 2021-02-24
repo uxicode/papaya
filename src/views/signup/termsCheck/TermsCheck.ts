@@ -1,16 +1,21 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
+import Btn from '@/components/button/Btn.vue';
 import WithRender from './TermsCheck.html';
 import TermsService from '@/api/service/TermsService';
-import {ITermsData, ICheckData} from '@/views/model/terms.model';
+import {ITermData, ICheckData} from '@/views/model/terms.model';
 
 @WithRender
-@Component
+@Component({
+    components:{
+        Btn,
+    }
+})
 export default class TermsCheck extends Vue {
     private step: number = 1;
     private stepTotal: number = 3;
     private pageTitle: string = '일반 회원가입';
     private allChecked: boolean = false;
-    private termsItems: ITermsData[]=[];
+    private termsItems: ITermData[]=[];
     private termsList: ICheckData[] = [
         {
             idx: 1,
@@ -91,7 +96,7 @@ export default class TermsCheck extends Vue {
 
         // axios.all 로 처리해도 됨.
         Promise.all( [serviceTerms, privateTerms, marketTerms] )
-            .then( (data: ITermsData[] ) => {
+            .then( (data: ITermData[] ) => {
                 this.termsItems = data;
             })
             .then(() => {
