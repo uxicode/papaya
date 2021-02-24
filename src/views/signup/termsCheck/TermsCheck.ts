@@ -1,12 +1,7 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import WithRender from './TermsCheck.html';
 import TermsService from '@/api/service/TermsService';
-
-interface ITermsData {
-    name: string;
-    type: string;
-    bodytext: string;
-}
+import {ITermsData, ICheckData} from '@/views/model/terms.model';
 
 @WithRender
 @Component
@@ -15,8 +10,8 @@ export default class TermsCheck extends Vue {
     private stepTotal: number = 3;
     private pageTitle: string = '일반 회원가입';
     private allChecked: boolean = false;
-    private termsItems: ITermsData[] = [];
-    private termsList: any = [
+    private termsItems: ITermsData[]=[];
+    private termsList: ICheckData[] = [
         {
             idx: 1,
             tit: '서비스 이용약관(필수)',
@@ -78,11 +73,10 @@ export default class TermsCheck extends Vue {
     private allCheck(checked: boolean): void {
         this.allChecked = checked;
         const chkList = this.termsList;
-        for (const i in chkList) {
-            chkList[i].selected = this.allChecked;
-            chkList[i].isChecked = !chkList[i].isChecked;
-            //console.log(chkList[i].isChecked);
-        }
+        chkList.forEach ( ( chkData: ICheckData )=> {
+            chkData.isActive = this.allChecked;
+            chkData.isChecked = !chkData.isChecked;
+        } );
     }
 
     /**
@@ -96,8 +90,8 @@ export default class TermsCheck extends Vue {
 
         // axios.all 로 처리해도 됨.
         Promise.all( [serviceTerms, privateTerms, marketTerms] )
-            .then( (data) => {
-                this.termsItems=data;
+            .then( (data: ITermsData[] ) => {
+                this.termsItems = data;
             })
             .then(() => {
                 //Promise.all 로 처리하면 리턴값이 배열. 즉 별도 매칭이 필요.
