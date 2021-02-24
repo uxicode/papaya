@@ -69,19 +69,19 @@
                     </div>
                 </div>
 
-                <div class="feed-item">
+                <div v-for="item in feedList" :key="item" class="feed-item">
                     <div class="fd-head">
-                        <h3 class="fd-tit">파파야초등학교 10월 가을 체험학습</h3>
+                        <h3 class="fd-tit">{{ item.feedTit }}</h3>
                         <div class="fd-writer">
                             <div class="tb-style">
                                 <div class="tb-cell">
-                                    <span class="class-photo"><img :src="require('@/assets/images/pic5.png')" class="thumb" alt=""></span>
+                                    <span class="class-photo"><img :src="item.classThumb" class="thumb" alt=""></span>
                                 </div>
                                 <div class="tb-cell">
-                                    <p class="class-name">꿈꾸는 5학년 1반</p>
+                                    <p class="class-name">{{ item.className }}</p>
                                     <p class="writer">
-                                        <span class="name">김미영선생님</span>
-                                        <span class="time">1분 전</span>
+                                        <span class="name">{{ item.writer }}</span>
+                                        <span class="time">{{ item.updatedDiffTime }}</span>
                                     </p>
                                 </div>
                             </div>
@@ -101,18 +101,21 @@
 
                         <div class="fd-inner">
                             <ul class="img-list clearfix">
+                                <li v-for="img in item.imgList" :key="img"><a href=""><img :src="img" alt=""></a></li>
+                                <!--
                                 <li><a href=""><img :src="require('@/assets/images/pic.png')" alt=""></a></li>
                                 <li><a href=""><img :src="require('@/assets/images/pic2.png')" alt=""></a></li>
                                 <li><a href=""><img :src="require('@/assets/images/pic3.png')" alt=""></a></li>
+                                -->
                             </ul>
                         </div>
                     </div>
                     <div class="fd-foot clearfix">
-                        <span class="fd-viewer">124명 읽음</span>
-                        <span class="fd-comment"><a href="">댓글 12</a></span>
+                        <span class="fd-viewer">{{ item.feedViewer }}명 읽음</span>
+                        <span class="fd-comment"><a href="">댓글 {{ item.comment }}</a></span>
                     </div>
                 </div>
-
+                <!--
                 <div class="feed-item">
                     <div class="fd-head">
                         <h3 class="fd-tit">수학 2단원 관련 공지사항</h3>
@@ -290,6 +293,7 @@
                         <span class="fd-comment"><a href="">댓글 12</a></span>
                     </div>
                 </div>
+                -->
             </div>
         </section>
     </div>

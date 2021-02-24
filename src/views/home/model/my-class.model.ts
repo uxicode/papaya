@@ -21,4 +21,15 @@ interface INotifyFeedList extends INotifyList {
     updatedDiffTime: string;
 }
 
-export {IClassInfo, INotifyList, INotifyFeedList};
+interface IFeedList {
+    feedTit: string;
+    classThumb: () => void;
+    className: string;
+    writer: string;
+    updatedDiffTime: string;
+    imgList: Array<() => void>;
+    feedViewer: number;
+    comment: number;
+}
+
+export {IClassInfo, INotifyList, INotifyFeedList, IFeedList};

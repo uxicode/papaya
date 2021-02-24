@@ -1,5 +1,5 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
-import {INotifyList, INotifyFeedList} from '@/views/home/model/my-class.model';
+import {INotifyList, INotifyFeedList, IFeedList} from '@/views/home/model/my-class.model';
 import WithRender from './Notify.html';
 
 @WithRender
@@ -42,8 +42,22 @@ export default class Notify extends Vue {
             updatedDiffTime: '1분 전',
         },
     ];
+
+    private feedList: IFeedList[] = [
+        {
+            feedTit: '파파야초등학교 10월 가을 체험학습',
+            classThumb: require('@/assets/images/pic5.png'),
+            className: '꿈꾸는 5학년 1반',
+            writer: '김미영선생님',
+            updatedDiffTime: '1분 전',
+            imgList: [require('@/assets/images/pic.png'), require('@/assets/images/pic2.png'), require('@/assets/images/pic3.png')],
+            feedViewer: 124,
+            comment: 12,
+        },
+    ];
+
     /**
-     * 화살표 버튼 클릭시 약관 내용 토글
+     * 화살표 버튼 클릭시 예약 알림 토글
      * @public
      */
     public accordionToggle(): void {
