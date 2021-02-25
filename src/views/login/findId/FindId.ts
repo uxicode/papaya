@@ -1,6 +1,6 @@
 import {Vue, Component} from 'vue-property-decorator';
-import {IAuthTypeForm} from '@/views/login/model/member-form.model';
-import {IFindIdWarnMsg} from '@/views/login/model/msg-form.model';
+import {IAuthTypeForm} from '@/views/model/member-form.model';
+import {IFindIdWarnMsg} from '@/views/model/msg-form.model';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import Btn from '@/components/button/Btn.vue';
 import TxtField from '@/components/form/txtField.vue';

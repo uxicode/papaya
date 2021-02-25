@@ -24,7 +24,7 @@
             &lt;!&ndash;<button type="button" class="btn sm grey"
                     :disabled="!userMobileState" @click.stop="getUserIdByMobile">인증
             </button>&ndash;&gt;
-            <btn type="grey" size="sm" :state="!userMobileState" @btnClick="getUserIdByMobile">인증</btn>
+            <btn type="grey" size="sm" :disabled="!userMobileState" @btnClick="getUserIdByMobile">인증</btn>
             <p class="form-message approval" v-if="isMobileChk">모바일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</p>
             <p class="form-message error" v-else>{{ errors[0] }}</p>
             </ValidationProvider>-->
@@ -36,7 +36,7 @@
                     valid-name="모바일번호"
                     success-feedback="모바일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요."
                     :success="isMobileChk"></txt-field>
-            <btn type="grey" size="sm" :state="!userMobileState" @btnClick="getUserIdByMobile">인증</btn>
+            <btn type="grey" size="sm" :disabled="!userMobileState" @btnClick="getUserIdByMobile">인증</btn>
           </div>
         </div>
       </div>
@@ -58,7 +58,7 @@
             &lt;!&ndash;<button type="button" class="btn sm grey"
                     :disabled="!userEmailState" @click.stop="getUserIdByEmail">인증
             </button>&ndash;&gt;
-            <btn type="grey" size="sm" :state="!userEmailState" @btnClick="getUserIdByEmail">인증</btn>
+            <btn type="grey" size="sm" :disabled="!userEmailState" @btnClick="getUserIdByEmail">인증</btn>
             <p class="form-message approval" v-if="isEmailChk">이메일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요.</p>
             <p class="form-message error" v-else>{{ errorMsg }}</p>-->
 
@@ -69,7 +69,7 @@
                     valid-name="이메일"
                     success-feedback="이메일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요."
                     :success="isEmailChk"></txt-field>
-            <btn type="grey" size="sm" :state="!userEmailState" @btnClick="getUserIdByEmail">인증</btn>
+            <btn type="grey" size="sm" :disabled="!userEmailState" @btnClick="getUserIdByEmail">인증</btn>
           </div>
         </div>
       </div>
@@ -79,7 +79,7 @@
           <!--<button type="button" class="btn basic lg primary red wd-full"
                   :class="{'disabled':!verificationConfirm() }" @click="confirmClickHandler">확인
           </button>-->
-          <btn size="wide" :state="!verificationConfirm()" @btnClick="confirmClickHandler">확인</btn>
+          <btn size="wide" :disabled="!verificationConfirm()" @btnClick="confirmClickHandler">확인</btn>
         </div>
       </div>
       <div class="page-back"><a href="" @click.prevent="gotoLoginHandler">로그인으로 돌아가기</a></div>

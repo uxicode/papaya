@@ -6,9 +6,9 @@
 
       <nav id="gnb" class="pd-desc">
         <ul class="menu">
-          <li><a href="">홈</a></li>
-          <li><a href="">모든 알림</a></li>
-          <li><a href="">모든 일정</a></li>
+          <li><router-link :to="{path:'/'}">홈</router-link></li>
+          <li><router-link :to="{path:'notify'}">모든 알림</router-link></li>
+          <li><router-link :to="{path:'schedule'}">모든 일정</router-link></li>
           <li><a href="">자료실</a></li>
         </ul>
       </nav>
@@ -17,7 +17,18 @@
         <li><a href="#"><img src="../../assets/images/search-white.svg" alt="" /></a></li>
         <li><a href="#"><img src="../../assets/images/icn-32-alert-white-on.svg" alt="" /></a></li>
         <li><a href="#"><img src="../../assets/images/mypage-white.svg" alt="" /></a></li>
-        <li><a href="#" class="arrow-down"><img src="../../assets/images/a-down.png" alt="" /></a></li>
+        <li>
+          <a href="#" class="arrow-down" :class="{'active': isActive}" @click="menuToggle"><img src="../../assets/images/a-down.png" alt="" /></a>
+          <ul class="depth-2" :class="{'active': isActive}">
+            <li><a href="#">MY프로필</a></li>
+            <li><a href="#">보관함</a></li>
+            <li class="bd-btm"><a href="#">활동내역</a></li>
+            <li><a href="#">공지사항</a></li>
+            <li><a href="#">고객센터</a></li>
+            <li class="bd-btm"><a href="#">이용약관</a></li>
+            <li><a href="#" @click="isLogout">로그아웃</a></li>
+          </ul>
+        </li>
       </ul>
 
     </div>
@@ -34,6 +45,7 @@ const Auth = namespace('Auth');
 
 @Component
 export default class AppHeader extends Vue {
+  private isActive: boolean = false;
 
   @Auth.Getter
   private isAuth!: boolean;
@@ -54,6 +66,14 @@ export default class AppHeader extends Vue {
   private gotoLoginPage(): void {
     // this.HISTORY_PAGE({history:'login'});
     this.$router.push('/login');
+  }
+
+  /**
+   * 우측 화살표 버튼 클릭시 하위 메뉴 노출
+   * @private
+   */
+  private menuToggle(): void {
+    this.isActive = !this.isActive;
   }
 }
 </script>

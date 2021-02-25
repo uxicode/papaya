@@ -62,12 +62,12 @@
                                                                size="390"
                                                                placeholder="아이디를 입력해 주세요."
                                                                v-model="formData.id"
-                                                               rules="required|minmax:5,20|id"
+                                                               rules="required|word|minmax:5,20|"
                                                                valid-name="아이디">
                                                     </txt-field>
                                                     <btn type="outline"
                                                          size="sm"
-                                                         :state="true">중복확인</btn>
+                                                         :disabled="true">중복확인</btn>
                                                 </div>
                                             </td>
                                         </tr>
@@ -128,7 +128,7 @@
                                                     </txt-field>
                                                     <btn type="outline"
                                                          size="sm"
-                                                         :state="true">인증</btn>
+                                                         :disabled="true">인증</btn>
                                                 </div>
                                             </td>
                                         </tr>
@@ -149,7 +149,7 @@
                                                     </txt-field>
                                                     <btn type="outline"
                                                          size="sm"
-                                                         :state="true">인증</btn>
+                                                         :disabled="true">인증</btn>
                                                 </div>
                                                 <div class="checkbox-group mgt-40">
                                                     <div class="btn-radio">

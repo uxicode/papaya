@@ -18576,7 +18576,6 @@ select::-ms-expand {
       &:active, &.active {background-color:#f4f5f6; border-color:#c9cad5;}
       &[disabled], &.disabled {color:rgba(87,87,109,0.2);}
     }
-
     &.fill {
       color:#373749;
       background-color:#f4f5f6;
@@ -18584,8 +18583,6 @@ select::-ms-expand {
       &:active, &.active {background-color:#c9cad5;}
       &[disabled], &.disabled {color:rgba(55,55,73,0.2);}
     }
-
-
   }*/
 }
 .btn:active, .btn.active {
@@ -19882,7 +19879,7 @@ select::-ms-expand {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.flie-list li {
+.file-list li {
   position: relative;
   float: left;
   margin: 0 10px 10px 0;
@@ -19891,7 +19888,7 @@ select::-ms-expand {
   border-radius: 5px;
   background-color: #fff;
 }
-.flie-list li:before {
+.file-list li:before {
   content: "";
   position: absolute;
   display: block;

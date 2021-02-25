@@ -1,7 +1,7 @@
 <template>
   <button type="button"
           class="btn"
-          :disabled="state"
+          :disabled="disabled"
           :class="buttonType"
           @click.stop="buttonClick">
     <slot></slot>
@@ -20,9 +20,9 @@ export default class Btn extends Vue{
   private readonly size: string | undefined;
 
   //부모 태그에서는 -> v-bind 축약형 (:)
-  // :state="!userMobileState"
+  // :disabled="!userMobileState"
   @Prop(Boolean)
-  private state!: boolean;
+  private disabled!: boolean;
 
   @Prop(String)
   private full!: string;
@@ -32,6 +32,7 @@ export default class Btn extends Vue{
       'primary': this.type===undefined || this.type === 'primary',
       'outline': this.type ==='outline',
       'grey': this.type ==='grey',
+      'navi': this.type ==='navi',
       'sm': this.size ==='small' || this.size ==='sm',
       'lg': this.size ==='large' || this.size ==='big' || this.size ==='lg',
       'btn-block': this.size === 'full',

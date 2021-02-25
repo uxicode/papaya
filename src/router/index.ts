@@ -1,14 +1,11 @@
 import Vue from 'vue';
 import VueRouter, {RawLocation, RouteConfig} from 'vue-router';
 import Home from '../views/Home.vue';
-import Login from '@/views/login/Login';
-import SignUp from '@/views/signup/SignUp';
-import SignInHeader from '@/components/header/signinHeader.vue';
-import SignUpHeader from '@/components/header/signupHeader.vue';
-import SignInFooter from '@/components/footer/signInFooter.vue';
 import AppHeader from '@/components/header/header.vue';
 import AppFooter from '@/components/footer/footer.vue';
 import {getIsAuth} from '@/router/AuthGuard';
+import {LoginRouter} from '@/router/LoginRouter';
+import {SignUpRouter} from '@/router/SignUpRouter';
 
 Vue.use(VueRouter);
 
@@ -19,39 +16,14 @@ const routes: RouteConfig[] = [
     name: 'home',
     components: {default: Home, header: AppHeader, footer: AppFooter},
     beforeEnter: getIsAuth,
-  },
-  {
-    path: '/login',
-    components: {default: Login, header: SignInHeader, footer: SignInFooter},
     children: [
-      {path: '', name: 'loginForm', component: () => import('../views/login/loginForm/LoginForm')},
-      {
-        path: 'findId',
-        component: () => import('../views/login/account/IdPwContainer'),
-        children: [
-          {path: '', name: 'findIdForm', component: () => import('../views/login/findId/FindId')},
-          {path: 'resetPw', name: 'resetPw', component: () => import('../views/login/resetPw/ResetPassword')},
-        ],
-      },
+      { path: '', component: () => import('../views/home/myClass/MyClass') },
+      { path: 'notify', component: () => import('../views/home/notify/Notify') },
+      { path: 'schedule', component: () => import('../views/home/schedule/Schedule') },
     ],
   },
-  {
-    path: '/signup',
-    components:{ default: SignUp, header: SignUpHeader, footer: AppFooter },
-    children:[
-      { path: '', component: () => import('../views/signup/signUpIntro/SignUpIntro') },
-      { path: 'termsCheck', name: 'termsCheck', component: () =>import('../views/signup/termsCheck/TermsCheck') },
-      {
-        path: 'verify',
-        name: 'verify',
-        component: () => import('../views/signup/verify/Verify'),
-        children: [
-          { path: 'verifyComplete', name: 'verifyComplete', component: () =>import('../views/signup/verify/verifyComplete/VerifyComplete')},
-        ],
-      },
-      { path: 'signUpForm', name: 'signUpForm', component: () =>import('../views/signup/signUpForm/SignUpForm') },
-    ],
-  },
+  ...LoginRouter,
+  ...SignUpRouter,
   {
     path: '*',
     name: 'notfound',
