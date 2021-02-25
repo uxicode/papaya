@@ -868,6 +868,7 @@
   margin-top:10px;
 
   .schedule-calendar {
+    position:relative;
     height: 674px;
     border-radius: 5px;
     border: solid 1px #f4f5f6;
@@ -891,6 +892,18 @@
         font-size:18px;
         font-weight:500;
         margin-left:20px;
+      }
+    }
+
+    .schedule-add {
+      @include pos-abs($right:0, $bottom:20px);
+      transform:translateX(85%);
+
+      &-btn {
+        display:block;
+        width:80px;
+        height:80px;
+        background:url(../../assets/images/add-btn.svg) no-repeat;
       }
     }
   }
@@ -924,6 +937,17 @@
       .en-count {
         font-weight:500;
       }
+    }
+  }
+
+  .curriculum-add {
+    @include pos-abs($right:0, $bottom:35%);
+
+    &-btn {
+      display:block;
+      width:80px;
+      height:80px;
+      background:url(../../assets/images/add-btn.svg) no-repeat;
     }
   }
 }

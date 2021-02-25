@@ -32,7 +32,7 @@
 }
 
 /* absolute vertical align center */
-@mixin pos-vertical ($left:null, $right:null,){
+@mixin pos-vertical ($left:null, $right:null){
   position:absolute;
   top:50%;
   left:$left;

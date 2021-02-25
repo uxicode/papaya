@@ -11,22 +11,6 @@
 header {
   background-color:#f4f5f6;
 
-  &.dark {
-    background-color:#1d1d4c;
-
-    .menu {
-      color:#fff;
-    }
-  }
-
-  &.white {
-    background-color:#fff;
-
-    .menu {
-      color:#45454a;
-    }
-  }
-
   .header-container {
     position:relative;
     width:1020px;
@@ -37,6 +21,18 @@ header {
       content: "";
       display: block;
       clear: both;
+    }
+
+    .class-select {
+      @include pos-vertical($left:90px);
+
+      .form-select {
+        min-width:266px;
+        padding:10px 52px 10px 20px;
+        border:0;
+        font-size:14px;
+        background-color:#f4f5f6;
+      }
     }
 
     .logo {
@@ -75,21 +71,54 @@ header {
         margin:0 6px;
 
         &:last-child {margin-right:0;}
-        &.active {
-          position:relative;
 
-          &:after {
-            content:'';
-            display:block;
-            width: 0px;
-            height: 0px;
+        > a {
+          display:inline-block;
+          width:32px;
+          height:32px;
+          vertical-align: middle;
+        }
 
-            @include pos-abs($bottom:-13px, $left:50%);
+        .top-search {
+          background:url(../../assets/images/search-white.svg) no-repeat;
 
-            transform:translateX(-50%);
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-bottom: 7px solid #fff;
+          &.active {
+            position: relative;
+
+            &:after {
+              content: '';
+              display: block;
+              width: 0px;
+              height: 0px;
+
+              @include pos-abs($bottom: -18px, $left: 50%);
+
+              transform: translateX(-50%);
+              border-left: 6px solid transparent;
+              border-right: 6px solid transparent;
+              border-bottom: 7px solid #fff;
+            }
+
+            background:url(../../assets/images/close-white.svg) no-repeat;
+          }
+        }
+
+        .top-alert {
+          background:url(../../assets/images/icn-32-alert-white.svg) no-repeat;
+
+          &.active {
+            position: relative;
+
+            &:after {
+              content:'';
+              display:block;
+              width:6px;
+              height:6px;
+              border-radius:50%;
+              background-color:#ff4d4d;
+
+              @include pos-abs($right:2px, $top:2px);
+            }
           }
         }
 
@@ -123,8 +152,7 @@ header {
           &.black {
             .sub-menu-btn {
               &:after {
-                background-image: url(../../assets/images/arrow-down.svg);
-                background-size:18px;
+                background-image: url(../../assets/images/icn-18-arrow-down.svg);
               }
             }
           }
@@ -163,6 +191,38 @@ header {
               display:none;
             }
           }
+        }
+      }
+    }
+  }
+
+  &.dark {
+    background-color:#1d1d4c;
+
+    .menu {
+      color:#fff;
+    }
+  }
+
+  &.white {
+    background-color:#fff;
+
+    .menu {
+      color:#45454a;
+    }
+
+    .sub-menu {
+      li{
+        .top-search {
+          background:url(../../assets/images/search.svg) no-repeat;
+
+          &.active {
+            background:url(../../assets/images/close.svg) no-repeat center;
+          }
+        }
+
+        .top-alert {
+          background:url(../../assets/images/alert.svg) no-repeat;
         }
       }
     }
