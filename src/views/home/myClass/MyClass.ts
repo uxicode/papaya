@@ -1,7 +1,7 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
-import {IClassInfo} from '@/views/model/my-class.model';
+import ClassService from '@/api/service/MyClassService';
+import {IClassInfo, IMyClassList} from '@/views/model/my-class.model';
 // @ts-ignore
-import {IUser} from '@/api/model/user.model';
 import WithRender from './MyClass.html';
 
 @WithRender
@@ -65,11 +65,37 @@ export default class MyClass extends Vue {
         },
     ];
 
+    private classItems: IMyClassList[] = [];
+
+    public created() {
+        this.getMyClass();
+    }
+
     /**
      * 하트 버튼 토글
      * @public
      */
     public heartToggle(item: any): void {
         item.isFavorite = !item.isFavorite;
+    }
+
+    /**
+     * 내 클래스 가져오기
+     * @public
+     */
+    public getMyClass(): any {
+        const myClassList = ClassService.getAllMyClass();
+
+        // axios.all 로 처리해도 됨.
+        Promise.all( [myClassList] )
+            .then( (data: IMyClassList[] ) => {
+                this.classItems = data;
+            })
+            .then(() => {
+                //Promise.all 로 처리하면 리턴값이 배열. 즉 별도 매칭이 필요.
+                this.classItems.map( ( item: any, idx: number ) => {
+                    this.myClass[idx].className=item.myclass_list.name;
+                });
+            });
     }
 }
