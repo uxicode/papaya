@@ -101,9 +101,9 @@ export default class TxtField extends Vue{
     }
   }
 
-  private inputChange(value: string) {
+  private inputChange(value: string): void{
     this.inputData=value;
-    this.$emit('input', value );
+    this.$emit('input', this.inputData );
   }
 
 }
