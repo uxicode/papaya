@@ -12,7 +12,8 @@
           <radio-button btn-id="radio1"
                         radio-name="radio"
                         btn-value="mobile"
-                        :radio-data="formData.radioValue"
+                        :active-value="formData.radioValue"
+                        v-model="formData.radioValue"
                         @click="optionFindChange">전체 회원 정보에 등록된 모바일 번호로 아이디 찾기
           </radio-button>
         </div>
@@ -47,7 +48,7 @@
           <radio-button btn-id="radio2"
                         radio-name="radio"
                         btn-value="email"
-                        :radio-data="formData.radioValue"
+                        v-model="formData.radioValue"
                         @click="optionFindChange">회원 정보에 등록된 이메일로 아이디 찾기
           </radio-button>
         </div>

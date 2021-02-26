@@ -10,6 +10,7 @@ interface ICheckData{
   isActive: boolean;
   isChecked: boolean;
   desc: string[];
+  val: string;
 }
 
 export { ITermData, ICheckData};

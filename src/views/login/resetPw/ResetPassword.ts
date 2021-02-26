@@ -126,7 +126,7 @@ export default class ResetPassword extends Vue {
    * 라디오버튼 클릭하여 다른 옵션으로 이동시 에러 표시가 기록되었다면 input 초기화
    * @private
    */
-  private optionFindChange(value: string): void {
+  private optionFindChange(value: string, checked: boolean): void {
     this.formData.radioValue = value;
     // console.log(this.formData.radioValue);
     if (this.errorMsg !== '') {
