@@ -3,7 +3,7 @@
     <div class="popup">
       <div class="modal-dim" @click.self="close"></div>
       <!-- popup-dialog : active 시 화면 노출 -->
-      <div class="popup-dialog active" style="width:400px">
+      <div class="popup-dialog active" :style="{ width: size || '400px'}">
         <!-- popup header -->
         <div class="popup-header">
           <slot name="header">
@@ -17,7 +17,7 @@
 
         <!-- popup body -->
         <div class="popup-body">
-          <div class="popup-cnt">
+          <div class="popup-cnt" :style="{padding: bodyPadding }">
             <slot name="body"></slot>
             <!--<h2 class="popup-tit">만 14세 미만 회원입니다.</h2>
             <p class="popup-txt">만 14세 미만의 경우 회원가입 시 보호자(법정대리인)의 실명 인증을 통한 가입 동의가 필요합니다.</p>-->
@@ -46,10 +46,17 @@
 </modal>
 -->
 <script lang="ts">
-import {Vue, Component} from 'vue-property-decorator';
+import {Vue, Component, Prop} from 'vue-property-decorator';
 
 @Component
 export default class Modal extends Vue{
+
+  @Prop(String)
+  private size!: string;
+
+  @Prop(String)
+  private bodyPadding!: string;
+
   public close(): void{
     console.log('클릭');
     this.$emit('modalClose');
