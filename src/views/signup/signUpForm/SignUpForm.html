@@ -61,13 +61,13 @@
                                                     <txt-field id="id"
                                                                size="390"
                                                                placeholder="아이디를 입력해 주세요."
-                                                               v-model="formData.id"
-                                                               rules="required|word|minmax:5,20|"
-                                                               valid-name="아이디">
+                                                               v-model="formData.user_id"
+                                                               :rules="`required|word|minmax:${userIdMin}, ${userIdMax}`"
+                                                               valid-name="아이디"
+                                                               :success="isDuplicateId"
+                                                               successFeedback="사용 가능한 아이디입니다." >
                                                     </txt-field>
-                                                    <btn type="outline"
-                                                         size="sm"
-                                                         :disabled="true">중복확인</btn>
+                                                    <btn type="outline" size="sm" :disabled="!this.userIDState" @btnClick="idCheck">중복확인</btn>
                                                 </div>
                                             </td>
                                         </tr>

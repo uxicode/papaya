@@ -1,12 +1,20 @@
 <template>
+
+  <!-- ex)
+  <radio-button btn-id="radio2"
+                        radio-name="radio"
+                        btn-value="email"
+                        :radio-data="formData.radioValue"
+                        @click="optionFindChange">회원 정보에 등록된 이메일로 인증</radio-button>
+    -->
+
   <div class="btn-radio">
     <input type="radio"
            :name="radioName"
            :id="btnId"
            :value="btnValue"
-           v-model="radioData"
            :checked="checkedState"
-           @click="update">
+           @click="update( $event.target.value, $event.target.checked )">
     <label :for="btnId">
       <slot></slot>
     </label>
@@ -14,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import {Vue, Component, Prop} from 'vue-property-decorator';
+import {Vue, Component, Prop, Emit} from 'vue-property-decorator';
 
 @Component
 export default class RadioButton extends Vue {
@@ -26,24 +34,36 @@ export default class RadioButton extends Vue {
   public radioName!: string;
 
   @Prop(String)
-  public btnValue!: string;
-
-  @Prop(String)
   public label!: string;
 
   @Prop(String)
-  private radioData!: string;
+  public btnValue!: string;
 
-  private update(event: any) {
-    this.btnValue = event.target.value;
+  @Prop(String)
+  public activeValue!: string;
+
+  get checkedState() {
+    return this.btnValue === this.currentValue;
+  }
+
+  private currentValue: string = '';
+  private checked: boolean=true;
+
+
+  @Emit()
+  public update( value: string, checked: boolean ) {
+    this.currentValue = value;
+    this.checked=checked;
     // this.btnValue=value;
-    this.$emit('click', this.btnValue);
+    this.$emit('click', this.currentValue, this.checked );
   }
 
-  private checkedState(): boolean {
-    // console.log( '라디오체크상태', this.radioData === this.btnValue );
-    return this.radioData === this.btnValue;
+  public mounted(): void{
+    this.currentValue=this.activeValue;
+    // console.log(this.btnValue, 'currentValue='+this.currentValue, this.btnValue === this.currentValue);
   }
+
+
 
 }
 </script>
