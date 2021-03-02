@@ -5,7 +5,7 @@
 
       <nav id="gnb">
         <ul class="menu">
-          <li><a href="">회원가입</a></li>
+          <li><router-link :to="{path:'/signup'}">회원가입</router-link></li>
           <li><router-link :to="{path:'/login'}">로그인</router-link></li>
         </ul>
       </nav>

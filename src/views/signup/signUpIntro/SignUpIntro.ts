@@ -5,4 +5,8 @@ import WithRender from './SignUpIntro.html';
 @Component
 export default class SignUpIntro extends Vue {
 
+  private gotoSignForm(): void{
+    this.$router.push('/signForm');
+  }
+
 }

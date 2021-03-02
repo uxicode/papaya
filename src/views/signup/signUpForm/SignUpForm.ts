@@ -65,4 +65,9 @@ export default class SignUpForm extends Vue {
         }
     }
 
+    private gotoPrevPage(): void{
+        this.$router.push('/signForm/verify');
+        this.$emit('updateStep', 2);
+    }
+
 }
