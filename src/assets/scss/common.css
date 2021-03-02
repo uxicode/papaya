@@ -18755,6 +18755,8 @@ body {
 }
 
 header {
+  position: relative;
+  z-index: 2;
   background-color: #f4f5f6;
 }
 header.dark {
