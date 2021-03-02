@@ -14,4 +14,11 @@ import WithRender from './SignUp.html';
 })
 export default class SignUp extends Vue {
 
+    private pageTitle: string='일반 회원가입';
+    private currentStep: number=1;
+    private stepTotal: number=3;
+
+    private updateCount( count: number ) {
+        this.currentStep= count;
+    }
 }

@@ -1,7 +1,26 @@
-<!-- start: join -->
-<div class="join">
-    <transition name="fade" mode="out-in">
-        <router-view></router-view>
-    </transition>
+<div class="contents join">
+  <!-- start: join -->
+  <div class="join">
+
+    <div class="contents">
+      <div class="contents-inner">
+        <div class="all-form">
+          <h2 class="main-tit">{{ pageTitle }}</h2>
+
+          <div class="form-progress">
+            <ul class="progress-list clearfix">
+              <li v-for="idx in stepTotal" :key="idx" class="item" :class="{'active':currentStep===idx}"></li>
+            </ul>
+          </div>
+
+          <transition name="slide-out" mode="out-in">
+            <router-view @updateStep="updateCount"></router-view>
+          </transition>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- //end : join -->
 </div>
-<!-- //end : join -->
+
+
