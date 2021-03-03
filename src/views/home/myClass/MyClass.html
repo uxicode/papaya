@@ -54,8 +54,8 @@
                         </div>
                     </a>
                     <div class="class-update">
-                        <span class="update" :class="{'active': item.isUpdated}">{{ item.updatedDiffTime }}</span>
-                        <button type="button" class="btn only-ico-btn heart" :class="{'active': item.isFavorite}" @click="heartToggle(item)"></button>
+                        <span class="update" :class="{'active': item.isUpdated === 1}">{{ item.updatedDiffTime }}</span>
+                        <button type="button" class="btn only-ico-btn heart" :class="{'active': item.isBookmarked}" @click="bookmarkToggle(item)"></button>
                     </div>
                 </li>
             </ul>

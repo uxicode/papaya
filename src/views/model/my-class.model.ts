@@ -7,7 +7,7 @@ interface IClassInfo {
     memberNum: number;
     isUpdated: boolean;
     updatedDiffTime: string;
-    isFavorite: boolean;
+    isBookmarked: number;
 }
 
 interface INotifyList {
@@ -83,6 +83,7 @@ export interface IOwner {
 }
 
 interface IMyClassList {
+    id: number;
     name: string;
     class_tags: [];
     me: IMe;
