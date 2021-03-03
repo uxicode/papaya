@@ -18765,6 +18765,9 @@ header.dark {
 header.dark .menu {
   color: #fff;
 }
+header.dark .menu > li a:not(.router-link-exact-active) {
+  opacity: 0.8;
+}
 header.white {
   background-color: #fff;
 }
@@ -18841,7 +18844,7 @@ header .header-container .sub-menu .arrow-down.active {
 }
 header .header-container .sub-menu .depth-2 {
   display: none;
-  width: 200px;
+  min-width: 200px;
   position: absolute;
   top: 29px;
   right: 0;
@@ -19480,6 +19483,9 @@ select::-ms-expand {
   min-width: 80px;
   padding: 10px 0 10px 17px;
 }
+.btn.ico-btn.sm.ico-left {
+  padding-left: 40px;
+}
 .btn.ico-btn.sm.ico-right {
   padding-right: 40px;
 }
@@ -20038,8 +20044,22 @@ select::-ms-expand {
 }
 
 .home-classes {
+  position: relative;
   margin-top: -132px;
   margin-bottom: 432px;
+}
+.home-classes .list-align {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.home-classes .list-align .form-select {
+  padding: 10px 40px 10px 21px;
+  border: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.45;
+  background-color: #fff;
 }
 .home-classes .classes-card {
   margin-top: 20px;
@@ -20737,6 +20757,7 @@ select::-ms-expand {
 }
 
 .cnt-top {
+  position: relative;
   margin-bottom: 26px;
 }
 .cnt-top .cnt-tit .color-mark {
