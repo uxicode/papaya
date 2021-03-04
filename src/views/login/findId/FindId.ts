@@ -4,6 +4,7 @@ import {IFindIdWarnMsg} from '@/views/model/msg-form.model';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import Btn from '@/components/button/Btn.vue';
 import TxtField from '@/components/form/txtField.vue';
+import Modal from '@/components/modal/modal.vue';
 import {namespace} from 'vuex-class';
 import WithRender from './FindId.html';
 
@@ -16,15 +17,19 @@ const History = namespace('History');
     RadioButton,
     Btn,
     TxtField,
+    Modal
   },
 })
 
 export default class FindId extends Vue {
 
-  private isEmailChk: boolean = false;
-  private isMobileChk: boolean = false;
+  private emailChk: boolean = false;
+  private mobileChk: boolean = false;
   private isConfirmComplete: boolean = false;
   private errorMessage: string = '';
+  private successMsg: string = '';
+  private successOpenPopup: boolean = false;
+  private errorOpenPopup: boolean=false;
 
   //아이디 찾기 관련
   private formData: IAuthTypeForm = {
@@ -87,13 +92,53 @@ export default class FindId extends Vue {
     return this.errorMessage;
   }
 
+  get isMobileAuthChk(): boolean {
+    //유효한 번호가 아닐때
+    if( !this.userMobileState ){
+      if( this.mobileChk ){
+        //모바일 번호를 이미 인증 받은 상태라고 해도 유효한 번호가 아니면( 번호를 다 지웠거나 몇몇 삭제한 경우) 인증된 상태를 리셋
+        this.mobileChk=false;
+      }
+    }
+    return this.userMobileState && this.mobileChk;
+  }
+
+  get isEmailAuthChk(): boolean{
+    //유효한 이메일이 아닐때
+    if( !this.userEmailState ){
+      //이메일 인증 받은 상태라고 해도 유효한 이메일이 아니면( 이메일 주소를 다 지웠거나 몇몇 삭제한 경우) 인증된 상태를 리셋
+      if( this.emailChk ){
+        this.emailChk=false;
+      }
+    }
+    return this.userEmailState && this.emailChk;
+  }
+
+
   public created() {
     this.HISTORY_PAGE('login');
   }
 
+  private closeErrorPopup(): void {
+    this.errorOpenPopup=false;
+    this.setErrorMessage();
+  }
+
+  private openSuccessPopup(): void{
+    this.successOpenPopup=true;
+  }
+
+  private closeSuccessPopup(): void{
+    this.successOpenPopup=false;
+    this.setSuccessMessage();
+  }
 
   private setErrorMessage(msg: string = ''): void {
     this.errorMessage = msg;
+  }
+
+  private setSuccessMessage( msg: string= ''): void{
+    this.successMsg = msg;
   }
 
 
@@ -120,6 +165,23 @@ export default class FindId extends Vue {
     }
   }
 
+  private changeMultiLine( txt: string ): string {
+    return txt.replace(/(\n|\r\n)/g, '<br>');
+  }
+
+  private attachMsg( msg: string | string[] ): string{
+    //String(value).replace(/(\n|\r\n)/g, '<br>');
+    let resultMsg: string | string[]='';
+    if( typeof msg === 'string' ){
+      resultMsg=this.changeMultiLine( msg );
+    }else if (typeof msg === 'object') {
+      msg.forEach( ( txt ) =>{
+        resultMsg+= `<p style="text-align:center;">${ txt }</p>`;
+      });
+    }
+    return resultMsg;
+  }
+
 
   /**
    * 사용자 mobile 번호로 아이디 찾기
@@ -135,12 +197,18 @@ export default class FindId extends Vue {
           "message": "아이디 조회 성공."
       }*/
         console.log('모바일번호로 아이디조회=', data);
-        this.isMobileChk = true; //모바일번호로 아이디찾기 완료했음을 기록.
+        this.openSuccessPopup();
+        // this.setSuccessMessage('모바일 인증이 완료 되었습니다. \n하단에 확인 버튼을 눌러 주세요.');
+
+        this.mobileChk = true; //모바일번호로 아이디찾기 완료했음을 기록.
       }).catch((error: any) => {
       // console.log('error', error);
+      this.errorOpenPopup=true;
       this.setErrorMessage(error.data.message);
     });
   }
+
+
 
   /**
    * 이메일로 아이디 찾기
@@ -149,13 +217,15 @@ export default class FindId extends Vue {
   private getUserIdByEmail() {
     // UserService.getUserIdByEmail(this.formData.email)
     this.FIND_ID_BY_EMAIL(this.formData.email)
-      .then(() => {
-        // console.log('이메일로 아이디조회=', data );
+      .then(( data: any ) => {
+        console.log('이메일로 아이디조회=', data );
         // this.findUserID=data.user_id;
-        this.isEmailChk = true; //이메일로 아이디찾기 완료했음을 기록.
+        this.emailChk = true; //이메일로 아이디찾기 완료했음을 기록.
       }).catch((error: any) => {
-      // console.log('error', error );
-      this.setErrorMessage(error.data.message);
+      this.emailChk = false;
+      this.errorOpenPopup=true;
+      console.log('error', error );
+      this.setErrorMessage('해당 이메일로 가입된 아이디가 없습니다.');
     });
   }
 
@@ -178,8 +248,8 @@ export default class FindId extends Vue {
    * @private
    */
   private verificationConfirm(): boolean {
-    return (this.formData.radioValue === 'mobile' && this.isMobileChk) ||
-      (this.formData.radioValue === 'email' && this.isEmailChk);
+    return (this.formData.radioValue === 'mobile' && this.isMobileAuthChk) ||
+      (this.formData.radioValue === 'email' && this.isEmailAuthChk);
   }
 
   /**
@@ -195,13 +265,14 @@ export default class FindId extends Vue {
    * @private
    */
   private resetFormData(): void {
-    this.isEmailChk = false;
-    this.isMobileChk = false;
+    this.emailChk = false;
+    this.mobileChk = false;
     this.formData = {
       radioValue: 'mobile',
       email: '',
       mobile: '',
     };
   }
+
 
 }

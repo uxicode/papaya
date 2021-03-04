@@ -13,17 +13,23 @@
   <div class="txt-field-container" :style="{width:size+'px'}">
     <ValidationProvider :name="validName"
                         :rules="rules"
-                        v-slot="{ errors }">
+                        v-slot="{ errors, passed, dirty, failed }">
       <label :for="id" v-if="isLabel">{{ label }}</label>
       <input class="form-control"
              :class="cssClassName"
              :id="id"
              :type="inputFieldType"
              :placeholder="placeholder"
-             @input="inputChange( $event.target.value )"
-             :value="inputData">
-      <p class="form-message approval" v-if="isSuccess">{{ successFeedback }}</p>
-      <p class="form-message error">{{ errors[0] }}</p>
+             :value="inputData"
+             @input="inputChange( $event.target.value )">
+      <template v-if="failed">
+        <p class="form-message error">{{ errors[0] }}</p>
+      </template>
+      <template v-else>
+        <p class="form-message approval" v-if="success">{{ successFeedback }}</p>
+        <p class="form-message error" v-if="fail">{{ failFeedback }}</p>
+      </template>
+
     </ValidationProvider>
   </div>
 </template>
@@ -62,8 +68,14 @@ export default class TxtField extends Vue{
   @Prop(String)
   private successFeedback: string | undefined;
 
+  @Prop(String)
+  private failFeedback: string | undefined;
+
   @Prop(Boolean)
-  private success: boolean | undefined;
+  private success!: boolean;
+
+  @Prop(Boolean)
+  private fail!: boolean;
 
   private inputData: string='';
 
@@ -72,12 +84,9 @@ export default class TxtField extends Vue{
   }
 
   get isSuccess(): boolean{
-    return !!this.success;
+    return this.success;
   }
 
-  get isValidShow(): boolean{
-    return this.success!==undefined && this.success;
-  }
 
   get isLabel(): boolean {
     return this.label!==undefined;
@@ -99,11 +108,16 @@ export default class TxtField extends Vue{
     if( parentClassList.contains('inline') ){
       this.$el.classList.add('inline');
     }
+
   }
 
-  private inputChange(value: string): void{
+  private inputChange( value: string ): void{
     this.inputData=value;
     this.$emit('input', this.inputData );
+  }
+
+  private resultValidate( passed: boolean ): void{
+    this.$emit('change', passed);
   }
 
 }

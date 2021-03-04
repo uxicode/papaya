@@ -48,6 +48,9 @@
     "comment-format": false,
     "no-console": false,
     "allowUnusedLabels": false,
-    "trailing-comma": false
+    "trailing-comma": false,
+    "max-line-length": [ true, {
+      "limit": 200
+    } ]
   }
 }

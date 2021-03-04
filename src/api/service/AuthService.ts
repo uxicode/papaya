@@ -19,7 +19,7 @@ class AuthService {
    * 핸드폰 번호로 인증번호 전송
    * @param mobile
    */
-  public getAuthMobileNum(mobile: string): Promise<any> {
+  public getAuthNumByMobile(mobile: string): Promise<any> {
     return request('get', `${AUTH_BASE_URL}/sms/${mobile}`);
   }
 
