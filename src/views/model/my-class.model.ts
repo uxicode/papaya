@@ -7,7 +7,7 @@ interface IClassInfo {
     memberNum: number;
     isUpdated: boolean;
     updatedDiffTime: string;
-    isFavorite: boolean;
+    isBookmarked: number;
 }
 
 interface INotifyList {
@@ -33,60 +33,12 @@ interface IFeedList {
     comment: number;
 }
 
-export interface IMe {
-    joinedAt: string;
-    createdAt: string;
-    updatedAt: string;
-    id: number;
-    class_id: number;
-    user_id: number;
-    nickname: string;
-    profile_image: string;
-    is_bookmarked: number;
-    schedule_color: number;
-    level: number;
-    status: number;
-    open_level_id: number;
-    open_level_mobileno: number;
-    open_level_email: number;
-    onoff_push_noti: number;
-    onoff_post_noti: number;
-    onooff_comment_noti: number;
-    onoff_schedule_noti: number;
-    schedule_noti_intime: number;
-    visited: 1;
-    class_member_auths: [];
-}
-
-export interface IOwner {
-    joinedAt: string;
-    createdAt: string;
-    updatedAt: string;
-    id: number;
-    class_id: number;
-    user_id: number;
-    nickname: string;
-    profile_image: string;
-    is_bookmarked: number;
-    schedule_color: number;
-    level: number;
-    status: number;
-    open_level_id: number;
-    open_level_mobileno: number;
-    open_level_email: number;
-    onoff_push_noti: number;
-    onoff_post_noti: number;
-    onooff_comment_noti: number;
-    onoff_schedule_noti: number;
-    schedule_noti_intime: number;
-    visited: 1;
-}
-
 interface IMyClassList {
+    id: number;
     name: string;
     class_tags: [];
-    me: IMe;
-    owner: IOwner;
+    me: {};
+    owner: {};
 }
 
 export {IClassInfo, INotifyList, INotifyFeedList, IFeedList, IMyClassList};

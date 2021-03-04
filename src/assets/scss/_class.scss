@@ -33,8 +33,21 @@
 }
 
 .home-classes {
+  position: relative;
   margin-top:-132px;
   margin-bottom:432px;
+
+  .list-align {
+    @include pos-abs($top:0, $right:0);
+    .form-select {
+      padding: 10px 40px 10px 21px;
+      border: 0;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.45;
+      background-color: #fff;
+    }
+  }
 
   .classes-card {
     margin-top:20px;
@@ -814,6 +827,7 @@
 }
 
 .cnt-top {
+  position: relative;
   margin-bottom:26px;
 
   .cnt-tit {

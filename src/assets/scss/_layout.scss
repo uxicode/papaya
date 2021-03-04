@@ -17,6 +17,10 @@ header {
 
     .menu {
       color:#fff;
+
+      > li a:not(.router-link-exact-active) {
+        opacity: 0.8;
+      }
     }
   }
 
@@ -104,7 +108,7 @@ header {
       }
       .depth-2 {
         display:none;
-        width:200px;
+        min-width:200px;
         position:absolute;
         top:29px;
         right:0;

@@ -11,7 +11,7 @@
 
     <div class="home-main">
         <div class="main-txt">
-            <h2 class="main-tit mgb-10">안녕하세요, {{ fullname }}님!</h2>
+            <h2 class="main-tit mgb-10">안녕하세요, {{ }}님!</h2>
             <p>즐거운 교육 놀이터, 파파야에 오신 것을 환영합니다.<br>클래스를 한번 둘러볼까요?</p>
         </div>
     </div>
@@ -19,6 +19,15 @@
     <div class="home-classes">
         <div class="cnt-top">
             <h3 class="cnt-tit">MY 클래스 <span class="fc-red">{{ myClass.length }}</span></h3>
+            <div class="list-align">
+                <div class="form-group">
+                    <select class="form-select">
+                        <option value="" selected>최신 업데이트순</option>
+                        <option value="">주간</option>
+                        <option value="">일간</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <div class="classes-card">
@@ -29,7 +38,7 @@
                     </a>
                 </li>
 
-                <li v-for="item in myClass" :key="item" class="item">
+                <li v-for="item in myClass" class="item">
                     <a href="" class="class-info">
                         <div class="info-img crown">
                             <span><img :src="item.classThumb" class="thumb" alt=""></span>
@@ -45,8 +54,8 @@
                         </div>
                     </a>
                     <div class="class-update">
-                        <span class="update" :class="{'active': item.isUpdated}">{{ item.updatedDiffTime }}</span>
-                        <button type="button" class="btn only-ico-btn heart" :class="{'active': item.isFavorite}" @click="heartToggle(item)"></button>
+                        <span class="update" :class="{'active': item.isUpdated === 1}">{{ item.updatedDiffTime }}</span>
+                        <button type="button" class="btn only-ico-btn heart" :class="{'active': item.isBookmarked}" @click="bookmarkToggle(item)"></button>
                     </div>
                 </li>
             </ul>

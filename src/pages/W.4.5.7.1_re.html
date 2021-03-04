@@ -34,6 +34,15 @@
 		<div class="header-container">
 			<h1 class="logo"><a href="#"><img src="./assets/images/logo-logotype-red.png" alt="papaya" /></a></h1>
 
+			<div class="class-select">
+				<select class="form-select">
+					<option value="" selected>꿈꾸는 5학년 1반</option>
+					<option value="">꿈꾸는 5학년 1반</option>
+					<option value="">꿈꾸는 5학년 1반</option>
+					<option value="">꿈꾸는 5학년 1반</option>
+				</select>
+			</div>
+
 			<nav id="gnb" class="pd-desc">
 				<ul class="menu">
 					<li><a href="">홈</a></li>
@@ -44,10 +53,27 @@
 			</nav>
 
 			<ul class="sub-menu">
-				<li><a href="#"><img src="./assets/images/search.png" alt="" /></a></li>
-				<li><a href="#"><img src="./assets/images/alert.png" alt="" /></a></li>
-				<li><a href="#"><img src="./assets/images/mypage.png" alt="" /></a></li>
-				<li><a href="#" class="arrow-down"><img src="assets/images/arrow-down-w.png" alt="" /></a></li>
+				<li><a href="#" class="top-search"></a></li>
+				<li><a href="#" class="top-alert"></a></li>
+				<li>
+					<div class="list-popup black">
+						<!-- sub-menu-btn 에 active 추가 시 arrow 버튼 활성화 -->
+						<button type="button" class="list-popup-btn sub-menu-btn">
+							<img src="./assets/images/mypage.svg" alt="" />
+						</button>
+						<div class="list-popup-menu">
+							<a href="" class="list-popup-item">MY프로필</a>
+							<a href="" class="list-popup-item">보관함</a>
+							<a href="" class="list-popup-item">활동내역</a>
+							<div class="line"></div>
+							<a href="" class="list-popup-item">공지사항</a>
+							<a href="" class="list-popup-item">고객센터</a>
+							<a href="" class="list-popup-item">이용약관</a>
+							<div class="line"></div>
+							<a href="" class="list-popup-item">로그아웃</a>
+						</div>
+					</div>
+				</li>
 			</ul>
 
 		</div>
@@ -112,7 +138,7 @@
 											<div class="member-info-btn">
 												<div class="list-popup">
 													<button type="button" class="list-popup-btn"><img src="assets/images/settings.svg" alt=""></button>
-													<div class="list-popup-menu pos-right active" style="left:42px;">
+													<div class="list-popup-menu pos-right active" style="transform:translate3d(42px, 0, 0);">
 														<a href="" class="list-popup-item">list1</a>
 														<a href="" class="list-popup-item">list2</a>
 														<a href="" class="list-popup-item">list3</a>
@@ -141,7 +167,7 @@
 												<div class="member-info-btn">
 													<div class="list-popup">
 														<button type="button" class="list-popup-btn"><span>받지 않기</span><img src="assets/images/arrow-right.svg" class="sm" alt=""></button>
-														<div class="list-popup-menu pos-right active" style="left:87px;">
+														<div class="list-popup-menu pos-right" style="transform:translate3d(87px, 0, 0);">
 															<a href="" class="list-popup-item">받기</a>
 															<a href="" class="list-popup-item">받지 않기</a>
 														</div>
@@ -153,8 +179,8 @@
 											<p class="list-tit">새 댓글</p>
 											<div class="setting-btn">
 												<div class="list-popup">
-													<button type="button" class="list-popup-btn"><span>받기</span><img src="assets/images/arrow-right.svg" class="sm" alt=""></button>
-													<div class="list-popup-menu pos-right active" style="left:87px;">
+													<button type="button" class="list-popup-btn">받지 않기 <img src="assets/images/arrow-right.svg" alt="" style="width:18px; height:18px;"></button>
+													<div class="list-popup-menu pos-right" style="transform:translate3d(87px, 0, 0);">
 														<a href="" class="list-popup-item">받기</a>
 														<a href="" class="list-popup-item">받지 않기</a>
 													</div>
@@ -166,13 +192,11 @@
 											<div class="setting-btn">
 												<div class="list-popup">
 													<button type="button" class="list-popup-btn">10분 전 받기 <img src="assets/images/arrow-right.svg" alt="" style="width:18px; height:18px;"></button>
-													<div class="list-popup-cnt pos-right" style="right:-220px;">
-														<ul class="list-popup-list pos-right active">
-															<li class="item"><a href="javascript:void(0);">10분 전 받기</a></li>
-															<li class="item"><a href="javascript:void(0);">30분 전 받기</a></li>
-															<li class="item"><a href="javascript:void(0);">하루 전 받기</a></li>
-															<li class="item"><a href="javascript:void(0);">받지 않기</a></li>
-														</ul>
+													<div class="list-popup-menu pos-right" style="transform:translate3d(87px, 0, 0);">
+														<a href="" class="list-popup-item">10분 전 받기</a>
+														<a href="" class="list-popup-item">30분 전 받기</a>
+														<a href="" class="list-popup-item">하루 전 받기</a>
+														<a href="" class="list-popup-item">받지 않기</a>
 													</div>
 												</div>
 											</div>
@@ -186,31 +210,31 @@
 										<li class="list-item">
 											<a href=""  class="list-tit">
 												클래스 기본 정보 관리
-												<div class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></div>
+												<a href="" class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
 											</a>
 										</li>
 										<li class="list-item">
 											<a href=""  class="list-tit">
 												클래스 태그 관리
-												<div class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></div>
+												<a href="" class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
 											</a>
 										</li>
 										<li class="list-item">
 											<a href=""  class="list-tit">
 												가입 안내 문구 설정
-												<div class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></div>
+												<a href="" class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
 											</a>
 										</li>
 										<li class="list-item">
 											<a href=""  class="list-tit">
 												가입 질문 설정
-												<div class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></div>
+												<a href="" class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
 											</a>
 										</li>
 										<li class="list-item">
 											<a href=""  class="list-tit">
 												가입 현황 관리
-												<div class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></div>
+												<a href="" class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
 											</a>
 										</li>
 									</ul>
@@ -222,13 +246,13 @@
 										<li class="list-item">
 											<a href=""  class="list-tit">
 												멤버 활동 관리
-												<div class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></div>
+												<a href="" class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
 											</a>
 										</li>
 										<li class="list-item">
 											<a href=""  class="list-tit">
 												스탭 관리
-												<div class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></div>
+												<a href="" class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
 											</a>
 										</li>
 									</ul>
@@ -240,13 +264,13 @@
 										<li class="list-item">
 											<a href=""  class="list-tit">
 												운영자 위임 신청
-												<div class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></div>
+												<a href class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
 											</a>
 										</li>
 										<li class="list-item">
 											<a href=""  class="list-tit">
 												클래스 탈퇴하기
-												<div class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></div>
+												<a href class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
 											</a>
 										</li>
 									</ul>
