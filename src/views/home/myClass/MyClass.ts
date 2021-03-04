@@ -1,6 +1,6 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import ClassService from '@/api/service/MyClassService';
-import {IClassInfo, IMyClassList} from '@/views/model/my-class.model';
+import {IClassInfo, IMe, IMyClassList, IOwner} from '@/views/model/my-class.model';
 // @ts-ignore
 import WithRender from './MyClass.html';
 
@@ -9,7 +9,7 @@ import WithRender from './MyClass.html';
 export default class MyClass extends Vue {
     private myClass: IClassInfo[] = [
         {
-            classThumb: require(''),
+            classThumb: require('@/assets/images/bg-icon.png'),
             className: '',
             classOwner: '',
             createdYear: 2019,
@@ -19,6 +19,7 @@ export default class MyClass extends Vue {
             updatedDiffTime: '',
             isBookmarked: 1,
         },
+        /*
         {
             classThumb: require('@/assets/images/bg-icon.png'),
             className: '꿈꾸는 5학년 1반',
@@ -63,6 +64,7 @@ export default class MyClass extends Vue {
             updatedDiffTime: '1주일간 업데이트 없음',
             isBookmarked: 1,
         },
+        */
     ];
 
     private classItems: IMyClassList[] = [];
@@ -73,7 +75,6 @@ export default class MyClass extends Vue {
 
     /**
      * 하트 버튼 토글
-     *
      * @public
      */
     public bookmarkToggle(item: any): void {
