@@ -35,9 +35,19 @@ export default class ResetPassword extends Vue {
   private isConfirmComplete: boolean = false;
   private isVerifiedCode: boolean = false;
   private errorMessage: string = '';
+  private successMsg: string = '';
+  private successOpenPopup: boolean = false;
   private errorOpenPopup: boolean=false;
-  private isVerifiedStatus: boolean=false;
   private isModifiedPwd: boolean=false;
+  private currentStatus: string = '';
+  private MOBILE_STATUS: string = 'mobile';
+  private MOBILE_AUTH_STATUS: string = 'mobile-auth';
+
+  private completeAuthNumMsgData: string[] =['아이디 확인이 되었습니다.', '입력하신 번호로 인증번호 전송하였습니다.'];
+  private completeMobileAuthMsgData: string[] =['모바일 인증이 완료 되었습니다.', '하단에 확인 버튼을 눌러 주세요.'];
+  // private completeEmailAuthMsgData: string[] =['이메일 인증이 완료 되었습니다.', '하단에 확인 버튼을 눌러 주세요.'];
+
+
 
   //비밀번호 재설정 관련
   private formData: IVerifiedForm = {
@@ -132,6 +142,16 @@ export default class ResetPassword extends Vue {
     return !!value;
   }
 
+  private openSuccessPopup( status: string='' ): void{
+    this.successOpenPopup=true;
+    this.currentStatus = status;
+  }
+
+  private closeSuccessPopup(): void{
+    this.successOpenPopup=false;
+    this.currentStatus = '';
+  }
+
   private closeErrorPopup(): void {
     this.errorOpenPopup=false;
   }
@@ -140,6 +160,20 @@ export default class ResetPassword extends Vue {
     this.errorMessage = msg;
   }
 
+  private getCurrentMsg(): string[] {
+    let items!: string[];
+    switch (this.currentStatus){
+      case this.MOBILE_STATUS:
+        items=this.completeAuthNumMsgData;
+        break;
+      case this.MOBILE_AUTH_STATUS:
+        items=this.completeMobileAuthMsgData;
+        break;
+      default :
+        break;
+    }
+    return items;
+  }
   /*private gotoFindIdHandler(): void {
     this.$router.push('/login/findId').then((r: Route) => {
       console.log('아이디 찾기로 이동');
@@ -203,6 +237,8 @@ export default class ResetPassword extends Vue {
       //{verification_key: "3091612168945547", message: "sms 로 인증번호 발송 성공"}
       // this.mVerificationComplete=true;
       // this.findUserID=data.user_id;
+      this.openSuccessPopup(this.MOBILE_STATUS);
+
       this.mobileChk = true;
     }).catch((error: any) => {
       console.log('error', error);
@@ -221,10 +257,11 @@ export default class ResetPassword extends Vue {
       }).then((data: any) => {
         console.log(data);
         // alert('인증이 완료 되었습니다.');
+        this.openSuccessPopup(this.MOBILE_AUTH_STATUS);
+
         this.isVerifiedCode = true;
         this.formData.verifiedCode = '';
         this.setErrorMessage('');
-        this.isVerifiedStatus=true;
       }).catch((error) => {
         this.errorOpenPopup=true;
         this.setErrorMessage(error.data.message);

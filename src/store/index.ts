@@ -7,7 +7,7 @@ import {GET_TOKEN} from '@/store/mutation-auth-types';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-  state: {},
+  // state: {},
   modules: {
     Auth: AuthModule,
     History: PageHistoryStatus,

@@ -15,6 +15,11 @@ class UserService {
     return request('get', `${this.getUserURLById(id)}/check`);
   }
 
+
+  public getEmailCheck(email: string): Promise<any> {
+    return request('get', `${USER_BASE_URL}/byemail/${email}/check`);
+  }
+
   /**
    * 회원가입
    * @param info

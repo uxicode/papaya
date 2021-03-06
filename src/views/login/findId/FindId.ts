@@ -30,6 +30,9 @@ export default class FindId extends Vue {
   private successMsg: string = '';
   private successOpenPopup: boolean = false;
   private errorOpenPopup: boolean=false;
+  private currentStatus: string = '';
+  private MOBILE_STATUS: string = 'mobile';
+  private EMAIL_STATUS: string = 'email';
 
   //아이디 찾기 관련
   private formData: IAuthTypeForm = {
@@ -49,6 +52,9 @@ export default class FindId extends Vue {
     verify: '인증번호를 입력해 주세요.',
     error: '',
   };
+
+  private completeMobileAuthMsgData: string[] =['모바일 인증이 완료 되었습니다.', '하단에 확인 버튼을 눌러 주세요.'];
+  private completeEmailAuthMsgData: string[] =['이메일 인증이 완료 되었습니다.', '하단에 확인 버튼을 눌러 주세요.'];
 
   @Auth.Getter
   private findInputUserEmail!: string;
@@ -124,12 +130,14 @@ export default class FindId extends Vue {
     this.setErrorMessage();
   }
 
-  private openSuccessPopup(): void{
+  private openSuccessPopup( status: string='' ): void{
     this.successOpenPopup=true;
+    this.currentStatus = status;
   }
 
   private closeSuccessPopup(): void{
     this.successOpenPopup=false;
+    this.currentStatus = '';
     this.setSuccessMessage();
   }
 
@@ -165,23 +173,21 @@ export default class FindId extends Vue {
     }
   }
 
-  private changeMultiLine( txt: string ): string {
-    return txt.replace(/(\n|\r\n)/g, '<br>');
-  }
 
-  private attachMsg( msg: string | string[] ): string{
-    //String(value).replace(/(\n|\r\n)/g, '<br>');
-    let resultMsg: string | string[]='';
-    if( typeof msg === 'string' ){
-      resultMsg=this.changeMultiLine( msg );
-    }else if (typeof msg === 'object') {
-      msg.forEach( ( txt ) =>{
-        resultMsg+= `<p style="text-align:center;">${ txt }</p>`;
-      });
+  private getCurrentMsg(): string[] {
+    let items!: string[];
+    switch (this.currentStatus){
+      case this.MOBILE_STATUS:
+        items=this.completeMobileAuthMsgData;
+        break;
+      case this.EMAIL_STATUS:
+        items=this.completeEmailAuthMsgData;
+        break;
+      default :
+        break;
     }
-    return resultMsg;
+    return items;
   }
-
 
   /**
    * 사용자 mobile 번호로 아이디 찾기
@@ -197,18 +203,17 @@ export default class FindId extends Vue {
           "message": "아이디 조회 성공."
       }*/
         console.log('모바일번호로 아이디조회=', data);
-        this.openSuccessPopup();
+        this.openSuccessPopup(this.MOBILE_STATUS);
         // this.setSuccessMessage('모바일 인증이 완료 되었습니다. \n하단에 확인 버튼을 눌러 주세요.');
 
         this.mobileChk = true; //모바일번호로 아이디찾기 완료했음을 기록.
       }).catch((error: any) => {
       // console.log('error', error);
+      this.mobileChk = false;
       this.errorOpenPopup=true;
       this.setErrorMessage(error.data.message);
     });
   }
-
-
 
   /**
    * 이메일로 아이디 찾기
@@ -219,6 +224,7 @@ export default class FindId extends Vue {
     this.FIND_ID_BY_EMAIL(this.formData.email)
       .then(( data: any ) => {
         console.log('이메일로 아이디조회=', data );
+        this.openSuccessPopup(this.EMAIL_STATUS);
         // this.findUserID=data.user_id;
         this.emailChk = true; //이메일로 아이디찾기 완료했음을 기록.
       }).catch((error: any) => {

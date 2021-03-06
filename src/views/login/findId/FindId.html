@@ -65,9 +65,7 @@
                        :placeholder="messages.email"
                        v-model="formData.email"
                        rules="required|email"
-                       valid-name="이메일"
-                       success-feedback="이메일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요."
-                       :success="isEmailAuthChk"></txt-field>
+                       valid-name="이메일"></txt-field>
             <btn type="grey" size="sm" :disabled="!userEmailState" @btnClick="getUserIdByEmail">인증</btn>
           </div>
         </div>
@@ -121,7 +119,7 @@
     </div>
     <div slot="body">
       <div class="msg-container"
-           v-html="attachMsg(['모바일 인증이 완료 되었습니다.', '하단에 확인 버튼을 눌러 주세요.'] )" ></div>
+           v-html="$options.filters.addMsg( getCurrentMsg() )" ></div>
     </div>
     <div slot="footer">
       <div class="btn-group ct">

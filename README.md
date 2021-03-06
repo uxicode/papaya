@@ -1,5 +1,16 @@
 # papaya-webapp
 
+## 구성 방식
+- vue( ver : 2.6.11 ) 
+- vuex ( ver: 3.4.0 ) 
+- vue-router( ver: 3.2.0 )
+- vue-class-component( ver : 7.2.3 )
+- vue-property-decorator( ver : 8.4.2 )
+- vuex-class( ver : 0.3.2 )
+- vuex-module-decorators( ver : 1.0.1 )
+- Typescript ( ver: 3.9.3 )
+- vee-validate( ver : 3.4.5 )
+
 ## Swagger api URL
 - http://211.254.212.184:8089/api-docs/#/
 

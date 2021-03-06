@@ -3,7 +3,6 @@ import router from '@/router';
 import store from '@/store';
 import {LOGOUT} from '@/store/mutation-auth-types';
 
-// 파파야 swagger http://211.254.212.184:8089/api-docs/#/
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 /**
  * request interceptor

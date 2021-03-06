@@ -23,6 +23,12 @@ export default class LoginForm extends Vue {
   private isLoginFail: boolean=false;
   private errorMsg: string = '';
 
+  @Auth.Getter
+  private userName!: string;
+
+  @Auth.Getter
+  private findUserId!: string;
+
   @History.Mutation
   private HISTORY_PAGE!: (pageName: string) => void;
 
@@ -39,6 +45,8 @@ export default class LoginForm extends Vue {
 
   public created() {
     this.HISTORY_PAGE('login');
+    console.log('findUserId=', this.findUserId);
+    console.log('userName=', this.userName);
   }
 
 

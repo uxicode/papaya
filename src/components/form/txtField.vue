@@ -13,15 +13,16 @@
   <div class="txt-field-container" :style="{width:size+'px'}">
     <ValidationProvider :name="validName"
                         :rules="rules"
-                        v-slot="{ errors, passed, dirty, failed }">
+                        v-slot="{ errors, passed, failed }">
       <label :for="id" v-if="isLabel">{{ label }}</label>
       <input class="form-control"
-             :class="cssClassName"
+             :class="[cssClassName, errorClassCheck( errors[0] ) ]"
              :id="id"
              :type="inputFieldType"
              :placeholder="placeholder"
              :value="inputData"
-             @input="inputChange( $event.target.value )">
+             @input="inputChange(  $event.target.value )"
+             @keyup="resultValidate( $event.target, passed )">
       <template v-if="failed">
         <p class="form-message error">{{ errors[0] }}</p>
       </template>
@@ -96,6 +97,11 @@ export default class TxtField extends Vue{
     return this.inputType===undefined? 'text' : this.inputType;
   }
 
+  public errorClassCheck(value: unknown): string {
+    // console.log( value )
+    return value === undefined ? '' : 'error';
+  }
+
   /**
    * mounted - 화면 렌더링 후
    */
@@ -108,7 +114,6 @@ export default class TxtField extends Vue{
     if( parentClassList.contains('inline') ){
       this.$el.classList.add('inline');
     }
-
   }
 
   private inputChange( value: string ): void{
@@ -116,7 +121,15 @@ export default class TxtField extends Vue{
     this.$emit('input', this.inputData );
   }
 
-  private resultValidate( passed: boolean ): void{
+  private resultValidate( ele: HTMLInputElement , passed: boolean ): void{
+    //validate 에 대한 rules 가 없을 때 여기서 종료시킴.
+    if( this.rules === undefined ){ return; }
+
+    if( passed ){
+      if( ele.classList.contains('error') ){
+        ele.classList.remove('error');
+      }
+    }
     this.$emit('change', passed);
   }
 
