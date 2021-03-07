@@ -46,8 +46,22 @@
       .find-info {
         margin-bottom:5px;
         a {
-          padding-right:14px;
+          padding:0 10px;
+          &:after{
+            content: '';
+            position: absolute;
+            display: block;
+            width: 1px;
+            height: 16px;
+            top: 50%;
+            right: -3px;
+            transform: translateY(-50%);
+            background-color: #848499;
+          }
         }
+      }
+      .join{
+        .item{display: inline-block;padding: 0 8px;}
       }
     }
 

@@ -18,7 +18,7 @@ interface IFindIdWarnMsg extends IWarnAuthMsg{
   mobile: string;
 }
 
-interface ISignUpWarnMsg extends IWarnAuthMsg{
+/*interface ISignUpWarnMsg extends IWarnAuthMsg{
   name: string;
   id: string;
   pw: string;
@@ -31,6 +31,11 @@ interface IHints {
   pwMin: string;
   warnPw: string;
   mobile: string;
-}
+}*/
 
-export {IWarnAuthMsg, IFindIdWarnMsg, ISignUpWarnMsg, IHints};
+interface ISignupModalMsg{
+  status: string;
+  title: string;
+  desc: string | string[];
+}
+export {IWarnAuthMsg, IFindIdWarnMsg, ISignupModalMsg};

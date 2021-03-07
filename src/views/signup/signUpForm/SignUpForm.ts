@@ -1,6 +1,7 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {Utils} from '@/utils/utils';
 import {ISignUpForm} from '@/views/model/member-form.model';
+import {ISignupModalMsg} from '@/views/model/msg-form.model';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -8,17 +9,8 @@ import UserService from '@/api/service/UserService';
 import WithRender from './SignUpForm.html';
 import AuthService from '@/api/service/AuthService';
 import {namespace} from 'vuex-class';
-import {SIGN_UP_ACTION} from '@/store/action-auth-types';
-
-
 
 const Auth = namespace('Auth');
-
-interface ISignupModalMsg{
-    status: string;
-    title: string;
-    desc: string | string[];
-}
 
 @WithRender
 @Component({
@@ -39,7 +31,6 @@ export default class SignUpForm extends Vue {
     private verificationKey: string = '';
     private isVerifiedCode: boolean = false;
     private isPwdChk: boolean=false;
-    private isSignUpFail: boolean=false;
     private userAuthByMobileChk: boolean= false; // 버튼 텍스트 교체 참조 변수 - 재전송 or  인증
     private isOpenPopup: boolean = false;
     private currentStatus: string = '';
@@ -104,31 +95,52 @@ export default class SignUpForm extends Vue {
         return userIDRegx.test(this.formData.user_id);
     }
 
+    /**
+     * 인증번호 유효 null 체크
+     */
     get isNullVerifiedNum(): boolean{
         return !!this.verifiedNumModel;
     }
 
+    /**
+     * name field  유효 null 체크
+     */
     get userNameState(): boolean {
         return  !!this.formData.fullname;
     }
 
+    /**
+     * 패스워드 유효 체크
+     */
     get pwState(): boolean{
         return (this.formData.user_password === this.rePassword) && this.isPwdChk;
     }
 
-    get isAllValidation(): boolean {
-        return (this.userNameState && this.userIDState && this.pwState && this.isMobileChk && this.isVerifiedCode);
-    }
-
+    /**
+     * 이메일 유효성 체크
+     */
     get isValidEmail(): boolean {
         return ( this.formData.email==='') || (this.formData.email !== '' && this.isEmailChk);
     }
 
+    /**
+     * 모든 입력 필드에 대한 유효성 통과했는지 체크
+     */
+    get isAllValidation(): boolean {
+        return (this.userNameState && this.userIDState && this.pwState && this.isMobileChk && this.isVerifiedCode);
+    }
+
+    /**
+     * 공통 모달에 알맞은 타이틀 전달.
+     */
     get modalTitle(): string{
         const findItem=this.modalMsgData.filter((item: ISignupModalMsg) => item.status === this.currentStatus);
         return findItem[0].title;
     }
 
+    /**
+     * 공통 모달에 알맞는 상세 텍스트 전달.
+     */
     get modalMsg(): string | string[]{
         const findItem=this.modalMsgData.filter((item: ISignupModalMsg) => item.status === this.currentStatus);
         return findItem[0].desc;
@@ -140,20 +152,14 @@ export default class SignUpForm extends Vue {
         return !!value;
     }
 
+    /**
+     * password validation 을 최종 통과했는지 체크.
+     * vee-validate 라이브러리에서 passed 값을 전달 받는다. 해당 값이 true 이면 통과.
+     * @param passed
+     */
     public resetPwdCheck(  passed: boolean ): void{
-        console.log(this.isPwdChk);
+        // console.log(this.isPwdChk);
         this.isPwdChk=passed;
-    }
-    public gotoErrorElement( selector: string ): void {
-        const inputEle=document.getElementById(selector) as HTMLInputElement;
-        inputEle.classList.add('error');
-        inputEle.classList.add('shake');
-
-        inputEle.addEventListener('animationend', (e) =>{
-            inputEle.classList.remove('shake');
-            inputEle.focus();
-            inputEle.blur();
-        }, {once: true});
     }
 
     /**
@@ -175,29 +181,63 @@ export default class SignUpForm extends Vue {
         //회원가입 성공시
         if( this.currentStatus === this.SUCCESS_MEMBERSHIP ){
             //로그인 페이지로 이동
-            this.$router.push('/signup/complete').then(()=>{
-                console.log('회원가입 성공');
-            });
+            this.memberSuccess();
         }else if( this.currentStatus ===this.ERROR_FAIL_SIGNUP ){  //회원가입 실패시
             // console.log(this.userNameState, this.userIDState, this.pwState, this.isMobileChk, this.isValidEmail);
-            const validateData = [
-                {id: 'name', check: this.userNameState},
-                {id: 'userID', check: this.userIDState},
-                {id: 'pwd', check: this.pwState},
-                {id: 'mobile', check: this.isMobileChk}
-            ];
-            const invalidItems=validateData.filter( ( value: { check: boolean, id: string} ) => !value.check );
-
-            invalidItems.forEach( ( value: {check: boolean, id: string})=>{
-                this.gotoErrorElement( value.id );
-            });
-
-            this.currentStatus = '';
+            this.failMemberShip();
         }else{
             this.currentStatus = '';
         }
     }
 
+    /**
+     * 지정된 엘리먼트에 error 및 shake 를 addClass .
+     * @param selector
+     */
+    private gotoErrorElement( selector: string ): void {
+        const inputEle=document.getElementById(selector) as HTMLInputElement;
+        inputEle.classList.add('error');
+        inputEle.classList.add('shake');
+
+        //애니메이션이 종료되는 시점에 등록된 shake 클래스를 제거.
+        inputEle.addEventListener('animationend', (e: AnimationEvent ) =>{
+            inputEle.classList.remove('shake');
+            inputEle.focus();
+            inputEle.blur();
+        }, {once: true});
+    }
+    /**
+     * 회원가입 실패시 해당하는 각각의 txtField 에 에러 표시 처리
+     * @private
+     */
+    private failMemberShip(): void{
+        const validateData = [
+            {id: 'name', check: this.userNameState},
+            {id: 'userID', check: this.userIDState},
+            {id: 'pwd', check: this.pwState},
+            {id: 'mobile', check: this.isMobileChk}
+        ];
+        const invalidItems=validateData.filter( ( value: { check: boolean, id: string} ) => !value.check );
+        invalidItems.forEach( ( value: {check: boolean, id: string})=>{
+            this.gotoErrorElement( value.id );
+        });
+        this.currentStatus = '';
+    }
+
+    /**
+     * 회원가입 성공
+     * @private
+     */
+    private memberSuccess(): void{
+        this.$router.push('/signup/complete').then(()=>{
+            console.log('회원가입 성공');
+        });
+    }
+
+    /**
+     * 이전 버튼 클릭시 본인인증으로 이동시킴.
+     * @private
+     */
     private gotoPrevPage(): void{
         this.$router.push('/signForm/verify');
         this.$emit('updateStep', 2);
@@ -221,6 +261,10 @@ export default class SignUpForm extends Vue {
           });
     }
 
+    /**
+     * 모바일 번호로 인증번호 전송
+     * @private
+     */
     private getUserAuthByMobile(): void {
         // console.log( !this.userMobileState , this.formData.userId===''  )
         // 버튼 텍스트 교체 참조 변수 - 재전송 or  인증
@@ -274,6 +318,10 @@ export default class SignUpForm extends Vue {
         }
     }
 
+    /**
+     * 이메일 중복 확인
+     * @private
+     */
     private emailCheck(): void{
         if( !this.userEmailState ){ return; }
         UserService.getEmailCheck(this.formData.email)
@@ -311,15 +359,7 @@ export default class SignUpForm extends Vue {
               }).catch( ( error: any) =>{
                 this.openPopup(this.ERROR_FAIL_SIGNUP);
             });
-            /*UserService.signUp( this.formData )
-              .then( (data: any) =>{
-                  console.log(data);
-                  this.openPopup(this.SUCCESS_MEMBERSHIP);
 
-              }).catch( ( error: any) => {
-                  this.openPopup(this.ERROR_FAIL_SIGNUP);
-                  //회원가입 실패!!! - 유저아이디가 이미 존재합니다.
-            });*/
         }
 
     }
