@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import AuthModule from '@/store/auth.module';
+import ClassModule from '@/store/class.module';
 import PageHistoryStatus from '@/store/PageHistoryStatus';
 import {GET_TOKEN} from '@/store/mutation-auth-types';
 
@@ -11,6 +12,7 @@ const store = new Vuex.Store({
   modules: {
     Auth: AuthModule,
     History: PageHistoryStatus,
+    Class: ClassModule,
   },
 });
 
