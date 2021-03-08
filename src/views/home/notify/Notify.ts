@@ -9,34 +9,34 @@ export default class Notify extends Vue {
 
     private notifyList: INotifyList[] = [
         {
-            classThumb: require('@/assets/images/bg-icon.png'),
-            className: '1학년 3반 수학',
+            profile_image: require('@/assets/images/bg-icon.png'),
+            name: '1학년 3반 수학',
         },
         {
-            classThumb: require('@/assets/images/pic5.png'),
-            className: '특목 고등학교 입시 미술반',
+            profile_image: require('@/assets/images/pic5.png'),
+            name: '특목 고등학교 입시 미술반',
         },
         {
-            classThumb: require('@/assets/images/bg-icon.png'),
-            className: '미술 아동반',
+            profile_image: require('@/assets/images/bg-icon.png'),
+            name: '미술 아동반',
         },
         {
-            classThumb: require('@/assets/images/pic5.png'),
-            className: '6학년 3반 독서부',
+            profile_image: require('@/assets/images/pic5.png'),
+            name: '6학년 3반 독서부',
         },
     ];
 
     private notifyFeedList: INotifyFeedList[] = [
         {
-            classThumb: require('@/assets/images/pic5.png'),
-            className: '꿈꾸는 5학년 1반',
+            profile_image: require('@/assets/images/pic5.png'),
+            name: '꿈꾸는 5학년 1반',
             feedTit: '파파야초등학교 10월 가을 체험학습',
             writer: '김미영선생님',
             updatedDiffTime: '1분 전',
         },
         {
-            classThumb: require('@/assets/images/pic5.png'),
-            className: '꿈꾸는 5학년 1반',
+            profile_image: require('@/assets/images/pic5.png'),
+            name: '꿈꾸는 5학년 1반',
             feedTit: '파파야초등학교 10월 가을 체험학습',
             writer: '김미영선생님',
             updatedDiffTime: '1분 전',
@@ -46,8 +46,8 @@ export default class Notify extends Vue {
     private feedList: IFeedList[] = [
         {
             feedTit: '파파야초등학교 10월 가을 체험학습',
-            classThumb: require('@/assets/images/pic5.png'),
-            className: '꿈꾸는 5학년 1반',
+            profile_image: require('@/assets/images/pic5.png'),
+            name: '꿈꾸는 5학년 1반',
             writer: '김미영선생님',
             updatedDiffTime: '1분 전',
             feedText: ['운동회는, 전교생이 청군과 백군으로 나눠 운동장에서 하루 동안 대결을 펼치는 운동회입니다. 달리기를 하면 1등에서 3등까지는 등수 별로 도장을 받았습니다.',
@@ -61,8 +61,8 @@ export default class Notify extends Vue {
         },
         {
             feedTit: '수학 2단원 관련 공지사항',
-            classThumb: require('@/assets/images/pic5.png'),
-            className: '1학년 3반 수학',
+            profile_image: require('@/assets/images/pic5.png'),
+            name: '1학년 3반 수학',
             writer: '박수한선생님',
             updatedDiffTime: '5분 전',
             feedText: ['안녕하세요, 박수한 선생님입니다.',
@@ -74,8 +74,8 @@ export default class Notify extends Vue {
         },
         {
             feedTit: '6학년 2학기 수학 II 3단원',
-            classThumb: require('@/assets/images/pic5.png'),
-            className: '1학년 3반 수학',
+            profile_image: require('@/assets/images/pic5.png'),
+            name: '1학년 3반 수학',
             writer: '박수한선생님',
             updatedDiffTime: '5분 전',
             feedText: ['어디로 가야 하는지 지도와 나침반이 있어야 올바른 길로 올바른 속도로 그리고 올바른 방향으로 갈 수 있죠. 공부에 있어서는 목차가 그러한데요. 오늘은 수학 II 목차를 3단원 내용 모두 다 정리해보려고 합니다.',
@@ -86,8 +86,8 @@ export default class Notify extends Vue {
         },
         {
             feedTit: '미술박물관 관람일 투표 부탁드립니다.',
-            classThumb: require('@/assets/images/pic5.png'),
-            className: '미술아동반',
+            profile_image: require('@/assets/images/pic5.png'),
+            name: '미술아동반',
             writer: '김에린선생님',
             updatedDiffTime: '5분 전',
             feedText: ['곧 전국의 박물관을 무료로 갈 수 있는 날이어서 가까운 마리에타 다운타운에 있는 역사 박물관엘 갈 예정입니다. 이 건물은 19세기 중반에 목화창고로 지어졌다가 인근 기차역에서 나오는 손님을 상대로 식당으로 개조됐고 윗층은 호텔로도 쓰였습니다.',
@@ -98,8 +98,8 @@ export default class Notify extends Vue {
         },
         {
             feedTit: '제3회 초등학교 미술대회 안내사항',
-            classThumb: require('@/assets/images/pic5.png'),
-            className: '꿈꾸는 5학년 1반',
+            profile_image: require('@/assets/images/pic5.png'),
+            name: '꿈꾸는 5학년 1반',
             writer: '김미영선생님',
             updatedDiffTime: '5분 전',
             feedText: ['자연사랑 어린이 미술대회는 지난 2016년부터 개최해 온 전통 있는 미술대회 입니다.',

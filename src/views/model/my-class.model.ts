@@ -1,18 +1,18 @@
-interface IClassInfo {
-    classThumb: () => void;
-    className: string;
-    classOwner: string;
-    createdYear: number;
-    classType: string;
+interface IMyClassList {
+    profile_image: () => void;
+    name: string;
+    nickname: string;
+    createdAt: number;
+    status: string;
     memberNum: number;
     isUpdated: boolean;
     updatedDiffTime: string;
-    isBookmarked: number;
+    is_bookmarked: number;
 }
 
 interface INotifyList {
-    classThumb: () => void;
-    className: string;
+    profile_image: () => void;
+    name: string;
 }
 
 interface INotifyFeedList extends INotifyList {
@@ -23,8 +23,8 @@ interface INotifyFeedList extends INotifyList {
 
 interface IFeedList {
     feedTit: string;
-    classThumb: () => void;
-    className: string;
+    profile_image: () => void;
+    name: string;
     writer: string;
     updatedDiffTime: string;
     feedText: string[];
@@ -33,12 +33,4 @@ interface IFeedList {
     comment: number;
 }
 
-interface IMyClassList {
-    id: number;
-    name: string;
-    class_tags: [];
-    me: {};
-    owner: {};
-}
-
-export {IClassInfo, INotifyList, INotifyFeedList, IFeedList, IMyClassList};
+export {IMyClassList, INotifyList, INotifyFeedList, IFeedList};
