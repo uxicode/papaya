@@ -6,6 +6,7 @@ import AppFooter from '@/components/footer/footer.vue';
 import {getIsAuth} from '@/router/AuthGuard';
 import {LoginRouter} from '@/router/LoginRouter';
 import {SignUpRouter} from '@/router/SignUpRouter';
+import {MyPageRouter} from '@/router/MyPageRouter';
 
 Vue.use(VueRouter);
 
@@ -24,6 +25,7 @@ const routes: RouteConfig[] = [
   },
   ...LoginRouter,
   ...SignUpRouter,
+  ...MyPageRouter,
   {
     path: '*',
     name: 'notfound',
