@@ -54,5 +54,17 @@ npm run test:e2e
 npm run test:unit
 ```
 
+### 화면 ID 가이드
+> 
+> - 페이지 성격 분류는 P 로 끝나면 된다. HP - 홈/메인, MP - 마이페이지,  LP - 각 카테고리 랜딩 페이지, SBP - 서브 하위페이지 
+> - 기능 단위의 페이지 : SI - 로그인, SP - 회원가입, SC - 찾기(검색), PP - 팝업 
+> - 타입 단위의 페이지 : LT - 리스트, CD - 카드, GD - 그리드, SKD - 스케쥴러/캘린더 
+> - 하위표현은 점 ( . ) 기능과 타입끼리의 연결은 대시( - ) 로 표현한다.
+> - 각 페이지별 ID 만들기 요약 -> 페이지.카테고리약어.기능-타입.순번 
+> - ex) 4.5.2 클래스 홈 페이지 알림 -> LP.CLS.CD-LT.4.5.2  
+> - ex) 4.3.1 클래스 만들기 분류 선택 -> SBP.CLSC.4.3.1
+> - ex) 4.3.1.1.1 클래스 만들기-분류 선택-학교-검색창 Focus -> SBP.CLSC.SC-PP.4.3.1.1.1
+
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

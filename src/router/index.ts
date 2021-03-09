@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter, {RawLocation, RouteConfig} from 'vue-router';
-import Home from '../views/Home.vue';
+import MyClassList from '@/views/class/myClassList';
 import AppHeader from '@/components/header/header.vue';
 import AppFooter from '@/components/footer/footer.vue';
 import {getIsAuth} from '@/router/AuthGuard';
@@ -14,13 +14,26 @@ const routes: RouteConfig[] = [
   {
     path: '/',
     name: 'home',
-    components: {default: Home, header: AppHeader, footer: AppFooter},
+    components: {default: MyClassList, header: AppHeader, footer: AppFooter},
     beforeEnter: getIsAuth,
-    children: [
-      { path: '', component: () => import('../views/home/myClass/MyClass') },
-      { path: 'notify', component: () => import('../views/home/notify/Notify') },
-      { path: 'schedule', component: () => import('../views/home/schedule/Schedule') },
-    ],
+  },
+  {
+    path: '/class',
+    name: 'myClass',
+    components: {default: () => import('../views/class/home/MyClass'), header: AppHeader, footer: AppFooter},
+    beforeEnter: getIsAuth,
+  },
+  {
+    path: '/class/notify',
+    name: 'notify',
+    components: {default: () => import('../views/class/notify/Notify'), header: AppHeader, footer: AppFooter},
+    beforeEnter: getIsAuth,
+  },
+  {
+    path: '/class/schedule',
+    name: 'schedule',
+    components: {default: () => import('../views/class/schedule/Schedule'), header: AppHeader, footer: AppFooter},
+    beforeEnter: getIsAuth,
   },
   ...LoginRouter,
   ...SignUpRouter,
