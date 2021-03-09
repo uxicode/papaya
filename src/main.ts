@@ -4,7 +4,7 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import store from './store';
-import './filters';
+import './filters/index';
 /*//공통 이벤트에 대한 후크를 사용하여 서비스 작업자 등록을 단순화한다.*/
 import './registerServiceWorker';
 // vee-validation custom 부분 호출

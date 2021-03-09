@@ -43,13 +43,13 @@
   </div>
 
   <div class="login-helper">
-    <div class="find-info">
+    <div class="find-info" style="border:0;">
       <a href="" class="txt-btn after-line" @click.prevent="findIdHandler">아이디 찾기</a>
-      <a href="" class="txt-btn pdl-10" @click.prevent="resetPwHandler">비밀번호 재설정하기</a>
+      <a href="" class="txt-btn" @click.prevent="resetPwHandler">비밀번호 재설정하기</a>
     </div>
     <div class="join">
-      <span>아직 회원이 아니신가요?</span>
-      <router-link class="txt-btn" :to="{path:'/signup'}">회원가입</router-link>
+      <span class="item">아직 회원이 아니신가요?</span>
+      <router-link class="item txt-btn" :to="{path:'/signup'}">회원가입</router-link>
     </div>
   </div>
 

@@ -19,16 +19,10 @@
                   <th><label for="name" class="required">이름</label></th>
                   <td>
                     <div class="form-group">
-                      <!--
-                      <ValidationProvider name="이름" rules="required" v-slot="{ errors }">
-                          <input type="text" class="form-control" id="input2" placeholder="이름을 입력해 주세요." v-model="formData.name"  style="width:390px">
-                          <p class="form-message error">{{ errors[0] }}</p>
-                      </ValidationProvider>
-                      -->
                       <txt-field id="name"
                                  size="390"
                                  placeholder="이름을 입력해 주세요."
-                                 v-model="formData.name"
+                                 v-model="formData.fullname"
                                  rules="required"
                                  valid-name="이름">
                       </txt-field>
@@ -39,23 +33,14 @@
                   <th><label for="id" class="required">아이디</label></th>
                   <td>
                     <div class="form-group inline">
-                      <!--
-                      <ValidationProvider name="아이디" rules="required|minmax:5,20|id" v-slot="{ errors }">
-                          <input type="text" class="form-control" id="input3" placeholder="아이디를 입력해 주세요." v-model="formData.id" style="width:390px">
-                          <p class="form-message error">{{ errors[0] }}</p>
-                      </ValidationProvider>
-                      <button type="button" class="btn basic x32 sm outline fill" disabled>중복확인</button>
-                      -->
-                      <txt-field id="id"
+                      <txt-field id="userID"
                                  size="390"
                                  placeholder="아이디를 입력해 주세요."
                                  v-model="formData.user_id"
                                  :rules="`required|word|minmax:${userIdMin}, ${userIdMax}`"
-                                 valid-name="아이디"
-                                 :success="isDuplicateId"
-                                 successFeedback="사용 가능한 아이디입니다." >
-                      </txt-field>
+                                 valid-name="아이디"></txt-field>
                       <btn type="outline" size="sm" :disabled="!this.userIDState" @btnClick="idCheck">중복확인</btn>
+
                     </div>
                   </td>
                 </tr>
@@ -73,7 +58,7 @@
                       <txt-field id="pwd"
                                  size="390"
                                  placeholder="비밀번호를 입력해 주세요."
-                                 v-model="formData.pwd"
+                                 v-model="formData.user_password"
                                  rules="required|minmax:8,16|pwd"
                                  valid-name="비밀번호">
                       </txt-field>
@@ -88,9 +73,10 @@
                       -->
                       <txt-field size="390"
                                  placeholder="비밀번호를 다시 입력해 주세요."
-                                 v-model="formData.rePwd"
-                                 rules="required|confirmed:@비밀번호"
-                                 valid-name="비밀번호 확인">
+                                 v-model="rePassword"
+                                 rules="required|confirmed:@비밀번호|"
+                                 valid-name="비밀번호 확인"
+                                 @change="resetPwdCheck">
                       </txt-field>
                     </div>
                   </td>
@@ -110,13 +96,26 @@
                       <txt-field id="mobile"
                                  size="390"
                                  placeholder="모바일 번호를 입력해 주세요."
-                                 v-model="formData.mobile"
+                                 v-model="formData.mobile_no"
                                  rules="required|mobile"
-                                 valid-name="모바일 번호">
-                      </txt-field>
+                                 valid-name="모바일 번호"></txt-field>
                       <btn type="outline"
                            size="sm"
-                           :disabled="true">인증</btn>
+                           :disabled="!userMobileState"
+                           @btnClick="getUserAuthByMobile">{{ userAuthByMobileChk? '재전송':'인증' }}</btn>
+                    </div>
+
+                    <div class="form-group inline mgt-40" v-show="isMobileChk"  style="position:relative;">
+                      <txt-field size="216"
+                                 id="verifiedCode"
+                                 placeholder="인증번호를 입력해 주세요."
+                                 v-model="verifiedNumModel"
+                                 rules="required"
+                                 valid-name="인증번호"></txt-field>
+                      <btn type="grey"
+                           size="sm"
+                           :disabled="!isNullVerifiedNum"
+                           @btnClick="verifyCompleteByMobile">인증</btn>
                     </div>
                   </td>
                 </tr>
@@ -137,7 +136,7 @@
                       </txt-field>
                       <btn type="outline"
                            size="sm"
-                           :disabled="true">인증</btn>
+                           :disabled="!userEmailState" @btnClick="emailCheck">인증</btn>
                     </div>
                     <div class="checkbox-group mgt-40">
                       <div class="btn-radio">
@@ -162,10 +161,47 @@
     <div class="form-btm">
       <div class="btn-group rt">
         <btn type="outline" @btnClick="gotoPrevPage">이전</btn>
-        <btn type="navi">다음</btn>
+        <btn type="navi" @btnClick="signupSubmit">다음</btn>
 <!--        <router-link class="btn basic x40 sm outline ct" :to="{path:'verify'}">이전</router-link>-->
 <!--        <router-link class="btn basic x40 sm primary navi ct" disabled :to="{path: ''}">다음</router-link>-->
       </div>
     </div>
   </div>
+
+  <!-- start: 공통 팝업 -->
+  <modal v-if="isOpenPopup">
+    <div slot="header">
+      <h3 class="popup-header-tit">{{ modalTitle }}</h3>
+      <div class="popup-close" @click="closePopup">
+        <button type="button" class="close" ><img :src="require('@/assets/images/close.svg')" alt=""></button>
+      </div>
+    </div>
+    <div slot="body">
+      <div class="msg-container"
+           v-html="$options.filters.addMsg( modalMsg )" ></div>
+    </div>
+    <div slot="footer">
+      <div class="btn-group ct">
+        <btn @btnClick="closePopup">확인</btn>
+      </div>
+    </div>
+  </modal>
+  <!-- end: 공통 팝업 -->
+
+  <!-- start: 회원가입 실패 팝업 -->
+  <!--<modal v-if="isSignUpFail">
+    <div slot="header">
+      <h3>회원가입 실패</h3>
+      <div class="popup-close" @click="signupFailPopupClose">
+        <button type="button" class="close" ><img :src="require('@/assets/images/close.svg')" alt=""></button>
+      </div>
+    </div>
+    <div slot="body">{{ errorMsg }}</div>
+    <div slot="footer">
+      <div class="btn-group ct">
+        <btn @btnClick="signupFailPopupClose">확인</btn>
+      </div>
+    </div>
+  </modal>-->
+  <!-- end: 회원가입 실패 팝업 팝업 -->
 </div>

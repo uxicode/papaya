@@ -34,9 +34,7 @@
                     :placeholder="messages.mobile"
                     v-model="formData.mobile"
                     rules="required|mobile"
-                    valid-name="모바일번호"
-                    success-feedback="모바일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요."
-                    :success="isMobileChk"></txt-field>
+                    valid-name="모바일번호"></txt-field>
             <btn type="grey" size="sm" :disabled="!userMobileState" @btnClick="getUserIdByMobile">인증</btn>
           </div>
         </div>
@@ -64,12 +62,10 @@
             <p class="form-message error" v-else>{{ errorMsg }}</p>-->
 
             <txt-field size="216"
-                    :placeholder="messages.email"
-                    v-model="formData.email"
-                    rules="required|email"
-                    valid-name="이메일"
-                    success-feedback="이메일 인증이 완료 되었습니다. 하단에 확인 버튼을 눌러 주세요."
-                    :success="isEmailChk"></txt-field>
+                       :placeholder="messages.email"
+                       v-model="formData.email"
+                       rules="required|email"
+                       valid-name="이메일"></txt-field>
             <btn type="grey" size="sm" :disabled="!userEmailState" @btnClick="getUserIdByEmail">인증</btn>
           </div>
         </div>
@@ -89,7 +85,7 @@
 
     <!-- start: 아이디 찾기 / 비밀번호 재설정 결과 화면 -->
     <div v-else>
-      <div class="find-card result" v-if="isMobileChk">
+      <div class="find-card result" v-if="mobileChk">
         <p class="card-tit">
           회원님의 아이디는<br>
           <span class="fc-red">{{ findUserId }}</span>입니다.
@@ -113,5 +109,41 @@
 
   </div>
 
+  <!-- start: 공통 조회 성공 팝업 -->
+  <modal v-if="successOpenPopup">
+    <div slot="header">
+      <h3>인증 완료.</h3>
+      <div class="popup-close" @click="closeSuccessPopup">
+        <button type="button" class="close" ><img :src="require('@/assets/images/close.svg')" alt=""></button>
+      </div>
+    </div>
+    <div slot="body">
+      <div class="msg-container"
+           v-html="$options.filters.addMsg( getCurrentMsg() )" ></div>
+    </div>
+    <div slot="footer">
+      <div class="btn-group ct">
+        <btn @btnClick="closeSuccessPopup">확인</btn>
+      </div>
+    </div>
+  </modal>
+  <!-- end: 공통 조회 성공 팝업 -->
+
+  <!-- start: 공통 에러 팝업 -->
+  <modal v-if="errorOpenPopup">
+    <div slot="header">
+      <h3>인증 실패</h3>
+      <div class="popup-close" @click="closeErrorPopup">
+        <button type="button" class="close" ><img :src="require('@/assets/images/close.svg')" alt=""></button>
+      </div>
+    </div>
+    <div slot="body">{{ errorMsg }}</div>
+    <div slot="footer">
+      <div class="btn-group ct">
+        <btn @btnClick="closeErrorPopup">확인</btn>
+      </div>
+    </div>
+  </modal>
+  <!-- end: 공통 에러 팝업 -->
 </div>
 

@@ -2,6 +2,7 @@ import SignUp from '@/views/signup/SignUp';
 import SignUpIntro from '@/views/signup/signUpIntro/SignUpIntro';
 import SignUpHeader from '@/components/header/signupHeader.vue';
 import AppFooter from '@/components/footer/footer.vue';
+import SignUpComplete from '@/views/signup/complete/SignUpComplete';
 
 const SignUpRouter=[
   {
@@ -24,6 +25,10 @@ const SignUpRouter=[
       },
       { path: 'signUpForm', name: 'signUpForm', component: () =>import('../views/signup/signUpForm/SignUpForm') },
     ]
+  },
+  {
+    path: '/signup/complete',
+    components:{ default: SignUpComplete, header: SignUpHeader, footer: AppFooter },
   },
 ];
 export {SignUpRouter};

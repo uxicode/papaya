@@ -7,8 +7,8 @@
       <nav id="gnb" class="pd-desc">
         <ul class="menu">
           <li><router-link :to="{path:'/'}">홈</router-link></li>
-          <li><router-link :to="{path:'notify'}">모든 알림</router-link></li>
-          <li><router-link :to="{path:'schedule'}">모든 일정</router-link></li>
+          <li><router-link :to="{path:'/class/notify'}">모든 알림</router-link></li>
+          <li><router-link :to="{path:'/class/schedule'}">모든 일정</router-link></li>
           <li><a href="">자료실</a></li>
         </ul>
       </nav>

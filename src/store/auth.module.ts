@@ -8,12 +8,15 @@ import {
   GET_TOKEN,
   USER_ID, USER_EMAIL,
   VERIFY_BY_MOBILE,
+  SIGN_UP,
+  SIGN_UP_MOVE,
 } from '@/store/mutation-auth-types';
 import {
   LOGIN_ACTION,
   FIND_ID_BY_MOBILE,
   FIND_ID_BY_EMAIL,
   AUTH_BY_MOBILE,
+  SIGN_UP_ACTION,
 } from '@/store/action-auth-types';
 
 
@@ -21,12 +24,13 @@ import {
   namespaced: true,
 })
 export default class AuthModule extends VuexModule {
-  private token: any = ''; //멤버 변수는 state 로 이용된다.
-  private findId: string = '';
-  private user: object = {};
-  private count: number = 0;
-  private inputUserEmail: string = '';
-  private resetPwByVerifyInfo: object = {};
+  public token: any = ''; //멤버 변수는 state 로 이용된다.
+  public findId: string = '';
+  public user: object = {};
+  public count: number = 0;
+  public inputUserEmail: string = '';
+  public signupName: string = '';
+  public resetPwByVerifyInfo: object = {};
 
   get isAuth(): boolean {
     return !!this.token;
@@ -46,6 +50,10 @@ export default class AuthModule extends VuexModule {
 
   get resetPwVerifyInfo(): object {
     return this.resetPwByVerifyInfo;
+  }
+
+  get userName(): string{
+    return this.signupName;
   }
 
   @Mutation
@@ -98,6 +106,18 @@ export default class AuthModule extends VuexModule {
     this.token = null;
     delete localStorage.token;
     delete localStorage.user;
+  }
+
+  @Mutation
+  public [SIGN_UP]( name: string ): void{
+    this.signupName=name;
+    localStorage.setItem('signupName', this.signupName );
+  }
+
+  @Mutation
+  public [SIGN_UP_MOVE](): void{
+    this.signupName= '';
+    delete localStorage.signupName;
   }
 
   @Action({rawError: true})
@@ -171,6 +191,51 @@ export default class AuthModule extends VuexModule {
         console.log('error', error);
         return Promise.reject(error);
       });
+  }
+
+  @Action( {rawError: true})
+  public [SIGN_UP_ACTION]( payload: {
+    user_id: string,
+    user_password: string,
+    fullname: string,
+    mobile_no: string,
+    email: string,
+    agree_marketing: boolean,
+    agree_email: boolean,
+  }): Promise<any>{
+    return UserService.signUp( payload )
+      .then( (data: any)=>{
+        console.log('payload.fullname=', payload.fullname, data.user.fullname );
+        this.context.commit(SIGN_UP, payload.fullname );
+        /*
+        {
+        access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9......"
+        message: "회원가입 성공"
+        refresh_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9......"
+        user:{
+            agree_email: false
+            agree_marketing: false
+            createdAt: "2021-03-06 08:12:50"
+            deletedYN: false
+            email: ""
+            fullname: "전봉철"
+            lastloginAt: "2021-03-06 08:12:50"
+            marketingAgreeAt: null
+            mobile_no: "01031992443"
+            nickname: null
+            push_onoff: true
+            push_token: null
+            schedule_color: 0
+            updatedAt: "2021-03-06 08:12:50"
+            user_id: "jbc103"
+             }
+         }*/
+
+        return Promise.resolve( data );
+    }).catch( (error: any)=>{
+      return Promise.reject(error);
+    });
+
   }
 
 

@@ -1,0 +1,64 @@
+<div class="contents-inner">
+  <div class="notice">
+    <div class="notice-cnt">
+      <p class="notice-tit">
+        <strong>Notice</strong>
+        <span>파파야 웹사이트 2.0 업데이트</span>
+        <a href=""><img :src="require('@/assets/images/arrow-right-small.png')" alt="" style="height:16px;"></a>
+      </p>
+    </div>
+  </div>
+
+  <div class="home-main">
+    <div class="main-txt">
+      <h2 class="main-tit mgb-10">안녕하세요, {{ }}님!</h2>
+      <p>즐거운 교육 놀이터, 파파야에 오신 것을 환영합니다.<br>클래스를 한번 둘러볼까요?</p>
+    </div>
+  </div>
+
+  <div class="home-classes">
+    <div class="cnt-top">
+      <h3 class="cnt-tit">MY 클래스 <span class="fc-red">{{ myClass.length }}</span></h3>
+      <div class="list-align">
+        <div class="form-group">
+          <select class="form-select">
+            <option value="" selected>최신 업데이트순</option>
+            <option value="">주간</option>
+            <option value="">일간</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="classes-card">
+      <ul class="classes">
+        <li class="item new-classes">
+          <a href="">
+            <p>새로운 클래스<br>생성하기</p>
+          </a>
+        </li>
+
+        <li v-for="item in myClass" class="item">
+          <a href="" class="class-info">
+            <div class="info-img crown">
+              <span><img :src="item.profile_image" class="thumb" alt=""></span>
+            </div>
+            <div class="info-tit">
+              <p>{{ item.name }}</p>
+              <span>{{ item.nickname }}</span>
+            </div>
+            <div class="info-sub">
+              <span>{{ item.createdAt }}</span>
+              <span>{{ item.status }}</span>
+              <span>멤버 {{ item.memberNum }}</span>
+            </div>
+          </a>
+          <div class="class-update">
+            <span class="update" :class="{'active': item.isUpdated === 1}">{{ item.updatedDiffTime }}</span>
+            <button type="button" class="btn only-ico-btn heart" :class="{'active': item.is_bookmarked}" @click="bookmarkToggle(item)"></button>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
