@@ -1,90 +1,192 @@
 <div class="mypage-cnt">
-    <div class="cnt-top">
-        <h2 class="cnt-tit">MY프로필</h2>
-    </div>
+    <!-- start: 모바일 번호 수정 -->
+    <template v-if="mobileModify">
+        <div class="cnt-top">
+            <h2 class="cnt-tit">MY프로필 > 모바일 번호 변경</h2>
+        </div>
 
-    <div class="my-profile">
-        <div class="my-profile-section">
-            <p class="section-tit">내 정보</p>
+        <div class="my-chage">
+            <h3>모바일 번호 변경</h3>
 
-            <div class="my-profile-list">
-                <div class="list-item">
-                    <p class="list-tit">이름</p>
-                    <div class="list-right">
-                        <span>김지영 선생님</span>
-                        <a href="" class="list-btn"><img src="./assets/images/edit.svg" alt=""></a>
-                    </div>
-                </div>
-                <div class="list-item">
-                    <p class="list-tit">생일</p>
-                    <div class="list-right">
-                        <div class="form-group date">
-                            <input type="text" class="form-control" size="10" value="2020. 2. 28">
-                            <span class="date-area">1988.10.31</span>
-                            <button type="button" class="btn form-btn form-calendar"></button>
+            <div class="form-group inline mgt-40">
+                <label for="mobile_no" class="required">모바일 번호</label>
+                <input type="text" class="form-control" id="mobile_no" placeholder="모바일 번호 ‘-‘없이 입력해 주세요." style="width:267px">
+                <btn type="grey" size="sm" disabled>인증</btn>
+            </div>
+
+            <div class="btn-box">
+                <btn type="navi" disabled>확인</btn>
+            </div>
+        </div>
+    </template>
+    <!-- end: 모바일 번호 수정 -->
+
+    <!-- start: 비밀번호 재설정 -->
+    <template v-else-if="pwModify">
+        <div class="cnt-top">
+            <h2 class="cnt-tit">MY프로필 > 비밀번호 재설정</h2>
+        </div>
+
+        <div class="my-chage">
+            <h3>현재 비밀번호 확인</h3>
+
+            <div class="form-group inline mgt-40">
+                <label for="myPw" class="required">비밀번호</label>
+                <input type="text" class="form-control" id="myPw" placeholder="비밀번호를 입력해 주세요." style="width:356px">
+            </div>
+
+            <div class="btn-box">
+                <btn type="navi" disabled>확인</btn>
+            </div>
+        </div>
+    </template>
+    <!-- end: 비밀번호 재설정 -->
+
+    <template v-else>
+        <div class="cnt-top">
+            <h2 class="cnt-tit">MY프로필</h2>
+        </div>
+
+        <div class="my-profile">
+            <div class="my-profile-section">
+                <p class="section-tit">내 정보</p>
+
+                <div class="my-profile-list">
+                    <div class="list-item">
+                        <p class="list-tit">이름</p>
+                        <div class="list-right">
+                            <span>김지영 선생님</span>
+                            <button type="button" class="list-btn" @click="nameModifyModalOpen"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                         </div>
                     </div>
-                </div>
-                <div class="list-item">
-                    <p class="list-tit">성별</p>
-                    <div class="list-right">
-                        <div class="list-popup">
-                            <button type="button" class="list-popup-btn">여자 <img src="assets/images/arrow-right.svg" class="sm" alt=""></button>
-                            <div class="list-popup-menu pos-right" style="transform:translate3d(75px, 0, 0);">
-                                <a href="" class="list-popup-item">여자</a>
-                                <a href="" class="list-popup-item">남자</a>
+                    <div class="list-item">
+                        <p class="list-tit">생일</p>
+                        <div class="list-right">
+                            <div class="form-group date">
+                                <span class="date-area">1988.10.31</span>
+                                <button type="button" class="btn form-btn form-calendar"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <p class="list-tit">성별</p>
+                        <div class="list-right">
+                            <div class="list-popup">
+                                <button type="button" class="list-popup-btn">여자 <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                <div class="list-popup-menu">
+                                    <a href="" class="list-popup-item">여자</a>
+                                    <a href="" class="list-popup-item">남자</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="my-profile-section">
-            <p class="section-tit">가입 정보</p>
+            <div class="my-profile-section">
+                <p class="section-tit">가입 정보</p>
 
-            <div class="my-profile-list">
-                <div class="list-item">
-                    <p class="list-tit">아이디</p>
-                    <div class="list-right">
-                        <span>papaya123</span>
+                <div class="my-profile-list">
+                    <div class="list-item">
+                        <p class="list-tit">아이디</p>
+                        <div class="list-right">
+                            <span>papaya123</span>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <p class="list-tit">모바일 번호</p>
+                        <div class="list-right">
+                            <span>010-1234-5678</span>
+                            <button type="button" class="list-btn" @click="gotoMobileModify"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <p class="list-tit">이메일 주소</p>
+                        <div class="list-right">
+                            <span>papaya@gamil.com</span>
+                            <button type="button" class="list-btn" @click="emailModifyModalOpen"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                        </div>
+                    </div>
+                    <div class="list-item">
+                        <p class="list-tit">비밀번호</p>
+                        <div class="list-right">
+                            <span>********</span>
+                            <button type="button" class="list-btn" @click="gotoPwModify"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                        </div>
                     </div>
                 </div>
-                <div class="list-item">
-                    <p class="list-tit">모바일 번호</p>
-                    <div class="list-right">
-                        <span>010-1234-5678</span>
-                        <a href="" class="list-btn"><img src="./assets/images/edit.svg" alt=""></a>
-                    </div>
-                </div>
-                <div class="list-item">
-                    <p class="list-tit">이메일 주소</p>
-                    <div class="list-right">
-                        <span>papaya@gamil.com</span>
-                        <a href="" class="list-btn"><img src="./assets/images/edit.svg" alt=""></a>
-                    </div>
-                </div>
-                <div class="list-item">
-                    <p class="list-tit">비밀번호</p>
-                    <div class="list-right">
-                        <span>********</span>
-                        <a href="" class="list-btn"><img src="./assets/images/edit.svg" alt=""></a>
+            </div>
+
+            <div class="my-profile-section">
+                <p class="section-tit">기타</p>
+
+                <div class="my-profile-list">
+                    <div class="list-item">
+                        <p class="list-tit">서비스 탈퇴하기</p>
+                        <div class="list-right">
+                            <a href="" class="list-btn"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="my-profile-section">
-            <p class="section-tit">기타</p>
-
-            <div class="my-profile-list">
-                <div class="list-item">
-                    <p class="list-tit">서비스 탈퇴하기</p>
-                    <div class="list-right">
-                        <a href="" class="list-btn"><img src="./assets/images/arrow-right.svg" alt=""></a>
+        <!-- start: 이름 수정 팝업 -->
+        <modal v-if="isNameModifyModal" size="540px" body-padding="0">
+            <div slot="header">
+                <div class="popup-icon">
+                    <img :src="require('@/assets/images/popup-icon-profile.svg')">
+                </div>
+                <div class="popup-close">
+                    <button class="close" @click="isNameModifyModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">이름 변경</h2>
+                    <div class="popup-input">
+                        <div class="form-group inline">
+                            <input type="text" class="form-control" value="김지영 선생님">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="outline" @btnClick="isNameModifyModal = false">취소</btn>
+                    <btn type="navi" disabled>변경하기</btn>
+                </div>
+            </div>
+        </modal>
+        <!-- end: 이름 수정 팝업 -->
+
+        <!-- start: 이메일 수정 팝업 -->
+        <modal v-else-if="isEmailModifyModal" size="540px" body-padding="0">
+            <div slot="header">
+                <div class="popup-icon">
+                    <img :src="require('@/assets/images/popup-icon-profile.svg')">
+                </div>
+                <div class="popup-close">
+                    <button class="close" @click="isEmailModifyModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">이메일 주소 변경</h2>
+                    <div class="popup-input">
+                        <div class="form-group inline">
+                            <input type="email" class="form-control" value="papaya@gmail.com">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="outline" @btnClick="isEmailModifyModal = false">취소</btn>
+                    <btn type="navi" disabled>변경하기</btn>
+                </div>
+            </div>
+        </modal>
+        <!-- end: 이름 수정 팝업 -->
+    </template>
 </div>
