@@ -7,11 +7,14 @@
 }
 
 .notice {
-  position:relative;
+  //jbc
+  //position:absolute;
+  width:100%;
+  margin-top:10px;
+  //top:10px;
+  //left:0;
 
   .notice-cnt {
-    position:absolute;
-    top:10px;
     display:inline-block;
     padding:6px 14px;
     font-size:12px;
@@ -33,19 +36,20 @@
 }
 
 .home-classes {
-  position: relative;
-  margin-top:-132px;
+  position:relative;
+  margin-top:-110px;
   margin-bottom:432px;
 
   .list-align {
-    @include pos-abs($top:0, $right:0);
+    @include pos-abs($right:0, $top:0);
+
     .form-select {
       padding: 10px 40px 10px 21px;
-      border: 0;
+      border:0;
       font-size: 14px;
-      font-weight: 500;
+      font-weight:500;
       line-height: 1.45;
-      background-color: #fff;
+      background-color:#fff;
     }
   }
 
@@ -93,14 +97,15 @@
 
               &:before {
                 content:'';
-                position:absolute;
                 display:block;
                 width:20px;
                 height:20px;
-                top:2px;
-                right:2px;
                 border-radius:50%;
-                background:red;
+
+                @include pos-abs($top:2px, $right:2px);
+
+                background:#ffd100 url('../../assets/images/member-manager.svg') no-repeat center / 10px ;
+
               }
             }
           }
@@ -571,11 +576,20 @@
 }
 
 .fd-inner {
+  position:relative;
   margin-top:20px;
 
   .fd-inner-txt {
+    position:relative;
     padding:8px 0;
     font-weight:500;
+    color:#57576d;
+  }
+
+  .vote-count {
+    @include pos-vertical($right:0);
+
+    font-size:12px;
     color:#57576d;
   }
 }
@@ -693,33 +707,37 @@
 
 .file-list {
   li {
-    position:relative;
     float:left;
     margin:0 10px 10px 0;
-    padding:14px 20px 14px 46px;
-    border:1px solid #c9cad5;
-    border-radius:5px;
-    background-color:#fff;
 
-    &:before {
-      content:'';
-      position: absolute;
+    a {
       display:block;
-      width:24px;
-      height:24px;
-      top:50%;
-      left:12px;
-      transform:translateY(-50%);
-      background:url(../../assets/images/pic7.png) no-repeat;
+      position:relative;
+      padding:14px 20px 14px 46px;
+      border:1px solid #c9cad5;
+      border-radius:5px;
+      background-color:#fff;
+
+      &:before {
+        content:'';
+        position: absolute;
+        display:block;
+        width:24px;
+        height:24px;
+        top:50%;
+        left:12px;
+        transform:translateY(-50%);
+        background:url(../../assets/images/pic7.png) no-repeat;
+      }
     }
   }
 }
 
 .schedule-list {
-  padding:14px 20px 14px 0;
+  padding:14px 20px 14px 48px;
   border-radius: 5px;
-  //border: solid 1px #c9cad5;
-  //background:url(../../assets/images/classmenu-plan-outline.svg) no-repeat left 23px top 14px / 18px 18px;
+  border: solid 1px #c9cad5;
+  background:url(../../assets/images/classmenu-plan-outline.svg) no-repeat left 23px top 14px / 18px 18px;
 
   li{
     color:#57576d;
@@ -852,6 +870,7 @@
   margin-top:10px;
 
   .schedule-calendar {
+    position:relative;
     height: 674px;
     border-radius: 5px;
     border: solid 1px #f4f5f6;
@@ -875,6 +894,18 @@
         font-size:18px;
         font-weight:500;
         margin-left:20px;
+      }
+    }
+
+    .schedule-add {
+      @include pos-abs($right:0, $bottom:20px);
+      transform:translateX(85%);
+
+      &-btn {
+        display:block;
+        width:80px;
+        height:80px;
+        background:url(../../assets/images/add-btn.svg) no-repeat;
       }
     }
   }
@@ -908,6 +939,17 @@
       .en-count {
         font-weight:500;
       }
+    }
+  }
+
+  .curriculum-add {
+    @include pos-abs($right:0, $bottom:35%);
+
+    &-btn {
+      display:block;
+      width:80px;
+      height:80px;
+      background:url(../../assets/images/add-btn.svg) no-repeat;
     }
   }
 }
@@ -1109,6 +1151,6 @@
   bottom:40px;
   right:0;
   border-radius:50%;
-  background:#1d1d4c url(../../assets/images/add-white.svg) center no-repeat;
-  background-size:32px;
+  background:#1d1d4c url(../../assets/images/icn-80-add-btn.svg) no-repeat;
+  background-size:contain;
 }

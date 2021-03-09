@@ -11,14 +11,14 @@
 
   <div class="home-main">
     <div class="main-txt">
-      <h2 class="main-tit mgb-10">안녕하세요, {{ }}님!</h2>
+      <h2 class="main-tit mgb-10">안녕하세요, {{ userName }}님!</h2>
       <p>즐거운 교육 놀이터, 파파야에 오신 것을 환영합니다.<br>클래스를 한번 둘러볼까요?</p>
     </div>
   </div>
 
   <div class="home-classes">
     <div class="cnt-top">
-      <h3 class="cnt-tit">MY 클래스 <span class="fc-red">{{ myClass.length }}</span></h3>
+      <h3 class="cnt-tit">MY 클래스 <span class="fc-red">{{ myClassLists.length }}</span></h3>
       <div class="list-align">
         <div class="form-group">
           <select class="form-select">
@@ -38,7 +38,7 @@
           </a>
         </li>
 
-        <li v-for="item in myClass" class="item">
+        <li v-for="item in myClassLists" class="item">
           <a href="" class="class-info">
             <div class="info-img crown">
               <span><img :src="item.profile_image" class="thumb" alt=""></span>

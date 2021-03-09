@@ -1,5 +1,6 @@
 import {request} from '@/api/service/axiosService';
 import {USER_BASE_URL} from '@/api/base';
+import {IUserMe} from '@/api/model/user.model';
 
 class UserService {
 
@@ -93,6 +94,10 @@ class UserService {
    */
   public deleteUser(id: string): Promise<any> {
     return request('delete', this.getUserURLById(id), {user_id: id});
+  }
+
+  public getUserMe(): Promise<any> {
+    return request('get', `${USER_BASE_URL}/me/info`);
   }
 
 
