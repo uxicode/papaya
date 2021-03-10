@@ -7,35 +7,13 @@ import {getIsAuth} from '@/router/AuthGuard';
 import {LoginRouter} from '@/router/LoginRouter';
 import {SignUpRouter} from '@/router/SignUpRouter';
 import {MyPageRouter} from '@/router/MyPageRouter';
+import {MyClassRouter} from '@/router/MyClassRouter';
 
 Vue.use(VueRouter);
 
 // @ts-ignore
 const routes: RouteConfig[] = [
-  {
-    path: '/',
-    name: 'home',
-    components: {default: MyClassList, header: AppHeader, footer: AppFooter},
-    beforeEnter: getIsAuth,
-  },
-  {
-    path: '/class',
-    name: 'myClass',
-    components: {default: () => import('../views/class/home/MyClass'), header: AppHeader, footer: AppFooter},
-    beforeEnter: getIsAuth,
-  },
-  {
-    path: '/class/notify',
-    name: 'notify',
-    components: {default: () => import('../views/class/notify/Notify'), header: AppHeader, footer: AppFooter},
-    beforeEnter: getIsAuth,
-  },
-  {
-    path: '/class/schedule',
-    name: 'schedule',
-    components: {default: () => import('../views/class/schedule/Schedule'), header: AppHeader, footer: AppFooter},
-    beforeEnter: getIsAuth,
-  },
+  ...MyClassRouter,
   ...LoginRouter,
   ...SignUpRouter,
   ...MyPageRouter,

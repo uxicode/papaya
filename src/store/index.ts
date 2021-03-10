@@ -12,11 +12,12 @@ const store = new Vuex.Store({
   modules: {
     Auth: AuthModule,
     History: PageHistoryStatus,
-    Class: ClassModule,
+    MyClass: ClassModule,
   },
 });
 
 const {token} = localStorage;
 
-store.commit(`Auth/${GET_TOKEN}`, localStorage.getItem('token'));
+// store.commit(`Auth/${GET_TOKEN}`, localStorage.getItem('token'));
+// store.commit(`Auth/${ACCESS_TOKEN}`, localStorage.getItem('user'));
 export default store;

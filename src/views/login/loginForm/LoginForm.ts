@@ -58,13 +58,15 @@ export default class LoginForm extends Vue {
         uid: this.userId,
         password: this.userPw,
       }).then((data: any) => {
-        // console.log('this.rPath=', this.rPath);
+        console.log('data', this.rPath, data);
         this.$router.push(this.rPath);
 
         this.isLoginFail=false;
-      }).catch((error) => {
+      }).catch((error: any) => {
         // console.log(error.data.message, error.data.error);
         this.errorMsg=error.data.error.message;
+
+        // console.log(error);
         this.isLoginFail=true;
       });
     }else{

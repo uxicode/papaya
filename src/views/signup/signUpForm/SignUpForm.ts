@@ -306,11 +306,11 @@ export default class SignUpForm extends Vue {
             AuthService.getVerification({
                 key: this.verificationKey,
                 num: this.verifiedNumModel,
-            }).then((data: any) => {
+            }).then(() => {
                 this.openPopup(this.MOBILE_AUTH_STATUS);
                 this.isVerifiedCode = true;
                 this.verifiedNumModel= '';
-            }).catch((error) => {
+            }).catch(() => {
                 this.isVerifiedCode = false;
                 this.openPopup(this.ERROR_VERIFY_NUM);
                 // console.log(this.errorMsg);
@@ -325,7 +325,7 @@ export default class SignUpForm extends Vue {
     private emailCheck(): void{
         if( !this.userEmailState ){ return; }
         UserService.getEmailCheck(this.formData.email)
-          .then((data: any) => {
+          .then(() => {
               /*{
                   "email": "jbc2119@gmail.com",
                 "user_id": "jbc2119",
@@ -333,7 +333,7 @@ export default class SignUpForm extends Vue {
               }*/
               this.isEmailChk=false;
               this.openPopup(this.ERROR_DISABLED_EMAIL);
-          }).catch((error: any) => {
+          }).catch(() => {
             /*{
                 "error_code": 40404,
               "message": "email 주소가 없습니다."
@@ -354,9 +354,9 @@ export default class SignUpForm extends Vue {
         if( this.isAllValidation && this.isValidEmail){
 
             this.SIGN_UP_ACTION( this.formData )
-              .then( (data: any)=>{
+              .then( ()=>{
                   this.openPopup(this.SUCCESS_MEMBERSHIP);
-              }).catch( ( error: any) =>{
+              }).catch( () =>{
                 this.openPopup(this.ERROR_FAIL_SIGNUP);
             });
 
