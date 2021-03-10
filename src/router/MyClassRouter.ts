@@ -16,7 +16,7 @@ const MyClassRouter=[
     components: {default: () => import('../views/class/home/MyClass'), header: AppHeader, footer: AppFooter},
     beforeEnter: getIsAuth,
   },
-  {
+ /* {
     path: '/class/notify',
     name: 'notify',
     components: {default: () => import('../views/class/notify/Notify'), header: AppHeader, footer: AppFooter},
@@ -27,6 +27,12 @@ const MyClassRouter=[
     name: 'schedule',
     components: {default: () => import('../views/class/schedule/Schedule'), header: AppHeader, footer: AppFooter},
     beforeEnter: getIsAuth,
+  },*/
+  //ex) - makeClass.4.3.1
+  {
+    path: '/class/make',
+    name: 'makeClass',
+    components: {default: () => import('../views/class/makeClass/makeClass.4.3.1'), header: AppHeader, footer: AppFooter},
   },
 ];
 
