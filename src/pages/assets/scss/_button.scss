@@ -289,7 +289,7 @@
       display:block;
       padding:15px 20px;
 
-      &:hover, &:active {
+      &:hover, &:active, &.active {
         background-color:#f4f5f6;
       }
 

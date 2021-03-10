@@ -138,10 +138,14 @@
 
     &.sm {
       min-width:80px;
-      padding:10px 0 10px 17px;
+      padding:9px 16px;
 
-      &.ico-left {padding-left:40px;}
       &.ico-right {padding-right:40px;}
+      &.ico-left {
+        padding-left:40px;
+
+        .icon {left:16px;}
+      }
     }
 
     &:hover {
@@ -285,7 +289,7 @@
       display:block;
       padding:15px 20px;
 
-      &:hover, &:active {
+      &:hover, &:active, &.active {
         background-color:#f4f5f6;
       }
 

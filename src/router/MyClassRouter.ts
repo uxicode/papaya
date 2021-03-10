@@ -34,6 +34,12 @@ const MyClassRouter=[
     name: 'makeClass',
     components: {default: () => import('../views/class/makeClass/makeClass.4.3.1'), header: AppHeader, footer: AppFooter},
   },
+
+  {
+    path: '/class/setting',
+    name: 'setting',
+    components: {default: () => import('../views/class/setting/classSetting.4.5.7.8'), header: AppHeader, footer: AppFooter},
+  },
 ];
 
 export {MyClassRouter};

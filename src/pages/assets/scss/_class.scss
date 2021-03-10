@@ -495,9 +495,8 @@
 
     .fd-btn {
       position:absolute;
-      top:50%;
+      top:14px;
       right:20px;
-      transform:translateY(-50%);
     }
   }
 }
@@ -1147,7 +1146,7 @@
   width:60px;
   height:60px;
   bottom:40px;
-  right:0;
+  right:15%;
   border-radius:50%;
   background:#1d1d4c url(../../assets/images/icn-80-add-btn.svg) no-repeat;
   background-size:contain;
