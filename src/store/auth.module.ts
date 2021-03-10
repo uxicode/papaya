@@ -155,9 +155,9 @@ export default class AuthModule extends VuexModule {
         // mutation( type, payload, option ) 이렇게 매개변수가 지정되어 있다.z
 
         this.context.commit(GET_TOKEN, data.access_token );
-        return UserService.getUserMe().then( (data: any)=>{
-            this.context.commit(SET_MY_INFO, data.user);
-            return Promise.resolve( data.user);
+        return UserService.getUserMe().then( ( userMe: any)=>{
+            this.context.commit(SET_MY_INFO, userMe.user);
+            return Promise.resolve( userMe.user);
           });// 왜인지는 모르겠으나 여기서 promise 를 리턴해주어야 함.
       }).catch((error) => {
         return Promise.reject(error);

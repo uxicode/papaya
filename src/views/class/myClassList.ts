@@ -2,6 +2,7 @@ import {Vue, Component} from 'vue-property-decorator';
 import WithRender from './myClassList.html';
 import {namespace} from 'vuex-class';
 import {IMyClassList} from '@/views/model/my-class.model';
+import {IMaybe} from '@/views/model/init.model';
 import { IUserMe} from '@/api/model/user.model';
 
 const Auth = namespace('Auth');
@@ -15,10 +16,10 @@ export default class MyClassList extends Vue {
   public userInfo!: IUserMe;
 
   @MyClass.Getter
-  private myClassLists: IMyClassList[] | undefined;
+  private myClassLists!: IMaybe<IMyClassList[]>;
 
   @MyClass.Action
-  private MYCLASS_LIST_ACTION!: ()=> Promise<IMyClassList>;
+  private MYCLASS_LIST_ACTION!: ()=> Promise<IMyClassList[]>;
   //private classItems: IMyClassList[] = [];
 
   get userName(): string {
@@ -45,7 +46,14 @@ export default class MyClassList extends Vue {
   public getMyClass(): void {
 
     this.MYCLASS_LIST_ACTION().then(() =>{
-      console.log(this.myClassLists);
+      // console.log(this.myClassLists);
+      if (this.myClassLists !== null && this.myClassLists!==undefined) {
+        this.myClassLists.map( ( item: IMyClassList ) => {
+          console.log(item.me);
+        });
+      }
+
+
     });
     //this.$store.getters.getMyClassList;
    /* const myClassList = ClassService.getAllMyClass();
