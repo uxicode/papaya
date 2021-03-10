@@ -15,6 +15,10 @@ export default class Bookmark extends Vue {
     private isResetModal: boolean = false;
     private bookmarkType: string = 'notification';
 
+    /**
+     * 보관함 비우기 팝업 열기
+     * @private
+     */
     private resetModalOpen(): void {
         this.isResetModal = !this.isResetModal;
     }
