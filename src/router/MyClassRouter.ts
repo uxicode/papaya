@@ -54,10 +54,11 @@ const MyClassRouter=[
   },/* 보류 */
 
   {
-    path: '/notify',
+    path: '/notify.4.5.2',
     name: 'notify.4.5.2',
-    components: {default: () => import('../views/notify/notify.4.5.2'), header: AppHeader, footer: AppFooter},
+    components: {default: () => import('../views/class/notify/notify.4.5.2'), header: AppHeader, footer: AppFooter},
   },
+
 
 
 ];
