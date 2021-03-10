@@ -30,7 +30,7 @@ const MyClassRouter=[
   },*/
   //ex) - makeClass.4.3.1
   {
-    path: '/class/make',
+    path: '/make',
     name: 'makeClass',
     components: {default: () => import('../views/class/makeClass/makeClass.4.3.1'), header: AppHeader, footer: AppFooter},
   },
@@ -51,6 +51,12 @@ const MyClassRouter=[
     path: '/allSchedule',
     name: 'allSchedule.6.3.1',
     components: {default: () => import('../views/allSchedule/allSchedule.6.3.1'), header: AppHeader, footer: AppFooter},
+  },/* 보류 */
+
+  {
+    path: '/notify',
+    name: 'notify.4.5.2',
+    components: {default: () => import('../views/notify/notify.4.5.2'), header: AppHeader, footer: AppFooter},
   },
 
 
