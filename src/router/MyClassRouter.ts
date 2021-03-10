@@ -34,6 +34,26 @@ const MyClassRouter=[
     name: 'makeClass',
     components: {default: () => import('../views/class/makeClass/makeClass.4.3.1'), header: AppHeader, footer: AppFooter},
   },
+
+  {
+    path: '/search.4.2.1',
+    name: 'search.4.2.1',
+    components: {default: () => import('../views/class/search/search.4.2.1'), header: AppHeader, footer: AppFooter},
+  },
+
+  {
+    path: '/search.4.2.3.1',
+    name: 'search.4.2.3.1',
+    components: {default: () => import('../views/class/search/search.4.2.3.1'), header: AppHeader, footer: AppFooter},
+  },
+
+  {
+    path: '/allSchedule',
+    name: 'allSchedule.6.3.1',
+    components: {default: () => import('../views/allSchedule/allSchedule.6.3.1'), header: AppHeader, footer: AppFooter},
+  },
+
+
 ];
 
 export {MyClassRouter};
