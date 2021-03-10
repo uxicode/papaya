@@ -3,19 +3,31 @@
   background-color:#f4f5f6;
 
   .contents {
+    width:100%;
     min-height:calc(100vh - 238px);
+  }
+
+  .container-fluid{
+    display: flex;
+    flex: 1 0 auto;
+    max-width: 100%;
   }
 }
 
 // header
 header {
+  position:relative;
+  z-index:2;
   background-color:#f4f5f6;
-
   &.dark {
     background-color:#1d1d4c;
 
     .menu {
       color:#fff;
+
+      > li a:not(.router-link-exact-active) {
+        opacity: 0.8;
+      }
     }
   }
 
@@ -103,7 +115,7 @@ header {
       }
       .depth-2 {
         display:none;
-        width:200px;
+        min-width:200px;
         position:absolute;
         top:29px;
         right:0;
@@ -247,3 +259,5 @@ footer {
     }
   }
 }
+
+

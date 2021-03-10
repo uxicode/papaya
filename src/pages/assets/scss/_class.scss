@@ -34,8 +34,22 @@
 }
 
 .home-classes {
-  margin-top:-132px;
+  position:relative;
+  margin-top:-110px;
   margin-bottom:432px;
+
+  .list-align {
+    @include pos-abs($right:0, $top:0);
+
+    .form-select {
+      padding: 10px 40px 10px 21px;
+      border:0;
+      font-size: 14px;
+      font-weight:500;
+      line-height: 1.45;
+      background-color:#fff;
+    }
+  }
 
   .classes-card {
     margin-top:20px;
@@ -81,14 +95,15 @@
 
               &:before {
                 content:'';
-                position:absolute;
                 display:block;
                 width:20px;
                 height:20px;
-                top:2px;
-                right:2px;
                 border-radius:50%;
-                background:red;
+
+                @include pos-abs($top:2px, $right:2px);
+
+                background:#ffd100 url('../../assets/images/member-manager.svg') no-repeat center / 10px ;
+
               }
             }
           }
@@ -570,7 +585,7 @@
   }
 
   .vote-count {
-    @include pos-center($right:0);
+    @include pos-vertical($right:0);
 
     font-size:12px;
     color:#57576d;
@@ -828,6 +843,7 @@
 }
 
 .cnt-top {
+  position: relative;
   margin-bottom:26px;
 
   .cnt-tit {
@@ -852,6 +868,7 @@
   margin-top:10px;
 
   .schedule-calendar {
+    position:relative;
     height: 674px;
     border-radius: 5px;
     border: solid 1px #f4f5f6;
@@ -875,6 +892,18 @@
         font-size:18px;
         font-weight:500;
         margin-left:20px;
+      }
+    }
+
+    .schedule-add {
+      @include pos-abs($right:0, $bottom:20px);
+      transform:translateX(85%);
+
+      &-btn {
+        display:block;
+        width:80px;
+        height:80px;
+        background:url(../../assets/images/add-btn.svg) no-repeat;
       }
     }
   }
@@ -908,6 +937,17 @@
       .en-count {
         font-weight:500;
       }
+    }
+  }
+
+  .curriculum-add {
+    @include pos-abs($right:0, $bottom:35%);
+
+    &-btn {
+      display:block;
+      width:80px;
+      height:80px;
+      background:url(../../assets/images/add-btn.svg) no-repeat;
     }
   }
 }

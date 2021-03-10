@@ -1,64 +1,52 @@
-<div class="contents">
-    <div class="contents-inner">
-        <div class="all-form">
-            <h2 class="main-tit">{{ pageTitle }}</h2>
+<div>
+  <div class="form-wrapper">
+    <h3 class="form-sub-tit ct">{{ currentTitle() }}</h3>
+    <div class="form-cnt">
+      <div class="accordion">
+        <div class="accordion-tit form-tit">
+          <!-- <div class="btn-checkbox">
+               <input type="checkbox" id="allCheck" v-model="allChecked" @click="allCheck($event.target.checked)">
+               <label for="allCheck">전체 동의</label>
+           </div>-->
 
-            <div class="form-progress">
-                <ul class="progress-list clearfix">
-                    <li v-for="idx in stepTotal" :key="idx" class="item" :class="{'active':step===idx}"></li>
-                </ul>
-            </div>
-
-            <div class="form-wrapper">
-                <h3 class="form-sub-tit ct">{{ currentTitle() }}</h3>
-                <div class="form-cnt">
-                    <div class="accordion">
-                        <div class="accordion-tit form-tit">
-                           <!-- <div class="btn-checkbox">
-                                <input type="checkbox" id="allCheck" v-model="allChecked" @click="allCheck($event.target.checked)">
-                                <label for="allCheck">전체 동의</label>
-                            </div>-->
-
-                          <check-button btn-id="allCheck"
-                                        check-name="allCheck"
-                                        :btn-value="allCheckValue"
-                                        :b-data="allChecked"
-                                        @click="updateCheck">전체 동의</check-button>
-                        </div>
-                        <div v-for="item in termsList" :key="item.idx">
-                            <!-- accordion -->
-                            <div class="accordion-tit form-tit">
-                                <!--<div class="btn-checkbox">
-                                    <input type="checkbox" :id="'check'+item.idx" v-model="item.isChecked">
-                                    <label :for="'check'+item.idx">{{ item.tit }}</label>
-                                </div>-->
-                              <check-button :btn-id="`check${item.idx}`"
-                                            :check-name="`check${item.idx}`"
-                                            :b-data="checkData"
-                                            :btn-value="item.val"
-                                            @click="updateCheck">{{ item.tit }}</check-button>
-
-
-                                <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
-                                <button class="accordion-btn" @click="accordionToggle(item)" :class="{ 'active': item.isActive }" data-toggle="collapse" :data-target="'#accordion'+item.idx"></button>
-                            </div>
-                            <!-- class="active" 일 경우 open -->
-                            <div class="accordion-cnt" :class="{ 'active': item.isActive }" :id="'accordion'+item.idx">
-                                <div class="agreement">
-                                    <p v-html="$options.filters.n2br(item.desc)"></p>
-                                </div>
-                            </div>
-                            <!-- //accordion -->
-                        </div>
-                    </div>
-                </div>
-                <div class="form-btm">
-                    <div class="btn-group rt">
-                        <btn type="navi" :disabled="!isNextStep" @btnClick="gotoVerify">다음</btn>
-                        <!--<router-link class="btn basic x40 sm primary navi ct" :to="{name:'verify'}" disabled>다음</router-link>-->
-                    </div>
-                </div>
-            </div>
+          <check-button btn-id="allCheck"
+                        check-name="allCheck"
+                        :btn-value="allCheckValue"
+                        :b-data="allChecked"
+                        @click="updateCheck">전체 동의</check-button>
         </div>
+        <div v-for="item in termsList" :key="item.idx">
+          <!-- accordion -->
+          <div class="accordion-tit form-tit">
+            <!--<div class="btn-checkbox">
+                <input type="checkbox" :id="'check'+item.idx" v-model="item.isChecked">
+                <label :for="'check'+item.idx">{{ item.tit }}</label>
+            </div>-->
+            <check-button :btn-id="`check${item.idx}`"
+                          :check-name="`check${item.idx}`"
+                          :b-data="checkData"
+                          :btn-value="item.val"
+                          @click="updateCheck">{{ item.tit }}</check-button>
+
+
+            <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
+            <button class="accordion-btn" @click="accordionToggle(item)" :class="{ 'active': item.isActive }" data-toggle="collapse" :data-target="'#accordion'+item.idx"></button>
+          </div>
+          <!-- class="active" 일 경우 open -->
+          <div class="accordion-cnt" :class="{ 'active': item.isActive }" :id="'accordion'+item.idx">
+            <div class="agreement">
+              <p v-html="$options.filters.n2br(item.desc)"></p>
+            </div>
+          </div>
+          <!-- //accordion -->
+        </div>
+      </div>
     </div>
+    <div class="form-btm">
+      <div class="btn-group rt">
+        <btn type="navi" :disabled="!isNextStep" @btnClick="gotoVerify">다음</btn>
+        <!--<router-link class="btn basic x40 sm primary navi ct" :to="{name:'verify'}" disabled>다음</router-link>-->
+      </div>
+    </div>
+  </div>
 </div>

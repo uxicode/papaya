@@ -7,8 +7,8 @@
       <nav id="gnb" class="pd-desc">
         <ul class="menu">
           <li><router-link :to="{path:'/'}">홈</router-link></li>
-          <li><router-link :to="{path:'notify'}">모든 알림</router-link></li>
-          <li><router-link :to="{path:'schedule'}">모든 일정</router-link></li>
+          <li><router-link :to="{path:'/class/notify'}">모든 알림</router-link></li>
+          <li><router-link :to="{path:'/class/schedule'}">모든 일정</router-link></li>
           <li><a href="">자료실</a></li>
         </ul>
       </nav>
@@ -20,8 +20,8 @@
         <li>
           <a href="#" class="arrow-down" :class="{'active': isActive}" @click="menuToggle"><img src="../../assets/images/a-down.png" alt="" /></a>
           <ul class="depth-2" :class="{'active': isActive}">
-            <li><a href="#">MY프로필</a></li>
-            <li><a href="#">보관함</a></li>
+            <li><router-link :to="{path:'/myProfile'}">MY프로필</router-link></li>
+            <li><router-link :to="{path:'/bookmark'}">보관함</router-link></li>
             <li class="bd-btm"><a href="#">활동내역</a></li>
             <li><a href="#">공지사항</a></li>
             <li><a href="#">고객센터</a></li>

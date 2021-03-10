@@ -1,4 +1,4 @@
-label {
+label, .label {
   display:block;
   font-weight:500;
   color:#57576d;
@@ -41,16 +41,25 @@ select {
 
   &[disabled], &[readonly] {color:#848499;}
 
+  &:before {
+    content: '';
+    @include pos-abs($top: 0, $left: 0);
+    width:0;
+    height:1px;
+    background-color:#0f0f15;
+  }
   &:focus {
-    border-color:#0f0f15;
+    //border-color:#0f0f15;
     box-shadow:none;
-
-    +.form-message {
-      &.count {color:#57576d;}
-      &.time {display:block;}
-      &.pw-show {opacity: 1;}
+    &:before {
+      width:100%;
     }
   }
+  &:focus+.form-message {
+      &.count {color:#57576d;}
+    &.time {display:block;}
+      &.pw-show {opacity: 1;}
+    }
 
   &[type="number"] {
     width:40px;
@@ -80,27 +89,27 @@ select {
   font-size:12px;
   color:#57576d;
 
-  &.count {left:auto; right:0; color:#848499;}
+  &.count {
+    @include pos-vertical($right:0);
+    color:#848499;
+  }
   &.error {color:#ff4d4d;}
   &.approval {color:#629f00;}
 
   /* form-control focus시 활성화 */
   &.ms-time {
+    @include pos-vertical($right:0);
     display:none;
-    bottom:10px;
-    left:auto;
-    right:0;
     font-size:14px;
     color:#ff4d4d;
   }
 
   /* form-control password focus시 활성화 */
   &.pw-show {
+    @include pos-vertical($right:0);
+
     width:24px;
     height:24px;
-    left:auto;
-    right:0;
-    bottom:6px;
     opacity: 0.2;
     background:url(../../assets/images/eye.svg) no-repeat;
 
@@ -163,6 +172,14 @@ select {
   background-color:#fff;
 
   &.h-full {height:100%;}
+
+  + .form-message {
+    &.count {
+      position:relative;
+      float:right;
+      transform:none;
+    }
+  }
 }
 
 .form-select {
@@ -177,21 +194,15 @@ select {
 .form-group {
   position: relative;
 
-  //+.form-group{margin-top:30px;}
-
   .btn {
     &.form-delete {
-      left:0;
-      margin-left:0;
+      @include pos-vertical($right:0);
+      display:none;
 
-      +.time-control, +.date-area {
-        margin-left:34px;
-      }
+      &.active {display:block;}
     }
 
-    + .form-control {
-      margin-left:6px;
-    }
+    + .form-control {margin-left:6px;}
   }
 
   &.inline {
@@ -203,6 +214,14 @@ select {
     .form-control {
       +.btn {margin-left:6px;}
     }
+  }
+
+  &.time .form-delete, &.date .form-delete {
+    display:block;
+    right:auto;
+    left:0;
+
+    +.time-control, +.date-area {margin-left:34px;}
   }
 
   &.time {
@@ -235,7 +254,7 @@ select {
 
       + .form-btn {margin-left:6px;}
 
-      &.placeholder {color:#848499;}
+      &.placeholder {color:#848499; opacity: 0.2;}
     }
   }
 }
@@ -357,5 +376,161 @@ select {
       border-radius:50%;
       background:url(../../assets/images/checkbox-circle-outline.svg) no-repeat;
     }
+  }
+}
+
+
+
+.all-form {
+  text-align:center;
+  margin-top:40px;
+  padding-bottom:75px;
+
+  .form-progress {
+    margin-top:20px;
+
+    .progress-list {
+      display:inline-block;
+
+      .item {
+        position:relative;
+        float:left;
+        height:20px;
+
+        &:before {
+          content:'';
+          display:inline-block;
+          width:6px;
+          height:6px;
+          border-radius:50%;
+          vertical-align: middle;
+          background-color:#0f0f15;
+        }
+
+        &:after {
+          content:'';
+          display:inline-block;
+          width:20px;
+          height:1px;
+          margin:0 4px;
+          vertical-align:middle;
+          background-color:#c9cad5;
+        }
+
+        &.active:before {
+          width:20px;
+          height:20px;
+          background-color:#fff;
+          border:7px solid #ff4d4d;
+        }
+
+        &:last-child:after {
+          display:none;
+        }
+      }
+    }
+  }
+
+  .form-wrapper {
+    width:800px;
+    padding:40px 60px;
+    margin:30px auto 0 auto;
+    text-align:left;
+    background-color:#fff;
+    box-shadow: 0 0 10px 0 rgba(15, 15, 21, 0.05);
+
+    .form-sub-tit {
+      font-size: 18px;
+      font-weight: 500;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #f4f5f6;
+    }
+  }
+
+  .form-cnt {
+    position:relative;
+    min-height:280px;
+
+    .agreement {
+      height:200px;
+      padding:20px 20px 20px 54px;
+      overflow-y: auto;
+      line-height:1.57;
+      text-align:left;
+      font-size:14px;
+      color:#57576d;
+      background-color:#f4f5f6;
+      p, li {
+        margin-bottom:8px;
+      }
+    }
+
+    .form-tit {
+      padding:18px 20px;
+      input {
+        + label {
+          font-size:16px;
+          color:#0f0f15;
+        }
+      }
+    }
+
+    .form-card {
+      margin-top:30px;
+      text-align:center;
+
+      .card-tit {
+        font-size:18px;
+        color:#0f0f15;
+
+        &.fw-500 {
+          font-weight:500;
+        }
+      }
+
+      .card-txt {
+        margin:20px 0 24px 0;
+        font-size:14px;
+        color:#5b5b70;
+        line-height:1.57;
+        letter-spacing:0;
+      }
+
+      &.bg {
+        &:after {
+          content:'';
+          display:block;
+          position:absolute;
+          width:233px;
+          height:199px;
+          bottom:0;
+          left:50%;
+          transform:translateX(-50%);
+          background:url(../../assets/images/illust-confirm-small.png) no-repeat center bottom;
+        }
+      }
+
+      &.bg2 {
+        &:after {
+          content:'';
+          display:block;
+          position:absolute;
+          width:233px;
+          height:232px;
+          bottom:0;
+          left:50%;
+          transform:translateX(-50%);
+          background:url(../../assets/images/illust-welcome-small.png) no-repeat center bottom;
+        }
+      }
+    }
+  }
+
+  .all-form-data {
+    padding:30px 35px;
+  }
+
+  .form-btm {
+    margin-top:30px;
   }
 }

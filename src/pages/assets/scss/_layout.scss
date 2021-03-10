@@ -11,32 +11,28 @@
 header {
   background-color:#f4f5f6;
 
-  &.dark {
-    background-color:#1d1d4c;
-
-    .menu {
-      color:#fff;
-    }
-  }
-
-  &.white {
-    background-color:#fff;
-
-    .menu {
-      color:#45454a;
-    }
-  }
-
   .header-container {
     position:relative;
     width:1020px;
     margin:0 auto;
-    padding:20px 0;
+    padding:24px 0;
 
     &:after {
       content: "";
       display: block;
       clear: both;
+    }
+
+    .class-select {
+      @include pos-vertical($left:90px);
+
+      .form-select {
+        min-width:266px;
+        padding:10px 52px 10px 20px;
+        border:0;
+        font-size:14px;
+        background-color:#f4f5f6;
+      }
     }
 
     .logo {
@@ -68,29 +64,101 @@ header {
       top:50%;
       right:0;
       transform:translateY(-50%);
+      z-index: 1000;
 
       li {
         display:inline-block;
         margin:0 6px;
 
-        &:last-child {margin:0;}
-        &.active {
-          position:relative;
+        &:last-child {margin-right:0;}
 
-          &:after {
-            content:'';
-            position:absolute;
-            display:block;
-            width: 0;
-            height: 0;
-            bottom:-13px;
-            left:50%;
-            transform:translateX(-50%);
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-bottom: 7px solid #fff;
+        > a {
+          display:inline-block;
+          width:32px;
+          height:32px;
+          vertical-align: middle;
+        }
+
+        .top-search {
+          background:url(../../assets/images/search-white.svg) no-repeat;
+
+          &.active {
+            position: relative;
+
+            &:after {
+              content: '';
+              display: block;
+              width: 0px;
+              height: 0px;
+
+              @include pos-abs($bottom: -18px, $left: 50%);
+
+              transform: translateX(-50%);
+              border-left: 6px solid transparent;
+              border-right: 6px solid transparent;
+              border-bottom: 7px solid #fff;
+            }
+
+            background:url(../../assets/images/close-white.svg) no-repeat;
           }
         }
+
+        .top-alert {
+          background:url(../../assets/images/icn-32-alert-white.svg) no-repeat;
+
+          &.active {
+            position: relative;
+
+            &:after {
+              content:'';
+              display:block;
+              width:6px;
+              height:6px;
+              border-radius:50%;
+              background-color:#ff4d4d;
+
+              @include pos-abs($right:2px, $top:2px);
+            }
+          }
+        }
+
+        .list-popup {
+          .sub-menu-btn {
+            padding-right:18px;
+
+            &:after {
+              content:'';
+              display:block;
+              width:18px;
+              height:18px;
+              background:url(../../assets/images/icn-18-arrow-down-white.svg) no-repeat center;
+
+              @include pos-vertical($right:0);
+
+              transform: translateY(-50%) rotate(0deg);
+              -webkit-transition: all 0.5s ease;
+              transition: all 0.2s ease;
+            }
+
+            &.active {
+              &:after {
+                transform: translateY(-50%) rotate(-180deg);
+                -webkit-transition: all 0.5s ease;
+                transition: all 0.2s ease;
+              }
+            }
+          }
+
+          &.black {
+            .sub-menu-btn {
+              &:after {
+                background-image: url(../../assets/images/icn-18-arrow-down.svg);
+              }
+            }
+          }
+        }
+
+
       }
     }
   }
@@ -123,6 +191,38 @@ header {
               display:none;
             }
           }
+        }
+      }
+    }
+  }
+
+  &.dark {
+    background-color:#1d1d4c;
+
+    .menu {
+      color:#fff;
+    }
+  }
+
+  &.white {
+    background-color:#fff;
+
+    .menu {
+      color:#45454a;
+    }
+
+    .sub-menu {
+      li{
+        .top-search {
+          background:url(../../assets/images/search.svg) no-repeat;
+
+          &.active {
+            background:url(../../assets/images/close.svg) no-repeat center;
+          }
+        }
+
+        .top-alert {
+          background:url(../../assets/images/alert.svg) no-repeat;
         }
       }
     }
