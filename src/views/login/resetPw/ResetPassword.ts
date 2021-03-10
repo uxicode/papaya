@@ -1,4 +1,4 @@
-import {Vue, Component} from 'vue-property-decorator';
+import {Vue, Component, Watch} from 'vue-property-decorator';
 import {IVerifiedForm} from '@/views/model/member-form.model';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import Btn from '@/components/button/Btn.vue';
@@ -8,6 +8,7 @@ import WithRender from './ResetPassword.html';
 
 import {namespace} from 'vuex-class';
 import AuthService from '@/api/service/AuthService';
+import {Utils} from '@/utils/utils';
 
 const Auth = namespace('Auth');
 const History = namespace('History');
@@ -30,12 +31,23 @@ export default class ResetPassword extends Vue {
 
 
   private isEmailChk: boolean = false;
-  private isMobileChk: boolean = false;
+  private mobileChk: boolean = false;
   private isConfirmComplete: boolean = false;
   private isVerifiedCode: boolean = false;
   private errorMessage: string = '';
-  private isVerifiedStatus: boolean=false;
+  private successMsg: string = '';
+  private successOpenPopup: boolean = false;
+  private errorOpenPopup: boolean=false;
   private isModifiedPwd: boolean=false;
+  private currentStatus: string = '';
+  private MOBILE_STATUS: string = 'mobile';
+  private MOBILE_AUTH_STATUS: string = 'mobile-auth';
+
+  private completeAuthNumMsgData: string[] =['아이디 확인이 되었습니다.', '입력하신 번호로 인증번호 전송하였습니다.'];
+  private completeMobileAuthMsgData: string[] =['모바일 인증이 완료 되었습니다.', '하단에 확인 버튼을 눌러 주세요.'];
+  // private completeEmailAuthMsgData: string[] =['이메일 인증이 완료 되었습니다.', '하단에 확인 버튼을 눌러 주세요.'];
+
+
 
   //비밀번호 재설정 관련
   private formData: IVerifiedForm = {
@@ -68,7 +80,7 @@ export default class ResetPassword extends Vue {
    * 유효한 모바일 번호인지 체크
    */
   get userMobileState(): boolean {
-    const userMobile = /^\d{3}\d{3,4}\d{4}$/;
+    const userMobile = Utils.getMobileRegx();
     return userMobile.test(this.formData.mobile);
   }
 
@@ -76,7 +88,7 @@ export default class ResetPassword extends Vue {
    * 유요한 이메일인지 체크
    */
   get userEmailState(): boolean {
-    const userEmail = /^[a-z0-9!#$%&'*+\\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/ig;
+    const userEmail = Utils.getEmailRegx();
     return userEmail.test(this.formData.email);
   }
 
@@ -87,13 +99,35 @@ export default class ResetPassword extends Vue {
 
   get pwState() {
     //정규표현식을 아래와 같이 변수를 연동하는 등의 동적 표현시엔 RegExp 생성자를 사용한다.
-    const userPWRegx = new RegExp(`(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9_])(?=.*[0-9]).{8,20}$`);
+    const userPWRegx = Utils.getPwdRegx(8, 16);
     return userPWRegx.test(this.pwdFormData.nPwd);
   }
 
-  /*get equalRePwd(): boolean {
-    return this.pwdFormData.rePwd === this.pwdFormData.nPwd;
-  }*/
+  get isMobileAuthChk(): boolean {
+    //유효한 번호가 아닐때
+    if( !this.userMobileState ){
+      if( this.mobileChk ){
+        //모바일 번호를 이미 인증 받은 상태라고 해도 유효한 번호가 아니면( 번호를 다 지웠거나 몇몇 삭제한 경우) 인증된 상태를 리셋
+        this.mobileChk=false;
+      }
+    }
+    return this.userMobileState && this.mobileChk;
+  }
+
+  get isVerifiedCodeChk(): boolean {
+    //유효한 번호가 아닐때
+/*    if( this.mobileChk ){
+      this.mobileChk=false;
+    }*/
+    return this.isVerifiedCode && this.mobileChk;
+  }
+
+  @Watch('formData.verifiedCode')
+  public onChangeVerifiedCode(value: string, oldValue: string) {
+    if (value !== oldValue) {
+      this.isVerifiedCode = false;
+    }
+  }
 
   public created() {
     this.HISTORY_PAGE('login');
@@ -108,10 +142,38 @@ export default class ResetPassword extends Vue {
     return !!value;
   }
 
+  private openSuccessPopup( status: string='' ): void{
+    this.successOpenPopup=true;
+    this.currentStatus = status;
+  }
+
+  private closeSuccessPopup(): void{
+    this.successOpenPopup=false;
+    this.currentStatus = '';
+  }
+
+  private closeErrorPopup(): void {
+    this.errorOpenPopup=false;
+  }
+
   private setErrorMessage(msg: string = ''): void {
     this.errorMessage = msg;
   }
 
+  private getCurrentMsg(): string[] {
+    let items!: string[];
+    switch (this.currentStatus){
+      case this.MOBILE_STATUS:
+        items=this.completeAuthNumMsgData;
+        break;
+      case this.MOBILE_AUTH_STATUS:
+        items=this.completeMobileAuthMsgData;
+        break;
+      default :
+        break;
+    }
+    return items;
+  }
   /*private gotoFindIdHandler(): void {
     this.$router.push('/login/findId').then((r: Route) => {
       console.log('아이디 찾기로 이동');
@@ -175,9 +237,12 @@ export default class ResetPassword extends Vue {
       //{verification_key: "3091612168945547", message: "sms 로 인증번호 발송 성공"}
       // this.mVerificationComplete=true;
       // this.findUserID=data.user_id;
-      this.isMobileChk = true;
+      this.openSuccessPopup(this.MOBILE_STATUS);
+
+      this.mobileChk = true;
     }).catch((error: any) => {
       console.log('error', error);
+      this.errorOpenPopup=true;
       this.setErrorMessage(error.data.message);
     });
   }
@@ -185,18 +250,20 @@ export default class ResetPassword extends Vue {
   private verifyCompleteByMobile(): void {
     //
     console.log('인증전송');
-    if (this.isMobileChk) {
+    if (this.mobileChk) {
       AuthService.getVerification({
         key: this.resetPwVerifyInfo.key,
         num: this.formData.verifiedCode,
       }).then((data: any) => {
         console.log(data);
         // alert('인증이 완료 되었습니다.');
+        this.openSuccessPopup(this.MOBILE_AUTH_STATUS);
+
         this.isVerifiedCode = true;
         this.formData.verifiedCode = '';
         this.setErrorMessage('');
-        this.isVerifiedStatus=true;
       }).catch((error) => {
+        this.errorOpenPopup=true;
         this.setErrorMessage(error.data.message);
         console.log(this.errorMsg);
       });
@@ -264,7 +331,7 @@ export default class ResetPassword extends Vue {
    */
   private resetFormData(): void {
     this.isEmailChk = false;
-    this.isMobileChk = false;
+    this.mobileChk = false;
     this.setErrorMessage('');
     this.formData = {
       radioValue: 'mobile',

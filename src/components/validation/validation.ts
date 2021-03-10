@@ -48,7 +48,9 @@ extend('confirmed', {
   validate( value: string | number, {target}: Record<string | number, any>): boolean {
     return value === target;
   },
-  message: '비밀번호가 일치하지 않습니다.',
+  message: ( fieldName: string, placeholder: Record<string, any>) => {
+    return `${fieldName}(이)가 일치하지 않습니다.`;
+  }
 });
 
 extend('mobile', (value: string ) => {

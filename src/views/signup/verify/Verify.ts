@@ -22,11 +22,13 @@ export default class Verify extends Vue {
     }
 
     private historyBack(): void{
-        this.$router.push('termsCheck');
+        this.$router.push('/signForm');
+        this.$emit('updateStep', 1);
     }
 
     private gotoNext(): void{
         this.$router.push('signUpForm');
+        this.$emit('updateStep', 3);
     }
 
     private verifyModalOpen() {

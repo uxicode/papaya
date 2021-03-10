@@ -183,7 +183,8 @@ export default class TermsCheck extends Vue {
         }*/
         //get isNextStep() ---> 필수 요소 선택 및 전부 체크시 true 반환
         if( this.isNextStep ){
-            this.$router.push('verify');
+            this.$router.push('/signForm/verify');
+            this.$emit('updateStep', 2);
         }
     }
 }

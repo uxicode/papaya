@@ -530,11 +530,12 @@ body {
   }
 }
 
-@import "./layout.scss";
-@import "./form.scss";
-@import "./button.scss";
-@import "./table.scss";
-@import "./popup.scss";
+@import "./transition";
+@import "./layout";
+@import "./form";
+@import "./button";
+@import "./table";
+@import "./popup";
 @import "./class";
 @import "./login";
 @import "./join";

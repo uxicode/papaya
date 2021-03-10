@@ -1,0 +1,1 @@
+export const MYCLASS_LIST: string = 'GET_MYCLASS_LIST';

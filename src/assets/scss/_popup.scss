@@ -36,6 +36,7 @@ $modalDepth : 1050;
   padding:30px 40px 20px;
 
   .popup-header-tit {
+    text-align: left;
     font-size:18px;
     font-weight:500;
   }
@@ -140,7 +141,7 @@ $modalDepth : 1050;
             display:block;
             width:32px;
             height:32px;
-            @include pos-center($left:0);
+            @include pos-vertical($left:0);
 
             &.icon-class {
               background:url(../../assets/images/profile-class.svg) no-repeat;
@@ -148,7 +149,7 @@ $modalDepth : 1050;
           }
 
           .post-classes-select {
-            @include pos-center($right:0);
+            @include pos-vertical($right:0);
           }
         }
 
@@ -182,7 +183,7 @@ $modalDepth : 1050;
         }
 
         .form-box {
-          @include pos-center($right:0);
+          @include pos-vertical($right:0);
 
           .form-group {
             + .form-group {
@@ -207,7 +208,7 @@ $modalDepth : 1050;
           .add-item-tit {font-weight:500;}
 
           .add-item-btn {
-            @include pos-center($right:0);
+            @include pos-vertical($right:0);
             .txt-btn {
               font-weight:500;
 
@@ -245,7 +246,7 @@ $modalDepth : 1050;
 
             .add-photo-control {
               .btn {
-                @include pos-center();
+                @include pos-vertical();
                 opacity:0.2;
 
                 &.scroll-prev {left:0;}
@@ -285,7 +286,7 @@ $modalDepth : 1050;
                   width:1px;
                   height:12px;
                   background-color:#848499;
-                  @include pos-center($right:0)
+                  @include pos-vertical($right:0)
                 }
 
               }
@@ -359,7 +360,7 @@ $modalDepth : 1050;
       }
 
       .form-temp-save {
-        @include pos-center($right:40px);
+        @include pos-vertical($right:40px);
       }
     }
   }
@@ -369,7 +370,7 @@ $modalDepth : 1050;
   padding:30px 40px;
 
   .popup-search-input {
-    @include pos-center($left:40px);
+    @include pos-vertical($left:40px);
 
     .form-control {
       border:none;

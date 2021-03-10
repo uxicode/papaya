@@ -23,6 +23,12 @@ export default class LoginForm extends Vue {
   private isLoginFail: boolean=false;
   private errorMsg: string = '';
 
+  @Auth.Getter
+  private userName!: string;
+
+  @Auth.Getter
+  private findUserId!: string;
+
   @History.Mutation
   private HISTORY_PAGE!: (pageName: string) => void;
 
@@ -39,6 +45,8 @@ export default class LoginForm extends Vue {
 
   public created() {
     this.HISTORY_PAGE('login');
+    console.log('findUserId=', this.findUserId);
+    console.log('userName=', this.userName);
   }
 
 
@@ -50,13 +58,15 @@ export default class LoginForm extends Vue {
         uid: this.userId,
         password: this.userPw,
       }).then((data: any) => {
-        // console.log('this.rPath=', this.rPath);
+        console.log('data', this.rPath, data);
         this.$router.push(this.rPath);
 
         this.isLoginFail=false;
-      }).catch((error) => {
+      }).catch((error: any) => {
         // console.log(error.data.message, error.data.error);
         this.errorMsg=error.data.error.message;
+
+        // console.log(error);
         this.isLoginFail=true;
       });
     }else{

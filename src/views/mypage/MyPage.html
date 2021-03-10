@@ -1,0 +1,20 @@
+<div class="contents mypage">
+    <div class="contents-inner">
+        <div class="contents-group">
+            <section class="contents-left">
+                <div class="mypage-list">
+                    <ul>
+                        <li><a href="/myProfile" class="active"><img src="./assets/images/mypage.svg" alt="">MY프로필</a></li>
+                        <li><a href="/bookmark"><img src="./assets/images/bookmark-outline.svg" alt="">보관함</a></li>
+                        <li><a href=""><img src="./assets/images/history.svg" alt="">활동내역</a></li>
+                    </ul>
+                </div>
+            </section>
+            <section class="contents-right">
+                <transition name="fade" mode="out-in">
+                    <router-view></router-view>
+                </transition>
+            </section>
+        </div>
+    </div>
+</div>

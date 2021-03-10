@@ -1,29 +1,22 @@
 import Vue from 'vue';
 import VueRouter, {RawLocation, RouteConfig} from 'vue-router';
-import Home from '../views/Home.vue';
+import MyClassList from '@/views/class/myClassList';
 import AppHeader from '@/components/header/header.vue';
 import AppFooter from '@/components/footer/footer.vue';
 import {getIsAuth} from '@/router/AuthGuard';
 import {LoginRouter} from '@/router/LoginRouter';
 import {SignUpRouter} from '@/router/SignUpRouter';
+import {MyPageRouter} from '@/router/MyPageRouter';
+import {MyClassRouter} from '@/router/MyClassRouter';
 
 Vue.use(VueRouter);
 
 // @ts-ignore
 const routes: RouteConfig[] = [
-  {
-    path: '/',
-    name: 'home',
-    components: {default: Home, header: AppHeader, footer: AppFooter},
-    beforeEnter: getIsAuth,
-    children: [
-      { path: '', component: () => import('../views/home/myClass/MyClass') },
-      { path: 'notify', component: () => import('../views/home/notify/Notify') },
-      { path: 'schedule', component: () => import('../views/home/schedule/Schedule') },
-    ],
-  },
+  ...MyClassRouter,
   ...LoginRouter,
   ...SignUpRouter,
+  ...MyPageRouter,
   {
     path: '*',
     name: 'notfound',
