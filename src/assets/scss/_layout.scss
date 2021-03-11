@@ -25,7 +25,7 @@ header {
     .menu {
       color:#fff;
 
-      > li a:not(.router-link-exact-active) {
+      > li a:not(.router-link-active) {
         opacity: 0.8;
       }
     }

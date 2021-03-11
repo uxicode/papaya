@@ -30,7 +30,7 @@ const MyClassRouter=[
   },*/
   //ex) - makeClass.4.3.1
   {
-    path: '/make',
+    path: '/class/make',
     name: 'makeClass',
     components: {default: () => import('../views/class/makeClass/makeClass.4.3.1'), header: AppHeader, footer: AppFooter},
   },
@@ -67,6 +67,12 @@ const MyClassRouter=[
 
 
 
+
+  {
+    path: '/class/setting',
+    name: 'setting',
+    components: {default: () => import('../views/class/setting/classSetting.4.5.7.8'), header: AppHeader, footer: AppFooter},
+  },
 ];
 
 export {MyClassRouter};

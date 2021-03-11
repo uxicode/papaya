@@ -9,6 +9,17 @@ $modalDepth : 1050;
   //background-color:rgba(15, 15, 21, 0.2);
   transition: all .3s ease;
 }
+
+.tip-info {
+  display:inline-block;
+  width:18px;
+  height:18px;
+
+  .icon-img {
+    vertical-align: top;
+  }
+}
+
 .modal-dim{
   position: fixed;
   top: 0;
@@ -47,22 +58,29 @@ $modalDepth : 1050;
 
     &.error {background:url(../../assets/images/popup-icon-error.png) no-repeat;}
     &.search {background:url(../../assets/images/popup-icon-search.png) no-repeat;}
-    //&.profile {background:url(../../assets/images/popup-icon-profile.png) no-repeat;}
-    &.link {background:url(../../assets/images/popup-icon-link.png) no-repeat;}
-    //&.time {background:url(../../assets/images/popup-icon-time.png) no-repeat;}
-    &.vote {background:url(../../assets/images/popup-icon-vote.png) no-repeat;}
+    &.edu {background:url(../../assets/images/popup-icon-edu.svg) no-repeat;}
+    &.profile {background:url(../../assets/images/popup-icon-profile.svg) no-repeat;}
+    &.link {background:url(../../assets/images/popup-icon-link.svg) no-repeat;}
+    &.time {background:url(../../assets/images/popup-icon-time.svg) no-repeat;}
+    &.vote {background:url(../../assets/images/popup-icon-vote.svg) no-repeat;}
+    &.withdraw {background:url(../../assets/images/popup-icon-withdraw.svg) no-repeat;}
+    &.change {background:url(../../assets/images/popup-icon-change.svg) no-repeat;}
+    &.confirm {background:url(../../assets/images/popup-icon-confirm.svg) no-repeat;}
+    &.add {background:url(../../assets/images/popup-icon-add.svg) no-repeat;}
+    &.staff {background:url(../../assets/images/popup-icon-staff.svg) no-repeat;}
+    &.leave {background:url(../../assets/images/popup-icon-leave.svg) no-repeat;}
+    &.block {background:url(../../assets/images/popup-icon-block.svg) no-repeat;}
   }
-
-
 }
 .popup-close {
   position:absolute;
   right:40px;
   top:30px;
 }
-.popup-body {
 
-  &.scroll-body {overflow-y:auto;}
+.scroll-body {overflow-y:auto;}
+
+.popup-body {
 
   .popup-cnt {
     padding:10px 40px;
@@ -81,7 +99,22 @@ $modalDepth : 1050;
 
   .popup-txt {
     letter-spacing:0;
+    line-height:1.57;
     color:#57576d;
+
+    &.type2 {
+      color:#848499;
+      margin-bottom:4px;
+    }
+  }
+
+  .popup-type {
+    padding-bottom:0;
+    border-bottom:none;
+    font-size:16px;
+    color:#373737;
+
+    &.sm {font-size:14px;}
   }
 
   .popup-search-result {

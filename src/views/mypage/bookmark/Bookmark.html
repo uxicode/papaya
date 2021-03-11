@@ -5,102 +5,196 @@
 
     <div class="my-bookmark">
         <div class="bookmark-top">
-            <a href="" class="txt-btn active">보관된 알림</a>
-            <a href="" class="txt-btn">보관된 일정</a>
-            <div class="bookmark-btn"><a href="" class="btn primary grey sm">비우기</a></div>
+            <button type="button" class="txt-btn" :class="{'active': bookmarkType === 'notification' }" @click="bookmarkType = 'notification'">보관된 알림</button>
+            <button type="button" class="txt-btn" :class="{'active': bookmarkType === 'schedule' }" @click="bookmarkType = 'schedule'">보관된 일정</button>
+            <div class="bookmark-btn">
+                <btn type="grey" size="sm" @btnClick="resetModalOpen">비우기</btn>
+            </div>
         </div>
 
         <div class="bookmark-list">
-            <div class="bookmark-item">
-                <div class="item-top">
-                    <span class="bookmark-class">1학년 3반 수학</span>
-                    <p class="bookmark-tit">수학 2단원 관련 공지사항</p>
+            <template v-if="bookmarkType === 'notification'">
+                <div class="bookmark-item">
+                    <div class="item-top">
+                        <span class="bookmark-class">1학년 3반 수학</span>
+                        <p class="bookmark-tit">수학 2단원 관련 공지사항</p>
 
-                    <div class="bookmark-option-btn">
-                        <button type="button" class="btn only-ico-btn sm bookmark active"></button>
+                        <div class="bookmark-option-btn">
+                            <button type="button" class="btn only-ico-btn sm bookmark active"></button>
 
-                        <div class="list-popup">
-                            <button type="button" class="list-popup-btn"><img src="assets/images/more.svg" alt=""></button>
-                            <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
-                                <a href="" class="list-popup-item">알림 수정</a>
-                                <a href="" class="list-popup-item">해당 클래스의 공지로 등록</a>
-                                <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
-                                <a href="" class="list-popup-item">알림 보관 해제</a>
-                                <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
+                            <div class="list-popup">
+                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
+                                    <a href="" class="list-popup-item">알림 수정</a>
+                                    <a href="" class="list-popup-item">해당 클래스의 공지로 등록</a>
+                                    <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
+                                    <a href="" class="list-popup-item">알림 보관 해제</a>
+                                    <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="item-cnt">
+                        <p class="post-txt">안녕하세요, 박수한 선생님입니다. 2020년을 맞이하여 1학년 1학기부터 3학년 1학기까지의 문제가 추가되었습니다. 기존에 제공하던 2학년 2학기 문제는 교과 과정이 개편되면서 많은 것들이…</p>
+                        <div class="post-sub">
+                            <span>박수한선생님</span>
+                            <span class="date">1분 전</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="item-cnt">
-                    <p class="post-txt">안녕하세요, 박수한 선생님입니다. 2020년을 맞이하여 1학년 1학기부터 3학년 1학기까지의 문제가 추가되었습니다. 기존에 제공하던 2학년 2학기 문제는 교과 과정이 개편되면서 많은 것들이…</p>
-                    <div class="post-sub">
-                        <span>박수한선생님</span>
-                        <span class="date">1분 전</span>
-                    </div>
-                </div>
-            </div>
+                <div class="bookmark-item">
+                    <div class="item-top">
+                        <span class="bookmark-class">꿈꾸는 5학년 1반</span>
+                        <p class="bookmark-tit">2019년 10월 가을체험학습 학부모 참가신청 안내 및 공지사항 안내</p>
 
-            <div class="bookmark-item">
-                <div class="item-top">
-                    <span class="bookmark-class">꿈꾸는 5학년 1반</span>
-                    <p class="bookmark-tit">2019년 10월 가을체험학습 학부모 참가신청 안내 및 공지사항 안내</p>
+                        <div class="bookmark-option-btn">
+                            <button type="button" class="btn only-ico-btn sm bookmark active"></button>
 
-                    <div class="bookmark-option-btn">
-                        <button type="button" class="btn only-ico-btn sm bookmark active"></button>
-
-                        <div class="list-popup">
-                            <button type="button" class="list-popup-btn"><img src="assets/images/more.svg" alt=""></button>
-                            <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
-                                <a href="" class="list-popup-item">알림 수정</a>
-                                <a href="" class="list-popup-item">해당 클래스의 공지로 등록</a>
-                                <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
-                                <a href="" class="list-popup-item">알림 보관 해제</a>
-                                <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
+                            <div class="list-popup">
+                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
+                                    <a href="" class="list-popup-item">알림 수정</a>
+                                    <a href="" class="list-popup-item">해당 클래스의 공지로 등록</a>
+                                    <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
+                                    <a href="" class="list-popup-item">알림 보관 해제</a>
+                                    <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="item-cnt">
+                        <p class="post-txt">안녕하세요, 박수한 선생님입니다. 2020년을 맞이하여 1학년 1학기부터 3학년 1학기까지의 문제가 추가되었습니다. 기존에 제공하던 2학년 2학기 문제는 교과 과정이 개편되면서 많은 것들이…</p>
+                        <div class="post-sub">
+                            <span>김지영선생님</span>
+                            <span class="date">2019. 10. 28</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="item-cnt">
-                    <p class="post-txt">안녕하세요, 박수한 선생님입니다. 2020년을 맞이하여 1학년 1학기부터 3학년 1학기까지의 문제가 추가되었습니다. 기존에 제공하던 2학년 2학기 문제는 교과 과정이 개편되면서 많은 것들이…</p>
-                    <div class="post-sub">
-                        <span>김지영선생님</span>
-                        <span class="date">2019. 10. 28</span>
+                <div class="bookmark-item">
+                    <div class="item-top">
+                        <span class="bookmark-class">꿈꾸는 5학년 1반</span>
+                        <p class="bookmark-tit">11월 급식표입니다.</p>
+
+                        <div class="bookmark-option-btn">
+                            <button type="button" class="btn only-ico-btn sm bookmark active"></button>
+
+                            <div class="list-popup">
+                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
+                                    <a href="" class="list-popup-item">알림 수정</a>
+                                    <a href="" class="list-popup-item">해당 클래스의 공지로 등록</a>
+                                    <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
+                                    <a href="" class="list-popup-item">알림 보관 해제</a>
+                                    <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item-cnt">
+                        <p class="post-txt none">게시글이 등록되었습니다.</p>
+                        <div class="post-sub">
+                            <span>박수한선생님</span>
+                            <span class="date">1분 전</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </template>
 
-            <div class="bookmark-item">
-                <div class="item-top">
-                    <span class="bookmark-class">꿈꾸는 5학년 1반</span>
-                    <p class="bookmark-tit">11월 급식표입니다.</p>
+            <template v-else-if="bookmarkType === 'schedule'">
+                <div class="bookmark-item">
+                    <div class="item-top">
+                        <span class="bookmark-class">1학년 3반 수학</span>
+                        <p class="bookmark-tit">파파야초등학교 10월 가을 체험학습</p>
 
-                    <div class="bookmark-option-btn">
-                        <button type="button" class="btn only-ico-btn sm bookmark active"></button>
+                        <div class="bookmark-option-btn">
+                            <button type="button" class="btn only-ico-btn sm bookmark active"></button>
 
-                        <div class="list-popup">
-                            <button type="button" class="list-popup-btn"><img src="assets/images/more.svg" alt=""></button>
-                            <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
-                                <a href="" class="list-popup-item">알림 수정</a>
-                                <a href="" class="list-popup-item">해당 클래스의 공지로 등록</a>
-                                <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
-                                <a href="" class="list-popup-item">알림 보관 해제</a>
-                                <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
+                            <div class="list-popup">
+                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
+                                    <a href="" class="list-popup-item">알림 수정</a>
+                                    <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
+                                    <a href="" class="list-popup-item">일정 보관 해제</a>
+                                    <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
+                                </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="item-cnt">
+                        <p class="post-txt">오늘은 3단원을 시작하도록 합니다.</p>
+                        <div class="schedule-box">
+                            <p>2019. 12. 10 오전 10시 - 11시</p>
+                        </div>
+                        <div class="post-sub">
+                            <span>박수한선생님</span>
+                            <span class="date">1분 전</span>
                         </div>
                     </div>
                 </div>
 
-                <div class="item-cnt">
-                    <p class="post-txt none">게시글이 등록되었습니다.</p>
-                    <div class="post-sub">
-                        <span>박수한선생님</span>
-                        <span class="date">1분 전</span>
+                <div class="bookmark-item">
+                    <div class="item-top">
+                        <span class="bookmark-class">꿈꾸는 5학년 1반</span>
+                        <p class="bookmark-tit">2019년 10월 가을체험학습 학부모 참가신청 안내 및 공지사항 안내</p>
+
+                        <div class="bookmark-option-btn">
+                            <button type="button" class="btn only-ico-btn sm bookmark active"></button>
+
+                            <div class="list-popup">
+                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
+                                    <a href="" class="list-popup-item">알림 수정</a>
+                                    <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
+                                    <a href="" class="list-popup-item">일정 보관 해제</a>
+                                    <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="item-cnt">
+                        <p class="post-txt">아침저녁으로 쌀쌀한 날씨가 계속 되고 있습니다. 감기에 걸리지 않도록 입고 벗기에 쉬운 겉옷을…</p>
+                        <div class="schedule-box">
+                            <p>2019. 10. 30 화요일 오전 10시 - 2019. 10. 31 수요일 오후 1시</p>
+                        </div>
+                        <div class="post-sub">
+                            <span>김지영 선생님</span>
+                            <span class="date">2019. 10. 28</span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </template>
         </div>
+
     </div>
 
+    <!-- start: 보관함 비우기 팝업 -->
+    <modal v-if="isResetModal" size="540px" body-padding="0">
+        <div slot="header">
+            <p class="popup-header-tit">보관된 알림을 비우시겠습니까?</p>
+            <div class="popup-close" @click="isResetModal = false">
+                <button type="button" class="close" ><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <div class="popup-cnt">
+                <p class="popup-txt">보관된 알림 <span class="fc-red">3</span>개가 모두 보관 해제됩니다. 계속하시겠습니까?</p>
+            </div>
+        </div>
+        <div slot="footer">
+            <div class="btn-group rt">
+                <btn type="outline" @btnClick="isResetModal = false">아니오</btn>
+                <btn type="navi">예</btn>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 보관함 비우기 팝업 -->
+
 </div>
+
