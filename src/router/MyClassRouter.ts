@@ -59,6 +59,12 @@ const MyClassRouter=[
     components: {default: () => import('../views/class/notify/notify.4.5.2'), header: AppHeader, footer: AppFooter},
   },
 
+  {
+    path: '/notify.4.5.2.4',
+    name: 'notify.4.5.2.4',
+    components: {default: () => import('../views/class/notify/notify.4.5.2.4'), header: AppHeader, footer: AppFooter},
+  },
+
 
 
 ];
