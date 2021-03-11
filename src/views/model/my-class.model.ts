@@ -1,13 +1,28 @@
 interface IMyClassList {
-    profile_image: () => void;
+    id: number;
     name: string;
-    nickname: string;
-    createdAt: number;
-    status: string;
-    memberNum: number;
-    isUpdated: boolean;
-    updatedDiffTime: string;
-    is_bookmarked: number;
+    me: {
+        joinedAt: Date;
+        createdAt: Date;
+        updatedAt: Date;
+        class_id: number;
+        user_id: number;
+        nickname: string;
+        profile_image: string;
+        is_bookmarked: string;
+        schedule_color: string;
+        level: string;
+        status: string;
+        open_level_id: number;
+        open_level_mobileno: number;
+        open_level_email:  number;
+        onoff_push_noti:  number;
+        onoff_post_noti:  number;
+        onoff_comment_noti:  number;
+        onoff_schedule_noti:  number;
+        schedule_noti_intime:  number;
+        visited:  string;
+    };
 }
 /*
 "myclass_list": [
