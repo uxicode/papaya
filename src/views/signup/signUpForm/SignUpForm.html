@@ -56,6 +56,7 @@
                       </ValidationProvider>
                       -->
                       <txt-field id="pwd"
+                                 input-type="password"
                                  size="390"
                                  placeholder="비밀번호를 입력해 주세요."
                                  v-model="formData.user_password"
@@ -72,6 +73,7 @@
                       </ValidationProvider>
                       -->
                       <txt-field size="390"
+                                 input-type="password"
                                  placeholder="비밀번호를 다시 입력해 주세요."
                                  v-model="rePassword"
                                  rules="required|confirmed:@비밀번호|"
