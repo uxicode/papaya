@@ -55,7 +55,7 @@
                     <div class="list-item">
                         <p class="list-tit">이름</p>
                         <div class="list-right">
-                            <span>김지영 선생님</span>
+                            <span>{{ myInfo.fullname }}</span>
                             <button type="button" class="list-btn" @click="nameModifyModalOpen"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                         <p class="list-tit">생일</p>
                         <div class="list-right">
                             <div class="form-group date">
-                                <span class="date-area">1988.10.31</span>
+                                <span class="date-area">{{ myInfo.birthday }}</span>
                                 <button type="button" class="btn form-btn form-calendar"></button>
                             </div>
                         </div>
@@ -72,7 +72,7 @@
                         <p class="list-tit">성별</p>
                         <div class="list-right">
                             <div class="list-popup">
-                                <button type="button" class="list-popup-btn">여자 <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                <button type="button" class="list-popup-btn">{{ myInfo.gender === '1' ? '남자' : '여자' }} <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
                                 <div class="list-popup-menu">
                                     <a href="" class="list-popup-item">여자</a>
                                     <a href="" class="list-popup-item">남자</a>
@@ -90,20 +90,20 @@
                     <div class="list-item">
                         <p class="list-tit">아이디</p>
                         <div class="list-right">
-                            <span>papaya123</span>
+                            <span>{{ myInfo.user_id }}</span>
                         </div>
                     </div>
                     <div class="list-item">
                         <p class="list-tit">모바일 번호</p>
                         <div class="list-right">
-                            <span>010-1234-5678</span>
+                            <span>{{ myInfo.mobile_no }}</span>
                             <button type="button" class="list-btn" @click="gotoMobileModify"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                         </div>
                     </div>
                     <div class="list-item">
                         <p class="list-tit">이메일 주소</p>
                         <div class="list-right">
-                            <span>papaya@gmail.com</span>
+                            <span>{{ myInfo.email }}</span>
                             <button type="button" class="list-btn" @click="emailModifyModalOpen"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                         </div>
                     </div>
@@ -146,7 +146,7 @@
                     <h2 class="popup-tit">이름 변경</h2>
                     <div class="popup-input">
                         <div class="form-group inline">
-                            <input type="text" class="form-control" value="김지영 선생님">
+                            <input type="text" class="form-control" :value="myInfo.fullname">
                         </div>
                     </div>
                 </div>
@@ -175,7 +175,7 @@
                     <h2 class="popup-tit">이메일 주소 변경</h2>
                     <div class="popup-input">
                         <div class="form-group inline">
-                            <input type="email" class="form-control" value="papaya@gmail.com">
+                            <input type="email" class="form-control" :value="myInfo.email">
                         </div>
                     </div>
                 </div>

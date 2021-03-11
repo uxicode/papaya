@@ -1,7 +1,11 @@
+import {IUserMe} from '@/api/model/user.model';
 import {Vue, Component, Prop} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import WithRender from './MyProfile.html';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
+
+const Auth = namespace('Auth');
 
 @WithRender
 @Component({
@@ -11,6 +15,14 @@ import Modal from '@/components/modal/modal.vue';
     },
 })
 export default class MyProfile extends Vue {
+    @Auth.Getter
+    public userInfo!: IUserMe;
+
+    get myInfo(): object {
+        // console.log( 'this.userInfo=', this.userInfo );
+        return this.userInfo;
+    }
+
     private isNameModifyModal: boolean = false;
     private isEmailModifyModal: boolean = false;
     private mobileModify: boolean = false;
