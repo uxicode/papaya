@@ -31,36 +31,51 @@
     </div>
 
     <div class="classes-card">
-      <ul class="classes">
-        <li class="item new-classes">
-          <a href="">
-            <p>새로운 클래스<br>생성하기</p>
-          </a>
-        </li>
-
-        <li v-for="item in classItemLists" class="item">
-          <a href="" class="class-info">
-            <div class="info-img crown">
-              <span><img :src="imgNullCheck(item.me.profile_image)" class="thumb" alt=""></span>
-            </div>
-            <div class="info-tit">
-              <p>{{  item.name }}</p>
-              <span>{{imgNullCheck( item.me.nickname ) }}</span>
-            </div>
-            <div class="info-sub">
-              <span>{{ getYears( item.me.createdAt )}}</span>
-              <span>{{ item.me.status ==='0'? '대기' : '승인' }}</span>
-              <span>멤버 {{ item.me.memberNum }}</span>
-            </div>
-          </a>
-          <div class="class-update">
-            <span class="update" :class="{'active': item.me.isUpdated === 1}">{{ updatedDiffDate( item.me.updatedAt ) }}</span>
-            <button type="button" class="btn only-ico-btn heart" :class="{'active': item.is_bookmarked}" @click="bookmarkToggle(item)"></button>
-          </div>
-        </li>
-      </ul>
-
-      <btn @btnClick="getMoreDisplay">더보기</btn>
+      <template  v-if="originalClassItems.length<1">
+        <ul class="classes">
+          <li class="item new-classes">
+            <a href="">
+              <p>새로운 클래스<br>생성하기</p>
+            </a>
+          </li>
+        </ul>
+      </template>
+      <template v-else>
+        <transition-group class="classes" name="slideY" tag="ul" @before-enter="beforeEnter" @after-enter="afterEnter">
+          <li class="item"
+              v-for="( item, index ) in classItemLists"
+              :data-index="index"
+              :key="item.me.class_id"
+              :class="{'new-classes':index===0}">
+            <template v-if="index===0">
+              <a href="" >
+                <p>새로운 클래스<br>생성하기</p>
+              </a>
+            </template>
+            <template v-else>
+              <a href="" class="class-info">
+                <div class="info-img crown">
+                  <span><img :src="imgNullCheck(item.me.profile_image)" class="thumb" alt=""></span>
+                </div>
+                <div class="info-tit">
+                  <p>{{  item.name }}</p>
+                  <span>{{imgNullCheck( item.me.nickname ) }}</span>
+                </div>
+                <div class="info-sub">
+                  <span>{{ getYears( item.me.createdAt )}}</span>
+                  <span>{{ item.me.status ==='0'? '대기' : '승인' }}</span>
+                  <span>멤버 {{ item.me.memberNum }}</span>
+                </div>
+              </a>
+              <div class="class-update">
+                <span class="update" :class="{'active': item.me.isUpdated === 1}">{{ updatedDiffDate( item.me.updatedAt ) }}</span>
+                <button type="button" class="btn only-ico-btn heart" :class="{'active': item.is_bookmarked}" @click="bookmarkToggle(item)"></button>
+              </div>
+            </template>
+          </li>
+        </transition-group>
+      </template>
+      <btn @btnClick="getMoreDisplay"  v-if="classItemLists.length>0">더보기</btn>
     </div>
   </div>
 </div>

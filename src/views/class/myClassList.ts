@@ -35,6 +35,10 @@ export default class MyClassList extends Vue {
     return this.classItems;
   }
 
+  get originalClassItems(): IMyClassList[] {
+    return this.myClassLists;
+  }
+
   get userName(): string {
     // console.log( 'this.userInfo=', this.userInfo );
     return ( this.userInfo as IUserMe).fullname;
@@ -59,18 +63,22 @@ export default class MyClassList extends Vue {
   public getMyClass(): void {
 
     this.MYCLASS_LIST_ACTION().then(() =>{
-      this.$nextTick( ()=>{
-        if (this.myClassLists !== null && this.myClassLists!==undefined) {
+      if (this.myClassLists !== null && this.myClassLists!==undefined) {
+        if (this.myClassLists.length > 0) {
           this.getMoreDisplay() ;
         }
-      });
+      }
     });
   }
 
+  /**
+   * 클래스 리스트 뷰
+   * this.pageCount 는 더 보기 클릭시 카운팅 하여 paging 처리 한다.
+   */
   public getMoreDisplay(): void{
     this.pageCount++;
     const numOfPage=16;
-    const end=this.pageCount*numOfPage-2;
+    const end=this.pageCount*numOfPage-1;
     const begin=( (end - numOfPage+1)<0 )? 0 : (end - numOfPage+1);
 
     // console.log(begin, end);
@@ -80,12 +88,6 @@ export default class MyClassList extends Vue {
     const items=this.myClassLists.filter( (item, idx)=> idx>=begin && idx<=end );
     this.classItems=[...this.classItems, ...items];
 
-    console.log(this.classItems);
-  }
-
-  public paginate(arr: object[], size: number, num: number) {
-    // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
-    return arr.slice( (num - 1) * size, size * num);
   }
 
   public getYears( dateTxt: string ): string{
@@ -99,8 +101,19 @@ export default class MyClassList extends Vue {
   public updatedDiffDate( dateValue: Date ): void{
     const today = new Date().getTime();
     const updateDate = new Date(dateValue).getTime();
-    // console.log(updateDate);
-    // console.log( new Date(dateValue), (today- updateDate )/1000/60/60 )
+    const calcDate=today-updateDate;
+    // console.log(new Date(dateValue));
+    console.log(new Date(dateValue), calcDate/ 1000 / 60 / 60 / 24/365 );
+  }
+
+  // 트랜지션을 시작할 때 인덱스 * 100 ms 만큼의 딜레이를 적용합니다.
+  public beforeEnter(el: HTMLElement) {
+    el.style.transitionDelay =100* parseInt( el.dataset.index as string, 10) + 'ms';
+  }
+
+  // 트랜지션을 완료하거나 취소할 때는 딜레이를 제거합니다.
+  public afterEnter(el: HTMLElement) {
+    el.style.transitionDelay = '';
   }
 
 
