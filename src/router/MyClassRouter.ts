@@ -65,9 +65,6 @@ const MyClassRouter=[
     components: {default: () => import('../views/class/notify/notify.4.5.2.4'), header: AppHeader, footer: AppFooter},
   },
 
-
-
-
   {
     path: '/class/setting',
     name: 'setting',
