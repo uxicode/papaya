@@ -36,6 +36,12 @@ const MyClassRouter=[
   },
 
   {
+    path: '/class/setting1',
+    name: 'setting',
+    components: {default: () => import('../views/class/setting/classSetting.4.5.7.3'), header: AppHeader, footer: AppFooter},
+  },
+
+  {
     path: '/class/search.4.2.1',
     name: 'search.4.2.1',
     components: {default: () => import('../views/class/search/search.4.2.1'), header: AppHeader, footer: AppFooter},
@@ -69,6 +75,29 @@ const MyClassRouter=[
     path: '/class/setting',
     name: 'setting',
     components: {default: () => import('../views/class/setting/classSetting.4.5.7.8'), header: AppHeader, footer: AppFooter},
+  },
+
+  {
+    path: '/class/setting2',
+    name: 'setting',
+    components: {default: () => import('../views/class/setting/classSetting.4.5.7.10'), header: AppHeader, footer: AppFooter},
+  },
+  {
+    path: '/class/member',
+    name: 'setting',
+    components: {default: () => import('../views/class/member/classMember.4.5.6'), header: AppHeader, footer: AppFooter},
+  },
+
+  {
+    path: '/class/education',
+    name: 'setting',
+    components: {default: () => import('../views/class/education/classEducation.4.5.5'), header: AppHeader, footer: AppFooter},
+  },
+
+  {
+    path: '/class/schedule',
+    name: 'setting',
+    components: {default: () => import('../views/class/schedule/classSchedule.4.5.3.3.4.2'), header: AppHeader, footer: AppFooter},
   },
 ];
 

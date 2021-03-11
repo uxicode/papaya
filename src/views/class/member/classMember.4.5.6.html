@@ -1,0 +1,346 @@
+<div class="contents home">
+    <div class="contents-inner">
+        <div class="contents-group">
+            <section class="contents-left">
+                <div class="class-home">
+                    <div class="class-home-info">
+                        <div class="info-img">
+                            <img :src="require('@/assets/images/bg-icon.png')" alt="">
+                            <a href="" class="img-change"><img :src="require('@/assets/images/btn-round 2.png')" alt=""></a>
+                        </div>
+                        <div class="info-txt">
+                            <p class="info-cn">꿈꾸는 5학년 1반</p>
+                            <span class="info-or">파파야초등학교</span>
+                            <ul class="info-list">
+                                <li>2019</li>
+                                <li>비공개클래스</li>
+                                <li><a href="">멤버 2122</a></li>
+                            </ul>
+                            <p class="info-tag">
+                                #꿈꾸는아이들 #파파야초등학교 #재미있는 #파파야 #어드벤처
+                            </p>
+                        </div>
+                        <div class="class-bookmark">
+                            <a type="button" class="btn ico-btn ico-left active"><span class="icon heart"></span>즐겨찾기</a>
+                        </div>
+                    </div>
+                    <div class="class-menu">
+                        <ul class="menu-list">
+                            <li><a href="" class="type1">클래스 홈</a></li>
+                            <li><a href="" class="type2">알림</a></li>
+                            <li><a href="" class="type3">일정</a></li>
+                            <li><a href="" class="type4">파일함</a></li>
+                            <li><a href="" class="type5">교육과정</a></li>
+                            <li><a href="" class="type6 active">클래스 설정</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section class="contents-right">
+                <div class="classes-member">
+                    <div class="cnt-top">
+                        <h2 class="cnt-tit">멤버 <strong>2122</strong></h2>
+                        <div class="cnt-top-btn">
+                            <button type="button" class="btn ico-btn ico-left navi sm">
+                                <img :src="require('@/assets/images/icn-18-add-white.svg')" class="icon" alt="">멤버 초대하기
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="member-search">
+                        <input type="text" class="mb-search-bar" placeholder="멤버를 검색해 주세요.">
+                        <button type="button" class="btn only-ico-btn"><img :src="require('@/assets/images/search.svg')" alt=""></button>
+                    </div>
+
+                    <div class="classes-member-list">
+                        <p class="list-tit">클래스 운영자</p>
+                        <ul class="member-list">
+                            <li class="list-item">
+                                <div class="member-info admin">
+                                    <p class="name">김지영선생님</p>
+                                    <span class="position">운영자</span>
+                                </div>
+                                <div class="member-info-btn">
+                                    <div class="list-popup">
+                                        <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                        <div class="list-popup-menu pos-right active" style="transform:translate3d(42px, 0, 0);">
+                                            <a href="" class="list-popup-item">list1</a>
+                                            <a href="" class="list-popup-item">list2</a>
+                                            <a href="" class="list-popup-item">list3</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="accordion">
+                            <!-- accordion 1-->
+                            <div class="accordion-tit">
+                                <p class="list-tit">스탭 멤버 <strong>3</strong></p>
+                                <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
+                                <button class="accordion-btn sm rt-10 active" data-toggle="collapse" data-target="#accordion1"></button>
+                            </div>
+                            <div class="accrodion-cnt active">
+                                <ul class="member-list">
+                                    <li class="list-item">
+                                        <div class="member-info staff">
+                                            <p class="name">김경희선생님</p>
+                                            <span class="position">스탭 멤버</span>
+                                        </div>
+                                        <div class="member-info-btn">
+                                            <div class="list-popup">
+                                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                                <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0, 0);">
+                                                    <a href="" class="list-popup-item">list1</a>
+                                                    <a href="" class="list-popup-item">list2</a>
+                                                    <a href="" class="list-popup-item">list3</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-item">
+                                        <div class="member-info staff">
+                                            <p class="name">김경희선생님</p>
+                                            <span class="position">스탭 멤버</span>
+                                        </div>
+                                        <div class="member-info-btn">
+                                            <div class="list-popup">
+                                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                                <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0, 0);">
+                                                    <a href="" class="list-popup-item">list1</a>
+                                                    <a href="" class="list-popup-item">list2</a>
+                                                    <a href="" class="list-popup-item">list3</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-item">
+                                        <div class="member-info staff">
+                                            <p class="name">김경희선생님</p>
+                                            <span class="position">스탭 멤버</span>
+                                        </div>
+                                        <div class="member-info-btn">
+                                            <div class="list-popup">
+                                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                                <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0, 0);">
+                                                    <a href="" class="list-popup-item">list1</a>
+                                                    <a href="" class="list-popup-item">list2</a>
+                                                    <a href="" class="list-popup-item">list3</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- accordion 1-->
+                            <div class="accordion-tit">
+                                <p class="list-tit">일반 멤버 <strong>2118</strong></p>
+                                <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
+                                <button class="accordion-btn sm rt-10 active" data-toggle="collapse" data-target="#accordion1"></button>
+                            </div>
+                            <div class="accrodion-cnt active">
+                                <ul class="member-list">
+                                    <li class="list-item">
+                                        <div class="member-info member">
+                                            <p class="name">박정수 엄마</p>
+                                            <span class="position">일반 멤버</span>
+                                        </div>
+                                        <div class="member-info-btn">
+                                            <div class="list-popup">
+                                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                                <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0, 0);">
+                                                    <a href="" class="list-popup-item">list1</a>
+                                                    <a href="" class="list-popup-item">list2</a>
+                                                    <a href="" class="list-popup-item">list3</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-item">
+                                        <div class="member-info member">
+                                            <p class="name">박정수 엄마</p>
+                                            <span class="position">일반 멤버</span>
+                                        </div>
+                                        <div class="member-info-btn">
+                                            <div class="list-popup">
+                                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                                <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0, 0);">
+                                                    <a href="" class="list-popup-item">list1</a>
+                                                    <a href="" class="list-popup-item">list2</a>
+                                                    <a href="" class="list-popup-item">list3</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-item">
+                                        <div class="member-info member">
+                                            <p class="name">박정수 엄마</p>
+                                            <span class="position">일반 멤버</span>
+                                        </div>
+                                        <div class="member-info-btn">
+                                            <div class="list-popup">
+                                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                                <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0, 0);">
+                                                    <a href="" class="list-popup-item">list1</a>
+                                                    <a href="" class="list-popup-item">list2</a>
+                                                    <a href="" class="list-popup-item">list3</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-item">
+                                        <div class="member-info member">
+                                            <p class="name">박정수 엄마</p>
+                                            <span class="position">일반 멤버</span>
+                                        </div>
+                                        <div class="member-info-btn">
+                                            <div class="list-popup">
+                                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                                <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0, 0);">
+                                                    <a href="" class="list-popup-item">list1</a>
+                                                    <a href="" class="list-popup-item">list2</a>
+                                                    <a href="" class="list-popup-item">list3</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-item">
+                                        <div class="member-info member">
+                                            <p class="name">박정수 엄마</p>
+                                            <span class="position">일반 멤버</span>
+                                        </div>
+                                        <div class="member-info-btn">
+                                            <div class="list-popup">
+                                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                                <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0, 0);">
+                                                    <a href="" class="list-popup-item">list1</a>
+                                                    <a href="" class="list-popup-item">list2</a>
+                                                    <a href="" class="list-popup-item">list3</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="list-item">
+                                        <div class="member-info member">
+                                            <p class="name">박정수 엄마</p>
+                                            <span class="position">일반 멤버</span>
+                                        </div>
+                                        <div class="member-info-btn">
+                                            <div class="list-popup">
+                                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                                <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0, 0);">
+                                                    <a href="" class="list-popup-item">list1</a>
+                                                    <a href="" class="list-popup-item">list2</a>
+                                                    <a href="" class="list-popup-item">list3</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 검색결과 없음 -->
+                    <!--
+                    <div class="classes-member-list">
+                        <div class="search-none">
+                            <div class="search-none-inner">
+                                <p><img :src="require('@/assets/images/class.png')" alt=""></p>
+                                <p class="m-txt">검색 결과가 없습니다.</p>
+                                <p class="s-txt">상단 멤버 초대하기 버튼을 통해 클래스에 초대 가능합니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                    -->
+
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.6.1 (멤버정보 - 상세) -->
+    <modal v-if="true">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon profile"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt">
+                <h2 class="popup-tit pdb-0">멤버 프로필 상세</h2>
+            </div>
+            <div class="member-profile">
+                <div class="profile-inner">
+                    <div class="profile-info staff">
+                        <p>김경희선생님</p>
+                        <span>스탭 멤버</span>
+                    </div>
+                    <div class="profile-btn">
+                        <div class="list-popup">
+                            <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                            <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0, 0);">
+                                <a href="" class="list-popup-item">list1</a>
+                                <a href="" class="list-popup-item">list2</a>
+                                <a href="" class="list-popup-item">list3</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <ul class="profile-list">
+                    <li class="list-item">
+                        <p class="list-tit">모바일 번호</p>
+                        <div class="basic-info">
+                            <p>01012345678</p>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <p class="list-tit">아이디</p>
+                        <div class="basic-info">
+                            <p>ky123</p>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <p class="list-tit">이메일 주소</p>
+                        <div class="basic-info">
+                            <p>ky123@gmail.com</p>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <p class="list-tit">가입 질문 응답</p>
+                        <div class="basic-info">
+                            <div class="accordion-tit">
+                                <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
+                                <button class="accordion-btn" data-toggle="collapse" data-target="#accordion1"></button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <!-- class="active" 일 경우 open -->
+                <div class="accordion-cnt active"  id="accordion1">
+                    <ul class="profile-qna">
+                        <li>
+                            <p class="question">1. 자녀와의 관계가 어떻게 되시나요? (예. 엄마, 아빠 등)</p>
+                            <p class="answer">엄마</p>
+                        </li>
+                        <li>
+                            <p class="question">2. 살고 있는 지역을 간단히 써주세요. (예. 서울 성북구)</p>
+                            <p class="answer">서울 구로구</p>
+                        </li>
+                        <li>
+                            <p class="question">3. 하고 싶은 말 적어주세요.</p>
+                            <p class="answer">잘 부탁드립니다.</p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- //accordion 3-->
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+</div>
