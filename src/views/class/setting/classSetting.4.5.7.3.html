@@ -1,14 +1,14 @@
 
 <!-- 클래스 관리메뉴 팝업 모음 -->
 
-<div class="contents home">
+<div class="contents">
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.3 (클래스 기본 정보 관리) -->
     <modal v-if="false">
         <div slot="header">
             <!-- header custom coding-->
             <p class="popup-header-tit">클래스 기본 정보 관리</p>
             <div class="popup-close">
-                <button class="close"><img src="assets/images/close.svg" alt=""></button>
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
         </div>
         <div slot="body">
@@ -63,7 +63,7 @@
             <!-- header custom coding-->
             <p class="popup-header-tit">클래스 태그 관리</p>
             <div class="popup-close">
-                <button class="close"><img src="assets/images/close.svg" alt=""></button>
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
         </div>
         <div slot="body">
@@ -95,13 +95,47 @@
     </modal>
     <!-- end: 공통 팝업 -->
 
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.4.2 (클래스 태그 관리 - 태그 검색중/완료) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon search"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-search">
+                <h2 class="popup-tit">태그를 검색해 보세요.</h2>
+                <div class="form-group inline">
+                    <input type="text" class="form-control" id="input3" value="파파야" style="width:370px">
+                    <button type="button" class="btn primary grey sm">검색</button>
+                </div>
+            </div>
+            <div class="popup-search-result">
+                <div class="popup-search-list">
+                    <ul>
+                        <li class="popup-search-item"><a href=""><strong>파파야</strong></a></li>
+                        <li class="popup-search-item"><a href=""><strong>파파야</strong>초등학교</a></li>
+                        <li class="popup-search-item"><a href=""><strong>파파야</strong>중학교</a></li>
+                        <li class="popup-search-item"><a href=""><strong>파파야</strong>고등학교</a></li>
+                        <li class="popup-search-item"><a href="">레드<strong>파파야</strong></a></li>
+                        <li class="popup-search-item"><a href="">골드<strong>파파야</strong></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.5 (가입 안내 문구 설정) -->
     <modal v-if="false">
         <div slot="header">
             <!-- header custom coding-->
             <p class="popup-header-tit">가입 안내 문구 설정</p>
             <div class="popup-close">
-                <button class="close"><img src="assets/images/close.svg" alt=""></button>
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
         </div>
         <div slot="body">
@@ -132,7 +166,7 @@
             <!-- header custom coding-->
             <p class="popup-header-tit">가입 질문 설정</p>
             <div class="popup-close">
-                <button class="close"><img src="assets/images/close.svg" alt=""></button>
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
         </div>
         <div slot="body">
@@ -160,7 +194,7 @@
                                 <div class="form-group" style="width:490px;">
                                     <input type="text" class="form-control popup-type" id="input4" value="자녀와의 관계가 어떻게 되시나요? (예. 엄마, 아빠 등)">
                                     <!-- form-delete active 시 display:block; -->
-                                    <button type="button" class="btn only-ico-btn form-delete active"><img src="assets/images/delete.svg" alt=""></button>
+                                    <button type="button" class="btn only-ico-btn form-delete active"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                                 </div>
                             </div>
                         </li>
@@ -171,7 +205,7 @@
                                 <div class="form-group" style="width:490px;">
                                     <input type="text" class="form-control popup-type" id="input5" value="살고 있는 지역을 간단히 써주세요. (예. 서울 성북구)">
                                     <!-- form-delete active 시 display:block; -->
-                                    <button type="button" class="btn only-ico-btn form-delete active"><img src="assets/images/delete.svg" alt=""></button>
+                                    <button type="button" class="btn only-ico-btn form-delete active"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                                 </div>
                             </div>
                         </li>
@@ -182,7 +216,7 @@
                                 <div class="form-group" style="width:490px;">
                                     <input type="text" class="form-control popup-type" id="input6" placeholder="질문을 30자 이내로 입력해 주세요.">
                                     <!-- form-delete active 시 display:block; -->
-                                    <button type="button" class="btn only-ico-btn form-delete active"><img src="assets/images/delete.svg" alt=""></button>
+                                    <button type="button" class="btn only-ico-btn form-delete active"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                                 </div>
                             </div>
                         </li>
@@ -201,7 +235,7 @@
     <!-- end: 공통 팝업 -->
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.7 (가입 현황 관리) -->
-    <modal v-if="true">
+    <modal v-if="false">
         <div slot="header">
             <!-- header custom coding-->
             <p class="popup-header-tit">가입 현황 관리</p>
@@ -263,6 +297,52 @@
                         <a href="" class="apply-more"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
                     </li>
                 </ul>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.7.1 (가입 현황 관리 - 가입 신청 상세) -->
+    <modal v-if="true">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon add"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt">
+                <h2 class="popup-tit pdb-0">가입 신청 상세</h2>
+            </div>
+            <div class="member-profile">
+                <p class="request-date">2019. 10. 30 오후 11:00에 신청</p>
+
+                <div class="join-detail">
+                    <div class="join-detail-top">
+                        <p class="join-top-tit">클래스 닉네임</p>
+                        <span class="join-top-txt">김민재아빠</span>
+                    </div>
+
+                    <div class="join-detail-cnt">
+                        <div class="join-qna">
+                            <p class="join-qna-q">1. 자녀와의 관계가 어떻게 되시나요? (예. 엄마, 아빠 등)</p>
+                            <p class="join-qna-a">아빠</p>
+                        </div>
+                        <div class="join-qna">
+                            <p class="join-qna-q">2. 살고 있는 지역을 간단히 써주세요. (예. 서울 성북구)</p>
+                            <p class="join-qna-a">서울 강남구</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <!-- footer custom coding-->
+            <div class="btn-group rt">
+                <button type="button" class="btn outline">거절</button>
+                <button type="button" class="btn primary navi">신청 수락</button>
             </div>
         </div>
     </modal>

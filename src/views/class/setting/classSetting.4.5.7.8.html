@@ -1,14 +1,18 @@
 
-<!-- 멤버 관리 팝업 모음 -->
+<!--
+    멤버 관리 팝업 모음
+    4.5.7.8.1.1 / 4.5.7.8.1.2 / 4.5.7.8.2.1 / 4.5.7.8.2.2 / 4.5.7.8.3.2 / 4.5.7.8.3.3 / 4.5.7.9.1.2 / 4.5.7.9.2.1 / 4.5.7.9.2.2
+    위 파일들은 형태는 같고 각 팝업 마다 아이콘, 텍스트, 버튼만 다름.
+-->
 
-<div class="contents home">
+<div class="contents">
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8 (멤버 활동 관리) -->
     <modal v-if="false">
         <div slot="header">
             <!-- header custom coding-->
             <p class="popup-header-tit">멤버 활동 관리</p>
             <div class="popup-close">
-                <button class="close"><img src="assets/images/close.svg" alt=""></button>
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
         </div>
         <div slot="body">
@@ -92,13 +96,277 @@
     </modal>
     <!-- end: 공통 팝업 -->
 
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.1.1 (멤버 활동 관리 - 차단-확인) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon block"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt">
+                <h2 class="popup-tit">선택한 멤버를 차단하시곘습니까?</h2>
+                <p class="popup-txt">
+                    차단된 멤버에게는 차단 해제 전까지 해당 클래스에 접근하거나 가입이 불가능하며 클래스 검색 및 노출이 제한됩니다.차단을 계속 하시겠습니까?
+                </p>
+            </div>
+            <div class="member-activity">
+                <div class="member-management-list bd-none">
+                    <ul>
+                        <li class="member-item bd-none">
+                            <div class="member-type staff">
+                                <p class="member-name">김경희선생님</p>
+                                <p class="member-tit">스탭 멤버</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <!-- footer custom coding-->
+            <div class="btn-group rt">
+                <button type="button" class="btn outline">취소</button>
+                <button type="button" class="btn primary navi">차단하기</button>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.1.2 (멤버 활동 관리 - 차단-완료) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon block"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt">
+                <h2 class="popup-tit pdb-0">멤버 차단이 완료되었습니다.</h2>
+            </div>
+            <div class="member-activity">
+                <div class="member-management-list bd-none">
+                    <ul>
+                        <li class="member-item bd-none">
+                            <div class="member-type staff">
+                                <p class="member-name">김경희선생님</p>
+                                <p class="member-tit">스탭 멤버</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <!-- footer custom coding-->
+            <div class="btn-group rt">
+                <button type="button" class="btn primary navi">확인</button>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.2.1 (멤버 활동 관리 - 탈퇴-확인) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon leave"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt">
+                <h2 class="popup-tit">선택한 멤버를 강제 탈퇴시키겠습니까?</h2>
+                <p class="popup-txt">
+                    멤버 강제 탈퇴 시 멤버가 작성했던 글, 댓글 등은 삭제되지 않습니다.
+                </p>
+            </div>
+            <div class="member-activity">
+                <div class="member-management-list bd-none">
+                    <ul>
+                        <li class="member-item bd-none">
+                            <div class="member-type staff">
+                                <p class="member-name">김경희선생님</p>
+                                <p class="member-tit">스탭 멤버</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <!-- footer custom coding-->
+            <div class="btn-group rt">
+                <button type="button" class="btn outline">취소</button>
+                <button type="button" class="btn primary navi">강제 탈퇴</button>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.2.2 (멤버 활동 관리 - 탈퇴-완료) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon leave"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt">
+                <h2 class="popup-tit">멤버 강제 탈퇴가 완료되었습니다.</h2>
+            </div>
+            <div class="member-activity">
+                <div class="member-management-list bd-none">
+                    <ul>
+                        <li class="member-item bd-none">
+                            <div class="member-type staff">
+                                <p class="member-name">김경희선생님</p>
+                                <p class="member-tit">스탭 멤버</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <!-- footer custom coding-->
+            <div class="btn-group rt">
+                <button type="button" class="btn primary navi">확인</button>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.3.1 (멤버 활동 관리 - 차단목록) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <p class="popup-header-tit">멤버 활동 관리</p>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="member-activity">
+                <div class="activity-tit">
+                    <p>차단된 멤버 3</p>
+                </div>
+                <div class="member-management-list scroll-body" style="height:540px;">
+                    <ul>
+                        <li class="member-item">
+                            <p class="member-name">정재진엄마</p>
+                            <p class="member-date">1분 전 차단</p>
+                            <a href="" class="member-more clear">차단 해제하기</a>
+                        </li>
+                        <li class="member-item">
+                            <p class="member-name">임수희</p>
+                            <p class="member-date">어제 차단</p>
+                            <a href="" class="member-more clear">차단 해제하기</a>
+                        </li>
+                        <li class="member-item">
+                            <p class="member-name">박영철</p>
+                            <p class="member-date">2019.10.20 차단</p>
+                            <a href="" class="member-more clear">차단 해제하기</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.3.2 (멤버 활동 관리 - 차단목록 - 차단해제확인) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon add"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt">
+                <h2 class="popup-tit pdb-0">선택한 멤버를 차단 해제하시곘습니까?</h2>
+            </div>
+            <div class="member-activity">
+                <div class="member-management-list bd-none">
+                    <ul>
+                        <li class="member-item bd-none">
+                            <div class="member-type staff">
+                                <p class="member-name">정재진엄마</p>
+                                <p class="member-tit">스탭 멤버</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <!-- footer custom coding-->
+            <div class="btn-group rt">
+                <button type="button" class="btn outline">취소</button>
+                <button type="button" class="btn primary navi">차단 해제</button>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.3.3 (멤버 활동 관리 - 차단목록 - 차단해제완료) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon confirm"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt">
+                <h2 class="popup-tit pdb-0">멤버 차단 해제가 완료되었습니다.</h2>
+            </div>
+            <div class="member-activity">
+                <div class="member-management-list bd-none">
+                    <ul>
+                        <li class="member-item bd-none">
+                            <div class="member-type staff">
+                                <p class="member-name">정재진엄마</p>
+                                <p class="member-tit">스탭 멤버</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <!-- footer custom coding-->
+            <div class="btn-group rt">
+                <button type="button" class="btn primary navi">확인</button>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.9 (스탭 관리) -->
     <modal v-if="false">
         <div slot="header">
             <!-- header custom coding-->
             <p class="popup-header-tit">스탭 관리</p>
             <div class="popup-close">
-                <button class="close"><img src="assets/images/close.svg" alt=""></button>
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
         </div>
         <div slot="body">
@@ -150,13 +418,13 @@
     </modal>
     <!-- end: 공통 팝업 -->
 
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.9.1 (스탭 추가) -->
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.9.1 (스탭 관리 - 스탭 추가) -->
     <modal v-if="false">
         <div slot="header">
             <!-- header custom coding-->
-            <p class="popup-header-tit"><a href="" class="mgr-10"><img src="assets/images/arrow-left.svg" alt=""></a> 스탭 추가하기 목록</p>
+            <p class="popup-header-tit"><a href="" class="mgr-10"><img :src="require('@/assets/images/arrow-left.svg')" alt=""></a> 스탭 추가하기 목록</p>
             <div class="popup-close">
-                <button class="close"><img src="assets/images/close.svg" alt=""></button>
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
         </div>
         <div slot="body">
@@ -265,13 +533,13 @@
     </modal>
     <!-- end: 공통 팝업 -->
 
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.9.1.1 (스탭 추가 - 권한 설정) -->
-    <modal v-if="true">
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.9.1.1 (스탭 관리 - 스탭 추가 - 권한 설정) -->
+    <modal v-if="false">
         <div slot="header">
             <!-- header custom coding-->
             <div class="popup-icon add"></div>
             <div class="popup-close">
-                <button class="close"><img src="assets/images/close.svg" alt=""></button>
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
         </div>
         <div slot="body">
@@ -330,6 +598,189 @@
             <div class="btn-group rt">
                 <button type="button" class="btn outline">취소</button>
                 <button type="button" class="btn primary navi">스탭 추가</button>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.9.1.2 (스탭 관리 - 스탭 추가 목록 - 추가 완료) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon confirm"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt">
+                <h2 class="popup-tit pdb-0">스탭 멤버로 전환 완료되었습니다.</h2>
+            </div>
+            <div class="member-activity">
+                <div class="member-management-list bd-none">
+                    <ul>
+                        <li class="member-item bd-none">
+                            <div class="member-type staff">
+                                <p class="member-name">박정수 엄마</p>
+                                <p class="member-tit">스탭 멤버</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <!-- footer custom coding-->
+            <div class="btn-group rt">
+                <button type="button" class="btn primary navi">확인</button>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.9.2 (스탭 관리 - 권한 수정) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon staff"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt">
+                <h2 class="popup-tit pdb-0">스탭 권한 설정 변경</h2>
+            </div>
+            <div class="member-activity">
+                <div class="member-management-list bd-none">
+                    <ul>
+                        <li class="member-item bd-none pdb-0">
+                            <div class="member-type staff mgb-15">
+                                <p class="member-name">김경희선생님</p>
+                                <p class="member-tit">스탭 멤버</p>
+                            </div>
+                            <ul class="auth-list">
+                                <li>
+                                    <p class="auth-tit">알림 관리</p>
+                                    <div class="auth-btn">
+                                        <div class="form-switcher">
+                                            <input type="checkbox" id="authNotice" checked>
+                                            <label for="authNotice"></label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <p class="auth-tit">일정 관리</p>
+                                    <div class="auth-btn">
+                                        <div class="form-switcher">
+                                            <input type="checkbox" id="authSchedule" checked>
+                                            <label for="authSchedule"></label>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <p class="auth-tit">교육과정 관리</p>
+                                    <div class="auth-btn">
+                                        <div class="form-switcher">
+                                            <input type="checkbox" id="authEdu">
+                                            <label for="authEdu"></label>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <a href="" class="chang-type">일반 멤버로 전환하기</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <!-- footer custom coding-->
+            <div class="btn-group rt">
+                <button type="button" class="btn outline">취소</button>
+                <button type="button" class="btn primary navi">변경하기</button>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.9.2.1 (스탭 관리 - 권한 수정 - 일반멤버로 전환 확인) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon change"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt">
+                <h2 class="popup-tit">선택한 멤버를 일반 멤버로 전환하시겠습니까?</h2>
+                <p class="popup-txt">
+                    일반 멤버로 전환 시 해당 멤버는 모든 스탭 권한을 잃게 됩니다.
+                </p>
+            </div>
+            <div class="member-activity">
+                <div class="member-management-list bd-none">
+                    <ul>
+                        <li class="member-item bd-none">
+                            <div class="member-type staff">
+                                <p class="member-name">김경희선생님</p>
+                                <p class="member-tit">
+                                    <span>스탭 멤버</span>
+                                    <img :src="require('@/assets/images/arrow-line.svg')" class="icon-img sm" alt="">
+                                    <span>일반 멤버</span>
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <!-- footer custom coding-->
+            <div class="btn-group rt">
+                <button type="button" class="btn outline">취소</button>
+                <button type="button" class="btn primary navi">전환하기</button>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.9.2.2 (스탭 관리 - 권한 수정 - 일반멤버로 전환 완료) -->
+    <modal v-if="true">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon confirm"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt">
+                <h2 class="popup-tit">일반 멤버로 전환 완료되었습니다.</h2>
+            </div>
+            <div class="member-activity">
+                <div class="member-management-list bd-none">
+                    <ul>
+                        <li class="member-item bd-none">
+                            <div class="member-type member">
+                                <p class="member-name">김경희선생님</p>
+                                <p class="member-tit">일반 멤버</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <!-- footer custom coding-->
+            <div class="btn-group rt">
+                <button type="button" class="btn primary navi">확인</button>
             </div>
         </div>
     </modal>
