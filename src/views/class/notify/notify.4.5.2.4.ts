@@ -1,8 +1,13 @@
 import {Component, Vue} from 'vue-property-decorator';
 import WithRender from './notify.4.5.2.4.html';
+import Modal from '@/components/modal/modal.vue';
 
 @WithRender
-@Component
-export default class MyClass extends Vue {
+@Component({
+    components:{
+        Modal,
+    }
+})
+export default class Notify extends Vue {
 
 }

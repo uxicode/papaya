@@ -36,13 +36,13 @@ const MyClassRouter=[
   },
 
   {
-    path: '/search.4.2.1',
+    path: '/class/search.4.2.1',
     name: 'search.4.2.1',
     components: {default: () => import('../views/class/search/search.4.2.1'), header: AppHeader, footer: AppFooter},
   },
 
   {
-    path: '/search.4.2.3.1',
+    path: '/class/search.4.2.3.1',
     name: 'search.4.2.3.1',
     components: {default: () => import('../views/class/search/search.4.2.3.1'), header: AppHeader, footer: AppFooter},
   },
@@ -54,13 +54,13 @@ const MyClassRouter=[
   },/* 보류 */
 
   {
-    path: '/notify.4.5.2',
+    path: '/class/notify.4.5.2',
     name: 'notify.4.5.2',
     components: {default: () => import('../views/class/notify/notify.4.5.2'), header: AppHeader, footer: AppFooter},
   },
 
   {
-    path: '/notify.4.5.2.4',
+    path: '/class/notify.4.5.2.4',
     name: 'notify.4.5.2.4',
     components: {default: () => import('../views/class/notify/notify.4.5.2.4'), header: AppHeader, footer: AppFooter},
   },
