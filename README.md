@@ -66,5 +66,31 @@ npm run test:unit
 > - ex) 4.3.1.1.1 클래스 만들기-분류 선택-학교-검색창 Focus -> SBP.CLSC.SC-PP.4.3.1.1.1
 
 
+###  typescript
+- 에러 or tip
+- 중첩된 Scope에 기존의 변수 이름을 사용하는 것을 Shadow
+- api 통신하는 객체는 interface 로 구조를 잡는다.
+- let과 const중 어떤 것을 사용할지 스스로 선택. 
+최소 권한의 원칙(Principle of least privilege)을 적용하면 수정하려는 모든 선언은 const 를 사용한다.
+
+- Destructuring
+- 함수
+```
+function f([first, second]: [number, number]) {
+    console.log(first);
+    console.log(second);
+}
+f([1, 2]);
+```
+
+- 객체
+```	
+({ a, b } = { a: "baz", b: 101 });
+//
+let { a, b }: { a: string, b: number } = o;
+```
+
+- 
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

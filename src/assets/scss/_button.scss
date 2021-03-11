@@ -4,17 +4,20 @@
   padding:13px 20px;
   font-size:14px;
   font-weight:500;
-  text-align:center;
   float:none;
   line-height:1;
   border-radius:48px;
+
   &:active, &.active {box-shadow: none;}
+
   &.wd-full, &.btn-block {width:100%;}
+
   &.sm {
     min-width:80px;
     padding:10px 16px;
     font-size:12px;
   }
+
   &.lg, &.big{
     min-width:160px;
     padding:15px 40px;
@@ -33,22 +36,21 @@
   &.grey {
     color: #373749;
     background-color: #f4f5f6;
-    &:hover,&:active, &.active{
-      background-color:#c9cad5;
-    }
-    &[disabled]:hover, &.disabled:hover {
+    &:hover,&:active, &.active{background-color:#c9cad5;}
+    &[disabled], &.disabled {
+      opacity: 1;
+      color:rgba(87,87,109,0.2);
+      &:hover {
         background-color:#f4f5f6;
       }
     }
+
+  }
   &.navi {
     color:#fff;
     background-color:#1d1d4c;
-    &:hover {
-      background-color:#57576d;
-    }
-    &:active, &.active {
-      background-color:#0f0f15;
-    }
+    &:hover {background-color:#57576d;}
+    &:active, &.active {background-color:#0f0f15;}
     &[disabled]:hover, &.disabled:hover {
       background-color:#1d1d4c;
     }
@@ -136,14 +138,10 @@
 
     &.sm {
       min-width:80px;
-      padding:9px 16px;
+      padding:10px 0 10px 17px;
 
+      &.ico-left {padding-left:40px;}
       &.ico-right {padding-right:40px;}
-      &.ico-left {
-        padding-left:40px;
-
-        .icon {left:16px;}
-      }
     }
 
     &:hover {
@@ -206,12 +204,7 @@
     padding:0;
 
     &.form-delete {background:url(../../assets/images/delete.svg) no-repeat;}
-    &.form-time {
-      background:url(../../assets/images/time-outline.svg) no-repeat;
-      &.active, &:active {
-        background:url(../../assets/images/time.svg) no-repeat;
-      }
-    }
+    &.form-time {background:url(../../assets/images/time-outline.svg) no-repeat;}
     &.form-calendar {
       background:url(../../assets/images/calendar-outline.svg) no-repeat;
       &.active, &:active {
@@ -224,7 +217,6 @@
 // text button
 .txt-btn {
   font-weight:500;
-  vertical-align: middle;
   color:#0f0f15;
 
   &:hover {color:#57576d;}
@@ -307,8 +299,6 @@
         transform:translateY(-50%);
       }
     }
-
-    .line {border-top:1px solid #f4f5f6;}
 
     &.pos-right {
       top:0;

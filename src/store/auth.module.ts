@@ -1,5 +1,5 @@
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
-import {IUser} from '@/api/model/user.model';
+import {IUser, IUserMe} from '@/api/model/user.model';
 import AuthService from '@/api/service/AuthService';
 import UserService from '@/api/service/UserService';
 import {
@@ -10,6 +10,7 @@ import {
   VERIFY_BY_MOBILE,
   SIGN_UP,
   SIGN_UP_MOVE,
+  SET_MY_INFO,
 } from '@/store/mutation-auth-types';
 import {
   LOGIN_ACTION,
@@ -17,6 +18,7 @@ import {
   FIND_ID_BY_EMAIL,
   AUTH_BY_MOBILE,
   SIGN_UP_ACTION,
+  SIGNIN_BY_TOKEN,
 } from '@/store/action-auth-types';
 
 
@@ -24,9 +26,10 @@ import {
   namespaced: true,
 })
 export default class AuthModule extends VuexModule {
-  public token: any = ''; //멤버 변수는 state 로 이용된다.
+  public token?: string | null= null; //멤버 변수는 state 로 이용된다.
   public findId: string = '';
-  public user: object = {};
+  public user: IUser[] =[];
+  public me: IUserMe | null =null;
   public count: number = 0;
   public inputUserEmail: string = '';
   public signupName: string = '';
@@ -34,10 +37,6 @@ export default class AuthModule extends VuexModule {
 
   get isAuth(): boolean {
     return !!this.token;
-  }
-
-  get tokenStatus(): string | null {
-    return this.token;
   }
 
   get findUserId(): string {
@@ -56,6 +55,12 @@ export default class AuthModule extends VuexModule {
     return this.signupName;
   }
 
+  get userInfo(): IUserMe | null{
+    return this.me;
+  }
+
+
+
   @Mutation
   public [USER_EMAIL](value: string): void {
     this.inputUserEmail = value;
@@ -67,19 +72,18 @@ export default class AuthModule extends VuexModule {
   }
 
   @Mutation
-  public [LOGIN](userData: IUser): void {
-    this.user = {
-      email: userData.email,
-      fullname: userData.fullname,
-      id: userData.id,
-      mobile_no: userData.mobile_no,
-      schedule_color: userData.schedule_color,
-      user_id: userData.user_id,
-    } as IUser;
+  public [LOGIN](userData: IUser[]): void {
+    this.user = userData;
     // console.log('this.token=', JSON.stringify(this.user) );
     localStorage.setItem('user', JSON.stringify(this.user));
     // console.log( localStorage.getItem('user') );
     this.count++;
+  }
+
+  @Mutation
+  public [SET_MY_INFO]( me: IUserMe ): void{
+    this.me = me;
+    localStorage.setItem('me', JSON.stringify(this.me));
   }
 
   @Mutation
@@ -93,13 +97,14 @@ export default class AuthModule extends VuexModule {
 
   @Mutation
   public [GET_TOKEN](token: string | null): void {
-    this.token = token;
-    if (this.token === null) {
-      return;
+    console.log('token=', this.token);
+    if (token !== null) {
+      this.token = token;
+      AuthService.setAuthToken(this.token);
+      localStorage.setItem('token', this.token);
     }
-    // AuthService.setAuthToken(this.token);
-    localStorage.setItem('token', this.token);
   }
+
 
   @Mutation
   public [LOGOUT](): void {
@@ -121,6 +126,18 @@ export default class AuthModule extends VuexModule {
   }
 
   @Action({rawError: true})
+  public [SIGNIN_BY_TOKEN]( token: string ){
+    this.context.commit(GET_TOKEN, token);
+
+    return UserService.getUserMe()
+      .then( ( data: any )=>{
+        console.log('UserMe=', data.user );
+        this.context.commit(SET_MY_INFO, data.user );
+        return Promise.resolve('signin status');
+      });
+  }
+
+  @Action({rawError: true})
   public [LOGIN_ACTION](payload: { uid: string, password: string }): Promise<any> {
     console.log(payload);
     return AuthService.login(payload.uid, payload.password)
@@ -134,11 +151,14 @@ export default class AuthModule extends VuexModule {
         schedule_color: 0
         user_id: "jbc2119"
         */
-        // console.log( data.user, data.access_token  )
-        // mutation( type, payload, option ) 이렇게 매개변수가 지정되어 있다.
-        this.context.commit(LOGIN, data.user);
-        this.context.commit(GET_TOKEN, data.access_token);
-        return Promise.resolve(data); // 왜인지는 모르겠으나 여기서 promise 를 리턴해주어야 함.
+        // console.log(data.user, data.access_token);
+        // mutation( type, payload, option ) 이렇게 매개변수가 지정되어 있다.z
+
+        this.context.commit(GET_TOKEN, data.access_token );
+        return UserService.getUserMe().then( ( userMe: any)=>{
+            this.context.commit(SET_MY_INFO, userMe.user);
+            return Promise.resolve( userMe.user);
+          });// 왜인지는 모르겠으나 여기서 promise 를 리턴해주어야 함.
       }).catch((error) => {
         return Promise.reject(error);
       });
