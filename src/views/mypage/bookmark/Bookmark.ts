@@ -14,6 +14,7 @@ import Modal from '@/components/modal/modal.vue';
 export default class Bookmark extends Vue {
     private isResetModal: boolean = false;
     private bookmarkType: string = 'notification';
+    private isMoreMenu: boolean = false;
 
     /**
      * 보관함 비우기 팝업 열기
@@ -21,5 +22,9 @@ export default class Bookmark extends Vue {
      */
     private resetModalOpen(): void {
         this.isResetModal = !this.isResetModal;
+    }
+
+    private moreMenuToggle(item: any): void {
+        this.isMoreMenu = !this.isMoreMenu;
     }
 }

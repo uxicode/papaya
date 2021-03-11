@@ -1,6 +1,6 @@
 <div class="mypage-cnt">
     <!-- start: 모바일 번호 수정 -->
-    <template v-if="mobileModify">
+    <template v-if="isMobileModify">
         <div class="cnt-top">
             <h2 class="cnt-tit">MY프로필 > 모바일 번호 변경</h2>
         </div>
@@ -22,23 +22,43 @@
     <!-- end: 모바일 번호 수정 -->
 
     <!-- start: 비밀번호 재설정 -->
-    <template v-else-if="pwModify">
+    <template v-else-if="isPwModify">
         <div class="cnt-top">
             <h2 class="cnt-tit">MY프로필 > 비밀번호 재설정</h2>
         </div>
+        <template v-if="!isPwConfirmed">
+            <div class="my-chage">
+                <h3>현재 비밀번호 확인</h3>
 
-        <div class="my-chage">
-            <h3>현재 비밀번호 확인</h3>
+                <div class="form-group inline mgt-40">
+                    <label for="myPw" class="required">비밀번호</label>
+                    <input type="password" class="form-control" id="myPw" placeholder="비밀번호를 입력해 주세요." style="width:356px">
+                </div>
 
-            <div class="form-group inline mgt-40">
-                <label for="myPw" class="required">비밀번호</label>
-                <input type="text" class="form-control" id="myPw" placeholder="비밀번호를 입력해 주세요." style="width:356px">
+                <div class="btn-box">
+                    <btn type="navi" @btnClick="isPwConfirmed = true">확인</btn>
+                </div>
             </div>
+        </template>
 
-            <div class="btn-box">
-                <btn type="navi" disabled>확인</btn>
+        <template v-else>
+            <div class="my-chage">
+                <h3>비밀번호 재설정</h3>
+
+                <div class="form-group inline mgt-40">
+                    <label for="newPw" class="required">새 비밀번호</label>
+                    <input type="password" class="form-control" id="newPw" placeholder="새 비밀번호를 입력해 주세요." style="width:356px">
+                </div>
+                <div class="form-group mgt-40 pdl-123">
+                    <input type="password" class="form-control" id="newPwConfirm" placeholder="새 비밀번호를 다시 입력해 주세요." style="width:356px">
+                </div>
+
+                <div class="btn-box">
+                    <btn type="outline" @btnClick="isPwConfirmed = isPwModify = false">취소</btn>
+                    <btn type="navi" disabled>변경하기</btn>
+                </div>
             </div>
-        </div>
+        </template>
     </template>
     <!-- end: 비밀번호 재설정 -->
 
@@ -72,8 +92,8 @@
                         <p class="list-tit">성별</p>
                         <div class="list-right">
                             <div class="list-popup">
-                                <button type="button" class="list-popup-btn">{{ myInfo.gender === '1' ? '남자' : '여자' }} <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
-                                <div class="list-popup-menu">
+                                <button type="button" class="list-popup-btn" @click="genderModifyToggle">{{ myInfo.gender === '1' ? '남자' : '여자' }} <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                <div class="list-popup-menu" :class="{'active': isGenderModify}">
                                     <a href="" class="list-popup-item">여자</a>
                                     <a href="" class="list-popup-item">남자</a>
                                 </div>

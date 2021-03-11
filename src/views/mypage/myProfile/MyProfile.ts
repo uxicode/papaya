@@ -24,9 +24,12 @@ export default class MyProfile extends Vue {
     }
 
     private isNameModifyModal: boolean = false;
+    private isGenderModify: boolean = false;
+
+    private isMobileModify: boolean = false;
     private isEmailModifyModal: boolean = false;
-    private mobileModify: boolean = false;
-    private pwModify: boolean = false;
+    private isPwModify: boolean = false;
+    private isPwConfirmed: boolean = false;
 
     /**
      * 이름 변경 팝업 열기
@@ -34,6 +37,22 @@ export default class MyProfile extends Vue {
      */
     private nameModifyModalOpen(): void {
         this.isNameModifyModal = !this.isNameModifyModal;
+    }
+
+    /**
+     * 성별 변경 토글
+     * @private
+     */
+    private genderModifyToggle(): void {
+        this.isGenderModify = !this.isGenderModify;
+    }
+
+    /**
+     * 모바일 번호 변경 페이지 이동
+     * @private
+     */
+    private gotoMobileModify(): void {
+        this.isMobileModify = !this.isMobileModify;
     }
 
     /**
@@ -45,18 +64,10 @@ export default class MyProfile extends Vue {
     }
 
     /**
-     * 모바일 번호 변경 페이지 이동
-     * @private
-     */
-    private gotoMobileModify(): void {
-        this.mobileModify = !this.mobileModify;
-    }
-
-    /**
      * 비밀번호 재설정 페이지 이동
      * @private
      */
     private gotoPwModify(): void {
-        this.pwModify = !this.pwModify;
+        this.isPwModify = !this.isPwModify;
     }
 }
