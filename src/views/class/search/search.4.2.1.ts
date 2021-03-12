@@ -1,4 +1,4 @@
-import {Component, Vue} from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
 import WithRender from './search.4.2.1.html';
 
 @WithRender

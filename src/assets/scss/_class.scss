@@ -1651,3 +1651,53 @@
   }
 }
 
+
+/* 20210310 cye */
+
+.photo-viewer {
+  .viewer-inner {
+    position:relative;
+    width:100%;
+    height:100%;
+  }
+
+  .viewer-close {
+    @include pos-abs($right:30px, $top:30px);
+  }
+
+  .viewer-list {
+    .viewer-item {
+      display:none;
+      @include pos-abs($left:50%, $top:50%);
+      transform:translate(-50%, -50%);
+
+      &.active{
+        display:block;
+      }
+    }
+  }
+
+  .viewer-control {
+    .control {
+      &.prev {
+        @include pos-vertical($left:0);
+      }
+      &.next {
+        @include pos-vertical($right:0);
+      }
+    }
+  }
+
+  .viewer-page {
+    @include pos-abs($left:50%, $bottom:18px);
+    font-size:18px;
+    font-weight:500;
+    color:#fff;
+    transform:translateX(-50%);
+  }
+}
+
+.form-txt, .date-area.ft-desc{color: #848499;}
+
+
+

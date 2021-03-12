@@ -1,7 +1,7 @@
 
-<div class="contents home">
+<div class="contents">
 
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2 (알림 - 새 알림 작성-fit, / 4.5.2.2.3.1) -->
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2 (알림 - 새 알림 작성-fit) -->
     <modal v-if="false">
         <div slot="header">
             <!-- header custom coding-->
@@ -62,8 +62,7 @@
                     </div>
                     <div class="popup-form-cnt">
                         <div class="form-item post-cnt" style="height:156px;">
-							<textarea class="form-textarea">운동회는, 전교생이 청군과 백군으로 나눠 운동장에서 하루 동안 대결을 펼치는 운동회입니다. 달리기를 하면 1등에서 3등까지는 등수 별로 도장을 받았습니다.
-	손목위에 찍힌 도장을 확인하며, 학용품도 받았죠. 또한, 김밥과 치킨 등 부모님께서 준비한 도시락을 먹는 것도 운동회에 대한 추억입니다. 이번에는 운동회의 역사와 현재의 운동회를 알아보는 시간을 가져보겠습니다.</textarea>
+							<textarea class="form-textarea">운동회는, 전교생이 청군과 백군으로 나눠 운동장에서 하루 동안 대결을 펼치는 운동회입니다. 달리기를 하면 1등에서 3등까지는 등수 별로 도장을 받았습니다. 손목위에 찍힌 도장을 확인하며, 학용품도 받았죠. 또한, 김밥과 치킨 등 부모님께서 준비한 도시락을 먹는 것도 운동회에 대한 추억입니다. 이번에는 운동회의 역사와 현재의 운동회를 알아보는 시간을 가져보겠습니다.</textarea>
                         </div>
                     </div>
                     <div class="popup-form-btm">
@@ -225,7 +224,461 @@
     </modal>
     <!-- end: 공통 팝업 -->
 
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.2.4 (알림 상세 / 단독) -->
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2.3.1 (알림 - 새 알림 작성-투표 - tab:텍스트) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon vote"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt pdb-desc">
+                <h2 class="popup-tit">투표 만들기</h2>
+                <div class="form-item">
+                    <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">
+                </div>
+            </div>
+
+            <div class="popup-form">
+                <div class="popup-form-cnt">
+                    <!-- start: create vote list -->
+                    <div class="form-create-list">
+                        <div class="create-item">
+                            <div class="create-item-cnt">
+                                <ul class="create-link-list">
+                                    <li class="bd-none">
+                                        <div class="form-type">
+                                            <div class="checkbox-group">
+                                                <div class="btn-radio">
+                                                    <input type="radio" name="type" id="text" checked>
+                                                    <label for="text">텍스트</label>
+                                                </div>
+                                                <div class="btn-radio">
+                                                    <input type="radio" name="type" id="date">
+                                                    <label for="date">날짜</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="create-form active">
+                                            <span class="num">1</span>
+
+                                            <div class="form-group inline">
+                                                <input type="text" class="form-control popup-type sm" value="제주도 여행" style="width: 345px;">
+                                                <button type="button" class="btn only-ico-btn form-delete active" disabled><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                                            </div>
+                                        </div>
+
+                                        <div class="create-sub-btn">
+                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
+                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="create-form">
+                                            <span class="num ">2</span>
+
+                                            <div class="form-group inline">
+                                                <input type="text" class="form-control popup-type sm" placeholder="항목을 입력해 주세요." style="width: 345px;">
+                                                <button type="button" class="btn only-ico-btn form-delete" disabled><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                                            </div>
+                                        </div>
+
+                                        <div class="create-sub-btn">
+                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
+                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="create-form">
+                                            <span class="num">3</span>
+
+                                            <div class="form-group inline">
+                                                <input type="text" class="form-control popup-type sm" placeholder="항목을 입력해 주세요." style="width: 345px;">
+                                                <button type="button" class="btn only-ico-btn form-delete" disabled><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                                            </div>
+                                        </div>
+
+                                        <div class="create-sub-btn">
+                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
+                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="create-add-list">
+                                <a href="" class="bd-none"><img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- start: create vote list -->
+
+                    <!-- start: create vote-type list -->
+                    <div class="form-create-list">
+                        <div class="create-item">
+                            <div class="create-item-cnt">
+                                <ul class="create-link-list">
+                                    <li>
+                                        <p class="form-txt">익명 투표</p>
+                                        <div class="create-sub-btn">
+                                            <div class="form-switcher">
+                                                <input type="checkbox" id="toggle1">
+                                                <label for="toggle1"></label>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <p class="form-txt">복수 선택 허용</p>
+                                        <div class="create-sub-btn">
+                                            <div class="form-switcher">
+                                                <input type="checkbox" id="toggle2">
+                                                <label for="toggle2"></label>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <p class="form-txt">종료일시 설정</p>
+                                        <div class="create-sub-btn">
+                                            <div class="form-group date">
+                                                <input type="text" class="form-control no-date" size="7" value="날짜 없음">
+                                                <span class="date-area placeholder">종료일시 없음</span>
+                                                <button type="button" class="btn form-btn form-calendar"></button>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <p class="form-txt">투표 현황 공개</p>
+                                        <div class="create-sub-btn">
+                                            <div class="list-popup">
+                                                <button type="button" class="list-popup-btn"><span>운영자에게만 공개</span> <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
+                                                <div class="list-popup-menu pos-right" style="transform:translate3d(145px, -125px, 0);">
+                                                    <a href="" class="list-popup-item">전체 공개</a>
+                                                    <a href="" class="list-popup-item">운영자와 스탭에게만 공개</a>
+                                                    <a href="" class="list-popup-item">운영자에게만 공개</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- start: create vote list -->
+                </div>
+            </div>
+        </div>
+
+        <div slot="footer">
+            <div class="btn-group rt">
+                <button type="button" class="btn primary navi">완료</button>
+            </div>
+        </div>
+
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2.3.2 (알림 - 새 알림 작성-투표 - tab:날짜 ) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon vote"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt pdb-desc">
+                <h2 class="popup-tit">투표 만들기</h2>
+                <div class="form-item">
+                    <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">
+                </div>
+            </div>
+
+            <div class="popup-form">
+                <div class="popup-form-cnt">
+                    <!-- start: create vote list -->
+                    <div class="form-create-list">
+                        <div class="create-item">
+                            <div class="create-item-cnt">
+                                <ul class="create-link-list">
+                                    <li class="bd-none">
+                                        <div class="form-type">
+                                            <div class="checkbox-group">
+                                                <div class="btn-radio">
+                                                    <input type="radio" name="type" id="text1">
+                                                    <label for="text1">텍스트</label>
+                                                </div>
+                                                <div class="btn-radio">
+                                                    <input type="radio" name="type" id="date2" checked>
+                                                    <label for="date2">날짜</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="create-form">
+                                            <span class="num">1</span>
+
+                                            <div class="form-group date">
+                                                <input type="text" class="form-control" size="10" value="2020. 2. 28">
+                                                <button type="button" class="btn form-btn form-calendar"></button>
+                                                <span class="date-area ft-desc">날짜를 선택해 주세요.</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="create-sub-btn">
+                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
+                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="create-form">
+                                            <span class="num ">2</span>
+
+                                            <div class="form-group date">
+                                                <input type="text" class="form-control" size="10" value="2020. 2. 28">
+                                                <button type="button" class="btn form-btn form-calendar"></button>
+                                                <span class="date-area ft-desc">날짜를 선택해 주세요.</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="create-sub-btn">
+                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
+                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="create-form">
+                                            <span class="num">3</span>
+
+                                            <div class="form-group date">
+                                                <input type="text" class="form-control" size="10" value="2020. 2. 28">
+                                                <button type="button" class="btn form-btn form-calendar"></button>
+                                                <span class="date-area ft-desc">날짜를 선택해 주세요.</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="create-sub-btn">
+                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
+                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="create-add-list">
+                                <a href="" class="bd-none"><img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- start: create vote list -->
+
+                    <!-- start: create vote-type list -->
+                    <div class="form-create-list">
+                        <div class="create-item">
+                            <div class="create-item-cnt">
+                                <ul class="create-link-list">
+                                    <li>
+                                        <p class="form-txt">익명 투표</p>
+                                        <div class="create-sub-btn">
+                                            <div class="form-switcher">
+                                                <input type="checkbox" id="toggle4">
+                                                <label for="toggle4"></label>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <p class="form-txt">복수 선택 허용</p>
+                                        <div class="create-sub-btn">
+                                            <div class="form-switcher">
+                                                <input type="checkbox" id="toggle5">
+                                                <label for="toggle5"></label>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <p class="form-txt">종료일시 설정</p>
+                                        <div class="create-sub-btn">
+                                            <div class="form-group date">
+                                                <input type="text" class="form-control no-date" size="7" value="날짜 없음">
+                                                <span class="date-area placeholder">종료일시 없음</span>
+                                                <button type="button" class="btn form-btn form-calendar"></button>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li>
+                                        <p class="form-txt">투표 현황 공개</p>
+                                        <div class="create-sub-btn">
+                                            <div class="list-popup">
+                                                <button type="button" class="list-popup-btn"><span>운영자에게만 공개</span> <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
+                                                <div class="list-popup-menu pos-right" style="transform:translate3d(145px, -125px, 0);">
+                                                    <a href="" class="list-popup-item">전체 공개</a>
+                                                    <a href="" class="list-popup-item">운영자와 스탭에게만 공개</a>
+                                                    <a href="" class="list-popup-item">운영자에게만 공개</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- start: create vote list -->
+                </div>
+            </div>
+        </div>
+
+        <div slot="footer">
+            <div class="btn-group rt">
+                <button type="button" class="btn primary navi">완료</button>
+            </div>
+        </div>
+
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2.4 (알림 - 새 알림 작성-링크) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon link"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt pdb-desc">
+                <h2 class="popup-tit">링크 만들기</h2>
+                <div class="form-item">
+                    <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">
+                </div>
+            </div>
+
+            <div class="popup-form">
+                <div class="popup-form-cnt">
+                    <!-- start: create-link list -->
+                    <div class="form-create-list">
+                        <div class="create-item">
+                            <div class="create-item-cnt">
+                                <ul class="create-link-list">
+                                    <li>
+                                        <div class="create-form active">
+                                            <span class="num">1</span>
+                                            <div class="form-group inline">
+                                                <input type="text" class="form-control popup-type sm" value="http://www.naver.com" style="width: 345px;">
+                                                <button type="button" class="btn only-ico-btn form-delete active" disabled><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                                            </div>
+                                        </div>
+
+                                        <div class="create-sub-btn">
+                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
+                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="create-form">
+                                            <span class="num">2</span>
+                                            <div class="form-group inline">
+                                                <input type="text" class="form-control popup-type sm" placeholder="항목을 입력해 주세요." style="width: 345px;">
+                                                <button type="button" class="btn only-ico-btn form-delete" disabled><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                                            </div>
+                                        </div>
+
+                                        <div class="create-sub-btn">
+                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
+                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="create-add-list">
+                                <a href=""><img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- start: create-link list -->
+                </div>
+            </div>
+        </div>
+
+        <div slot="footer">
+            <div class="btn-group rt">
+                <button type="button" class="btn primary navi" disabled>완료</button>
+            </div>
+        </div>
+
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2.5 (알림 - 새 알림 작성-알림예약설정 / 4,5,2,2,5,1) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon time"></div>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt pdb-desc">
+                <h2 class="popup-tit">알림 예약 설정</h2>
+            </div>
+
+            <div class="popup-form">
+                <div class="popup-form-cnt">
+                    <!-- start: create notice list -->
+                    <div class="form-create-list">
+                        <div class="create-item">
+                            <div class="create-item-cnt">
+                                <ul class="create-notice-list">
+                                    <li>
+                                        <p class="form-txt">예약일시 설정</p>
+                                        <div class="create-sub-btn">
+                                            <div class="form-switcher">
+                                                <input type="checkbox" id="toggle3">
+                                                <label for="toggle3"></label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="bd-none">
+                                        <div class="form-group date">
+                                            <input type="text" class="form-control" size="10" value="2020. 2. 28">
+                                            <span class="date-area placeholder">2020. 2. 28</span>
+                                        </div>
+                                        <div class="create-sub-btn">
+                                            <button type="button" class="btn form-btn form-calendar"></button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- start: create notice list -->
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <div class="btn-group rt">
+                <button type="button" class="btn primary navi">완료</button>
+            </div>
+        </div>
+
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.2.4 (알림 상세) -->
     <modal v-if="false">
         <div slot="header">
             <!-- header custom coding-->
@@ -386,8 +839,8 @@
     </modal>
     <!-- end: 공통 팝업 -->
 
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.2.4.1 (알림 - 상세-사진 상세 / 단독) -->
-    <modal v-if="true">
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.2.4.1 (알림 - 상세-사진 상세) -->
+    <modal v-if="false">
 
         <div slot="body">
             <!-- body custom coding-->
@@ -413,460 +866,6 @@
                 </div>
             </div>
 
-        </div>
-
-    </modal>
-    <!-- end: 공통 팝업 -->
-
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2.4 (알림 - 새 알림 작성-링크) -->
-    <modal v-if="false">
-        <div slot="header">
-            <!-- header custom coding-->
-            <div class="popup-icon link"></div>
-            <div class="popup-close">
-                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-            </div>
-        </div>
-        <div slot="body">
-            <!-- body custom coding-->
-            <div class="popup-cnt pdb-desc">
-                <h2 class="popup-tit">링크 만들기</h2>
-                <div class="form-item">
-                    <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">
-                </div>
-            </div>
-
-            <div class="popup-form">
-                <div class="popup-form-cnt">
-                    <!-- start: create-link list -->
-                    <div class="form-create-list">
-                        <div class="create-item">
-                            <div class="create-item-cnt">
-                                <ul class="create-link-list">
-                                    <li>
-                                        <div class="create-form active">
-                                            <span class="num">1</span>
-                                            <div class="form-group inline">
-                                                <input type="text" class="form-control popup-type sm" value="http://www.naver.com" style="width: 345px;">
-                                                <button type="button" class="btn only-ico-btn form-delete active" disabled><img :src="require('@/assets/images/delete.svg')" alt=""></button>
-                                            </div>
-                                        </div>
-
-                                        <div class="create-sub-btn">
-                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
-                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="create-form">
-                                            <span class="num">2</span>
-                                            <div class="form-group inline">
-                                                <input type="text" class="form-control popup-type sm" placeholder="항목을 입력해 주세요." style="width: 345px;">
-                                                <button type="button" class="btn only-ico-btn form-delete" disabled><img :src="require('@/assets/images/delete.svg')" alt=""></button>
-                                            </div>
-                                        </div>
-
-                                        <div class="create-sub-btn">
-                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
-                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="create-add-list">
-                                <a href=""><img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span></a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- start: create-link list -->
-                </div>
-            </div>
-        </div>
-
-        <div slot="footer">
-            <div class="btn-group rt">
-                <button type="button" class="btn primary navi" disabled>완료</button>
-            </div>
-        </div>
-
-    </modal>
-    <!-- end: 공통 팝업 -->
-
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2.5 (알림 - 새 알림 작성-알림예약설정 / 4,5,2,2,5,1) -->
-    <modal v-if="false">
-        <div slot="header">
-            <!-- header custom coding-->
-            <div class="popup-icon time"></div>
-            <div class="popup-close">
-                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-            </div>
-        </div>
-        <div slot="body">
-            <!-- body custom coding-->
-            <div class="popup-cnt pdb-desc">
-                <h2 class="popup-tit">알림 예약 설정</h2>
-            </div>
-
-            <div class="popup-form">
-                <div class="popup-form-cnt">
-                    <!-- start: create notice list -->
-                    <div class="form-create-list">
-                        <div class="create-item">
-                            <div class="create-item-cnt">
-                                <ul class="create-notice-list">
-                                    <li>
-                                        <p class="form-txt">예약일시 설정</p>
-                                        <div class="create-sub-btn">
-                                            <div class="form-switcher">
-                                                <input type="checkbox" id="toggle3">
-                                                <label for="toggle3"></label>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="bd-none">
-                                        <div class="form-group date">
-                                            <input type="text" class="form-control" size="10" value="2020. 2. 28">
-                                            <span class="date-area placeholder">2020. 2. 28</span>
-                                        </div>
-                                        <div class="create-sub-btn">
-                                            <button type="button" class="btn form-btn form-calendar"></button>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- start: create notice list -->
-                </div>
-            </div>
-        </div>
-        <div slot="footer">
-            <div class="btn-group rt">
-                <button type="button" class="btn primary navi">완료</button>
-            </div>
-        </div>
-
-    </modal>
-    <!-- end: 공통 팝업 -->
-
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2.3.1 (알림 - 새 알림 작성-투표-텍스트) -->
-    <modal v-if="false">
-        <div slot="header">
-            <!-- header custom coding-->
-            <div class="popup-icon vote"></div>
-            <div class="popup-close">
-                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-            </div>
-        </div>
-        <div slot="body">
-            <!-- body custom coding-->
-            <div class="popup-cnt pdb-desc">
-                <h2 class="popup-tit">투표 만들기</h2>
-                <div class="form-item">
-                    <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">
-                </div>
-            </div>
-
-            <div class="popup-form">
-                <div class="popup-form-cnt">
-                    <!-- start: create vote list -->
-                    <div class="form-create-list">
-                        <div class="create-item">
-                            <div class="create-item-cnt">
-                                <ul class="create-link-list">
-                                    <li class="bd-none">
-                                        <div class="form-type">
-                                            <div class="checkbox-group">
-                                                <div class="btn-radio">
-                                                    <input type="radio" name="type" id="text" checked>
-                                                    <label for="text">텍스트</label>
-                                                </div>
-                                                <div class="btn-radio">
-                                                    <input type="radio" name="type" id="date">
-                                                    <label for="date">날짜</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="create-form active">
-                                            <span class="num">1</span>
-
-                                            <div class="form-group inline">
-                                                <input type="text" class="form-control popup-type sm" value="제주도 여행" style="width: 345px;">
-                                                <button type="button" class="btn only-ico-btn form-delete active" disabled><img :src="require('@/assets/images/delete.svg')" alt=""></button>
-                                            </div>
-                                        </div>
-
-                                        <div class="create-sub-btn">
-                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
-                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="create-form">
-                                            <span class="num ">2</span>
-
-                                            <div class="form-group inline">
-                                                <input type="text" class="form-control popup-type sm" placeholder="항목을 입력해 주세요." style="width: 345px;">
-                                                <button type="button" class="btn only-ico-btn form-delete" disabled><img :src="require('@/assets/images/delete.svg')" alt=""></button>
-                                            </div>
-                                        </div>
-
-                                        <div class="create-sub-btn">
-                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
-                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="create-form">
-                                            <span class="num">3</span>
-
-                                            <div class="form-group inline">
-                                                <input type="text" class="form-control popup-type sm" placeholder="항목을 입력해 주세요." style="width: 345px;">
-                                                <button type="button" class="btn only-ico-btn form-delete" disabled><img :src="require('@/assets/images/delete.svg')" alt=""></button>
-                                            </div>
-                                        </div>
-
-                                        <div class="create-sub-btn">
-                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
-                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="create-add-list">
-                                <a href="" class="bd-none"><img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span></a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- start: create vote list -->
-
-                    <!-- start: create vote-type list -->
-                    <div class="form-create-list">
-                        <div class="create-item">
-                            <div class="create-item-cnt">
-                                <ul class="create-link-list">
-                                    <li>
-                                        <p class="form-txt">익명 투표</p>
-                                        <div class="create-sub-btn">
-                                            <div class="form-switcher">
-                                                <input type="checkbox" id="toggle1">
-                                                <label for="toggle1"></label>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <p class="form-txt">복수 선택 허용</p>
-                                        <div class="create-sub-btn">
-                                            <div class="form-switcher">
-                                                <input type="checkbox" id="toggle2">
-                                                <label for="toggle2"></label>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <p class="form-txt">종료일시 설정</p>
-                                        <div class="create-sub-btn">
-                                            <div class="form-group date">
-                                                <input type="text" class="form-control no-date" size="7" value="날짜 없음">
-                                                <span class="date-area placeholder">종료일시 없음</span>
-                                                <button type="button" class="btn form-btn form-calendar"></button>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <p class="form-txt">투표 현황 공개</p>
-                                        <div class="create-sub-btn">
-                                            <div class="list-popup">
-                                                <button type="button" class="list-popup-btn"><span>운영자에게만 공개</span> <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                                                <div class="list-popup-menu pos-right" style="transform:translate3d(145px, -125px, 0);">
-                                                    <a href="" class="list-popup-item">전체 공개</a>
-                                                    <a href="" class="list-popup-item">운영자와 스탭에게만 공개</a>
-                                                    <a href="" class="list-popup-item">운영자에게만 공개</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- start: create vote list -->
-                </div>
-            </div>
-        </div>
-
-        <div slot="footer">
-            <div class="btn-group rt">
-                <button type="button" class="btn primary navi">완료</button>
-            </div>
-        </div>
-
-    </modal>
-    <!-- end: 공통 팝업 -->
-
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2.3.4 (알림 - 새 알림 작성-투표-날짜 선택, 더보기 / 4.5.2.2.3.2, 4.5.2.2.3.3 ) -->
-    <modal v-if="false">
-        <div slot="header">
-            <!-- header custom coding-->
-            <div class="popup-icon vote"></div>
-            <div class="popup-close">
-                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-            </div>
-        </div>
-        <div slot="body">
-            <!-- body custom coding-->
-            <div class="popup-cnt pdb-desc">
-                <h2 class="popup-tit">투표 만들기</h2>
-                <div class="form-item">
-                    <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">
-                </div>
-            </div>
-
-            <div class="popup-form">
-                <div class="popup-form-cnt">
-                    <!-- start: create vote list -->
-                    <div class="form-create-list">
-                        <div class="create-item">
-                            <div class="create-item-cnt">
-                                <ul class="create-link-list">
-                                    <li class="bd-none">
-                                        <div class="form-type">
-                                            <div class="checkbox-group">
-                                                <div class="btn-radio">
-                                                    <input type="radio" name="type" id="text1">
-                                                    <label for="text1">텍스트</label>
-                                                </div>
-                                                <div class="btn-radio">
-                                                    <input type="radio" name="type" id="date2" checked>
-                                                    <label for="date2">날짜</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="create-form">
-                                            <span class="num">1</span>
-
-                                            <div class="form-group date">
-                                                <input type="text" class="form-control" size="10" value="2020. 2. 28">
-                                                <button type="button" class="btn form-btn form-calendar"></button>
-                                                <span class="date-area">날짜를 선택해 주세요.</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="create-sub-btn">
-                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
-                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="create-form">
-                                            <span class="num ">2</span>
-
-                                            <div class="form-group date">
-                                                <input type="text" class="form-control" size="10" value="2020. 2. 28">
-                                                <button type="button" class="btn form-btn form-calendar"></button>
-                                                <span class="date-area">날짜를 선택해 주세요.</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="create-sub-btn">
-                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
-                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="create-form">
-                                            <span class="num">3</span>
-
-                                            <div class="form-group date">
-                                                <input type="text" class="form-control" size="10" value="2020. 2. 28">
-                                                <button type="button" class="btn form-btn form-calendar"></button>
-                                                <span class="date-area">날짜를 선택해 주세요.</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="create-sub-btn">
-                                            <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>
-                                            <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="create-add-list">
-                                <a href="" class="bd-none"><img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span></a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- start: create vote list -->
-
-                    <!-- start: create vote-type list -->
-                    <div class="form-create-list">
-                        <div class="create-item">
-                            <div class="create-item-cnt">
-                                <ul class="create-link-list">
-                                    <li>
-                                        <p class="form-txt">익명 투표</p>
-                                        <div class="create-sub-btn">
-                                            <div class="form-switcher">
-                                                <input type="checkbox" id="toggle4">
-                                                <label for="toggle4"></label>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <p class="form-txt">복수 선택 허용</p>
-                                        <div class="create-sub-btn">
-                                            <div class="form-switcher">
-                                                <input type="checkbox" id="toggle5">
-                                                <label for="toggle5"></label>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <p class="form-txt">종료일시 설정</p>
-                                        <div class="create-sub-btn">
-                                            <div class="form-group date">
-                                                <input type="text" class="form-control no-date" size="7" value="날짜 없음">
-                                                <span class="date-area placeholder">종료일시 없음</span>
-                                                <button type="button" class="btn form-btn form-calendar"></button>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <p class="form-txt">투표 현황 공개</p>
-                                        <div class="create-sub-btn">
-                                            <div class="list-popup">
-                                                <button type="button" class="list-popup-btn"><span>운영자에게만 공개</span> <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                                                <div class="list-popup-menu pos-right" style="transform:translate3d(145px, -125px, 0);">
-                                                    <a href="" class="list-popup-item">전체 공개</a>
-                                                    <a href="" class="list-popup-item">운영자와 스탭에게만 공개</a>
-                                                    <a href="" class="list-popup-item">운영자에게만 공개</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- start: create vote list -->
-                </div>
-            </div>
-        </div>
-
-        <div slot="footer">
-            <div class="btn-group rt">
-                <button type="button" class="btn primary navi">완료</button>
-            </div>
         </div>
 
     </modal>
@@ -943,7 +942,7 @@
     <!-- end: 공통 팝업 -->
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.2.4.3 (알림 - 새 알림 작성-투표-응답자 확인-미참여) -->
-    <modal v-if="false">
+    <modal v-if="true">
         <div slot="header">
             <!-- header custom coding-->
             <div class="popup-icon vote"></div>
