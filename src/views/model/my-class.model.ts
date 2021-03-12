@@ -7,21 +7,21 @@ interface IMyClassList {
         updatedAt: Date;
         class_id: number;
         user_id: number;
-        nickname: string;
-        profile_image: string;
-        is_bookmarked: string;
-        schedule_color: string;
-        level: string;
-        status: string;
+        nickname?:  string;
+        profile_image?: string;
+        is_bookmarked: number | string;
+        schedule_color: number | string;
+        level:  number | string;
+        status:  number | string;
         open_level_id: number;
-        open_level_mobileno: number;
-        open_level_email:  number;
-        onoff_push_noti:  number;
-        onoff_post_noti:  number;
-        onoff_comment_noti:  number;
-        onoff_schedule_noti:  number;
-        schedule_noti_intime:  number;
-        visited:  string;
+        open_level_mobileno: number | string;
+        open_level_email:  number | string;
+        onoff_push_noti:  number | string;
+        onoff_post_noti: number | string;
+        onoff_comment_noti:  number | string;
+        onoff_schedule_noti: number | string;
+        schedule_noti_intime:  number | string;
+        visited: number | string;
     };
 }
 /*

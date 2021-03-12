@@ -37,6 +37,23 @@ opacity: 0;
     transform: translateX(-10%);
 }
 
+
+/* slide out motion */
+.slideY-enter-active {
+    transition: all .75s ease;
+}
+.slideY-leave-active {
+    transition: all .75s;
+}
+// -leave-active( leave, leave-to )
+.slideY-enter{
+    opacity: 0;
+    transform: translateY(10%);
+}
+.slideY-leave-to{
+    opacity: 0;
+    transform: translateY(-10%);
+}
 /* slide out motion */
 .fade-enter-active {
     transition: all .75s ease;

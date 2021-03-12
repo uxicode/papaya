@@ -27,9 +27,10 @@ export default class ClassModule extends VuexModule {
 
     /* Mutations */
     @Mutation
-    public [MYCLASS_LIST](classData: IMyClassList[]): void {
+    public [MYCLASS_LIST](classData: IMyClassList[] ): void {
         this.classData =classData;
 
+        // console.log(this.classData);
         localStorage.setItem('classData', JSON.stringify(this.classData) );
         this.count++;
     }

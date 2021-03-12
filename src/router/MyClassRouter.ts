@@ -38,7 +38,7 @@ const MyClassRouter=[
   {
     path: '/allSchedule',
     name: 'allSchedule',
-    components: {default: () => import('../views/allSchedule/allSchedule.6.3.1'), header: AppHeader, footer: AppFooter},
+    components: {default: () => import('../views/allSchedule/allSchedule.5.1'), header: AppHeader, footer: AppFooter},
   },
 
   {

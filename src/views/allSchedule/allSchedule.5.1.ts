@@ -1,5 +1,5 @@
 import {Component, Vue} from 'vue-property-decorator';
-import WithRender from './allSchedule.6.3.1.html';
+import WithRender from './allSchedule.5.1.html';
 import Modal from '@/components/modal/modal.vue';
 
 @WithRender
