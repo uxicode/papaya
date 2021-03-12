@@ -656,6 +656,22 @@
         }
       }
     }
+
+    .no-notify {
+      position:relative;
+      height:600px;
+      border-radius: 5px;
+      background-color:#fff;
+
+      .no-data {
+        @include pos-abs($top:50%, $left:50%);
+        transform:translate(-50%, -50%);
+        text-align:center;
+
+        p {margin-top:20px; font-size:16px; color:#848499;}
+        span {margin-top:10px; color:#c9cad5;}
+      }
+    }
   }
 }
 
