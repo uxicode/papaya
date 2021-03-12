@@ -36,15 +36,45 @@ const MyClassRouter=[
   },
 
   {
-    path: '/class/setting1',
-    name: 'setting',
-    components: {default: () => import('../views/class/setting/classSetting.4.5.7.3'), header: AppHeader, footer: AppFooter},
+    path: '/allSchedule',
+    name: 'allSchedule',
+    components: {default: () => import('../views/allSchedule/allSchedule.6.3.1'), header: AppHeader, footer: AppFooter},
+  },
+
+  {
+    path: '/class/search',
+    name: 'search',
+    components: {default: () => import('../views/class/search/search.4.2.1'), header: AppHeader, footer: AppFooter},
+  },
+
+  {
+    path: '/class/search2',
+    name: 'search',
+    components: {default: () => import('../views/class/search/search.4.2.3.1'), header: AppHeader, footer: AppFooter},
+  },
+
+  {
+    path: '/class/notify',
+    name: 'notify',
+    components: {default: () => import('../views/class/notify/notify.4.5.2'), header: AppHeader, footer: AppFooter},
+  },
+
+  {
+    path: '/class/notify2',
+    name: 'notify',
+    components: {default: () => import('../views/class/notify/notify.4.5.2.4'), header: AppHeader, footer: AppFooter},
   },
 
   {
     path: '/class/setting',
     name: 'setting',
     components: {default: () => import('../views/class/setting/classSetting.4.5.7.8'), header: AppHeader, footer: AppFooter},
+  },
+
+  {
+    path: '/class/setting1',
+    name: 'setting',
+    components: {default: () => import('../views/class/setting/classSetting.4.5.7.3'), header: AppHeader, footer: AppFooter},
   },
 
   {

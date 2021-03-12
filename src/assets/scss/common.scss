@@ -327,6 +327,7 @@ body {
 
   .item {
     float:left;
+    //margin-bottom:10px;
     text-align:center;
     font-size:16px;
     color:#57576d;
@@ -340,6 +341,7 @@ body {
       a {
         position:relative;
         display:inline-block;
+        padding:0 6px;
         font-weight:500;
 
         &:after {
