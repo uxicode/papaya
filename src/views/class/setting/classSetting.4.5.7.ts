@@ -8,6 +8,6 @@ import Modal from '@/components/modal/modal.vue';
         Modal,
     }
 })
-export default class ClassSetting extends Vue{
+export default class ClassSettingBasic extends Vue{
 
 }

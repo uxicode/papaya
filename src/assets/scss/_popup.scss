@@ -13,9 +13,6 @@ $modalDepth : 1050;
   }
 }
 
-
-
-
 .tip-info {
   display:inline-block;
   width:18px;
@@ -77,6 +74,8 @@ $modalDepth : 1050;
     &.leave {background:url(../../assets/images/popup-icon-leave.svg) no-repeat;}
     &.block {background:url(../../assets/images/popup-icon-block.svg) no-repeat;}
   }
+
+
 }
 .popup-close, .popup-btn {
   @include pos-abs($right:40px, $top:30px);
