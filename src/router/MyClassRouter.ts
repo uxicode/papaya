@@ -35,8 +35,6 @@ const MyClassRouter=[
     components: {default: () => import('../views/class/makeClass/makeClass.4.3.1'), header: AppHeader, footer: AppFooter},
   },
 
-
-
   {
     path: '/allSchedule',
     name: 'allSchedule',
