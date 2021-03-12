@@ -3,7 +3,6 @@ import Btn from '@/components/button/Btn.vue';
 import WithRender from './myClassList.html';
 import {namespace} from 'vuex-class';
 import {IMyClassList} from '@/views/model/my-class.model';
-import {IMaybe, INullable} from '@/views/model/init.model';
 import { IUserMe} from '@/api/model/user.model';
 
 const Auth = namespace('Auth');

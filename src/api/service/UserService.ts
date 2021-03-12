@@ -1,6 +1,5 @@
-import {request} from '@/api/service/axiosService';
+import {request} from '@/api/service/AxiosService';
 import {USER_BASE_URL} from '@/api/base';
-import {IUserMe} from '@/api/model/user.model';
 
 class UserService {
 

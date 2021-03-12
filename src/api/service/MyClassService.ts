@@ -1,4 +1,4 @@
-import {request} from '@/api/service/axiosService';
+import {request} from '@/api/service/AxiosService';
 import {CLASS_BASE_URL} from '@/api/base';
 import {IMyClassList} from '@/views/model/my-class.model';
 
