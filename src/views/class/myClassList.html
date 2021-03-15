@@ -18,7 +18,7 @@
 
   <div class="home-classes">
     <div class="cnt-top">
-      <h3 class="cnt-tit">MY 클래스 <span class="fc-red">{{ classItemLists.length }}</span></h3>
+      <h3 class="cnt-tit">MY 클래스 <span class="fc-red">{{ originalClassItems.length }}</span></h3>
       <div class="list-align">
         <div class="form-group">
           <select class="form-select">
@@ -55,20 +55,20 @@
             <template v-else>
               <a href="" class="class-info">
                 <div class="info-img crown">
-                  <span><img :src="imgNullCheck(item.me.profile_image)" class="thumb" alt=""></span>
+                  <span><img :src="nullCheck(item.me.profile_image)" class="thumb" alt=""></span>
                 </div>
                 <div class="info-tit">
                   <p>{{  item.name }}</p>
-                  <span>{{imgNullCheck( item.me.nickname ) }}</span>
+                  <span>{{ nullCheck(item.me.nickname) }}</span>
                 </div>
                 <div class="info-sub">
                   <span>{{ getYears( item.me.createdAt )}}</span>
-                  <span>{{ item.me.status ==='0'? '대기' : '승인' }}</span>
+                  <span>{{ getClassPrivateById( index ) }}</span>
                   <span>멤버 {{ item.me.memberNum }}</span>
                 </div>
               </a>
               <div class="class-update">
-                <span class="update" :class="{'active': item.me.isUpdated === 1}">{{ updatedDiffDate( item.me.updatedAt ) }}</span>
+                <span class="update" :class="{'active': isPostUpdate( item.me.updatedAt) }">{{ updatedDiffDate( item.me.updatedAt ) }} 업데이트</span>
                 <button type="button" class="btn only-ico-btn heart" :class="{'active': item.is_bookmarked}" @click="bookmarkToggle(item)"></button>
               </div>
             </template>

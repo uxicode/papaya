@@ -1,6 +1,7 @@
-import {request} from '@/api/service/axiosService';
+import {request} from '@/api/service/AxiosService';
 import {CLASS_BASE_URL} from '@/api/base';
 import {IMyClassList, IPostList} from '@/views/model/my-class.model';
+
 
 class MyClassService {
     /**
@@ -8,6 +9,10 @@ class MyClassService {
      */
     public getAllMyClass(): Promise<IMyClassList> {
         return request('get', `${CLASS_BASE_URL}/me/all`);
+    }
+
+    public getClassInfoById( id: number | string ): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${id}`);
     }
 
     /**

@@ -1,4 +1,4 @@
-import {request, setAuthorization} from '@/api/service/axiosService';
+import {request, setAuthorization} from '@/api/service/AxiosService';
 import {AUTH_BASE_URL, USER_BASE_URL} from '@/api/base';
 
 class AuthService {

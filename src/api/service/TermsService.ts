@@ -1,4 +1,4 @@
-import {request} from '@/api/service/axiosService';
+import {request} from '@/api/service/AxiosService';
 import {TERMS_BASE_URL} from '@/api/base';
 import {ITermData} from '@/views/model/terms.model';
 
