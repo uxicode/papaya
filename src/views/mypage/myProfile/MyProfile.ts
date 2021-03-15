@@ -8,6 +8,11 @@ import Modal from '@/components/modal/modal.vue';
 
 const Auth = namespace('Auth');
 
+interface IPwd {
+    nPwd: string;
+    rePwd: string;
+}
+
 @WithRender
 @Component({
     components:{
@@ -24,13 +29,24 @@ export default class MyProfile extends Vue {
         return this.userInfo;
     }
 
+    /* 팝업 및 페이지 변경 상태 값 */
     private isNameModifyModal: boolean = false;
     private isGenderModify: boolean = false;
-
     private isMobileModify: boolean = false;
     private isEmailModifyModal: boolean = false;
     private isPwModify: boolean = false;
     private isPwConfirmed: boolean = false;
+
+    private tempData: any = '';
+
+    /**
+     * 변경할 정보를 임시로 담을 함수
+     * @param event
+     * @private
+     */
+    private valueChange(event: any): void {
+        this.tempData = event.target.value;
+    }
 
     /**
      * 이름 변경 팝업 열기
@@ -46,7 +62,9 @@ export default class MyProfile extends Vue {
      * @private
      */
     private nameModify(newName: string): void {
-        UserService.setUserInfo(this.userInfo.user_id, {fullname: newName});
+        UserService.setUserInfo(this.userInfo.user_id, {fullname: this.tempData}); // 실제 데이터에서 이름이 변경됨
+        this.isNameModifyModal = !this.isNameModifyModal;
+        this.userInfo.fullname = this.tempData; // 화면상에서 바뀐 이름이 즉시 반영됨
     }
 
     /**
@@ -59,6 +77,7 @@ export default class MyProfile extends Vue {
 
     private genderModify(newGender: number): void {
         UserService.setUserInfo(this.userInfo.user_id, {gender: newGender});
+        this.isGenderModify = !this.isGenderModify;
     }
 
     /**
@@ -84,4 +103,5 @@ export default class MyProfile extends Vue {
     private gotoPwModify(): void {
         this.isPwModify = !this.isPwModify;
     }
+
 }

@@ -21,6 +21,13 @@ class MyClassService {
     public getMyKeepPosts(): Promise<IPostList> {
         return request('get', `${CLASS_BASE_URL}/me/keep/posts`);
     }
+
+    /**
+     * 내가 가입한 클래스 북마크한 일정 글조회
+     */
+    public getMyKeepSchedules(): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/me/keep/schedules`);
+    }
 }
 
 export default new MyClassService();
