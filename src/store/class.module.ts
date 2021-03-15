@@ -1,9 +1,9 @@
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 import {INullable} from '@/views/model/init.model';
-import {IMyClassList} from '@/views/model/my-class.model';
+import {IMyClassList, IPostList} from '@/views/model/my-class.model';
 import ClassService from '@/api/service/MyClassService';
-import {MYCLASS_LIST} from '@/store/mutation-class-types';
-import {MYCLASS_LIST_ACTION} from '@/store/action-class-types';
+import {MYCLASS_LIST, POST_LIST} from '@/store/mutation-class-types';
+import {MYCLASS_LIST_ACTION, POST_LIST_ACTION} from '@/store/action-class-types';
 
 
 @Module({

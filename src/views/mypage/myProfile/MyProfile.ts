@@ -1,4 +1,5 @@
 import {IUserMe} from '@/api/model/user.model';
+import UserService from '@/api/service/UserService';
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import WithRender from './MyProfile.html';
@@ -40,11 +41,24 @@ export default class MyProfile extends Vue {
     }
 
     /**
+     * 이름 수정
+     * @param newName
+     * @private
+     */
+    private nameModify(newName: string): void {
+        UserService.setUserInfo(this.userInfo.user_id, {fullname: newName});
+    }
+
+    /**
      * 성별 변경 토글
      * @private
      */
     private genderModifyToggle(): void {
         this.isGenderModify = !this.isGenderModify;
+    }
+
+    private genderModify(newGender: number): void {
+        UserService.setUserInfo(this.userInfo.user_id, {gender: newGender});
     }
 
     /**
