@@ -299,6 +299,11 @@
         transform:translateY(-50%);
       }
     }
+    // 20210315 ksj
+    button.list-popup-item {
+      width:100%;
+      text-align: left;
+    }
 
     &.pos-right {
       top:0;

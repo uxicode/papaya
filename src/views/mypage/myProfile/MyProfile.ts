@@ -78,6 +78,7 @@ export default class MyProfile extends Vue {
     private genderModify(newGender: number): void {
         UserService.setUserInfo(this.userInfo.user_id, {gender: newGender});
         this.isGenderModify = !this.isGenderModify;
+        this.userInfo.gender = newGender; // 화면상에서 바뀐 이름이 즉시 반영됨
     }
 
     /**
