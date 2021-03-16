@@ -138,26 +138,19 @@ export default class MyClassList extends Vue {
     };
   }
 
+  /**
+   * myClassLists( 내가 가입한 클래스 목록 데이터 원본 ) 에서 주어진 카운팅에 의해 해당 범위에 있는 멤버를 가져오기.
+   * @param begin
+   * @param end
+   * @private
+   */
+  private getMemberRange( begin: number, end: number ): IMyClassList[]{
+    console.log('first');
+    return this.myClassLists.filter( (item: IMyClassList, idx: number)=> idx>=begin && idx<=end );
+  }
 
-
-  private getUpdateList(): void{
-
-    const {begin, end} = this.rangeOfCount();
-
-    // console.log(begin, end);
-    //end 가 classItem 개수보다 많을 때 여기서 종료
-    if( end>= this.myClassLists.length ){ return; }
-
-    const promiseItems: any[]=[];
-    //현재 api 에서 클래스 멤버 전체 조회시 500개이상 이더라도
-    //페이징에 대한 쿼리스트링 전달이 없기에 별도로 프론트에서 페이징처리
-    const items=this.myClassLists.filter( (item, idx)=> idx>=begin && idx<=end );
-    //전체 조회 api 에서 공개 /비공개에 대한 값과 멤버수 등 항목이 없기에 개별 클래스 조회 api 통신해야 한다.
-    // 즉  pagination 1개에 16개씩 노출이라서 전체 api 통신 후 16번의 개별 통신을 다시 해야 한다.
-    items.forEach( (item: IMyClassList)=>{
-      promiseItems.push( MyClassService.getClassInfoById( item.me.class_id) );
-    });
-
+  private getDataByMemberRange( promiseItems: any[] ){
+    console.log('third');
     getAllPromise( promiseItems ).then( ( data: any )=>{
       // console.log(data.length);
       this.moreInfos=data.map( (item: any ) => {
@@ -169,8 +162,44 @@ export default class MyClassList extends Vue {
     }).catch((error)=>{
       console.log('class more info error', error );
     });
-    // console.log(items);
-    this.classItems=[...this.classItems, ...items];
+  }
+
+  private getFindMemberByRange( items: IMyClassList[] ): any[]{
+    console.log('second');
+    const promiseItems: any[]=[];
+    items.forEach( (item: IMyClassList)=>{
+      promiseItems.push( MyClassService.getClassInfoById( item.me.class_id) );
+    });
+
+    return promiseItems;
+  }
+
+  private async findMemberRange( begin: number, end: number ){
+    //현재 api 에서 클래스 멤버 전체 조회시 500개이상 이더라도
+    //페이징에 대한 쿼리스트링 전달이 없기에 별도로 프론트에서 페이징처리
+    const items = await this.getMemberRange(begin, end);
+
+    //전체 조회 api 에서 공개 /비공개에 대한 값과 멤버수 등 항목이 없기에 개별 클래스 조회 api 통신해야 한다.
+    // 즉  pagination 1개에 16개씩 노출이라서 전체 api 통신 후 16번의 개별 통신을 다시 해야 한다.
+    const promiseData= await this.getFindMemberByRange( items );
+
+    await this.getDataByMemberRange( promiseData );
+
+    return items;
+  }
+
+   private getUpdateList(): void{
+
+    //범위 설정.
+    const {begin, end} = this.rangeOfCount();
+    // console.log(begin, end);
+    //end 가 classItem 개수보다 많을 때 여기서 종료
+    if( end>= this.myClassLists.length ){ return; }
+
+    this.findMemberRange( begin, end ).then(( data )=>{
+      this.classItems=[...this.classItems, ...data];
+    });
+
   }
 
   private updateBookmark( payload: {classId: number,  memberId: number, nickname: string, bookmarkValue: number } ): void {
