@@ -1,5 +1,6 @@
 import {IUserMe} from '@/api/model/user.model';
 import UserService from '@/api/service/UserService';
+import ResetPassword from '@/views/login/resetPw/ResetPassword';
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import WithRender from './MyProfile.html';
@@ -7,11 +8,6 @@ import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 
 const Auth = namespace('Auth');
-
-interface IPwd {
-    nPwd: string;
-    rePwd: string;
-}
 
 @WithRender
 @Component({
@@ -28,6 +24,9 @@ export default class MyProfile extends Vue {
         // console.log( 'this.userInfo=', this.userInfo );
         return this.userInfo;
     }
+
+    /* 비밀번호 재설정 */
+    public ResetPassword = new ResetPassword();
 
     /* 팝업 및 페이지 변경 상태 값 */
     private isNameModifyModal: boolean = false;
@@ -57,7 +56,7 @@ export default class MyProfile extends Vue {
     }
 
     /**
-     * 이름 수정
+     * 이름 변경
      * @param newName
      * @private
      */
@@ -75,10 +74,15 @@ export default class MyProfile extends Vue {
         this.isGenderModify = !this.isGenderModify;
     }
 
+    /**
+     * 성별 변경
+     * @param newGender
+     * @private
+     */
     private genderModify(newGender: number): void {
-        UserService.setUserInfo(this.userInfo.user_id, {gender: newGender});
+        UserService.setUserInfo(this.userInfo.user_id, {gender: newGender}); // 실제 데이터에서 이름이 변경됨
         this.isGenderModify = !this.isGenderModify;
-        this.userInfo.gender = newGender; // 화면상에서 바뀐 이름이 즉시 반영됨
+        this.userInfo.gender = this.tempData; // 화면상에서 바뀐 성별 즉시 반영됨
     }
 
     /**
@@ -104,5 +108,4 @@ export default class MyProfile extends Vue {
     private gotoPwModify(): void {
         this.isPwModify = !this.isPwModify;
     }
-
 }
