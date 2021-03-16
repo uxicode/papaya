@@ -1,9 +1,9 @@
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 import {INullable} from '@/views/model/types';
-import {IMyClassList} from '@/views/model/my-class.model';
-import MyClassService from '@/api/service/MyClassService';
-import {MYCLASS_LIST, MODIFY_MYCLASS_LIST} from '@/store/mutation-class-types';
-import {MYCLASS_LIST_ACTION, MODIFY_MYCLASS_LIST_ACTION} from '@/store/action-class-types';
+import {IMyClassList, IPostList} from '@/views/model/my-class.model';
+import ClassService from '@/api/service/MyClassService';
+import {MYCLASS_LIST, POST_LIST} from '@/store/mutation-class-types';
+import {MYCLASS_LIST_ACTION, POST_LIST_ACTION} from '@/store/action-class-types';
 
 
 @Module({
@@ -12,6 +12,7 @@ import {MYCLASS_LIST_ACTION, MODIFY_MYCLASS_LIST_ACTION} from '@/store/action-cl
 export default class ClassModule extends VuexModule {
     /* State */
     private classData: IMyClassList[]=[];
+    private postData: IPostList[]=[];
     private count: number = 0;
 
     /* Getters */
@@ -29,14 +30,34 @@ export default class ClassModule extends VuexModule {
         this.count++;
     }
 
+    @Mutation
+    public [POST_LIST](postData: IPostList[] ): void {
+        this.postData =postData;
+
+        // console.log(this.postData);
+        localStorage.setItem('postData', JSON.stringify(this.postData) );
+        this.count++;
+    }
 
     /* Actions */
     @Action({rawError: true})
     public [MYCLASS_LIST_ACTION](): Promise<INullable<IMyClassList[]>> {
-        return MyClassService.getAllMyClass()
+        return ClassService.getAllMyClass()
             .then((data: any) => {
                 this.context.commit(MYCLASS_LIST, data.myclass_list);
                 return Promise.resolve(data.myclass_list);
+            }).catch((error: any) => {
+                console.log(error);
+                return Promise.reject(error);
+            });
+    }
+
+    @Action({rawError: true})
+    public [POST_LIST_ACTION](): Promise<INullable<IPostList[]>> {
+        return ClassService.getMyKeepPosts()
+            .then((data: any) => {
+                this.context.commit(POST_LIST, data.post_list);
+                return Promise.resolve(data.post_list);
             }).catch((error: any) => {
                 console.log(error);
                 return Promise.reject(error);

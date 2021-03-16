@@ -269,4 +269,77 @@ interface IFeedList {
     comment: number;
 }
 
-export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember};
+interface IPostList {
+    startAt: string;
+    endAt: string;
+    expiredAt: string;
+    createdAt: string;
+    updatedAt: string;
+    id: number;
+    class_id: number;
+    post_type: number;
+    type: number;
+    user_id: number;
+    user_member_id: number;
+    title: string;
+    text: string;
+    count: number;
+    param1: number;
+    deletedYN: boolean;
+    class: {
+        contents_updatedAt: string;
+        createdAt: string;
+        updatedAt: string;
+        id: number;
+        code: string;
+        name: string;
+        owner_id: number;
+        owner_member_id: number;
+        board_id: number;
+        is_private: boolean;
+        image_url: string;
+        description: string;
+        startday: string;
+        endday: string;
+        g_type: number;
+        g_name: string;
+        g_code: number;
+        member_count: number;
+        question_showYN: boolean;
+        deletedYN: boolean;
+        contents_updated_type: number;
+    };
+    owner: {
+        joinedAt: string;
+        createdAt: string;
+        updatedAt: string;
+        id: number;
+        class_id: number;
+        user_id: number;
+        nickname: string;
+        profile_image: string;
+        is_bookmarked: number;
+        schedule_color: number;
+        level: number;
+        status: number;
+        open_level_id: number;
+        open_level_mobileno: number;
+        open_level_email: number;
+        onoff_push_noti: number;
+        onoff_post_noti: number;
+        onoff_comment_noti: number;
+        onoff_schedule_noti: number;
+        schedule_noti_intime: number;
+        visited: number;
+    };
+    user_keep_class_posts: [
+        {
+            createdAt: string;
+            id: number;
+            post_id: number;
+            user_id: number;
+            class_id: number;
+        }
+    ];
+}
+export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList};

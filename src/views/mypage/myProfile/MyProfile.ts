@@ -1,4 +1,5 @@
 import {IUserMe} from '@/api/model/user.model';
+import UserService from '@/api/service/UserService';
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import WithRender from './MyProfile.html';
@@ -6,6 +7,11 @@ import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 
 const Auth = namespace('Auth');
+
+interface IPwd {
+    nPwd: string;
+    rePwd: string;
+}
 
 @WithRender
 @Component({
@@ -23,13 +29,24 @@ export default class MyProfile extends Vue {
         return this.userInfo;
     }
 
+    /* 팝업 및 페이지 변경 상태 값 */
     private isNameModifyModal: boolean = false;
     private isGenderModify: boolean = false;
-
     private isMobileModify: boolean = false;
     private isEmailModifyModal: boolean = false;
     private isPwModify: boolean = false;
     private isPwConfirmed: boolean = false;
+
+    private tempData: any = '';
+
+    /**
+     * 변경할 정보를 임시로 담을 함수
+     * @param event
+     * @private
+     */
+    private valueChange(event: any): void {
+        this.tempData = event.target.value;
+    }
 
     /**
      * 이름 변경 팝업 열기
@@ -40,11 +57,28 @@ export default class MyProfile extends Vue {
     }
 
     /**
+     * 이름 수정
+     * @param newName
+     * @private
+     */
+    private nameModify(newName: string): void {
+        UserService.setUserInfo(this.userInfo.user_id, {fullname: this.tempData}); // 실제 데이터에서 이름이 변경됨
+        this.isNameModifyModal = !this.isNameModifyModal;
+        this.userInfo.fullname = this.tempData; // 화면상에서 바뀐 이름이 즉시 반영됨
+    }
+
+    /**
      * 성별 변경 토글
      * @private
      */
     private genderModifyToggle(): void {
         this.isGenderModify = !this.isGenderModify;
+    }
+
+    private genderModify(newGender: number): void {
+        UserService.setUserInfo(this.userInfo.user_id, {gender: newGender});
+        this.isGenderModify = !this.isGenderModify;
+        this.userInfo.gender = newGender; // 화면상에서 바뀐 이름이 즉시 반영됨
     }
 
     /**
@@ -70,4 +104,5 @@ export default class MyProfile extends Vue {
     private gotoPwModify(): void {
         this.isPwModify = !this.isPwModify;
     }
+
 }

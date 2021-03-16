@@ -1,6 +1,6 @@
 import {request} from '@/api/service/AxiosService';
 import {CLASS_BASE_URL} from '@/api/base';
-import {IClassInfo, IMyClassList, IClassMember} from '@/views/model/my-class.model';
+import {IClassInfo, IMyClassList, IClassMember, IPostList} from '@/views/model/my-class.model';
 
 
 class MyClassService {
@@ -13,6 +13,20 @@ class MyClassService {
 
     public getClassInfoById( id: number | string ): Promise<IClassInfo>{
         return request('get', `${CLASS_BASE_URL}/${id}`);
+    }
+
+    /**
+     * 내가 가입한 클래스 알림글 북마크한 글조회
+     */
+    public getMyKeepPosts(): Promise<IPostList> {
+        return request('get', `${CLASS_BASE_URL}/me/keep/posts`);
+    }
+
+    /**
+     * 내가 가입한 클래스 북마크한 일정 글조회
+     */
+    public getMyKeepSchedules(): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/me/keep/schedules`);
     }
 
     public setClassBookmark(classId: number, memberId: number, payload: { is_bookmarked: number; nickname: string | undefined }): Promise<IClassMember>{

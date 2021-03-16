@@ -46,11 +46,12 @@
                 <h3>비밀번호 재설정</h3>
 
                 <div class="form-group inline mgt-40">
-                    <label for="newPw" class="required">새 비밀번호</label>
-                    <input type="password" class="form-control" id="newPw" placeholder="새 비밀번호를 입력해 주세요." style="width:356px">
+                    <label for="nPwd" class="required">새 비밀번호</label>
+                    <input type="password" class="form-control" id="nPwd" placeholder="새 비밀번호를 입력해 주세요." style="width:356px">
                 </div>
+
                 <div class="form-group mgt-40 pdl-123">
-                    <input type="password" class="form-control" id="newPwConfirm" placeholder="새 비밀번호를 다시 입력해 주세요." style="width:356px">
+                    <input type="password" class="form-control" id="rePwd" placeholder="새 비밀번호를 다시 입력해 주세요." style="width:356px">
                 </div>
 
                 <div class="btn-box">
@@ -92,10 +93,13 @@
                         <p class="list-tit">성별</p>
                         <div class="list-right">
                             <div class="list-popup">
-                                <button type="button" class="list-popup-btn" @click="genderModifyToggle">{{ myInfo.gender === '1' ? '남자' : '여자' }} <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                <button type="button" class="list-popup-btn" @click="genderModifyToggle">
+                                    {{ myInfo.gender === '1' ? '남자' : '여자' }}
+                                    <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
+                                </button>
                                 <div class="list-popup-menu" :class="{'active': isGenderModify}">
-                                    <a href="" class="list-popup-item">여자</a>
-                                    <a href="" class="list-popup-item">남자</a>
+                                    <button type="button" class="list-popup-item" value="0" @click="valueChange($event); genderModify(tempData)">여자</button>
+                                    <button type="button" class="list-popup-item" value="1" @click="valueChange($event); genderModify(tempData)">남자</button>
                                 </div>
                             </div>
                         </div>
@@ -166,15 +170,15 @@
                     <h2 class="popup-tit">이름 변경</h2>
                     <div class="popup-input">
                         <div class="form-group inline">
-                            <input type="text" class="form-control" :value="myInfo.fullname">
+                            <input type="text" class="form-control" :value="myInfo.fullname" @input="valueChange($event)">
                         </div>
                     </div>
                 </div>
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isNameModifyModal = false">취소</btn>
-                    <btn type="navi" disabled>변경하기</btn>
+                    <btn type="outline" @btnClick="isNameModifyModal = false; tempData = myInfo.fullname">취소</btn>
+                    <btn type="navi" @btnClick="nameModify(tempData);">변경하기</btn>
                 </div>
             </div>
         </modal>
