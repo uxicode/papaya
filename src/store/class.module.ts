@@ -1,9 +1,9 @@
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
-import {INullable} from '@/views/model/init.model';
+import {INullable} from '@/views/model/types';
 import {IMyClassList} from '@/views/model/my-class.model';
-import ClassService from '@/api/service/MyClassService';
-import {MYCLASS_LIST} from '@/store/mutation-class-types';
-import {MYCLASS_LIST_ACTION} from '@/store/action-class-types';
+import MyClassService from '@/api/service/MyClassService';
+import {MYCLASS_LIST, MODIFY_MYCLASS_LIST} from '@/store/mutation-class-types';
+import {MYCLASS_LIST_ACTION, MODIFY_MYCLASS_LIST_ACTION} from '@/store/action-class-types';
 
 
 @Module({
@@ -29,10 +29,11 @@ export default class ClassModule extends VuexModule {
         this.count++;
     }
 
+
     /* Actions */
     @Action({rawError: true})
     public [MYCLASS_LIST_ACTION](): Promise<INullable<IMyClassList[]>> {
-        return ClassService.getAllMyClass()
+        return MyClassService.getAllMyClass()
             .then((data: any) => {
                 this.context.commit(MYCLASS_LIST, data.myclass_list);
                 return Promise.resolve(data.myclass_list);

@@ -2,6 +2,7 @@ interface IMyClassList {
     id: number;
     name: string;
     me: {
+        id: number;
         joinedAt: Date;
         createdAt: Date;
         updatedAt: Date;
@@ -82,8 +83,60 @@ interface IMyClassList {
 
 
 interface IClassInfo{
+    classinfo: {
+        contents_updatedAt: Date,
+        createdAt: Date,
+        updatedAt: Date,
+        id: number | string,
+        code: string,
+        name: string,
+        owner_id: number | string,
+        owner_member_id: number | string,
+        board_id: number | string,
+        is_private: boolean,
+        // image_url: null,
+        // description: null,
+        startday: number | string,
+        endday: number | string,
+        g_type: number,
+        g_name: string,
+        // g_code: null,
+        member_count: number,
+        question_showYN: boolean,
+        deletedYN: boolean,
+        contents_updated_type: number,
+        class_tags: [],
+    };
+    class_members: [];
+    me: {
+        joinedAt: Date;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number,
+        class_id: number;
+        user_id: number;
+        nickname?:  string;
+        profile_image?: string;
+        is_bookmarked: number | string;
+        schedule_color: number | string;
+        level:  number | string;
+        status:  number | string;
+        open_level_id: number;
+        open_level_mobileno: number | string;
+        open_level_email:  number | string;
+        onoff_push_noti:  number | string;
+        onoff_post_noti: number | string;
+        onoff_comment_noti:  number | string;
+        onoff_schedule_noti: number | string;
+        schedule_noti_intime:  number | string;
+        visited: number | string;
+    };
+}
+
+interface IClassMember{
     member_count: number;
     is_private: boolean;
+    message?: string;
 }
 /*
 /class/{class_id} 의 결과
@@ -216,4 +269,4 @@ interface IFeedList {
     comment: number;
 }
 
-export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo};
+export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember};

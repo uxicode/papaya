@@ -1,4 +1,4 @@
-import axios, {AxiosResponse, AxiosRequestConfig} from 'axios';
+import axios, {AxiosResponse, AxiosRequestConfig, AxiosPromise} from 'axios';
 import router from '@/router';
 import store from '@/store';
 import {LOGOUT} from '@/store/mutation-auth-types';
@@ -36,17 +36,12 @@ const onUnauthorized = () => {
 const setAuthorization = (token: string) => {
   axios.defaults.headers.common.Authorization = (token) ? `Bearer ${token}` : null;
 };
-const request = (method: string, url: string, data: any | null = null) => {
+const request = (method: string, url: string, data: any | null = null): Promise<any> => {
   // console.log( 'data status=', method, data, url );
   let reqObj: object;
 
   if (method === 'get') {
-    if (data !== null) {
-      reqObj = {method, url, params: data};
-    } else {
-      // console.log( 'data status=', data, url );
-      reqObj = {method, url};
-    }
+    reqObj = (data !== null)? {method, url, params: data} : {method, url};
   } else {
     reqObj = {method, url, data};
   }

@@ -1,4 +1,3 @@
-import MyClassList from '@/views/class/myClassList';
 import AppHeader from '@/components/header/header.vue';
 import AppFooter from '@/components/footer/footer.vue';
 import {getIsAuth} from '@/router/AuthGuard';
@@ -7,7 +6,7 @@ const MyClassRouter=[
   {
     path: '/',
     name: 'myClassList',
-    components: {default: MyClassList, header: AppHeader, footer: AppFooter},
+    components: { default: () => import('../views/class/classList/myClassListPage'), header: AppHeader, footer: AppFooter },
     beforeEnter: getIsAuth,
   },
   {
