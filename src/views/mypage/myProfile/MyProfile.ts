@@ -5,6 +5,9 @@ import {namespace} from 'vuex-class';
 import WithRender from './MyProfile.html';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
+import TxtField from '@/components/form/txtField.vue';
+// import {SET_MY_INFO} from '@/store/mutation-auth-types';
+// import {USER_ME_ACTION} from '@/store/action-auth-types';
 
 const Auth = namespace('Auth');
 
@@ -21,8 +24,12 @@ interface IPwd {
     },
 })
 export default class MyProfile extends Vue {
+
     @Auth.Getter
-    public userInfo!: IUserMe;
+    public readonly userInfo!: IUserMe;
+
+    @Auth.Action
+    public USER_ME_ACTION!:  () => Promise<IUserMe>;
 
     get myInfo(): object {
         // console.log( 'this.userInfo=', this.userInfo );
@@ -37,16 +44,10 @@ export default class MyProfile extends Vue {
     private isPwModify: boolean = false;
     private isPwConfirmed: boolean = false;
 
+
     private tempData: any = '';
 
-    /**
-     * 변경할 정보를 임시로 담을 함수
-     * @param event
-     * @private
-     */
-    private valueChange(event: any): void {
-        this.tempData = event.target.value;
-    }
+
 
     /**
      * 이름 변경 팝업 열기
@@ -74,9 +75,24 @@ export default class MyProfile extends Vue {
     private genderModifyToggle(): void {
         this.isGenderModify = !this.isGenderModify;
     }
+    /**
+     * 변경할 정보를 임시로 담을 함수
+     * @param event
+     * @private
+     */
+    private valueChange(event: any): void {
+        this.tempData = event.target.value;
+    }
 
-    private genderModify(newGender: number): void {
-        UserService.setUserInfo(this.userInfo.user_id, {gender: newGender});
+    private genderModify( event: Event, newGender: number ): void {
+        // console.log('target=', event.target+':::'+event.target.value);
+        UserService.setUserInfo(this.userInfo.user_id, {gender: newGender})
+          .then(()=>{
+              // console.log(data);
+              this.USER_ME_ACTION().then( ( me: IUserMe)=>{
+                  console.log(me);
+              });
+          });
         this.isGenderModify = !this.isGenderModify;
         this.userInfo.gender = newGender; // 화면상에서 바뀐 이름이 즉시 반영됨
     }
