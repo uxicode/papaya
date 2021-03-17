@@ -1,0 +1,144 @@
+<div class="my-profile">
+    <div class="my-profile-section">
+        <p class="section-tit">내 정보</p>
+
+        <div class="my-profile-list">
+            <div class="list-item">
+                <p class="list-tit">이름</p>
+                <div class="list-right">
+                    <span>{{ myInfo.fullname }}</span>
+                    <button type="button" class="list-btn" @click="modifyNameModalOpen"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                </div>
+            </div>
+            <div class="list-item">
+                <p class="list-tit">생일</p>
+                <div class="list-right">
+                    <div class="form-group date">
+                        <span class="date-area">{{ myInfo.birthday }}</span>
+                        <button type="button" class="btn form-btn form-calendar"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="list-item">
+                <p class="list-tit">성별</p>
+                <div class="list-right">
+                    <div class="list-popup">
+                        <button type="button" class="list-popup-btn" @click="modifyGenderToggle">
+                            {{ myInfo.gender === '1' ? '남자' : '여자' }}
+                            <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
+                        </button>
+                        <div class="list-popup-menu" :class="{'active': isModifyGender}">
+                            <button type="button" class="list-popup-item" value="0" @click="modifyGender($event, $event.target.value )">여자</button>
+                            <button type="button" class="list-popup-item" value="1" @click="modifyGender($event, $event.target.value )">남자</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="my-profile-section">
+        <p class="section-tit">가입 정보</p>
+
+        <div class="my-profile-list">
+            <div class="list-item">
+                <p class="list-tit">아이디</p>
+                <div class="list-right">
+                    <span>{{ myInfo.user_id }}</span>
+                </div>
+            </div>
+            <div class="list-item">
+                <p class="list-tit">모바일 번호</p>
+                <div class="list-right">
+                    <span>{{ myInfo.mobile_no }}</span>
+                    <button type="button" class="list-btn" @click="gotoModifyMobile"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                </div>
+            </div>
+            <div class="list-item">
+                <p class="list-tit">이메일 주소</p>
+                <div class="list-right">
+                    <span>{{ myInfo.email }}</span>
+                    <button type="button" class="list-btn" @click="modifyEmailModalOpen"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                </div>
+            </div>
+            <div class="list-item">
+                <p class="list-tit">비밀번호</p>
+                <div class="list-right">
+                    <span>********</span>
+                    <button type="button" class="list-btn" @click="gotoPwModify"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="my-profile-section">
+        <p class="section-tit">기타</p>
+
+        <div class="my-profile-list">
+            <div class="list-item">
+                <p class="list-tit">서비스 탈퇴하기</p>
+                <div class="list-right">
+                    <a href="" class="list-btn"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- start: 이름 수정 팝업 -->
+    <modal v-if="isModifyNameModal" size="540px" body-padding="0">
+        <div slot="header">
+            <div class="popup-icon">
+                <img :src="require('@/assets/images/popup-icon-profile.svg')">
+            </div>
+            <div class="popup-close">
+                <button class="close" @click="isModifyNameModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <div class="popup-cnt">
+                <h2 class="popup-tit">이름 변경</h2>
+                <div class="popup-input">
+                    <div class="form-group inline">
+                        <input type="text" class="form-control" :value="myInfo.fullname" @input="valueChange($event)">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <div class="btn-group rt">
+                <btn type="outline" @btnClick="isModifyNameModal = false; tempData = myInfo.fullname">취소</btn>
+                <btn type="navi" @btnClick="modifyName(tempData);">변경하기</btn>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 이름 수정 팝업 -->
+
+    <!-- start: 이메일 수정 팝업 -->
+    <modal v-else-if="isModifyEmailModal" size="540px" body-padding="0">
+        <div slot="header">
+            <div class="popup-icon">
+                <img :src="require('@/assets/images/popup-icon-profile.svg')">
+            </div>
+            <div class="popup-close">
+                <button class="close" @click="isModifyEmailModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <div class="popup-cnt">
+                <h2 class="popup-tit">이메일 주소 변경</h2>
+                <div class="popup-input">
+                    <div class="form-group inline">
+                        <input type="email" class="form-control" :value="myInfo.email">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <div class="btn-group rt">
+                <btn type="outline" @btnClick="isModifyEmailModal = false">취소</btn>
+                <btn type="navi" disabled>변경하기</btn>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 이메일 수정 팝업 -->
+</div>
