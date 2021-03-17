@@ -1,13 +1,20 @@
 import {IUserMe} from '@/api/model/user.model';
 import UserService from '@/api/service/UserService';
-import ResetPassword from '@/views/login/resetPw/ResetPassword';
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import WithRender from './MyProfile.html';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
+import TxtField from '@/components/form/txtField.vue';
+// import {SET_MY_INFO} from '@/store/mutation-auth-types';
+// import {USER_ME_ACTION} from '@/store/action-auth-types';
 
 const Auth = namespace('Auth');
+
+interface IPwd {
+    nPwd: string;
+    rePwd: string;
+}
 
 @WithRender
 @Component({
@@ -18,15 +25,15 @@ const Auth = namespace('Auth');
 })
 export default class MyProfile extends Vue {
     @Auth.Getter
-    public userInfo!: IUserMe;
+    public readonly userInfo!: IUserMe;
+
+    @Auth.Action
+    public USER_ME_ACTION!:  () => Promise<IUserMe>;
 
     get myInfo(): object {
         // console.log( 'this.userInfo=', this.userInfo );
         return this.userInfo;
     }
-
-    /* 비밀번호 재설정 */
-    public ResetPassword = new ResetPassword();
 
     /* 팝업 및 페이지 변경 상태 값 */
     private isNameModifyModal: boolean = false;
@@ -38,14 +45,7 @@ export default class MyProfile extends Vue {
 
     private tempData: any = '';
 
-    /**
-     * 변경할 정보를 임시로 담을 함수
-     * @param event
-     * @private
-     */
-    private valueChange(event: any): void {
-        this.tempData = event.target.value;
-    }
+
 
     /**
      * 이름 변경 팝업 열기
@@ -56,7 +56,7 @@ export default class MyProfile extends Vue {
     }
 
     /**
-     * 이름 변경
+     * 이름 수정
      * @param newName
      * @private
      */
@@ -73,16 +73,26 @@ export default class MyProfile extends Vue {
     private genderModifyToggle(): void {
         this.isGenderModify = !this.isGenderModify;
     }
-
     /**
-     * 성별 변경
-     * @param newGender
+     * 변경할 정보를 임시로 담을 함수
+     * @param event
      * @private
      */
-    private genderModify(newGender: number): void {
-        UserService.setUserInfo(this.userInfo.user_id, {gender: newGender}); // 실제 데이터에서 이름이 변경됨
+    private valueChange(event: any): void {
+        this.tempData = event.target.value;
+    }
+
+    private genderModify( event: Event, newGender: number ): void {
+        // console.log('target=', event.target+':::'+event.target.value);
+        UserService.setUserInfo(this.userInfo.user_id, {gender: newGender})
+          .then(()=>{
+              // console.log(data);
+              this.USER_ME_ACTION().then( ( me: IUserMe)=>{
+                  console.log(me);
+              });
+          });
         this.isGenderModify = !this.isGenderModify;
-        this.userInfo.gender = this.tempData; // 화면상에서 바뀐 성별 즉시 반영됨
+        this.userInfo.gender = newGender; // 화면상에서 바뀐 이름이 즉시 반영됨
     }
 
     /**
@@ -108,4 +118,5 @@ export default class MyProfile extends Vue {
     private gotoPwModify(): void {
         this.isPwModify = !this.isPwModify;
     }
+
 }

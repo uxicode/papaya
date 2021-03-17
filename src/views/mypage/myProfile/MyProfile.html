@@ -98,8 +98,8 @@
                                     <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
                                 </button>
                                 <div class="list-popup-menu" :class="{'active': isGenderModify}">
-                                    <button type="button" class="list-popup-item" value="0" @click="valueChange($event); genderModify(tempData)">여자</button>
-                                    <button type="button" class="list-popup-item" value="1" @click="valueChange($event); genderModify(tempData)">남자</button>
+                                    <button type="button" class="list-popup-item" value="0" @click="genderModify($event, $event.target.value )">여자</button>
+                                    <button type="button" class="list-popup-item" value="1" @click="genderModify($event, $event.target.value )">남자</button>
                                 </div>
                             </div>
                         </div>

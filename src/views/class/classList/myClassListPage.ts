@@ -71,7 +71,35 @@ export default class MyClassList extends Vue {
   }
 
   public setClassItemLists(): void{
-    this.classItems = [];
+    this.classItems = [
+      {
+        id: 0,
+        name: '',
+        me: {
+          id:0,
+          joinedAt: new Date(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          class_id: 0,
+          user_id: 0,
+          nickname:'',
+          profile_image:undefined,
+          is_bookmarked:0,
+          schedule_color:0,
+          level:  0,
+          status: 0,
+          open_level_id:0,
+          open_level_mobileno:0,
+          open_level_email: 0,
+          onoff_push_noti: 0,
+          onoff_post_noti: 0,
+          onoff_comment_noti:0,
+          onoff_schedule_noti:0,
+          schedule_noti_intime:0,
+          visited: 0,
+        }
+      }
+    ];
   }
 
   get originalClassItems(): IMyClassList[] {
@@ -101,7 +129,7 @@ export default class MyClassList extends Vue {
     this.MYCLASS_LIST_ACTION().then(() =>{
       if (this.myClassLists !== null && this.myClassLists!==undefined) {
         if (this.myClassLists.length > 0) {
-          this.getMoreDisplay() ;
+          this.getUpdateList();
         }
       }
     });
@@ -117,10 +145,14 @@ export default class MyClassList extends Vue {
    * this.pageCount 는 더 보기 클릭시 카운팅 하여 paging 처리 한다.
    */
   private getMoreDisplay(): void{
+    ++this.pageCount;
     this.getUpdateList();
-    this.pageCount++;
   }
 
+  /**
+   * 페이징 카운트 범위
+   * @private
+   */
   private rangeOfCount(): { begin: number, end: number} {
     let begin: number;
     let end: number;
@@ -138,28 +170,42 @@ export default class MyClassList extends Vue {
     };
   }
 
+  /**
+   * myClassLists( 내가 가입한 클래스 목록 데이터 원본 ) 에서 주어진 카운팅에 의해 해당 범위에 있는 멤버를 가져오기.
+   * @param begin
+   * @param end
+   * @private
+   */
+  private getMemberRange( begin: number, end: number ): IMyClassList[]{
+    // console.log('first');
+    return this.myClassLists.filter( (item: IMyClassList, idx: number)=> idx>=begin && idx<=end );
+  }
 
-
-  private getUpdateList(): void{
-
-    const {begin, end} = this.rangeOfCount();
-
-    // console.log(begin, end);
-    //end 가 classItem 개수보다 많을 때 여기서 종료
-    if( end>= this.myClassLists.length ){ return; }
-
+  /**
+   * 전체 api 에 member_count ( 멤버수 )/ is_private ( 공개/비공개 ) 가 없고 개별 아이템 조회에는 존재하기에 별도의 개별 조회를 한다.
+   * @param items
+   * @private
+   */
+  private getFindMemberByRange( items: IMyClassList[] ): any[]{
+    // console.log('second');
     const promiseItems: any[]=[];
-    //현재 api 에서 클래스 멤버 전체 조회시 500개이상 이더라도
-    //페이징에 대한 쿼리스트링 전달이 없기에 별도로 프론트에서 페이징처리
-    const items=this.myClassLists.filter( (item, idx)=> idx>=begin && idx<=end );
-    //전체 조회 api 에서 공개 /비공개에 대한 값과 멤버수 등 항목이 없기에 개별 클래스 조회 api 통신해야 한다.
-    // 즉  pagination 1개에 16개씩 노출이라서 전체 api 통신 후 16번의 개별 통신을 다시 해야 한다.
     items.forEach( (item: IMyClassList)=>{
       promiseItems.push( MyClassService.getClassInfoById( item.me.class_id) );
     });
 
+    return promiseItems;
+  }
+
+  /**
+   *
+   * @param promiseItems
+   * @private
+   */
+  private getDataByMemberRange( promiseItems: any[] ){
+    // console.log('third');
     getAllPromise( promiseItems ).then( ( data: any )=>{
       // console.log(data.length);
+      //member_count ( 멤버수 )/ is_private ( 공개/비공개 )
       this.moreInfos=data.map( (item: any ) => {
         return {
           member_count:item.classinfo.member_count,
@@ -169,8 +215,30 @@ export default class MyClassList extends Vue {
     }).catch((error)=>{
       console.log('class more info error', error );
     });
-    // console.log(items);
-    this.classItems=[...this.classItems, ...items];
+  }
+
+  private async findMemberRange( begin: number, end: number ){
+    //현재 api 에서 클래스 멤버 전체 조회시 500개이상 이더라도
+    //페이징에 대한 쿼리스트링 전달이 없기에 별도로 프론트에서 페이징처리
+    const items = await this.getMemberRange(begin, end);
+    //전체 조회 api 에서 공개 /비공개에 대한 값과 멤버수 등 항목이 없기에 개별 클래스 조회 api 통신해야 한다.
+    // 즉  pagination 1개에 16개씩 노출이라서 전체 api 통신 후 16번의 개별 통신을 다시 해야 한다.
+    const promiseData= await this.getFindMemberByRange( items );
+    await this.getDataByMemberRange( promiseData );
+
+    return items;
+  }
+
+   private getUpdateList(): void{
+    //범위 설정.
+    const {begin, end} = this.rangeOfCount();
+    // console.log(begin, end);
+    //end 가 classItem 개수보다 많을 때 여기서 종료
+    if( end>= this.myClassLists.length ){ return; }
+
+    this.findMemberRange( begin, end ).then(( data )=>{
+      this.classItems=[...this.classItems, ...data];
+    });
   }
 
   private updateBookmark( payload: {classId: number,  memberId: number, nickname: string, bookmarkValue: number } ): void {
@@ -179,10 +247,21 @@ export default class MyClassList extends Vue {
       payload.memberId, {
         nickname: payload.nickname,
         is_bookmarked: payload.bookmarkValue
-      }).then( ( data: IClassMember)=>{
-      //api 에서 paging 처리가 추가되고 하단도 같이 수정 되어야 한다.
-      this.resetClassLists();
-      this.getUpdateList();
+      }).then((data: IClassMember) => {
+        //북마크 하려 클릭한 것 class_id 를 대조해 봐서 index 값 구한다.
+      /*const findIndex = this.classItems.findIndex((item: IMyClassList) => item.me.class_id === payload.classId);
+
+      this.MYCLASS_LIST_ACTION().then(() => {
+        if (this.myClassLists !== null && this.myClassLists !== undefined) {
+          if (this.myClassLists.length > 0) {
+            this.classItems = [
+              ...this.classItems.slice(0, findIndex),
+              this.classItems[findIndex],
+              ...this.classItems.slice(findIndex + 1, this.classItems.length)
+            ];
+          }
+        }
+      });*/
     });
   }
 
