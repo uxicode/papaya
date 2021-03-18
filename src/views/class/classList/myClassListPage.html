@@ -20,6 +20,9 @@
           :class-list-data="classItemLists"
           :list-total="originalClassItems.length"
           :more-info="classListMoreInfos"
+          :list-load-num="numOfPage"
+          :start-num="startNum"
+          :end-num="endNum"
           @updateBookmark="updateBookmark"
           @moreClick="moreClickEventHandler"></my-class-list-view>
 </div>

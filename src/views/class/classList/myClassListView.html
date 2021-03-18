@@ -23,7 +23,7 @@
       </ul>
     </template>
     <template v-else>
-      <transition-group class="classes" name="slideY" tag="ul" @before-enter="beforeEnter" @after-enter="afterEnter">
+      <transition-group class="classes" name="slideY" tag="ul"  @before-enter="beforeEnter" @after-enter="afterEnter" >
         <li class="item"
             v-for="( item, index ) in classItems"
             :data-index="index"
@@ -35,28 +35,47 @@
             </a>
           </template>
           <template v-else>
-            <a href="" class="class-info">
-              <div class="info-img" :class="{ 'crown':item.me.level ===1}">
-                <span><img :src="nullCheck(item.me.profile_image)" class="thumb" alt=""></span>
+            <template v-if="loadingChk && (index>=startNum && index<=endNum)">
+              <div class="skeleton-box">
+                <div class="skeleton-inner"></div>
               </div>
-              <div class="info-tit">
-                <p>{{  item.name }}</p>
-                <span>{{ nullCheck(item.me.nickname) }}</span>
+            </template>
+            <template v-else>
+              <a href="" class="class-info">
+                <div class="info-img" :class="{ 'crown':item.me.level ===1}">
+                  <span><img :src="nullCheck(item.me.profile_image)" class="thumb" alt=""></span>
+                </div>
+                <div class="info-tit">
+                  <p>{{  item.name }}</p>
+                  <span>{{ nullCheck(item.me.nickname) }}</span>
+                </div>
+                <div class="info-sub">
+                  <span>{{ getYears( item.me.createdAt )}}</span>
+                  <span>{{ getClassPrivate(index)}}</span>
+                  <span>멤버 {{ getMemberCount(index) }}</span>
+                </div>
+              </a>
+              <div class="class-update">
+                <span class="update" :class="{'active': isPostUpdate(item.me.updatedAt) }">{{ updatedDiffDate( item.me.updatedAt ) }} 업데이트</span>
+                <button type="button" class="btn only-ico-btn heart" :class="{'active': item.me.is_bookmarked===1}" @click="bookmarkToggle(item)"></button>
               </div>
-              <div class="info-sub">
-                <span>{{ getYears( item.me.createdAt )}}</span>
-                <span>{{ getClassPrivate(index)}}</span>
-                <span>멤버 {{ getMemberCount(index) }}</span>
-              </div>
-            </a>
-            <div class="class-update">
-              <span class="update" :class="{'active': isPostUpdate(item.me.updatedAt) }">{{ updatedDiffDate( item.me.updatedAt ) }} 업데이트</span>
-              <button type="button" class="btn only-ico-btn heart" :class="{'active': item.me.is_bookmarked===1}" @click="bookmarkToggle(item)"></button>
-            </div>
+            </template>
+
           </template>
         </li>
       </transition-group>
+
+      <!--<template v-if="loadingChk">
+        <div class="skeleton-cnt">
+          <div class="skeleton-box" v-for="n in dItems" :key="n">
+            <div class="skeleton-inner"></div>
+          </div>
+        </div>
+      </template>-->
+
     </template>
-    <btn @btnClick="moreInfoClick"  v-if="listTotal>0">더보기</btn>
+
+    <btn @btnClick="moreInfoClick"  v-if="listTotal>0">더보기 </btn>
+
   </div>
 </div>

@@ -18,9 +18,13 @@ const MyClass = namespace('MyClass');
 })
 export default class MyClassList extends Vue {
 
+
   //start : 변수 선언부 ================================================
-  private pageCount: number=0; // 페이징
   private numOfPage: number=12; // 더보기 클릭 > 불러올 카드 리스트 개수
+  private pageCount: number=0; // 페이징
+  private dummyData: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+  private startNum: number=0;
+  private endNum: number=0;
 
   //첫번째 배너가 데이터가 아닌 새로운 모임방(클래스)을 생성하는 배너이기에 디폴트 값이 있는 것을 첫 인덱스로 채워둔다.
   private classItems: IMyClassList[]=[
@@ -54,6 +58,7 @@ export default class MyClassList extends Vue {
   ];
   private moreInfos: IClassMember[]=[];
 
+
   @Auth.Getter
   private userInfo!: IUserMe;
 
@@ -66,8 +71,27 @@ export default class MyClassList extends Vue {
 
 
   //start : get method ================================================
+
   get classListMoreInfos():  IClassMember[]{
     return this.moreInfos;
+  }
+  get originalClassItems(): IMyClassList[] {
+    return this.myClassLists;
+  }
+
+  get classItemLists(): IMyClassList[]{
+    return this.classItems;
+  }
+
+  get userName(): string {
+    return ( this.userInfo as IUserMe).fullname;
+  }
+  //end : get method ================================================
+
+ //start : public ================================================
+  public created() {
+    console.log( this.dummyData );
+    this.getMyClass();
   }
 
   public setClassItemLists(): void{
@@ -101,24 +125,6 @@ export default class MyClassList extends Vue {
       }
     ];
   }
-
-  get originalClassItems(): IMyClassList[] {
-    return this.myClassLists;
-  }
-
-  get classItemLists(): IMyClassList[]{
-    return this.classItems;
-  }
-
-  get userName(): string {
-    return ( this.userInfo as IUserMe).fullname;
-  }
-  //end : get method ================================================
-
- //start : public ================================================
-  public created() {
-    this.getMyClass();
-  }
  //end : public ================================================
 
   /**
@@ -147,6 +153,44 @@ export default class MyClassList extends Vue {
   private getMoreDisplay(): void{
     ++this.pageCount;
     this.getUpdateList();
+  }
+
+
+  private getUpdateList(): void{
+    //범위 설정.
+    const {begin, end} = this.rangeOfCount();
+
+    this.startNum=begin;
+    this.endNum=end;
+
+    // console.log(begin, end);
+    //end 가 classItem 개수보다 많을 때 여기서 종료
+    if( end>= this.myClassLists.length ){ return; }
+
+    this.findMemberRange( begin, end ).then(( data )=>{
+      this.classItems=[...this.classItems, ...data];
+    });
+  }
+
+  /**
+   * 지정된 범위 만큼 클래스 목록 추가
+   * @param begin
+   * @param end
+   * @private
+   */
+  private async findMemberRange( begin: number, end: number ){
+    //현재 api 에서 클래스 멤버 전체 조회시 500개이상 이더라도
+    //페이징에 대한 쿼리스트링 전달이 없기에 별도로 프론트에서 페이징처리
+    const items = await this.getMemberRange(begin, end);
+    //전체 조회 api 에서 공개 /비공개에 대한 값과 멤버수 등 항목이 없기에 개별 클래스 조회 api 통신해야 한다.
+    // 즉  pagination 1개에 16개씩 노출이라서 전체 api 통신 후 16번의 개별 통신을 다시 해야 한다.
+    //개별 조회 api promise 를 배열에 담아둔다.
+    const promiseData= await this.getFindMemberByRange( items );
+
+    //배열에 담아둔 promise 들을 promise.all 로 조회
+    await this.getDataByMemberRange( promiseData );
+
+    return items;
   }
 
   /**
@@ -197,7 +241,7 @@ export default class MyClassList extends Vue {
   }
 
   /**
-   *
+   *  member_count ( 멤버수 )/ is_private ( 공개/비공개 )
    * @param promiseItems
    * @private
    */
@@ -206,40 +250,19 @@ export default class MyClassList extends Vue {
     getAllPromise( promiseItems ).then( ( data: any )=>{
       // console.log(data.length);
       //member_count ( 멤버수 )/ is_private ( 공개/비공개 )
-      this.moreInfos=data.map( (item: any ) => {
+      const member=data.map( (item: any ) => {
         return {
           member_count:item.classinfo.member_count,
           is_private:item.classinfo.is_private
         };
       });
+      this.moreInfos = [...this.moreInfos, ...member];
     }).catch((error)=>{
       console.log('class more info error', error );
     });
   }
 
-  private async findMemberRange( begin: number, end: number ){
-    //현재 api 에서 클래스 멤버 전체 조회시 500개이상 이더라도
-    //페이징에 대한 쿼리스트링 전달이 없기에 별도로 프론트에서 페이징처리
-    const items = await this.getMemberRange(begin, end);
-    //전체 조회 api 에서 공개 /비공개에 대한 값과 멤버수 등 항목이 없기에 개별 클래스 조회 api 통신해야 한다.
-    // 즉  pagination 1개에 16개씩 노출이라서 전체 api 통신 후 16번의 개별 통신을 다시 해야 한다.
-    const promiseData= await this.getFindMemberByRange( items );
-    await this.getDataByMemberRange( promiseData );
 
-    return items;
-  }
-
-   private getUpdateList(): void{
-    //범위 설정.
-    const {begin, end} = this.rangeOfCount();
-    // console.log(begin, end);
-    //end 가 classItem 개수보다 많을 때 여기서 종료
-    if( end>= this.myClassLists.length ){ return; }
-
-    this.findMemberRange( begin, end ).then(( data )=>{
-      this.classItems=[...this.classItems, ...data];
-    });
-  }
 
   private updateBookmark( payload: {classId: number,  memberId: number, nickname: string, bookmarkValue: number } ): void {
     MyClassService.setClassBookmark(
@@ -248,6 +271,15 @@ export default class MyClassList extends Vue {
         nickname: payload.nickname,
         is_bookmarked: payload.bookmarkValue
       }).then((data: IClassMember) => {
+      console.log(data);
+       /*
+       * {
+          "is_bookmarked": true,
+          "nickname": "홍길동",
+          "message": "성공 - 수정 완료."
+        }
+       * */
+
         //북마크 하려 클릭한 것 class_id 를 대조해 봐서 index 값 구한다.
       /*const findIndex = this.classItems.findIndex((item: IMyClassList) => item.me.class_id === payload.classId);
 
