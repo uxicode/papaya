@@ -87,7 +87,9 @@
 
             span {
               display:inline-block;
-              background-color:red;
+              width:100%; //jbc
+              height:100%;//jbc
+              background-color:#ececec;
               border-radius:50%;
               overflow:hidden;
             }

@@ -1,0 +1,81 @@
+<div class="home-classes">
+  <div class="cnt-top">
+    <h3 class="cnt-tit">MY 클래스 <span class="fc-red">{{ listTotal }}</span></h3>
+    <div class="list-align">
+      <div class="form-group">
+        <select class="form-select">
+          <option value="" selected>최신 업데이트순</option>
+          <option value="">주간</option>
+          <option value="">일간</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="classes-card" style="text-align:center;">
+    <template  v-if="classItems.length<1">
+      <ul class="classes">2
+        <li class="item new-classes">
+          <a href="">
+            <p>새로운 클래스<br>생성하기</p>
+          </a>
+        </li>
+      </ul>
+    </template>
+    <template v-else>
+      <transition-group class="classes" name="slideY" tag="ul"  @before-enter="beforeEnter" @after-enter="afterEnter" >
+        <li class="item"
+            v-for="( item, index ) in classItems"
+            :data-index="index"
+            :key="item.me.class_id"
+            :class="{'new-classes':index===0}">
+          <template v-if="index===0">
+            <a href="" @click="gotoCreateClassPage">
+              <p>새로운 클래스<br>생성하기</p>
+            </a>
+          </template>
+          <template v-else>
+            <template v-if="loadingChk && (index>=startNum && index<=endNum)">
+              <div class="skeleton-box">
+                <div class="skeleton-inner"></div>
+              </div>
+            </template>
+            <template v-else>
+              <a href="" class="class-info">
+                <div class="info-img" :class="{ 'crown':item.me.level ===1}">
+                  <span><img :src="nullCheck(item.me.profile_image)" class="thumb" alt=""></span>
+                </div>
+                <div class="info-tit">
+                  <p>{{  item.name }}</p>
+                  <span>{{ nullCheck(item.me.nickname) }}</span>
+                </div>
+                <div class="info-sub">
+                  <span>{{ getYears( item.me.createdAt )}}</span>
+                  <span>{{ getClassPrivate(index)}}</span>
+                  <span>멤버 {{ getMemberCount(index) }}</span>
+                </div>
+              </a>
+              <div class="class-update">
+                <span class="update" :class="{'active': isPostUpdate(item.me.updatedAt) }">{{ updatedDiffDate( item.me.updatedAt ) }} 업데이트</span>
+                <button type="button" class="btn only-ico-btn heart" :class="{'active': item.me.is_bookmarked===1}" @click="bookmarkToggle(item)"></button>
+              </div>
+            </template>
+
+          </template>
+        </li>
+      </transition-group>
+
+      <!--<template v-if="loadingChk">
+        <div class="skeleton-cnt">
+          <div class="skeleton-box" v-for="n in dItems" :key="n">
+            <div class="skeleton-inner"></div>
+          </div>
+        </div>
+      </template>-->
+
+    </template>
+
+    <btn @btnClick="moreInfoClick"  v-if="listTotal>0">더보기 </btn>
+
+  </div>
+</div>

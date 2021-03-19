@@ -19,6 +19,7 @@ import {
   AUTH_BY_MOBILE,
   SIGN_UP_ACTION,
   SIGNIN_BY_TOKEN,
+  USER_ME_ACTION
 } from '@/store/action-auth-types';
 
 
@@ -153,7 +154,6 @@ export default class AuthModule extends VuexModule {
         */
         // console.log(data.user, data.access_token);
         // mutation( type, payload, option ) 이렇게 매개변수가 지정되어 있다.z
-
         this.context.commit(GET_TOKEN, data.access_token );
         return UserService.getUserMe().then( ( userMe: any)=>{
             this.context.commit(SET_MY_INFO, userMe.user);
@@ -162,6 +162,16 @@ export default class AuthModule extends VuexModule {
       }).catch((error) => {
         return Promise.reject(error);
       });
+  }
+
+  @Action({rawError: true})
+  public [USER_ME_ACTION](): Promise<IUserMe>{
+    return UserService.getUserMe().then( ( userMe: any)=>{
+      this.context.commit(SET_MY_INFO, userMe.user);
+      return Promise.resolve( userMe.user);
+    }).catch( (error: any)=>{
+      return Promise.reject(error);
+    });
   }
 
   @Action({rawError: true})

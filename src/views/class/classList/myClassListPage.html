@@ -1,0 +1,28 @@
+<div class="contents-inner">
+  <div class="notice">
+    <div class="notice-cnt">
+      <p class="notice-tit">
+        <strong>Notice</strong>
+        <span>파파야 웹사이트 2.0 업데이트</span>
+        <a href=""><img :src="require('@/assets/images/arrow-right-small.png')" alt="" style="height:16px;"></a>
+      </p>
+    </div>
+  </div>
+
+  <div class="home-main">
+    <div class="main-txt">
+      <h2 class="main-tit mgb-10">안녕하세요, {{ userName }}님!</h2>
+      <p>즐거운 교육 놀이터, 파파야에 오신 것을 환영합니다.<br>클래스를 한번 둘러볼까요?</p>
+    </div>
+  </div>
+
+  <my-class-list-view
+          :class-list-data="classItemLists"
+          :list-total="originalClassItems.length"
+          :more-info="classListMoreInfos"
+          :list-load-num="numOfPage"
+          :start-num="startNum"
+          :end-num="endNum"
+          @updateBookmark="updateBookmark"
+          @moreClick="moreClickEventHandler"></my-class-list-view>
+</div>

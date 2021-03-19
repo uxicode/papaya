@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter, {RawLocation, RouteConfig} from 'vue-router';
-import MyClassList from '@/views/class/myClassList';
 import AppHeader from '@/components/header/header.vue';
 import AppFooter from '@/components/footer/footer.vue';
 import {getIsAuth} from '@/router/AuthGuard';
