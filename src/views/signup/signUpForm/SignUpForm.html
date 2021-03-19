@@ -173,13 +173,14 @@
   <!-- start: 공통 팝업 -->
   <modal v-if="isOpenPopup">
     <div slot="header">
-      <h3 class="popup-header-tit">{{ modalTitle }}</h3>
+      <div class="popup-icon error"></div>
       <div class="popup-close" @click="closePopup">
         <button type="button" class="close" ><img :src="require('@/assets/images/close.svg')" alt=""></button>
       </div>
     </div>
-    <div slot="body">
-      <div class="msg-container"
+    <div slot="body" style="text-align:left;">
+      <h3 class="popup-tit">{{ modalTitle }}</h3>
+      <div class="msg-container popup-txt"
            v-html="$options.filters.addMsg( modalMsg )" ></div>
     </div>
     <div slot="footer">

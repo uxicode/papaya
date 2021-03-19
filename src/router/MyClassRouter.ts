@@ -29,9 +29,14 @@ const MyClassRouter=[
   },*/
   //ex) - makeClass.4.3.1
   {
-    path: '/class/make',
+    path: '/make-class',
     name: 'makeClass',
-    components: {default: () => import('../views/class/makeClass/makeClass.4.3.1'), header: AppHeader, footer: AppFooter},
+    components: {default: () => import('../views/class/makeClass/MakeClassPage'), header: AppHeader, footer: AppFooter},
+    children: [
+      {path: 'step1', name: 'makeClassOption', component: () => import('../views/class/makeClass/step1/MakeClassOption')},
+      // {path: 'step2', name: 'makeClassOption', component: () => import('../views/class/makeClass/step1/MakeClassOption')},
+      // {path: 'step3', name: 'makeClassOption', component: () => import('../views/class/makeClass/step1/MakeClassOption')},
+    ]
   },
 ];
 

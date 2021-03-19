@@ -161,7 +161,7 @@ export default class MyClassListView extends Vue{
    * @private
    */
   private gotoCreateClassPage(): void{
-    // this.$router.push({name:})
+    this.$router.push('/make-class/step1');
   }
 
 }
