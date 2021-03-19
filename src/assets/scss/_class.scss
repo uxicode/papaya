@@ -1692,4 +1692,25 @@
 .form-txt, .date-area.ft-desc{color: #848499;}
 
 
+/* 20210319 lyj */
+.popup-result-list {
+  li {
+    display:table;
+    width:100%;
+    border-bottom:1px solid #f4f5f6;
 
+    .tb-cell > a {
+      display:block;
+
+      &.result-tit {padding:15px 0 15px 40px;}
+      &.result-sub {
+        padding:15px 0 15px 20px;
+        color:#848499;
+      }
+    }
+
+    &:last-child {border-bottom:0;}
+
+    &:hover {background-color:#f4f5f6;}
+  }
+}
