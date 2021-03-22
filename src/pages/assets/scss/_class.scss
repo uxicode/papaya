@@ -1194,7 +1194,10 @@
         }
 
         .tb-cell {
-          &.result-tit {padding:15px 0 15px 40px;}
+          &.result-tit {
+            width:36%;
+            padding:15px 0 15px 40px;
+          }
           &.result-sub {
             padding:15px 0 15px 20px;
             color:#848499;
