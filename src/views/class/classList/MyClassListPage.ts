@@ -4,8 +4,8 @@ import { IClassMember, IMyClassList} from '@/views/model/my-class.model';
 import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
 import {getAllPromise} from '@/views/model/types';
+import MyClassListView from '@/views/class/classList/MyClassListView';
 import WithRender from './myClassListPage.html';
-import MyClassListView from '@/views/class/classList/myClassListView';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');

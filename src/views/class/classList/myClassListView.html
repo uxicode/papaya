@@ -42,12 +42,12 @@
             </template>
             <template v-else>
               <a href="" class="class-info">
-                <div class="info-img" :class="{ 'crown':item.me.level ===1}">
+                <div class="info-img" :class="{ 'crown': item.me.level ===1}">
                   <span><img :src="nullCheck(item.me.profile_image)" class="thumb" alt=""></span>
                 </div>
                 <div class="info-tit">
                   <p>{{  item.name }}</p>
-                  <span>{{ nullCheck(item.me.nickname) }}</span>
+                  <span>{{ nullCheck( item.me.nickname ) }}</span>
                 </div>
                 <div class="info-sub">
                   <span>{{ getYears( item.me.createdAt )}}</span>
@@ -64,18 +64,7 @@
           </template>
         </li>
       </transition-group>
-
-      <!--<template v-if="loadingChk">
-        <div class="skeleton-cnt">
-          <div class="skeleton-box" v-for="n in dItems" :key="n">
-            <div class="skeleton-inner"></div>
-          </div>
-        </div>
-      </template>-->
-
     </template>
-
     <btn @btnClick="moreInfoClick"  v-if="listTotal>0">더보기 </btn>
-
   </div>
 </div>
