@@ -342,4 +342,53 @@ interface IPostList {
         }
     ];
 }
-export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList};
+
+interface ISearchSchool{
+    createdAt: Date;
+    updatedAt: Date;
+    id: number | string;
+    code: string;
+    name: string;
+    stage: string;
+    anniversary: string | number;
+    region:  string;
+    jb_addr:  string;
+    jb_addr_detail:  string;
+    jb_zip:  string | number;
+    rd_addr: string;
+    rd_addr_detail: string;
+    rd_zip:  string | number;
+    tel: string;
+    fax: string;
+    website: string;
+}
+/*
+{
+   "total": 3,
+  "result_count": 3,
+  "results": [
+    {
+        "createdAt": "2019-10-21 16:34:35",
+        "updatedAt": "Invalid date",
+        "id": 1050,
+        "code": "S010000429",
+        "name": "마포고등학교",
+        "stage": "04",
+        "anniversary": "19530601",
+        "region": "서울특별시 강서구",
+        "jb_addr": "서울특별시 강서구 등촌동 ",
+        "jb_addr_detail": "82-1번지",
+        "jb_zip": "157033",
+        "rd_addr": "서울특별시 강서구 화곡로 403",
+        "rd_addr_detail": "(등촌동,마포고등학교)",
+        "rd_zip": "07576",
+        "tel": "02-3663-2583",
+        "fax": "02-3663-2590",
+        "website": "http://mapo.sen.hs.kr"
+    }
+   ],
+  "message": "리스트 .....",
+  "count_per_page": 10
+}
+*/
+export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList, ISearchSchool};

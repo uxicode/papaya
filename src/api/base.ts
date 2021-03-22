@@ -7,3 +7,4 @@ export const FAQ_BASE_URL: string = '/faqs';
 export const CLASS_BASE_URL: string = '/class';
 export const LOGIN_URL: string = '/login';
 export const SIGN_UP_URL: string = '/signup';
+export const SCHOOL_URL: string = '/school';

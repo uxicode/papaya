@@ -52,12 +52,32 @@
       <div class="popup-search">
         <h2 class="popup-tit">학교 이름을 검색해 주세요.</h2>
         <div class="form-group inline">
-          <txt-field id="input3" placeholder="학교 이름을 검색해주세요." size="370"></txt-field>
+          <!--<input type="text"
+                 class="form-control"
+                 id="searchSchool"
+                 style="width:370px"
+                 placeholder="학교 이름을 검색해주세요."
+                 v-stream:keyup="keyup$">-->
+          <txt-field
+                  id="searchSchool"
+                  placeholder="학교 이름을 검색해주세요."
+                  size="370" ></txt-field>
           <btn type="grey" size="sm" @btnClick="">검색</btn>
         </div>
       </div>
       <div class="popup-search-result">
-
+        <div class="popup-result">
+          <ul class="popup-result-list">
+            <li v-for="item in searchResults">
+              <div class="tb-cell">
+                <a href="" class="result-tit">{{item.name}}</a>
+              </div>
+              <div class="tb-cell">
+                <a href="" class="result-sub">{{ item.rd_addr }}</a>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div slot="footer">

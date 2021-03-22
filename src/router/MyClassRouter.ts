@@ -6,7 +6,7 @@ const MyClassRouter=[
   {
     path: '/',
     name: 'myClassList',
-    components: { default: () => import('../views/class/classList/myClassListPage'), header: AppHeader, footer: AppFooter },
+    components: { default: () => import('../views/class/classList/MyClassListPage'), header: AppHeader, footer: AppFooter },
     beforeEnter: getIsAuth,
   },
   {
@@ -33,7 +33,7 @@ const MyClassRouter=[
     name: 'makeClass',
     components: {default: () => import('../views/class/makeClass/MakeClassPage'), header: AppHeader, footer: AppFooter},
     children: [
-      {path: 'step1', name: 'makeClassOption', component: () => import('../views/class/makeClass/step1/MakeClassOption')},
+      {path: 'step1', name: 'makeClassOption', component: () => import('../views/class/makeClass/step1/MakeClassOption')}
       // {path: 'step2', name: 'makeClassOption', component: () => import('../views/class/makeClass/step1/MakeClassOption')},
       // {path: 'step3', name: 'makeClassOption', component: () => import('../views/class/makeClass/step1/MakeClassOption')},
     ]
