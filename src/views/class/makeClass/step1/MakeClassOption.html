@@ -65,16 +65,14 @@
           <btn type="grey" size="sm" @btnClick="">검색</btn>
         </div>
       </div>
-      <div class="popup-search-result">
-        <div class="popup-result">
-          <ul class="popup-result-list">
+      <div class="search-result">
+        <div class="search-result-cnt">
+          <ul class="search-result-item">
             <li v-for="item in searchResults">
-              <div class="tb-cell">
-                <a href="" class="result-tit">{{item.name}}</a>
-              </div>
-              <div class="tb-cell">
-                <a href="" class="result-sub">{{ item.rd_addr }}</a>
-              </div>
+              <a href="" class="result-link">
+                <div class="tb-cell result-tit">{{item.name}}</div>
+                <div class="tb-cell result-sub">{{ item.rd_addr }}</div>
+              </a>
             </li>
           </ul>
         </div>
