@@ -23,7 +23,7 @@ export default class MyProfileMain extends Vue {
     public readonly userInfo!: IUserMe;
 
     @Auth.Action
-    public USER_ME_ACTION!:  () => Promise<IUserMe>;
+    public USER_ME_ACTION!: () => Promise<IUserMe>;
 
     get myInfo(): object {
         // console.log( 'this.userInfo=', this.userInfo );
@@ -36,6 +36,15 @@ export default class MyProfileMain extends Vue {
     private isModifyEmailModal: boolean = false;
 
     private tempData: any = '';
+
+    /**
+     * 변경할 정보를 임시로 담을 함수
+     * @param event
+     * @private
+     */
+    private valueChange(event: any): void {
+        this.tempData = event.target.value;
+    }
 
     /**
      * 이름 변경 팝업 열기
@@ -51,9 +60,13 @@ export default class MyProfileMain extends Vue {
      * @private
      */
     private modifyName(newName: string): void {
-        UserService.setUserInfo(this.userInfo.user_id, {fullname: this.tempData}); // 실제 데이터에서 이름이 변경됨
+        UserService.setUserInfo(this.userInfo.user_id, {fullname: this.tempData})
+            .then(() => {
+                this.USER_ME_ACTION().then( ( me: IUserMe)=>{
+                    console.log(me.fullname);
+                });
+            });
         this.isModifyNameModal = !this.isModifyNameModal;
-        this.userInfo.fullname = this.tempData; // 화면상에서 바뀐 이름이 즉시 반영됨
     }
 
     /**
@@ -65,25 +78,21 @@ export default class MyProfileMain extends Vue {
     }
 
     /**
-     * 변경할 정보를 임시로 담을 함수
+     * 성별 변경
      * @param event
+     * @param newGender
      * @private
      */
-    private valueChange(event: any): void {
-        this.tempData = event.target.value;
-    }
-
     private modifyGender( event: Event, newGender: number ): void {
         // console.log('target=', event.target+':::'+event.target.value);
         UserService.setUserInfo(this.userInfo.user_id, {gender: newGender})
             .then(()=>{
                 // console.log(data);
                 this.USER_ME_ACTION().then( ( me: IUserMe)=>{
-                    console.log(me);
+                    console.log(me.gender);
                 });
             });
         this.isModifyGender = !this.isModifyGender;
-        this.userInfo.gender = newGender; // 화면상에서 바뀐 이름이 즉시 반영됨
     }
 
     /**
@@ -100,6 +109,21 @@ export default class MyProfileMain extends Vue {
      * @private
      */
     private modifyEmailModalOpen(): void {
+        this.isModifyEmailModal = !this.isModifyEmailModal;
+    }
+
+    /**
+     * 이메일 주소 변경
+     * @param newEmail
+     * @private
+     */
+    private modifyEmail(newEmail: string): void {
+        UserService.setUserInfo(this.userInfo.user_id, {email: newEmail})
+            .then(() => {
+                this.USER_ME_ACTION().then( ( me: IUserMe)=>{
+                    console.log(me.email);
+                });
+            });
         this.isModifyEmailModal = !this.isModifyEmailModal;
     }
 

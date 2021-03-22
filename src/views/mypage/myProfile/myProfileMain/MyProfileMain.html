@@ -128,7 +128,7 @@
                 <h2 class="popup-tit">이메일 주소 변경</h2>
                 <div class="popup-input">
                     <div class="form-group inline">
-                        <input type="email" class="form-control" :value="myInfo.email">
+                        <input type="email" class="form-control" :value="myInfo.email" @input="valueChange($event)">
                     </div>
                 </div>
             </div>
@@ -136,7 +136,7 @@
         <div slot="footer">
             <div class="btn-group rt">
                 <btn type="outline" @btnClick="isModifyEmailModal = false">취소</btn>
-                <btn type="navi" disabled>변경하기</btn>
+                <btn type="navi" @btnClick="modifyEmail(tempData)">변경하기</btn>
             </div>
         </div>
     </modal>

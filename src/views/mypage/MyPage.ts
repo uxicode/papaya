@@ -12,8 +12,6 @@ import WithRender from './MyPage.html';
 })
 
 export default class MyPage extends Vue {
-    private isActive: boolean = false;
-
     private gotoMyProfile(): void{
         this.$router.push('/myProfile');
         this.$emit('updatePage', '');

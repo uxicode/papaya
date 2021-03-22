@@ -4,11 +4,6 @@ import ModifyPassword from '@/views/mypage/myProfile/modifyPw/ModifyPassword';
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import WithRender from './MyProfile.html';
 
-interface IPwd {
-    nPwd: string;
-    rePwd: string;
-}
-
 @WithRender
 @Component({
     components:{
