@@ -11,6 +11,16 @@ import WithRender from './myClassListView.html';
   }
 })
 export default class MyClassListView extends Vue{
+  private isLoading: boolean= false;
+
+  @Prop(Number)
+  private startNum!: number;
+
+  @Prop(Number)
+  private endNum!: number;
+
+  @Prop(Number)
+  private listLoadNum!: number;
 
   @Prop([String, Number])
   private listTotal: string | number | undefined;
@@ -20,6 +30,10 @@ export default class MyClassListView extends Vue{
 
   @Prop(Array)
   private moreInfo!: IClassMember[];
+
+  get loadingChk(): boolean{
+    return this.isLoading;
+  }
 
   get classItems(): IMyClassList[] | undefined {
     return this.classListData;
@@ -35,6 +49,24 @@ export default class MyClassListView extends Vue{
 
   public nullCheck(value: string ): string{
     return (value===null)? '' : value;
+  }
+
+  // 트랜지션을 시작할 때 인덱스 * 100 ms 만큼의 딜레이를 적용합니다.
+  public beforeEnter(el: HTMLElement): void {
+    if(el.dataset.index !=='0'){
+      // el.classList.add('skeleton-inner');
+      console.log(this.startNum, this.endNum);
+      this.isLoading=true;
+      const delayTime = parseInt(el.dataset.index as string, 10);
+      el.style.transitionDelay =200*(delayTime%this.listLoadNum) + 'ms';
+    }
+  }
+
+  // 트랜지션을 완료하거나 취소할 때는 딜레이를 제거합니다.
+  public afterEnter(el: HTMLElement): void {
+    this.isLoading=false;
+    el.style.transitionDelay = '';
+    el.classList.remove('skeleton-inner');
   }
 
   public calcDate(dateValue: Date): number[] {
@@ -59,26 +91,18 @@ export default class MyClassListView extends Vue{
     // console.log(today, '일수 차이=', calcDay );
     return [ calcDay,  calcHour, calcMin ];
   }
-  public updatedDiffDate( dateValue: Date ): string{
+  private updatedDiffDate( dateValue: Date ): string{
     const resultDate=this.calcDate(dateValue);
     // console.log( resultDate[0], resultDate[1], resultDate[1]);
     return ( resultDate[0]>7 )? Utils.getTodayParseFormat( new Date(dateValue) ) : resultDate[1]+'시 '+resultDate[2]+'분 전';
   }
 
-  public isPostUpdate( dateValue: Date ) {
+  private isPostUpdate( dateValue: Date ) {
     const resultDate=this.calcDate(dateValue);
     return ( resultDate[0] <=7 );
   }
 
-  // 트랜지션을 시작할 때 인덱스 * 100 ms 만큼의 딜레이를 적용합니다.
-  public beforeEnter(el: HTMLElement): void {
-    el.style.transitionDelay =100* parseInt( el.dataset.index as string, 10) + 'ms';
-  }
 
-  // 트랜지션을 완료하거나 취소할 때는 딜레이를 제거합니다.
-  public afterEnter(el: HTMLElement): void{
-    el.style.transitionDelay = '';
-  }
 
   /**
    * 북마크 클릭
@@ -103,10 +127,10 @@ export default class MyClassListView extends Vue{
    * @private
    */
   private getClassPrivate(idx: number ): string{
-    if(this.moreInfo[idx - 1]===undefined){
+    if(this.classMoreInfo[idx - 1]===undefined){
       return '';
     }else{
-      return (this.moreInfo[idx - 1].is_private) ? '공개' : '비공개';
+      return (this.classMoreInfo[idx - 1].is_private) ? '공개' : '비공개';
     }
   }
 
@@ -116,10 +140,10 @@ export default class MyClassListView extends Vue{
    * @private
    */
   private getMemberCount(idx: number ): string | number{
-    if(this.moreInfo[idx - 1]===undefined){
+    if(this.classMoreInfo[idx - 1]===undefined){
       return '';
     }else{
-      return this.moreInfo[idx - 1].member_count;
+      return this.classMoreInfo[idx - 1].member_count;
     }
   }
 
@@ -137,7 +161,7 @@ export default class MyClassListView extends Vue{
    * @private
    */
   private gotoCreateClassPage(): void{
-    // this.$router.push({name:})
+    this.$router.push('/make-class/step1');
   }
 
 }

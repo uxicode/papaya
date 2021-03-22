@@ -7,10 +7,15 @@ import App from './App';
 import router from './router';
 import store from './store';
 import './filters/index';
+import Rx from 'rxjs';
+import VueRx from 'vue-rx';
+
 /*//공통 이벤트에 대한 후크를 사용하여 서비스 작업자 등록을 단순화한다.*/
 import './registerServiceWorker';
 import './components/validation/validation';
 import './assets/scss/common.scss';
+
+Vue.use(VueRx, Rx);
 
 Vue.config.productionTip = false;
 Vue.config.errorHandler = (err: Error, vm: Vue, info: string) => {

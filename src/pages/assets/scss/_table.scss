@@ -32,31 +32,31 @@
       }
     }
 
-    &.tb-md-search {
-      tr {
-        th, td {
-          padding:15px 0;
-          border-bottom:1px solid #f4f5f6;
-          text-align:left;
-        }
-
-        th {
-          padding-left:40px;
-          font-weight:400;
-          strong {font-weight:500;}
-        }
-        td {
-          padding-left:20px;
-          color:#848499;
-        }
-
-        &:last-child {
-          th, td {
-            border-bottom:none;
-          }
-        }
-      }
-    }
+    //&.tb-md-search {
+    //  tr {
+    //    th, td {
+    //      padding:15px 0;
+    //      border-bottom:1px solid #f4f5f6;
+    //      text-align:left;
+    //    }
+    //
+    //    th {
+    //      padding-left:40px;
+    //      font-weight:400;
+    //      strong {font-weight:500;}
+    //    }
+    //    td {
+    //      padding-left:20px;
+    //      color:#848499;
+    //    }
+    //
+    //    &:last-child {
+    //      th, td {
+    //        border-bottom:none;
+    //      }
+    //    }
+    //  }
+    //}
 
 
     // search page table

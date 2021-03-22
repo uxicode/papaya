@@ -16,8 +16,8 @@
     transform: scale(0.8);
 }
 .page-change-leave-to{
-// 비활성화 되어 있는 엘리먼트가 relative 가 되어 있기에 등장시 삐걱거림이 있기에 포지션을 절대값으로 해둔다.
-opacity: 0;
+    // 비활성화 되어 있는 엘리먼트가 relative 가 되어 있기에 등장시 삐걱거림이 있기에 포지션을 절대값으로 해둔다.
+    opacity: 0;
     transform:translateY(100%) rotateZ(45deg);
 }
 /* slide out motion */
@@ -39,21 +39,31 @@ opacity: 0;
 
 
 /* slide out motion */
-.slideY-enter-active {
+.slideY-enter-active{
     transition: all .75s ease;
 }
 .slideY-leave-active {
     transition: all .75s;
 }
 // -leave-active( leave, leave-to )
+// 진입시
 .slideY-enter{
     opacity: 0;
-    transform: translateY(10%);
+    transform: translateY(20%);
+    transition: all .75s ease;
 }
+// 진출시
 .slideY-leave-to{
     opacity: 0;
-    transform: translateY(-10%);
+    transform: translateY(-20%);
 }
+
+
+
+
+
+
+
 /* slide out motion */
 .fade-enter-active {
     transition: all .75s ease;
