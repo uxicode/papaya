@@ -1168,3 +1168,51 @@
   background:#1d1d4c url(../../assets/images/icn-80-add-btn.svg) no-repeat;
   background-size:contain;
 }
+
+
+.search-result {
+  position:relative;
+  height:320px;
+
+  .search-result-cnt {
+    height:100%;
+    overflow-y:auto;
+    border-top:1px solid #f4f5f6;
+    border-bottom:1px solid #f4f5f6;
+
+    .search-result-item {
+      li {
+        display:table;
+        width:100%;
+        border-bottom:1px solid #f4f5f6;
+
+        .result-link {
+          display:table;
+          width:100%;
+
+          &:hover {background-color:#f4f5f6;}
+        }
+
+        .tb-cell {
+          &.result-tit {padding:15px 0 15px 40px;}
+          &.result-sub {
+            padding:15px 0 15px 20px;
+            color:#848499;
+          }
+        }
+
+        &:last-child {border-bottom:0;}
+      }
+    }
+  }
+
+  .search-none {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    font-size:16px;
+    letter-spacing: 0;
+    color:#848499;
+  }
+}

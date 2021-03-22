@@ -19320,24 +19320,24 @@ select::-ms-expand {
   color: #848499;
   margin-bottom: 4px;
 }
-.popup-dialog .popup-body .popup-search-result {
+.popup-dialog .popup-body .search-result {
   position: relative;
   height: 320px;
 }
-.popup-dialog .popup-body .popup-search-result .popup-search-list {
+.popup-dialog .popup-body .search-result .popup-search-list {
   height: 100%;
   overflow-y: auto;
   border-top: 1px solid #f4f5f6;
   border-bottom: 1px solid #f4f5f6;
 }
-.popup-dialog .popup-body .popup-search-result .popup-search-list .popup-search-item a {
+.popup-dialog .popup-body .search-result .popup-search-list .search-result-item a {
   display: block;
   padding: 15px 40px;
 }
-.popup-dialog .popup-body .popup-search-result .popup-search-list .popup-search-item a:hover {
+.popup-dialog .popup-body .search-result .popup-search-list .search-result-item a:hover {
   background-color: #f4f5f6;
 }
-.popup-dialog .popup-body .popup-search-result .search-none {
+.popup-dialog .popup-body .search-result .search-none {
   position: absolute;
   top: 50%;
   left: 50%;
