@@ -2,8 +2,6 @@ import AppHeader from '@/components/header/header.vue';
 import AppFooter from '@/components/footer/footer.vue';
 import {getIsAuth} from '@/router/AuthGuard';
 
-// @ts-ignore
-// @ts-ignore
 const MyClassRouter=[
   {
     path: '/',

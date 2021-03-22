@@ -89,7 +89,7 @@ export default class MyClassListPage extends Vue {
 
  //start : public ================================================
   public created() {
-    // console.log( this.dummyData );
+    console.log( this.dummyData );
     this.getMyClass();
   }
 
