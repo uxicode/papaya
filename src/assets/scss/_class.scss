@@ -1734,13 +1734,15 @@
 
         .result-link {
           display:table;
+          table-layout: fixed; //jbc
           width:100%;
 
           &:hover {background-color:#f4f5f6;}
         }
 
         .tb-cell {
-          &.result-tit {padding:15px 0 15px 40px;}
+          //jbc
+          &.result-tit {width:38%;padding:15px 0 15px 40px;}
           &.result-sub {
             padding:15px 0 15px 20px;
             color:#848499;
