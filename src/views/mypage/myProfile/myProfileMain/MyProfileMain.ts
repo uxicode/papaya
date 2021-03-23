@@ -100,8 +100,10 @@ export default class MyProfileMain extends Vue {
      * @private
      */
     private gotoModifyMobile(): void {
-        this.$router.push('myProfile/modifyMobile');
-        this.$emit('updatePage', 'modifyMobile');
+        this.$router.push('myProfile/modifyMobile')
+            .then(() => {
+                this.$emit('updatePage', 'modifyMobile');
+            });
     }
 
     /**
@@ -132,8 +134,10 @@ export default class MyProfileMain extends Vue {
      * @private
      */
     private gotoPwModify(): void {
-        this.$router.push('myProfile/modifyPw');
-        this.$emit('updatePage', 'modifyPw');
+        this.$router.push('myProfile/modifyPw')
+            .then(() => {
+                this.$emit('updatePage', 'modifyPw');
+            });
     }
 }
 

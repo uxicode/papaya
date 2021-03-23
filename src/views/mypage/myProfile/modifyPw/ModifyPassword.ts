@@ -81,7 +81,9 @@ export default class ModifyPassword extends Vue {
     }
 
     private gotoMyProfile(): void {
-        this.$router.push('/myProfile');
-        this.$emit('updatePage', '');
+        this.$router.push('/myProfile')
+            .then(() => {
+                this.$emit('updatePage', '');
+            });
     }
 }
