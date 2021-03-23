@@ -1,0 +1,122 @@
+<!-- start: 공통 팝업 / 파일명 : W.4.5.7.2 (클래스 프로필 설정) -->
+<section class="contents-right">
+    <div class="non-popup">
+        <div class="popup-header">
+            <p class="popup-header-tit">프로필 설정</p>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+
+        <div class="popup-body">
+            <div class="class-profile">
+                <ul class="profile-list">
+                    <li class="list-item">
+                        <div class="tb-style full">
+                            <div class="tb-cell list-tit">클래스 닉네임</div>
+                            <div class="tb-cell basic-info">
+                                <!-- basic-info-item에 class show -->
+                                <p class="basic-info-item show">김지영선생님</p>
+                                <div class="basic-info-item">
+                                    <input type="text" class="form-control" style="width:200px;">
+                                </div>
+                                <button type="button" class="edit-btn"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-item">
+                        <div class="tb-style full">
+                            <div class="tb-cell list-tit">아이디</div>
+                            <div class="tb-cell basic-info">
+                                <p>papaya123</p>
+
+                                <div class="list-popup">
+                                    <button type="button" class="list-popup-btn"><span>운영자에게만 공개</span> <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                    <div class="list-popup-menu pos-right active" style="transform:translate3d(130px, 0, 0);">
+                                        <a href="" class="list-popup-item">비공개</a>
+                                        <a href="" class="list-popup-item">전체 공개</a>
+                                        <a href="" class="list-popup-item">운영자에게만 공개</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-item">
+                        <div class="tb-style full">
+                            <div class="tb-cell list-tit">모바일 번호</div>
+                            <div class="tb-cell basic-info">
+                                <p>010-1234-5678</p>
+                                <div class="list-popup">
+                                    <button type="button" class="list-popup-btn"><span>비공개</span> <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                    <div class="list-popup-menu pos-right " style="transform:translate3d(75px, 0, 0);">
+                                        <a href="" class="list-popup-item">비공개</a>
+                                        <a href="" class="list-popup-item">공개</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="list-item">
+                        <div class="tb-style full">
+                            <div class="tb-cell list-tit">이메일 주소</div>
+                            <div class="tb-cell basic-info">
+                                <p>papaya@gmail.com</p>
+                                <div class="list-popup">
+                                    <button type="button" class="list-popup-btn"><span>모든 클래스 멤버에게 공개</span> <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                    <div class="list-popup-menu pos-right " style="transform:translate3d(168px, 0, 0);">
+                                        <a href="" class="list-popup-item">모든 클래스 멤버에게 공개</a>
+                                        <a href="" class="list-popup-item">비공개</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="popup-footer">
+            <div class="btn-group rt">
+                <button type="button" class="btn outline">취소</button>
+                <button type="button" class="btn primary navi">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.2.1 (클래스 프로필 설정 - 닉네임 변경) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon profile"></div>
+            <div class="popup-close">
+                <button class="close"><img src="assets/images/close.svg" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt">
+                <h2 class="popup-tit">클래스 닉네임 변경</h2>
+                <p class="popup-txt">꿈꾸는 5학년 1반에서 사용할 클래스 닉네임을 설정해 주세요.</p>
+
+                <div class="popup-input">
+                    <div class="form-group inline">
+                        <input type="text" class="form-control" value="배혜진" style="width:370px;">
+                        <button type="button" class="btn primary grey sm">중복확인</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <!-- footer custom coding-->
+            <div class="btn-group rt">
+                <button type="button" class="btn outline">취소</button>
+                <button type="button" class="btn primary navi" disabled>변경하기</button>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+
+</section>
+<!-- end: 공통 팝업 -->

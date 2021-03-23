@@ -1,6 +1,6 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import ClassSettingMain from '@/views/class/setting/classSettingMain/ClassSettingMain';
-import ClassBasicInfo from '@/views/class/setting/classBasicInfo/ClassBasicInfo';
+import ClassProfile from '@/views/class/setting/classProfile/ClassProfile';
 import ClassMemberManage from '@/views/class/setting/classMemberManage/ClassMemberManage';
 import ClassAdminDelegate from '@/views/class/setting/classAdminDelegate/ClassAdminDelegate';
 import WithRender from './ClassSetting.html';
@@ -9,7 +9,7 @@ import WithRender from './ClassSetting.html';
 @Component({
   components: {
       ClassSettingMain,
-      ClassBasicInfo,
+      ClassProfile,
       ClassMemberManage,
       ClassAdminDelegate,
   }

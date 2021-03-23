@@ -1764,3 +1764,8 @@
     color:#848499;
   }
 }
+
+/* 디자인상 팝업이지만 router-view 처리하는 경우 - ksj */
+.non-popup {
+  background: #fff;
+}
