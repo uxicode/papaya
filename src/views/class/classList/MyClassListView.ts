@@ -2,7 +2,7 @@ import {Component, Vue, Prop} from 'vue-property-decorator';
 import {IClassMember, IMyClassList} from '@/views/model/my-class.model';
 import Btn from '@/components/button/Btn.vue';
 import {Utils} from '@/utils/utils';
-import WithRender from './myClassListView.html';
+import WithRender from './MyClassListView.html';
 
 @WithRender
 @Component({
@@ -11,7 +11,7 @@ import WithRender from './myClassListView.html';
   }
 })
 export default class MyClassListView extends Vue{
-  private isLoading: boolean= false;
+  public isLoading: boolean= false;
 
   @Prop(Number)
   private startNum!: number;
@@ -102,14 +102,12 @@ export default class MyClassListView extends Vue{
     return ( resultDate[0] <=7 );
   }
 
-
-
   /**
    * 북마크 클릭
    * @param item
    * @private
    */
-  private bookmarkToggle(item: IMyClassList ) {
+  private bookmarkToggle(item: IMyClassList ): void{
     item.me.is_bookmarked =( item.me.is_bookmarked === 0)? 1 : 0;
 
     this.$emit('updateBookmark', {
@@ -155,13 +153,14 @@ export default class MyClassListView extends Vue{
     this.$emit('moreClick');
   }
 
-
   /**
    * 클래스 만들기 페이지로 이동
    * @private
    */
   private gotoCreateClassPage(): void{
-    // this.$router.push({name:})
+    this.$router.push('/make-class/step1').then(()=>{
+      console.log('step1');
+    });
   }
 
 }
