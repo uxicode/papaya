@@ -27,6 +27,17 @@ const MyClassRouter=[
       // {path: 'step3', name: 'makeClassOption', component: () => import('../views/class/makeClass/step1/MakeClassOption')},
     ]
   },
+  {
+    path: '/classSetting',
+    name: 'classSetting',
+    components: {default: () => import('../views/class/setting/ClassSetting'), header: AppHeader, footer: AppFooter},
+    children: [
+      {path: '/', name: 'classSettingMain', component: () => import('../views/class/setting/classSettingMain/ClassSettingMain')},
+      {path: 'classBasicInfo', name: 'classBasicInfo', component: () => import('../views/class/setting/classBasicInfo/ClassBasicInfo')},
+      {path: 'classMemberManage', name: 'classMemberManage', component: () => import('../views/class/setting/classMemberManage/ClassMemberManage')},
+      {path: 'classAdminDelegate', name: 'classAdminDelegate', component: () => import('../views/class/setting/classAdminDelegate/ClassAdminDelegate')},
+    ]
+  }
 ];
 
 export {MyClassRouter};

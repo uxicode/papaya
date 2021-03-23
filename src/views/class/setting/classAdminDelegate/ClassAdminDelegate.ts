@@ -1,5 +1,5 @@
 import {Vue, Component} from 'vue-property-decorator';
-import WithRender from './classSetting.4.5.7.10.html';
+import WithRender from './ClassAdminDelegate.html';
 import Modal from '@/components/modal/modal.vue';
 
 @WithRender
@@ -8,6 +8,6 @@ import Modal from '@/components/modal/modal.vue';
         Modal,
     }
 })
-export default class ClassSettingBasic extends Vue{
+export default class ClassAdminDelegate extends Vue{
 
 }
