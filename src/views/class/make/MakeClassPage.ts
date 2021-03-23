@@ -9,6 +9,7 @@ import WithRender from './MakeClassPage.html';
   }
 })
 export default class MakeClassPage extends Vue{
+
   private currentStep: number=1;
   private stepTotal: number=3;
 

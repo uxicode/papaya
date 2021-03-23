@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter, {RawLocation, RouteConfig} from 'vue-router';
-import AppHeader from '@/components/header/header.vue';
-import AppFooter from '@/components/footer/footer.vue';
-import {getIsAuth} from '@/router/AuthGuard';
+// import AppHeader from '@/components/header/header.vue';
+// import AppFooter from '@/components/footer/footer.vue';
+// import {getIsAuth} from '@/router/AuthGuard';
 import {LoginRouter} from '@/router/LoginRouter';
 import {SignUpRouter} from '@/router/SignUpRouter';
 import {MyPageRouter} from '@/router/MyPageRouter';
