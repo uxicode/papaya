@@ -391,4 +391,13 @@ interface ISearchSchool{
   "count_per_page": 10
 }
 */
-export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList, ISearchSchool};
+
+interface IMakeClassInfo{
+    name?: string;
+    g_type: number | string;
+    g_name: string;
+    is_private?: boolean;
+    image_url?: string;
+    startday?: Date;
+}
+export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList, ISearchSchool, IMakeClassInfo};

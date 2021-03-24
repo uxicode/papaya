@@ -1,5 +1,4 @@
 <template>
-  <transition name="modal"  mode="out-in">
     <div class="popup">
       <div class="modal-dim" @click.self="close"></div>
       <!-- popup-dialog : active 시 화면 노출 -->
@@ -36,7 +35,6 @@
         <!--// popup footer -->
       </div>
     </div>
-  </transition>
 </template>
 <!-- example
 <modal v-if="showModal" @close="showModal = false">
@@ -77,7 +75,7 @@ export default class Modal extends Vue{
  * these styles.
  */
 
-.modal-enter {
+/*.modal-enter {
   opacity: 0;
 }
 
@@ -88,5 +86,5 @@ export default class Modal extends Vue{
 .modal-enter .popup-dialog,
 .modal-leave-active .popup-dialog {
   transform: translate(-50%, -50%) scale(0.3);
-}
+}*/
 </style>

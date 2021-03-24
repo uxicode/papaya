@@ -171,24 +171,26 @@
   </div>
 
   <!-- start: 공통 팝업 -->
-  <modal v-if="isOpenPopup">
-    <div slot="header">
-      <div class="popup-icon error"></div>
-      <div class="popup-close" @click="closePopup">
-        <button type="button" class="close" ><img :src="require('@/assets/images/close.svg')" alt=""></button>
+  <transition name="modal">
+    <modal v-if="isOpenPopup">
+      <div slot="header">
+        <div class="popup-icon error"></div>
+        <div class="popup-close" @click="closePopup">
+          <button type="button" class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+        </div>
       </div>
-    </div>
-    <div slot="body" style="text-align:left;">
-      <h3 class="popup-tit">{{ modalTitle }}</h3>
-      <div class="msg-container popup-txt"
-           v-html="$options.filters.addMsg( modalMsg )" ></div>
-    </div>
-    <div slot="footer">
-      <div class="btn-group ct">
-        <btn @btnClick="closePopup">확인</btn>
+      <div slot="body" style="text-align:left;">
+        <h3 class="popup-tit">{{ modalTitle }}</h3>
+        <div class="msg-container popup-txt"
+             v-html="$options.filters.addMsg( modalMsg )"></div>
       </div>
-    </div>
-  </modal>
+      <div slot="footer">
+        <div class="btn-group ct">
+          <btn @btnClick="closePopup">확인</btn>
+        </div>
+      </div>
+    </modal>
+  </transition>
   <!-- end: 공통 팝업 -->
 
   <!-- start: 회원가입 실패 팝업 -->
