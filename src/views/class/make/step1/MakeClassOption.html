@@ -18,7 +18,7 @@
       <template v-if="isSchoolSelected(activeItem)">
         <div class="form-group inline">
           <label for="schoolName">학교 이름</label>
-          <txt-field id="schoolName" placeholder="학교를 검색해주세요." size="387"></txt-field>
+          <txt-field id="schoolName" placeholder="학교를 검색해주세요." size="387" v-model="searchValue"></txt-field>
           <btn type="grey" size="sm" @btnClick="openSchoolSearchPopup">검색</btn>
         </div>
       </template>
@@ -33,12 +33,14 @@
   </div>
   <div class="form-btm">
     <div class="btn-group rt">
-      <button type="button" class="btn primary navi" disabled>다음</button>
+      <btn type="navi" :disabled="!isNextStep" @btnClick="nextStepClickHandler">다음</btn>
+<!--      <button type="button" class="btn primary navi" disabled>다음</button>-->
     </div>
   </div>
 
 
   <!-- start: 공통 팝업 -->
+  <transition name="modal">
   <modal v-if="isOpenPopup" size="540px" body-padding="10px 0 20px" @modalClose="closeSchoolSearchPopup">
     <div slot="header">
       <!-- header custom coding-->
@@ -61,15 +63,19 @@
           <txt-field
                   id="searchSchool"
                   placeholder="학교 이름을 검색해주세요."
-                  size="370" ></txt-field>
+                  size="370" v-model="searchValue"></txt-field>
           <btn type="grey" size="sm" @btnClick="">검색</btn>
+          <!-- start: 로딩 바 -->
+          <div class="lds-roller" v-show=""><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          <!-- end: 로딩 바 -->
+
         </div>
       </div>
       <div class="search-result">
         <div class="search-result-cnt">
           <ul class="search-result-item">
             <li v-for="item in searchResults">
-              <a href="" class="result-link">
+              <a href="" class="result-link" @click.prevent.stop="applySearchResult( item.name )">
                 <div class="tb-cell result-tit">{{item.name}}</div>
                 <div class="tb-cell result-sub">{{ item.rd_addr }}</div>
               </a>
@@ -86,6 +92,7 @@
       </div>
     </div>
   </modal>
+  </transition>
   <!-- end: 공통 팝업 -->
 </div>
 

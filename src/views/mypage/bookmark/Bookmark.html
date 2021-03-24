@@ -100,6 +100,7 @@
     </div>
 
     <!-- start: 보관된 일정 비우기 팝업 -->
+  <transition name="modal">
     <modal v-if="isPostsResetModal" size="540px" body-padding="0">
         <div slot="header">
             <p class="popup-header-tit">보관된 알림을 비우시겠습니까?</p>
@@ -119,6 +120,7 @@
             </div>
         </div>
     </modal>
+  </transition>
     <!-- end: 보관된 일정 비우기 팝업 -->
 
 </div>

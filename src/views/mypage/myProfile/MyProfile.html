@@ -155,6 +155,8 @@
             </div>
         </div>
 
+
+      <transition name="modal">
         <!-- start: 이름 수정 팝업 -->
         <modal v-if="isNameModifyModal" size="540px" body-padding="0">
             <div slot="header">
@@ -186,31 +188,32 @@
 
         <!-- start: 이메일 수정 팝업 -->
         <modal v-else-if="isEmailModifyModal" size="540px" body-padding="0">
-            <div slot="header">
-                <div class="popup-icon">
-                    <img :src="require('@/assets/images/popup-icon-profile.svg')">
-                </div>
-                <div class="popup-close">
-                    <button class="close" @click="isEmailModifyModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-                </div>
+          <div slot="header">
+            <div class="popup-icon">
+              <img :src="require('@/assets/images/popup-icon-profile.svg')">
             </div>
-            <div slot="body">
-                <div class="popup-cnt">
-                    <h2 class="popup-tit">이메일 주소 변경</h2>
-                    <div class="popup-input">
-                        <div class="form-group inline">
-                            <input type="email" class="form-control" :value="myInfo.email">
-                        </div>
-                    </div>
-                </div>
+            <div class="popup-close">
+              <button class="close" @click="isEmailModifyModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
-            <div slot="footer">
-                <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isEmailModifyModal = false">취소</btn>
-                    <btn type="navi" disabled>변경하기</btn>
+          </div>
+          <div slot="body">
+            <div class="popup-cnt">
+              <h2 class="popup-tit">이메일 주소 변경</h2>
+              <div class="popup-input">
+                <div class="form-group inline">
+                  <input type="email" class="form-control" :value="myInfo.email">
                 </div>
+              </div>
             </div>
+          </div>
+          <div slot="footer">
+            <div class="btn-group rt">
+              <btn type="outline" @btnClick="isEmailModifyModal = false">취소</btn>
+              <btn type="navi" disabled>변경하기</btn>
+            </div>
+          </div>
         </modal>
         <!-- end: 이메일 수정 팝업 -->
+      </transition>
     </template>
 </div>

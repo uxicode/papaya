@@ -1,8 +1,8 @@
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 import {INullable} from '@/views/model/types';
-import {IMyClassList, IPostList} from '@/views/model/my-class.model';
+import {IMyClassList, IPostList, IMakeClassInfo} from '@/views/model/my-class.model';
 import ClassService from '@/api/service/MyClassService';
-import {MYCLASS_LIST, POST_LIST} from '@/store/mutation-class-types';
+import {MYCLASS_LIST, POST_LIST, CREATE_CLASS_LIST} from '@/store/mutation-class-types';
 import {MYCLASS_LIST_ACTION, POST_LIST_ACTION} from '@/store/action-class-types';
 
 
@@ -14,13 +14,29 @@ export default class ClassModule extends VuexModule {
     private classData: IMyClassList[]=[];
     private postData: IPostList[]=[];
     private count: number = 0;
+    private makeClassInfo: IMakeClassInfo={
+        name:'',
+        g_type:'',
+        g_name: '',
+        is_private: false,
+        image_url:''
+    };
 
     /* Getters */
     get myClassLists():  IMyClassList[]{
         return this.classData;
     }
 
+    get createdClassInfo(): IMakeClassInfo {
+        return this.makeClassInfo;
+    }
+
     /* Mutations */
+    @Mutation
+    public [CREATE_CLASS_LIST]( infos: IMakeClassInfo ): void {
+        this.makeClassInfo = {...this.makeClassInfo, ...infos};
+    }
+
     @Mutation
     public [MYCLASS_LIST](classData: IMyClassList[] ): void {
         this.classData =classData;

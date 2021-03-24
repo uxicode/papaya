@@ -23,6 +23,7 @@
   </div>
 
   <!-- start: 본인인증 팝업 -->
+  <transition name="modal">
   <modal v-if="isVerifyModal" size="450px" body-padding="0">
     <div slot="header">
       <h3>본인 인증</h3>
@@ -39,5 +40,6 @@
       </div>
     </div>
   </modal>
+  </transition>
   <!-- end: 본인인증 팝업 -->
 </div>

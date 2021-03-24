@@ -20,8 +20,8 @@ const MyClassRouter=[
     name: 'makeClass',
     components: {default: () => import('../views/class/make/MakeClassPage'), header: AppHeader, footer: AppFooter},
     children: [
-      {path: 'step1', name: 'makeClassOption', component: () => import('../views/class/make/step1/MakeClassOption')}
-      // {path: 'step2', name: 'makeClassOption', component: () => import('../views/class/makeClass/step1/MakeClassOption')},
+      {path: 'step1', name: 'makeClassOption', component: () => import('../views/class/make/step1/MakeClassOption')},
+      {path: 'step2', name: 'makeClassForm', component: () => import('../views/class/make/step2/MakeClassForm')},
       // {path: 'step3', name: 'makeClassOption', component: () => import('../views/class/makeClass/step1/MakeClassOption')},
     ]
   },
