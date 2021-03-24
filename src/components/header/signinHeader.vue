@@ -2,7 +2,7 @@
   <!-- start: header -->
   <header class="dark">
     <div class="header-container">
-      <h1 class="logo"><router-link :to="{path:'/'}"><img src="../../assets/images/logo-logotype-white.png" alt="papaya"/></router-link></h1>
+      <h1 class="logo"><a href="" @click.prevent.stop="gotoLogin"><img src="../../assets/images/logo-logotype-white.png" alt="papaya"/></a></h1>
       <nav id="gnb">
         <ul class="menu">
           <li>
@@ -40,7 +40,7 @@ export default class SignInHeader extends Vue {
     // this.$router.push(RestApi.SIGN_UP_URL);
   }
 
-  private gotoLoginPage(): void {
+  private gotoLogin(): void {
     // this.HISTORY_PAGE({history:'login'});
     this.$router.push('/login');
   }

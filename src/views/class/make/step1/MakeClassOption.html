@@ -53,7 +53,7 @@
       <!-- body custom coding-->
       <div class="popup-search">
         <h2 class="popup-tit">학교 이름을 검색해 주세요.</h2>
-        <div class="form-group inline">
+        <div class="form-group inline" style="position:relative;">
           <!--<input type="text"
                  class="form-control"
                  id="searchSchool"
@@ -63,24 +63,32 @@
           <txt-field
                   id="searchSchool"
                   placeholder="학교 이름을 검색해주세요."
-                  size="370" v-model="searchValue"></txt-field>
+                  size="370" v-model="searchValue">
+          </txt-field>
           <btn type="grey" size="sm" @btnClick="">검색</btn>
           <!-- start: 로딩 바 -->
-          <div class="lds-roller" v-show=""><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+          <div class="lds-roller" v-show="isLoading"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
           <!-- end: 로딩 바 -->
 
         </div>
       </div>
       <div class="search-result">
         <div class="search-result-cnt">
+          <template v-if="searchResults.length>1">
           <ul class="search-result-item">
-            <li v-for="item in searchResults">
-              <a href="" class="result-link" @click.prevent.stop="applySearchResult( item.name )">
-                <div class="tb-cell result-tit">{{item.name}}</div>
-                <div class="tb-cell result-sub">{{ item.rd_addr }}</div>
-              </a>
-            </li>
+              <li v-for="item in searchResults">
+                <a href="" class="result-link" @click.prevent.stop="applySearchResult( item.name )">
+                  <div class="tb-cell result-tit" v-html="boldSearchResult( item.name )"></div>
+                  <div class="tb-cell result-sub">{{ item.rd_addr }}</div>
+                </a>
+              </li>
           </ul>
+          </template>
+          <template v-else-if="searchResultValue.length>0">
+            <div class="search-result">
+              <p class="search-none">‘<strong>{{searchResultValue}}</strong>’에 대한 검색 결과가 없습니다.</p>
+            </div>
+          </template>
         </div>
       </div>
     </div>

@@ -37,8 +37,8 @@ class MyClassService {
         return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
 
-    public getSearchSchool(name: string, query: { count: number }={ count:10 }): Promise<any> {
-        return request('get', `${SCHOOL_URL}/searchbyname/${name}`, query);
+    public getSearchSchool(name: string): Promise<any> {
+        return request('get', `${SCHOOL_URL}/searchbyname/${name}`);
     }
 }
 
