@@ -12,6 +12,8 @@ import WithRender from './ClassProfile.html';
 })
 
 export default class ClassProfile extends Vue {
+    private isNicknameModify: boolean = false;
+
     /**
      * 뒤로가기
      * @private
