@@ -13,4 +13,12 @@ import WithRender from './ClassStaffManage.html';
 
 export default class ClassStaffManage extends Vue {
 
+    /**
+     * 뒤로가기
+     * @private
+     */
+    private goBack(): void {
+        this.$router.push('./')
+            .then();
+    }
 }

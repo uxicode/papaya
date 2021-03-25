@@ -14,7 +14,7 @@
                             <span class="position">운영자</span>
                         </div>
                         <div class="member-info-btn">
-                            <button type="button" class="btn only-ico-btn"><img :src="require('@/assets/images/settings.svg')" alt=""></button>
+                            <button type="button" class="btn only-ico-btn" @click="gotoClassProfile"><img :src="require('@/assets/images/settings.svg')" alt=""></button>
                         </div>
                     </li>
                 </ul>
@@ -80,34 +80,24 @@
                 <p class="list-tit">클래스 관리</p>
                 <ul class="setting-list">
                     <li class="list-item">
-                        <a href=""  class="list-tit">
-                            클래스 기본 정보 관리
-                            <a href="" class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
-                        </a>
+                        <a href=""  class="list-tit">클래스 기본 정보 관리</a>
+                        <button class="setting-btn" @click="isBasicInfo = true"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                     <li class="list-item">
-                        <a href=""  class="list-tit">
-                            클래스 태그 관리
-                            <a href="" class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
-                        </a>
+                        <a href=""  class="list-tit">클래스 태그 관리</a>
+                        <button class="setting-btn" @click="gotoClassTagManage"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                     <li class="list-item">
-                        <a href=""  class="list-tit">
-                            가입 안내 문구 설정
-                            <a href="" class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
-                        </a>
+                        <a href=""  class="list-tit">가입 안내 문구 설정</a>
+                        <button class="setting-btn" @click="isGuideTxt = true"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                     <li class="list-item">
-                        <a href=""  class="list-tit">
-                            가입 질문 설정
-                            <a href="" class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
-                        </a>
+                        <a href=""  class="list-tit">가입 질문 설정</a>
+                        <button class="setting-btn" @click="isJoinQnaSetting = true"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                     <li class="list-item">
-                        <a href=""  class="list-tit">
-                            가입 현황 관리
-                            <a href="" class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
-                        </a>
+                        <a href=""  class="list-tit">가입 현황 관리</a>
+                        <button class="setting-btn" @click="gotoClassJoinStatus"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                 </ul>
             </div>
@@ -116,16 +106,12 @@
                 <p class="list-tit">멤버 관리</p>
                 <ul class="setting-list">
                     <li class="list-item">
-                        <a href=""  class="list-tit">
-                            멤버 활동 관리
-                            <a href="" class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
-                        </a>
+                        <a href=""  class="list-tit">멤버 활동 관리</a>
+                        <button class="setting-btn" @click="gotoClassMemberManage"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                     <li class="list-item">
-                        <a href=""  class="list-tit">
-                            스탭 관리
-                            <a href="" class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
-                        </a>
+                        <a href=""  class="list-tit">스탭 관리</a>
+                        <button class="setting-btn" @click="gotoClassStaffManage"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                 </ul>
             </div>
@@ -134,16 +120,12 @@
                 <p class="list-tit">기타</p>
                 <ul class="setting-list">
                     <li class="list-item">
-                        <a href=""  class="list-tit">
-                            운영자 위임 신청
-                            <a href class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
-                        </a>
+                        <a href=""  class="list-tit">운영자 위임 신청</a>
+                        <button class="setting-btn" @click="gotoClassAdminDelegate"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                     <li class="list-item">
-                        <a href=""  class="list-tit">
-                            클래스 탈퇴하기
-                            <a href class="setting-btn"><img src="assets/images/arrow-right.svg" alt=""></a>
-                        </a>
+                        <a href=""  class="list-tit">클래스 탈퇴하기</a>
+                        <button class="setting-btn" @click="isWithdraw = true"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                 </ul>
             </div>
@@ -151,220 +133,231 @@
     </div>
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.3 (클래스 기본 정보 관리) -->
-    <modal v-if="false">
-        <div slot="header">
-            <!-- header custom coding-->
-            <p class="popup-header-tit">클래스 기본 정보 관리</p>
-            <div class="popup-close">
-                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-            </div>
-        </div>
-        <div slot="body">
-            <!-- body custom coding-->
-            <div class="class-basic-info">
-                <div class="info-top">
-                    <img :src="require('@/assets/images/school-on.png')" alt="">
-                    <p class="group-type">학교</p>
+    <transition name="modal">
+        <modal v-if="isBasicInfo" size="600px" body-padding="0">
+            <div slot="header">
+                <!-- header custom coding-->
+                <p class="popup-header-tit">클래스 기본 정보 관리</p>
+                <div class="popup-close">
+                    <button class="close" @click="isBasicInfo = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
+            </div>
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="class-basic-info">
+                    <div class="info-top">
+                        <img :src="require('@/assets/images/school-on.png')" alt="">
+                        <p class="group-type">학교</p>
+                    </div>
 
-                <div class="info-cnt">
-                    <div class="info-form">
-                        <div class="form-group">
-                            <label for="schoolName">학교 이름</label>
-                            <button type="button" class="btn primary grey sm">검색</button>
-                            <input type="text" class="form-control" id="schoolName" value="파파야 초등학교" disabled style="width:430px">
-                        </div>
-                        <div class="form-group mgt-40">
-                            <label for="className">클래스 이름</label>
-                            <input type="text" class="form-control" id="className" value="꿈꾸는 5학년 1반">
-                        </div>
-                        <div class="form-group mgt-40">
-                            <span class="label">공개 범위 <a href="" class="tip-info"><img :src="require('@/assets/images/info.svg')" class="icon-img" alt=""></a></span>
-                            <div class="checkbox-group">
-                                <div class="btn-radio">
-                                    <input type="radio" name="privacy" id="closedClass" checked>
-                                    <label for="closedClass">비공개 클래스</label>
-                                </div>
-                                <div class="btn-radio">
-                                    <input type="radio" name="privacy" id="openedClass">
-                                    <label for="openedClass">오픈 클래스</label>
+                    <div class="info-cnt">
+                        <div class="info-form">
+                            <div class="form-group">
+                                <label for="schoolName">학교 이름</label>
+                                <button type="button" class="btn primary grey sm">검색</button>
+                                <input type="text" class="form-control" id="schoolName" value="파파야 초등학교" disabled style="width:430px">
+                            </div>
+                            <div class="form-group mgt-40">
+                                <label for="className">클래스 이름</label>
+                                <input type="text" class="form-control" id="className" value="꿈꾸는 5학년 1반">
+                            </div>
+                            <div class="form-group mgt-40">
+                                <span class="label">공개 범위 <a href="" class="tip-info"><img :src="require('@/assets/images/info.svg')" class="icon-img" alt=""></a></span>
+                                <div class="checkbox-group">
+                                    <div class="btn-radio">
+                                        <input type="radio" name="privacy" id="closedClass" checked>
+                                        <label for="closedClass">비공개 클래스</label>
+                                    </div>
+                                    <div class="btn-radio">
+                                        <input type="radio" name="privacy" id="openedClass">
+                                        <label for="openedClass">오픈 클래스</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div slot="footer">
-            <!-- footer custom coding-->
-            <div class="btn-group rt">
-                <button type="button" class="btn outline">취소</button>
-                <button type="button" class="btn primary navi">저장</button>
+            <div slot="footer">
+                <!-- footer custom coding-->
+                <div class="btn-group rt">
+                    <button type="button" class="btn outline" @click="isBasicInfo = false">취소</button>
+                    <button type="button" class="btn primary navi">저장</button>
+                </div>
             </div>
-        </div>
-    </modal>
+        </modal>
+    </transition>
     <!-- end: 공통 팝업 -->
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.5 (클래스 가입 안내 문구 설정) -->
-    <modal v-if="false">
-        <div slot="header">
-            <p class="popup-header-tit">가입 안내 문구 설정</p>
-            <div class="popup-close">
-                <button class="close"><img src="assets/images/close.svg" alt=""></button>
-            </div>
-        </div>
-        <div slot="body">
-            <div class="popup-cnt">
-                <p class="popup-txt">가입 안내 문구는 멤버가 클래스 가입 시 노출됩니다.</p>
-
-                <div class="form-group mgt-20">
-                    <label for="guideTxt">가입 안내 문구</label>
-                    <textarea class="form-textarea mgt-10" id="guideTxt" placeholder="text"></textarea>
-                    <small class="form-message count">0/100</small>
+    <transition name="modal">
+        <modal v-if="isGuideTxt" size="600px" body-padding="0">
+            <div slot="header">
+                <p class="popup-header-tit">가입 안내 문구 설정</p>
+                <div class="popup-close">
+                    <button class="close" @click="isGuideTxt = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
-        </div>
-        <div slot="footer">
-            <div class="btn-group rt">
-                <button type="button" class="btn outline">취소</button>
-                <button type="button" class="btn primary navi">저장</button>
+            <div slot="body">
+                <div class="popup-cnt">
+                    <p class="popup-txt">가입 안내 문구는 멤버가 클래스 가입 시 노출됩니다.</p>
+
+                    <div class="form-group mgt-20">
+                        <label for="guideTxt">가입 안내 문구</label>
+                        <textarea class="form-textarea mgt-10" id="guideTxt" placeholder="text"></textarea>
+                        <small class="form-message count">0/100</small>
+                    </div>
+                </div>
             </div>
-        </div>
-    </modal>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="outline" @btnClick="isGuideTxt = false">취소</btn>
+                    <btn type="navi">저장</btn>
+                </div>
+            </div>
+        </modal>
+    </transition>
     <!-- end: 공통 팝업 -->
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.6 ~ W.4.5.7.6.1 (클래스 가입 질문 설정) -->
-    <modal v-if="false">
-        <div slot="header">
-            <p class="popup-header-tit">가입 질문 설정</p>
-            <div class="popup-close">
-                <button class="close"><img src="assets/images/close.svg" alt=""></button>
+    <transition name="modal">
+        <modal v-if="isJoinQnaSetting" size="600px" body-padding="0">
+            <div slot="header">
+                <p class="popup-header-tit">가입 질문 설정</p>
+                <div class="popup-close">
+                    <button class="close" @click="isJoinQnaSetting = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
             </div>
-        </div>
-        <div slot="body">
-            <div class="popup-cnt">
-                <p class="popup-txt">가입 질문 설정 시 멤버가 클래스 가입 시 질문을 대답해야만 클래스 가입이 가능합니다.<br>질문의 갯수는 총 3개까지 등록할 수 있습니다.</p>
-            </div>
-            <div class="profile-qna-setting">
-                <div class="qan-setting-top">
-                    <p>가입 질문 설정</p>
-                    <div class="qna-setting-btn">
-                        <div class="form-switcher">
-                            <input type="checkbox" id="toggle1" checked>
-                            <label for="toggle1"></label>
+            <div slot="body">
+                <div class="popup-cnt">
+                    <p class="popup-txt">가입 질문 설정 시 멤버가 클래스 가입 시 질문을 대답해야만 클래스 가입이 가능합니다.<br>질문의 갯수는 총 3개까지 등록할 수 있습니다.</p>
+                </div>
+                <div class="profile-qna-setting">
+                    <div class="qan-setting-top">
+                        <p>가입 질문 설정</p>
+                        <div class="qna-setting-btn">
+                            <div class="form-switcher">
+                                <input type="checkbox" id="toggle1" checked>
+                                <label for="toggle1"></label>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="qna-setting-list">
-                    <p>질문 목록</p>
-                    <ul class="qna-list">
-                        <li class="list-item">
-                            <span class="num">1</span>
-                            <div class="qna-input">
-                                <div class="form-group" style="width:490px;">
-                                    <input type="text" class="form-control popup-type" id="input4" value="자녀와의 관계가 어떻게 되시나요? (예. 엄마, 아빠 등)">
-                                    <!-- form-delete active 시 display:block; -->
-                                    <button type="button" class="btn only-ico-btn form-delete active"><img src="assets/images/delete.svg" alt=""></button>
+                    <div class="qna-setting-list">
+                        <p>질문 목록</p>
+                        <ul class="qna-list">
+                            <li class="list-item">
+                                <span class="num">1</span>
+                                <div class="qna-input">
+                                    <div class="form-group" style="width:490px;">
+                                        <input type="text" class="form-control popup-type" id="input4" value="자녀와의 관계가 어떻게 되시나요? (예. 엄마, 아빠 등)">
+                                        <!-- form-delete active 시 display:block; -->
+                                        <button type="button" class="btn only-ico-btn form-delete active"><img src="assets/images/delete.svg" alt=""></button>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
+                            </li>
 
-                        <li class="list-item">
-                            <span class="num">2</span>
-                            <div class="qna-input">
-                                <div class="form-group" style="width:490px;">
-                                    <input type="text" class="form-control popup-type" id="input5" value="살고 있는 지역을 간단히 써주세요. (예. 서울 성북구)">
-                                    <!-- form-delete active 시 display:block; -->
-                                    <button type="button" class="btn only-ico-btn form-delete active"><img src="assets/images/delete.svg" alt=""></button>
+                            <li class="list-item">
+                                <span class="num">2</span>
+                                <div class="qna-input">
+                                    <div class="form-group" style="width:490px;">
+                                        <input type="text" class="form-control popup-type" id="input5" value="살고 있는 지역을 간단히 써주세요. (예. 서울 성북구)">
+                                        <!-- form-delete active 시 display:block; -->
+                                        <button type="button" class="btn only-ico-btn form-delete active"><img src="assets/images/delete.svg" alt=""></button>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
+                            </li>
 
-                        <li class="list-item">
-                            <span class="num disabled">3</span>
-                            <div class="qna-input">
-                                <div class="form-group" style="width:490px;">
-                                    <input type="text" class="form-control popup-type" id="input6" placeholder="질문을 30자 이내로 입력해 주세요.">
-                                    <!-- form-delete active 시 display:block; -->
-                                    <button type="button" class="btn only-ico-btn form-delete active"><img src="assets/images/delete.svg" alt=""></button>
+                            <li class="list-item">
+                                <span class="num disabled">3</span>
+                                <div class="qna-input">
+                                    <div class="form-group" style="width:490px;">
+                                        <input type="text" class="form-control popup-type" id="input6" placeholder="질문을 30자 이내로 입력해 주세요.">
+                                        <!-- form-delete active 시 display:block; -->
+                                        <button type="button" class="btn only-ico-btn form-delete active"><img src="assets/images/delete.svg" alt=""></button>
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                    </ul>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div slot="footer">
-            <div class="btn-group rt">
-                <button type="button" class="btn outline">취소</button>
-                <button type="button" class="btn primary navi">저장</button>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="outline" @btnClick="isJoinQnaSetting = false">취소</btn>
+                    <btn type="navi">저장</btn>
+                </div>
             </div>
-        </div>
-    </modal>
+        </modal>
+    </transition>
     <!-- end: 공통 팝업 -->
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.11.1 (클래스 탈퇴하기) -->
-    <modal v-if="false">
-        <div slot="header">
-            <!-- header custom coding-->
-            <div class="popup-icon withdraw"></div>
-            <div class="popup-close">
-                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+    <transition name="modal">
+        <modal v-if="isWithdraw" size="540px" body-padding="0">
+            <div slot="header">
+                <!-- header custom coding-->
+                <div class="popup-icon withdraw"></div>
+                <div class="popup-close">
+                    <button class="close" @click="isWithdraw = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
             </div>
-        </div>
-        <div slot="body">
-            <!-- body custom coding-->
-            <div class="popup-cnt">
-                <h2 class="popup-tit">클래스 탈퇴하기</h2>
-                <p class="popup-txt">
-                    <strong>꿈꾸는 5학년 1반</strong> 클래스 탈퇴 전 꼭 확인하세요.<br>
-                    클래스에서 탈퇴 시 작성한 글, 사진, 댓글 등을 삭제하거나 수정할 수 없습니다.<br>
-                    원하시면 탈퇴 전에 삭제 혹은 수정하시기 바랍니다.
-                </p>
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">클래스 탈퇴하기</h2>
+                    <p class="popup-txt">
+                        <strong>꿈꾸는 5학년 1반</strong> 클래스 탈퇴 전 꼭 확인하세요.<br>
+                        클래스에서 탈퇴 시 작성한 글, 사진, 댓글 등을 삭제하거나 수정할 수 없습니다.<br>
+                        원하시면 탈퇴 전에 삭제 혹은 수정하시기 바랍니다.
+                    </p>
 
-                <div class="popup-input">
-                    <div class="btn-checkbox">
-                        <input type="checkbox" id="withdraw">
-                        <label for="withdraw">확인하였으며 이 클래스에 탈퇴하겠습니다.</label>
+                    <div class="popup-input">
+                        <div class="btn-checkbox">
+                            <input type="checkbox" id="withdraw">
+                            <label for="withdraw">확인하였으며 이 클래스에 탈퇴하겠습니다.</label>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div slot="footer">
-            <!-- footer custom coding-->
-            <div class="btn-group rt">
-                <button type="button" class="btn outline">취소</button>
-                <button type="button" class="btn primary navi" disabled>탈퇴하기</button>
+            <div slot="footer">
+                <!-- footer custom coding-->
+                <div class="btn-group rt">
+                    <btn type="outline" @btnClick="isWithdraw = false">취소</btn>
+                    <btn type="navi" disabled>탈퇴하기</btn>
+                </div>
             </div>
-        </div>
-    </modal>
+        </modal>
+    </transition>
     <!-- end: 공통 팝업 -->
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.11.2 (클래스 탈퇴하기 - 탈퇴 불가) -->
-    <modal v-if="false">
-        <div slot="header">
-            <!-- header custom coding-->
-            <div class="popup-icon error"></div>
-            <div class="popup-close">
-                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+    <transition name="modal">
+        <modal v-if="false" size="540px" body-padding="0">
+            <div slot="header">
+                <!-- header custom coding-->
+                <div class="popup-icon error"></div>
+                <div class="popup-close">
+                    <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
             </div>
-        </div>
-        <div slot="body">
-            <!-- body custom coding-->
-            <div class="popup-cnt">
-                <h2 class="popup-tit">클래스에 멤버가 있을 시 운영자는 탈퇴가 불가능합니다.</h2>
-                <p class="popup-txt">
-                    운영자 위임 신청을 원하신다면 ‘클래스 설정 > 클래스 관리 > 운영자 위임 신청’을 통해 진행해 주시기 바랍니다.
-                </p>
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">클래스에 멤버가 있을 시 운영자는 탈퇴가 불가능합니다.</h2>
+                    <p class="popup-txt">
+                        운영자 위임 신청을 원하신다면 ‘클래스 설정 > 클래스 관리 > 운영자 위임 신청’을 통해 진행해 주시기 바랍니다.
+                    </p>
+                </div>
             </div>
-        </div>
-        <div slot="footer">
-            <!-- footer custom coding-->
-            <div class="btn-group rt">
-                <button type="button" class="btn primary navi">확인</button>
+            <div slot="footer">
+                <!-- footer custom coding-->
+                <div class="btn-group rt">
+                    <button type="button" class="btn primary navi">확인</button>
+                </div>
             </div>
-        </div>
-    </modal>
+        </modal>
+    </transition>
     <!-- end: 공통 팝업 -->
+
 </section>

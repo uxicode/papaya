@@ -12,5 +12,14 @@ import WithRender from './ClassJoinStatus.html';
 })
 
 export default class ClassJoinStatus extends Vue {
+    private isJoinDetail: boolean = false;
 
+    /**
+     * 뒤로가기
+     * @private
+     */
+    private goBack(): void {
+        this.$router.push('./')
+            .then();
+    }
 }

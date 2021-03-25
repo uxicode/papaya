@@ -84,61 +84,63 @@
         </div>
     </div>
 
-    <!-- start: 이름 수정 팝업 -->
-    <modal v-if="isModifyNameModal" size="540px" body-padding="0">
-        <div slot="header">
-            <div class="popup-icon">
-                <img :src="require('@/assets/images/popup-icon-profile.svg')">
+    <transition name="modal">
+        <!-- start: 이름 수정 팝업 -->
+        <modal v-if="isNameModifyModal" size="540px" body-padding="0">
+            <div slot="header">
+                <div class="popup-icon">
+                    <img :src="require('@/assets/images/popup-icon-profile.svg')">
+                </div>
+                <div class="popup-close">
+                    <button class="close" @click="isNameModifyModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
             </div>
-            <div class="popup-close">
-                <button class="close" @click="isModifyNameModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-            </div>
-        </div>
-        <div slot="body">
-            <div class="popup-cnt">
-                <h2 class="popup-tit">이름 변경</h2>
-                <div class="popup-input">
-                    <div class="form-group inline">
-                        <input type="text" class="form-control" :value="myInfo.fullname" @input="valueChange($event)">
+            <div slot="body">
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">이름 변경</h2>
+                    <div class="popup-input">
+                        <div class="form-group inline">
+                            <input type="text" class="form-control" :value="myInfo.fullname" @input="valueChange($event)">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div slot="footer">
-            <div class="btn-group rt">
-                <btn type="outline" @btnClick="isModifyNameModal = false; tempData = myInfo.fullname">취소</btn>
-                <btn type="navi" @btnClick="modifyName(tempData);">변경하기</btn>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="outline" @btnClick="isNameModifyModal = false; tempData = myInfo.fullname">취소</btn>
+                    <btn type="navi" @btnClick="modifyName(tempData);">변경하기</btn>
+                </div>
             </div>
-        </div>
-    </modal>
-    <!-- end: 이름 수정 팝업 -->
+        </modal>
+        <!-- end: 이름 수정 팝업 -->
 
-    <!-- start: 이메일 수정 팝업 -->
-    <modal v-else-if="isModifyEmailModal" size="540px" body-padding="0">
-        <div slot="header">
-            <div class="popup-icon">
-                <img :src="require('@/assets/images/popup-icon-profile.svg')">
+        <!-- start: 이메일 수정 팝업 -->
+        <modal v-else-if="isEmailModifyModal" size="540px" body-padding="0">
+            <div slot="header">
+                <div class="popup-icon">
+                    <img :src="require('@/assets/images/popup-icon-profile.svg')">
+                </div>
+                <div class="popup-close">
+                    <button class="close" @click="isEmailModifyModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
             </div>
-            <div class="popup-close">
-                <button class="close" @click="isModifyEmailModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-            </div>
-        </div>
-        <div slot="body">
-            <div class="popup-cnt">
-                <h2 class="popup-tit">이메일 주소 변경</h2>
-                <div class="popup-input">
-                    <div class="form-group inline">
-                        <input type="email" class="form-control" :value="myInfo.email" @input="valueChange($event)">
+            <div slot="body">
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">이메일 주소 변경</h2>
+                    <div class="popup-input">
+                        <div class="form-group inline">
+                            <input type="email" class="form-control" :value="myInfo.email">
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div slot="footer">
-            <div class="btn-group rt">
-                <btn type="outline" @btnClick="isModifyEmailModal = false">취소</btn>
-                <btn type="navi" @btnClick="modifyEmail(tempData)">변경하기</btn>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="outline" @btnClick="isEmailModifyModal = false">취소</btn>
+                    <btn type="navi" @btnClick="modifyEmail(tempData)">변경하기</btn>
+                </div>
             </div>
-        </div>
-    </modal>
-    <!-- end: 이메일 수정 팝업 -->
+        </modal>
+        <!-- end: 이메일 수정 팝업 -->
+    </transition>
 </div>

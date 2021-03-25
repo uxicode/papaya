@@ -12,5 +12,14 @@ import WithRender from './ClassTagManage.html';
 })
 
 export default class ClassTagManage extends Vue {
+    private isClassTagSearch: boolean = false;
 
+    /**
+     * 뒤로가기
+     * @private
+     */
+    private goBack(): void {
+        this.$router.push('./')
+            .then();
+    }
 }

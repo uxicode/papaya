@@ -1177,6 +1177,8 @@
       .basic-info {
         text-align:right;
 
+        p {margin-bottom: 4px;}
+
         .basic-info-item {
           display:none;
 
@@ -1215,8 +1217,10 @@
     padding:20px 40px 12px;
 
     label, .label {
-      display:inline-block;
       margin-bottom:10px;
+    }
+    .label {
+      display:inline-block;
     }
   }
 }
@@ -1731,6 +1735,7 @@
         display:table;
         width:100%;
         border-bottom:1px solid #f4f5f6;
+        padding: 15px 0 15px 40px; // ksj
 
         .result-link {
           display:table;
@@ -1768,4 +1773,6 @@
 /* 디자인상 팝업이지만 router-view 처리하는 경우 - ksj */
 .non-popup {
   background: #fff;
+
+  .scroll-body {overflow-y:auto;}
 }

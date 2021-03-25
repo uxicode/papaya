@@ -1,7 +1,7 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
-import WithRender from './ClassProfile.html';
+import WithRender from './BlockedMemberList.html';
 
 @WithRender
 @Component({
@@ -11,13 +11,9 @@ import WithRender from './ClassProfile.html';
     }
 })
 
-export default class ClassProfile extends Vue {
-    /**
-     * 뒤로가기
-     * @private
-     */
+export default class BlockedMemberList extends Vue {
     private goBack(): void {
-        this.$router.push('./')
+        this.$router.push('/classSetting/classMemberManage')
             .then();
     }
 }
