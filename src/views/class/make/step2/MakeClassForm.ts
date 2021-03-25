@@ -16,6 +16,11 @@ export default class MakeClassForm extends Vue{
     console.log(this.createdClassInfo.g_name);
   }
 
+  private prevStep(){
+    this.$router.push('/make-class/step1');
+    this.$emit('updateStep', 1);
+  }
+
   //만들고 난 후 받는 데이터
 /* 전송데이터
 {
