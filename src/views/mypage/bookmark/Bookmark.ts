@@ -59,7 +59,7 @@ export default class Bookmark extends Vue {
         this.isPostsResetModal = !this.isPostsResetModal;
     }
 
-    private moreMenuToggle(item: any): void {
+    private moreMenuToggle(): void {
         this.isMoreMenu = !this.isMoreMenu;
     }
 }

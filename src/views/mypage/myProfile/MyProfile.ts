@@ -1,124 +1,43 @@
-import {IUserMe} from '@/api/model/user.model';
-import UserService from '@/api/service/UserService';
+import MyProfileMain from '@/views/mypage/myProfile/myProfileMain/MyProfileMain';
+import ModifyMobile from '@/views/mypage/myProfile/modifyMobile/ModifyMobile';
+import ModifyPassword from '@/views/mypage/myProfile/modifyPw/ModifyPassword';
 import {Vue, Component, Prop} from 'vue-property-decorator';
-import {namespace} from 'vuex-class';
 import WithRender from './MyProfile.html';
-import Btn from '@/components/button/Btn.vue';
-import Modal from '@/components/modal/modal.vue';
-import TxtField from '@/components/form/txtField.vue';
-// import {SET_MY_INFO} from '@/store/mutation-auth-types';
-// import {USER_ME_ACTION} from '@/store/action-auth-types';
-
-const Auth = namespace('Auth');
-
-interface IPwd {
-    nPwd: string;
-    rePwd: string;
-}
 
 @WithRender
 @Component({
     components:{
-        Btn,
-        Modal,
+        MyProfileMain,
+        ModifyMobile,
+        ModifyPassword,
     },
 })
 export default class MyProfile extends Vue {
+    private currentPage: string = '';
 
-    @Auth.Getter
-    public readonly userInfo!: IUserMe;
-
-    @Auth.Action
-    public USER_ME_ACTION!:  () => Promise<IUserMe>;
-
-    get myInfo(): object {
-        // console.log( 'this.userInfo=', this.userInfo );
-        return this.userInfo;
+    public created() {
+        window.onpopstate = () => {
+            this.updateTitle('');
+        };
     }
 
-    /* 팝업 및 페이지 변경 상태 값 */
-    private isNameModifyModal: boolean = false;
-    private isGenderModify: boolean = false;
-    private isMobileModify: boolean = false;
-    private isEmailModifyModal: boolean = false;
-    private isPwModify: boolean = false;
-    private isPwConfirmed: boolean = false;
-
-
-    private tempData: any = '';
-
-
-
-    /**
-     * 이름 변경 팝업 열기
-     * @private
-     */
-    private nameModifyModalOpen(): void {
-        this.isNameModifyModal = !this.isNameModifyModal;
+    private updateTitle(page: string ) {
+        this.currentPage = page;
     }
 
-    /**
-     * 이름 수정
-     * @param newName
-     * @private
-     */
-    private nameModify(newName: string): void {
-        UserService.setUserInfo(this.userInfo.user_id, {fullname: this.tempData}); // 실제 데이터에서 이름이 변경됨
-        this.isNameModifyModal = !this.isNameModifyModal;
-        this.userInfo.fullname = this.tempData; // 화면상에서 바뀐 이름이 즉시 반영됨
+    private currentTitle(): string {
+        let result;
+        switch (this.currentPage) {
+            case 'modifyMobile':
+                result = 'MY프로필 > 모바일 번호 변경';
+                break;
+            case 'modifyPw':
+                result = 'MY프로필 > 비밀번호 재설정';
+                break;
+            default:
+                result = 'MY프로필';
+                break;
+        }
+        return result;
     }
-
-    /**
-     * 성별 변경 토글
-     * @private
-     */
-    private genderModifyToggle(): void {
-        this.isGenderModify = !this.isGenderModify;
-    }
-    /**
-     * 변경할 정보를 임시로 담을 함수
-     * @param event
-     * @private
-     */
-    private valueChange(event: any): void {
-        this.tempData = event.target.value;
-    }
-
-    private genderModify( event: Event, newGender: number ): void {
-        // console.log('target=', event.target+':::'+event.target.value);
-        UserService.setUserInfo(this.userInfo.user_id, {gender: newGender})
-          .then(()=>{
-              // console.log(data);
-              this.USER_ME_ACTION().then( ( me: IUserMe)=>{
-                  console.log(me);
-              });
-          });
-        this.isGenderModify = !this.isGenderModify;
-        this.userInfo.gender = newGender; // 화면상에서 바뀐 이름이 즉시 반영됨
-    }
-
-    /**
-     * 모바일 번호 변경 페이지 이동
-     * @private
-     */
-    private gotoMobileModify(): void {
-        this.isMobileModify = !this.isMobileModify;
-    }
-
-    /**
-     * 이메일 주소 변경 팝업 열기
-     * @private
-     */
-    private emailModifyModalOpen(): void {
-        this.isEmailModifyModal = !this.isEmailModifyModal;
-    }
-
-    /**
-     * 비밀번호 재설정 페이지 이동
-     * @private
-     */
-    private gotoPwModify(): void {
-        this.isPwModify = !this.isPwModify;
-    }
-
 }

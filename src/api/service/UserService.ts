@@ -88,6 +88,17 @@ class UserService {
   }
 
   /**
+   * 비밀번호 변경 - 로그인 된 상태
+   * @param payload
+   */
+  public pwdChange(payload: { userId: string, old_pw: string, new_pw: string } ): Promise<any> {
+    return request('put', `${USER_BASE_URL}/${payload.userId}/change-password`, {
+      old_password: payload.old_pw,
+      new_password: payload.new_pw,
+    });
+  }
+
+  /**
    *
    * @param id
    */
