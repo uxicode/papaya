@@ -81,7 +81,7 @@
                 <ul class="setting-list">
                     <li class="list-item">
                         <a href=""  class="list-tit">클래스 기본 정보 관리</a>
-                        <button class="setting-btn" @click="isBasicInfo = true"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
+                        <button class="setting-btn" @click="gotoClassBasicInfo"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                     <li class="list-item">
                         <a href=""  class="list-tit">클래스 태그 관리</a>
@@ -131,63 +131,6 @@
             </div>
         </div>
     </div>
-
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.3 (클래스 기본 정보 관리) -->
-    <transition name="modal">
-        <modal v-if="isBasicInfo" size="600px" body-padding="0">
-            <div slot="header">
-                <!-- header custom coding-->
-                <p class="popup-header-tit">클래스 기본 정보 관리</p>
-                <div class="popup-close">
-                    <button class="close" @click="isBasicInfo = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-                </div>
-            </div>
-            <div slot="body">
-                <!-- body custom coding-->
-                <div class="class-basic-info">
-                    <div class="info-top">
-                        <img :src="require('@/assets/images/school-on.png')" alt="">
-                        <p class="group-type">학교</p>
-                    </div>
-
-                    <div class="info-cnt">
-                        <div class="info-form">
-                            <div class="form-group">
-                                <label for="schoolName">학교 이름</label>
-                                <button type="button" class="btn primary grey sm">검색</button>
-                                <input type="text" class="form-control" id="schoolName" value="파파야 초등학교" disabled style="width:430px">
-                            </div>
-                            <div class="form-group mgt-40">
-                                <label for="className">클래스 이름</label>
-                                <input type="text" class="form-control" id="className" value="꿈꾸는 5학년 1반">
-                            </div>
-                            <div class="form-group mgt-40">
-                                <span class="label">공개 범위 <a href="" class="tip-info"><img :src="require('@/assets/images/info.svg')" class="icon-img" alt=""></a></span>
-                                <div class="checkbox-group">
-                                    <div class="btn-radio">
-                                        <input type="radio" name="privacy" id="closedClass" checked>
-                                        <label for="closedClass">비공개 클래스</label>
-                                    </div>
-                                    <div class="btn-radio">
-                                        <input type="radio" name="privacy" id="openedClass">
-                                        <label for="openedClass">오픈 클래스</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div slot="footer">
-                <!-- footer custom coding-->
-                <div class="btn-group rt">
-                    <button type="button" class="btn outline" @click="isBasicInfo = false">취소</button>
-                    <button type="button" class="btn primary navi">저장</button>
-                </div>
-            </div>
-        </modal>
-    </transition>
-    <!-- end: 공통 팝업 -->
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.5 (클래스 가입 안내 문구 설정) -->
     <transition name="modal">
@@ -324,7 +267,7 @@
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
                     <btn type="outline" @btnClick="isWithdraw = false">취소</btn>
-                    <btn type="navi" disabled>탈퇴하기</btn>
+                    <btn type="navi" @btnClick="withdrawSubmit">탈퇴하기</btn>
                 </div>
             </div>
         </modal>

@@ -27,6 +27,15 @@ export default class ClassSettingMain extends Vue{
     }
 
     /**
+     * 클래스 기본 정보 설정 페이지 이동
+     * @private
+     */
+    private gotoClassBasicInfo(): void {
+        this.$router.push('classBasicInfo')
+            .then();
+    }
+
+    /**
      * 클래스 태그 관리 페이지 이동
      * @private
      */
@@ -68,6 +77,16 @@ export default class ClassSettingMain extends Vue{
      */
     private gotoClassAdminDelegate(): void {
         this.$router.push('classAdminDelegate')
+            .then();
+    }
+
+    /**
+     * 클래스 탈퇴 완료
+     * @private
+     */
+    private withdrawSubmit(): void {
+
+        this.$router.push('../classWithdrawComplete')
             .then();
     }
 }
