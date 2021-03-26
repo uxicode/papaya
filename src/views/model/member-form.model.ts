@@ -3,7 +3,7 @@ interface IMemberForm{
   mobile: string;
 }
 interface IAuthTypeForm extends IMemberForm{
-  radioValue: string;
+  radioValue: string | number | boolean;
 }
 
 interface IVerifiedForm extends IAuthTypeForm {

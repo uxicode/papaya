@@ -1,25 +1,89 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import Btn from '@/components/button/Btn.vue';
+import TxtField from '@/components/form/txtField.vue';
+import SelectBox from '@/components/selectbox/SelectBox.vue';
+import RadioButton from '@/components/radio/RadioButton.vue';
 
 import WithRender from './MakeClassForm.html';
-import {IMakeClassInfo} from '@/views/model/my-class.model';
+import {IMakeClassInfo, IMakeClassInfoBase} from '@/views/model/my-class.model';
+import {Utils} from '@/utils/utils';
 
 const MyClass = namespace('MyClass');
 
 @WithRender
-@Component
+@Component({
+  components:{
+    Btn,
+    TxtField,
+    SelectBox,
+    RadioButton
+  }
+})
 export default class MakeClassForm extends Vue{
   @MyClass.Getter
   private createdClassInfo!: IMakeClassInfo;
 
+  @MyClass.Action
+  private MAKE_CLASS!: ( info: IMakeClassInfoBase ) => Promise<IMakeClassInfo>;
+
+  private classFormData: IMakeClassInfoBase={
+    name: '',
+    is_private: true,
+    image_url:'',
+    startday: 0
+  };
+
+  private currentFullYear=Utils.getTodayFullValue( new Date() );
+
+  get startYears(): string[] | number[] {
+    const resultYears = [];
+    for (let i: number = 0; i < 5; i++) {
+      resultYears.push( this.currentFullYear[0] - i );
+    }
+    return resultYears;
+  }
+
+  get selectDataModel(): Date | string | number | undefined{
+    return this.classFormData.startday;
+  }
+
+  get isValidation(): boolean{
+    return !!this.classFormData.name && !!this.classFormData.is_private &&  !!this.classFormData.startday;
+  }
+
   public created() {
-    console.log(this.createdClassInfo.g_name);
+    this.classFormData.startday=this.currentFullYear[0];
+    // console.log(this.createdClassInfo.g_name, this.startYears);
   }
 
   private prevStep(){
     this.$router.push('/make-class/step1');
     this.$emit('updateStep', 1);
   }
+
+  private updateYears( value: string | number ): void{
+    this.classFormData.startday=value;
+  }
+
+
+  private privateOptionChange( value: boolean, checked: boolean ): void{
+    // console.log(value, checked);
+    this.classFormData.is_private=value;
+  }
+
+  private submit(): void{
+    const randomNum = Utils.getRandomNum(0, 6);
+    this.classFormData.image_url=randomNum+'';
+
+    this.MAKE_CLASS( this.classFormData )
+      .then( (data: any )=>{
+        this.$router.push('/make-class/step3');
+        this.$emit('updateStep', 3);
+      });
+
+  }
+
 
   //만들고 난 후 받는 데이터
 /* 전송데이터

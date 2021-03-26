@@ -42,19 +42,17 @@ export default class MakeClassOption extends Vue{
 
   //검색어 결과 모음 배열.
   private searchResultItems: ISearchSchool[]=[];
-  private searchValue: string = '';
-  private isSelected: boolean=false;
+  private searchSchoolValue: string = '';
+  private groupNameValue: string = '';
   private isLoading: boolean= false;
+  private isManualClick: boolean=false;
+  private manualInputField: string = '';
 
   @MyClass.Mutation
   private CREATE_CLASS_LIST!: (info: IMakeClassInfo) => void;
 
-
-  get loadingStatus(): boolean{
-    return this.isLoading;
-  }
   get searchResultValue(): string{
-    return this.searchValue;
+    return this.searchSchoolValue;
   }
   get searchResults(): ISearchSchool[] {
     return this.searchResultItems;
@@ -67,11 +65,18 @@ export default class MakeClassOption extends Vue{
     return this.openPopupStatus;
   }
   get isNextStep(): boolean{
-    return !!this.searchResultValue && this.isSelected;
+    return !!this.searchResultValue || !!this.manualInputField || !!this.groupNameValue || this.activeItem ===2;
+  }
+  get manualChk(): boolean{
+    return this.isManualClick;
+  }
+
+  public getSchoolNameInput( selector: string ): HTMLInputElement{
+    return document.getElementById( selector ) as HTMLInputElement;
   }
 
   private search(){
-    this.searchValue='';
+    this.searchSchoolValue='';
     this.searchResultItems=[];
 
     //$nextTick - 해당하는 엘리먼트가 화면에 렌더링이 되고 난 후
@@ -166,22 +171,54 @@ export default class MakeClassOption extends Vue{
    */
   private closeSchoolSearchPopup(): void{
     this.openPopupStatus=false;
+    this.isManualClick=false;
   }
+
+  private manualInputClickHandler(): void{
+    this.isManualClick=true;
+  }
+
+  private applyManualValClickHandler(): void{
+    const schoolNameField=this.getSchoolNameInput('schoolName');
+    schoolNameField.value=this.manualInputField;
+    this.closeSchoolSearchPopup();
+  }
+
+
 
   private applySearchResult( name: string): void {
     this.closeSchoolSearchPopup();
-    this.searchValue=name;
-    this.isSelected=true;
+    this.searchSchoolValue=name;
 
-    const schoolNameField=document.getElementById('schoolName') as HTMLInputElement;
-    schoolNameField.value=this.searchValue;
-
-    this.CREATE_CLASS_LIST({ g_type:1, g_name: this.searchValue });
+    const schoolNameField=this.getSchoolNameInput('schoolName');
+    schoolNameField.value=this.searchSchoolValue;
   }
 
   private nextStepClickHandler(): void{
+    this.classOptionSelect();
     this.$router.push('/make-class/step2');
     this.$emit('updateStep', 2);
   }
+
+  private classOptionSelect() {
+
+    switch(this.activeItem){
+      case 0 :
+        this.CREATE_CLASS_LIST({ g_type:1, g_name: this.searchSchoolValue });
+        break;
+      case 1 :
+        this.CREATE_CLASS_LIST({ g_type:2, g_name: this.groupNameValue });
+        break;
+      case 2:
+        console.log(this.activeItem);
+        this.CREATE_CLASS_LIST({ g_type:3, g_name: '소모임' });
+        break;
+    }
+  }
+
+
+
+
+
 }
 

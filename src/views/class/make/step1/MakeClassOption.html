@@ -18,14 +18,14 @@
       <template v-if="isSchoolSelected(activeItem)">
         <div class="form-group inline">
           <label for="schoolName">학교 이름</label>
-          <txt-field id="schoolName" placeholder="학교를 검색해주세요." size="387" v-model="searchValue"></txt-field>
+          <txt-field id="schoolName" placeholder="학교를 검색해주세요." size="387" v-model="searchSchoolValue"></txt-field>
           <btn type="grey" size="sm" @btnClick="openSchoolSearchPopup">검색</btn>
         </div>
       </template>
       <template v-else-if="isOrganization(activeItem)">
         <div class="form-group inline">
           <label for="groupName">단체 이름</label>
-          <txt-field id="groupName" placeholder="단체 이름을 입력해 주세요." size="390"></txt-field>
+          <txt-field id="groupName" v-model="groupNameValue" placeholder="단체 이름을 입력해 주세요." size="390"></txt-field>
         </div>
       </template>
 
@@ -63,7 +63,7 @@
           <txt-field
                   id="searchSchool"
                   placeholder="학교 이름을 검색해주세요."
-                  size="370" v-model="searchValue">
+                  size="370" v-model="searchSchoolValue">
           </txt-field>
           <btn type="grey" size="sm" @btnClick="">검색</btn>
           <!-- start: 로딩 바 -->
@@ -94,10 +94,20 @@
     </div>
     <div slot="footer">
       <!-- footer custom coding-->
-      <div class="btn-group ct">
-        <btn type="outline" @btnClick="">직접입력</btn>
-<!--        <button type="button" class="btn outline">직접입력</button>-->
-      </div>
+
+      <template v-if="!manualChk">
+        <div class="btn-group ct">
+          <btn type="outline" @btnClick="manualInputClickHandler">직접입력</btn>
+        </div>
+      </template>
+      <template v-else>
+        <div class="popup-search-input">
+          <txt-field size="320" v-model="manualInputField" placeholder="학교 이름을 직접 입력해 주세요."></txt-field>
+        </div>
+        <div class="btn-group rt">
+          <btn type="navi" @btnClick="applyManualValClickHandler">확인</btn>
+        </div>
+      </template>
     </div>
   </modal>
   </transition>

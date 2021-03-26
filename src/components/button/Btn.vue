@@ -1,5 +1,6 @@
 <template>
   <button type="button"
+          :style="`width:${width}px`"
           class="btn"
           :disabled="disabled"
           :class="buttonType"
@@ -13,6 +14,10 @@ import {Vue, Component, Prop} from 'vue-property-decorator';
 
 @Component
 export default class Btn extends Vue{
+
+  @Prop([Number, String])
+  private readonly width: number | string | undefined;
+
   @Prop(String)
   private readonly type: string | undefined;
 

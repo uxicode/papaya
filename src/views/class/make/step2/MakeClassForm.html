@@ -15,25 +15,30 @@
             <th class="top">클래스 이름</th>
             <td>
               <div class="form-group">
-                <input type="text" class="form-control" placeholder="클래스 이름을 20자 이내로 입력해주세요."  style="width:390px">
+                <txt-field size="390"
+                           v-model="classFormData.name"
+                           rules="required"
+                           valid-name="클래스 이름"
+                           placeholder="클래스 이름을 20자 이내로 입력해주세요."></txt-field>
               </div>
             </td>
           </tr>
           <tr>
             <th class="top">클래스 시작년도</th>
             <td>
-              <select class="form-control" style="width:390px;">
+              <!--<select class="form-control" style="width:390px;">
                 <option value="" selected>2019</option>
                 <option value="">2018</option>
                 <option value="">2017</option>
-              </select>
+              </select>-->
+              <select-box id="startYear" size="390" :items="startYears" @change="updateYears" :selected-value="selectDataModel"></select-box>
             </td>
           </tr>
           <tr>
             <th class="top">공개 범위<span class="info-icon"><img :src="require('@/assets/images/info.svg')" class="icon-img" alt=""></span></th>
             <td>
               <div class="checkbox-group">
-                <div class="btn-radio">
+                <!--<div class="btn-radio">
                   <input type="radio" name="radio" id="radio1" checked>
                   <label for="radio1">비공개 클래스</label>
                 </div>
@@ -41,6 +46,18 @@
                   <input type="radio" name="radio" id="radio2">
                   <label for="radio2">오픈 클래스</label>
                 </div>
+                -->
+                <radio-button btn-id="chk1"
+                              radio-name="radio"
+                              btn-value="yes"
+                              active-value="yes"
+                              v-model="classFormData.is_private"
+                              @click="privateOptionChange">비공개 클래스</radio-button>
+                <radio-button btn-id="chk2"
+                              radio-name="radio"
+                              btn-value="no"
+                              v-model="classFormData.is_private"
+                              @click="privateOptionChange">오픈 클래스</radio-button>
               </div>
             </td>
           </tr>
@@ -52,8 +69,8 @@
   </div>
   <div class="form-btm">
     <div class="btn-group rt">
-      <button type="button" class="btn outline" @click="prevStep">이전</button>
-      <button type="button" class="btn primary navi" disabled>다음</button>
+      <btn type="outline" @btnClick="prevStep">이전</btn>
+      <btn type="navi" :disabled="!isValidation" @btnClick="submit">다음</btn>
     </div>
   </div>
 </div>

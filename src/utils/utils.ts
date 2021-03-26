@@ -220,6 +220,10 @@ class Utils{
     return yyyy+'-'+( mm<10 ? '0'+mm : mm )+'-'+( dd<10 ? '0'+dd : dd );
   }
 
+  public static getRandomNum( min: number, max: number ): number {
+    return Math.floor(Math.random()*(max-min+1)) + min;
+  }
+
 
 }
 
