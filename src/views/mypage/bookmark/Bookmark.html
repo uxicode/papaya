@@ -16,7 +16,7 @@
 
             <!-- start: 보관된 알림 -->
             <template v-if="bookmarkType === 'notification'">
-                <div v-for="item in postItems"
+                <div v-for="item in myPostLists"
                      class="bookmark-item">
                     <div class="item-top">
                         <span class="bookmark-class">{{ item.class.name }}</span>
@@ -29,14 +29,15 @@
                                 <button type="button" class="list-popup-btn" @click="moreMenuToggle()"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                 <!-- 더보기 -->
                                 <div class="list-popup-menu pos-right" :class="{'active': isMoreMenu}" style="transform:translate3d(35px, 0, 0);">
-                                    <a v-for="(item, idx) in postMoreMenuItems"
-                                       :key="item"
-                                       href=""
-                                       class="list-popup-item">{{ postMoreMenuItems[idx] }}</a>
+                                    <a href="" class="list-popup-item">알림 수정</a>
+                                    <a href="" class="list-popup-item">해당 클래스의 공지로 등록</a>
+                                    <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
+                                    <a href="" class="list-popup-item">알림 보관 해제</a>
+                                    <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
                                 </div>
                                 <!-- 더보기 (일반멤버) -->
                                 <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
-                                    <a href="" class="list-popup-item">{{ postMoreMenuItems[3] }}</a>
+                                    <a href="" class="list-popup-item">알림 보관 해제</a>
                                 </div>
                             </div>
                         </div>
@@ -67,14 +68,14 @@
                                 <button type="button" class="list-popup-btn" @click="moreMenuToggle()"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                 <!-- 더보기 -->
                                 <div class="list-popup-menu pos-right" :class="{'active': isMoreMenu}" style="transform:translate3d(35px, 0, 0);">
-                                    <a v-for="(item, idx) in scheduleMoreMenuItems"
-                                       :key="item"
-                                       href=""
-                                       class="list-popup-item">{{ scheduleMoreMenuItems[idx] }}</a>
+                                    <a href="" class="list-popup-item">알림 수정</a>
+                                    <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
+                                    <a href="" class="list-popup-item">일정 보관 해제</a>
+                                    <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
                                 </div>
                                 <!-- 더보기 (일반멤버) -->
                                 <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
-                                    <a href="" class="list-popup-item">{{ scheduleMoreMenuItems[2] }}</a>
+                                    <a href="" class="list-popup-item">일정 보관 해제</a>
                                 </div>
                             </div>
                         </div>
