@@ -43,7 +43,7 @@
             </template>
 
             <template v-else>
-              <a href="" class="class-info">
+              <a href="javascript:void(0);" class="class-info" @click.prevent="gotoClassClickHandler( item.me.class_id )">
                 <div class="info-img" :class="{ 'crown':item.me.level ===1}">
                   <span><img :src="nullCheck( item.me.profile_image)" class="thumb" alt=""></span>
                 </div>

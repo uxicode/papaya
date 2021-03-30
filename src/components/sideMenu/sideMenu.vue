@@ -40,9 +40,21 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
+
+const MyClass = namespace('MyClass');
 
 @Component
-export default class SideMenu extends Vue{ }
+export default class SideMenu extends Vue{
+  @MyClass.Getter
+  private classID!: string | number;
+
+
+  public created(): void{
+    console.log('classID=', this.classID);
+  }
+
+}
 </script>
 
 <style scoped>

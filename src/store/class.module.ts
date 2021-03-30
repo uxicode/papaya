@@ -1,9 +1,11 @@
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
+import VueRouter from 'vue-router';
 import {INullable} from '@/views/model/types';
 import {IMyClassList, IPostList, IMakeClassInfo, IMakeClassInfoBase} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
-import {MYCLASS_LIST, POST_LIST, CREATE_CLASS_LIST} from '@/store/mutation-class-types';
-import {MYCLASS_LIST_ACTION, POST_LIST_ACTION, MAKE_CLASS} from '@/store/action-class-types';
+import {MYCLASS_LIST, POST_LIST, CREATE_CLASS_LIST, SET_CLASS_ID} from '@/store/mutation-class-types';
+import {MYCLASS_LIST_ACTION, POST_LIST_ACTION, MAKE_CLASS, MYCLASS_HOME} from '@/store/action-class-types';
+import {CLASS_BASE_URL} from '@/api/base';
 
 
 @Module({
@@ -11,9 +13,12 @@ import {MYCLASS_LIST_ACTION, POST_LIST_ACTION, MAKE_CLASS} from '@/store/action-
 })
 export default class ClassModule extends VuexModule {
     /* State */
-    private classData: IMyClassList[]=[];
-    private postData: IPostList[]=[];
-    private count: number = 0;
+    private $classData: IMyClassList[]=[];
+    private $postData: IPostList[]=[];
+    private $count: number = 0;
+    private $classID: string | number = 0;
+    private $router: VueRouter =new VueRouter();
+
     private makeClassInfo: IMakeClassInfo={
         name:'',
         g_type:'',
@@ -24,14 +29,23 @@ export default class ClassModule extends VuexModule {
 
     /* Getters */
     get myClassLists():  IMyClassList[]{
-        return this.classData;
+        return this.$classData;
     }
 
     get createdClassInfo(): IMakeClassInfo {
         return this.makeClassInfo;
     }
 
+    get classID(): string | number{
+        return this.$classID;
+    }
+
     /* Mutations */
+    @Mutation
+    public [SET_CLASS_ID]( id: string | number ): void {
+        this.$classID=id;
+    }
+
     @Mutation
     public [CREATE_CLASS_LIST]( infos: IMakeClassInfo ): void {
         this.makeClassInfo = {...this.makeClassInfo, ...infos};
@@ -39,20 +53,20 @@ export default class ClassModule extends VuexModule {
 
     @Mutation
     public [MYCLASS_LIST](classData: IMyClassList[] ): void {
-        this.classData =classData;
+        this.$classData =classData;
 
         // console.log(this.classData);
-        localStorage.setItem('classData', JSON.stringify(this.classData) );
-        this.count++;
+        localStorage.setItem('classData', JSON.stringify(this.$classData) );
+        this.$count++;
     }
 
     @Mutation
     public [POST_LIST](postData: IPostList[] ): void {
-        this.postData =postData;
+        this.$postData =postData;
 
         // console.log(this.postData);
-        localStorage.setItem('postData', JSON.stringify(this.postData) );
-        this.count++;
+        localStorage.setItem('postData', JSON.stringify(this.$postData) );
+        this.$count++;
     }
 
     /* Actions */
@@ -94,5 +108,21 @@ export default class ClassModule extends VuexModule {
               console.log(error);
               return Promise.reject(error);
           });
+    }
+
+    @Action({rawError: true})
+    public [MYCLASS_HOME]( id: string | number ): Promise<any>{
+        this.context.commit(SET_CLASS_ID, id);
+
+        return MyClassService.getClassInfoById( id )
+          .then( (data)=>{
+              return Promise.resolve(data);
+          }).catch((error)=>{
+              console.log(error);
+              return Promise.reject(error);
+          });
+
+
+        // return this.$routers
     }
 }
