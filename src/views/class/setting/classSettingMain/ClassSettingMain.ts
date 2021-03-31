@@ -12,7 +12,6 @@ import Btn from '@/components/button/Btn.vue';
 })
 export default class ClassSettingMain extends Vue{
     /* Modal 오픈 상태값 */
-    private isBasicInfo: boolean = false;
     private isGuideTxt: boolean = false;
     private isJoinQnaSetting: boolean = false;
     private isWithdraw: boolean = false;
