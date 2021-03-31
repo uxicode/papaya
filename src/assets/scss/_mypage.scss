@@ -11,7 +11,7 @@
 
         img {margin-right:20px;}
 
-        &.router-link-active, &:hover {
+        &.active, &:hover {
           background-color:#f4f5f6;
         }
       }

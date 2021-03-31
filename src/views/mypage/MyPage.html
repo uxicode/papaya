@@ -4,8 +4,8 @@
             <section class="contents-left">
                 <div class="mypage-list">
                     <ul>
-                        <li><router-link :to="{path: '/myProfile'}"><img :src="require('@/assets/images/mypage.svg')" alt="">MY프로필</router-link></li>
-                        <li><router-link :to="{path: '/bookmark'}"><img :src="require('@/assets/images/bookmark-outline.svg')" alt="">보관함</router-link></li>
+                        <li><a href="javascript:void(0);" @click="gotoMyProfile" :class="{'active': this.myPageList[0].isActive}"><img :src="require('@/assets/images/mypage.svg')" alt="">MY프로필</a></li>
+                        <li><a href="javascript:void(0);" @click="gotoBookmark" :class="{'active': this.myPageList[1].isActive}"><img :src="require('@/assets/images/bookmark-outline.svg')" alt="">보관함</a></li>
                         <li><a href=""><img :src="require('@/assets/images/history.svg')" alt="">활동내역</a></li>
                     </ul>
                 </div>

@@ -1,0 +1,236 @@
+<section class="contents-right">
+    <div class="non-popup">
+        <!-- popup header -->
+        <div class="popup-header">
+            <p class="popup-header-tit">멤버 활동 관리</p>
+            <div class="popup-close">
+                <button class="close" @click="goBack"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <!--// popup header -->
+
+        <!-- popup-body -->
+        <div class="popup-body">
+            <div class="member-activity">
+                <div class="activity-tit grey">
+                    <p><strong>차단 멤버 목록</strong> <button class="more-btn" @click="gotoBlockedMemberList"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button></p>
+                </div>
+                <div class="activity-tit">
+                    <p>멤버 2118</p>
+                </div>
+                <div class="member-management-list scroll-body" style="height:540px;">
+                    <ul>
+                        <li class="member-item">
+                            <div class="member-type manager">
+                                <p class="member-name">김미영선생님</p>
+                                <p class="member-tit">운영자</p>
+                            </div>
+                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
+                        </li>
+                        <li class="member-item">
+                            <div class="member-type staff">
+                                <p class="member-name">김경희선생님</p>
+                                <p class="member-tit">스탭 멤버</p>
+                            </div>
+                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
+                        </li>
+                        <li class="member-item">
+                            <div class="member-type staff">
+                                <p class="member-name">박철수선생님</p>
+                                <p class="member-tit">스탭 멤버</p>
+                            </div>
+                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
+                        </li>
+                        <li class="member-item">
+                            <div class="member-type staff">
+                                <p class="member-name">새봄선생님</p>
+                                <p class="member-tit">스탭 멤버</p>
+                            </div>
+                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
+                        </li>
+                        <li class="member-item">
+                            <div class="member-type member">
+                                <p class="member-name">박정수 엄마</p>
+                                <p class="member-tit">일반 멤버</p>
+                            </div>
+                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
+                        </li>
+                        <li class="member-item">
+                            <div class="member-type member">
+                                <p class="member-name">박정수 엄마</p>
+                                <p class="member-tit">일반 멤버</p>
+                            </div>
+                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
+                        </li>
+                        <li class="member-item">
+                            <div class="member-type member">
+                                <p class="member-name">박정수 엄마</p>
+                                <p class="member-tit">일반 멤버</p>
+                            </div>
+                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
+                        </li>
+                        <li class="member-item">
+                            <div class="member-type member">
+                                <p class="member-name">박정수 엄마</p>
+                                <p class="member-tit">일반 멤버</p>
+                            </div>
+                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--// popup-body -->
+    </div>
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.1.1 (멤버 활동 관리 - 차단-확인) -->
+    <transition name="modal">
+        <modal v-if="false" size="540px" body-padding="0">
+            <div slot="header">
+                <!-- header custom coding-->
+                <div class="popup-icon block"></div>
+                <div class="popup-close">
+                    <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">선택한 멤버를 차단하시곘습니까?</h2>
+                    <p class="popup-txt">
+                        차단된 멤버에게는 차단 해제 전까지 해당 클래스에 접근하거나 가입이 불가능하며 클래스 검색 및 노출이 제한됩니다.차단을 계속 하시겠습니까?
+                    </p>
+                </div>
+                <div class="member-activity">
+                    <div class="member-management-list bd-none">
+                        <ul>
+                            <li class="member-item bd-none">
+                                <div class="member-type staff">
+                                    <p class="member-name">김경희선생님</p>
+                                    <p class="member-tit">스탭 멤버</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div slot="footer">
+                <!-- footer custom coding-->
+                <div class="btn-group rt">
+                    <button type="button" class="btn outline">취소</button>
+                    <button type="button" class="btn primary navi">차단하기</button>
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.1.2 (멤버 활동 관리 - 차단-완료) -->
+    <transition name="modal">
+        <modal v-if="false" size="540px" body-padding="0">
+            <div slot="header">
+                <div class="popup-icon block"></div>
+                <div class="popup-close">
+                    <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <div class="popup-cnt">
+                    <h2 class="popup-tit pdb-0">멤버 차단이 완료되었습니다.</h2>
+                </div>
+                <div class="member-activity">
+                    <div class="member-management-list bd-none">
+                        <ul>
+                            <li class="member-item bd-none">
+                                <div class="member-type staff">
+                                    <p class="member-name">김경희선생님</p>
+                                    <p class="member-tit">스탭 멤버</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="navi">확인</btn>
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.2.1 (멤버 활동 관리 - 탈퇴-확인) -->
+    <transition name="modal">
+        <modal v-if="false" size="540px" body-padding="0">
+            <div slot="header">
+                <div class="popup-icon leave"></div>
+                <div class="popup-close">
+                    <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">선택한 멤버를 강제 탈퇴시키겠습니까?</h2>
+                    <p class="popup-txt">
+                        멤버 강제 탈퇴 시 멤버가 작성했던 글, 댓글 등은 삭제되지 않습니다.
+                    </p>
+                </div>
+                <div class="member-activity">
+                    <div class="member-management-list bd-none">
+                        <ul>
+                            <li class="member-item bd-none">
+                                <div class="member-type staff">
+                                    <p class="member-name">김경희선생님</p>
+                                    <p class="member-tit">스탭 멤버</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="outline">취소</btn>
+                    <btn type="navi">강제 탈퇴</btn>
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.2.2 (멤버 활동 관리 - 탈퇴-확인) -->
+    <transition name="modal">
+        <modal v-if="false" size="540px" body-padding="0">
+            <div slot="header">
+                <div class="popup-icon leave"></div>
+                <div class="popup-close">
+                    <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">멤버 강제 탈퇴가 완료되었습니다.</h2>
+                </div>
+                <div class="member-activity">
+                    <div class="member-management-list bd-none">
+                        <ul>
+                            <li class="member-item bd-none">
+                                <div class="member-type staff">
+                                    <p class="member-name">김경희선생님</p>
+                                    <p class="member-tit">스탭 멤버</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="navi">확인</btn>
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
+</section>

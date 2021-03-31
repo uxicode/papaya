@@ -1,0 +1,107 @@
+<section class="contents-right">
+    <div class="non-popup">
+        <!-- popup header -->
+        <div class="popup-header">
+            <p class="popup-header-tit">클래스 태그 관리</p>
+            <div class="popup-close">
+                <button class="close" @click="goBack"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <!--// popup header -->
+
+        <!-- popup-body -->
+        <div class="popup-body">
+            <div class="popup-cnt">
+                <p class="popup-txt">클래스를 표현할 수 있는 태그를 추가해 보세요. 총 10개까지 등록 가능합니다.</p>
+
+                <div class="tag-cnt">
+                    <span class="label">등록된 태그 <strong>6/10</strong></span>
+                    <div class="tag-list mgt-16">
+                        <div class="hashtag"><span class="tag-label">꿈꾸는아이들</span> <a href="" class="tag-delete"><img :src="require('@/assets/images/delete.svg')" alt=""></a></div>
+                        <div class="hashtag"><span class="tag-label">파파야초등학교</span> <a href="" class="tag-delete"><img :src="require('@/assets/images/delete.svg')" alt=""></a></div>
+                        <div class="hashtag"><span class="tag-label">재미있는</span> <a href="" class="tag-delete"><img :src="require('@/assets/images/delete.svg')" alt=""></a></div>
+                        <div class="hashtag"><span class="tag-label">초등학교</span> <a href="" class="tag-delete"><img :src="require('@/assets/images/delete.svg')" alt=""></a></div>
+                        <div class="hashtag"><span class="tag-label">파파야</span> <a href="" class="tag-delete"><img :src="require('@/assets/images/delete.svg')" alt=""></a></div>
+                        <div class="hashtag"><span class="tag-label">어드벤처</span> <a href="" class="tag-delete"><img :src="require('@/assets/images/delete.svg')" alt=""></a></div>
+                        <button type="button" class="btn ico-btn ico-left sm" @click="isClassTagSearch = true"><img :src="require('@/assets/images/add.svg')" class="icon" alt="">태그추가</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--// popup-body -->
+
+        <!-- popup footer -->
+        <div class="popup-footer">
+            <div class="btn-group rt">
+                <btn type="outline" @btnClick="goBack">취소</btn>
+                <btn type="navi">저장</btn>
+            </div>
+        </div>
+        <!--// popup footer -->
+    </div>
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.4.1 ~ W.4.5.7.4.2 (클래스 태그 검색) -->
+    <transition name="modal">
+        <modal v-if="isClassTagSearch" size="540px" body-padding="0">
+            <div slot="header">
+                <div class="popup-icon search"></div>
+                <div class="popup-close">
+                    <button class="close" @click="isClassTagSearch = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <div class="popup-search">
+                    <h2 class="popup-tit">태그를 검색해 보세요.</h2>
+                    <div class="form-group inline">
+                        <input type="text" class="form-control" id="input3" placeholder="검색어를 입력해 주세요." value="파파야"  style="width:370px">
+                        <button type="button" class="btn primary grey sm">검색</button>
+                    </div>
+                </div>
+                <div class="search-result">
+                    <div class="search-result-cnt">
+                        <ul class="search-result-item">
+                            <li>
+                                <div class="tb-cell">
+                                    <a href="" class="result-tit"><strong>파파야</strong>초등학교</a>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div class="tb-cell">
+                                    <a href="" class="result-tit"><strong>파파야</strong>초등학교</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="tb-cell">
+                                    <a href="" class="result-tit"><strong>파파야</strong>초등학교</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="tb-cell">
+                                    <a href="" class="result-tit"><strong>파파야</strong>초등학교</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="tb-cell">
+                                    <a href="" class="result-tit"><strong>파파야</strong>초등학교</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="tb-cell">
+                                    <a href="" class="result-tit"><strong>파파야</strong>초등학교</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="tb-cell">
+                                    <a href="" class="result-tit"><strong>파파야</strong>초등학교</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
+
+</section>

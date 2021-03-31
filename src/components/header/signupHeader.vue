@@ -1,7 +1,7 @@
 <template>
   <header>
     <div class="header-container">
-      <h1 class="logo"><router-link :to="{path:'/'}"><img src="../../assets/images/logo-logotype-black.png" alt="papaya"/></router-link></h1>
+      <h1 class="logo"><a href="" @click.prevent.stop="gotoLogin"><img src="../../assets/images/logo-logotype-black.png" alt="papaya"/></a></h1>
 
       <nav id="gnb">
         <ul class="menu">
@@ -22,6 +22,9 @@ const Auth = namespace('Auth');
 
 @Component
 export default class SignUpHeader extends Vue {
+  private gotoLogin(): void{
+    this.$router.push('/login');
+  }
 }
 </script>
 

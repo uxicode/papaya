@@ -1,6 +1,6 @@
 import {request} from '@/api/service/AxiosService';
 import {CLASS_BASE_URL, SCHOOL_URL} from '@/api/base';
-import {IClassInfo, IMyClassList, IClassMember, IPostList} from '@/views/model/my-class.model';
+import {IClassInfo, IMyClassList, IClassMember, IPostList, IMakeClassInfo} from '@/views/model/my-class.model';
 
 
 class MyClassService {
@@ -37,8 +37,11 @@ class MyClassService {
         return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
 
-    public getSearchSchool(name: string, query: { count: number }={ count:10 }): Promise<any> {
-        return request('get', `${SCHOOL_URL}/searchbyname/${name}`, query);
+    public getSearchSchool(name: string): Promise<any> {
+        return request('get', `${SCHOOL_URL}/searchbyname/${name}`);
+    }
+    public setMakeClass( info: IMakeClassInfo ): Promise<any>{
+        return request('post', `${CLASS_BASE_URL}`, info );
     }
 }
 

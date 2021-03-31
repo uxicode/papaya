@@ -110,6 +110,7 @@
   </div>
 
   <!-- start: 공통 조회 성공 팝업 -->
+  <transition name="modal">
   <modal v-if="successOpenPopup">
     <div slot="header">
       <h3>인증 완료.</h3>
@@ -127,9 +128,11 @@
       </div>
     </div>
   </modal>
+  </transition>
   <!-- end: 공통 조회 성공 팝업 -->
 
   <!-- start: 공통 에러 팝업 -->
+  <transition name="modal">
   <modal v-if="errorOpenPopup">
     <div slot="header">
       <h3>인증 실패</h3>
@@ -144,6 +147,7 @@
       </div>
     </div>
   </modal>
+  </transition>
   <!-- end: 공통 에러 팝업 -->
 </div>
 

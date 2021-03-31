@@ -17,7 +17,6 @@
             <!-- start: 보관된 알림 -->
             <template v-if="bookmarkType === 'notification'">
                 <div v-for="item in postItems"
-                     :key="item"
                      class="bookmark-item">
                     <div class="item-top">
                         <span class="bookmark-class">{{ item.class.name }}</span>
@@ -27,7 +26,7 @@
                             <button type="button" class="btn only-ico-btn sm bookmark active"></button>
 
                             <div class="list-popup">
-                                <button type="button" class="list-popup-btn" @click="moreMenuToggle(item)"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                <button type="button" class="list-popup-btn" @click="moreMenuToggle()"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                 <!-- 더보기 -->
                                 <div class="list-popup-menu pos-right" :class="{'active': isMoreMenu}" style="transform:translate3d(35px, 0, 0);">
                                     <a v-for="(item, idx) in postMoreMenuItems"
@@ -65,7 +64,7 @@
                             <button type="button" class="btn only-ico-btn sm bookmark active"></button>
 
                             <div class="list-popup">
-                                <button type="button" class="list-popup-btn" @click="moreMenuToggle(item)"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                <button type="button" class="list-popup-btn" @click="moreMenuToggle()"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                 <!-- 더보기 -->
                                 <div class="list-popup-menu pos-right" :class="{'active': isMoreMenu}" style="transform:translate3d(35px, 0, 0);">
                                     <a v-for="(item, idx) in scheduleMoreMenuItems"
@@ -100,6 +99,7 @@
     </div>
 
     <!-- start: 보관된 일정 비우기 팝업 -->
+  <transition name="modal">
     <modal v-if="isPostsResetModal" size="540px" body-padding="0">
         <div slot="header">
             <p class="popup-header-tit">보관된 알림을 비우시겠습니까?</p>
@@ -119,6 +119,7 @@
             </div>
         </div>
     </modal>
+  </transition>
     <!-- end: 보관된 일정 비우기 팝업 -->
 
 </div>
