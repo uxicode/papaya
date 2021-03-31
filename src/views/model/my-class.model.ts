@@ -83,132 +83,29 @@ interface IMyClassList {
 
 
 interface IClassInfo{
-    classinfo: {
-        contents_updatedAt: Date,
-        createdAt: Date,
-        updatedAt: Date,
-        id: string | number,
-        code: string,
-        name: string,
-        owner_id: string | number,
-        owner_member_id: string | number,
-        board_id: string | number,
-        is_private: string | boolean,
-        image_url: string,
-        description: string,
-        startday: string | number,,
-        endday: string | number,,
-        g_type: string | number,,
-        g_name: string,
-        g_code: string,
-        member_count: string | number,
-        question_showYN: string | boolean,
-        deletedYN: string | boolean,
-        contents_updated_type: string | number,,
-        class_tags: string[],
-        class_members: [
-            {
-                joinedAt: Date,
-                createdAt: Date,
-                updatedAt: Date,
-                id: 732,
-                class_id: 710,
-                user_id: 81,
-                nickname: 선생님1,
-                profile_image: null,
-                is_bookmarked: 0,
-                schedule_color: 0,
-                level: 1,
-                status: 1,
-                open_level_id: 0,
-                open_level_mobileno: 0,
-                open_level_email: 0,
-                onoff_push_noti: 1,
-                onoff_post_noti: 1,
-                onoff_comment_noti: 1,
-                onoff_schedule_noti: 1,
-                schedule_noti_intime: 10,
-                visited: 0
-            }
-        ],
-        me: null,
-        owner: {
-            joinedAt: 2020-01-20 14:17:24,
-            createdAt: 2020-01-20 14:17:24,
-            updatedAt: 2020-01-20 14:17:27,
-            id: 732,
-            class_id: 710,
-            user_id: 81,
-            nickname: 선생님1,
-            profile_image: null,
-            is_bookmarked: 0,
-            schedule_color: 0,
-            level: 1,
-            status: 1,
-            open_level_id: 0,
-            open_level_mobileno: 0,
-            open_level_email: 0,
-            onoff_push_noti: 1,
-            onoff_post_noti: 1,
-            onoff_comment_noti: 1,
-            onoff_schedule_noti: 1,
-            schedule_noti_intime: 10,
-            visited: 0
-        },
-        class_link: https://papayaclass.com/class/3b7711e1xk5lzzw21
-    },
-    posts: {
-        count: 100,
-        rows: [
-            {
-                startAt: 2020-01-20 05:18:00,
-                endAt: null,
-                expiredAt: null,
-                createdAt: 2020-01-20 14:18:37,
-                updatedAt: 2020-01-20 14:18:37,
-                id: 167,
-                class_id: 710,
-                board_id: 710,
-                post_type: 0,
-                type: 0,
-                user_id: 81,
-                user_member_id: 732,
-                title: 테스트,
-                text: ...
-                count: 1,
-                param1: null,
-                deletedYN: false,
-                owner: {
-                    joinedAt: 2020-01-20 14:17:24,
-                    createdAt: 2020-01-20 14:17:24,
-                    updatedAt: 2020-01-20 14:17:27,
-                    id: 732,
-                    class_id: 710,
-                    user_id: 81,
-                    nickname: 선생님1,
-                    profile_image: null,
-                    is_bookmarked: 0,
-                    schedule_color: 0,
-                    level: 1,
-                    status: 1,
-                    open_level_id: 0,
-                    open_level_mobileno: 0,
-                    open_level_email: 0,
-                    onoff_push_noti: 1,
-                    onoff_post_noti: 1,
-                    onoff_comment_noti: 1,
-                    onoff_schedule_noti: 1,
-                    schedule_noti_intime: 10,
-                    visited: 0
-                },
-                user_keep_class_schedules: [],
-                user_keep_class_posts: [],
-                vote: null,
-                link: null,
-                attachment: []
-            }
-        ],
-    },
+    contents_updatedAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
+    id: string | number;
+    code: string;
+    name: string;
+    owner_id: string | number;
+    owner_member_id: string | number;
+    board_id: string | number;
+    is_private: string | boolean;
+    image_url: string;
+    description: string;
+    startday: string | number;
+    endday: string | number;
+    g_type: string | number;
+    g_name: string;
+    g_code: string;
+    member_count: string | number;
+    question_showYN: string | boolean;
+    deletedYN: string | boolean;
+    contents_updated_type: string | number;
+    class_tags: Array<{ id: string | number, keyword: string }>;
+    class_link: string;
 }
 
 interface IClassMember{

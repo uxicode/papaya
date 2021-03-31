@@ -340,8 +340,9 @@
 
     .info-img {
       position:relative;
-      display:inline-block;
+      //display:inline-block;
       width:80px;
+      margin:0 auto;
 
       img {
         width:100%;
