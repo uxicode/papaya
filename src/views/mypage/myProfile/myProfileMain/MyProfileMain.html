@@ -7,7 +7,7 @@
                 <p class="list-tit">이름</p>
                 <div class="list-right">
                     <span>{{ myInfo.fullname }}</span>
-                    <button type="button" class="list-btn" @click="modifyNameModalOpen"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                    <button type="button" class="list-btn" @click="openModify('name')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                 </div>
             </div>
             <div class="list-item">
@@ -23,7 +23,7 @@
                 <p class="list-tit">성별</p>
                 <div class="list-right">
                     <div class="list-popup">
-                        <button type="button" class="list-popup-btn" @click="modifyGenderToggle">
+                        <button type="button" class="list-popup-btn" @click="openModify('gender')">
                             {{ myInfo.gender === '1' ? '남자' : '여자' }}
                             <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
                         </button>
@@ -51,21 +51,21 @@
                 <p class="list-tit">모바일 번호</p>
                 <div class="list-right">
                     <span>{{ myInfo.mobile_no }}</span>
-                    <button type="button" class="list-btn" @click="gotoModifyMobile"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                    <button type="button" class="list-btn" @click="gotoLink('modifyMobile')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                 </div>
             </div>
             <div class="list-item">
                 <p class="list-tit">이메일 주소</p>
                 <div class="list-right">
                     <span>{{ myInfo.email }}</span>
-                    <button type="button" class="list-btn" @click="modifyEmailModalOpen"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                    <button type="button" class="list-btn" @click="openModify('email')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                 </div>
             </div>
             <div class="list-item">
                 <p class="list-tit">비밀번호</p>
                 <div class="list-right">
                     <span>********</span>
-                    <button type="button" class="list-btn" @click="gotoPwModify"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                    <button type="button" class="list-btn" @click="gotoLink('modifyPw')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                 </div>
             </div>
         </div>

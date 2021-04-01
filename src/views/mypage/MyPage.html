@@ -5,7 +5,9 @@
                 <div class="mypage-list">
                     <ul>
                       <li v-for="(item, index) in myPageListModel">
-                        <a href="" @click.prevent="gotoMyPageLink( index )" :class="{'active': index === activeNum }">{{ item.title }}</a>
+                        <a href="" @click.prevent="gotoMyPageLink( index )" :class="{'active': index === activeNum }">
+                            <img :src="item.icon" alt=""> {{ item.title }}
+                        </a>
                       </li>
                     </ul>
                 </div>
