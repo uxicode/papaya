@@ -9,4 +9,10 @@ import WithRender from './MyClass.html';
   }
 })
 export default class MyClass extends Vue {
+  private activeMenuNum: number=0;
+
+  private update(idx: number): void{
+    console.log(idx);
+    this.activeMenuNum=idx;
+  }
 }

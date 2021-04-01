@@ -23,12 +23,6 @@ const routes: RouteConfig[] = [
   },
 ];
 
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes,
-});
-
 /*$router.push 로 같은 링크 재차 클릭 에러 방지.*/
 const originalPath = VueRouter.prototype.push;
 VueRouter.prototype.push = function(url: RawLocation) {
@@ -39,4 +33,10 @@ VueRouter.prototype.push = function(url: RawLocation) {
     }
   });
 };
+
+const router = new VueRouter({
+  base:process.env.VUE_APP_BASE_URL,
+  routes,
+  mode: 'history',
+});
 export default router;

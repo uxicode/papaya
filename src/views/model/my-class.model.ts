@@ -83,54 +83,29 @@ interface IMyClassList {
 
 
 interface IClassInfo{
-    classinfo: {
-        contents_updatedAt: Date,
-        createdAt: Date,
-        updatedAt: Date,
-        id: number | string,
-        code: string,
-        name: string,
-        owner_id: number | string,
-        owner_member_id: number | string,
-        board_id: number | string,
-        is_private: boolean,
-        // image_url: null,
-        // description: null,
-        startday: number | string,
-        endday: number | string,
-        g_type: number,
-        g_name: string,
-        // g_code: null,
-        member_count: number,
-        question_showYN: boolean,
-        deletedYN: boolean,
-        contents_updated_type: number,
-        class_tags: [],
-    };
-    class_members: [];
-    me: {
-        joinedAt: Date;
-        createdAt: Date;
-        updatedAt: Date;
-        id: number,
-        class_id: number;
-        user_id: number;
-        nickname?:  string;
-        profile_image?: string;
-        is_bookmarked: number | string;
-        schedule_color: number | string;
-        level:  number | string;
-        status:  number | string;
-        open_level_id: number;
-        open_level_mobileno: number | string;
-        open_level_email:  number | string;
-        onoff_push_noti:  number | string;
-        onoff_post_noti: number | string;
-        onoff_comment_noti:  number | string;
-        onoff_schedule_noti: number | string;
-        schedule_noti_intime:  number | string;
-        visited: number | string;
-    };
+    contents_updatedAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
+    id: string | number;
+    code: string;
+    name: string;
+    owner_id: string | number;
+    owner_member_id: string | number;
+    board_id: string | number;
+    is_private: string | boolean;
+    image_url: string;
+    description: string;
+    startday: string | number;
+    endday: string | number;
+    g_type: string | number;
+    g_name: string;
+    g_code: string;
+    member_count: string | number;
+    question_showYN: string | boolean;
+    deletedYN: string | boolean;
+    contents_updated_type: string | number;
+    class_tags: Array<{ id: string | number, keyword: string }>;
+    class_link: string;
 }
 
 interface IClassMember{
@@ -138,114 +113,7 @@ interface IClassMember{
     is_private: boolean;
     message?: string;
 }
-/*
-/class/{class_id} 의 결과
-{
-    "classinfo": {
-    "contents_updatedAt": "2021-03-09 02:20:41",
-      "createdAt": "2021-03-09 02:20:41",
-      "updatedAt": "2021-03-09 02:20:41",
-      "id": 734,
-      "code": "3b7711dzbkm0uov2q",
-      "name": "클래스B",
-      "owner_id": 45,
-      "owner_member_id": 815,
-      "board_id": 158,
-      "is_private": false,
-      "image_url": null,
-      "description": null,
-      "startday": "20210309",
-      "endday": "99991231",
-      "g_type": 1,
-      "g_name": "파파야 고등학교",
-      "g_code": null,
-      "member_count": 1,
-      "question_showYN": true,
-      "deletedYN": false,
-      "contents_updated_type": 0,
-      "class_tags": [],
-      "class_members": [
-        {
-            "joinedAt": "2021-03-09 11:20:41",
-            "createdAt": "2021-03-09 02:20:41",
-            "updatedAt": "2021-03-11 20:05:44",
-            "id": 815,
-            "class_id": 734,
-            "user_id": 45,
-            "nickname": "홍길동날다",
-            "profile_image": null,
-            "is_bookmarked": 0,
-            "schedule_color": 0,
-            "level": 1,
-            "status": 1,
-            "open_level_id": 0,
-            "open_level_mobileno": 0,
-            "open_level_email": 0,
-            "onoff_push_noti": 1,
-            "onoff_post_noti": 1,
-            "onoff_comment_noti": 1,
-            "onoff_schedule_noti": 1,
-            "schedule_noti_intime": 10,
-            "visited": 0
-        }
-    ],
-      "me": {
-        "joinedAt": "2021-03-09 11:20:41",
-          "createdAt": "2021-03-09 02:20:41",
-          "updatedAt": "2021-03-11 20:05:44",
-          "id": 815,
-          "class_id": 734,
-          "user_id": 45,
-          "nickname": "홍길동날다",
-          "profile_image": null,
-          "is_bookmarked": 0,
-          "schedule_color": 0,
-          "level": 1,
-          "status": 1,
-          "open_level_id": 0,
-          "open_level_mobileno": 0,
-          "open_level_email": 0,
-          "onoff_push_noti": 1,
-          "onoff_post_noti": 1,
-          "onoff_comment_noti": 1,
-          "onoff_schedule_noti": 1,
-          "schedule_noti_intime": 10,
-          "visited": 0
-    },
-    "owner": {
-        "joinedAt": "2021-03-09 11:20:41",
-          "createdAt": "2021-03-09 02:20:41",
-          "updatedAt": "2021-03-11 20:05:44",
-          "id": 815,
-          "class_id": 734,
-          "user_id": 45,
-          "nickname": "홍길동날다",
-          "profile_image": null,
-          "is_bookmarked": 0,
-          "schedule_color": 0,
-          "level": 1,
-          "status": 1,
-          "open_level_id": 0,
-          "open_level_mobileno": 0,
-          "open_level_email": 0,
-          "onoff_push_noti": 1,
-          "onoff_post_noti": 1,
-          "onoff_comment_noti": 1,
-          "onoff_schedule_noti": 1,
-          "schedule_noti_intime": 10,
-          "visited": 0
-    },
-    "class_link": "https://papayaclass.com/class/3b7711dzbkm0uov2q"
-},
-    "posts": {
-    "count": 100,
-      "rows": [],
-      "total": 0,
-      "page_no": 1
-},
-    "message": "조회 성공"
-}
-*/
+
 interface INotifyList {
     profile_image: () => void;
     name: string;
@@ -401,4 +269,137 @@ interface IMakeClassInfo extends IMakeClassInfoBase{
     g_type: number | string;
     g_name: string;
 }
+
+/*{
+    "classinfo": {
+      "contents_updatedAt": "2020-01-20 14:18:37",
+      "createdAt": "2020-01-20 14:17:24",
+      "updatedAt": "2020-01-20 14:17:24",
+      "id": 710,
+      "code": "3b7711e1xk5lzzw21",
+      "name": "색다른 모임",
+      "owner_id": 81,
+      "owner_member_id": 732,
+      "board_id": 134,
+      "is_private": false,
+      "image_url": null,
+      "description": null,
+      "startday": "2020",
+      "endday": "99991231",
+      "g_type": 3,
+      "g_name": "소모임",
+      "g_code": null,
+      "member_count": 1,
+      "question_showYN": true,
+      "deletedYN": false,
+      "contents_updated_type": 1,
+      "class_tags": [],
+      "class_members": [
+        {
+            "joinedAt": "2020-01-20 14:17:24",
+            "createdAt": "2020-01-20 14:17:24",
+            "updatedAt": "2020-01-20 14:17:27",
+            "id": 732,
+            "class_id": 710,
+            "user_id": 81,
+            "nickname": "선생님1",
+            "profile_image": null,
+            "is_bookmarked": 0,
+            "schedule_color": 0,
+            "level": 1,
+            "status": 1,
+            "open_level_id": 0,
+            "open_level_mobileno": 0,
+            "open_level_email": 0,
+            "onoff_push_noti": 1,
+            "onoff_post_noti": 1,
+            "onoff_comment_noti": 1,
+            "onoff_schedule_noti": 1,
+            "schedule_noti_intime": 10,
+            "visited": 0
+        }
+    ],
+      "me": null,
+      "owner": {
+        "joinedAt": "2020-01-20 14:17:24",
+          "createdAt": "2020-01-20 14:17:24",
+          "updatedAt": "2020-01-20 14:17:27",
+          "id": 732,
+          "class_id": 710,
+          "user_id": 81,
+          "nickname": "선생님1",
+          "profile_image": null,
+          "is_bookmarked": 0,
+          "schedule_color": 0,
+          "level": 1,
+          "status": 1,
+          "open_level_id": 0,
+          "open_level_mobileno": 0,
+          "open_level_email": 0,
+          "onoff_push_noti": 1,
+          "onoff_post_noti": 1,
+          "onoff_comment_noti": 1,
+          "onoff_schedule_noti": 1,
+          "schedule_noti_intime": 10,
+          "visited": 0
+    },
+      "class_link": "https://papayaclass.com/class/3b7711e1xk5lzzw21"
+     },
+    "posts": {
+    "count": 100,
+      "rows": [
+        {
+            "startAt": "2020-01-20 05:18:00",
+            "endAt": null,
+            "expiredAt": null,
+            "createdAt": "2020-01-20 14:18:37",
+            "updatedAt": "2020-01-20 14:18:37",
+            "id": 167,
+            "class_id": 710,
+            "board_id": 710,
+            "post_type": 0,
+            "type": 0,
+            "user_id": 81,
+            "user_member_id": 732,
+            "title": "테스트",
+            "text": "..."
+            "count": 1,
+            "param1": null,
+            "deletedYN": false,
+            "owner": {
+                "joinedAt": "2020-01-20 14:17:24",
+                "createdAt": "2020-01-20 14:17:24",
+                "updatedAt": "2020-01-20 14:17:27",
+                "id": 732,
+                "class_id": 710,
+                "user_id": 81,
+                "nickname": "선생님1",
+                "profile_image": null,
+                "is_bookmarked": 0,
+                "schedule_color": 0,
+                "level": 1,
+                "status": 1,
+                "open_level_id": 0,
+                "open_level_mobileno": 0,
+                "open_level_email": 0,
+                "onoff_push_noti": 1,
+                "onoff_post_noti": 1,
+                "onoff_comment_noti": 1,
+                "onoff_schedule_noti": 1,
+                "schedule_noti_intime": 10,
+                "visited": 0
+            },
+            "user_keep_class_schedules": [],
+            "user_keep_class_posts": [],
+            "vote": null,
+            "link": null,
+            "attachment": []
+        }
+    ],
+      "total": 1,
+      "page_no": 1
+},
+    "message": "조회 성공"
+}*/
+
 export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList, ISearchSchool, IMakeClassInfo, IMakeClassInfoBase};

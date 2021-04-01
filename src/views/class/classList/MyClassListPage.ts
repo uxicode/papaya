@@ -6,6 +6,8 @@ import MyClassService from '@/api/service/MyClassService';
 import {getAllPromise} from '@/views/model/types';
 import MyClassListView from '@/views/class/classList/MyClassListView';
 import WithRender from './MyClassListPage.html';
+import {MYCLASS_HOME} from '@/store/action-class-types';
+import {CLASS_BASE_URL} from '@/api/base';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
@@ -64,8 +66,14 @@ export default class MyClassListPage extends Vue {
   @MyClass.Getter
   private myClassLists!: IMyClassList[];
 
+  @MyClass.Getter
+  private classID!: string | number;
+
   @MyClass.Action
   private MYCLASS_LIST_ACTION!: ()=> Promise<IMyClassList[]>;
+
+  @MyClass.Action
+  private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
   //end : 변수 선언부 ================================================
 
 
@@ -298,6 +306,12 @@ export default class MyClassListPage extends Vue {
 
   private moreClickEventHandler(): void {
     this.getMoreDisplay();
+  }
+
+  private gotoClassListDetailView( id: string | number ): void{
+       this.MYCLASS_HOME(id).then((data)=>{
+         this.$router.push({path: `${CLASS_BASE_URL}/${this.classID}`});
+       });
   }
 
 

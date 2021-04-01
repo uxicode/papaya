@@ -6,19 +6,21 @@ const MyClassRouter=[
   {
     path: '/',
     name: 'myClassList',
-    components: { default: () => import('../views/class/classList/MyClassListPage'), header: AppHeader, footer: AppFooter },
     beforeEnter: getIsAuth,
+    components: { default: () => import('@/views/class/classList/MyClassListPage'), header: AppHeader, footer: AppFooter },
   },
   {
-    path: '/class',
+    path: '/class/:classId',
     name: 'myClass',
-    components: {default: () => import('../views/class/home/MyClass'), header: AppHeader, footer: AppFooter},
     beforeEnter: getIsAuth,
+    components: {default: () => import('@/views/class/home/MyClass'), header: AppHeader, footer: AppFooter},
+    props: { default: true, header: false, footer: false }
   },
   {
     path: '/make-class',
     name: 'makeClass',
     components: {default: () => import('../views/class/make/MakeClassPage'), header: AppHeader, footer: AppFooter},
+    beforeEnter: getIsAuth,
     children: [
       {path: 'step1', name: 'makeClassOption', component: () => import('../views/class/make/step1/MakeClassOption')},
       {path: 'step2', name: 'makeClassForm', component: () => import('../views/class/make/step2/MakeClassForm')},
@@ -29,6 +31,7 @@ const MyClassRouter=[
     path: '/classSetting',
     name: 'classSetting',
     components: {default: () => import('../views/class/setting/ClassSetting'), header: AppHeader, footer: AppFooter},
+    beforeEnter: getIsAuth,
     children: [
       {path: '/', name: 'classSettingMain', component: () => import('../views/class/setting/classSettingMain/ClassSettingMain')},
       {path: 'classProfile', name: 'classProfile', component: () => import('../views/class/setting/classProfile/ClassProfile')},  // W.4.5.7.2 ~
@@ -44,6 +47,7 @@ const MyClassRouter=[
   {
     path: '/classWithdrawComplete',
     name: 'classWithdrawComplete',
+    beforeEnter: getIsAuth,
     components: {default: () => import('../views/class/setting/ClassWithdrawComplete'), header: AppHeader, footer: AppFooter}, // W.4.5.7.11.1.1
   }
 ];

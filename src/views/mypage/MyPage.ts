@@ -3,6 +3,12 @@ import MyProfile from '@/views/mypage/myProfile/MyProfile';
 import Bookmark from '@/views/mypage/bookmark/Bookmark';
 import WithRender from './MyPage.html';
 
+interface IPageListMenu{
+  title: string;
+  icon: string;
+  key: string;
+}
+
 @WithRender
 @Component({
     components:{
@@ -12,37 +18,37 @@ import WithRender from './MyPage.html';
 })
 
 export default class MyPage extends Vue {
-    private myPageList: any = [
-        {
-            title: 'myProfile',
-            isActive: false,
-        },
-        {
-            title: 'bookmark',
-            isActive: false
-        },
-    ];
 
-    public created() {
-        this.myPageList[0].isActive = true;
-    }
+  private activeNum: number = 0;
 
-    private gotoMyProfile(): void {
-        this.$router.push('/myProfile')
-            .then(() => {
-                console.log('MY프로필로 이동');
-                this.$emit('updatePage', '');
-                this.myPageList[1].isActive = false;
-                this.myPageList[0].isActive = true;
-            });
-    }
+  private myPageList: IPageListMenu[] = [
+    {
+      title: 'MY프로필',
+      icon: '@/assets/images/mypage.svg',
+      key:'myProfile',
+    },
+    {
+      title: '보관함',
+      icon: '@/assets/images/bookmark-outline.svg',
+      key:'bookmark',
+    },
+    {
+      title: '활동내역',
+      icon: '@/assets/images/history.svg',
+      key:'activity',
+    },
+  ];
 
-    private gotoBookmark(): void {
-        this.$router.push('/bookmark')
-            .then(() => {
-                console.log('보관함으로 이동');
-                this.myPageList[0].isActive = false;
-                this.myPageList[1].isActive = true;
-            });
-    }
+  get myPageListModel(): IPageListMenu[] {
+    return this.myPageList;
+  }
+
+  private gotoMyPageLink( idx: number ): void {
+    this.activeNum=idx;
+
+    this.$router.push('/' + this.myPageListModel[idx].key)
+      .then(() => {
+        console.log(this.myPageListModel[idx].key + '로 이동됨.');
+      });
+  }
 }
