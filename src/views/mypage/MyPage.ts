@@ -24,17 +24,17 @@ export default class MyPage extends Vue {
   private myPageList: IPageListMenu[] = [
     {
       title: 'MY프로필',
-      icon: '@/assets/images/mypage.svg',
+      icon: require('@/assets/images/mypage.svg'),
       key:'myProfile',
     },
     {
       title: '보관함',
-      icon: '@/assets/images/bookmark-outline.svg',
+      icon: require('@/assets/images/bookmark-outline.svg'),
       key:'bookmark',
     },
     {
       title: '활동내역',
-      icon: '@/assets/images/history.svg',
+      icon: require('@/assets/images/history.svg'),
       key:'activity',
     },
   ];
