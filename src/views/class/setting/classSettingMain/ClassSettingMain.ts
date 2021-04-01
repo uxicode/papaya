@@ -3,6 +3,11 @@ import WithRender from './ClassSettingMain.html';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 
+interface ISettingMenu {
+    title: string;
+    type: any;
+}
+
 @WithRender
 @Component({
     components:{
@@ -16,67 +21,80 @@ export default class ClassSettingMain extends Vue{
     private isJoinQnaSetting: boolean = false;
     private isWithdraw: boolean = false;
 
+    private classNotifyList: string[] = ['새 알림', '새 댓글', '일정'];
+    private classManageList: ISettingMenu[] = [
+        {
+            title: '클래스 기본 정보 관리',
+            type: 'classBasicInfo'
+        },
+        {
+            title: '클래스 태그 관리',
+            type: 'classTagManage'
+        },
+        {
+            title: '가입 안내 문구 설정',
+            type: 'guideTxtModal'
+        },
+        {
+            title: '가입 질문 설정',
+            type: 'joinQnaSettingModal'
+        },
+        {
+            title: '가입 현황 관리',
+            type: 'classJoinStatus'
+        }
+    ];
+    private memberManageList: ISettingMenu[] = [
+        {
+            title: '멤버 활동 관리',
+            type: 'classMemberManage'
+        },
+        {
+            title: '스탭 관리',
+            type: 'classStaffManage'
+        }
+    ];
+    private etcList: ISettingMenu[] = [
+        {
+            title: '운영자 위임 신청',
+            type: 'classAdminDelegate'
+        },
+        {
+            title: '클래스 탈퇴하기',
+            type: 'withdrawModal'
+        }
+    ];
+
+
     /**
-     * 클래스 프로필 설정 페이지 이동
+     * 각 설정 페이지 이동
+     * @param key
      * @private
      */
-    private gotoClassProfile(): void {
-        this.$router.push('classProfile')
-            .then();
+    private gotoLink(key: string): void {
+        this.$router.push(key)
+          .then(() => {
+              console.log(`${key}로 이동`);
+          });
     }
 
     /**
-     * 클래스 기본 정보 설정 페이지 이동
+     * 설정 Modal 열기
+     * @param key
      * @private
      */
-    private gotoClassBasicInfo(): void {
-        this.$router.push('classBasicInfo')
-            .then();
-    }
-
-    /**
-     * 클래스 태그 관리 페이지 이동
-     * @private
-     */
-    private gotoClassTagManage(): void {
-        this.$router.push('classTagManage')
-            .then();
-    }
-
-    /**
-     * 클래스 가입 현황 페이지 이동
-     * @private
-     */
-    private gotoClassJoinStatus(): void {
-        this.$router.push('classJoinStatus')
-            .then();
-    }
-
-    /**
-     * 클래스 멤버 관리 페이지 이동
-     * @private
-     */
-    private gotoClassMemberManage(): void {
-        this.$router.push('classMemberManage')
-            .then();
-    }
-
-    /**
-     * 클래스 스탭 관리 페이지 이동
-     * @private
-     */
-    private gotoClassStaffManage(): void {
-        this.$router.push('classStaffManage')
-            .then();
-    }
-
-    /**
-     * 클래스 운영자 위임 신청 페이지 이동
-     * @private
-     */
-    private gotoClassAdminDelegate(): void {
-        this.$router.push('classAdminDelegate')
-            .then();
+    private openModal(key: string): void {
+        switch(key) {
+            case 'guideTxtModal':
+                this.isGuideTxt = true;
+                break;
+            case 'joinQnaSettingModal':
+                this.isJoinQnaSetting = true;
+                break;
+            case 'withdrawModal':
+                this.isWithdraw = true;
+                break;
+        }
     }
 
     /**

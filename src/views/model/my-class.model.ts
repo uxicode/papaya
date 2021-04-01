@@ -402,4 +402,12 @@ interface IMakeClassInfo extends IMakeClassInfoBase{
     "message": "조회 성공"
 }*/
 
-export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList, ISearchSchool, IMakeClassInfo, IMakeClassInfoBase};
+interface INotiFlag {
+    onoff_push_noti: boolean;
+    onoff_post_noti: boolean;
+    onoff_comment_noti: boolean;
+    onoff_schedule_noti: boolean;
+    schedule_noti_intime: number;
+}
+
+export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList, ISearchSchool, IMakeClassInfo, IMakeClassInfoBase, INotiFlag};

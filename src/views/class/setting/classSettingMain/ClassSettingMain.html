@@ -14,7 +14,7 @@
                             <span class="position">운영자</span>
                         </div>
                         <div class="member-info-btn">
-                            <button type="button" class="btn only-ico-btn" @click="gotoClassProfile"><img :src="require('@/assets/images/settings.svg')" alt=""></button>
+                            <button type="button" class="btn only-ico-btn" @click="gotoLink('classProfile')"><img :src="require('@/assets/images/settings.svg')" alt=""></button>
                         </div>
                     </li>
                 </ul>
@@ -33,8 +33,10 @@
                         </div>
                     </li>
                     <!-- sub-list-item 에 클래스명 disabled추가 시 비활성화 -->
-                    <li class="list-item sub-list-item">
-                        <p class="list-tit">새 알림</p>
+                    <li v-for="(item, idx) in classNotifyList"
+                        :key="idx"
+                        class="list-item sub-list-item">
+                        <p class="list-tit">{{ item }}</p>
                         <div class="setting-btn">
                             <div class="member-info-btn">
                                 <div class="list-popup">
@@ -47,57 +49,19 @@
                             </div>
                         </div>
                     </li>
-                    <li class="list-item sub-list-item">
-                        <p class="list-tit">새 댓글</p>
-                        <div class="setting-btn">
-                            <div class="list-popup">
-                                <button type="button" class="list-popup-btn"><span>받지 않기</span><img :src="require('@/assets/images/arrow-right.svg')" alt="" style="width:18px; height:18px;"></button>
-                                <div class="list-popup-menu pos-right" style="transform:translate3d(87px, 0, 0);">
-                                    <a href="" class="list-popup-item">받기</a>
-                                    <a href="" class="list-popup-item">받지 않기</a>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-item sub-list-item">
-                        <p class="list-tit">일정</p>
-                        <div class="setting-btn">
-                            <div class="list-popup">
-                                <button type="button" class="list-popup-btn"><span>10분 전 받기</span><img :src="require('@/assets/images/arrow-right.svg')" alt="" style="width:18px; height:18px;"></button>
-                                <div class="list-popup-menu pos-right" style="transform:translate3d(87px, 0, 0);">
-                                    <a href="" class="list-popup-item">10분 전 받기</a>
-                                    <a href="" class="list-popup-item">30분 전 받기</a>
-                                    <a href="" class="list-popup-item">하루 전 받기</a>
-                                    <a href="" class="list-popup-item">받지 않기</a>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
                 </ul>
             </div>
 
             <div class="list-group">
                 <p class="list-tit">클래스 관리</p>
                 <ul class="setting-list">
-                    <li class="list-item">
-                        <a href=""  class="list-tit">클래스 기본 정보 관리</a>
-                        <button class="setting-btn" @click="gotoClassBasicInfo"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                    </li>
-                    <li class="list-item">
-                        <a href=""  class="list-tit">클래스 태그 관리</a>
-                        <button class="setting-btn" @click="gotoClassTagManage"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                    </li>
-                    <li class="list-item">
-                        <a href=""  class="list-tit">가입 안내 문구 설정</a>
-                        <button class="setting-btn" @click="isGuideTxt = true"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                    </li>
-                    <li class="list-item">
-                        <a href=""  class="list-tit">가입 질문 설정</a>
-                        <button class="setting-btn" @click="isJoinQnaSetting = true"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                    </li>
-                    <li class="list-item">
-                        <a href=""  class="list-tit">가입 현황 관리</a>
-                        <button class="setting-btn" @click="gotoClassJoinStatus"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
+                    <li v-for="(item, idx) in classManageList"
+                        :key="idx"
+                        class="list-item">
+                        <a href=""  class="list-tit">{{ item.title }}</a>
+                        <button class="setting-btn"
+                                @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
+                            <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                 </ul>
             </div>
@@ -105,13 +69,12 @@
             <div class="list-group">
                 <p class="list-tit">멤버 관리</p>
                 <ul class="setting-list">
-                    <li class="list-item">
-                        <a href=""  class="list-tit">멤버 활동 관리</a>
-                        <button class="setting-btn" @click="gotoClassMemberManage"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                    </li>
-                    <li class="list-item">
-                        <a href=""  class="list-tit">스탭 관리</a>
-                        <button class="setting-btn" @click="gotoClassStaffManage"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
+                    <li v-for="(item, idx) in memberManageList"
+                        :key="idx"
+                        class="list-item">
+                        <a href=""  class="list-tit">{{ item.title }}</a>
+                        <button class="setting-btn" @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
+                            <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                 </ul>
             </div>
@@ -119,13 +82,12 @@
             <div class="list-group">
                 <p class="list-tit">기타</p>
                 <ul class="setting-list">
-                    <li class="list-item">
-                        <a href=""  class="list-tit">운영자 위임 신청</a>
-                        <button class="setting-btn" @click="gotoClassAdminDelegate"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                    </li>
-                    <li class="list-item">
-                        <a href=""  class="list-tit">클래스 탈퇴하기</a>
-                        <button class="setting-btn" @click="isWithdraw = true"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
+                    <li v-for="(item, idx) in etcList"
+                        :key="idx"
+                        class="list-item">
+                        <a href=""  class="list-tit">{{ item.title }}</a>
+                        <button class="setting-btn" @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
+                            <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                 </ul>
             </div>
