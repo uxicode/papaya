@@ -1,9 +1,9 @@
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 import {INullable} from '@/views/model/types';
-import {IMyClassList, IPostList, IMakeClassInfo, IMakeClassInfoBase} from '@/views/model/my-class.model';
+import {IMyClassList, IPostList, IMakeClassInfo, IMakeClassInfoBase, IClassInfo} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
-import {MYCLASS_LIST, POST_LIST, CREATE_CLASS_LIST} from '@/store/mutation-class-types';
-import {MYCLASS_LIST_ACTION, POST_LIST_ACTION, MAKE_CLASS} from '@/store/action-class-types';
+import {MYCLASS_LIST, POST_LIST, CREATE_CLASS_LIST, SET_CLASS_ID, SET_MYCLASS_HOME_DATA} from '@/store/mutation-class-types';
+import {MYCLASS_LIST_ACTION, POST_LIST_ACTION, MAKE_CLASS, MYCLASS_HOME} from '@/store/action-class-types';
 
 
 @Module({
@@ -14,6 +14,33 @@ export default class ClassModule extends VuexModule {
     private classData: IMyClassList[]=[];
     private postData: IPostList[]=[];
     private count: number = 0;
+    private classId: string | number = 0;
+    private myClassHomeData: IClassInfo={
+        contents_updatedAt:new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        id:0,
+        code: '',
+        name:  '',
+        owner_id: 0,
+        owner_member_id:0,
+        board_id:0,
+        is_private: false,
+        image_url: '',
+        description: '',
+        startday:0,
+        endday:0,
+        g_type:0,
+        g_name:  '',
+        g_code:  '',
+        member_count: 0,
+        question_showYN: false,
+        deletedYN: false,
+        contents_updated_type: 0,
+        class_tags: [],
+        class_link:  '',
+    };
+
     private makeClassInfo: IMakeClassInfo={
         name:'',
         g_type:'',
@@ -31,7 +58,25 @@ export default class ClassModule extends VuexModule {
         return this.makeClassInfo;
     }
 
+    get classID(): string | number{
+        return this.classId;
+    }
+
+    get myClassHomeModel(): IClassInfo{
+        return this.myClassHomeData;
+    }
+
+    @Mutation
+    public [SET_MYCLASS_HOME_DATA]( info: IClassInfo ): void{
+        this.myClassHomeData=info;
+    }
+
     /* Mutations */
+    @Mutation
+    public [SET_CLASS_ID]( id: string | number ): void {
+        this.classId=id;
+    }
+
     @Mutation
     public [CREATE_CLASS_LIST]( infos: IMakeClassInfo ): void {
         this.makeClassInfo = {...this.makeClassInfo, ...infos};
@@ -94,5 +139,25 @@ export default class ClassModule extends VuexModule {
               console.log(error);
               return Promise.reject(error);
           });
+    }
+
+    @Action({rawError: true})
+    public [MYCLASS_HOME]( id: string | number ): Promise<any>{
+        this.context.commit(SET_CLASS_ID, id);
+
+        return MyClassService.getClassInfoById( id )
+          .then( (data)=>{
+              this.context.commit(SET_MYCLASS_HOME_DATA, data.classinfo);
+
+              console.log(this.myClassHomeModel);
+
+              return Promise.resolve(this.myClassHomeModel);
+          }).catch((error)=>{
+              console.log(error);
+              return Promise.reject(error);
+          });
+
+
+        // return this.$routers
     }
 }

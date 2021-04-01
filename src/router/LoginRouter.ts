@@ -7,7 +7,7 @@ const LoginRouter=[
     path: '/login',
     components: {default: Login, header: SignInHeader, footer: SignInFooter},
     children: [
-      {path: '', name: 'loginForm', component: () => import('../views/login/loginForm/LoginForm')},
+      {path: '/', name: 'loginForm', component: () => import('../views/login/loginForm/LoginForm')},
       {
         path: 'findId',
         component: () => import('../views/login/account/IdPwContainer'),

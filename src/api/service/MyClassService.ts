@@ -11,7 +11,7 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/me/all`);
     }
 
-    public getClassInfoById( id: number | string ): Promise<IClassInfo>{
+    public getClassInfoById( id: number | string ): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${id}`);
     }
 

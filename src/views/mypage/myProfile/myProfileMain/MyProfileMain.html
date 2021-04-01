@@ -86,13 +86,13 @@
 
     <transition name="modal">
         <!-- start: 이름 수정 팝업 -->
-        <modal v-if="isNameModifyModal" size="540px" body-padding="0">
+        <modal v-if="isModifyNameModal" size="540px" body-padding="0">
             <div slot="header">
                 <div class="popup-icon">
                     <img :src="require('@/assets/images/popup-icon-profile.svg')">
                 </div>
                 <div class="popup-close">
-                    <button class="close" @click="isNameModifyModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    <button class="close" @click="isModifyNameModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
             <div slot="body">
@@ -107,7 +107,7 @@
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isNameModifyModal = false; tempData = myInfo.fullname">취소</btn>
+                    <btn type="outline" @btnClick="isModifyNameModal = false; tempData = myInfo.fullname">취소</btn>
                     <btn type="navi" @btnClick="modifyName(tempData);">변경하기</btn>
                 </div>
             </div>
@@ -115,13 +115,13 @@
         <!-- end: 이름 수정 팝업 -->
 
         <!-- start: 이메일 수정 팝업 -->
-        <modal v-else-if="isEmailModifyModal" size="540px" body-padding="0">
+        <modal v-else-if="isModifyEmailModal" size="540px" body-padding="0">
             <div slot="header">
                 <div class="popup-icon">
                     <img :src="require('@/assets/images/popup-icon-profile.svg')">
                 </div>
                 <div class="popup-close">
-                    <button class="close" @click="isEmailModifyModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    <button class="close" @click="isModifyEmailModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
             <div slot="body">
@@ -136,7 +136,7 @@
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isEmailModifyModal = false">취소</btn>
+                    <btn type="outline" @btnClick="isModifyEmailModal = false">취소</btn>
                     <btn type="navi" @btnClick="modifyEmail(tempData)">변경하기</btn>
                 </div>
             </div>

@@ -2,6 +2,7 @@ import {Component, Vue, Prop} from 'vue-property-decorator';
 import {IClassMember, IMyClassList} from '@/views/model/my-class.model';
 import Btn from '@/components/button/Btn.vue';
 import {Utils} from '@/utils/utils';
+import {CLASS_BASE_URL} from '@/api/base';
 import WithRender from './MyClassListView.html';
 
 @WithRender
@@ -161,6 +162,10 @@ export default class MyClassListView extends Vue{
     this.$router.push('/make-class/step1').then(()=>{
       console.log('step1');
     });
+  }
+
+  private gotoClassClickHandler( id: string | number): void{
+    this.$emit('listClick', id);
   }
 
 }

@@ -38,7 +38,7 @@
 
         </div>
       </section>-->
-      <side-menu></side-menu>
+      <side-menu :active-num="activeMenuNum" @sideClick="update"></side-menu>
 
       <transition name="slide-out" mode="out-in">
         <router-view></router-view>

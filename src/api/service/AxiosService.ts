@@ -3,7 +3,7 @@ import router from '@/router';
 import store from '@/store';
 import {LOGOUT} from '@/store/mutation-auth-types';
 
-axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
+axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
 /**
  * request interceptor
  */
