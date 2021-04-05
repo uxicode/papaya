@@ -1,41 +1,7 @@
 <div class="contents">
     <div class="contents-inner">
         <div class="contents-group">
-            <section class="contents-left">
-                <div class="class-home">
-                    <div class="class-home-info">
-                        <div class="info-img">
-                            <img :src="require('@/assets/images/bg-icon.png')" alt="">
-                            <a href="" class="img-change"><img :src="require('@/assets/images/btn-round 2.png')" alt=""></a>
-                        </div>
-                        <div class="info-txt">
-                            <p class="info-cn">꿈꾸는 5학년 1반</p>
-                            <span class="info-or">파파야초등학교</span>
-                            <ul class="info-list">
-                                <li>2019</li>
-                                <li>비공개클래스</li>
-                                <li><a href="">멤버 2122</a></li>
-                            </ul>
-                            <p class="info-tag">
-                                #꿈꾸는아이들 #파파야초등학교 #재미있는 #파파야 #어드벤처
-                            </p>
-                        </div>
-                        <div class="class-bookmark">
-                            <a type="button" class="btn ico-btn ico-left active"><span class="icon heart"></span>즐겨찾기</a>
-                        </div>
-                    </div>
-                    <div class="class-menu">
-                        <ul class="menu-list">
-                            <li><a href="" class="type1">클래스 홈</a></li>
-                            <li><a href="" class="type2">알림</a></li>
-                            <li><a href="" class="type3 active">일정</a></li>
-                            <li><a href="" class="type4">파일함</a></li>
-                            <li><a href="" class="type5">교육과정</a></li>
-                            <li><a href="" class="type6">클래스 설정</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+            <side-menu></side-menu>
             <section class="contents-right">
                 <div class="classes-curriculum">
                     <div class="cnt-top">
@@ -174,7 +140,7 @@
                         </div>
 
                         <div class="curriculum-add">
-                            <a href="" class="curriculum-add-btn"></a>
+                            <button class="curriculum-add-btn" @click="isCreateClass = true"></button>
                         </div>
                     </div>
                 </div>
@@ -183,278 +149,212 @@
     </div>
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.5.1 (교육과정 만들기) (4.5.5.1 ~ 4.5.5.1.1)-->
-    <modal v-if="false">
-        <div slot="header">
-            <!-- header custom coding-->
-            <p class="popup-header-tit">새 교육과정 등록</p>
-            <div class="popup-close">
-                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-            </div>
-        </div>
-        <div slot="body">
-            <!-- body custom coding-->
-            <div class="popup-form">
-                <div class="popup-form-top">
-                    <div class="form-item post-classes selected"> <!-- class 선택 시 form-item에 selected 추가됨 -->
-                        <p>
-                            <span class="icon"><img :src="require('@/assets/images/bg-icon.png')" class="icon-img" alt=""></span>
-                            <span class="gr-name">파파야초등학교</span>
-                            <strong class="cls-name">꿈꾸는 5학년 1반</strong>
-                        </p>
-                    </div>
-                    <div class="form-item">
-                        <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">
-                    </div>
+    <transition name="modal">
+        <modal v-if="isCreateClass" size="600px" body-padding="0">
+            <div slot="header">
+                <!-- header custom coding-->
+                <p class="popup-header-tit">새 교육과정 등록</p>
+                <div class="popup-close">
+                    <button class="close" @click="isCreateClass = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
-                <div class="popup-form-cnt">
-                    <div class="form-item post-cnt" style="height:154px;">
-                        <textarea class="form-textarea" placeholder="일정 내용을 작성해 주세요."></textarea>
+            </div>
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-form">
+                    <div class="popup-form-top">
+                        <div class="form-item post-classes selected"> <!-- class 선택 시 form-item에 selected 추가됨 -->
+                            <p>
+                                <span class="icon"><img :src="require('@/assets/images/bg-icon.png')" class="icon-img" alt=""></span>
+                                <span class="gr-name">파파야초등학교</span>
+                                <strong class="cls-name">꿈꾸는 5학년 1반</strong>
+                            </p>
+                        </div>
+                        <div class="form-item">
+                            <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">
+                        </div>
                     </div>
+                    <div class="popup-form-cnt">
+                        <div class="form-item post-cnt" style="height:154px;">
+                            <textarea class="form-textarea" placeholder="일정 내용을 작성해 주세요."></textarea>
+                        </div>
 
-                    <div class="add-curriculum bd-top">
-                        <p class="tit">수업 설정</p>
-                        <div class="scroll-body" style="height:174px;">
-                            <div class="add-curr-item">
-                                <p class="add-curr-tit">수업 회차</p>
-                                <div class="form-box">
-                                    <div class="form-group">
-                                        <input type="number" class="form-control" value="10">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="add-curr-item">
-                                <p class="add-curr-tit">1 회차</p>
-                                <input type="text" class="form-control popup-type sm" value="새 교육과정 1" style="width:400px;">
-                                <div class="form-box">
-                                    <div class="list-popup">
-                                        <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                        <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
-                                            <a href="" class="list-popup-item">list1</a>
-                                            <a href="" class="list-popup-item">list2</a>
-                                            <a href="" class="list-popup-item">list3</a>
+                        <div class="add-curriculum bd-top">
+                            <p class="tit">수업 설정</p>
+                            <div class="scroll-body" style="height:174px;">
+                                <div class="add-curr-item">
+                                    <p class="add-curr-tit">수업 회차</p>
+                                    <div class="form-box">
+                                        <div class="form-group">
+                                            <input type="number" class="form-control" value="10">
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="add-curr-item">
-                                <p class="add-curr-tit">2 회차</p>
-                                <input type="text" class="form-control popup-type sm" value="새 교육과정 2" style="width:400px;">
-                                <div class="form-box">
-                                    <div class="list-popup">
-                                        <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                        <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
-                                            <a href="" class="list-popup-item">list1</a>
-                                            <a href="" class="list-popup-item">list2</a>
-                                            <a href="" class="list-popup-item">list3</a>
-                                        </div>
+                                <div class="add-curr-item">
+                                    <p class="add-curr-tit">1 회차</p>
+                                    <input type="text" class="form-control popup-type sm" value="새 교육과정 1" style="width:400px;">
+                                    <div class="form-box">
+                                        <button type="button" @click="isClassCurr = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="add-curr-item">
-                                <p class="add-curr-tit">3 회차</p>
-                                <input type="text" class="form-control popup-type sm" value="새 교육과정 3" style="width:400px;">
-                                <div class="form-box">
-                                    <div class="list-popup">
-                                        <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                        <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
-                                            <a href="" class="list-popup-item">list1</a>
-                                            <a href="" class="list-popup-item">list2</a>
-                                            <a href="" class="list-popup-item">list3</a>
-                                        </div>
+                                <div class="add-curr-item">
+                                    <p class="add-curr-tit">2 회차</p>
+                                    <input type="text" class="form-control popup-type sm" value="새 교육과정 2" style="width:400px;">
+                                    <div class="form-box">
+                                        <button type="button" @click="isClassCurr = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="add-curr-item">
-                                <p class="add-curr-tit">4 회차</p>
-                                <input type="text" class="form-control popup-type sm" value="새 교육과정 4" style="width:400px;">
-                                <div class="form-box">
-                                    <div class="list-popup">
-                                        <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                        <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
-                                            <a href="" class="list-popup-item">list1</a>
-                                            <a href="" class="list-popup-item">list2</a>
-                                            <a href="" class="list-popup-item">list3</a>
-                                        </div>
+                                <div class="add-curr-item">
+                                    <p class="add-curr-tit">3 회차</p>
+                                    <input type="text" class="form-control popup-type sm" value="새 교육과정 3" style="width:400px;">
+                                    <div class="form-box">
+                                        <button type="button" @click="isClassCurr = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="add-curr-item">
-                                <p class="add-curr-tit">5 회차</p>
-                                <input type="text" class="form-control popup-type sm" value="새 교육과정 5" style="width:400px;">
-                                <div class="form-box">
-                                    <div class="list-popup">
-                                        <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                        <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
-                                            <a href="" class="list-popup-item">list1</a>
-                                            <a href="" class="list-popup-item">list2</a>
-                                            <a href="" class="list-popup-item">list3</a>
-                                        </div>
+                                <div class="add-curr-item">
+                                    <p class="add-curr-tit">4 회차</p>
+                                    <input type="text" class="form-control popup-type sm" value="새 교육과정 4" style="width:400px;">
+                                    <div class="form-box">
+                                        <button type="button" @click="isClassCurr = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="add-curr-item">
-                                <p class="add-curr-tit">6 회차</p>
-                                <input type="text" class="form-control popup-type sm" value="새 교육과정 6" style="width:400px;">
-                                <div class="form-box">
-                                    <div class="list-popup">
-                                        <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                        <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
-                                            <a href="" class="list-popup-item">list1</a>
-                                            <a href="" class="list-popup-item">list2</a>
-                                            <a href="" class="list-popup-item">list3</a>
-                                        </div>
+                                <div class="add-curr-item">
+                                    <p class="add-curr-tit">5 회차</p>
+                                    <input type="text" class="form-control popup-type sm" value="새 교육과정 5" style="width:400px;">
+                                    <div class="form-box">
+                                        <button type="button" @click="isClassCurr = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="add-curr-item">
-                                <p class="add-curr-tit">7 회차</p>
-                                <input type="text" class="form-control popup-type sm" value="새 교육과정 7" style="width:400px;">
-                                <div class="form-box">
-                                    <div class="list-popup">
-                                        <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                        <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
-                                            <a href="" class="list-popup-item">list1</a>
-                                            <a href="" class="list-popup-item">list2</a>
-                                            <a href="" class="list-popup-item">list3</a>
-                                        </div>
+                                <div class="add-curr-item">
+                                    <p class="add-curr-tit">6 회차</p>
+                                    <input type="text" class="form-control popup-type sm" value="새 교육과정 6" style="width:400px;">
+                                    <div class="form-box">
+                                        <button type="button" @click="isClassCurr = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="add-curr-item">
-                                <p class="add-curr-tit">8 회차</p>
-                                <input type="text" class="form-control popup-type sm" value="새 교육과정 8" style="width:400px;">
-                                <div class="form-box">
-                                    <div class="list-popup">
-                                        <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                        <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
-                                            <a href="" class="list-popup-item">list1</a>
-                                            <a href="" class="list-popup-item">list2</a>
-                                            <a href="" class="list-popup-item">list3</a>
-                                        </div>
+                                <div class="add-curr-item">
+                                    <p class="add-curr-tit">7 회차</p>
+                                    <input type="text" class="form-control popup-type sm" value="새 교육과정 7" style="width:400px;">
+                                    <div class="form-box">
+                                        <button type="button" @click="isClassCurr = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="add-curr-item">
-                                <p class="add-curr-tit">9 회차</p>
-                                <input type="text" class="form-control popup-type sm" value="새 교육과정 9" style="width:400px;">
-                                <div class="form-box">
-                                    <div class="list-popup">
-                                        <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                        <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
-                                            <a href="" class="list-popup-item">list1</a>
-                                            <a href="" class="list-popup-item">list2</a>
-                                            <a href="" class="list-popup-item">list3</a>
-                                        </div>
+                                <div class="add-curr-item">
+                                    <p class="add-curr-tit">8 회차</p>
+                                    <input type="text" class="form-control popup-type sm" value="새 교육과정 8" style="width:400px;">
+                                    <div class="form-box">
+                                        <button type="button" @click="isClassCurr = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="add-curr-item">
-                                <p class="add-curr-tit">10 회차</p>
-                                <input type="text" class="form-control popup-type sm" value="새 교육과정 10" style="width:400px;">
-                                <div class="form-box">
-                                    <div class="list-popup">
-                                        <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                        <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
-                                            <a href="" class="list-popup-item">list1</a>
-                                            <a href="" class="list-popup-item">list2</a>
-                                            <a href="" class="list-popup-item">list3</a>
-                                        </div>
+                                <div class="add-curr-item">
+                                    <p class="add-curr-tit">9 회차</p>
+                                    <input type="text" class="form-control popup-type sm" value="새 교육과정 9" style="width:400px;">
+                                    <div class="form-box">
+                                        <button type="button" @click="isClassCurr = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                    </div>
+                                </div>
+                                <div class="add-curr-item">
+                                    <p class="add-curr-tit">10 회차</p>
+                                    <input type="text" class="form-control popup-type sm" value="새 교육과정 10" style="width:400px;">
+                                    <div class="form-box">
+                                        <button type="button" @click="isClassCurr = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="popup-form-btm">
-                    <div class="form-add-btn">
-                        <div class="form-temp-save"><a href="" class="txt-btn">임시저장</a></div>
+                    <div class="popup-form-btm">
+                        <div class="form-add-btn">
+                            <div class="form-temp-save"><a href="" class="txt-btn">임시저장</a></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div slot="footer">
-            <!-- footer custom coding-->
-            <div class="btn-group rt">
-                <button type="button" class="btn primary navi" disabled>등록</button>
+            <div slot="footer">
+                <!-- footer custom coding-->
+                <div class="btn-group rt">
+                    <button type="button" class="btn primary navi" disabled>등록</button>
+                </div>
             </div>
-        </div>
-    </modal>
+        </modal>
+    </transition>
     <!-- end: 공통 팝업 -->
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.5.2 (교육과정 만들기 - 수업내용입력) (4.5.5.2 ~ 4.5.5.2.2) -->
-    <modal v-if="true">
-        <div slot="header">
-            <!-- header custom coding-->
-            <div class="popup-icon edu"></div>
-            <div class="popup-close">
-                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-            </div>
-        </div>
-        <div slot="body">
-            <!-- body custom coding-->
-            <div class="popup-cnt">
-                <p class="popup-txt type2">교육과정</p>
-                <h2 class="popup-tit pdb-0">1 회차 수업</h2>
-            </div>
-
-            <div class="popup-form">
-                <div class="popup-form-top">
-                    <div class="form-item">
-                        <input type="text" class="form-control popup-type" placeholder="수업 제목을 20자 이내로 작성해 주세요.">
-                    </div>
+    <transition name="modal">
+        <modal v-if="isClassCurr" size="540px" body-padding="0">
+            <div slot="header">
+                <!-- header custom coding-->
+                <div class="popup-icon edu"></div>
+                <div class="popup-close">
+                    <button class="close" @click="isClassCurr = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
-                <div class="popup-form-cnt">
-                    <div class="form-item">
-                        <p>수업 날짜</p>
-                        <div class="form-box">
-                            <div class="form-group date">
-                                <input type="text" class="form-control" size="10" value="2020. 2. 28">
-                                <span class="date-area">2020. 2. 28</span>
-                                <button type="button" class="btn form-btn form-calendar"></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-item">
-                        <p>수업 시작 시간</p>
-                        <div class="form-box">
-                            <div class="form-group time">
-                                <input type="text" class="time-control no-time" size="8" value="시간 없음">
-                                <button type="button" class="btn form-btn form-time"></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-item">
-                        <p>수업 종료 시간</p>
-                        <div class="form-box">
-                            <div class="form-group time">
-                                <input type="text" class="time-control no-time" size="8" value="시간 없음">
-                                <button type="button" class="btn form-btn form-time"></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-item post-cnt" style="height:120px;">
-                        <textarea class="form-textarea" placeholder="수업 내용을 100자 이내로 작성해 주세요."></textarea>
-                    </div>
+            </div>
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-cnt">
+                    <p class="popup-txt type2">교육과정</p>
+                    <h2 class="popup-tit pdb-0">1 회차 수업</h2>
                 </div>
 
-                <div class="popup-form-btm">
-                    <div class="form-add-btn">
-                        <ul class="clearfix">
-                            <li><a href=""><img :src="require('@/assets/images/image.svg')" alt=""></a></li>
-                            <li><a href=""><img :src="require('@/assets/images/file.svg')" alt=""></a></li>
-                        </ul>
+                <div class="popup-form">
+                    <div class="popup-form-top">
+                        <div class="form-item">
+                            <input type="text" class="form-control popup-type" placeholder="수업 제목을 20자 이내로 작성해 주세요.">
+                        </div>
+                    </div>
+                    <div class="popup-form-cnt">
+                        <div class="form-item">
+                            <p>수업 날짜</p>
+                            <div class="form-box">
+                                <div class="form-group date">
+                                    <input type="text" class="form-control" size="10" value="2020. 2. 28">
+                                    <span class="date-area">2020. 2. 28</span>
+                                    <button type="button" class="btn form-btn form-calendar"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-item">
+                            <p>수업 시작 시간</p>
+                            <div class="form-box">
+                                <div class="form-group time">
+                                    <input type="text" class="time-control no-time" size="8" value="시간 없음">
+                                    <button type="button" class="btn form-btn form-time"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-item">
+                            <p>수업 종료 시간</p>
+                            <div class="form-box">
+                                <div class="form-group time">
+                                    <input type="text" class="time-control no-time" size="8" value="시간 없음">
+                                    <button type="button" class="btn form-btn form-time"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-item post-cnt" style="height:120px;">
+                            <textarea class="form-textarea" placeholder="수업 내용을 100자 이내로 작성해 주세요."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="popup-form-btm">
+                        <div class="form-add-btn">
+                            <ul class="clearfix">
+                                <li><a href=""><img :src="require('@/assets/images/image.svg')" alt=""></a></li>
+                                <li><a href=""><img :src="require('@/assets/images/file.svg')" alt=""></a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div slot="footer">
-            <!-- footer custom coding-->
-            <div class="btn-group rt">
-                <button type="button" class="btn primary navi" disabled>완료</button>
+            <div slot="footer">
+                <!-- footer custom coding-->
+                <div class="btn-group rt">
+                    <button type="button" class="btn primary navi" disabled>완료</button>
+                </div>
             </div>
-        </div>
-    </modal>
+        </modal>
+    </transition>
     <!-- end: 공통 팝업 -->
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.5.3 (교육과정 - 상세) -->
