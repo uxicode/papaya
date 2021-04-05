@@ -11,9 +11,9 @@ const MyClassRouter=[
   },
   {
     path: '/class/:classId',
-    name: 'myClass',
+    name: 'myClassListDetailPage',
     beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/home/MyClass'), header: AppHeader, footer: AppFooter},
+    components: {default: () => import('@/views/class/home/MyClassListDetailPage'), header: AppHeader, footer: AppFooter},
     props: { default: true, header: false, footer: false }
   },
   {

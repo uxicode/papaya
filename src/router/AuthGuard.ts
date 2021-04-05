@@ -13,7 +13,7 @@ const getIsAuth = (to: Route, from: Route, next: NavigationGuardNext): void => {
   // console.log(to.path);
   const loginPath: string = `/login?rqPath=${encodeURIComponent(to.path)}`;
   // console.log(store.getters['Auth/isAuth']);
-  if (store.getters['Auth/isAuth']) {
+  if ( store.getters['Auth/isAuth']) {
     next();
   } else {
     //로그인 페이지라고 저장해둠.

@@ -43,6 +43,28 @@ class MyClassService {
     public setMakeClass( info: IMakeClassInfo ): Promise<any>{
         return request('post', `${CLASS_BASE_URL}`, info );
     }
+
+    /**
+     * profile image 등록
+     * @param classId
+     * @param file
+     */
+    public setUploadProfileImg( classId: string | number, file: any ): Promise<any>{
+        return request('upload', `/upload/class/${classId}/banner`, file );
+    }
+
+    public getAllScheduleByClassId(classId: string | number, pageNum: number, count: number = 5): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/schedule`, {page_no:pageNum, count});
+    }
+
+    public getAllPostsByClassId(classId: string | number, pageNum: number, count: number = 5): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/posts`, {page_no:pageNum, count});
+    }
+
+    public getAllCurriculumByClassId(classId: string | number, pageNum: number, count: number = 5): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/curriculum`, {page_no:pageNum, count});
+    }
+
 }
 
 export default new MyClassService();
