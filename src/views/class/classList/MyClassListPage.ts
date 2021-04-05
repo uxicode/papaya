@@ -97,7 +97,7 @@ export default class MyClassListPage extends Vue {
 
  //start : public ================================================
   public created() {
-    console.log( this.dummyData );
+    // console.log( this.dummyData );
     this.getMyClass();
   }
 
@@ -254,6 +254,7 @@ export default class MyClassListPage extends Vue {
    */
   private getDataByMemberRange( promiseItems: any[] ){
     // console.log('third');
+    //Promise.all 의 타입버전
     getAllPromise( promiseItems ).then( ( data: any )=>{
       // console.log(data.length);
       //member_count ( 멤버수 )/ is_private ( 공개/비공개 )
@@ -308,9 +309,14 @@ export default class MyClassListPage extends Vue {
     this.getMoreDisplay();
   }
 
+  /**
+   * 클래스 홈 ( 디테일 페이지 ) 보기
+   * @param id - store 에 저장된 class id
+   * @private
+   */
   private gotoClassListDetailView( id: string | number ): void{
        this.MYCLASS_HOME(id).then((data)=>{
-         this.$router.push({path: `${CLASS_BASE_URL}/${this.classID}`});
+         this.$router.push({path: `${CLASS_BASE_URL}/${id}`});
        });
   }
 

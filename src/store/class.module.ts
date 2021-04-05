@@ -2,7 +2,7 @@ import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 import {INullable} from '@/views/model/types';
 import {IMyClassList, IPostList, IMakeClassInfo, IMakeClassInfoBase, IClassInfo} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
-import {MYCLASS_LIST, POST_LIST, CREATE_CLASS_LIST, SET_CLASS_ID, SET_MYCLASS_HOME_DATA} from '@/store/mutation-class-types';
+import {MYCLASS_LIST, POST_LIST, CREATE_CLASS_LIST, SET_CLASS_ID, SET_MYCLASS_HOME_DATA, REMOVE_CLASS_DATA} from '@/store/mutation-class-types';
 import {MYCLASS_LIST_ACTION, POST_LIST_ACTION, MAKE_CLASS, MYCLASS_HOME} from '@/store/action-class-types';
 
 
@@ -14,7 +14,7 @@ export default class ClassModule extends VuexModule {
     private classData: IMyClassList[]=[];
     private postData: IPostList[]=[];
     private count: number = 0;
-    private classId: string | number = 0;
+    private classId: number = 0;
     private myClassHomeData: IClassInfo={
         contents_updatedAt:new Date(),
         createdAt: new Date(),
@@ -58,23 +58,25 @@ export default class ClassModule extends VuexModule {
         return this.makeClassInfo;
     }
 
-    get classID(): string | number{
-        return this.classId;
+    get classID(): string | null | number{
+        return (  localStorage.getItem('classId') !==null )? localStorage.getItem('classId') : this.classId;
     }
 
-    get myClassHomeModel(): IClassInfo{
-        return this.myClassHomeData;
+    get myClassHomeModel(): IClassInfo {
+        return (!this.myClassHomeData)? this.myClassHomeData : JSON.parse( localStorage.getItem('homeData') as string );
     }
 
     @Mutation
     public [SET_MYCLASS_HOME_DATA]( info: IClassInfo ): void{
         this.myClassHomeData=info;
+        localStorage.setItem('homeData', JSON.stringify(this.myClassHomeData) );
     }
 
     /* Mutations */
     @Mutation
-    public [SET_CLASS_ID]( id: string | number ): void {
+    public [SET_CLASS_ID]( id: number ): void {
         this.classId=id;
+        localStorage.setItem('classId', String(this.classId) );
     }
 
     @Mutation
@@ -98,6 +100,17 @@ export default class ClassModule extends VuexModule {
         // console.log(this.postData);
         localStorage.setItem('postData', JSON.stringify(this.postData) );
         this.count++;
+    }
+
+    @Mutation
+    public [REMOVE_CLASS_DATA](): void{
+        console.log('클래스 데이터 제거');
+        localStorage.removeItem('homeData');
+        localStorage.removeItem('classData');
+        localStorage.removeItem('classId');
+        this.classData=[];
+        this.postData=[];
+        this.classId=0;
     }
 
     /* Actions */
