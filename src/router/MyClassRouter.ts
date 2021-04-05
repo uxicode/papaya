@@ -54,7 +54,7 @@ const MyClassRouter=[
   {
     path: '/classEducation',
     name: 'classEducation',
-    components: {default: () => import('../views/class/education/ClassEducationPage'), header: AppHeader, footer: AppFooter},
+    components: {default: () => import('../views/class/education/ClassEducation'), header: AppHeader, footer: AppFooter},
     beforeEnter: getIsAuth,
   },
 ];

@@ -961,7 +961,7 @@
   }
 
   .curriculum-add {
-    @include pos-abs($right:10%, $bottom:35%);
+    @include pos-abs($right:-10%, $bottom:35%);
 
     &-btn {
       display:block;
