@@ -9,24 +9,8 @@ import {
     IClassMemberInfo
 } from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
-import {MYCLASS_LIST, POST_LIST, CREATE_CLASS_LIST, SET_CLASS_ID, SET_MYCLASS_HOME_DATA, REMOVE_CLASS_DATA} from '@/store/mutation-class-types';
-import {MYCLASS_LIST_ACTION, POST_LIST_ACTION, MAKE_CLASS, MYCLASS_HOME} from '@/store/action-class-types';
-import {
-    MYCLASS_LIST,
-    POST_LIST,
-    CREATE_CLASS_LIST,
-    SET_CLASS_ID,
-    SET_MYCLASS_HOME_DATA,
-    CLASS_MEMBER_INFO, SET_MEMBER_ID
-} from '@/store/mutation-class-types';
-import {
-    MYCLASS_LIST_ACTION,
-    POST_LIST_ACTION,
-    MAKE_CLASS,
-    MYCLASS_HOME,
-    CLASS_MEMBER_INFO_ACTION, MODIFY_CLASS_MEMBER_INFO
-} from '@/store/action-class-types';
-
+import {MYCLASS_LIST, POST_LIST, CREATE_CLASS_LIST, SET_CLASS_ID, SET_MYCLASS_HOME_DATA, REMOVE_CLASS_DATA, CLASS_MEMBER_INFO, SET_MEMBER_ID} from '@/store/mutation-class-types';
+import {MYCLASS_LIST_ACTION, POST_LIST_ACTION, MAKE_CLASS, MYCLASS_HOME, CLASS_MEMBER_INFO_ACTION, MODIFY_CLASS_MEMBER_INFO} from '@/store/action-class-types';
 
 @Module({
     namespaced: true,
@@ -127,7 +111,7 @@ export default class ClassModule extends VuexModule {
     }
 
     @Mutation
-    public [SET_MEMBER_ID](memberId: string | number): void {
+    public [SET_MEMBER_ID](memberId: number): void {
         this.memberId = memberId;
     }
 
