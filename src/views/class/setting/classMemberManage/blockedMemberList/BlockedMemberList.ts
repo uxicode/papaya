@@ -13,7 +13,6 @@ import WithRender from './BlockedMemberList.html';
 
 export default class BlockedMemberList extends Vue {
     private goBack(): void {
-        this.$router.push('/classSetting/classMemberManage')
-            .then();
+        this.$router.go(-1);
     }
 }

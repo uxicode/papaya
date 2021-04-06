@@ -140,7 +140,7 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private gotoLink(key: string): void {
-        this.$router.push(`${key}`)
+        this.$router.push(`./${key}`)
           .then(() => {
               console.log(`${key}로 이동`);
           });
