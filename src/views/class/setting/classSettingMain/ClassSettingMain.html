@@ -10,8 +10,8 @@
                 <ul class="member-list">
                     <li class="list-item">
                         <div class="member-info admin">
-                            <p class="name">김지영선생님</p>
-                            <span class="position">운영자</span>
+                            <p class="name">{{ classMemberInfo.member_info.nickname }}</p>
+                            <span class="position">{{ memberLevel(classMemberInfo.member_info.level) }}</span>
                         </div>
                         <div class="member-info-btn">
                             <button type="button" class="btn only-ico-btn" @click="gotoLink('classProfile')"><img :src="require('@/assets/images/settings.svg')" alt=""></button>
@@ -27,7 +27,7 @@
                         <p class="list-tit">푸시 알림 설정</p>
                         <div class="setting-btn">
                             <div class="form-switcher">
-                                <input type="checkbox" id="push" checked>
+                                <input type="checkbox" id="push" v-model="notiFlag.onoff_push_noti" @change="pushToggle($event, $event.target.value)">
                                 <label for="push"></label>
                             </div>
                         </div>
@@ -35,15 +35,16 @@
                     <!-- sub-list-item 에 클래스명 disabled추가 시 비활성화 -->
                     <li v-for="(item, idx) in classNotifyList"
                         :key="idx"
-                        class="list-item sub-list-item">
-                        <p class="list-tit">{{ item }}</p>
+                        class="list-item sub-list-item"
+                        :class="{'disabled': !notiFlag.onoff_push_noti}">
+                        <p class="list-tit">{{ item.listTit }}</p>
                         <div class="setting-btn">
                             <div class="member-info-btn">
                                 <div class="list-popup">
-                                    <button type="button" class="list-popup-btn"><span>받지 않기</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
-                                    <div class="list-popup-menu pos-right active" style="transform:translate3d(87px, 0, 0);">
-                                        <a href="" class="list-popup-item">받기</a>
-                                        <a href="" class="list-popup-item active">받지 않기</a>
+                                    <button type="button" class="list-popup-btn" @click="item.isActive = !item.isActive"><span>받지 않기</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                    <div class="list-popup-menu pos-right" :class="{'active': item.isActive}" style="transform:translate3d(87px, 0, 0);">
+                                        <button class="list-popup-item" value="0" @click>받기</button>
+                                        <button class="list-popup-item active" value="1" @click>받지 않기</button>
                                     </div>
                                 </div>
                             </div>

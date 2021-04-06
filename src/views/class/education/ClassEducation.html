@@ -1,7 +1,8 @@
 <div class="contents">
     <div class="contents-inner">
         <div class="contents-group">
-            <side-menu :active-num="activeMenuNum"></side-menu>
+            <side-menu :active-num="activeNum"></side-menu>
+
             <section class="contents-right">
                 <div class="classes-curriculum">
                     <div class="cnt-top">
@@ -10,88 +11,6 @@
 
                     <div class="curriculum-list clearfix">
                         <div class="list-group">
-                            <div class="curr-item">
-                                <div class="fd-head">
-                                    <p class="fd-tit">5학년 2학기 수학 교육과정</p>
-                                    <div class="fd-writer type2">
-                                        <p class="writer">
-                                            <span class="name crown">김미영선생님</span>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="fd-cnt">
-                                    <p class="fd-txt">요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요.</p>
-                                    <p class="fd-txt">거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.</p>
-                                </div>
-                                <div class="fd-foot">
-                                    <p class="en-count">총 5회차 수업 등록</p>
-                                    <div class="fd-btn">
-                                        <button type="button" @click="isClassCurrDetail = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="curr-item">
-                                <div class="fd-head">
-                                    <p class="fd-tit">일이삼사오육칠팔구십일이삼사오육칠팔구십</p>
-                                    <div class="fd-writer type2">
-                                        <p class="writer">
-                                            <span class="name">김경희선생님</span>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="fd-cnt">
-                                    <p class="fd-txt">요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요.</p>
-                                    <p class="fd-txt">거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.</p>
-                                    <p class="fd-txt">스쿨수학에 서 빼놓을수 없는 부분인데거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에… 빼놓을수 없는 부분인데요.</p>
-                                </div>
-                                <div class="fd-foot">
-                                    <p class="en-count">총 5회차 수업 등록</p>
-                                    <div class="fd-btn">
-                                        <button type="button" @click="isClassCurrDetail = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group">
-                            <div class="curr-item">
-                                <div class="fd-head">
-                                    <p class="fd-tit">일이삼사오육칠팔구십일이삼사오육칠팔구십</p>
-                                    <div class="fd-writer type2">
-                                        <p class="writer">
-                                            <span class="name">김경희선생님</span>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="fd-cnt">
-                                    <p class="fd-txt">감사합니다.</p>
-                                </div>
-                                <div class="fd-foot">
-                                    <p class="en-count">총 50회차 수업 등록</p>
-                                    <div class="fd-btn">
-                                        <button type="button" @click="isClassCurrDetail = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="curr-item">
-                                <div class="fd-head">
-                                    <p class="fd-tit">2학기 국어 교육과정</p>
-                                    <div class="fd-writer type2">
-                                        <p class="writer">
-                                            <span class="name">김미영 선생님</span>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="fd-cnt">
-                                    <p class="fd-txt">요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요.</p>
-                                    <p class="fd-txt">거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.</p>
-                                </div>
-                                <div class="fd-foot">
-                                    <p class="en-count">총 5회차 수업 등록</p>
-                                    <div class="fd-btn">
-                                        <button type="button" @click="isClassCurrDetail = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="curr-item">
                                 <div class="fd-head">
                                     <p class="fd-tit">5학년 2학기 수학 교육과정</p>
