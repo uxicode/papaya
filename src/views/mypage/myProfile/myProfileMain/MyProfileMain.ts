@@ -35,6 +35,11 @@ export default class MyProfileMain extends Vue {
     private isModifyGender: boolean = false;
     private isModifyEmailModal: boolean = false;
 
+    /* 서비스 탈퇴 팝업 상태 값 */
+    private isWithdrawModal: boolean = false;
+    private isWithdrawCompleteModal: boolean = false;
+    private isWithdrawDeniedModal: boolean = false;
+
     private tempData: any = '';
 
     /**
@@ -52,6 +57,9 @@ export default class MyProfileMain extends Vue {
                 break;
             case 'email':
                 this.isModifyEmailModal = !this.isModifyEmailModal;
+                break;
+            case 'withdraw':
+                this.isWithdrawModal = !this.isWithdrawModal;
                 break;
         }
     }
@@ -124,6 +132,29 @@ export default class MyProfileMain extends Vue {
                 });
             });
         this.isModifyEmailModal = !this.isModifyEmailModal;
+    }
+
+    private withdraw(): void {
+        // 클래스 운영자 && 클래스 멤버 1이상 => 탈퇴 불가 모달
+
+        //this.isWithdrawDeniedModal = true;
+
+        // 그렇지 않으면 탈퇴 후 완료 모달
+        UserService.serviceWithdraw()
+          .then(() => {
+              console.log('탈퇴 완료');
+              this.isWithdrawModal = false;
+              this.isWithdrawCompleteModal = true;
+          });
+    }
+
+    // 완료 모달 닫으면 로그인 화면으로 이동
+    private gotoLogin(): void {
+        this.isWithdrawCompleteModal = false;
+        this.$router.push('login')
+          .then(() => {
+              console.log('로그인으로 이동');
+          });
     }
 }
 

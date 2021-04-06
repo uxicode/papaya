@@ -1,54 +1,46 @@
-<div class="contents">
-    <div class="contents-inner">
-        <div class="contents-group">
-            <side-menu :active-num="activeMenuNum" @sideClick="update"></side-menu>
+<section class="contents-right">
+    <div class="classes-curriculum">
+        <div class="cnt-top">
+            <h2 class="cnt-tit">교육과정</h2>
+        </div>
 
-            <section class="contents-right">
-                <div class="classes-curriculum">
-                    <div class="cnt-top">
-                        <h2 class="cnt-tit">교육과정</h2>
+        <div class="curriculum-list clearfix">
+            <div class="list-group">
+                <div v-for="(item, idx) in classCurrList" :key="idx" class="curr-item">
+                    <div class="fd-head">
+                        <p class="fd-tit">{{ item.listTit }}</p>
+                        <div class="fd-writer type2">
+                            <p class="writer">
+                                <span class="name" :class="{crown: item.managerLevel}">{{ item.classAdmin }}</span>
+                            </p>
+                        </div>
                     </div>
-
-                    <div class="curriculum-list clearfix">
-                        <div class="list-group">
-                            <div v-for="(item, idx) in classCurrList" :key="idx" class="curr-item">
-                                <div class="fd-head">
-                                    <p class="fd-tit">{{ item.listTit }}</p>
-                                    <div class="fd-writer type2">
-                                        <p class="writer">
-                                            <span class="name" :class="{crown: item.managerLevel}">{{ item.classAdmin }}</span>
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="fd-cnt">
-                                    <p class="fd-txt">
-                                        <a href="#" @click="isClassCurrDetail = true">
-                                            {{ item.classCnt }}
-                                        </a>
-                                    </p>
-                                </div>
-                                <div class="fd-foot">
-                                    <p class="en-count">{{ item.classCurrent }}</p>
-                                    <div class="fd-btn">
-                                        <div class="list-popup">
-                                            <button type="button" class="list-popup-btn" @click="item.isActive = !item.isActive"><img :src="require('@/assets/images/more.svg')" class="sm" alt=""></button>
-                                            <div class="list-popup-menu pos-right" :class="{'active': item.isActive}" style="transform:translate3d(24px, 0, 0);">
-                                                <button class="list-popup-item" value="0" @click>교육과정 수정</button>
-                                                <button class="list-popup-item active" value="1" @click>교육과정 삭제</button>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                    <div class="fd-cnt">
+                        <p class="fd-txt">
+                            <a href="#" @click="isClassCurrDetail = true">
+                                {{ item.classCnt }}
+                            </a>
+                        </p>
+                    </div>
+                    <div class="fd-foot">
+                        <p class="en-count">{{ item.classCurrent }}</p>
+                        <div class="fd-btn">
+                            <div class="list-popup">
+                                <button type="button" class="list-popup-btn" @click="item.isActive = !item.isActive"><img :src="require('@/assets/images/more.svg')" class="sm" alt=""></button>
+                                <div class="list-popup-menu pos-right" :class="{'active': item.isActive}" style="transform:translate3d(24px, 0, 0);">
+                                    <button class="list-popup-item" value="0" @click>교육과정 수정</button>
+                                    <button class="list-popup-item active" value="1" @click>교육과정 삭제</button>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="curriculum-add">
-                            <button class="curriculum-add-btn" @click="isCreateClass = true"></button>
-                        </div>
                     </div>
                 </div>
-            </section>
+            </div>
+
+            <div class="curriculum-add">
+                <button class="curriculum-add-btn" @click="isCreateClass = true"></button>
+            </div>
         </div>
     </div>
 
@@ -85,14 +77,14 @@
                         <div class="add-curriculum bd-top">
                             <p class="tit">수업 설정</p>
 
-                                <div class="add-curr-item">
-                                    <p class="add-curr-tit">수업 회차</p>
-                                    <div class="form-box">
-                                        <div class="form-group">
-                                            <input type="number" class="form-control" v-model.number="currListNum.currNum">
-                                        </div>
+                            <div class="add-curr-item">
+                                <p class="add-curr-tit">수업 회차</p>
+                                <div class="form-box">
+                                    <div class="form-group">
+                                        <input type="number" class="form-control" v-model.number="currListNum.currNum">
                                     </div>
                                 </div>
+                            </div>
                             <div class="scroll-body" style="height:124px;">
                                 <div v-for="i in currListNum.currNum" class="add-curr-item">
                                     <p class="add-curr-tit">
@@ -379,4 +371,4 @@
         </modal>
     </transition>
     <!-- end: 공통 팝업 -->
-</div>
+</section>

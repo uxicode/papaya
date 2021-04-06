@@ -1,8 +1,9 @@
-import {Vue, Component} from 'vue-property-decorator';
-import WithRender from './ClassEducation.html';
+import {Component, Vue} from 'vue-property-decorator';
+
 import SideMenu from '@/components/sideMenu/sideMenu.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
+import WithRender from './ClassEducation.html';
 
 interface IcurrNum {
     currNum?: number;
@@ -11,26 +12,19 @@ interface IcurrNum {
 @WithRender
 @Component({
     components:{
+        SideMenu,
         Modal,
-        Btn,
-        SideMenu
+        Btn
     }
 })
 
 export default class ClassEducation extends Vue {
-    private activeMenuNum: number = 4;
 
     /* Modal 오픈 상태값 */
     private isCreateClass: boolean = false;
     private isClassCurr: boolean = false;
     private isClassCurrDetail: boolean = false;
     private isMoreMenu: boolean = false;
-
-    private update(idx: number): void{
-        // console.log(idx);
-        this.activeMenuNum=idx;
-    }
-
 
     private classCurrList: object[] = [
         {
