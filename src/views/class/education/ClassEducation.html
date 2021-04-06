@@ -45,8 +45,8 @@
     </div>
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.5.1 (교육과정 만들기) (4.5.5.1 ~ 4.5.5.1.1)-->
-    <transition name="modal">
-        <modal v-if="isCreateClass" size="600px" body-padding="0">
+    <transition name="modal" >
+        <modal v-if="isCreateClass" size="600px" body-padding="0" @modalClose="isCreateClass=false">
             <div slot="header">
                 <!-- header custom coding-->
                 <p class="popup-header-tit">새 교육과정 등록</p>
@@ -81,16 +81,16 @@
                                 <p class="add-curr-tit">수업 회차</p>
                                 <div class="form-box">
                                     <div class="form-group">
-                                        <input type="number" class="form-control" v-model.number="currListNum.currNum">
+                                        <input type="number" class="form-control" v-model.number="currListNum" @input="setCurriNum($event.target.value)">
                                     </div>
                                 </div>
                             </div>
                             <div class="scroll-body" style="height:124px;">
-                                <div v-for="i in currListNum.currNum" class="add-curr-item">
+                                <div v-for="(item, index) in currListNumModel" class="add-curr-item" :key="`currListNum-${index}`">
                                     <p class="add-curr-tit">
                                         <button @click="isClassCurr = true">
-                                            <span class="curr-num">{{ i }} 회차</span>
-                                            <span>새 교육과정 {{ i }}</span>
+                                            <span class="curr-num">{{ index+1 }} 회차</span>
+                                            <span>새 교육과정 {{ index+1 }}</span>
                                         </button>
                                     </p>
                                     <div class="form-box">
@@ -98,8 +98,8 @@
                                             <button type="button" class="list-popup-btn" @click="moreMenuToggle()"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                             <!-- 더보기 -->
                                             <div class="list-popup-menu pos-right" :class="{'active': isMoreMenu}" style="transform:translate3d(35px, 0, 0);">
-                                                <button class="list-popup-item" value="0" @click>교육과정 수정</button>
-                                                <button class="list-popup-item active" value="1" @click>교육과정 삭제</button>
+                                                <button class="list-popup-item" value="0" >교육과정 수정</button>
+                                                <button class="list-popup-item active" value="1" >교육과정 삭제</button>
                                             </div>
                                         </div>
                                     </div>
@@ -204,7 +204,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.5.3 (교육과정 - 상세) -->
     <transition name="modal">
-        <modal v-if="isClassCurrDetail" size="600px" body-padding="0">
+        <modal v-if="isClassCurrDetail" size="600px" body-padding="0" @modalClose="isClassCurrDetail=false">
             <div slot="header">
                 <!-- header custom coding-->
                 <p class="popup-header-tit">123</p>

@@ -5,9 +5,6 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './ClassEducation.html';
 
-interface IcurrNum {
-    currNum?: number;
-}
 
 @WithRender
 @Component({
@@ -78,13 +75,23 @@ export default class ClassEducation extends Vue {
 
     ];
 
+    private currListNum: number = 0;
+
+    private eduItems: Array< {title: string }>=[];
+
+    get currListNumModel(): Array< {title: string }>{
+        return this.eduItems;
+    }
 
     private moreMenuToggle(): void {
         this.isMoreMenu = !this.isMoreMenu;
     }
 
-    private currListNum: IcurrNum = {
-        currNum: 10,
+    private setCurriNum( num: number ): void{
+        this.currListNum=num;
+        this.eduItems.length=num;
     }
+
+
 
 }
