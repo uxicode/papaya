@@ -1,4 +1,5 @@
 import {IUserMe} from '@/api/model/user.model';
+import MyClassService from '@/api/service/MyClassService';
 import UserService from '@/api/service/UserService';
 import {IClassMemberInfo} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
@@ -36,7 +37,7 @@ export default class ClassSettingMain extends Vue{
     private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo[]>;
 
     @MyClass.Action
-    private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo[]>;
+    private MODIFY_CLASS_MEMBER_INFO!: (data: any) => Promise<IClassMemberInfo[]>;
 
     /* Modal 오픈 상태값 */
     private isGuideTxt: boolean = false;
@@ -132,6 +133,21 @@ export default class ClassSettingMain extends Vue{
             default:
                 return '일반';
         }
+    }
+
+    /**
+     * 푸시 알림 설정
+     * @param item
+     * @private
+     */
+    private pushToggle(item: number): void {
+        MyClassService.setClassMemberInfo(745, 826, {onoff_push_noti: item})
+          .then(() => {
+              this.MODIFY_CLASS_MEMBER_INFO(item)
+                .then((data) => {
+                    console.log(data);
+                });
+          });
     }
 
     /**

@@ -213,13 +213,14 @@ export default class ClassModule extends VuexModule {
     }
 
     @Action({rawError: true})
-    public [MODIFY_CLASS_MEMBER_INFO](payload: {classId: number, memberId: number}): Promise<IClassMemberInfo[]>{
-        this.context.commit(SET_CLASS_ID, payload.classId);
-        this.context.commit(SET_MEMBER_ID, payload.memberId);
+    public [MODIFY_CLASS_MEMBER_INFO](classId: number, memberId: number, data: any): Promise<IClassMemberInfo[]>{
+        // this.context.commit(SET_CLASS_ID, classId);
+        // this.context.commit(SET_MEMBER_ID, memberId);
+        this.context.commit(CLASS_MEMBER_INFO, data);
 
-        return MyClassService.setClassMemberInfo(payload.classId, payload.memberId)
-          .then((data) => {
-              this.context.commit(CLASS_MEMBER_INFO, data);
+        return MyClassService.setClassMemberInfo(classId, memberId, data)
+          .then((info) => {
+              this.context.commit(CLASS_MEMBER_INFO, info);
               console.log(this.memberInfo);
               return Promise.resolve(this.memberInfo);
           })

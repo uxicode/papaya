@@ -27,7 +27,9 @@
                         <p class="list-tit">푸시 알림 설정</p>
                         <div class="setting-btn">
                             <div class="form-switcher">
-                                <input type="checkbox" id="push" v-model="notiFlag.onoff_push_noti" @change="pushToggle($event, $event.target.value)">
+                                <input type="checkbox" id="push"
+                                       v-model="notiFlag.onoff_push_noti"
+                                       @change="pushToggle(0)">
                                 <label for="push"></label>
                             </div>
                         </div>
