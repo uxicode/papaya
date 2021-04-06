@@ -2,6 +2,7 @@ import axios, {AxiosResponse, AxiosRequestConfig, AxiosPromise} from 'axios';
 import router from '@/router';
 import store from '@/store';
 import {LOGOUT} from '@/store/mutation-auth-types';
+import {REMOVE_CLASS_DATA} from '@/store/mutation-class-types';
 
 axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
 /**
@@ -30,19 +31,24 @@ const onUnauthorized = () => {
   router.push(`/login?rPath=${encodeURIComponent(location.pathname)}`)
     .then(() => {
       // console.log( res );
-      store.commit(LOGOUT);
+      store.commit(`Auth/${LOGOUT}`);
+      store.commit(`MyClass/${REMOVE_CLASS_DATA}`);
     });
 };
 const setAuthorization = (token: string) => {
   axios.defaults.headers.common.Authorization = (token) ? `Bearer ${token}` : null;
 };
-const request = (method: string, url: string, data: any | null = null): Promise<any> => {
+const  request = (method: string, url: string, data: any | null = null ): Promise<any> => {
   // console.log( 'data status=', method, data, url );
   let reqObj: object;
 
   if (method === 'get') {
     reqObj = (data !== null)? {method, url, params: data} : {method, url};
-  } else {
+  } else if(method === 'upload'){
+    reqObj = { method:'post', url, data, headers: {
+      'Content-Type': 'multipart/form-data;charset=utf-8;'
+    } };
+  }else{
     reqObj = {method, url, data};
   }
   return axios(reqObj).then((res: AxiosResponse) => {
@@ -52,8 +58,8 @@ const request = (method: string, url: string, data: any | null = null): Promise<
     const {status} = error.response;
     //data.error_code 가 존재한다.
     if (status === 401) {
-      alert('사용자 세션이 만료되었습니다. 다시 로그인 해주세요~');
       onUnauthorized();
+      alert('사용자 세션이 만료되었습니다. 다시 로그인 해주세요~');
     } else {
       // let errorCode=parseInt(`${ data.error_code }`);
       // alert( `${ data.message }` );

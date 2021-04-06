@@ -11,10 +11,13 @@ const MyClassRouter=[
   },
   {
     path: '/class/:classId',
-    name: 'myClass',
+    name: 'myClassListDetailPage',
     beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/home/MyClass'), header: AppHeader, footer: AppFooter},
-    props: { default: true, header: false, footer: false }
+    components: {default: () => import('@/views/class/home/MyClassListDetailPage'), header: AppHeader, footer: AppFooter},
+    children: [
+      {path: '', name: 'myClassListDetailView', component: () => import('../views/class/home/MyClassListDetailView')},
+      {path: 'schedule', name: 'scheduleView', component: () => import('../views/class/schedule/ScheduleView')},
+    ]
   },
   {
     path: '/make-class',

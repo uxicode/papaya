@@ -109,9 +109,11 @@ export default class AuthModule extends VuexModule {
 
   @Mutation
   public [LOGOUT](): void {
+    console.log('logout');
+    localStorage.removeItem('token');
+    localStorage.removeItem('me');
     this.token = null;
-    delete localStorage.token;
-    delete localStorage.user;
+    this.me=null;
   }
 
   @Mutation
