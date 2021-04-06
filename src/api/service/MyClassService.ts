@@ -1,6 +1,13 @@
 import {request} from '@/api/service/AxiosService';
 import {CLASS_BASE_URL, SCHOOL_URL} from '@/api/base';
-import {IClassInfo, IMyClassList, IClassMember, IPostList, IMakeClassInfo} from '@/views/model/my-class.model';
+import {
+    IClassInfo,
+    IMyClassList,
+    IClassMember,
+    IPostList,
+    IMakeClassInfo,
+    IClassMemberInfo
+} from '@/views/model/my-class.model';
 
 
 class MyClassService {
@@ -42,6 +49,18 @@ class MyClassService {
     }
     public setMakeClass( info: IMakeClassInfo ): Promise<any>{
         return request('post', `${CLASS_BASE_URL}`, info );
+    }
+
+    /**
+     * 클래스 멤버 정보 조회 및 수정
+     * @param classId
+     * @param memberId
+     */
+    public getClassMemberInfo(classId: number, memberId: number): Promise<IClassMemberInfo> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
+    }
+    public setClassMemberInfo(classId: number, memberId: number): Promise<IClassMemberInfo> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
 }
 
