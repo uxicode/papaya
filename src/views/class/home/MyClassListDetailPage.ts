@@ -21,6 +21,9 @@ export default class MyClassListDetailPage extends Vue {
 
   private activeMenuNum: number=0;
 
+  get activeMenuNumModel(): number {
+    return this.activeMenuNum;
+  }
 
   @MyClass.Getter
   private classID!: string | number;

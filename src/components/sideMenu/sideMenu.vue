@@ -74,12 +74,13 @@ import {Utils} from '@/utils/utils';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import MyClassService from '@/api/service/MyClassService';
+import {CLASS_BASE_URL} from '@/api/base';
 
 
 interface ISideMenu{
   id: number;
   title: string;
-  link: string;
+  linkKey: string;
 }
 
 const MyClass = namespace('MyClass');
@@ -105,12 +106,12 @@ export default class SideMenu extends Vue{
   private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
 
   private sideMenuData: ISideMenu[]=[
-    {id:0, title: '클래스 홈', link:'' },
-    {id:1, title: '알림', link:'' },
-    {id:2, title: '일정', link:'' },
-    {id:3, title: '파일함', link:'' },
-    {id:4, title: '교육과정', link:'' },
-    {id:5, title: '클래스 설정', link:'' },
+    {id:0, title: '클래스 홈', linkKey:'' },
+    {id:1, title: '알림', linkKey:'alert' },
+    {id:2, title: '일정', linkKey:'schedule' },
+    {id:3, title: '파일함', linkKey:'fileManger' },
+    {id:4, title: '교육과정', linkKey:'curriculum' },
+    {id:5, title: '클래스 설정', linkKey:'setting' },
   ];
   private isPopup: boolean=false;
 
@@ -147,6 +148,7 @@ export default class SideMenu extends Vue{
 
   private sideMenuClickHandler(idx: number): void{
     this.$emit('sideClick', idx);
+    this.$router.push(CLASS_BASE_URL+'/'+this.classID+'/'+this.sideMenuData[idx].linkKey);
   }
 
   /**
