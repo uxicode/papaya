@@ -2,9 +2,9 @@
   <div class="contents-inner">
     <div class="contents-group">
       <!-- 좌측 메뉴 -->
-      <side-menu :active-num="activeMenuNum" @sideClick="update"></side-menu>
+      <side-menu :active-num="activeMenuNumModel" @sideClick="update"></side-menu>
 
-      <transition name="slide-out" mode="out-in">
+      <transition name="fade" mode="out-in">
         <router-view></router-view>
       </transition>
 
