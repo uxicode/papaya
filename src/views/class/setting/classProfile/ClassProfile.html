@@ -24,11 +24,13 @@
                             </div>
                         </div>
                     </li>
-                    <li class="list-item">
+                    <li v-for="(item, idx) in profileDataList"
+                        :key="idx"
+                        class="list-item">
                         <div class="tb-style full">
-                            <div class="tb-cell list-tit">아이디</div>
+                            <div class="tb-cell list-tit">{{ item.type }}</div>
                             <div class="tb-cell basic-info">
-                                <p>papaya123</p>
+                                <p>{{ item.data }}</p>
 
                                 <div class="list-popup">
                                     <button type="button" class="list-popup-btn"><span>운영자에게만 공개</span> <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
@@ -36,38 +38,6 @@
                                         <a href="" class="list-popup-item">비공개</a>
                                         <a href="" class="list-popup-item">전체 공개</a>
                                         <a href="" class="list-popup-item">운영자에게만 공개</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="list-item">
-                        <div class="tb-style full">
-                            <div class="tb-cell list-tit">모바일 번호</div>
-                            <div class="tb-cell basic-info">
-                                <p>010-1234-5678</p>
-                                <div class="list-popup">
-                                    <button type="button" class="list-popup-btn"><span>비공개</span> <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
-                                    <div class="list-popup-menu pos-right " style="transform:translate3d(75px, 0, 0);">
-                                        <a href="" class="list-popup-item">비공개</a>
-                                        <a href="" class="list-popup-item">공개</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="list-item">
-                        <div class="tb-style full">
-                            <div class="tb-cell list-tit">이메일 주소</div>
-                            <div class="tb-cell basic-info">
-                                <p>papaya@gmail.com</p>
-                                <div class="list-popup">
-                                    <button type="button" class="list-popup-btn"><span>모든 클래스 멤버에게 공개</span> <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
-                                    <div class="list-popup-menu pos-right " style="transform:translate3d(168px, 0, 0);">
-                                        <a href="" class="list-popup-item">모든 클래스 멤버에게 공개</a>
-                                        <a href="" class="list-popup-item">비공개</a>
                                     </div>
                                 </div>
                             </div>

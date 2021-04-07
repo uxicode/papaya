@@ -945,14 +945,12 @@
   margin-top:10px;
 
   .list-group {
-    float:left;
-
-    &:nth-child(2n) {
-      margin-left:10px;
-    }
+    column-width:295px;
+    column-gap: 10px;
   }
 
   .curr-item {
+    display:inline-block;
     width:295px;
     margin-bottom:10px;
     padding: 20px 30px 30px;
@@ -973,7 +971,7 @@
   }
 
   .curriculum-add {
-    @include pos-abs($right:10%, $bottom:35%);
+    @include pos-abs($right:-10%, $bottom:35%);
 
     &-btn {
       display:block;
@@ -1548,10 +1546,13 @@
     border-bottom:1px solid #f4f5f6;
 
     .add-curr-tit {
-      margin-right:40px;
       float:left;
       font-weight:500;
       color:#848499;
+
+      .curr-num {
+        margin-right:40px;
+      }
     }
     .form-box {
       @include pos-vertical($right:40px)

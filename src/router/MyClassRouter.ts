@@ -14,7 +14,20 @@ const MyClassRouter=[
     name: 'myClassListDetailPage',
     beforeEnter: getIsAuth,
     components: {default: () => import('@/views/class/home/MyClassListDetailPage'), header: AppHeader, footer: AppFooter},
-    props: { default: true, header: false, footer: false }
+    children: [
+      {path: '', name: 'myClassListDetailView', component: () => import('../views/class/home/MyClassListDetailView')},
+      {path: 'schedule', name: 'scheduleView', component: () => import('../views/class/schedule/ScheduleView')},
+      {path: 'setting', name: 'classSettingMain', component: () => import('../views/class/setting/classSettingMain/ClassSettingMain')},
+      {path: 'setting/classProfile', name: 'classProfile', component: () => import('../views/class/setting/classProfile/ClassProfile')},  // W.4.5.7.2 ~
+      {path: 'setting/classBasicInfo', name: 'classBasicInfo', component: () => import('../views/class/setting/classBasicInfo/ClassBasicInfo')},  // W.4.5.7.3 ~
+      {path: 'setting/classTagManage', name: 'classTagManage', component: () => import('../views/class/setting/classTagManage/ClassTagManage')}, // W.4.5.7.4 ~
+      {path: 'setting/classJoinStatus', name: 'classJoinStatus', component: () => import('../views/class/setting/classJoinStatus/ClassJoinStatus')}, // W.4.5.7.7 ~
+      {path: 'setting/classMemberManage', name: 'classMemberManage', component: () => import('../views/class/setting/classMemberManage/ClassMemberManage'),},// W.4.5.7.8 ~
+      {path: 'setting/blockedMemberList', name: 'blockedMemberList', component: () => import('../views/class/setting/classMemberManage/blockedMemberList/BlockedMemberList')}, // W.4.5.7.8.3.1 ~
+      {path: 'setting/classStaffManage', name: 'classStaffManage', component: () => import('../views/class/setting/classStaffManage/ClassStaffManage')}, // W.4.5.7.9 ~
+      {path: 'setting/classAdminDelegate', name: 'classAdminDelegate', component: () => import('../views/class/setting/classAdminDelegate/ClassAdminDelegate')}, // W4.5.7.10 ~
+      {path: 'curriculum', name:'curriculum', component: () => import('../views/class/education/ClassEducation')}, // W4.5.5 ~
+    ]
   },
   {
     path: '/make-class',
@@ -28,34 +41,12 @@ const MyClassRouter=[
     ]
   },
   {
-    path: '/classSetting',
-    name: 'classSetting',
-    components: {default: () => import('../views/class/setting/ClassSetting'), header: AppHeader, footer: AppFooter},
-    beforeEnter: getIsAuth,
-    children: [
-      {path: '/', name: 'classSettingMain', component: () => import('../views/class/setting/classSettingMain/ClassSettingMain')},
-      {path: 'classProfile', name: 'classProfile', component: () => import('../views/class/setting/classProfile/ClassProfile')},  // W.4.5.7.2 ~
-      {path: 'classBasicInfo', name: 'classBasicInfo', component: () => import('../views/class/setting/classBasicInfo/ClassBasicInfo')},  // W.4.5.7.3 ~
-      {path: 'classTagManage', name: 'classTagManage', component: () => import('../views/class/setting/classTagManage/ClassTagManage')}, // W.4.5.7.4 ~
-      {path: 'classJoinStatus', name: 'classJoinStatus', component: () => import('../views/class/setting/classJoinStatus/ClassJoinStatus')}, // W.4.5.7.7 ~
-      {path: 'classMemberManage', name: 'classMemberManage', component: () => import('../views/class/setting/classMemberManage/ClassMemberManage'),},// W.4.5.7.8 ~
-      {path: 'blockedMemberList', name: 'blockedMemberList', component: () => import('../views/class/setting/classMemberManage/blockedMemberList/BlockedMemberList')}, // W.4.5.7.8.3.1 ~
-      {path: 'classStaffManage', name: 'classStaffManage', component: () => import('../views/class/setting/classStaffManage/ClassStaffManage')}, // W.4.5.7.9 ~
-      {path: 'classAdminDelegate', name: 'classAdminDelegate', component: () => import('../views/class/setting/classAdminDelegate/ClassAdminDelegate')}, // W4.5.7.10 ~
-    ]
-  },
-  {
     path: '/classWithdrawComplete',
     name: 'classWithdrawComplete',
     beforeEnter: getIsAuth,
     components: {default: () => import('../views/class/setting/ClassWithdrawComplete'), header: AppHeader, footer: AppFooter}, // W.4.5.7.11.1.1
   },
-  {
-    path: '/classTest',
-    name: 'classTest',
-    beforeEnter: getIsAuth,
-    components: {default: () => import('../views/class/education/classEducation.4.5.5'), header: AppHeader, footer: AppFooter}, // W.4.5.5
-  },
+
 ];
 
 export {MyClassRouter};

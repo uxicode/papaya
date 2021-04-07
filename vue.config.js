@@ -1,3 +1,5 @@
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
 module.exports={
     // productionSourceMap: false,
     chainWebpack: (config) => {
@@ -5,10 +7,6 @@ module.exports={
             args[0].memoryLimit = 512;
             return args;
         });
-
-        /*const svgRule = config.module.rule('svg')
-        svgRule.uses.clear()
-        svgRule.use('vue-svg-loader').loader('vue-svg-loader')*/
     },
     configureWebpack:{
         module:{
@@ -30,7 +28,8 @@ module.exports={
                     ],
                 }*/
             ]
-        }
+        },
+        plugins: [new BundleAnalyzerPlugin(), new VuetifyLoaderPlugin()]
     },
     css:{
         loaderOptions: {

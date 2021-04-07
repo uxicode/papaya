@@ -110,9 +110,12 @@ class UserService {
     return request('get', `${USER_BASE_URL}/me/info`);
   }
 
-
-
-
+  /**
+   * 사용자 서비스 탈퇴
+   */
+  public serviceWithdraw(): Promise<any> {
+    return request('delete', `${USER_BASE_URL}/me`);
+  }
 
 }
 
