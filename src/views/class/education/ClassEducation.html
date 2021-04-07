@@ -186,7 +186,19 @@
                         <div class="form-add-btn">
                             <ul class="clearfix">
                                 <li><a href=""><img :src="require('@/assets/images/image.svg')" alt=""></a></li>
-                                <li><a href=""><img :src="require('@/assets/images/file.svg')" alt=""></a></li>
+                                <li>
+                                    <form class="form-test2" method="post" enctype="multipart/form-data">
+                                        <div>
+                                            <label for="image_uploads"><img :src="require('@/assets/images/file.svg')" alt=""></label>
+                                            <input type="file" id="image_uploads" class="image_uploads_test" name="image_uploads" accept=".jpg, .jpeg, .png">
+                                        </div>
+                                        <div class="preview">
+                                            <span>
+                                                <img :src="require('@/assets/images/file.svg')" alt="" style="display: inline-block">No files currently selected for upload
+                                            </span>
+                                        </div>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     </div>

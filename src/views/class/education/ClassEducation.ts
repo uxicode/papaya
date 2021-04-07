@@ -94,4 +94,17 @@ export default class ClassEducation extends Vue {
 
 
 
+
+
+
+
+
+
+
 }
+
+
+
+
+
+

@@ -50,3 +50,4 @@ const MyClassRouter=[
 ];
 
 export {MyClassRouter};
+
