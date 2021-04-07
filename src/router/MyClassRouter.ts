@@ -46,7 +46,6 @@ const MyClassRouter=[
     beforeEnter: getIsAuth,
     components: {default: () => import('../views/class/setting/ClassWithdrawComplete'), header: AppHeader, footer: AppFooter}, // W.4.5.7.11.1.1
   },
-
 ];
 
 export {MyClassRouter};

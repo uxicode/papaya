@@ -83,6 +83,8 @@ export default class ClassEducation extends Vue {
         return this.eduItems;
     }
 
+
+
     private moreMenuToggle(): void {
         this.isMoreMenu = !this.isMoreMenu;
     }
