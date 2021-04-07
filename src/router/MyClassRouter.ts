@@ -49,7 +49,13 @@ const MyClassRouter=[
     name: 'classWithdrawComplete',
     beforeEnter: getIsAuth,
     components: {default: () => import('../views/class/setting/ClassWithdrawComplete'), header: AppHeader, footer: AppFooter}, // W.4.5.7.11.1.1
-  }
+  },
+  {
+    path: '/classTest',
+    name: 'classTest',
+    beforeEnter: getIsAuth,
+    components: {default: () => import('../views/class/education/classEducation.4.5.5'), header: AppHeader, footer: AppFooter}, // W.4.5.5
+  },
 ];
 
 export {MyClassRouter};
