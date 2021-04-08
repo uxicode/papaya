@@ -46,7 +46,7 @@ export default class Btn extends Vue{
   }
 
   public buttonClick() {
-    this.$emit('testOpen');
+    this.$emit('btnClick');
   }
 
 }
