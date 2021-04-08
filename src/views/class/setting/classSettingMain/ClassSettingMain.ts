@@ -1,7 +1,5 @@
-import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
-import UserService from '@/api/service/UserService';
-import {IClassMemberInfo} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo, IMyClassList} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import WithRender from './ClassSettingMain.html';
@@ -9,14 +7,6 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 
 const MyClass = namespace('MyClass');
-
-interface INotiFlag {
-    onoff_push_noti?: boolean;
-    onoff_post_noti?: boolean;
-    onoff_comment_noti?: boolean;
-    onoff_schedule_noti?: boolean;
-    schedule_noti_intime?: number;
-}
 
 interface ISettingMenu {
     title: string;
@@ -31,7 +21,13 @@ interface ISettingMenu {
     }
 })
 export default class ClassSettingMain extends Vue{
-    private memberInfo: IClassMemberInfo[] = [];
+    private classMemberInfo: IClassMemberInfo[] = [];
+
+    @MyClass.Getter
+    private classID!: number;
+
+    @MyClass.Getter
+    private memberID!: number;
 
     @MyClass.Action
     private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo[]>;
@@ -43,13 +39,6 @@ export default class ClassSettingMain extends Vue{
     private isGuideTxt: boolean = false;
     private isJoinQnaSetting: boolean = false;
     private isWithdraw: boolean = false;
-
-    private notiFlag: INotiFlag = {
-        onoff_push_noti: true,
-        onoff_post_noti: true,
-        onoff_comment_noti: true,
-        onoff_schedule_noti: true,
-    };
 
     private classNotifyList: object[] = [
         {
@@ -65,6 +54,8 @@ export default class ClassSettingMain extends Vue{
             isActive: false
         },
     ];
+
+    private onOffNoti: number = 1;
 
     private classManageList: ISettingMenu[] = [
         {
@@ -109,18 +100,24 @@ export default class ClassSettingMain extends Vue{
         }
     ];
 
-    get classMemberInfo(): IClassMemberInfo[] {
-        return this.memberInfo;
+    /* 가입 안내 문구 관련 */
+    private maxLength: number = 100;
+    private remainLength: number = 100;
+    private guideTxt: string = '';
+
+    get memberInfo(): IClassMemberInfo[] {
+        return this.classMemberInfo;
     }
 
     public created() {
-        this.getClassMemberInfo({classId: 745, memberId: 826});
+        this.getClassMemberInfo();
     }
 
-    private getClassMemberInfo(payload: { classId: number, memberId: number }): void {
-        this.CLASS_MEMBER_INFO_ACTION(payload)
+    private getClassMemberInfo(): void {
+        this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.memberID})
           .then((data) => {
-              this.memberInfo = data;
+              console.log(`classId = ${this.classID}, memberId = ${this.memberID}`);
+              this.classMemberInfo = data;
           });
     }
 
@@ -140,14 +137,23 @@ export default class ClassSettingMain extends Vue{
      * @param item
      * @private
      */
-    private pushToggle(item: number): void {
-        MyClassService.setClassMemberInfo(745, 826, {onoff_push_noti: item})
-          .then(() => {
-              this.MODIFY_CLASS_MEMBER_INFO(item)
-                .then((data) => {
-                    console.log(data);
-                });
+    private pushToggle(onoff: number): void {
+        onoff = (onoff === 1) ? 1 : 0;
+        this.onOffNoti = onoff;
+        this.MODIFY_CLASS_MEMBER_INFO(this.onOffNoti)
+          .then((data) => {
+              console.log(data);
           });
+    }
+
+    /**
+     * 가입 안내 문구 글자 수 제한
+     * @private
+     */
+    private textCount(): void {
+        this.remainLength = this.maxLength - this.guideTxt.length;
+        this.guideTxt = (this.remainLength < 0) ? this.guideTxt.substring(0, 100) : this.guideTxt;
+        this.remainLength = (this.remainLength < 0) ? 0 : this.remainLength;
     }
 
     /**
@@ -156,7 +162,7 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private gotoLink(key: string): void {
-        this.$router.push(`./${key}`)
+        this.$router.push(`${key}`)
           .then(() => {
               console.log(`${key}로 이동`);
           });
@@ -186,8 +192,11 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private withdrawSubmit(): void {
-
+        MyClassService.withdrawClass(this.classID, this.memberID)
+          .then(() => {
+             console.log('클래스 탈퇴 완료');
+          });
         this.$router.push('../classWithdrawComplete')
-            .then();
+          .then();
     }
 }
