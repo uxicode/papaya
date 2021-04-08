@@ -88,10 +88,10 @@
                             <div class="scroll-body" style="height:124px;">
                                 <div v-for="(item, index) in currListNumModel" class="add-curr-item" :key="`currListNum-${index}`">
                                     <p class="add-curr-tit">
-                                        <button @click="isClassCurr = true">
+                                        <a href="#" @click="isClassCurr = true;test(index+1)">
                                             <span class="curr-num">{{ index+1 }} 회차</span>
                                             <span>새 교육과정 {{ index+1 }}</span>
-                                        </button>
+                                        </a>
                                     </p>
                                     <div class="form-box">
                                         <div class="list-popup">
@@ -139,7 +139,7 @@
                 <!-- body custom coding-->
                 <div class="popup-cnt">
                     <p class="popup-txt type2">교육과정</p>
-                    <h2 class="popup-tit pdb-0">1 회차 수업</h2>
+                    <h2 class="popup-tit pdb-0">{{this.testName}} 회차 수업</h2>
                 </div>
 
                 <div class="popup-form">

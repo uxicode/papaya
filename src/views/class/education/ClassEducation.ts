@@ -23,6 +23,8 @@ export default class ClassEducation extends Vue {
     private isClassCurrDetail: boolean = false;
     private isMoreMenu: boolean = false;
 
+    private testName: number = 0;
+
     private classCurrList: object[] = [
         {
             listTit:'5학년 2학기 수학 교육과정',
@@ -83,17 +85,17 @@ export default class ClassEducation extends Vue {
         return this.eduItems;
     }
 
-
-
-    private moreMenuToggle(): void {
-        this.isMoreMenu = !this.isMoreMenu;
-    }
-
     private setCurriNum( num: number ): void{
         this.currListNum=num;
         this.eduItems.length=num;
     }
 
 
+    private moreMenuToggle(): void {
+        this.isMoreMenu = !this.isMoreMenu;
+    }
 
+    // private testT(num: number): void{
+    //     this.testName = num;
+    // }
 }

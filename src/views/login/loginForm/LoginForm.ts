@@ -44,13 +44,15 @@ export default class LoginForm extends Vue {
   }
 
   public created() {
-    this.HISTORY_PAGE('login');
+    // this.HISTORY_PAGE('login');
     console.log('findUserId=', this.findUserId);
     console.log('userName=', this.userName);
   }
 
 
   private validate(): void {
+
+    console.log('로그인');
 
     //빈칸
     if( this.isFieldRequired ){
