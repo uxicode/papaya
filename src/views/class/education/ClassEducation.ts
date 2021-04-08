@@ -95,7 +95,7 @@ export default class ClassEducation extends Vue {
         this.isMoreMenu = !this.isMoreMenu;
     }
 
-    // private testT(num: number): void{
-    //     this.testName = num;
-    // }
+    private test(num: number): void{
+        this.testName = num;
+    }
 }
