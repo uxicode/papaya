@@ -31,7 +31,7 @@
       <div class="class-menu">
         <ul class="menu-list">
           <li v-for="(item, index) in sideMenuModel" :key="`item-${index}`">
-            <a href="" :class="[`type${index+1}`, {'active': index===activeNum }]" @click.stop.prevent="sideMenuClickHandler( index )">{{ item.title }}</a>
+            <a href="" :class="[`type${index+1}`, {'active': index===activeNum }]" @click.prevent="sideMenuClickHandler( index )">{{ item.title }}</a>
           </li>
 <!--          <li><a href="" class="type2">알림</a></li>
           <li><a href="" class="type3">일정</a></li>
@@ -75,6 +75,7 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import MyClassService from '@/api/service/MyClassService';
 import {CLASS_BASE_URL} from '@/api/base';
+import {UPDATE_SIDE_MENU_NUM} from '@/store/mutation-class-types';
 
 
 interface ISideMenu{
@@ -94,13 +95,16 @@ const MyClass = namespace('MyClass');
 export default class SideMenu extends Vue{
 
   @Prop(Number)
-  private activeNum: number =0;
+  private activeNum: number | null | undefined;
 
   @MyClass.Getter
   private classID!: string | number;
 
   @MyClass.Getter
   private myClassHomeModel!: IClassInfo;
+
+  @MyClass.Getter
+  private activeSideMenuNum!: number;
 
   @MyClass.Action
   private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
@@ -117,6 +121,13 @@ export default class SideMenu extends Vue{
 
   get sideMenuModel(): ISideMenu[]{
     return this.sideMenuData;
+  }
+
+  public created(){
+    //화면 새로고침시에
+    if (performance.navigation.type === 1) {
+      this.sideMenuClickHandler(0);
+    }
   }
 
   public getHashTag( items: any[] ): string | undefined {
@@ -143,12 +154,17 @@ export default class SideMenu extends Vue{
       img=imgUrl;
     }
 
-    return ( imgUrl )? img : require( `@/assets/images/${img}` );
+    return ( imgUrl !== null && imgUrl !== undefined )? img : require( `@/assets/images/${img}` );
   }
 
   private sideMenuClickHandler(idx: number): void{
     this.$emit('sideClick', idx);
-    this.$router.push(CLASS_BASE_URL+'/'+this.classID+'/'+this.sideMenuData[idx].linkKey);
+    this.$router.push(CLASS_BASE_URL+'/'+this.classID+'/'+this.sideMenuData[idx].linkKey)
+    .catch((error)=>{
+      console.log(error);
+      //에러 난 경우 새로고침
+      window.location.reload();
+    });
   }
 
   /**

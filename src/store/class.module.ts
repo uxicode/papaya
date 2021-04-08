@@ -9,8 +9,28 @@ import {
     IClassMemberInfo
 } from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
+<<<<<<< HEAD
 import {MYCLASS_LIST, POST_LIST, CREATE_CLASS_LIST, SET_CLASS_ID, SET_MYCLASS_HOME_DATA, REMOVE_CLASS_DATA, CLASS_MEMBER_INFO, SET_MEMBER_ID} from '@/store/mutation-class-types';
 import {MYCLASS_LIST_ACTION, POST_LIST_ACTION, MAKE_CLASS, MYCLASS_HOME, CLASS_MEMBER_INFO_ACTION, MODIFY_CLASS_MEMBER_INFO} from '@/store/action-class-types';
+=======
+import {
+    MYCLASS_LIST,
+    POST_LIST,
+    CREATE_CLASS_LIST,
+    SET_CLASS_ID,
+    SET_MYCLASS_HOME_DATA,
+    REMOVE_CLASS_DATA,
+    UPDATE_SIDE_MENU_NUM
+} from '@/store/mutation-class-types';
+import {
+    MYCLASS_LIST_ACTION,
+    POST_LIST_ACTION,
+    MAKE_CLASS,
+    MYCLASS_HOME,
+    UPDATE_SIDE_MENU_NUM_ACTION
+} from '@/store/action-class-types';
+
+>>>>>>> 97d9e83904744d00c1f8d9412798797c19179f51
 
 @Module({
     namespaced: true,
@@ -22,7 +42,11 @@ export default class ClassModule extends VuexModule {
     private memberInfo: IClassMemberInfo[] = [];
     private count: number = 0;
     private classId: number = 0;
+<<<<<<< HEAD
     private memberId: number = 0;
+=======
+    private sideMenuNum: number=0;
+>>>>>>> 97d9e83904744d00c1f8d9412798797c19179f51
     private myClassHomeData: IClassInfo={
         contents_updatedAt:new Date(),
         createdAt: new Date(),
@@ -74,11 +98,24 @@ export default class ClassModule extends VuexModule {
         return (!this.myClassHomeData)? this.myClassHomeData : JSON.parse( localStorage.getItem('homeData') as string );
     }
 
+<<<<<<< HEAD
     get memberID(): string | null | number{
         return (  localStorage.getItem('memberId') !==null )? localStorage.getItem('memberId') : this.memberId;
     }
 
     /* Mutations */
+=======
+    get activeSideMenuNum(): number{
+        return (  localStorage.getItem('sideMenuNum') !==null )? Number( localStorage.getItem('sideMenuNum') ) : this.sideMenuNum;
+    }
+
+    @Mutation
+    public [UPDATE_SIDE_MENU_NUM]( num: number ): void{
+        this.sideMenuNum=num;
+        console.log('sideMenuNum=', this.sideMenuNum);
+        localStorage.setItem('sideMenuNum', String( num ) );
+    }
+>>>>>>> 97d9e83904744d00c1f8d9412798797c19179f51
 
     @Mutation
     public [SET_MYCLASS_HOME_DATA]( info: IClassInfo ): void{
@@ -141,6 +178,11 @@ export default class ClassModule extends VuexModule {
         this.classId=0;
     }
 
+    @Action({rawError: true})
+    public [UPDATE_SIDE_MENU_NUM_ACTION]( num: number ): void{
+        this.context.commit(UPDATE_SIDE_MENU_NUM, num);
+    }
+
     /* Actions */
     @Action({rawError: true})
     public [MYCLASS_LIST_ACTION](): Promise<INullable<IMyClassList[]>> {
@@ -185,6 +227,7 @@ export default class ClassModule extends VuexModule {
     @Action({rawError: true})
     public [MYCLASS_HOME]( id: string | number ): Promise<any>{
         this.context.commit(SET_CLASS_ID, id);
+        this.context.commit(UPDATE_SIDE_MENU_NUM, 0);
 
         return MyClassService.getClassInfoById( id )
           .then( (data)=>{
