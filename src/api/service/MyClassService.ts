@@ -81,8 +81,11 @@ class MyClassService {
     public getClassMemberInfo(classId: number, memberId: number): Promise<IClassMemberInfo> {
         return request('get', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
-    public setClassMemberInfo(classId: number, memberId: number, data: any): Promise<IClassMemberInfo> {
-        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`, data);
+    public setClassMemberInfo(classId: number, memberId: number, info: any): Promise<IClassMemberInfo> {
+        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`, info);
+    }
+    public withdrawClass(classId: number, memberId: number): Promise<any> {
+        return request('delete', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
 }
 

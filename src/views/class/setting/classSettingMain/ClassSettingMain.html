@@ -10,8 +10,8 @@
                 <ul class="member-list">
                     <li class="list-item">
                         <div class="member-info admin">
-                            <p class="name">{{ classMemberInfo.member_info.nickname }}</p>
-                            <span class="position">{{ memberLevel(classMemberInfo.member_info.level) }}</span>
+                            <p class="name">{{ memberInfo.nickname }}</p>
+                            <span class="position">{{ memberLevel(memberInfo.level) }}</span>
                         </div>
                         <div class="member-info-btn">
                             <button type="button" class="btn only-ico-btn" @click="gotoLink('classProfile')"><img :src="require('@/assets/images/settings.svg')" alt=""></button>
@@ -27,10 +27,11 @@
                         <p class="list-tit">푸시 알림 설정</p>
                         <div class="setting-btn">
                             <div class="form-switcher">
-                                <input type="checkbox" id="push"
-                                       v-model="notiFlag.onoff_push_noti"
-                                       @change="pushToggle(0)">
-                                <label for="push"></label>
+                                <input type="checkbox"
+                                       id="push_noti"
+                                       v-model="this.onOffNoti"
+                                       @change="pushToggle(this.onOffNoti)">
+                                <label for="push_noti"></label>
                             </div>
                         </div>
                     </li>
@@ -38,7 +39,7 @@
                     <li v-for="(item, idx) in classNotifyList"
                         :key="idx"
                         class="list-item sub-list-item"
-                        :class="{'disabled': !notiFlag.onoff_push_noti}">
+                        :class="{'disabled': this.onOffNoti === 0}">
                         <p class="list-tit">{{ item.listTit }}</p>
                         <div class="setting-btn">
                             <div class="member-info-btn">
@@ -112,8 +113,12 @@
 
                     <div class="form-group mgt-20">
                         <label for="guideTxt">가입 안내 문구</label>
-                        <textarea class="form-textarea mgt-10" id="guideTxt" placeholder="text"></textarea>
-                        <small class="form-message count">0/100</small>
+                        <textarea class="form-textarea mgt-10"
+                                  id="guideTxt"
+                                  @keyup="textCount"
+                                  v-model="guideTxt"
+                                  placeholder="text"></textarea>
+                        <small class="form-message count">{{this.guideTxt.length}}/{{maxLength}}</small>
                     </div>
                 </div>
             </div>

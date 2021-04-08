@@ -33,11 +33,11 @@
                                 <p>{{ item.data }}</p>
 
                                 <div class="list-popup">
-                                    <button type="button" class="list-popup-btn"><span>운영자에게만 공개</span> <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
-                                    <div class="list-popup-menu pos-right active" style="transform:translate3d(130px, 0, 0);">
-                                        <a href="" class="list-popup-item">비공개</a>
-                                        <a href="" class="list-popup-item">전체 공개</a>
-                                        <a href="" class="list-popup-item">운영자에게만 공개</a>
+                                    <button type="button" class="list-popup-btn" @click="item.isActive = !item.isActive"><span>운영자에게만 공개</span> <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                    <div class="list-popup-menu pos-right" :class="{'active': item.isActive}" style="transform:translate3d(130px, 0, 0);">
+                                        <button type="button" class="list-popup-item">비공개</button>
+                                        <button type="button" class="list-popup-item">전체 공개</button>
+                                        <button type="button" class="list-popup-item">운영자에게만 공개</button>
                                     </div>
                                 </div>
                             </div>

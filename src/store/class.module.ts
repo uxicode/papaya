@@ -74,13 +74,19 @@ export default class ClassModule extends VuexModule {
         return (!this.myClassHomeData)? this.myClassHomeData : JSON.parse( localStorage.getItem('homeData') as string );
     }
 
+    get memberID(): string | null | number{
+        return (  localStorage.getItem('memberId') !==null )? localStorage.getItem('memberId') : this.memberId;
+    }
+
+    /* Mutations */
+
     @Mutation
     public [SET_MYCLASS_HOME_DATA]( info: IClassInfo ): void{
         this.myClassHomeData=info;
         localStorage.setItem('homeData', JSON.stringify(this.myClassHomeData) );
     }
 
-    /* Mutations */
+
     @Mutation
     public [SET_CLASS_ID]( id: number ): void {
         this.classId=id;
@@ -113,6 +119,7 @@ export default class ClassModule extends VuexModule {
     @Mutation
     public [SET_MEMBER_ID](memberId: number): void {
         this.memberId = memberId;
+        localStorage.setItem('memberId', String(this.memberId) );
     }
 
     @Mutation
@@ -196,13 +203,13 @@ export default class ClassModule extends VuexModule {
     }
 
     @Action({rawError: true})
-    public [CLASS_MEMBER_INFO_ACTION](payload: {classId: number, memberId: number}): Promise<IClassMemberInfo[]>{
+    public [CLASS_MEMBER_INFO_ACTION](payload: { classId: number, memberId: number }): Promise<IClassMemberInfo[]>{
         this.context.commit(SET_CLASS_ID, payload.classId);
         this.context.commit(SET_MEMBER_ID, payload.memberId);
 
         return MyClassService.getClassMemberInfo(payload.classId, payload.memberId)
           .then((data) => {
-              this.context.commit(CLASS_MEMBER_INFO, data);
+              this.context.commit(CLASS_MEMBER_INFO, data.member_info);
               console.log(this.memberInfo);
               return Promise.resolve(this.memberInfo);
           })
@@ -213,12 +220,11 @@ export default class ClassModule extends VuexModule {
     }
 
     @Action({rawError: true})
-    public [MODIFY_CLASS_MEMBER_INFO](classId: number, memberId: number, data: any): Promise<IClassMemberInfo[]>{
-        // this.context.commit(SET_CLASS_ID, classId);
-        // this.context.commit(SET_MEMBER_ID, memberId);
-        this.context.commit(CLASS_MEMBER_INFO, data);
+    public [MODIFY_CLASS_MEMBER_INFO](payload: {classId: number, memberId: number}, data: any): Promise<IClassMemberInfo[]>{
+        this.context.commit(SET_CLASS_ID, payload.classId);
+        this.context.commit(SET_MEMBER_ID, payload.memberId);
 
-        return MyClassService.setClassMemberInfo(classId, memberId, data)
+        return MyClassService.setClassMemberInfo(payload.classId, payload.memberId, data)
           .then((info) => {
               this.context.commit(CLASS_MEMBER_INFO, info);
               console.log(this.memberInfo);

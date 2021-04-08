@@ -6,6 +6,7 @@ import WithRender from './ClassProfile.html';
 interface IProfileData {
     type: string;
     data: string;
+    isActive: boolean;
 }
 
 @WithRender
@@ -22,15 +23,18 @@ export default class ClassProfile extends Vue {
     private profileDataList: IProfileData[] = [
         {
             type: '아이디',
-            data: 'papaya123'
+            data: 'papaya123',
+            isActive: false
         },
         {
             type: '모바일 번호',
-            data: '010-1234-5678'
+            data: '010-1234-5678',
+            isActive: false
         },
         {
             type: '이메일 주소',
-            data: 'papaya@gmail.com'
+            data: 'papaya@gmail.com',
+            isActive: false
         }
     ];
 
