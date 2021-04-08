@@ -62,11 +62,11 @@ export default class FindId extends Vue {
   @Auth.Getter
   private findUserId!: string; //아이디 찾기를 통해  store 에  저장된 아이디 값 호출
 
-  @Auth.Mutation
-  private USER_ID!: (userId: string) => void; //아이디 찾기를 통해 해당 값을 store 에 값 저장
+  /*@Auth.Mutation
+  private USER_ID!: (userId: string) => void;*/ //아이디 찾기를 통해 해당 값을 store 에 값 저장
 
-  @Auth.Mutation
-  private USER_EMAIL!: (value: string) => void; // 이메일 찾기를 통해 해당 값을 store 에 저장
+  /*@Auth.Mutation
+  private USER_EMAIL!: (value: string) => void; */// 이메일 찾기를 통해 해당 값을 store 에 저장
 
   @Auth.Action
   private FIND_ID_BY_MOBILE!: (mobile: string) => Promise<any>;
