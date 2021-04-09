@@ -544,6 +544,21 @@ $popupDepth: 10;
   }
 }
 
+.preview {
+  > .pre-txt {
+    display: inline-block;
+    padding: 15px 0;
+    font-size: 14px;
+    color: #373749;
+    border-bottom: 1px solid #f4f5f6;
+    > img{
+      display: inline-block;
+      padding-right: 10px;
+    }
+  }
+}
+
+
 .form-temp-save {
   @include pos-vertical($right:40px);
 }

@@ -320,3 +320,12 @@
     }
   }
 }
+.add-schedule{
+  @include pos-abs($right:-80px, $bottom:35%);
+  &-btn {
+    display:block;
+    width:80px;
+    height:80px;
+    background:url(../../assets/images/add-btn.svg) no-repeat;
+  }
+}

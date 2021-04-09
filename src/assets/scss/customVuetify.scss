@@ -1,0 +1,34 @@
+.theme--light.v-calendar-weekly .v-calendar-weekly__day:not(:last-child), .theme--light.v-calendar-weekly .v-calendar-weekly__head-weekday:not(:last-child){
+  border-right:0;
+}
+.v-calendar-weekly__day-label .v-btn{font-size:14px;}
+/*달력 클릭했을때 배경 */
+.theme--light.v-btn:focus {
+  color:#fff;
+  &:before{
+    opacity: 1;
+    background-color:#1d1d4c;
+  }
+}
+.theme--light.v-calendar-weekly .v-calendar-weekly__day.v-outside,
+.theme--light.v-calendar-weekly .v-calendar-weekly__head-weekday.v-outside{
+  background-color: #fff;
+}
+//달력 상단 요일
+.v-calendar-weekly__head-weekday{
+  font-size:14px;
+}
+.calendar-prev{position: relative;}
+.v-icon.mdi-chevron-left:after, .v-icon.mdi-chevron-right:after , .calendar-prev:after{
+  width:24px;
+  height:24px;
+  background:url('../images/arrow-right.png') 0 0 no-repeat;
+  opacity: 1;
+  transform: scale(1);
+}
+.v-icon.mdi-chevron-left:after{
+  transform: rotate(180deg);
+}
+.v-text-field input{font-size:14px;}
+
+
