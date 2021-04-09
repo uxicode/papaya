@@ -22,6 +22,10 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/${id}`);
     }
 
+    public setClassInfoById(id: number, data: any): Promise<any>{
+        return request('put', `${CLASS_BASE_URL}/${id}`, data);
+    }
+
     /**
      * 내가 가입한 클래스 알림글 북마크한 글조회
      */
@@ -72,6 +76,9 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum`, {page_no:pageNum, count});
     }
 
+    public getClassMembers(classId: number): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/members`);
+    }
 
     /**
      * 클래스 멤버 정보 조회 및 수정
@@ -81,11 +88,25 @@ class MyClassService {
     public getClassMemberInfo(classId: number, memberId: number): Promise<IClassMemberInfo> {
         return request('get', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
+
     public setClassMemberInfo(classId: number, memberId: number, info: any): Promise<IClassMemberInfo> {
         return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`, info);
     }
+
     public withdrawClass(classId: number, memberId: number): Promise<any> {
         return request('delete', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
+    }
+
+    /**
+     * 클래스 가입 질문 전체 조회
+     * @param classId
+     */
+    public getClassQuestion(classId: number): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/question`);
+    }
+
+    public setClassQuestion(classId: number, questionId: number, payload: {new_question: string}): Promise<any> {
+        return request('put', `${CLASS_BASE_URL}/${classId}/question/${{questionId}}`, payload);
     }
 }
 

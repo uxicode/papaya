@@ -16,10 +16,7 @@
                             <div class="tb-cell list-tit">클래스 닉네임</div>
                             <div class="tb-cell basic-info">
                                 <!-- basic-info-item에 class show -->
-                                <p class="basic-info-item show">김지영선생님</p>
-                                <div class="basic-info-item">
-                                    <input type="text" class="form-control" style="width:200px;">
-                                </div>
+                                <p class="basic-info-item show">{{ memberInfo.nickname }}</p>
                                 <button type="button" class="edit-btn" @click="isNicknameModify = true"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                             </div>
                         </div>
@@ -30,14 +27,14 @@
                         <div class="tb-style full">
                             <div class="tb-cell list-tit">{{ item.type }}</div>
                             <div class="tb-cell basic-info">
-                                <p>{{ item.data }}</p>
+                                <p>{{ myInfo[item.data] }}</p>
 
                                 <div class="list-popup">
                                     <button type="button" class="list-popup-btn" @click="item.isActive = !item.isActive"><span>운영자에게만 공개</span> <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
                                     <div class="list-popup-menu pos-right" :class="{'active': item.isActive}" style="transform:translate3d(130px, 0, 0);">
-                                        <button type="button" class="list-popup-item">비공개</button>
-                                        <button type="button" class="list-popup-item">전체 공개</button>
-                                        <button type="button" class="list-popup-item">운영자에게만 공개</button>
+                                        <button type="button" class="list-popup-item" value="0">비공개</button>
+                                        <button type="button" class="list-popup-item" value="1">전체 공개</button>
+                                        <button type="button" class="list-popup-item" value="2">운영자에게만 공개</button>
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +70,10 @@
 
                     <div class="popup-input">
                         <div class="form-group inline">
-                            <input type="text" class="form-control" value="배혜진" style="width:370px;">
+                            <input type="text" class="form-control"
+                                   :value="memberInfo.nickname"
+                                   @input="valueChange($event)"
+                                   style="width:370px;">
                             <btn type="grey" size="sm">중복확인</btn>
                         </div>
                     </div>
@@ -82,8 +82,8 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isNicknameModify = false">취소</btn>
-                    <btn type="navi" disabled>변경하기</btn>
+                    <btn type="outline" @btnClick="isNicknameModify = false; tempData = memberInfo.nickname;">취소</btn>
+                    <btn type="navi" @btnClick="modifyNickname(tempData)">변경하기</btn>
                 </div>
             </div>
         </modal>
