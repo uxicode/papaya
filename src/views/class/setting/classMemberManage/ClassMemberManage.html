@@ -16,65 +16,25 @@
                     <p><strong>차단 멤버 목록</strong> <button class="more-btn" @click="gotoBlockedMemberList"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button></p>
                 </div>
                 <div class="activity-tit">
-                    <p>멤버 2118</p>
+                    <p>멤버 {{ classMembers.length }}</p>
                 </div>
                 <div class="member-management-list scroll-body" style="height:540px;">
                     <ul>
-                        <li class="member-item">
-                            <div class="member-type manager">
-                                <p class="member-name">김미영선생님</p>
-                                <p class="member-tit">운영자</p>
+                        <li v-for="(item, idx) in classMembers"
+                            :key="idx"
+                            class="member-item">
+                            <div class="member-type manager"
+                                 :class="memberLevelIcon(item.level)">
+                                <p class="member-name">{{ item.nickname }}</p>
+                                <p class="member-tit">{{ memberLevelTxt(item.level) }}</p>
                             </div>
-                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type staff">
-                                <p class="member-name">김경희선생님</p>
-                                <p class="member-tit">스탭 멤버</p>
+                            <div class="list-popup">
+                                <button type="button" class="member-more" @click="isActive = !isActive"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                <div class="list-popup-menu pos-right" :class="{'active': isActive === true}" style="transform:translate3d(87px, 0, 0);">
+                                    <button class="list-popup-item" @click="isActive = false; isBlockModal = true">멤버 차단</button>
+                                    <button class="list-popup-item" @click="isActive = false; isBanModal = true">강제 탈퇴</button>
+                                </div>
                             </div>
-                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type staff">
-                                <p class="member-name">박철수선생님</p>
-                                <p class="member-tit">스탭 멤버</p>
-                            </div>
-                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type staff">
-                                <p class="member-name">새봄선생님</p>
-                                <p class="member-tit">스탭 멤버</p>
-                            </div>
-                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
                         </li>
                     </ul>
                 </div>
@@ -83,14 +43,14 @@
         <!--// popup-body -->
     </div>
 
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.1.1 (멤버 활동 관리 - 차단-확인) -->
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.1.1 (멤버 활동 관리-차단-확인) -->
     <transition name="modal">
-        <modal v-if="false" size="540px" body-padding="0">
+        <modal v-if="isBlockModal" size="540px" body-padding="0">
             <div slot="header">
                 <!-- header custom coding-->
                 <div class="popup-icon block"></div>
                 <div class="popup-close">
-                    <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    <button class="close" @click="isBlockModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
             <div slot="body">
@@ -117,21 +77,21 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <button type="button" class="btn outline">취소</button>
-                    <button type="button" class="btn primary navi">차단하기</button>
+                    <btn type="outline" @btnClick="isBlockModal = false">취소</btn>
+                    <btn type="navi" @btnClick="isBlockModal = false">차단하기</btn>
                 </div>
             </div>
         </modal>
     </transition>
     <!-- end: 공통 팝업 -->
 
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.1.2 (멤버 활동 관리 - 차단-완료) -->
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.1.2 (멤버 활동 관리-차단-완료) -->
     <transition name="modal">
-        <modal v-if="false" size="540px" body-padding="0">
+        <modal v-if="isBlockCompleteModal" size="540px" body-padding="0">
             <div slot="header">
                 <div class="popup-icon block"></div>
                 <div class="popup-close">
-                    <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    <button class="close" @click="isBlockCompleteModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
             <div slot="body">
@@ -153,20 +113,20 @@
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="navi">확인</btn>
+                    <btn type="navi" @click="isBlockCompleteModal = false">확인</btn>
                 </div>
             </div>
         </modal>
     </transition>
     <!-- end: 공통 팝업 -->
 
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.2.1 (멤버 활동 관리 - 탈퇴-확인) -->
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.2.1 (멤버 활동 관리-탈퇴-확인) -->
     <transition name="modal">
-        <modal v-if="false" size="540px" body-padding="0">
+        <modal v-if="isBanModal" size="540px" body-padding="0">
             <div slot="header">
                 <div class="popup-icon leave"></div>
                 <div class="popup-close">
-                    <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    <button class="close" @click="isBanModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
             <div slot="body">
@@ -191,21 +151,21 @@
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="outline">취소</btn>
-                    <btn type="navi">강제 탈퇴</btn>
+                    <btn type="outline" @btnClick="isBanModal = false">취소</btn>
+                    <btn type="navi" @btnClick="isBanModal = false">강제 탈퇴</btn>
                 </div>
             </div>
         </modal>
     </transition>
     <!-- end: 공통 팝업 -->
 
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.2.2 (멤버 활동 관리 - 탈퇴-확인) -->
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.2.2 (멤버 활동 관리-탈퇴-완료) -->
     <transition name="modal">
-        <modal v-if="false" size="540px" body-padding="0">
+        <modal v-if="isBanCompleteModal" size="540px" body-padding="0">
             <div slot="header">
                 <div class="popup-icon leave"></div>
                 <div class="popup-close">
-                    <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    <button class="close" @click="isBanCompleteModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
             <div slot="body">
@@ -227,7 +187,7 @@
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="navi">확인</btn>
+                    <btn type="navi" @btnClick="isBanCompleteModal = false">확인</btn>
                 </div>
             </div>
         </modal>

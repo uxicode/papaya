@@ -11,6 +11,6 @@ import Modal from '@/components/modal/modal.vue';
 export default class ClassAdminDelegate extends Vue{
     private goBack(): void {
         this.$router.push('./')
-            .then();
+          .then();
     }
 }

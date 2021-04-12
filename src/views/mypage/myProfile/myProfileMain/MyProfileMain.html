@@ -7,7 +7,7 @@
                 <p class="list-tit">이름</p>
                 <div class="list-right">
                     <span>{{ myInfo.fullname }}</span>
-                    <button type="button" class="list-btn" @click="modifyNameModalOpen"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                    <button type="button" class="list-btn" @click="openModify('name')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                 </div>
             </div>
             <div class="list-item">
@@ -23,7 +23,7 @@
                 <p class="list-tit">성별</p>
                 <div class="list-right">
                     <div class="list-popup">
-                        <button type="button" class="list-popup-btn" @click="modifyGenderToggle">
+                        <button type="button" class="list-popup-btn" @click="openModify('gender')">
                             {{ myInfo.gender === '1' ? '남자' : '여자' }}
                             <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
                         </button>
@@ -51,21 +51,21 @@
                 <p class="list-tit">모바일 번호</p>
                 <div class="list-right">
                     <span>{{ myInfo.mobile_no }}</span>
-                    <button type="button" class="list-btn" @click="gotoModifyMobile"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                    <button type="button" class="list-btn" @click="gotoLink('modifyMobile')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                 </div>
             </div>
             <div class="list-item">
                 <p class="list-tit">이메일 주소</p>
                 <div class="list-right">
                     <span>{{ myInfo.email }}</span>
-                    <button type="button" class="list-btn" @click="modifyEmailModalOpen"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                    <button type="button" class="list-btn" @click="openModify('email')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                 </div>
             </div>
             <div class="list-item">
                 <p class="list-tit">비밀번호</p>
                 <div class="list-right">
                     <span>********</span>
-                    <button type="button" class="list-btn" @click="gotoPwModify"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                    <button type="button" class="list-btn" @click="gotoLink('modifyPw')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@
             <div class="list-item">
                 <p class="list-tit">서비스 탈퇴하기</p>
                 <div class="list-right">
-                    <a href="" class="list-btn"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
+                    <button type="button" class="list-btn" @click="openModify('withdraw')"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                 </div>
             </div>
         </div>
@@ -142,5 +142,72 @@
             </div>
         </modal>
         <!-- end: 이메일 수정 팝업 -->
+
+        <!-- start: 서비스 탈퇴-확인 팝업 -->
+        <modal v-else-if="isWithdrawModal" size="540px" body-padding="0">
+            <div slot="header">
+                <div class="popup-close">
+                    <button class="close" @click="isWithdrawModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">정말 탈퇴 하시겠습니까?</h2>
+                    <p class="popup-txt">서비스 탈퇴 시 개인정보는 모두 삭제됩니다. 자세한 내용은 이용약관을 확인해주세요.</p>
+                </div>
+            </div>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="outline" @btnClick="withdraw">네</btn>
+                    <btn type="navi" @btnClick="isWithdrawModal = false">아니오</btn>
+                </div>
+            </div>
+        </modal>
+        <!-- end: 서비스 탈퇴-확인 팝업 -->
+
+        <!-- start: 서비스 탈퇴-완료 팝업 -->
+        <modal v-else-if="isWithdrawCompleteModal" size="540px" body-padding="0">
+            <div slot="header">
+                <div class="popup-close">
+                    <button class="close" @click="gotoLogin"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">탈퇴가 완료되었습니다.</h2>
+                    <p class="popup-txt">파파야 클래스를 이용해 주셔서 감사합니다.</p>
+                </div>
+            </div>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="navi" @btnClick="gotoLogin">확인</btn>
+                </div>
+            </div>
+        </modal>
+        <!-- end: 서비스 탈퇴-완료 팝업 -->
+
+        <!-- start: 서비스 탈퇴-탈퇴 불가 팝업 -->
+        <modal v-else-if="isWithdrawDeniedModal" size="540px" body-padding="0">
+            <div slot="header">
+                <div class="popup-icon">
+                    <img :src="require('@/assets/images/popup-icon-error.png')">
+                </div>
+                <div class="popup-close">
+                    <button class="close" @click="isWithdrawDeniedModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">클래스에 멤버가 있을 시 운영자는 탈퇴가 불가능합니다.</h2>
+                    <p class="popup-txt">운영자 위임 신청을 원하신다면 ‘클래스 설정 > 클래스 관리 > 운영자 위임 신청’을 통해 진행해 주시기 바랍니다.</p>
+                </div>
+            </div>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="navi" @btnClick="isWithdrawDeniedModal = false">확인</btn>
+                </div>
+            </div>
+        </modal>
+        <!-- end: 서비스 탈퇴-탈퇴 불가 팝업 -->
     </transition>
 </div>

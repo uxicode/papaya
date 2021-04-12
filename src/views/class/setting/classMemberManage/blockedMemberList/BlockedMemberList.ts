@@ -12,8 +12,11 @@ import WithRender from './BlockedMemberList.html';
 })
 
 export default class BlockedMemberList extends Vue {
+    private isUnblockModal: boolean = false;
+    private isUnblockCompleteModal: boolean = false;
+
     private goBack(): void {
-        this.$router.push('/classSetting/classMemberManage')
-            .then();
+        this.$router.push('./')
+          .then();
     }
 }
