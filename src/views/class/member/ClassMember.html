@@ -24,7 +24,10 @@
                     </div>
                     <div class="member-info-btn">
                         <div class="list-popup">
-                            <button type="button" class="list-popup-btn" @click="isDetailPopup = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                            <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                            <div class="list-popup-menu pos-right active" style="transform:translate3d(42px, 0,0);">
+                                <button type="button" class="list-popup-item" @click="isDetailPopup = true">멤버정보</button>
+                            </div>
                         </div>
                     </div>
                 </li>
@@ -45,7 +48,10 @@
                             </div>
                             <div class="member-info-btn">
                                 <div class="list-popup">
-                                    <button type="button" class="list-popup-btn" @click="isDetailPopup = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                    <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                    <div class="list-popup-menu pos-right active" style="transform:translate3d(42px, 0,0);">
+                                        <button type="button" class="list-popup-item" @click="isDetailPopup = true">멤버정보</button>
+                                    </div>
                                 </div>
                             </div>
                         </li>
@@ -67,7 +73,10 @@
                             </div>
                             <div class="member-info-btn">
                                 <div class="list-popup">
-                                    <button type="button" class="list-popup-btn" @click="isDetailPopup = true"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                    <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                    <div class="list-popup-menu pos-right active" style="transform:translate3d(42px, 0,0);">
+                                        <button type="button" class="list-popup-item" @click="isDetailPopup = true">멤버정보</button>
+                                    </div>
                                 </div>
                             </div>
                         </li>
@@ -115,10 +124,10 @@
                         <div class="profile-btn">
                             <div class="list-popup">
                                 <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0, 0);">
-                                    <a href="" class="list-popup-item">list1</a>
-                                    <a href="" class="list-popup-item">list2</a>
-                                    <a href="" class="list-popup-item">list3</a>
+                                <div class="list-popup-menu pos-right active" style="transform:translate3d(42px, 0, 0);">
+                                    <button type="button" class="list-popup-item">list1</button>
+                                    <button type="button" class="list-popup-item">list1</button>
+                                    <button type="button" class="list-popup-item">list1</button>
                                 </div>
                             </div>
                         </div>

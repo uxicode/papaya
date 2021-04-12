@@ -116,10 +116,10 @@
                         <label for="guideTxt">가입 안내 문구</label>
                         <textarea class="form-textarea mgt-10"
                                   id="guideTxt"
-                                  @keyup="textCount(info.classinfo.description)"
-                                  v-model="info.classinfo.description"
+                                  @keyup="textCount(info.description)"
+                                  v-model="info.description"
                                   placeholder="text"></textarea>
-                        <small class="form-message count">{{info.classinfo.description.length}}/{{maxLength}}</small>
+                        <small class="form-message count">{{info.description.length}}/{{maxLength}}</small>
                     </div>
                 </div>
             </div>

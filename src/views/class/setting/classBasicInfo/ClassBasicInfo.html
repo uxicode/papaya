@@ -17,22 +17,24 @@
                     <div class="info-form">
                         <div class="form-group">
                             <label for="schoolName">학교 이름</label>
-                            <button type="button" class="btn primary grey sm">검색</button>
-                            <input type="text" class="form-control" id="schoolName" value="파파야 초등학교" disabled style="width:430px">
+                            <btn type="grey" size="sm">검색</btn>
+                            <input type="text" class="form-control" id="schoolName"
+                                   v-model="info.g_name" readonly style="width:430px">
                         </div>
                         <div class="form-group mgt-40">
                             <label for="className">클래스 이름</label>
-                            <input type="text" class="form-control" id="className" value="꿈꾸는 5학년 1반">
+                            <input type="text" class="form-control" id="className"
+                                   v-model="info.name">
                         </div>
                         <div class="form-group mgt-40">
-                            <span class="label">공개 범위 <a href="" class="tip-info"><img :src="require('@/assets/images/info.svg')" class="icon-img" alt=""></a></span>
+                            <span class="label">공개 범위 <button type="button" class="tip-info"><img :src="require('@/assets/images/info.svg')" class="icon-img" alt=""></button></span>
                             <div class="checkbox-group">
                                 <div class="btn-radio">
-                                    <input type="radio" name="privacy" id="closedClass" checked>
+                                    <input type="radio" name="privacy" id="closedClass" :checked="classInfo.is_private === true">
                                     <label for="closedClass">비공개 클래스</label>
                                 </div>
                                 <div class="btn-radio">
-                                    <input type="radio" name="privacy" id="openedClass">
+                                    <input type="radio" name="privacy" id="openedClass" :checked="classInfo.is_private === false">
                                     <label for="openedClass">오픈 클래스</label>
                                 </div>
                             </div>

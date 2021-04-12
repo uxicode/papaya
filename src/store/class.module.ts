@@ -250,7 +250,7 @@ export default class ClassModule extends VuexModule {
     }
 
     @Action({rawError: true})
-    public [MODIFY_CLASS_MEMBER_INFO](payload: {classId: number, memberId: number}, data: any): Promise<IClassMemberInfo[]>{
+    public [MODIFY_CLASS_MEMBER_INFO](payload: {classId: number, memberId: number}, data: object): Promise<IClassMemberInfo[]>{
         this.context.commit(SET_CLASS_ID, payload.classId);
         this.context.commit(SET_MEMBER_ID, payload.memberId);
 

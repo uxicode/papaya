@@ -63,7 +63,7 @@ export default class ClassSettingMain extends Vue{
             isActive: false
         },
     ];
-
+    /* 클래스 관리 / 멤버 관리 / 기타 텍스트 및 링크 */
     private classManageList: ISettingMenu[] = [
         {
             title: '클래스 기본 정보 관리',
@@ -114,7 +114,6 @@ export default class ClassSettingMain extends Vue{
 
     /* 가입 질문 설정 관련 */
     private questionList: IQuestionList[] = [];
-    private questionId: number = 0;
     private tempData: string = '';
 
     get memberInfo(): IClassMemberInfo[] {
@@ -142,7 +141,7 @@ export default class ClassSettingMain extends Vue{
     private getClassInfo(): void {
         MyClassService.getClassInfoById(this.classID)
           .then((data) => {
-              this.classInfo = data;
+              this.classInfo = data.classinfo;
               console.log(this.classInfo);
           });
     }
@@ -180,7 +179,7 @@ export default class ClassSettingMain extends Vue{
     }
 
     /**
-     * 변경할 정보를 임시로 담을 함수
+     * input을 이용해 변경할 정보를 임시로 담을 함수
      * @param event
      * @private
      */
@@ -194,11 +193,9 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private pushToggle(): void {
-        this.onOffNoti = !this.onOffNoti;
-        this.MODIFY_CLASS_MEMBER_INFO({classId: this.classID, memberId: this.memberID},
-          {onoff_push_noti: this.onOffNoti})
+        MyClassService.setClassMemberInfo(this.classID, this.memberID, {onoff_push_noti: !this.onOffNoti})
           .then(() => {
-              console.log(`onoff_push_noti = ${this.onOffNoti}`);
+              console.log(`푸시 알림 : ${!this.onOffNoti}`);
           });
     }
 
