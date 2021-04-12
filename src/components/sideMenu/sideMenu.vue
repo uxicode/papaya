@@ -74,8 +74,10 @@ import {Utils} from '@/utils/utils';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import MyClassService from '@/api/service/MyClassService';
+import ImageSetting from '@/views/class/IProfileImg/ImageSetting';
 import {CLASS_BASE_URL} from '@/api/base';
-import {UPDATE_SIDE_MENU_NUM} from '@/store/mutation-class-types';
+import { UPDATE_SIDE_MENU_NUM} from '@/store/mutation-class-types';
+import store from '@/store';
 
 
 interface ISideMenu{
@@ -94,6 +96,8 @@ const MyClass = namespace('MyClass');
 })
 export default class SideMenu extends Vue{
 
+
+
   @Prop(Number)
   private activeNum: number | null | undefined;
 
@@ -106,8 +110,12 @@ export default class SideMenu extends Vue{
   @MyClass.Getter
   private activeSideMenuNum!: number;
 
+  @MyClass.Getter
+  private activeNumModel!: number;
+
   @MyClass.Action
   private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
+
 
   private sideMenuData: ISideMenu[]=[
     {id:0, title: '클래스 홈', linkKey:'' },
@@ -126,8 +134,16 @@ export default class SideMenu extends Vue{
   public created(){
     //화면 새로고침시에
     if (performance.navigation.type === 1) {
-      this.sideMenuClickHandler(0);
+      this.sideMenuClickHandler( 0 );
     }
+
+    /*window.onpageshow = function(event) {
+      if ( event.persisted || (window.performance && window.performance.navigation.type === 1)) {
+        // Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우
+        console.log( event )
+      }
+    }*/
+
   }
 
   public getHashTag( items: any[] ): string | undefined {
@@ -145,20 +161,12 @@ export default class SideMenu extends Vue{
       'image-d.jpg',
       'image-e.jpg'
     ];
-    let img: string= '';
-    if( imgUrl === null || imgUrl === undefined){
-      img=randomImgItems[ Utils.getRandomNum(0, 5) ];
-    }else if( !isNaN( parseInt(imgUrl, 10) ) ){
-      img=randomImgItems[ parseInt(imgUrl, 10) ];
-    }else{
-      img=imgUrl;
-    }
-
-    return ( imgUrl !== null && imgUrl !== undefined )? img : require( `@/assets/images/${img}` );
+    return ImageSetting.getProfileImg(randomImgItems, imgUrl);
   }
 
   private sideMenuClickHandler(idx: number): void{
     this.$emit('sideClick', idx);
+
     this.$router.push(CLASS_BASE_URL+'/'+this.classID+'/'+this.sideMenuData[idx].linkKey)
     .catch((error)=>{
       console.log(error);

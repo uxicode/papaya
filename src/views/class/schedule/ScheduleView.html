@@ -1,9 +1,9 @@
+<v-app>
 <section class="contents-right" style="position:relative">
   <div class="classes-feed home">
     <h2 class="cnt-tit">일정</h2>
     <div class="top-notify">
     </div>
-    <v-app>
       <v-sheet height="674">
         <v-btn
                 fab
@@ -35,20 +35,15 @@
                 :event-overlap-mode="mode"
                 :event-overlap-threshold="90"
                 :event-color="getEventColor"
-                @change="getEvents"
-        ></v-calendar>
+                @change="getEvents"></v-calendar>
       </v-sheet>
-    </v-app>
-
-
   </div>
   <div class="add-schedule">
     <a href="" class="add-schedule-btn" @click.stop.prevent="addScheduleOpen"></a>
   </div>
   <!-- start: 공통 팝업 / 파일명 : W.4.5.3.3.4.2 (일정 만들기) (4.5.3.3.1 ~ 4.5.3.3.4.2)-->
   <transition name="modal">
-    <modal v-if="isPopup" size="600px" @modalClose="isPopup=false;menu1 = false">
-      <div slot="header">
+    <modal v-if="isPopup" size="600px" body-padding="0" @modalClose="isPopup=false;menu1 = false">
         <!-- header custom coding-->
         <p class="popup-header-tit">새 일정 등록</p>
         <div class="popup-close" @click="closePopup">
@@ -80,16 +75,15 @@
                 </div>
               </div>
             </div>
-
             <div class="form-item">
               <p>시작일시</p>
-<!--:close-on-content-click="false"-->
-                <div class="form-box">
+
+              <div class="form-box">
+                <div class="form-group date" style="display: inline-block;width:110px;">
                   <v-menu
                           ref="menu"
                           v-model="menu1"
-                          :close-on-content-click="false"
-                          :return-value.sync="datePickerModel"
+                          :close-on-click="true"
                           transition="scale-transition"
                           offset-y
                           min-width="auto">
@@ -97,34 +91,42 @@
                       <v-text-field
                               v-model="datePickerModel"
                               v-bind="attrs"
-                              v-on="on">
+                              v-on="on" hide-details solo flat>
                         <template v-slot:append>
                           <button type="button" class="btn form-btn form-calendar" v-on="on"></button>
                         </template>
                       </v-text-field>
                     </template>
-                    <v-date-picker v-model="datePickerModel">
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="menu1 = false">Cancel</v-btn>
-                      <v-btn text color="primary" @click="$refs.menu.save(datePickerModel)">OK</v-btn>
-                    </v-date-picker>
+                    <v-date-picker v-model="datePickerModel" no-title hide-details ></v-date-picker>
                   </v-menu>
                 </div>
 
-              <!--<div class="form-box">
-                <div class="form-group date">
-                  <input type="text" class="form-control" size="10" value="2020. 2. 28">
-                  <span class="date-area">{{ datePickerModel }}</span>
-                  <button type="button" class="btn form-btn form-calendar"></button>
-                </div>
-
-                <div class="form-group time">
+                <div class="form-group time" v-if="!isTimeSelect" @click="isTimeSelect=true">
                   <input type="text" class="time-control" size="12" value="오후 12시 00분">
                   <button type="button" class="btn form-btn form-time"></button>
                 </div>
 
-              </div>-->
+                <div class="form-group time" style="display: inline-block;" v-else>
+                  <v-select :items="['오전', '오후'] " placeholder="오전" hide-details  style="display:inline-block;width:55px">
+                    <template v-slot:selection="{item, index}">
+                      <span style="font-size:14px;">{{item}}</span>
+                    </template>
+                  </v-select>
+                  <v-select :items="[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] " placeholder="12 시" hide-details   style="display:inline-block;width:55px">
+                    <template v-slot:selection="{item, index}">
+                      <span style="font-size:14px;">{{item}}시</span>
+                    </template>
+                  </v-select>
+                  <v-select :items="[ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00'] " placeholder="00 분"  hide-details   style="display:inline-block;width:55px">
+                    <template v-slot:selection="{item, index}">
+                      <span style="font-size:14px;">{{item}}분</span>
+                    </template>
+                  </v-select>
+                </div>
+              </div>
+
             </div>
+
             <div class="form-item">
               <p>종료일시</p>
               <div class="form-box">
@@ -306,3 +308,4 @@
   </modal>
   <!-- end: 공통 팝업 -->
 </section>
+</v-app>

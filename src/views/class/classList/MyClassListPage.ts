@@ -3,7 +3,7 @@ import {namespace} from 'vuex-class';
 import { IClassMember, IMyClassList} from '@/views/model/my-class.model';
 import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
-import {getAllPromise} from '@/views/model/types';
+import { getAllPromise } from '@/views/model/types';
 import MyClassListView from '@/views/class/classList/MyClassListView';
 import WithRender from './MyClassListPage.html';
 import {MYCLASS_HOME} from '@/store/action-class-types';
@@ -59,7 +59,6 @@ export default class MyClassListPage extends Vue {
   ];
   private moreInfos: IClassMember[]=[];
 
-
   @Auth.Getter
   private userInfo!: IUserMe;
 
@@ -78,7 +77,6 @@ export default class MyClassListPage extends Vue {
 
 
   //start : get method ================================================
-
   get classListMoreInfos():  IClassMember[]{
     return this.moreInfos;
   }

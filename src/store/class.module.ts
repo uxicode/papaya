@@ -64,6 +64,7 @@ export default class ClassModule extends VuexModule {
         image_url:''
     };
 
+
     /* Getters */
     get myClassLists():  IMyClassList[]{
         return this.classData;

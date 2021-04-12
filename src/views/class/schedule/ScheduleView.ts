@@ -15,6 +15,7 @@ const MyClass = namespace('MyClass');
 })
 export default class ScheduleView extends Vue{
     private isPopup: boolean=false;
+    private isTimeSelect: boolean=false;
 
     private type: string= 'month';
     private types: string[] = ['month', 'week', 'day', '4day'];
@@ -39,7 +40,7 @@ export default class ScheduleView extends Vue{
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
-    public getEvents( time: {start: any, end: any} ) {
+    public getEvents( time: { start: any, end: any } ) {
         const eventItems= [];
 
         const min = new Date(`${time.start.date}T00:00:00`);

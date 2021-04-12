@@ -6,3 +6,4 @@ export const SET_CLASS_ID: string = 'SET_CLASS_ID';
 export const SET_MYCLASS_HOME_DATA: string = 'SET_MYCLASS_HOME_DATA';
 export const REMOVE_CLASS_DATA: string = 'REMOVE_CLASS_DATA';
 export const UPDATE_SIDE_MENU_NUM: string = 'UPDATE_SIDE_MENU_NUM';
+export const SET_ACTIVE_NUM: string = 'SET_ACTIVE_NUM';
