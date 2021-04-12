@@ -180,14 +180,14 @@ export default class ClassModule extends VuexModule {
 
         console.log(this.makeClassInfo);
         return MyClassService.setMakeClass( this.makeClassInfo )
-          .then( (data: any)=>{
-              console.log(data.classinfo);
-              this.context.commit( CREATE_CLASS_LIST, this.makeClassInfo );
-              return Promise.resolve(this.makeClassInfo);
-          }).catch((error: any)=>{
-              console.log(error);
-              return Promise.reject(error);
-          });
+            .then( (data: any)=>{
+                console.log(data.classinfo);
+                this.context.commit( CREATE_CLASS_LIST, this.makeClassInfo );
+                return Promise.resolve(this.makeClassInfo);
+            }).catch((error: any)=>{
+                console.log(error);
+                return Promise.reject(error);
+            });
     }
 
     @Action({rawError: true})
@@ -195,16 +195,16 @@ export default class ClassModule extends VuexModule {
         this.context.commit(SET_CLASS_ID, id);
 
         return MyClassService.getClassInfoById( id )
-          .then( (data)=>{
-              this.context.commit(SET_MYCLASS_HOME_DATA, data.classinfo);
+            .then( (data)=>{
+                this.context.commit(SET_MYCLASS_HOME_DATA, data.classinfo);
 
-              console.log(this.myClassHomeModel);
+                console.log(this.myClassHomeModel);
 
-              return Promise.resolve(this.myClassHomeModel);
-          }).catch((error)=>{
-              console.log(error);
-              return Promise.reject(error);
-          });
+                return Promise.resolve(this.myClassHomeModel);
+            }).catch((error)=>{
+                console.log(error);
+                return Promise.reject(error);
+            });
 
 
         // return this.$routers
@@ -216,15 +216,15 @@ export default class ClassModule extends VuexModule {
         this.context.commit(SET_MEMBER_ID, payload.memberId);
 
         return MyClassService.getClassMemberInfo(payload.classId, payload.memberId)
-          .then((data) => {
-              this.context.commit(CLASS_MEMBER_INFO, data.member_info);
-              console.log(this.memberInfo);
-              return Promise.resolve(this.memberInfo);
-          })
-          .catch((error) => {
-              console.log(error);
-              return Promise.reject(error);
-          });
+            .then((data) => {
+                this.context.commit(CLASS_MEMBER_INFO, data.member_info);
+                console.log(this.memberInfo);
+                return Promise.resolve(this.memberInfo);
+            })
+            .catch((error) => {
+                console.log(error);
+                return Promise.reject(error);
+            });
     }
 
     @Action({rawError: true})
@@ -233,14 +233,14 @@ export default class ClassModule extends VuexModule {
         this.context.commit(SET_MEMBER_ID, payload.memberId);
 
         return MyClassService.setClassMemberInfo(payload.classId, payload.memberId, data)
-          .then((info) => {
-              this.context.commit(CLASS_MEMBER_INFO, info);
-              console.log(this.memberInfo);
-              return Promise.resolve(this.memberInfo);
-          })
-          .catch((error) => {
-              console.log(error);
-              return Promise.reject(error);
-          });
+            .then((info) => {
+                this.context.commit(CLASS_MEMBER_INFO, info);
+                console.log(this.memberInfo);
+                return Promise.resolve(this.memberInfo);
+            })
+            .catch((error) => {
+                console.log(error);
+                return Promise.reject(error);
+            });
     }
 }
