@@ -26,12 +26,14 @@ export default class ClassEducation extends Vue {
     /* Modal 오픈 상태값 */
     private isCreateClass: boolean = false;
     private isClassCurr: boolean = false;
+    private isClassCurrMore: boolean = false;
     private isClassCurrDetail: boolean = false;
     private isMoreMenu: boolean = false;
 
     private countNumber: number = 0;
 
     private classCardIndex: number = 0;
+    private classCurrIndex: number = 0;
 
     private classCurrList: object[] = [
         {
@@ -43,21 +45,91 @@ export default class ClassEducation extends Vue {
                 '거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.',
             classCurrent:'총 5회차 수업 등록',
             isActive: false,
-            classCurrDetail : [
+        },
+        {
+            listTit:'2학기 국어 교육과',
+            managerLevel: false,
+            classAdmin:'김경희선생님',
+            classCnt:'요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요.' +
+                '거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.' +
+                '스쿨수학에 서 빼놓을수 없는 부분인데거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에… 빼놓을수 없는 부분인데요.',
+            classCurrent:'총 50회차 수업 등록',
+            isActive: false,
+        },
+        {
+            listTit:'일이삼사오육칠팔구십일이삼사오육칠팔구십',
+            managerLevel: true,
+            classAdmin:'김경희선생님1',
+            classCnt:'감사합니다.',
+            classCurrent:'총 3회차 수업 등록',
+            isActive: false,
+        },
+        {
+            listTit:'2학기 국어 교육과',
+            managerLevel: false,
+            classAdmin:'김경희선생님2',
+            classCnt:'요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요.' +
+                '거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.' +
+                '스쿨수학에 서 빼놓을수 없는 부분인데거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에… 빼놓을수 없는 부분인데요.',
+            classCurrent:'총 50회차 수업 등록',
+            isActive: false,
+        },
+        {
+            listTit:'2학기 국어 교육과',
+            managerLevel: true,
+            classAdmin:'김경희선생님3',
+            classCnt:'요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요.' +
+                '거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.' +
+                '스쿨수학에 서 빼놓을수 없는 부분인데거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에… 빼놓을수 없는 부분인데요.',
+            classCurrent:'총 50회차 수업 등록',
+            isActive: false,
+        },
+    ];
+
+    private classCurrDetail: object[] = [
+        {
+            classList:[
                 {
                     index: '1',
                     currTit:'4단원 복습',
                     currDate:'2019. 9. 1 월요일',
                     currTime:'오전 10시 ~ 11시',
-                    currImg: '이미지 2',
-                    currFile: '파일 1'
+                    currImg: '이미지 3',
+                    currFile: '파일 1',
+                    fileList: [
+                        {
+                            fileTit:'testFile1.pdf'
+                        },
+                        {
+                            fileTit:'testFile2.hwp'
+                        }
+                    ],
+                    imgFile:[
+                        {
+                            imgUrl:'@/assets/images/pic.png'
+                        },
+                        {
+                            imgUrl:'@/assets/images/pic2.png'
+                        },
+                        {
+                            imgUrl:'@/assets/images/pic3.png'
+                        },
+                    ]
                 },
                 {
                     index: '2',
                     currTit:'5단원 복습 - 소수의 곱셈과 나눗셈',
                     currDate:'2019. 9. 2 화요일',
                     currTime:'오전 10시 ~ 11시',
-                    currFile: '파일 1'
+                    currFile: '파일 1',
+                    fileList: [
+                        {
+                            fileTit:'testFile1.pdf'
+                        },
+                        {
+                            fileTit:'testFile2.hwp'
+                        }
+                    ],
                 },
                 {
                     index: '3',
@@ -70,8 +142,27 @@ export default class ClassEducation extends Vue {
                     currTit:'7단원 - 일차방정식',
                     currDate:'2019. 9. 4 목요일',
                     currTime:'오전 10시 ~ 11시',
-                    currImg: '이미지 2',
-                    currFile: '파일 1'
+                    currImg: '이미지 3',
+                    currFile: '파일 1',
+                    fileList: [
+                        {
+                            fileTit:'testFile1.pdf'
+                        },
+                        {
+                            fileTit:'testFile2.hwp'
+                        }
+                    ],
+                    imgFile:[
+                        {
+                            imgUrl:'@/assets/images/pic.png'
+                        },
+                        {
+                            imgUrl:'@/assets/images/pic2.png'
+                        },
+                        {
+                            imgUrl:'@/assets/images/pic3.png'
+                        },
+                    ]
                 },
                 {
                     index: '5',
@@ -82,29 +173,43 @@ export default class ClassEducation extends Vue {
             ]
         },
         {
-            listTit:'2학기 국어 교육과',
-            managerLevel: false,
-            classAdmin:'김경희선생님',
-            classCnt:'요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요.' +
-                '거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.' +
-                '스쿨수학에 서 빼놓을수 없는 부분인데거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에… 빼놓을수 없는 부분인데요.',
-            classCurrent:'총 50회차 수업 등록',
-            isActive: false,
-            classCurrDetail : [
+            classList: [
                 {
                     index: '1',
                     currTit:'1단원 - 학습',
                     currDate:'2019. 9. 1 월요일',
                     currTime:'오전 10시 ~ 11시',
-                    currImg: '이미지 2',
-                    currFile: '파일 1'
+                    currImg: '이미지 3',
+                    currFile: '파일 1',
+                    fileList:[
+                        {
+                            fileTit:'6학년 2학기 국어 II 3단원 .pdf'
+                        },
+                        {
+                            fileTit:'국어 II 3단원 정리 .hwp'
+                        },
+                        {
+                            fileTit:'국어 I 개념 정리.pdf'
+                        }
+                    ]
                 },
                 {
                     index: '2',
                     currTit:'2단원 - 학습',
                     currDate:'2019. 9. 2 화요일',
                     currTime:'오전 10시 ~ 11시',
-                    currFile: '파일 1'
+                    currFile: '파일 1',
+                    fileList:[
+                        {
+                            fileTit:'6학년 2학기 국어 II 3단원 .pdf'
+                        },
+                        {
+                            fileTit:'국어 II 3단원 정리 .hwp'
+                        },
+                        {
+                            fileTit:'국어 I 개념 정리.pdf'
+                        }
+                    ]
                 },
                 {
                     index: '3',
@@ -118,7 +223,18 @@ export default class ClassEducation extends Vue {
                     currDate:'2019. 9. 4 목요일',
                     currTime:'오전 10시 ~ 11시',
                     currImg: '이미지 2',
-                    currFile: '파일 1'
+                    currFile: '파일 1',
+                    fileList:[
+                        {
+                            fileTit:'6학년 2학기 국어 II 3단원 .pdf'
+                        },
+                        {
+                            fileTit:'국어 II 3단원 정리 .hwp'
+                        },
+                        {
+                            fileTit:'국어 I 개념 정리.pdf'
+                        }
+                    ]
                 },
                 {
                     index: '5',
@@ -129,13 +245,7 @@ export default class ClassEducation extends Vue {
             ]
         },
         {
-            listTit:'일이삼사오육칠팔구십일이삼사오육칠팔구십',
-            managerLevel: true,
-            classAdmin:'김경희선생님1',
-            classCnt:'감사합니다.',
-            classCurrent:'총 3회차 수업 등록',
-            isActive: false,
-            classCurrDetail : [
+            classList: [
                 {
                     index: '1',
                     currTit:'9단원 - 학습',
@@ -174,15 +284,7 @@ export default class ClassEducation extends Vue {
             ]
         },
         {
-            listTit:'2학기 국어 교육과',
-            managerLevel: false,
-            classAdmin:'김경희선생님2',
-            classCnt:'요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요.' +
-                '거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.' +
-                '스쿨수학에 서 빼놓을수 없는 부분인데거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에… 빼놓을수 없는 부분인데요.',
-            classCurrent:'총 50회차 수업 등록',
-            isActive: false,
-            classCurrDetail : [
+            classList: [
                 {
                     index: '1',
                     currTit:'10단원 - 학습',
@@ -221,15 +323,7 @@ export default class ClassEducation extends Vue {
             ]
         },
         {
-            listTit:'2학기 국어 교육과',
-            managerLevel: true,
-            classAdmin:'김경희선생님3',
-            classCnt:'요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요.' +
-                '거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.' +
-                '스쿨수학에 서 빼놓을수 없는 부분인데거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에… 빼놓을수 없는 부분인데요.',
-            classCurrent:'총 50회차 수업 등록',
-            isActive: false,
-            classCurrDetail : [
+            classList: [
                 {
                     index: '1',
                     currTit:'20단원 - 학습',
@@ -266,8 +360,10 @@ export default class ClassEducation extends Vue {
                     currTime:'오전 10시 ~ 11시',
                 }
             ]
-        },
-    ];
+        }
+
+
+    ]
 
     private currListNum: number = 0;
 
@@ -293,6 +389,9 @@ export default class ClassEducation extends Vue {
 
     private classCard(num: number): void{
         this.classCardIndex = num;
+    }
+    private classCurr(num: number): void{
+        this.classCurrIndex = num;
     }
 
     private getProfileImg( imgUrl: string | null | undefined ): string{
