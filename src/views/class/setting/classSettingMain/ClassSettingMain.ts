@@ -147,14 +147,35 @@ export default class ClassSettingMain extends Vue{
           });
     }
 
-    private memberLevel(level: number): string {
+    /**
+     * 멤버 등급에 따른 아이콘 클래스 바인딩
+     * @param level
+     * @private
+     */
+    private memberLevelIcon(level: number): string {
+        switch (level) {
+            case 1:
+                return 'admin';
+            case 2:
+                return 'staff';
+            default:
+                return 'member';
+        }
+    }
+
+    /**
+     * 멤버 등급 텍스트
+     * @param level
+     * @private
+     */
+    private memberLevelTxt(level: number): string {
         switch (level) {
             case 1:
                 return '운영자';
             case 2:
-                return '스태프';
+                return '스탭 멤버';
             default:
-                return '일반';
+                return '일반 멤버';
         }
     }
 

@@ -16,6 +16,7 @@ const MyClassRouter=[
     components: {default: () => import('@/views/class/home/MyClassListDetailPage'), header: AppHeader, footer: AppFooter},
     children: [
       {path: '', name: 'myClassListDetailView', component: () => import('../views/class/home/MyClassListDetailView')},
+      {path: 'member', name: 'classMember', component: () => import('../views/class/member/ClassMember')},
       {path: 'schedule', name: 'scheduleView', component: () => import('../views/class/schedule/ScheduleView')},
       {path: 'setting', name: 'classSettingMain', component: () => import('../views/class/setting/classSettingMain/ClassSettingMain')},
       {path: 'setting/classProfile', name: 'classProfile', component: () => import('../views/class/setting/classProfile/ClassProfile')},  // W.4.5.7.2 ~

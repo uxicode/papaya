@@ -20,7 +20,7 @@
           <ul class="info-list">
             <li>{{ myClassHomeModel.startday }}</li>
             <li>{{ myClassHomeModel.is_private? '공개' : '비공개' }}</li>
-            <li><a href="">멤버 {{ myClassHomeModel.member_count }} &gt;</a></li>
+            <li><button type="button" @click="gotoClassMemberPage">멤버 {{ myClassHomeModel.member_count }} &gt;</button></li>
           </ul>
           <p class="info-tag">{{getHashTag(myClassHomeModel.class_tags) }}</p>
         </div>
@@ -179,6 +179,10 @@ export default class SideMenu extends Vue{
 
   private closePopup(): void{
     this.isPopup=false;
+  }
+
+  private gotoClassMemberPage(): void{
+    this.$router.push(`/class/${this.classID}/member`);
   }
 }
 
