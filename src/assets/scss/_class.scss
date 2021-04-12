@@ -1618,44 +1618,6 @@
           float:left;
           color:#848499;
         }
-        .curriculum-info {
-          float:left;
-          margin-left:20px;
-
-          .subject-tit {font-weight:500;}
-
-          .subject-schedule, .subject-sub {
-            overflow:hidden;
-
-            span {
-              float:left;
-              font-size:12px;
-              color:#57576d;
-            }
-          }
-
-          .subject-schedule {
-            margin-top:4px;
-
-            span {
-              &:after {
-                content:'・';
-                padding:0 6px;
-                display:inline-block;
-              }
-              &:last-child:after {display:none;}
-            }
-          }
-
-          .subject-sub {
-            margin-top:2px;
-
-            strong {
-              margin-right:6px;
-              font-weight:500;
-            }
-          }
-        }
       }
     }
   }

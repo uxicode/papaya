@@ -17,7 +17,7 @@
                     </div>
                     <div class="fd-cnt">
                         <p class="fd-txt">
-                            <a href="#" @click="isClassCurrDetail = true">
+                            <a href="#" @click="isClassCurrDetail = true;classCard(idx)">
                                 {{ item.classCnt }}
                             </a>
                         </p>
@@ -88,10 +88,10 @@
                             <div class="scroll-body" style="height:124px;">
                                 <div v-for="(item, index) in currListNumModel" class="add-curr-item" :key="`currListNum-${index}`">
                                     <p class="add-curr-tit">
-                                        <button @click="isClassCurr = true">
+                                        <a href="#" @click="isClassCurr = true;countNum(index+1)">
                                             <span class="curr-num">{{ index+1 }} 회차</span>
                                             <span>새 교육과정 {{ index+1 }}</span>
-                                        </button>
+                                        </a>
                                     </p>
                                     <div class="form-box">
                                         <div class="list-popup">
@@ -127,7 +127,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.5.2 (교육과정 만들기 - 수업내용입력) (4.5.5.2 ~ 4.5.5.2.2) -->
     <transition name="modal">
-        <modal v-if="isClassCurr" size="540px" body-padding="0">
+        <modal v-if="isClassCurr" size="540px" body-padding="0" @modalClose="isClassCurr=false">
             <div slot="header">
                 <!-- header custom coding-->
                 <div class="popup-icon edu"></div>
@@ -139,7 +139,7 @@
                 <!-- body custom coding-->
                 <div class="popup-cnt">
                     <p class="popup-txt type2">교육과정</p>
-                    <h2 class="popup-tit pdb-0">1 회차 수업</h2>
+                    <h2 class="popup-tit pdb-0">{{this.countNumber}} 회차 수업</h2>
                 </div>
 
                 <div class="popup-form">
@@ -217,7 +217,7 @@
         <modal v-if="isClassCurrDetail" size="600px" body-padding="0" @modalClose="isClassCurrDetail=false">
             <div slot="header">
                 <!-- header custom coding-->
-                <p class="popup-header-tit">123</p>
+                <p class="popup-header-tit">{{ classCurrList[this.classCardIndex].listTit }}</p>
 
                 <div class="popup-btn">
                     <div class="list-popup mgl-20">
@@ -236,12 +236,12 @@
                     <div class="popup-form-top">
                         <div class="form-item post-classes selected"> <!-- class 선택 시 form-item에 selected 추가됨 -->
                             <p>
-                                <span class="icon"><img :src="require('@/assets/images/bg-icon.png')" class="icon-img" alt=""></span>
-                                <span class="gr-name">파파야초등학교</span>
-                                <strong class="cls-name">꿈꾸는 5학년 1반</strong>
+                                <span class="icon"><img :src="getProfileImg(myClassHomeModel.image_url)" class="icon-img" alt=""></span>
+                                <span class="gr-name">{{myClassHomeModel.g_name}}</span>
+                                <strong class="cls-name">{{myClassHomeModel.name}}</strong>
                             </p>
 
-                            <p class="post-writer">김미영선생님</p>
+                            <p class="post-writer" :class="{crown: classCurrList[this.classCardIndex].managerLevel}">{{ classCurrList[this.classCardIndex].classAdmin }}</p>
                         </div>
                     </div>
                 </div>
@@ -249,70 +249,25 @@
                 <div class="popup-feed-detail">
                     <div class="fd-cnt">
                         <p class="fd-txt">
-                            요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요. 거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.
+                            {{ classCurrList[this.classCardIndex].classCnt }}
                         </p>
 
                         <div class="fd-inner">
                             <div class="curriculum-list">
-                                <div class="curriculum-item">
-                                    <span class="turn">1회차</span>
+                                <div v-for="(item, index) in classCurrList[this.classCardIndex].classCurrDetail" :key="index" class="curriculum-item">
+                                    <span class="turn">{{ item.index }} 회차</span>
                                     <div class="curriculum-info">
-                                        <p class="subject-tit">4단원 복습</p>
-                                        <div class="subject-schedule">
-                                            <span>2019. 9. 1 수요일</span>
-                                            <span>오전 10시 - 11시</span>
-                                        </div>
-                                        <div class="subject-sub">
-                                            <span>이미지 <strong>2</strong></span>
-                                            <span>파일 <strong>1</strong></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="curriculum-item">
-                                    <span class="turn">2회차</span>
-                                    <div class="curriculum-info">
-                                        <p class="subject-tit">5단원 - 소수의 곱셈과 나눗셈</p>
-                                        <div class="subject-schedule">
-                                            <span>2019. 9. 2 목요일</span>
-                                            <span>오전 10시 - 11시</span>
-                                        </div>
-                                        <div class="subject-sub">
-                                            <span>파일 <strong>1</strong></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="curriculum-item">
-                                    <span class="turn">3회차</span>
-                                    <div class="curriculum-info">
-                                        <p class="subject-tit">6단원 - 함수</p>
-                                        <div class="subject-schedule">
-                                            <span>2019. 9. 8 수요일</span>
-                                            <span>오전 10시 - 11시</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="curriculum-item">
-                                    <span class="turn">4회차</span>
-                                    <div class="curriculum-info">
-                                        <p class="subject-tit">7단원 - 일차방정식</p>
-                                        <div class="subject-schedule">
-                                            <span>2019. 9. 9 목요일</span>
-                                            <span>오전 10시 - 11시</span>
-                                        </div>
-                                        <div class="subject-sub">
-                                            <span>이미지 <strong>2</strong></span>
-                                            <span>파일 <strong>1</strong></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="curriculum-item">
-                                    <span class="turn">5회차</span>
-                                    <div class="curriculum-info">
-                                        <p class="subject-tit">6단원 - 함수</p>
+                                        <a href="">
+                                            <p class="subject-tit">{{ item.currTit }}</p>
+                                            <div class="subject-schedule">
+                                                <span>{{ item.currDate }}</span>
+                                                <span>{{ item.currTime }}</span>
+                                            </div>
+                                            <div class="subject-sub">
+                                                <span>{{ item.currImg }}</span>
+                                                <span>{{ item.currFile }}</span>
+                                            </div>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

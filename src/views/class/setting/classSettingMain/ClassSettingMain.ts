@@ -1,7 +1,5 @@
-import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
-import UserService from '@/api/service/UserService';
-import {IClassMemberInfo} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo, IMyClassList} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import WithRender from './ClassSettingMain.html';
@@ -10,17 +8,16 @@ import Btn from '@/components/button/Btn.vue';
 
 const MyClass = namespace('MyClass');
 
-interface INotiFlag {
-    onoff_push_noti?: boolean;
-    onoff_post_noti?: boolean;
-    onoff_comment_noti?: boolean;
-    onoff_schedule_noti?: boolean;
-    schedule_noti_intime?: number;
-}
-
 interface ISettingMenu {
     title: string;
     type: string;
+}
+
+interface IQuestionList {
+    createdAt?: Date;
+    id: number;
+    class_id: number;
+    question: string;
 }
 
 @WithRender
@@ -31,25 +28,27 @@ interface ISettingMenu {
     }
 })
 export default class ClassSettingMain extends Vue{
-    private memberInfo: IClassMemberInfo[] = [];
+    private classMemberInfo: IClassMemberInfo[] = [];
+    private classInfo: IClassInfo[] = [];
+
+    @MyClass.Getter
+    private classID!: number;
+
+    @MyClass.Getter
+    private memberID!: number;
 
     @MyClass.Action
     private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo[]>;
 
     @MyClass.Action
-    private MODIFY_CLASS_MEMBER_INFO!: (data: any) => Promise<IClassMemberInfo[]>;
+    private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<IClassMemberInfo[]>;
 
     /* Modal 오픈 상태값 */
     private isGuideTxt: boolean = false;
     private isJoinQnaSetting: boolean = false;
     private isWithdraw: boolean = false;
 
-    private notiFlag: INotiFlag = {
-        onoff_push_noti: true,
-        onoff_post_noti: true,
-        onoff_comment_noti: true,
-        onoff_schedule_noti: true,
-    };
+    private onOffNoti: boolean = true;
 
     private classNotifyList: object[] = [
         {
@@ -109,18 +108,42 @@ export default class ClassSettingMain extends Vue{
         }
     ];
 
-    get classMemberInfo(): IClassMemberInfo[] {
-        return this.memberInfo;
+    /* 가입 안내 문구 관련 */
+    private maxLength: number = 100;
+    private remainLength: number = 100;
+    private guideTxt: string = '';
+
+    private questionList: IQuestionList[] = [];
+    private questionId: number = 0;
+    private tempData: string = '';
+
+    get memberInfo(): IClassMemberInfo[] {
+        return this.classMemberInfo;
+    }
+
+    get info(): IClassInfo[] {
+        return this.classInfo;
     }
 
     public created() {
-        this.getClassMemberInfo({classId: 745, memberId: 826});
+        this.getClassMemberInfo();
+        this.getClassInfo();
+        this.getClassJoinQuestion();
     }
 
-    private getClassMemberInfo(payload: { classId: number, memberId: number }): void {
-        this.CLASS_MEMBER_INFO_ACTION(payload)
+    private getClassMemberInfo(): void {
+        this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.memberID})
           .then((data) => {
-              this.memberInfo = data;
+              console.log(`classId = ${this.classID}, memberId = ${this.memberID}`);
+              this.classMemberInfo = data;
+          });
+    }
+
+    private getClassInfo(): void {
+        MyClassService.getClassInfoById(this.classID)
+          .then((data) => {
+              this.classInfo = data;
+              console.log(this.classInfo);
           });
     }
 
@@ -136,18 +159,72 @@ export default class ClassSettingMain extends Vue{
     }
 
     /**
+     * 변경할 정보를 임시로 담을 함수
+     * @param event
+     * @private
+     */
+    private valueChange(event: any): void {
+        this.tempData = event.target.value;
+    }
+
+    /**
      * 푸시 알림 설정
      * @param item
      * @private
      */
-    private pushToggle(item: number): void {
-        MyClassService.setClassMemberInfo(745, 826, {onoff_push_noti: item})
+    private pushToggle(): void {
+        this.onOffNoti = !this.onOffNoti;
+        this.MODIFY_CLASS_MEMBER_INFO({classId: this.classID, memberId: this.memberID},
+          {onoff_push_noti: this.onOffNoti})
           .then(() => {
-              this.MODIFY_CLASS_MEMBER_INFO(item)
-                .then((data) => {
-                    console.log(data);
-                });
+              console.log(`onoff_push_noti = ${this.onOffNoti}`);
           });
+    }
+
+    /**
+     * 가입 안내 문구 수정
+     * @param text
+     * @private
+     */
+    private guideTxtModify(text: string): void {
+        MyClassService.setClassInfoById(this.classID, {description: text})
+          .then(() => {
+             console.log('가입 안내 문구 수정 완료');
+             this.isGuideTxt = false;
+          });
+    }
+
+    /**
+     * 가입 안내 문구 글자 수 제한
+     * @param text
+     * @private
+     */
+    private textCount(text: string): void {
+        this.guideTxt = text;
+        this.remainLength = this.maxLength - this.guideTxt.length;
+        this.guideTxt = (this.remainLength < 0) ? this.guideTxt.substring(0, 100) : this.guideTxt;
+        this.remainLength = (this.remainLength < 0) ? 0 : this.remainLength;
+    }
+
+    /**
+     * 클래스 가입 질문 가져오기
+     * @private
+     */
+    private getClassJoinQuestion(): void {
+        MyClassService.getClassQuestion(this.classID)
+          .then((data) => {
+              this.questionList = data.questionlist;
+              console.log(this.questionList);
+          });
+    }
+
+    private setClassJoinQuestion(id: number, newQuestion: any): void {
+        MyClassService.setClassQuestion(this.classID, id, {new_question: newQuestion})
+          .then(() => {
+            console.log('가입 질문 수정 성공');
+          });
+        this.isJoinQnaSetting = false;
+        this.tempData = '';
     }
 
     /**
@@ -156,7 +233,7 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private gotoLink(key: string): void {
-        this.$router.push(`./${key}`)
+        this.$router.push(`setting/${key}`)
           .then(() => {
               console.log(`${key}로 이동`);
           });
@@ -186,8 +263,11 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private withdrawSubmit(): void {
-
+        MyClassService.withdrawClass(this.classID, this.memberID)
+          .then(() => {
+             console.log('클래스 탈퇴 완료');
+          });
         this.$router.push('../classWithdrawComplete')
-            .then();
+          .then();
     }
 }

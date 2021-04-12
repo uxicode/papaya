@@ -10,8 +10,8 @@
                 <ul class="member-list">
                     <li class="list-item">
                         <div class="member-info admin">
-                            <p class="name">{{ classMemberInfo.member_info.nickname }}</p>
-                            <span class="position">{{ memberLevel(classMemberInfo.member_info.level) }}</span>
+                            <p class="name">{{ memberInfo.nickname }}</p>
+                            <span class="position">{{ memberLevel(memberInfo.level) }}</span>
                         </div>
                         <div class="member-info-btn">
                             <button type="button" class="btn only-ico-btn" @click="gotoLink('classProfile')"><img :src="require('@/assets/images/settings.svg')" alt=""></button>
@@ -27,10 +27,11 @@
                         <p class="list-tit">푸시 알림 설정</p>
                         <div class="setting-btn">
                             <div class="form-switcher">
-                                <input type="checkbox" id="push"
-                                       v-model="notiFlag.onoff_push_noti"
-                                       @change="pushToggle(0)">
-                                <label for="push"></label>
+                                <input type="checkbox"
+                                       id="onoff_push_noti"
+                                       v-model="memberInfo.onoff_push_noti"
+                                       @change="pushToggle">
+                                <label for="onoff_push_noti"></label>
                             </div>
                         </div>
                     </li>
@@ -38,15 +39,15 @@
                     <li v-for="(item, idx) in classNotifyList"
                         :key="idx"
                         class="list-item sub-list-item"
-                        :class="{'disabled': !notiFlag.onoff_push_noti}">
+                        :class="{'disabled': memberInfo.onoff_push_noti === 0}">
                         <p class="list-tit">{{ item.listTit }}</p>
                         <div class="setting-btn">
                             <div class="member-info-btn">
                                 <div class="list-popup">
                                     <button type="button" class="list-popup-btn" @click="item.isActive = !item.isActive"><span>받지 않기</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
                                     <div class="list-popup-menu pos-right" :class="{'active': item.isActive}" style="transform:translate3d(87px, 0, 0);">
-                                        <button class="list-popup-item" value="0" @click>받기</button>
-                                        <button class="list-popup-item active" value="1" @click>받지 않기</button>
+                                        <button class="list-popup-item" value="1" @click>받기</button>
+                                        <button class="list-popup-item" value="0" @click>받지 않기</button>
                                     </div>
                                 </div>
                             </div>
@@ -112,15 +113,19 @@
 
                     <div class="form-group mgt-20">
                         <label for="guideTxt">가입 안내 문구</label>
-                        <textarea class="form-textarea mgt-10" id="guideTxt" placeholder="text"></textarea>
-                        <small class="form-message count">0/100</small>
+                        <textarea class="form-textarea mgt-10"
+                                  id="guideTxt"
+                                  @keyup="textCount(info.classinfo.description)"
+                                  v-model="info.classinfo.description"
+                                  placeholder="text"></textarea>
+                        <small class="form-message count">{{info.classinfo.description.length}}/{{maxLength}}</small>
                     </div>
                 </div>
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
                     <btn type="outline" @btnClick="isGuideTxt = false">취소</btn>
-                    <btn type="navi">저장</btn>
+                    <btn type="navi" @btnClick="guideTxtModify(guideTxt)">저장</btn>
                 </div>
             </div>
         </modal>
@@ -154,11 +159,16 @@
                     <div class="qna-setting-list">
                         <p>질문 목록</p>
                         <ul class="qna-list">
-                            <li class="list-item">
-                                <span class="num">1</span>
+                            <li v-for="(item, idx) in questionList"
+                                :key="idx"
+                                class="list-item">
+                                <span class="num">{{ idx+1 }}</span>
                                 <div class="qna-input">
                                     <div class="form-group" style="width:490px;">
-                                        <input type="text" class="form-control popup-type" id="input4" value="자녀와의 관계가 어떻게 되시나요? (예. 엄마, 아빠 등)">
+                                        <input type="text" class="form-control popup-type"
+                                               :value="item.question"
+                                               @input="valueChange($event)"
+                                               :id="`question${item.id}`">
                                         <!-- form-delete active 시 display:block; -->
                                         <button type="button" class="btn only-ico-btn form-delete active"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                                     </div>
@@ -166,18 +176,7 @@
                             </li>
 
                             <li class="list-item">
-                                <span class="num">2</span>
-                                <div class="qna-input">
-                                    <div class="form-group" style="width:490px;">
-                                        <input type="text" class="form-control popup-type" id="input5" value="살고 있는 지역을 간단히 써주세요. (예. 서울 성북구)">
-                                        <!-- form-delete active 시 display:block; -->
-                                        <button type="button" class="btn only-ico-btn form-delete active"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li class="list-item">
-                                <span class="num disabled">3</span>
+                                <span class="num disabled">{{ questionList.length+1 }}</span>
                                 <div class="qna-input">
                                     <div class="form-group" style="width:490px;">
                                         <input type="text" class="form-control popup-type" id="input6" placeholder="질문을 30자 이내로 입력해 주세요.">
@@ -193,7 +192,7 @@
             <div slot="footer">
                 <div class="btn-group rt">
                     <btn type="outline" @btnClick="isJoinQnaSetting = false">취소</btn>
-                    <btn type="navi">저장</btn>
+                    <btn type="navi" @btnClick="setClassJoinQuestion(49, tempData)">저장</btn>
                 </div>
             </div>
         </modal>
