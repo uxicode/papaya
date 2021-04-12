@@ -1,5 +1,5 @@
 import MyClassService from '@/api/service/MyClassService';
-import {IClassInfo, IClassMemberInfo, IMyClassList} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo, IMyClassList, IQuestionList} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import WithRender from './ClassSettingMain.html';
@@ -11,13 +11,6 @@ const MyClass = namespace('MyClass');
 interface ISettingMenu {
     title: string;
     type: string;
-}
-
-interface IQuestionList {
-    createdAt?: Date;
-    id: number;
-    class_id: number;
-    question: string;
 }
 
 @WithRender
@@ -37,11 +30,17 @@ export default class ClassSettingMain extends Vue{
     @MyClass.Getter
     private memberID!: number;
 
+    @MyClass.Getter
+    private questionID!: number;
+
     @MyClass.Action
     private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo[]>;
 
     @MyClass.Action
     private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<IClassMemberInfo[]>;
+
+    @MyClass.Action
+    private MODIFY_CLASS_QUESTION!: (payload: {classId: number, questionId: number}, text: {new_question: string}) => Promise<IQuestionList[]>;
 
     /* Modal 오픈 상태값 */
     private isGuideTxt: boolean = false;
@@ -113,6 +112,7 @@ export default class ClassSettingMain extends Vue{
     private remainLength: number = 100;
     private guideTxt: string = '';
 
+    /* 가입 질문 설정 관련 */
     private questionList: IQuestionList[] = [];
     private questionId: number = 0;
     private tempData: string = '';
@@ -128,7 +128,7 @@ export default class ClassSettingMain extends Vue{
     public created() {
         this.getClassMemberInfo();
         this.getClassInfo();
-        this.getClassJoinQuestion();
+        this.getJoinQuestion();
     }
 
     private getClassMemberInfo(): void {
@@ -210,7 +210,7 @@ export default class ClassSettingMain extends Vue{
      * 클래스 가입 질문 가져오기
      * @private
      */
-    private getClassJoinQuestion(): void {
+    private getJoinQuestion(): void {
         MyClassService.getClassQuestion(this.classID)
           .then((data) => {
               this.questionList = data.questionlist;
@@ -218,13 +218,26 @@ export default class ClassSettingMain extends Vue{
           });
     }
 
-    private setClassJoinQuestion(id: number, newQuestion: any): void {
-        MyClassService.setClassQuestion(this.classID, id, {new_question: newQuestion})
+    /**
+     * 클래스 가입 질문 수정
+     * @param id
+     * @param newQuestion
+     * @private
+     */
+    private setJoinQuestion(newQuestion: any): void {
+        MyClassService.setClassQuestion(this.classID, this.questionID, {new_question: newQuestion})
           .then(() => {
             console.log('가입 질문 수정 성공');
           });
         this.isJoinQnaSetting = false;
         this.tempData = '';
+    }
+
+    private deleteJoinQuestion(questionId: number): void {
+        MyClassService.deleteClassQuestion(this.classID, questionId)
+          .then(() => {
+              console.log('가입 질문 삭제 성공');
+          });
     }
 
     /**
@@ -233,7 +246,7 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private gotoLink(key: string): void {
-        this.$router.push(`setting/${key}`)
+        this.$router.push(`/class/${this.classID}/setting/${key}`)
           .then(() => {
               console.log(`${key}로 이동`);
           });

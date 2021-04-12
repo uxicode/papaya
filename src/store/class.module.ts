@@ -6,10 +6,20 @@ import {
     IMakeClassInfo,
     IMakeClassInfoBase,
     IClassInfo,
-    IClassMemberInfo
+    IClassMemberInfo, IQuestionList
 } from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
-import {MYCLASS_LIST, POST_LIST, CREATE_CLASS_LIST, SET_CLASS_ID, SET_MYCLASS_HOME_DATA, REMOVE_CLASS_DATA, CLASS_MEMBER_INFO, SET_MEMBER_ID} from '@/store/mutation-class-types';
+import {
+    MYCLASS_LIST,
+    POST_LIST,
+    CREATE_CLASS_LIST,
+    SET_CLASS_ID,
+    SET_MYCLASS_HOME_DATA,
+    REMOVE_CLASS_DATA,
+    CLASS_MEMBER_INFO,
+    SET_MEMBER_ID,
+    SET_QUESTION_ID
+} from '@/store/mutation-class-types';
 import {
     MYCLASS_LIST_ACTION,
     POST_LIST_ACTION,
@@ -17,7 +27,7 @@ import {
     MYCLASS_HOME,
     CLASS_MEMBER_INFO_ACTION,
     MODIFY_CLASS_MEMBER_INFO,
-    MODIFY_CLASS_INFO
+    MODIFY_CLASS_INFO, MODIFY_QUESTION
 } from '@/store/action-class-types';
 
 @Module({
@@ -28,9 +38,11 @@ export default class ClassModule extends VuexModule {
     private classData: IMyClassList[]=[];
     private postData: IPostList[]=[];
     private memberInfo: IClassMemberInfo[] = [];
+    private questionData: IQuestionList[] = [];
     private count: number = 0;
     private classId: number = 0;
     private memberId: number = 0;
+    private questionId: number = 0;
     private myClassHomeData: IClassInfo={
         contents_updatedAt:new Date(),
         createdAt: new Date(),
@@ -84,6 +96,10 @@ export default class ClassModule extends VuexModule {
 
     get memberID(): string | null | number{
         return (  localStorage.getItem('memberId') !==null )? localStorage.getItem('memberId') : this.memberId;
+    }
+
+    get questionID(): string | null | number{
+        return (  localStorage.getItem('questionId') !==null )? localStorage.getItem('questionId') : this.questionId;
     }
 
     /* Mutations */
@@ -147,6 +163,12 @@ export default class ClassModule extends VuexModule {
         this.classData=[];
         this.postData=[];
         this.classId=0;
+    }
+
+    @Mutation
+    public [SET_QUESTION_ID](questionId: number): void {
+        this.questionId = questionId;
+        localStorage.setItem('questionId', String(this.questionId) );
     }
 
     /* Actions */
@@ -237,6 +259,22 @@ export default class ClassModule extends VuexModule {
               this.context.commit(CLASS_MEMBER_INFO, info);
               console.log(this.memberInfo);
               return Promise.resolve(this.memberInfo);
+          })
+          .catch((error) => {
+              console.log(error);
+              return Promise.reject(error);
+          });
+    }
+
+    @Action({rawError: true})
+    public [MODIFY_QUESTION](payload: {classId: number, questionId: number}, text: {new_question: string}): Promise<any>{
+        this.context.commit(SET_CLASS_ID, payload.classId);
+        this.context.commit(SET_QUESTION_ID, payload.questionId);
+
+        return MyClassService.setClassQuestion(payload.classId, payload.questionId, text)
+          .then((success) => {
+            console.log(success);
+            return Promise.resolve(this.questionData);
           })
           .catch((error) => {
               console.log(error);

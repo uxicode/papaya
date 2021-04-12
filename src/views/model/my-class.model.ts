@@ -460,4 +460,11 @@ interface IClassMemberList {
     message?: string;
 }
 
-export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList, ISearchSchool, IMakeClassInfo, IMakeClassInfoBase, IClassMemberInfo, IClassMemberList};
+interface IQuestionList {
+    createdAt?: Date;
+    id: number;
+    class_id: number;
+    question: string;
+}
+
+export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList, ISearchSchool, IMakeClassInfo, IMakeClassInfoBase, IClassMemberInfo, IClassMemberList, IQuestionList};

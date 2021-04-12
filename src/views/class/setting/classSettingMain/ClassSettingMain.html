@@ -124,7 +124,7 @@
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isGuideTxt = false">취소</btn>
+                    <btn type="outline" @btnClick="isGuideTxt = false;">취소</btn>
                     <btn type="navi" @btnClick="guideTxtModify(guideTxt)">저장</btn>
                 </div>
             </div>
@@ -170,7 +170,7 @@
                                                @input="valueChange($event)"
                                                :id="`question${item.id}`">
                                         <!-- form-delete active 시 display:block; -->
-                                        <button type="button" class="btn only-ico-btn form-delete active"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                                        <button type="button" class="btn only-ico-btn form-delete active" @click="deleteJoinQuestion(item.id)"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                                     </div>
                                 </div>
                             </li>
@@ -192,7 +192,7 @@
             <div slot="footer">
                 <div class="btn-group rt">
                     <btn type="outline" @btnClick="isJoinQnaSetting = false">취소</btn>
-                    <btn type="navi" @btnClick="setClassJoinQuestion(49, tempData)">저장</btn>
+                    <btn type="navi" @btnClick="setJoinQuestion(tempData)">저장</btn>
                 </div>
             </div>
         </modal>

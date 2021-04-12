@@ -6,3 +6,4 @@ export const MYCLASS_HOME: string = 'MYCLASS_HOME';
 export const CLASS_MEMBER_INFO_ACTION: string = 'CLASS_MEMBER_INFO_ACTION';
 export const MODIFY_CLASS_MEMBER_INFO: string = 'MODIFY_CLASS_MEMBER_INFO';
 export const MODIFY_CLASS_INFO: string = 'MODIFY_CLASS_INFO';
+export const MODIFY_QUESTION: string = 'MODIFY_QUESTION';

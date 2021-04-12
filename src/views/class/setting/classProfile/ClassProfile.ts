@@ -82,6 +82,10 @@ export default class ClassProfile extends Vue {
         this.getClassInfo();
     }
 
+    /**
+     * 클래스 멤버 정보 가져오기
+     * @private
+     */
     private getClassMemberInfo(): void {
         this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.memberID})
           .then((data) => {
@@ -97,6 +101,7 @@ export default class ClassProfile extends Vue {
      */
     private valueChange(event: any): void {
         this.tempData = event.target.value;
+        this.$emit('input', this.tempData);
     }
 
     /**
@@ -105,14 +110,24 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private modifyNickname(newNickname: string): void {
-        this.MODIFY_CLASS_MEMBER_INFO({classId: this.classID, memberId: this.memberID},
-          {nickname: this.tempData})
+        MyClassService.setClassMemberInfo(this.classID, this.memberID, {nickname: newNickname})
           .then(() => {
-                console.log('닉네임 변경 완료');
+              this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.memberID}).then(() => {
+                  console.log('닉네임 변경 완료');
+              });
           });
+        // this.MODIFY_CLASS_MEMBER_INFO({classId: this.classID, memberId: this.memberID},
+        //   {nickname: newNickname})
+        //   .then(() => {
+        //         console.log('닉네임 변경 완료');
+        //   });
         this.isNicknameModify = false;
     }
 
+    /**
+     * 클래스 정보 가져오기
+     * @private
+     */
     private getClassInfo(): void {
         MyClassService.getClassInfoById(this.classID)
           .then((data) => {

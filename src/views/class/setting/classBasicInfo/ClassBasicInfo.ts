@@ -13,6 +13,7 @@ import WithRender from './ClassBasicInfo.html';
 
 export default class ClassBasicInfo extends Vue {
     private goBack(): void {
-        this.$router.go(-1);
+        this.$router.push('./')
+          .then();
     }
 }
