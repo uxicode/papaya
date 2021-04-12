@@ -186,6 +186,10 @@ $popupDepth: 10;
         color:#848499;
         padding-left:42px;
 
+        .icon {
+          border-radius: 50%;
+          overflow: hidden;
+        }
         .gr-name {font-size:12px; color:#57576d;}
         .cls-name {
           display:block;
@@ -219,10 +223,12 @@ $popupDepth: 10;
           margin-right:6px;
           vertical-align: middle;
           border-radius:50%;
-          background:#ffba36 url(../../assets/images/member-manager.svg) no-repeat center / 8px;
+          background:#57576d url(../../assets/images/member-staff.svg) no-repeat center / 8px;
 
           @include pos-vertical($left:0);
         }
+
+        &.crown:before {background:#ffba36 url(../../assets/images/member-manager.svg) no-repeat center / 8px;}
       }
     }
 
@@ -608,6 +614,8 @@ $popupDepth: 10;
 .curriculum-info {
   float:left;
   margin-left:20px;
+
+  a {display:block;}
 }
 
 .subject-schedule, .subject-sub {
@@ -636,6 +644,7 @@ $popupDepth: 10;
 .subject-sub {
   margin-top:2px;
 
+  span {margin-right:6px;}
   strong {
     margin-right:6px;
     font-weight:500;
