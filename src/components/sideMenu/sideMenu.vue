@@ -76,8 +76,6 @@ import Btn from '@/components/button/Btn.vue';
 import MyClassService from '@/api/service/MyClassService';
 import ImageSetting from '@/views/class/IProfileImg/ImageSetting';
 import {CLASS_BASE_URL} from '@/api/base';
-import { UPDATE_SIDE_MENU_NUM} from '@/store/mutation-class-types';
-import store from '@/store';
 
 
 interface ISideMenu{
@@ -95,8 +93,6 @@ const MyClass = namespace('MyClass');
   }
 })
 export default class SideMenu extends Vue{
-
-
 
   @Prop(Number)
   private activeNum: number | null | undefined;
@@ -152,7 +148,6 @@ export default class SideMenu extends Vue{
     return keywords.join(' ');
   }
 
-
   public getProfileImg( imgUrl: string | null | undefined ): string{
     const randomImgItems = [
       'image-a.jpg',
@@ -171,7 +166,8 @@ export default class SideMenu extends Vue{
     .catch((error)=>{
       console.log(error);
       //에러 난 경우 새로고침
-      window.location.reload();
+      // window.location.reload();
+      Utils.getWindowReload();
     });
   }
 

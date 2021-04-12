@@ -224,6 +224,10 @@ class Utils{
     return Math.floor(Math.random()*(max-min+1)) + min;
   }
 
+  public static getWindowReload(): void{
+    window.location.reload();
+  }
+
   /*
   어떤 페이지를 로딩하는 데 필요한 전체 시간 계산하기.
   * var perfData = window.performance.timing;

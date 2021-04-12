@@ -10,10 +10,15 @@ import {
 } from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import {
-    MYCLASS_LIST, POST_LIST,
-    CREATE_CLASS_LIST, SET_CLASS_ID,
-    SET_MYCLASS_HOME_DATA, REMOVE_CLASS_DATA,
-    CLASS_MEMBER_INFO, SET_MEMBER_ID, SET_QUESTION_ID, UPDATE_SIDE_MENU_NUM
+    MYCLASS_LIST,
+    POST_LIST,
+    CREATE_CLASS_LIST,
+    SET_CLASS_ID,
+    SET_MYCLASS_HOME_DATA,
+    REMOVE_CLASS_DATA,
+    CLASS_MEMBER_INFO,
+    SET_MEMBER_ID,
+    SET_QUESTION_ID
 } from '@/store/mutation-class-types';
 import {
     MYCLASS_LIST_ACTION,
@@ -24,7 +29,6 @@ import {
     MODIFY_CLASS_MEMBER_INFO,
     MODIFY_CLASS_INFO,
     MODIFY_QUESTION,
-    UPDATE_SIDE_MENU_NUM_ACTION
 } from '@/store/action-class-types';
 
 
@@ -170,10 +174,6 @@ export default class ClassModule extends VuexModule {
         localStorage.setItem('questionId', String(this.questionId) );
     }
 
-    @Action({rawError: true})
-    public [UPDATE_SIDE_MENU_NUM_ACTION]( num: number ): void{
-        this.context.commit(UPDATE_SIDE_MENU_NUM, num);
-    }
 
     /* Actions */
     @Action({rawError: true})
