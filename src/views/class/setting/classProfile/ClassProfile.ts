@@ -2,9 +2,9 @@ import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
 import {IClassMemberInfo} from '@/views/model/my-class.model';
 import {Vue, Component, Prop} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
-import {namespace} from 'vuex-class';
 import WithRender from './ClassProfile.html';
 
 const Auth = namespace('Auth');

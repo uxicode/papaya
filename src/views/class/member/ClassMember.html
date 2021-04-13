@@ -1,7 +1,7 @@
 <section class="contents-right">
     <div class="classes-member">
         <div class="cnt-top">
-            <h2 class="cnt-tit">멤버 <strong>2122</strong></h2>
+            <h2 class="cnt-tit">멤버 <strong>{{ totalMemberNum }}</strong></h2>
             <div class="cnt-top-btn">
                 <button type="button" class="btn ico-btn ico-left navi sm">
                     <img :src="require('@/assets/images/icn-18-add-white.svg')" class="icon" alt="">멤버 초대하기
@@ -17,10 +17,12 @@
         <div class="classes-member-list">
             <p class="list-tit">클래스 운영자</p>
             <ul class="member-list">
-                <li class="list-item">
-                    <div class="member-info admin">
-                        <p class="name">{{ }}</p>
-                        <span class="position">운영자</span>
+                <li v-for="(item, idx) in adminList"
+                    :key="idx"
+                    class="list-item">
+                    <div class="member-info" :class="memberLevelIcon(item.level)">
+                        <p class="name">{{ item.nickname }}</p>
+                        <span class="position">{{ memberLevelTxt(item.level) }}</span>
                     </div>
                     <div class="member-info-btn">
                         <div class="list-popup">
@@ -35,22 +37,26 @@
             <div class="accordion">
                 <!-- accordion 1-->
                 <div class="accordion-tit">
-                    <p class="list-tit">스탭 멤버 <strong>3</strong></p>
+                    <p class="list-tit">스탭 멤버 <strong>{{ staffList.length }}</strong></p>
                     <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
                     <button class="accordion-btn sm rt-10 active" data-toggle="collapse" data-target="#accordion1"></button>
                 </div>
                 <div class="accordion-cnt active">
                     <ul class="member-list">
-                        <li class="list-item">
-                            <div class="member-info staff">
-                                <p class="name">김경희선생님</p>
-                                <span class="position">스탭 멤버</span>
+                        <li v-for="(item, idx) in staffList"
+                            :key="idx"
+                            class="list-item">
+                            <div class="member-info" :class="memberLevelIcon(item.level)">
+                                <p class="name">{{ item.nickname }}</p>
+                                <span class="position">{{ memberLevelTxt(item.level) }}</span>
                             </div>
                             <div class="member-info-btn">
                                 <div class="list-popup">
                                     <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                     <div class="list-popup-menu pos-right active" style="transform:translate3d(42px, 0,0);">
-                                        <button type="button" class="list-popup-item" @click="isDetailPopup = true">멤버정보</button>
+                                        <button type="button" class="list-popup-item" @click="isDetailPopup = true">멤버 정보</button>
+                                        <button type="button" class="list-popup-item" @click="isDetailPopup = true">멤버 차단</button>
+                                        <button type="button" class="list-popup-item" @click="isDetailPopup = true">멤버 강제 탈퇴</button>
                                     </div>
                                 </div>
                             </div>
@@ -60,22 +66,25 @@
 
                 <!-- accordion 1-->
                 <div class="accordion-tit">
-                    <p class="list-tit">일반 멤버 <strong>2118</strong></p>
+                    <p class="list-tit">일반 멤버 <strong>{{ memberList.length }}</strong></p>
                     <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
                     <button class="accordion-btn sm rt-10 active" data-toggle="collapse" data-target="#accordion1"></button>
                 </div>
                 <div class="accordion-cnt active">
                     <ul class="member-list">
-                        <li class="list-item">
-                            <div class="member-info member">
-                                <p class="name">박정수 엄마</p>
-                                <span class="position">일반 멤버</span>
+                        <li v-for="(item, idx) in memberList"
+                            :key="idx"
+                            class="list-item">
+                            <div class="member-info" :class="memberLevelIcon(item.level)">                                <p class="name">{{ item.nickname }}</p>
+                                <span class="position">{{ memberLevelTxt(item.level) }}</span>
                             </div>
                             <div class="member-info-btn">
                                 <div class="list-popup">
                                     <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                     <div class="list-popup-menu pos-right active" style="transform:translate3d(42px, 0,0);">
-                                        <button type="button" class="list-popup-item" @click="isDetailPopup = true">멤버정보</button>
+                                        <button type="button" class="list-popup-item" @click="isDetailPopup = true">멤버 정보</button>
+                                        <button type="button" class="list-popup-item" @click="isDetailPopup = true">멤버 차단</button>
+                                        <button type="button" class="list-popup-item" @click="isDetailPopup = true">멤버 강제 탈퇴</button>
                                     </div>
                                 </div>
                             </div>
@@ -181,6 +190,87 @@
                         </ul>
                     </div>
                     <!-- //accordion 3-->
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.1.1 (멤버 활동 관리-차단-확인) -->
+    <transition name="modal">
+        <modal v-if="isBlockModal" size="540px" body-padding="0">
+            <div slot="header">
+                <!-- header custom coding-->
+                <div class="popup-icon block"></div>
+                <div class="popup-close">
+                    <button class="close" @click="isBlockModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">선택한 멤버를 차단하시곘습니까?</h2>
+                    <p class="popup-txt">
+                        차단된 멤버에게는 차단 해제 전까지 해당 클래스에 접근하거나 가입이 불가능하며 클래스 검색 및 노출이 제한됩니다.차단을 계속 하시겠습니까?
+                    </p>
+                </div>
+                <div class="member-activity">
+                    <div class="member-management-list bd-none">
+                        <ul>
+                            <li class="member-item bd-none">
+                                <div class="member-type staff">
+                                    <p class="member-name">김경희선생님</p>
+                                    <p class="member-tit">스탭 멤버</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div slot="footer">
+                <!-- footer custom coding-->
+                <div class="btn-group rt">
+                    <btn type="outline" @btnClick="isBlockModal = false">취소</btn>
+                    <btn type="navi" @btnClick="isBlockModal = false">차단하기</btn>
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.2.1 (멤버 활동 관리-탈퇴-확인) -->
+    <transition name="modal">
+        <modal v-if="isBanModal" size="540px" body-padding="0">
+            <div slot="header">
+                <div class="popup-icon leave"></div>
+                <div class="popup-close">
+                    <button class="close" @click="isBanModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">선택한 멤버를 강제 탈퇴시키겠습니까?</h2>
+                    <p class="popup-txt">
+                        멤버 강제 탈퇴 시 멤버가 작성했던 글, 댓글 등은 삭제되지 않습니다.
+                    </p>
+                </div>
+                <div class="member-activity">
+                    <div class="member-management-list bd-none">
+                        <ul>
+                            <li class="member-item bd-none">
+                                <div class="member-type staff">
+                                    <p class="member-name">김경희선생님</p>
+                                    <p class="member-tit">스탭 멤버</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="outline" @btnClick="isBanModal = false">취소</btn>
+                    <btn type="navi" @btnClick="isBanModal = false">강제 탈퇴</btn>
                 </div>
             </div>
         </modal>

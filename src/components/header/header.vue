@@ -18,7 +18,7 @@
         <li><a href="#"><img src="../../assets/images/icn-32-alert-white-on.svg" alt="" /></a></li>
         <li><a href="#"><img src="../../assets/images/mypage-white.svg" alt="" /></a></li>
         <li>
-          <a href="#" class="arrow-down" :class="{'active': isActive}" @click="menuToggle"><img src="../../assets/images/a-down.png" alt="" /></a>
+          <a href="#" class="arrow-down" :class="{'active': isActive}" @click="menuToggle" @blur="menuClose"><img src="../../assets/images/a-down.png" alt="" /></a>
           <ul class="depth-2" :class="{'active': isActive}">
             <li><router-link :to="{path:'/myProfile'}">MY프로필</router-link></li>
             <li><router-link :to="{path:'/bookmark'}">보관함</router-link></li>
@@ -74,6 +74,10 @@ export default class AppHeader extends Vue {
    */
   private menuToggle(): void {
     this.isActive = !this.isActive;
+  }
+
+  private menuClose(): void {
+    this.isActive = false;
   }
 }
 </script>
