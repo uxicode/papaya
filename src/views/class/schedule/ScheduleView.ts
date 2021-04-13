@@ -4,8 +4,15 @@ import Modal from '@/components/modal/modal.vue';
 import WithRender from './ScheduleView.html';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
+import ImageSetting from '@/views/class/IProfileImg/ImageSetting';
 
 const MyClass = namespace('MyClass');
+
+interface ITimeModel{
+    apm: string;
+    hour: string;
+    minute: string;
+}
 
 @WithRender
 @Component({
@@ -34,11 +41,20 @@ export default class ScheduleView extends Vue{
     private names: string[] =  ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'];
 
     //datepicker
-    private datePickerModel: string= new Date().toISOString().substr(0, 10);
-    private menu1: boolean= false;
+    private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
+    private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
+    private timeModel: string = '';
+    private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
+    private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
+
 
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
+
+    get currentTimeModel(): string{
+        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
+    }
+
 
     public getEvents( time: { start: any, end: any } ) {
         const eventItems= [];
@@ -103,16 +119,7 @@ export default class ScheduleView extends Vue{
             'image-d.jpg',
             'image-e.jpg'
         ];
-        let img: string= '';
-        if( imgUrl === null || imgUrl === undefined){
-            img=randomImgItems[ Utils.getRandomNum(0, 5) ];
-        }else if( !isNaN( parseInt(imgUrl, 10) ) ){
-            img=randomImgItems[ parseInt(imgUrl, 10) ];
-        }else{
-            img=imgUrl;
-        }
-
-        return ( imgUrl !== null && imgUrl !== undefined )? img : require( `@/assets/images/${img}` );
+        return ImageSetting.getProfileImg(randomImgItems, imgUrl);
     }
 
 

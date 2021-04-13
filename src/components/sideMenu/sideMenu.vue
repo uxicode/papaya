@@ -162,7 +162,7 @@ export default class SideMenu extends Vue{
   private sideMenuClickHandler(idx: number): void{
     this.$emit('sideClick', idx);
 
-    this.$router.push(CLASS_BASE_URL+'/'+this.classID+'/'+this.sideMenuData[idx].linkKey)
+    this.$router.push(CLASS_BASE_URL+'/'+this.classID+'/'+this.sideMenuData[idx].linkKey )
     .catch((error)=>{
       console.log(error);
       //에러 난 경우 새로고침

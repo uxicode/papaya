@@ -1,10 +1,10 @@
-import MyClassService from '@/api/service/MyClassService';
-import {IClassInfo, IClassMemberInfo, IMyClassList, IQuestionList} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import WithRender from './ClassSettingMain.html';
+import {IClassInfo, IClassMemberInfo, IMyClassList, IQuestionList} from '@/views/model/my-class.model';
+import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
+import WithRender from './ClassSettingMain.html';
 
 const MyClass = namespace('MyClass');
 
@@ -126,8 +126,8 @@ export default class ClassSettingMain extends Vue{
 
     public created() {
         this.getClassMemberInfo();
-        this.getClassInfo();
-        this.getJoinQuestion();
+        // this.getClassInfo();
+        // this.getJoinQuestion();
     }
 
     private getClassMemberInfo(): void {
