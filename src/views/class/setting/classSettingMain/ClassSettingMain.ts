@@ -189,7 +189,6 @@ export default class ClassSettingMain extends Vue{
 
     /**
      * 푸시 알림 설정
-     * @param item
      * @private
      */
     private pushToggle(): void {
@@ -242,10 +241,10 @@ export default class ClassSettingMain extends Vue{
      * @param newQuestion
      * @private
      */
-    private setJoinQuestion(newQuestion: any): void {
+    private setJoinQuestion(newQuestion: string): void {
         MyClassService.setClassQuestion(this.classID, this.questionID, {new_question: newQuestion})
           .then(() => {
-            console.log('가입 질문 수정 성공');
+            console.log(`question${this.questionID} 수정 성공`);
           });
         this.isJoinQnaSetting = false;
         this.tempData = '';

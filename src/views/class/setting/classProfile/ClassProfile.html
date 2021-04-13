@@ -30,11 +30,11 @@
                                 <p>{{ myInfo[item.data] }}</p>
 
                                 <div class="list-popup">
-                                    <button type="button" class="list-popup-btn" @click="item.isActive = !item.isActive"><span>운영자에게만 공개</span> <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
-                                    <div class="list-popup-menu pos-right" :class="{'active': item.isActive}" style="transform:translate3d(130px, 0, 0);">
-                                        <button type="button" class="list-popup-item" value="0">비공개</button>
-                                        <button type="button" class="list-popup-item" value="1">전체 공개</button>
-                                        <button type="button" class="list-popup-item" value="2">운영자에게만 공개</button>
+                                    <button type="button" class="list-popup-btn" @click="item.isActive = !item.isActive"><span>{{ openLevelTxt(memberInfo[item.open]) }}</span> <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                    <div class="list-popup-menu pos-right" :class="{'active': item.isActive}" style="transform:translate3d(87px, 0,0);">
+                                        <button type="button" class="list-popup-item" value="0" @click="openLevelModify(item.open, 0)">비공개</button>
+                                        <button type="button" class="list-popup-item" value="1" @click="openLevelModify(item.open, 1)">전체 공개</button>
+                                        <button type="button" class="list-popup-item" value="2" @click="openLevelModify(item.open, 2)">운영자에게만 공개</button>
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +82,7 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isNicknameModify = false;">취소</btn>
+                    <btn type="outline" @btnClick="isNicknameModify = false; this.tempData = ''">취소</btn>
                     <btn type="navi" @btnClick="modifyNickname(tempData)">변경하기</btn>
                 </div>
             </div>
