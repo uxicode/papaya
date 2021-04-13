@@ -9,9 +9,10 @@
                 <p class="list-tit">사용 중인 프로필</p>
                 <ul class="member-list">
                     <li class="list-item">
-                        <div class="member-info admin">
+                        <div class="member-info admin"
+                             :class=memberLevelIcon(memberInfo.level)>
                             <p class="name">{{ memberInfo.nickname }}</p>
-                            <span class="position">{{ memberLevel(memberInfo.level) }}</span>
+                            <span class="position">{{ memberLevelTxt(memberInfo.level) }}</span>
                         </div>
                         <div class="member-info-btn">
                             <button type="button" class="btn only-ico-btn" @click="gotoLink('classProfile')"><img :src="require('@/assets/images/settings.svg')" alt=""></button>
@@ -115,16 +116,16 @@
                         <label for="guideTxt">가입 안내 문구</label>
                         <textarea class="form-textarea mgt-10"
                                   id="guideTxt"
-                                  @keyup="textCount(info.classinfo.description)"
-                                  v-model="info.classinfo.description"
+                                  @keyup="textCount(info.description)"
+                                  v-model="info.description"
                                   placeholder="text"></textarea>
-                        <small class="form-message count">{{info.classinfo.description.length}}/{{maxLength}}</small>
+                        <small class="form-message count">{{info.description.length}}/{{maxLength}}</small>
                     </div>
                 </div>
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isGuideTxt = false">취소</btn>
+                    <btn type="outline" @btnClick="isGuideTxt = false;">취소</btn>
                     <btn type="navi" @btnClick="guideTxtModify(guideTxt)">저장</btn>
                 </div>
             </div>
@@ -170,7 +171,7 @@
                                                @input="valueChange($event)"
                                                :id="`question${item.id}`">
                                         <!-- form-delete active 시 display:block; -->
-                                        <button type="button" class="btn only-ico-btn form-delete active"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                                        <button type="button" class="btn only-ico-btn form-delete active" @click="deleteJoinQuestion(item.id)"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                                     </div>
                                 </div>
                             </li>
@@ -192,7 +193,7 @@
             <div slot="footer">
                 <div class="btn-group rt">
                     <btn type="outline" @btnClick="isJoinQnaSetting = false">취소</btn>
-                    <btn type="navi" @btnClick="setClassJoinQuestion(49, tempData)">저장</btn>
+                    <btn type="navi" @btnClick="setJoinQuestion(tempData)">저장</btn>
                 </div>
             </div>
         </modal>

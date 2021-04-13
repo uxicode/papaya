@@ -18,17 +18,8 @@
 .v-calendar-weekly__head-weekday{
   font-size:14px;
 }
-.calendar-prev{position: relative;}
-.v-icon.mdi-chevron-left:after, .v-icon.mdi-chevron-right:after , .calendar-prev:after{
-  width:24px;
-  height:24px;
-  background:url('../images/arrow-right.png') 0 0 no-repeat;
-  opacity: 1;
-  transform: scale(1);
-}
-.v-icon.mdi-chevron-left:after{
-  transform: rotate(180deg);
-}
-.v-text-field input{font-size:14px;}
 
+.v-text-field input{font-size:14px;}
+.form-group.time .v-icon{font-size:14px;}
+.form-item>p{margin-bottom:0;}
 

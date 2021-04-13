@@ -7,3 +7,5 @@ export const SET_MYCLASS_HOME_DATA: string = 'SET_MYCLASS_HOME_DATA';
 export const REMOVE_CLASS_DATA: string = 'REMOVE_CLASS_DATA';
 export const SET_MEMBER_ID: string = 'SET_MEMBER_ID';
 export const CLASS_MEMBER_INFO: string = 'CLASS_MEMBER_INFO';
+export const SET_QUESTION_ID: string = 'SET_QUESTION_ID';
+export const SET_ACTIVE_NUM: string = 'SET_ACTIVE_NUM';
