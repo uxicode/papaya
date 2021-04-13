@@ -31,7 +31,7 @@
       <div class="class-menu">
         <ul class="menu-list">
           <li v-for="(item, index) in sideMenuModel" :key="`item-${index}`">
-            <a href="" :class="[`type${index+1}`, {'active': index===activeNum }]" @click.stop.prevent="sideMenuClickHandler( index )">{{ item.title }}</a>
+            <a href="" :class="[`type${index+1}`, {'active': index===activeNum }]" @click.prevent="sideMenuClickHandler( index )">{{ item.title }}</a>
           </li>
 <!--          <li><a href="" class="type2">알림</a></li>
           <li><a href="" class="type3">일정</a></li>
@@ -74,6 +74,7 @@ import {Utils} from '@/utils/utils';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import MyClassService from '@/api/service/MyClassService';
+import ImageSetting from '@/views/class/IProfileImg/ImageSetting';
 import {CLASS_BASE_URL} from '@/api/base';
 
 
@@ -94,7 +95,7 @@ const MyClass = namespace('MyClass');
 export default class SideMenu extends Vue{
 
   @Prop(Number)
-  private activeNum: number =0;
+  private activeNum: number | null | undefined;
 
   @MyClass.Getter
   private classID!: string | number;
@@ -102,8 +103,15 @@ export default class SideMenu extends Vue{
   @MyClass.Getter
   private myClassHomeModel!: IClassInfo;
 
+  @MyClass.Getter
+  private activeSideMenuNum!: number;
+
+  @MyClass.Getter
+  private activeNumModel!: number;
+
   @MyClass.Action
   private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
+
 
   private sideMenuData: ISideMenu[]=[
     {id:0, title: '클래스 홈', linkKey:'' },
@@ -119,12 +127,26 @@ export default class SideMenu extends Vue{
     return this.sideMenuData;
   }
 
+  public created(){
+    //화면 새로고침시에
+    if (performance.navigation.type === 1) {
+      this.sideMenuClickHandler( 0 );
+    }
+
+    /*window.onpageshow = function(event) {
+      if ( event.persisted || (window.performance && window.performance.navigation.type === 1)) {
+        // Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우
+        console.log( event )
+      }
+    }*/
+
+  }
+
   public getHashTag( items: any[] ): string | undefined {
     if( items.length === 0 ){ return; }
     const keywords= items.map(( prop ) => '#' + prop.keyword);
     return keywords.join(' ');
   }
-
 
   public getProfileImg( imgUrl: string | null | undefined ): string{
     const randomImgItems = [
@@ -134,21 +156,19 @@ export default class SideMenu extends Vue{
       'image-d.jpg',
       'image-e.jpg'
     ];
-    let img: string= '';
-    if( imgUrl === null || imgUrl === undefined){
-      img=randomImgItems[ Utils.getRandomNum(0, 5) ];
-    }else if( !isNaN( parseInt(imgUrl, 10) ) ){
-      img=randomImgItems[ parseInt(imgUrl, 10) ];
-    }else{
-      img=imgUrl;
-    }
-
-    return ( imgUrl )? img : require( `@/assets/images/${img}` );
+    return ImageSetting.getProfileImg(randomImgItems, imgUrl);
   }
 
   private sideMenuClickHandler(idx: number): void{
     this.$emit('sideClick', idx);
-    this.$router.push(CLASS_BASE_URL+'/'+this.classID+'/'+this.sideMenuData[idx].linkKey);
+
+    this.$router.push(CLASS_BASE_URL+'/'+this.classID+'/'+this.sideMenuData[idx].linkKey )
+    .catch((error)=>{
+      console.log(error);
+      //에러 난 경우 새로고침
+      // window.location.reload();
+      Utils.getWindowReload();
+    });
   }
 
   /**

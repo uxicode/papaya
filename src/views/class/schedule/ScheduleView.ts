@@ -1,38 +1,34 @@
-import {Vue, Component} from 'vue-property-decorator';
-import {
-    VSheet,
-    VBtn,
-    VBtnToggle,
-    VContent,
-    VCalendar,
-    VCalendarDaily,
-    VCalendarMonthly,
-    VCalendarWeekly,
-    VCalendarCategory
-} from 'vuetify/lib';
-
+import {Vue, Component, Watch} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
+import Modal from '@/components/modal/modal.vue';
 import WithRender from './ScheduleView.html';
+import {IClassInfo} from '@/views/model/my-class.model';
+import {Utils} from '@/utils/utils';
+import ImageSetting from '@/views/class/IProfileImg/ImageSetting';
+
+const MyClass = namespace('MyClass');
+
+interface ITimeModel{
+    apm: string;
+    hour: string;
+    minute: string;
+}
 
 @WithRender
 @Component({
     components:{
-        VSheet,
-        VBtn,
-        VBtnToggle,
-        VContent,
-        VCalendar,
-        VCalendarDaily,
-        VCalendarMonthly,
-        VCalendarWeekly,
-        VCalendarCategory
+        Modal
     }
 })
 export default class ScheduleView extends Vue{
+    private isPopup: boolean=false;
+    private isTimeSelect: boolean=false;
+
     private type: string= 'month';
     private types: string[] = ['month', 'week', 'day', '4day'];
     private mode: string= 'stack';
     private modes: string[] = ['stack', 'column'];
-    private weekday: number[] = [0, 1, 2, 3, 4, 5, 6];
+    private weekday: number[] = [1, 2, 3, 4, 5, 6, 0];
     private weekdays: Array<{text: string, value: number[] }>=[
         { text: 'Sun - Sat', value: [0, 1, 2, 3, 4, 5, 6] },
         { text: 'Mon - Sun', value: [1, 2, 3, 4, 5, 6, 0] },
@@ -44,8 +40,24 @@ export default class ScheduleView extends Vue{
     private colors: string[] = ['#3F51B5', '#00BCD4', '#673AB7', '#2196F3', '#4CAF50', '#FF9800', '#757575'];
     private names: string[] =  ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'];
 
-    public getEvents( time: {start: any, end: any} ) {
-        const events = [];
+    //datepicker
+    private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
+    private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
+    private timeModel: string = '';
+    private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
+    private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
+
+
+    @MyClass.Getter
+    private myClassHomeModel!: IClassInfo;
+
+    get currentTimeModel(): string{
+        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
+    }
+
+
+    public getEvents( time: { start: any, end: any } ) {
+        const eventItems= [];
 
         const min = new Date(`${time.start.date}T00:00:00`);
         const max = new Date(`${time.end.date}T23:59:59`);
@@ -59,7 +71,7 @@ export default class ScheduleView extends Vue{
             const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000;
             const second = new Date(first.getTime() + secondTimestamp);
 
-            events.push({
+            eventItems.push({
                 name: this.names[this.rnd(0, this.names.length - 1)],
                 start: first,
                 end: second,
@@ -68,7 +80,17 @@ export default class ScheduleView extends Vue{
             });
         }
 
-        this.events = events;
+        this.events = eventItems;
+    }
+
+    public created(){
+        console.log(new Date().toISOString());
+    }
+
+    public getDay(date: any){
+        const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+        // console.log(date.weekday);
+        return daysOfWeek[date.weekday];
     }
     public getEventColor(event: any) {
         return event.color;
@@ -76,4 +98,30 @@ export default class ScheduleView extends Vue{
     public rnd(a: any, b: any): number {
         return Math.floor((b - a + 1) * Math.random()) + a;
     }
+
+    private updatePopup(isOpen: boolean) {
+        this.isPopup=isOpen;
+    }
+
+    private closePopup(): void{
+        this.isPopup=false;
+    }
+
+    private addScheduleOpen(): void{
+        this.updatePopup(true);
+    }
+
+    private getProfileImg( imgUrl: string | null | undefined ): string{
+        const randomImgItems = [
+            'image-a.jpg',
+            'image-b.jpg',
+            'image-c.jpg',
+            'image-d.jpg',
+            'image-e.jpg'
+        ];
+        return ImageSetting.getProfileImg(randomImgItems, imgUrl);
+    }
+
+
+
 }

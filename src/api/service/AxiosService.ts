@@ -38,7 +38,7 @@ const onUnauthorized = () => {
 const setAuthorization = (token: string) => {
   axios.defaults.headers.common.Authorization = (token) ? `Bearer ${token}` : null;
 };
-const  request = (method: string, url: string, data: any | null = null ): Promise<any> => {
+const request = (method: string, url: string, data: any | null = null ): Promise<any> => {
   // console.log( 'data status=', method, data, url );
   let reqObj: object;
 
@@ -67,7 +67,7 @@ const  request = (method: string, url: string, data: any | null = null ): Promis
     //error_code
     // error.response.data
     console.log(`error_code=${error.response.data.error_code}\n${error.response.data.message}\n url=${url}\n method=${method}`);
-
+    onUnauthorized();
     //여기서 별도로 error.response 를 넘겨 줘야 각 api 호출시 catch 부분에서 error 의 인자값을 확인할 수 있다.
     throw error.response;
   });

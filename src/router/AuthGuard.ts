@@ -17,7 +17,7 @@ const getIsAuth = (to: Route, from: Route, next: NavigationGuardNext): void => {
     next();
   } else {
     //로그인 페이지라고 저장해둠.
-    store.commit('PageHistoryStatus/' + HISTORY_PAGE, {history: 'login'});
+    // store.commit('PageHistoryStatus/' + HISTORY_PAGE, {history: 'login'});
     next(loginPath);
   }
 };

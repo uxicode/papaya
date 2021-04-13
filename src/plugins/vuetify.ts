@@ -1,32 +1,12 @@
 import Vue from 'vue';
-import Vuetify, {
-  VSheet,
-  VBtn,
-  VBtnToggle,
-  VContent,
-  VOverflowBtn,
-  VCalendar,
-  VCalendarDaily,
-  VCalendarMonthly,
-  VCalendarWeekly,
-  VCalendarCategory
-} from 'vuetify/lib';
+import Vuetify from 'vuetify';
+import '@mdi/font/css/materialdesignicons.css';
 import { VuetifyPreset } from 'vuetify/types';
 import 'vuetify/dist/vuetify.min.css';
 
-
-const opts = {};
-Vue.use( Vuetify, {
-  components: {
-    VSheet,
-    VBtn,
-    VBtnToggle,
-    VContent,
-    VCalendar,
-    VCalendarDaily,
-    VCalendarMonthly,
-    VCalendarWeekly,
-    VCalendarCategory
+Vue.use( Vuetify);
+export default new Vuetify({
+  icons: {
+    iconfont: 'mdi', // default - only for display purposes
   }
 });
-export default new Vuetify();

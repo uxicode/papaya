@@ -3,7 +3,7 @@ import {namespace} from 'vuex-class';
 import { IClassMember, IMyClassList} from '@/views/model/my-class.model';
 import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
-import {getAllPromise} from '@/views/model/types';
+import { getAllPromise } from '@/views/model/types';
 import MyClassListView from '@/views/class/classList/MyClassListView';
 import WithRender from './MyClassListPage.html';
 import {MYCLASS_HOME} from '@/store/action-class-types';
@@ -24,8 +24,8 @@ export default class MyClassListPage extends Vue {
   public numOfPage: number=12; // 더보기 클릭 > 불러올 카드 리스트 개수
   public pageCount: number=0; // 페이징
   public dummyData: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
-  public startNum: number=0;
-  public endNum: number=0;
+  public startNum: number =0;
+  public endNum: number =0;
 
   //첫번째 배너가 데이터가 아닌 새로운 모임방(클래스)을 생성하는 배너이기에 디폴트 값이 있는 것을 첫 인덱스로 채워둔다.
   private classItems: IMyClassList[]=[
@@ -59,7 +59,6 @@ export default class MyClassListPage extends Vue {
   ];
   private moreInfos: IClassMember[]=[];
 
-
   @Auth.Getter
   private userInfo!: IUserMe;
 
@@ -78,7 +77,6 @@ export default class MyClassListPage extends Vue {
 
 
   //start : get method ================================================
-
   get classListMoreInfos():  IClassMember[]{
     return this.moreInfos;
   }

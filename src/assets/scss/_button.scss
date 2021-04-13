@@ -1,3 +1,7 @@
+
+[type=reset], [type=submit], button, html [type=button]{
+  -webkit-appearance: none;
+}
 // button
 .btn {
   min-width:120px;
@@ -318,5 +322,14 @@
       right:auto;
       left:0;
     }
+  }
+}
+.add-schedule{
+  @include pos-abs($right:-80px, $bottom:35%);
+  &-btn {
+    display:block;
+    width:80px;
+    height:80px;
+    background:url(../../assets/images/add-btn.svg) no-repeat;
   }
 }

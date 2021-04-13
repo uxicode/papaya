@@ -1,0 +1,48 @@
+.theme--light.v-calendar-weekly .v-calendar-weekly__day:not(:last-child), .theme--light.v-calendar-weekly .v-calendar-weekly__head-weekday:not(:last-child){
+  border-right:0;
+}
+.v-calendar-weekly__day-label .v-btn{font-size:14px;}
+/*달력 클릭했을때 배경 */
+.theme--light.v-btn:focus {
+  color:#fff;
+  &:before{
+    opacity: 1;
+    background-color:#1d1d4c;
+  }
+}
+.theme--light.v-calendar-weekly .v-calendar-weekly__day.v-outside,
+.theme--light.v-calendar-weekly .v-calendar-weekly__head-weekday.v-outside{
+  background-color: #fff;
+}
+//달력 상단 요일
+.v-calendar-weekly__head-weekday{
+  font-size:14px;
+}
+
+.v-text-field input{font-size:14px;}
+.form-group.time .v-icon{font-size:14px;}
+.time-select-menu.bg-white{
+  background-color:#fff !important;
+  .v-input__icon{
+    height:16px;
+    width:16px;
+    min-width:16px;
+    .v-icon{
+      font-size:16px;
+    }
+  }
+  .v-text-field.v-text-field--enclosed:not(.v-text-field--rounded)>.v-input__control>.v-input__slot{
+    padding:0 8px;
+  }
+
+}
+.form-group{
+  .v-text-field.v-text-field--enclosed:not(.v-text-field--rounded)>.v-input__control>.v-input__slot{
+    padding:0;
+  }
+  &.date, &.time{
+    .v-text-field input{text-align:right;width:125px;}
+  }
+}
+.form-item>p{margin-bottom:0;}
+

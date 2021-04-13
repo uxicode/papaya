@@ -1,7 +1,7 @@
-import MyClassService from '@/api/service/MyClassService';
-import {IClassInfo, IClassMemberInfo, IMyClassList, IQuestionList} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import {IClassInfo, IClassMemberInfo, IMyClassList, IQuestionList} from '@/views/model/my-class.model';
+import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './ClassSettingMain.html';
@@ -189,6 +189,7 @@ export default class ClassSettingMain extends Vue{
 
     /**
      * 푸시 알림 설정
+     * @param item
      * @private
      */
     private pushToggle(): void {
