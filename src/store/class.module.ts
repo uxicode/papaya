@@ -46,7 +46,7 @@ export default class ClassModule extends VuexModule {
     private classId: number = 0;
     private sideMenuNum: number=0;
     private memberId: number = 0;
-    private questionId: number = 0;
+    private questionId: string | number = 0;
     private myClassHomeData: IClassInfo={
         contents_updatedAt:new Date(),
         createdAt: new Date(),
@@ -166,8 +166,8 @@ export default class ClassModule extends VuexModule {
     }
 
     @Mutation
-    public [SET_MEMBER_ID](memberId: number): void {
-        this.memberId = memberId;
+    public [SET_MEMBER_ID](): void {
+        this.memberId = (this.myClassHomeData.me as any).id;
         localStorage.setItem('memberId', String(this.memberId) );
     }
 
@@ -258,11 +258,11 @@ export default class ClassModule extends VuexModule {
 
     @Action({rawError: true})
     public [CLASS_MEMBER_INFO_ACTION](payload: { classId: number, memberId: number }): Promise<IClassMemberInfo[]>{
-        // this.context.commit(SET_CLASS_ID, payload.classId);
-        this.context.commit(SET_MEMBER_ID, payload.memberId);
+        payload.memberId = (this.myClassHomeData.me as any).id;
 
         return MyClassService.getClassMemberInfo(payload.classId, payload.memberId)
           .then((data) => {
+              this.context.commit(SET_MEMBER_ID, payload.memberId);
               this.context.commit(CLASS_MEMBER_INFO, data.member_info);
               // console.log(this.memberInfo);
               return Promise.resolve(this.memberInfo);
@@ -275,11 +275,11 @@ export default class ClassModule extends VuexModule {
 
     @Action({rawError: true})
     public [MODIFY_CLASS_MEMBER_INFO](payload: {classId: number, memberId: number}, data: object): Promise<IClassMemberInfo[]>{
-        this.context.commit(SET_CLASS_ID, payload.classId);
-        this.context.commit(SET_MEMBER_ID, payload.memberId);
+        //this.context.commit(SET_CLASS_ID, payload.classId);
 
         return MyClassService.setClassMemberInfo(payload.classId, payload.memberId, data)
           .then((info) => {
+              this.context.commit(SET_MEMBER_ID, payload.memberId);
               this.context.commit(CLASS_MEMBER_INFO, info);
               console.log(this.memberInfo);
               return Promise.resolve(this.memberInfo);
@@ -292,7 +292,7 @@ export default class ClassModule extends VuexModule {
 
     @Action({rawError: true})
     public [MODIFY_QUESTION](payload: {classId: number, questionId: number}, text: {new_question: string}): Promise<any>{
-        this.context.commit(SET_CLASS_ID, payload.classId);
+        //this.context.commit(SET_CLASS_ID, payload.classId);
         this.context.commit(SET_QUESTION_ID, payload.questionId);
 
         return MyClassService.setClassQuestion(payload.classId, payload.questionId, text)
