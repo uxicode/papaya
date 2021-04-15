@@ -112,6 +112,22 @@ class MyClassService {
     public deleteClassQuestion(classId: number, questionId: number): Promise<any> {
         return request('delete', `${CLASS_BASE_URL}/${classId}/question/${{questionId}}`);
     }
+
+    /**
+     * 클래스 태그 조회
+     * @param classId
+     */
+    public getClassTags(classId: number): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/tags`);
+    }
+
+    /**
+     *  태그 검색
+     * @param searchText
+     */
+    public searchTag(searchText: string): Promise<any> {
+        return request('get', `tag/search/${searchText}`);
+    }
 }
 
 export default new MyClassService();
