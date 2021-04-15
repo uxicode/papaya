@@ -151,13 +151,64 @@
                     <div class="popup-form-cnt">
                         <div class="form-item">
                             <p>수업 날짜</p>
+<!--                            <div class="form-box">-->
+<!--                                <div class="form-group date">-->
+<!--                                    <input type="text" class="form-control" size="10" value="2020. 2. 28">-->
+<!--                                    <span class="date-area">2020. 2. 28</span>-->
+<!--                                    <button type="button" class="btn form-btn form-calendar"></button>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+
                             <div class="form-box">
-                                <div class="form-group date">
-                                    <input type="text" class="form-control" size="10" value="2020. 2. 28">
-                                    <span class="date-area">2020. 2. 28</span>
-                                    <button type="button" class="btn form-btn form-calendar"></button>
+                                <div class="form-group date" style="display: inline-block;width:110px;">
+                                    <v-menu
+                                            ref="menu"
+                                            v-model="menu1"
+                                            :close-on-click="true"
+                                            transition="scale-transition"
+                                            offset-y
+                                            min-width="auto">
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <v-text-field
+                                                    v-model="datePickerModel"
+                                                    v-bind="attrs"
+                                                    v-on="on" hide-details solo flat>
+                                                <template v-slot:append>
+                                                    <button type="button" class="btn form-btn form-calendar" v-on="on"></button>
+                                                </template>
+                                            </v-text-field>
+                                        </template>
+                                        <v-date-picker v-model="datePickerModel" no-title hide-details ></v-date-picker>
+                                    </v-menu>
+                                </div>
+
+                                <div class="form-group time" v-if="!isTimeSelect" @click="isTimeSelect=true">
+                                    <input type="text" class="time-control" size="12" value="오후 12시 00분">
+                                    <button type="button" class="btn form-btn form-time"></button>
+                                </div>
+
+                                <div class="form-group time" style="display: inline-block;" v-else>
+                                    <v-select :items="['오전', '오후'] " placeholder="오전" hide-details  style="display:inline-block;width:55px">
+                                        <template v-slot:selection="{item, index}">
+                                            <span style="font-size:14px;">{{item}}</span>
+                                        </template>
+                                    </v-select>
+                                    <v-select :items="[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] " placeholder="12 시" hide-details   style="display:inline-block;width:55px">
+                                        <template v-slot:selection="{item, index}">
+                                            <span style="font-size:14px;">{{item}}시</span>
+                                        </template>
+                                    </v-select>
+                                    <v-select :items="[ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00'] " placeholder="00 분"  hide-details   style="display:inline-block;width:55px">
+                                        <template v-slot:selection="{item, index}">
+                                            <span style="font-size:14px;">{{item}}분</span>
+                                        </template>
+                                    </v-select>
                                 </div>
                             </div>
+
+
+
                         </div>
                         <div class="form-item">
                             <p>수업 시작 시간</p>
@@ -186,7 +237,17 @@
                         <div class="form-add-btn">
                             <ul class="clearfix">
                                 <li><a href=""><img :src="require('@/assets/images/image.svg')" alt=""></a></li>
-                                <li><a href=""><img :src="require('@/assets/images/file.svg')" alt=""></a></li>
+                                <li>
+                                    <form method="post" enctype="multipart/form-data">
+                                        <div>
+                                            <label for="image_uploads"><img :src="require('@/assets/images/file.svg')" alt=""></label>
+                                            <input type="file" id="image_uploads" class="image_uploads_test" name="image_uploads" accept=".jpg, .jpeg, .png">
+                                        </div>
+                                        <div class="preview">
+                                            <span class="pre-txt"><img :src="require('@/assets/images/file.svg')" alt="">No files currently selected for upload</span>
+                                        </div>
+                                    </form>
+                                </li>
                             </ul>
                         </div>
                     </div>
