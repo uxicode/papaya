@@ -176,7 +176,7 @@ export default class MyClassListView extends Vue{
     }else{
       return this.classMoreInfo[idx - 1].image_url;
     }*/
-    console.log(this.classMoreInfo[idx - 1].image_url);
+
     return (this.classMoreInfo[idx - 1]===undefined) ? '' : ImageSettingService.getProfileImg( this.classMoreInfo[idx - 1].image_url );
   }
 

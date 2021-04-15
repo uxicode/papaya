@@ -2,7 +2,6 @@ import {Utils} from '@/utils/utils';
 
 class ImageSettingService{
   public getProfileImg(imgUrl: string | null | undefined ): string{
-    console.log( imgUrl);
 
     const imgItems = [
       'image-a.jpg',
@@ -14,18 +13,26 @@ class ImageSettingService{
 
     let img: string= '';
     if( imgUrl === null || imgUrl === undefined){
-      // console.log('1', imgUrl);
+      // console.log('null 이거나 undefined', imgUrl);
       img=imgItems[ Utils.getRandomNum(0, imgItems.length-1) ];
     }else {
-      if (imgUrl.length < 6 ) {
-        // console.log('2', imgUrl);
-        img = imgItems[parseInt(imgUrl, 10) - 1];
+      if( isNaN(Number(imgUrl) )){
+        if( imgUrl.indexOf('https:')!==-1 ){
+          img=imgUrl;
+          //console.log('https 주소값 가진 url =', imgUrl);
+        }else if( imgUrl.length<2 ) {
+          // console.log('랜덤 숫자', imgUrl);
+          img = imgItems[parseInt(imgUrl, 10) - 1];
+        }else{
+          // console.log('이상한 문자', imgUrl);
+          img=imgItems[ Utils.getRandomNum(0, imgItems.length-1) ];
+        }
       }else{
-        // console.log('3', imgUrl);
-        img=imgUrl;
+        // console.log('이상한 문자', imgUrl);
+        img=imgItems[ Utils.getRandomNum(0, imgItems.length-1) ];
       }
     }
-    return ( img.indexOf('https:')===-1 )? require( `@/assets/images/${img}`) : img;
+    return ( img.indexOf('https:')!==-1 )? img : require( `@/assets/images/${img}`);
   }
 
 }
