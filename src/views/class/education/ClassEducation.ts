@@ -361,9 +361,7 @@ export default class ClassEducation extends Vue {
                 }
             ]
         }
-
-
-    ]
+    ];
 
     private currListNum: number = 0;
 
