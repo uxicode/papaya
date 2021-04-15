@@ -3,6 +3,7 @@ import {IClassInfo, IClassMembers} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
+import Btn from '@/components/button/Btn.vue';
 import WithRender from './ClassMember.html';
 
 const MyClass = namespace('MyClass');
@@ -11,6 +12,7 @@ const MyClass = namespace('MyClass');
 @Component({
     components:{
         Modal,
+        Btn,
     }
 })
 export default class ClassMember extends Vue{
@@ -25,6 +27,8 @@ export default class ClassMember extends Vue{
     private isStaffToggle: boolean = false;
     private isMemberToggle: boolean = false;
 
+    private isInvitePopup: boolean = false;
+    private isSnackbar: boolean = false;
     private isDetailPopup: boolean = false;
     private isBlockModal: boolean = false;
     private isBanModal: boolean = false;

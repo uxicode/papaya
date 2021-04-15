@@ -36,7 +36,7 @@ export default class ClassTagManage extends Vue {
     private isClassTagSearch: boolean = false;
     private isLoading: boolean = false;
     private searchTagValue: string = '';
-    private searchResultItems: [] = [];
+    private searchResultItems: ITagList[] = [];
 
     @MyClass.Getter
     private classID!: number;
@@ -45,7 +45,7 @@ export default class ClassTagManage extends Vue {
         return this.searchTagValue;
     }
 
-    get searchResults(): [] {
+    get searchResults(): ITagList[] {
         return this.searchResultItems;
     }
 
@@ -53,6 +53,10 @@ export default class ClassTagManage extends Vue {
         return this.isLoading;
     }
 
+    public getTagNameInput( selector: string ): HTMLInputElement{
+        return document.getElementById( selector ) as HTMLInputElement;
+    }
+    
     public created() {
         this.getClassTags();
     }
@@ -95,11 +99,11 @@ export default class ClassTagManage extends Vue {
 
             //키가 눌렸을 때 체크 Observable
             // targetInputSelector: string
-            const keyup$ = searchKeyEventObservable('#searchSchool');
+            const keyup$ = searchKeyEventObservable('#searchTag');
 
             //사용자가 입력한 값 처리 Observable
             //obv$: Observable<any>, loadChk: ()=>void, promiseFunc: Promise<any>, isLoading: boolean
-            const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, MyClassService.getSearchSchool, this.isLoading );
+            const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, MyClassService.searchTag, this.isLoading );
             userInter$.subscribe({
                 next:( searchData: any ) =>{
                     // console.log(searchData);
@@ -142,12 +146,26 @@ export default class ClassTagManage extends Vue {
     private checkLoading(): void{
         this.isLoading=!this.isLoading;
     }
+    
+    /**
+     * autocomplete 로 검색된 리스트 중 하나를 클릭했을때 실행 -> 해당 클릭한 키워드값으로
+     * @param name
+     * @private
+     */
+    private applySearchResult( name: string): void {
+        this.closeTagSearchPopup();
+        this.searchTagValue=name;
+        this.changeTagNameValue(this.searchTagValue);
+    }
 
-    private tagSearch(searchText: string): void {
-        MyClassService.searchTag(searchText)
-          .then((data: ITagList) => {
-             console.log(data);
-          });
+    /**
+     * 태그 이름 input value 변경
+     * @param val
+     * @private
+     */
+    private changeTagNameValue(val: string) {
+        const TagNameField=this.getTagNameInput('tagName');
+        TagNameField.value = val;
     }
 
     /**

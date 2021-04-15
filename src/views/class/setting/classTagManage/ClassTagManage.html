@@ -60,8 +60,8 @@
                                placeholder="학교 이름을 검색해주세요."
                                v-stream:keyup="keyup$">-->
                         <txt-field
-                                id="searchSchool"
-                                placeholder="학교 이름을 검색해주세요."
+                                id="searchTag"
+                                placeholder="태그 이름을 검색해주세요."
                                 size="370" v-model="searchTagValue">
                         </txt-field>
                         <btn type="grey" size="sm" @btnClick="">검색</btn>
@@ -71,26 +71,26 @@
 
                     </div>
                 </div>
-
-                <template v-if="searchResultValue.length >= 1">
-                    <div class="search-result">
-                        <div class="search-result-cnt">
+                <div class="search-result">
+                    <div class="search-result-cnt">
+                        <template v-if="searchResults.length >= 1">
                             <ul class="search-result-item">
-                                <li>
-                                    <div class="tb-cell">
-                                        <button type="button" class="result-tit"><strong>파파야</strong>초등학교</button>
-                                    </div>
+                                <li v-for="item in searchResults">
+                                    <a href="" class="result-link" @click.prevent.stop="applySearchResult( item.keyword )">
+                                        <div class="tb-cell result-tit" v-html="boldSearchResult( item.keyword )"></div>
+                                        <div class="tb-cell result-sub">{{ item.keyword }}</div>
+                                    </a>
                                 </li>
                             </ul>
-                        </div>
-                    </div>
-                </template>
+                        </template>
 
-                <template v-else-if="searchResultValue.length === 0">
-                    <div class="search-result">
-                        <p class="search-none">‘<strong>{{searchResultValue}}</strong>’에 대한 검색 결과가 없습니다.</p>
+                        <template v-else-if="searchResults.length === 0">
+                            <div class="search-result">
+                                <p class="search-none">‘<strong>{{searchResultValue}}</strong>’에 대한 검색 결과가 없습니다.</p>
+                            </div>
+                        </template>
                     </div>
-                </template>
+                </div>
             </div>
         </modal>
     </transition>

@@ -122,7 +122,7 @@ class MyClassService {
     }
 
     /**
-     *  태그 검색
+     * 태그 검색
      * @param searchText
      */
     public searchTag(searchText: string): Promise<any> {

@@ -3,7 +3,7 @@
         <div class="cnt-top">
             <h2 class="cnt-tit">멤버 <strong>{{ totalMemberNum }}</strong></h2>
             <div class="cnt-top-btn">
-                <button type="button" class="btn ico-btn ico-left navi sm">
+                <button type="button" class="btn ico-btn ico-left navi sm" @click="isInvitePopup = true">
                     <img :src="require('@/assets/images/icn-18-add-white.svg')" class="icon" alt="">멤버 초대하기
                 </button>
             </div>
@@ -108,6 +108,51 @@
         -->
 
     </div>
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.6.3 (클래스 페이지-멤버 초대) -->
+    <transition name="modal">
+        <modal v-if="isInvitePopup" size="540px" body-padding="0">
+            <div slot="header">
+                <!-- header custom coding-->
+                <div class="popup-icon add"></div>
+                <div class="popup-close">
+                    <button class="close" @click=""><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">멤버 초대하기</h2>
+                    <p class="popup-txt">아래 링크를 복사하여 클래스에 멤버를 초대해 주세요.</p>
+
+                    <div class="popup-input">
+                        <div class="form-group inline">
+                            <input type="text" class="form-control"
+                                   value="https://papayaclass.com/class/bbhca62kmlxzb28"
+                                   style="width:370px;">
+                            <btn type="grey" size="sm" @btnClick="isSnackbar = true">링크복사</btn>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div slot="footer">
+                <!-- footer custom coding-->
+                <div class="btn-group rt">
+                    <btn type="outline" @btnClick>취소</btn>
+                    <btn type="navi" @btnClick>확인</btn>
+                </div>
+            </div>
+            <v-snackbar v-model="isSnackbar"
+                        :absolute="true"
+                        :centered="true"
+                        :timeout="3000"
+                        :width="600"
+                        :height="50">
+                초대링크 복사가 완료되었습니다.
+            </v-snackbar>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.6.1 (멤버정보 - 상세) -->
     <transition name="modal">
