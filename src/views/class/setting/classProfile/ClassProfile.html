@@ -47,7 +47,7 @@
         <div class="popup-footer">
             <div class="btn-group rt">
                 <btn type="outline" @btnClick="goBack">취소</btn>
-                <btn type="navi">저장</btn>
+                <btn type="navi" @btnClick="goBack">저장</btn>
             </div>
         </div>
     </div>
@@ -82,7 +82,7 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isNicknameModify = false; tempData = memberInfo.nickname;">취소</btn>
+                    <btn type="outline" @btnClick="isNicknameModify = false;">취소</btn>
                     <btn type="navi" @btnClick="modifyNickname(tempData)">변경하기</btn>
                 </div>
             </div>

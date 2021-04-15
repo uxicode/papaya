@@ -106,6 +106,29 @@ interface IClassInfo{
     contents_updated_type: string | number;
     class_tags: Array<{ id: string | number, keyword: string }>;
     class_link: string;
+    me?: {
+        class_id: number;
+        createdAt: Date
+        id: number;
+        is_bookmarked: number;
+        joinedAt: Date;
+        level: number;
+        nickname: string;
+        onoff_comment_noti: number;
+        onoff_post_noti: number;
+        onoff_push_noti: number;
+        onoff_schedule_noti: number;
+        open_level_email: number;
+        open_level_id: number;
+        open_level_mobileno: number;
+        profile_image: null;
+        schedule_color: number;
+        schedule_noti_intime: number;
+        status: number;
+        updatedAt: Date;
+        user_id: number;
+        visited: number;
+    };
 }
 
 interface IClassMember{
@@ -460,4 +483,11 @@ interface IClassMemberList {
     message?: string;
 }
 
-export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList, ISearchSchool, IMakeClassInfo, IMakeClassInfoBase, IClassMemberInfo, IClassMemberList};
+interface IQuestionList {
+    createdAt?: Date;
+    id: number;
+    class_id: number;
+    question: string;
+}
+
+export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList, ISearchSchool, IMakeClassInfo, IMakeClassInfoBase, IClassMemberInfo, IClassMemberList, IQuestionList};

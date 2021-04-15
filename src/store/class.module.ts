@@ -6,10 +6,21 @@ import {
     IMakeClassInfo,
     IMakeClassInfoBase,
     IClassInfo,
-    IClassMemberInfo
+    IClassMemberInfo,
+    IQuestionList
 } from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
-import {MYCLASS_LIST, POST_LIST, CREATE_CLASS_LIST, SET_CLASS_ID, SET_MYCLASS_HOME_DATA, REMOVE_CLASS_DATA, CLASS_MEMBER_INFO, SET_MEMBER_ID} from '@/store/mutation-class-types';
+import {
+    MYCLASS_LIST,
+    POST_LIST,
+    CREATE_CLASS_LIST,
+    SET_CLASS_ID,
+    SET_MYCLASS_HOME_DATA,
+    REMOVE_CLASS_DATA,
+    CLASS_MEMBER_INFO,
+    SET_MEMBER_ID,
+    SET_QUESTION_ID
+} from '@/store/mutation-class-types';
 import {
     MYCLASS_LIST_ACTION,
     POST_LIST_ACTION,
@@ -17,8 +28,10 @@ import {
     MYCLASS_HOME,
     CLASS_MEMBER_INFO_ACTION,
     MODIFY_CLASS_MEMBER_INFO,
-    MODIFY_CLASS_INFO
+    MODIFY_CLASS_INFO,
+    MODIFY_QUESTION,
 } from '@/store/action-class-types';
+
 
 @Module({
     namespaced: true,
@@ -28,9 +41,12 @@ export default class ClassModule extends VuexModule {
     private classData: IMyClassList[]=[];
     private postData: IPostList[]=[];
     private memberInfo: IClassMemberInfo[] = [];
+    private questionData: IQuestionList[] = [];
     private count: number = 0;
     private classId: number = 0;
+    private sideMenuNum: number=0;
     private memberId: number = 0;
+    private questionId: number = 0;
     private myClassHomeData: IClassInfo={
         contents_updatedAt:new Date(),
         createdAt: new Date(),
@@ -55,6 +71,29 @@ export default class ClassModule extends VuexModule {
         contents_updated_type: 0,
         class_tags: [],
         class_link:  '',
+        me: {
+            class_id: 744,
+            createdAt: new Date(),
+            id: 825,
+            is_bookmarked: 0,
+            joinedAt: new Date(),
+            level: 1,
+            nickname: '홍길동1',
+            onoff_comment_noti: 1,
+            onoff_post_noti: 1,
+            onoff_push_noti: 0,
+            onoff_schedule_noti: 1,
+            open_level_email: 2,
+            open_level_id: 1,
+            open_level_mobileno: 0,
+            profile_image: null,
+            schedule_color: 0,
+            schedule_noti_intime: 10,
+            status: 1,
+            updatedAt: new Date(),
+            user_id: 45,
+            visited: 0
+        }
     };
 
     private makeClassInfo: IMakeClassInfo={
@@ -84,6 +123,10 @@ export default class ClassModule extends VuexModule {
 
     get memberID(): string | null | number{
         return (  localStorage.getItem('memberId') !==null )? localStorage.getItem('memberId') : this.memberId;
+    }
+
+    get questionID(): string | null | number{
+        return (  localStorage.getItem('questionId') !==null )? localStorage.getItem('questionId') : this.questionId;
     }
 
     /* Mutations */
@@ -118,10 +161,8 @@ export default class ClassModule extends VuexModule {
     @Mutation
     public [POST_LIST](postData: IPostList[] ): void {
         this.postData =postData;
-
-        // console.log(this.postData);
         localStorage.setItem('postData', JSON.stringify(this.postData) );
-        this.count++;
+        // this.count++;
     }
 
     @Mutation
@@ -133,9 +174,7 @@ export default class ClassModule extends VuexModule {
     @Mutation
     public [CLASS_MEMBER_INFO](memberInfo: IClassMemberInfo[] ): void {
         this.memberInfo = memberInfo;
-
         localStorage.setItem('memberInfo', JSON.stringify(this.memberInfo) );
-        this.count++;
     }
 
     @Mutation
@@ -148,6 +187,13 @@ export default class ClassModule extends VuexModule {
         this.postData=[];
         this.classId=0;
     }
+
+    @Mutation
+    public [SET_QUESTION_ID](questionId: number): void {
+        this.questionId = questionId;
+        localStorage.setItem('questionId', String(this.questionId) );
+    }
+
 
     /* Actions */
     @Action({rawError: true})
@@ -180,14 +226,14 @@ export default class ClassModule extends VuexModule {
 
         console.log(this.makeClassInfo);
         return MyClassService.setMakeClass( this.makeClassInfo )
-            .then( (data: any)=>{
-                console.log(data.classinfo);
-                this.context.commit( CREATE_CLASS_LIST, this.makeClassInfo );
-                return Promise.resolve(this.makeClassInfo);
-            }).catch((error: any)=>{
-                console.log(error);
-                return Promise.reject(error);
-            });
+          .then( (data: any)=>{
+              console.log(data.classinfo);
+              this.context.commit( CREATE_CLASS_LIST, this.makeClassInfo );
+              return Promise.resolve(this.makeClassInfo);
+          }).catch((error: any)=>{
+              console.log(error);
+              return Promise.reject(error);
+          });
     }
 
     @Action({rawError: true})
@@ -195,16 +241,16 @@ export default class ClassModule extends VuexModule {
         this.context.commit(SET_CLASS_ID, id);
 
         return MyClassService.getClassInfoById( id )
-            .then( (data)=>{
-                this.context.commit(SET_MYCLASS_HOME_DATA, data.classinfo);
+          .then( (data)=>{
+              this.context.commit(SET_MYCLASS_HOME_DATA, data.classinfo);
 
-                console.log(this.myClassHomeModel);
+              console.log(this.myClassHomeModel);
 
-                return Promise.resolve(this.myClassHomeModel);
-            }).catch((error)=>{
-                console.log(error);
-                return Promise.reject(error);
-            });
+              return Promise.resolve(this.myClassHomeModel);
+          }).catch((error)=>{
+              console.log(error);
+              return Promise.reject(error);
+          });
 
 
         // return this.$routers
@@ -212,35 +258,51 @@ export default class ClassModule extends VuexModule {
 
     @Action({rawError: true})
     public [CLASS_MEMBER_INFO_ACTION](payload: { classId: number, memberId: number }): Promise<IClassMemberInfo[]>{
-        this.context.commit(SET_CLASS_ID, payload.classId);
+        // this.context.commit(SET_CLASS_ID, payload.classId);
         this.context.commit(SET_MEMBER_ID, payload.memberId);
 
         return MyClassService.getClassMemberInfo(payload.classId, payload.memberId)
-            .then((data) => {
-                this.context.commit(CLASS_MEMBER_INFO, data.member_info);
-                console.log(this.memberInfo);
-                return Promise.resolve(this.memberInfo);
-            })
-            .catch((error) => {
-                console.log(error);
-                return Promise.reject(error);
-            });
+          .then((data) => {
+              this.context.commit(CLASS_MEMBER_INFO, data.member_info);
+              // console.log(this.memberInfo);
+              return Promise.resolve(this.memberInfo);
+          })
+          .catch((error) => {
+              console.log(error);
+              return Promise.reject(error);
+          });
     }
 
     @Action({rawError: true})
-    public [MODIFY_CLASS_MEMBER_INFO](payload: {classId: number, memberId: number}, data: any): Promise<IClassMemberInfo[]>{
+    public [MODIFY_CLASS_MEMBER_INFO](payload: {classId: number, memberId: number}, data: object): Promise<IClassMemberInfo[]>{
         this.context.commit(SET_CLASS_ID, payload.classId);
         this.context.commit(SET_MEMBER_ID, payload.memberId);
 
         return MyClassService.setClassMemberInfo(payload.classId, payload.memberId, data)
-            .then((info) => {
-                this.context.commit(CLASS_MEMBER_INFO, info);
-                console.log(this.memberInfo);
-                return Promise.resolve(this.memberInfo);
-            })
-            .catch((error) => {
-                console.log(error);
-                return Promise.reject(error);
-            });
+          .then((info) => {
+              this.context.commit(CLASS_MEMBER_INFO, info);
+              console.log(this.memberInfo);
+              return Promise.resolve(this.memberInfo);
+          })
+          .catch((error) => {
+              console.log(error);
+              return Promise.reject(error);
+          });
+    }
+
+    @Action({rawError: true})
+    public [MODIFY_QUESTION](payload: {classId: number, questionId: number}, text: {new_question: string}): Promise<any>{
+        this.context.commit(SET_CLASS_ID, payload.classId);
+        this.context.commit(SET_QUESTION_ID, payload.questionId);
+
+        return MyClassService.setClassQuestion(payload.classId, payload.questionId, text)
+          .then((success) => {
+            console.log(success);
+            return Promise.resolve(this.questionData);
+          })
+          .catch((error) => {
+              console.log(error);
+              return Promise.reject(error);
+          });
     }
 }

@@ -38,7 +38,7 @@ const onUnauthorized = () => {
 const setAuthorization = (token: string) => {
   axios.defaults.headers.common.Authorization = (token) ? `Bearer ${token}` : null;
 };
-const  request = (method: string, url: string, data: any | null = null ): Promise<any> => {
+const request = (method: string, url: string, data: any | null = null ): Promise<any> => {
   // console.log( 'data status=', method, data, url );
   let reqObj: object;
 

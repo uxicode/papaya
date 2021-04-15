@@ -4,7 +4,7 @@
       <div class="class-home-info">
         <div class="info-img">
           <img :src="getProfileImg(myClassHomeModel.image_url)" alt="" class="circle">
-          <!--          <a href="" class="img-change"><img :src="require('@/assets/images/btn-round 2.png')" alt=""></a>-->
+<!--          <a href="" class="img-change"><img :src="require('@/assets/images/btn-round 2.png')" alt=""></a>-->
 
           <!-- start: profile image upload -->
           <form class="file-form img-change" enctype="multipart/form-data" accept-charset="utf-8" novalidate>
@@ -20,7 +20,7 @@
           <ul class="info-list">
             <li>{{ myClassHomeModel.startday }}</li>
             <li>{{ myClassHomeModel.is_private? '공개' : '비공개' }}</li>
-            <li><a href="">멤버 {{ myClassHomeModel.member_count }} &gt;</a></li>
+            <li><button type="button" @click="gotoClassMemberPage">멤버 {{ myClassHomeModel.member_count }} &gt;</button></li>
           </ul>
           <p class="info-tag">{{getHashTag(myClassHomeModel.class_tags) }}</p>
         </div>
@@ -31,13 +31,13 @@
       <div class="class-menu">
         <ul class="menu-list">
           <li v-for="(item, index) in sideMenuModel" :key="`item-${index}`">
-            <a href="" :class="[`type${index+1}`, {'active': index===activeNum }]" @click.stop.prevent="sideMenuClickHandler( index )">{{ item.title }}</a>
+            <a href="" :class="[`type${index+1}`, {'active': index===activeNum }]" @click.prevent="sideMenuClickHandler( index )">{{ item.title }}</a>
           </li>
-          <!--          <li><a href="" class="type2">알림</a></li>
-                    <li><a href="" class="type3">일정</a></li>
-                    <li><a href="" class="type4">파일함</a></li>
-                    <li><a href="" class="type5">교육과정</a></li>
-                    <li><a href="" class="type6">클래스 설정</a></li>-->
+<!--          <li><a href="" class="type2">알림</a></li>
+          <li><a href="" class="type3">일정</a></li>
+          <li><a href="" class="type4">파일함</a></li>
+          <li><a href="" class="type5">교육과정</a></li>
+          <li><a href="" class="type6">클래스 설정</a></li>-->
         </ul>
       </div>
     </div>
@@ -67,120 +67,145 @@
 </template>
 
 <script lang="ts">
-  import {Component, Prop, Vue} from 'vue-property-decorator';
-  import {namespace} from 'vuex-class';
-  import {IClassInfo} from '@/views/model/my-class.model';
-  import {Utils} from '@/utils/utils';
-  import Modal from '@/components/modal/modal.vue';
-  import Btn from '@/components/button/Btn.vue';
-  import MyClassService from '@/api/service/MyClassService';
-  import {CLASS_BASE_URL} from '@/api/base';
+import {Component, Prop, Vue} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
+import {IClassInfo} from '@/views/model/my-class.model';
+import {Utils} from '@/utils/utils';
+import Modal from '@/components/modal/modal.vue';
+import Btn from '@/components/button/Btn.vue';
+import MyClassService from '@/api/service/MyClassService';
+import {CLASS_BASE_URL} from '@/api/base';
+import ImageSettingService from '@/views/service/IProfileImg/ImageSettingService';
 
 
-  interface ISideMenu{
-    id: number;
-    title: string;
-    linkKey: string;
+interface ISideMenu{
+  id: number;
+  title: string;
+  linkKey: string;
+}
+
+const MyClass = namespace('MyClass');
+
+@Component({
+  components:{
+    Modal,
+    Btn,
+  }
+})
+export default class SideMenu extends Vue{
+
+  @Prop(Number)
+  private activeNum: number | null | undefined;
+
+  @MyClass.Getter
+  private classID!: string | number;
+
+  @MyClass.Getter
+  private myClassHomeModel!: IClassInfo;
+
+  @MyClass.Getter
+  private activeSideMenuNum!: number;
+
+  @MyClass.Getter
+  private activeNumModel!: number;
+
+  @MyClass.Action
+  private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
+
+
+  private sideMenuData: ISideMenu[]=[
+    {id:0, title: '클래스 홈', linkKey:'' },
+    {id:1, title: '알림', linkKey:'alert' },
+    {id:2, title: '일정', linkKey:'schedule' },
+    {id:3, title: '파일함', linkKey:'fileManger' },
+    {id:4, title: '교육과정', linkKey:'curriculum' },
+    {id:5, title: '클래스 설정', linkKey:'setting' },
+  ];
+  private isPopup: boolean=false;
+
+  get sideMenuModel(): ISideMenu[]{
+    return this.sideMenuData;
   }
 
-  const MyClass = namespace('MyClass');
-
-  @Component({
-    components:{
-      Modal,
-      Btn,
-    }
-  })
-  export default class SideMenu extends Vue{
-
-    @Prop(Number)
-    private activeNum: number =0;
-
-    @MyClass.Getter
-    private classID!: string | number;
-
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
-
-    @MyClass.Action
-    private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
-
-    private sideMenuData: ISideMenu[]=[
-      {id:0, title: '클래스 홈', linkKey:'' },
-      {id:1, title: '알림', linkKey:'alert' },
-      {id:2, title: '일정', linkKey:'schedule' },
-      {id:3, title: '파일함', linkKey:'fileManger' },
-      {id:4, title: '교육과정', linkKey:'curriculum' },
-      {id:5, title: '클래스 설정', linkKey:'setting' },
-    ];
-    private isPopup: boolean=false;
-
-    get sideMenuModel(): ISideMenu[]{
-      return this.sideMenuData;
+  public created(){
+    //화면 새로고침시에
+    if (performance.navigation.type === 1) {
+      this.sideMenuClickHandler( 0 );
     }
 
-    public getHashTag( items: any[] ): string | undefined {
-      if( items.length === 0 ){ return; }
-      const keywords= items.map(( prop ) => '#' + prop.keyword);
-      return keywords.join(' ');
-    }
-
-
-    public getProfileImg( imgUrl: string | null | undefined ): string{
-      const randomImgItems = [
-        'image-a.jpg',
-        'image-b.jpg',
-        'image-c.jpg',
-        'image-d.jpg',
-        'image-e.jpg'
-      ];
-      let img: string= '';
-      if( imgUrl === null || imgUrl === undefined){
-        img=randomImgItems[ Utils.getRandomNum(0, 5) ];
-      }else if( !isNaN( parseInt(imgUrl, 10) ) ){
-        img=randomImgItems[ parseInt(imgUrl, 10) ];
-      }else{
-        img=imgUrl;
+    /*window.onpageshow = function(event) {
+      if ( event.persisted || (window.performance && window.performance.navigation.type === 1)) {
+        // Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우
+        console.log( event )
       }
+    }*/
 
-      return ( imgUrl )? img : require( `@/assets/images/${img}` );
-    }
-
-    private sideMenuClickHandler(idx: number): void{
-      this.$emit('sideClick', idx);
-      this.$router.push(CLASS_BASE_URL+'/'+this.classID+'/'+this.sideMenuData[idx].linkKey);
-    }
-
-    /**
-     * 프로필 이미지 수정
-     * @param files - input type=file 의 onChange 이벤트로  $event.target.files 값
-     * @private
-     */
-    private async uploadProfileImg( files: any ){
-      const formData = new FormData();
-      formData.append('file', files[0] );
-      await MyClassService.setUploadProfileImg( this.classID, formData )
-              .then((data) => {
-                console.log(data);
-              }).catch((error) => {
-                console.log(error);
-              });
-      await this.MYCLASS_HOME( this.classID )
-              .then( (data) => {
-                console.log(data);
-                // this.$emit('updateProfile', true);
-                this.updateProfileImage( true );
-              });
-    }
-
-    private updateProfileImage(isOpen: boolean) {
-      this.isPopup=isOpen;
-    }
-
-    private closePopup(): void{
-      this.isPopup=false;
-    }
   }
+
+  public getHashTag( items: any[] ): string | undefined {
+    if( items.length === 0 ){ return; }
+    const keywords= items.map(( prop ) => '#' + prop.keyword);
+    return keywords.join(' ');
+  }
+
+  public getProfileImg( imgUrl: string | null | undefined ): string{
+    const randomImgItems = [
+      'image-a.jpg',
+      'image-b.jpg',
+      'image-c.jpg',
+      'image-d.jpg',
+      'image-e.jpg'
+    ];
+    // console.log(ImageSettingService.getProfileImg(randomImgItems, imgUrl) );
+    return ImageSettingService.getProfileImg(randomImgItems, imgUrl);
+  }
+
+  private sideMenuClickHandler(idx: number): void{
+    this.$emit('sideClick', idx);
+
+    this.$router.push(CLASS_BASE_URL+'/'+this.classID+'/'+this.sideMenuData[idx].linkKey )
+    .catch((error)=>{
+      console.log(error);
+      //에러 난 경우 새로고침
+      // window.location.reload();
+      Utils.getWindowReload();
+    });
+  }
+
+  /**
+   * 프로필 이미지 수정
+   * @param files - input type=file 의 onChange 이벤트로  $event.target.files 값
+   * @private
+   */
+  private async uploadProfileImg( files: any ){
+    const formData = new FormData();
+    formData.append('file', files[0] );
+    await MyClassService.setUploadProfileImg( this.classID, formData )
+        .then((data) => {
+          console.log(data);
+        }).catch((error) => {
+           console.log(error);
+        });
+    await this.MYCLASS_HOME( this.classID )
+        .then( (data) => {
+          console.log(data);
+          // this.$emit('updateProfile', true);
+          this.updateProfileImage( true );
+        });
+  }
+
+  private updateProfileImage(isOpen: boolean) {
+    this.isPopup=isOpen;
+  }
+
+  private closePopup(): void{
+    this.isPopup=false;
+  }
+
+  private gotoClassMemberPage(): void{
+    this.$router.push(`/class/${this.classID}/member`);
+  }
+}
 
 </script>
 

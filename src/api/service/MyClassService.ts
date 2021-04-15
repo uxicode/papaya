@@ -108,6 +108,10 @@ class MyClassService {
     public setClassQuestion(classId: number, questionId: number, payload: {new_question: string}): Promise<any> {
         return request('put', `${CLASS_BASE_URL}/${classId}/question/${{questionId}}`, payload);
     }
+
+    public deleteClassQuestion(classId: number, questionId: number): Promise<any> {
+        return request('delete', `${CLASS_BASE_URL}/${classId}/question/${{questionId}}`);
+    }
 }
 
 export default new MyClassService();
