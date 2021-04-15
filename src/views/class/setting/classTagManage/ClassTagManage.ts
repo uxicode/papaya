@@ -1,22 +1,22 @@
-import MyClassService from '@/api/service/MyClassService';
+import {Vue, Component, Prop} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import {
     resetSearchInput,
     searchKeyEventObservable,
     searchUserKeyValueObservable
 } from '@/views/service/search/SearchService';
-import {Vue, Component, Prop} from 'vue-property-decorator';
-import {namespace} from 'vuex-class';
+import MyClassService from '@/api/service/MyClassService';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import WithRender from './ClassTagManage.html';
 
 interface ITagList {
-    createdAt?: Date;
-    updatedAt?: Date;
     id: number;
     class_id: number;
     keyword: string;
+    updatedAt?: Date;
+    createdAt?: Date;
 }
 
 const MyClass = namespace('MyClass');
@@ -62,6 +62,7 @@ export default class ClassTagManage extends Vue {
      * @private
      */
     private getClassTags(): void {
+        console.log('동적라우트값=' , this.$route.params.classId, this.classID);
         MyClassService.getClassTags(this.classID)
           .then((data) => {
               this.tagList = data.tag_list;
