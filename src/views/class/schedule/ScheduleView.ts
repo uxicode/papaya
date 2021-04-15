@@ -1,10 +1,13 @@
 import {Vue, Component, Watch} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
+import TxtField from '@/components/form/txtField.vue';
+import Btn from '@/components/button/Btn.vue';
 import WithRender from './ScheduleView.html';
 import {IClassInfo} from '@/views/model/my-class.model';
-import {Utils} from '@/utils/utils';
-import ImageSetting from '@/views/class/IProfileImg/ImageSetting';
+import ImageSettingService from '@/views/service/IProfileImg/ImageSettingService';
+
+
 
 const MyClass = namespace('MyClass');
 
@@ -17,7 +20,9 @@ interface ITimeModel{
 @WithRender
 @Component({
     components:{
-        Modal
+        Modal,
+        TxtField,
+        Btn
     }
 })
 export default class ScheduleView extends Vue{
@@ -43,18 +48,37 @@ export default class ScheduleView extends Vue{
     //datepicker
     private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
     private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
-    private timeModel: string = '';
     private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
     private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
 
+    private endDatePickerModel: string= new Date().toISOString().substr(0, 10);
+    private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
+    private endDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
+    private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
+
+    private loopRangeModel: string = '반복없음';
+    private loopRangeItems: string[] = ['반복없음', '매일', '매주', '매월', '매년'];
+    private loopRangeCheck: boolean=false;
+    private loopRangeCount: number | string=10;
 
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
-    get currentTimeModel(): string{
+    get currentLoopRangeItems(): string[]{
+        return this.loopRangeItems;
+    }
+    get currentStartTimeModel(): string{
         return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
     }
 
+    get currentEndTimeModel(): string{
+        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
+    }
+
+    public loopRangeCountClickHandler( value: string ){
+        this.loopRangeCount=value;
+        console.log(this.loopRangeCount);
+    }
 
     public getEvents( time: { start: any, end: any } ) {
         const eventItems= [];
@@ -111,7 +135,7 @@ export default class ScheduleView extends Vue{
         this.updatePopup(true);
     }
 
-    private getProfileImg( imgUrl: string | null | undefined ): string{
+    private getProfileImg(imgUrl: string | null | undefined ): string{
         const randomImgItems = [
             'image-a.jpg',
             'image-b.jpg',
@@ -119,7 +143,7 @@ export default class ScheduleView extends Vue{
             'image-d.jpg',
             'image-e.jpg'
         ];
-        return ImageSetting.getProfileImg(randomImgItems, imgUrl);
+        return ImageSettingService.getProfileImg(randomImgItems, imgUrl);
     }
 
 
