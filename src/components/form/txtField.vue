@@ -37,10 +37,12 @@
 
 <script lang="ts">
 
-import {Vue, Component, Prop} from 'vue-property-decorator';
+import {Vue, Component, Prop, Model, Emit} from 'vue-property-decorator';
 
 @Component
 export default class TxtField extends Vue{
+
+  @Model('input') public inputData!: string;
 
   @Prop(String)
   private readonly validName: string | undefined;
@@ -78,7 +80,8 @@ export default class TxtField extends Vue{
   @Prop(Boolean)
   private fail!: boolean;
 
-  private inputData: string='';
+  // private inputData: string='';
+
 
   get cssClassName(): string{
     return (this.addClass !== undefined)? this.addClass : '';
@@ -116,9 +119,10 @@ export default class TxtField extends Vue{
     }
   }
 
-  private inputChange( value: string ): void{
-    this.inputData=value;
-    this.$emit('input', this.inputData );
+  @Emit()
+  private inputChange( value: string ){
+    // this.inputData=value;
+    this.$emit('input', value );
   }
 
   private resultValidate( ele: HTMLInputElement , passed: boolean ): void{

@@ -74,8 +74,8 @@ import {Utils} from '@/utils/utils';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import MyClassService from '@/api/service/MyClassService';
-import ImageSetting from '@/views/class/IProfileImg/ImageSetting';
 import {CLASS_BASE_URL} from '@/api/base';
+import ImageSettingService from '@/views/service/IProfileImg/ImageSettingService';
 
 
 interface ISideMenu{
@@ -156,7 +156,8 @@ export default class SideMenu extends Vue{
       'image-d.jpg',
       'image-e.jpg'
     ];
-    return ImageSetting.getProfileImg(randomImgItems, imgUrl);
+    // console.log(ImageSettingService.getProfileImg(randomImgItems, imgUrl) );
+    return ImageSettingService.getProfileImg(randomImgItems, imgUrl);
   }
 
   private sideMenuClickHandler(idx: number): void{
