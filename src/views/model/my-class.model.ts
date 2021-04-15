@@ -135,6 +135,7 @@ interface IClassMember{
     member_count: number;
     is_private: boolean;
     message?: string;
+    image_url?: string;
 }
 
 interface INotifyList {
