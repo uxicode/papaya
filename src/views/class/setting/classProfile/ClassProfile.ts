@@ -1,10 +1,10 @@
 import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
-import {IClassInfo, IClassMemberInfo} from '@/views/model/my-class.model';
+import {IClassMemberInfo} from '@/views/model/my-class.model';
 import {Vue, Component, Prop} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
-import {namespace} from 'vuex-class';
 import WithRender from './ClassProfile.html';
 
 const Auth = namespace('Auth');
@@ -13,6 +13,7 @@ const MyClass = namespace('MyClass');
 interface IProfileData {
     type: string;
     data: any;
+    open: any;
     isActive: boolean;
 }
 
@@ -26,7 +27,6 @@ interface IProfileData {
 
 export default class ClassProfile extends Vue {
     private classMemberInfo: IClassMemberInfo[] = [];
-    private classInfo: IClassInfo[] = [];
 
     private tempData: any = '';
 
@@ -51,21 +51,24 @@ export default class ClassProfile extends Vue {
         {
             type: '아이디',
             data: 'user_id',
+            open: 'open_level_id',
             isActive: false,
         },
         {
             type: '모바일 번호',
             data: 'mobile_no',
+            open: 'open_level_mobileno',
             isActive: false
         },
         {
             type: '이메일 주소',
             data: 'email',
+            open: 'open_level_email',
             isActive: false
         }
     ];
 
-    get myInfo(): object {
+    get myInfo(): IUserMe {
         return this.userInfo;
     }
 
@@ -73,13 +76,8 @@ export default class ClassProfile extends Vue {
         return this.classMemberInfo;
     }
 
-    get info(): IClassInfo[] {
-        return this.classInfo;
-    }
-
     public created() {
         this.getClassMemberInfo();
-        this.getClassInfo();
     }
 
     /**
@@ -101,7 +99,6 @@ export default class ClassProfile extends Vue {
      */
     private valueChange(event: any): void {
         this.tempData = event.target.value;
-        this.$emit('input', this.tempData);
     }
 
     /**
@@ -114,26 +111,54 @@ export default class ClassProfile extends Vue {
           .then(() => {
               this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.memberID}).then(() => {
                   console.log('닉네임 변경 완료');
+                  this.tempData = '';
               });
           });
-        // this.MODIFY_CLASS_MEMBER_INFO({classId: this.classID, memberId: this.memberID},
-        //   {nickname: newNickname})
-        //   .then(() => {
-        //         console.log('닉네임 변경 완료');
-        //   });
         this.isNicknameModify = false;
     }
 
     /**
-     * 클래스 정보 가져오기
+     * 정보 공개 여부 수정
+     * @param data
+     * @param level
      * @private
      */
-    private getClassInfo(): void {
-        MyClassService.getClassInfoById(this.classID)
-          .then((data) => {
-              this.classInfo = data;
-              console.log(this.classInfo);
-          });
+    private openLevelModify(data: string, level: number): void {
+        switch (data) {
+            case 'open_level_id':
+                MyClassService.setClassMemberInfo(this.classID, this.memberID, {open_level_id: level})
+                  .then(() => {
+                    console.log('아이디 공개 여부 수정');
+                  });
+                break;
+            case 'open_level_mobileno':
+                MyClassService.setClassMemberInfo(this.classID, this.memberID, {open_level_mobileno: level})
+                  .then(() => {
+                      console.log('모바일 공개 여부 수정');
+                  });
+                break;
+            case 'open_level_email':
+                MyClassService.setClassMemberInfo(this.classID, this.memberID, {open_level_email: level})
+                  .then(() => {
+                      console.log('이메일 공개 여부 수정');
+                  });
+                break;
+            default:
+                return;
+        }
+    }
+
+    private openLevelTxt(level: number): string {
+        switch (level) {
+            case 0:
+                return '비공개';
+            case 1:
+                return '전체 공개';
+            case 2:
+                return '운영자에게만 공개';
+            default:
+                return '';
+        }
     }
 
     /**

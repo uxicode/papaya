@@ -1,5 +1,4 @@
 import MyClassService from '@/api/service/MyClassService';
-import ClassSettingMain from '@/views/class/setting/classSettingMain/ClassSettingMain';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
