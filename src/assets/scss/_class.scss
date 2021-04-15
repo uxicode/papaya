@@ -1752,3 +1752,25 @@
 
   .scroll-body {overflow-y:auto;}
 }
+
+
+/* 20210415 클래스 교육과정 첨부파일 preview list */
+.preview {
+  ul {padding:0 40px;}
+  li {position:relative;}
+
+  .add-file-delete {
+    @include pos-vertical($right:0);
+  }
+
+  /* file 첨부 preview*/
+  .add-file-list {
+    .list-item {
+      p {
+        background:url(../../assets/images/file.svg) no-repeat left center;
+        padding:15px 0 15px 34px;
+        border-bottom:1px solid #f4f5f6;
+      }
+    }
+  }
+}
