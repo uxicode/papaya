@@ -9,5 +9,6 @@ const MyClassSubRouter=[
   {path: 'setting/classStaffManage', name: 'classStaffManage', component: () => import('../views/class/setting/classStaffManage/ClassStaffManage')}, // W.4.5.7.9 ~
   {path: 'setting/classStaffAdd', name: 'classStaffAdd', component: () => import('../views/class/setting/classStaffManage/classStaffAdd/ClassStaffAdd')}, // W.4.5.7.9.1 ~
   {path: 'setting/classAdminDelegate', name: 'classAdminDelegate', component: () => import('../views/class/setting/classAdminDelegate/ClassAdminDelegate')}, // W4.5.7.10 ~
+  {path: 'curriculum', name:'curriculum', component: () => import('../views/class/curriculum/Curriculum')}, // W4.5.5 ~
 ];
 export {MyClassSubRouter};

@@ -5,7 +5,7 @@ import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './ScheduleView.html';
 import {IClassInfo} from '@/views/model/my-class.model';
-import ImageSettingService from '@/views/service/IProfileImg/ImageSettingService';
+import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 
 
 
@@ -136,14 +136,7 @@ export default class ScheduleView extends Vue{
     }
 
     private getProfileImg(imgUrl: string | null | undefined ): string{
-        const randomImgItems = [
-            'image-a.jpg',
-            'image-b.jpg',
-            'image-c.jpg',
-            'image-d.jpg',
-            'image-e.jpg'
-        ];
-        return ImageSettingService.getProfileImg(randomImgItems, imgUrl);
+        return ImageSettingService.getProfileImg( imgUrl );
     }
 
 
