@@ -4,6 +4,7 @@ import Btn from '@/components/button/Btn.vue';
 import {Utils} from '@/utils/utils';
 import {CLASS_BASE_URL} from '@/api/base';
 import WithRender from './MyClassListView.html';
+import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 
 @WithRender
 @Component({
@@ -166,6 +167,17 @@ export default class MyClassListView extends Vue{
 
   private gotoClassClickHandler( id: string | number): void{
     this.$emit('listClick', id);
+  }
+
+  private getProfileImg( idx: number ): string{
+/*
+    if(this.classMoreInfo[idx - 1]===undefined){
+      return '';
+    }else{
+      return this.classMoreInfo[idx - 1].image_url;
+    }*/
+    console.log(this.classMoreInfo[idx - 1].image_url);
+    return (this.classMoreInfo[idx - 1]===undefined) ? '' : ImageSettingService.getProfileImg( this.classMoreInfo[idx - 1].image_url );
   }
 
 }

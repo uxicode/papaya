@@ -1,14 +1,23 @@
 import {Utils} from '@/utils/utils';
 
-class ImageSettingService implements IProfileImg{
-  public getProfileImg(imgItems: string[], imgUrl: string | null | undefined ): string{
+class ImageSettingService{
+  public getProfileImg(imgUrl: string | null | undefined ): string{
     console.log( imgUrl);
+
+    const imgItems = [
+      'image-a.jpg',
+      'image-b.jpg',
+      'image-c.jpg',
+      'image-d.jpg',
+      'image-e.jpg'
+    ];
+
     let img: string= '';
     if( imgUrl === null || imgUrl === undefined){
       // console.log('1', imgUrl);
       img=imgItems[ Utils.getRandomNum(0, imgItems.length-1) ];
     }else {
-      if (imgUrl.length < 2) {
+      if (imgUrl.length < 6 ) {
         // console.log('2', imgUrl);
         img = imgItems[parseInt(imgUrl, 10) - 1];
       }else{
@@ -16,7 +25,6 @@ class ImageSettingService implements IProfileImg{
         img=imgUrl;
       }
     }
-
     return ( img.indexOf('https:')===-1 )? require( `@/assets/images/${img}`) : img;
   }
 

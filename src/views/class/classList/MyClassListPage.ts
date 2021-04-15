@@ -259,7 +259,8 @@ export default class MyClassListPage extends Vue {
       const member=data.map( (item: any ) => {
         return {
           member_count:item.classinfo.member_count,
-          is_private:item.classinfo.is_private
+          is_private:item.classinfo.is_private,
+          image_url:item.classinfo.image_url
         };
       });
       this.moreInfos = [...this.moreInfos, ...member];

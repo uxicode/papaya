@@ -57,6 +57,4 @@ function resetSearchInput( obv$: Observable<any>, reset: ()=>void) {
   );
 }
 
-
-
 export {searchKeyEventObservable, searchUserKeyValueObservable, resetSearchInput};
