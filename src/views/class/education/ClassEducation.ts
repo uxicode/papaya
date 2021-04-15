@@ -3,12 +3,21 @@ import {Component, Vue} from 'vue-property-decorator';
 import SideMenu from '@/components/sideMenu/sideMenu.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
-import WithRender from './ClassEducation.html';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {namespace} from 'vuex-class';
 import {Utils} from '@/utils/utils';
+import WithRender from './ClassEducation.html';
 
 const MyClass = namespace('MyClass');
+
+/*start: 추가 테스트*/
+interface ITimeModel{
+    apm: string;
+    hour: string;
+    minute: string;
+}
+/*end: 추가 테스트*/
+
 
 @WithRender
 @Component({
@@ -361,7 +370,32 @@ export default class ClassEducation extends Vue {
                 }
             ]
         }
+
+
     ];
+
+
+    // get classCurrListModel(): object[]{
+    //     return this.classCurrList;
+    // }
+    //
+    // get classCurrDetailModel(): object[]{
+    //     return this.classCurrDetail;
+    // }
+
+    /*start: 추가 테스트*/
+    //datepicker
+    private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
+    private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
+    private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
+    private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
+    private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
+    private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
+
+    /*end: 추가 테스트*/
+
+
+
 
     private currListNum: number = 0;
 
@@ -413,96 +447,23 @@ export default class ClassEducation extends Vue {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-    private isPopup: boolean=false;
-    private isTimeSelect: boolean=false;
-
-    private type: string= 'month';
-    private types: string[] = ['month', 'week', 'day', '4day'];
-    private mode: string= 'stack';
-    private modes: string[] = ['stack', 'column'];
-    private weekday: number[] = [1, 2, 3, 4, 5, 6, 0];
-    private weekdays: Array<{text: string, value: number[] }>=[
-        { text: 'Sun - Sat', value: [0, 1, 2, 3, 4, 5, 6] },
-        { text: 'Mon - Sun', value: [1, 2, 3, 4, 5, 6, 0] },
-        { text: 'Mon - Fri', value: [1, 2, 3, 4, 5] },
-        { text: 'Mon, Wed, Fri', value: [1, 3, 5] },
-    ];
-    private value: string= '';
-    private events: any[] = [];
-    private colors: string[] = ['#3F51B5', '#00BCD4', '#673AB7', '#2196F3', '#4CAF50', '#FF9800', '#757575'];
-    private names: string[] =  ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'];
-
-    //datepicker
-    private datePickerModel: string= new Date().toISOString().substr(0, 10);
-    private menu1: boolean= false;
-
-    @MyClass.Getter
-    // private myClassHomeModel!: IClassInfo;
-
-    // public getEvents( time: { start: any, end: any } ) {
-    //     const eventItems= [];
-    //
-    //     const min = new Date(`${time.start.date}T00:00:00`);
-    //     const max = new Date(`${time.end.date}T23:59:59`);
-    //     const days = (max.getTime() - min.getTime()) / 86400000;
-    //     const eventCount = this.rnd(days, days + 20);
-    //
-    //     for (let i = 0; i < eventCount; i++) {
-    //         const allDay = this.rnd(0, 3) === 0;
-    //         const firstTimestamp = this.rnd(min.getTime(), max.getTime());
-    //         const first = new Date(firstTimestamp - (firstTimestamp % 900000));
-    //         const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000;
-    //         const second = new Date(first.getTime() + secondTimestamp);
-    //
-    //         eventItems.push({
-    //             name: this.names[this.rnd(0, this.names.length - 1)],
-    //             start: first,
-    //             end: second,
-    //             color: this.colors[this.rnd(0, this.colors.length - 1)],
-    //             timed: !allDay,
-    //         });
-    //     }
-    //
-    //     this.events = eventItems;
-    // }
-
-    public created(){
-        console.log(new Date().toISOString());
+    /*start: 추가 테스트*/
+    get currentStartTimeModel(): string{
+        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
     }
 
-    // public getDay(date: any){
-    //     const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
-    //     // console.log(date.weekday);
-    //     return daysOfWeek[date.weekday];
-    // }
-    // public getEventColor(event: any) {
-    //     return event.color;
-    // }
-    // public rnd(a: any, b: any): number {
-    //     return Math.floor((b - a + 1) * Math.random()) + a;
-    // }
-
-    private updatePopup(isOpen: boolean) {
-        this.isPopup=isOpen;
+    get currentEndTimeModel(): string{
+        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
     }
+    /*end: 추가 테스트*/
 
-    private closePopup(): void{
-        this.isPopup=false;
-    }
 
-    private addScheduleOpen(): void{
-        this.updatePopup(true);
-    }
+
+
+
+
+
+
 
 
 
