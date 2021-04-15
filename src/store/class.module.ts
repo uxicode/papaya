@@ -137,7 +137,6 @@ export default class ClassModule extends VuexModule {
         localStorage.setItem('homeData', JSON.stringify(this.myClassHomeData) );
     }
 
-
     @Mutation
     public [SET_CLASS_ID]( id: number ): void {
         this.classId=id;

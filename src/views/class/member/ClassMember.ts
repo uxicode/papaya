@@ -1,5 +1,5 @@
 import MyClassService from '@/api/service/MyClassService';
-import {IClassMembers} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMembers} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
@@ -17,18 +17,30 @@ export default class ClassMember extends Vue{
     @MyClass.Getter
     private classID!: number;
 
+    @MyClass.Getter
+    private memberID!: number;
+
+    /* 운영자/스탭/일반 멤버 토글 상태값 */
+    private isAdminToggle: boolean = false;
+    private isStaffToggle: boolean = false;
+    private isMemberToggle: boolean = false;
+
     private isDetailPopup: boolean = false;
     private isBlockModal: boolean = false;
     private isBanModal: boolean = false;
+
+    private memberLevel: number = 0;
+    private totalMemberNum: number = 0;
 
     private classMembers: IClassMembers[] = [];
     private adminList: IClassMembers[] = [];
     private staffList: IClassMembers[] = [];
     private memberList: IClassMembers[] = [];
-    private totalMemberNum: number = 0;
+
 
     public created() {
         this.getClassMembers();
+        this.getClassMemberLevel();
     }
 
     /**
@@ -47,6 +59,15 @@ export default class ClassMember extends Vue{
               this.totalMemberNum = data.classinfo.class_members.length;
               this.classMembers = data.classinfo.class_members;
               console.log(this.classMembers);
+          });
+    }
+
+    private getClassMemberLevel(): void {
+        MyClassService.getClassMemberInfo(this.classID, this.memberID)
+          .then((data) => {
+            //console.log(data.member_info);
+            this.memberLevel = data.member_info.level;
+            console.log(this.memberLevel);
           });
     }
 
