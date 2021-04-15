@@ -1,6 +1,7 @@
 import AppHeader from '@/components/header/header.vue';
 import AppFooter from '@/components/footer/footer.vue';
 import {getIsAuth} from '@/router/AuthGuard';
+import {MyClassSubRouter} from '@/router/MyClassSubRouter';
 
 const MyClassRouter=[
   {
@@ -12,7 +13,7 @@ const MyClassRouter=[
   {
     path: '/class/:classId',
     name: 'myClassListDetailPage',
-    beforeEnter: getIsAuth,
+    // beforeEnter: getIsAuth,
     components: {default: () => import('@/views/class/home/MyClassListDetailPage'), header: AppHeader, footer: AppFooter},
     children: [
       {path: '', name: 'myClassListDetailView', component: () => import('../views/class/home/MyClassListDetailView')},

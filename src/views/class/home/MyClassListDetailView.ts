@@ -1,8 +1,8 @@
 import {Vue, Component} from 'vue-property-decorator';
-import WithRender from './MyClassListDetailView.html';
+import {namespace} from 'vuex-class';
 import {getAllPromise} from '@/views/model/types';
 import MyClassService from '@/api/service/MyClassService';
-import {namespace} from 'vuex-class';
+import WithRender from './MyClassListDetailView.html';
 
 const MyClass = namespace('MyClass');
 

@@ -4,10 +4,9 @@ import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import {IMakeClassInfo, ISearchSchool} from '@/views/model/my-class.model';
-import {Observable} from 'rxjs';
 import WithRender from './MakeClassOption.html';
-import {debounceTime, distinctUntilChanged, filter, finalize, map, retry, share, switchMap, tap} from 'rxjs/operators';
 import MyClassService from '@/api/service/MyClassService';
+import { searchUserKeyValueObservable, resetSearchInput, searchKeyEventObservable} from '@/views/service/search/SearchService';
 
 
 const MyClass = namespace('MyClass');
@@ -29,24 +28,22 @@ interface IMenuOption{
 })
 export default class MakeClassOption extends Vue{
 
-  private pageTitle: string = '클래스 분류 선택';
-  private pageDesc: string = '클래스 분류를 선택해주세요.';
-  private openPopupStatus: boolean = false;
-
   private activeItem: number=-1;
-  private menuData: IMenuOption[]= [
-    {id: 0, title: '학교', key: 'school', type:'type1'},
-    {id: 1, title: '단체', key: 'organization', type:'type2'},
-    {id: 2, title: '소모임', key: 'group', type:'type3'},
-  ];
-
-  //검색어 결과 모음 배열.
-  private searchResultItems: ISearchSchool[]=[];
+  private openPopupStatus: boolean = false;
   private searchSchoolValue: string = '';
   private groupNameValue: string = '';
   private isLoading: boolean= false;
   private isManualClick: boolean=false;
   private manualInputField: string = '';
+  private pageDesc: string = '클래스 분류를 선택해주세요.';
+  private pageTitle: string = '클래스 분류 선택';
+  private menuData: IMenuOption[]= [
+    {id: 0, title: '학교', key: 'school', type:'type1'},
+    {id: 1, title: '단체', key: 'organization', type:'type2'},
+    {id: 2, title: '소모임', key: 'group', type:'type3'},
+  ];
+  //검색어 결과 모음 배열.
+  private searchResultItems: ISearchSchool[]=[];
 
   @MyClass.Mutation
   private CREATE_CLASS_LIST!: (info: IMakeClassInfo) => void;
@@ -71,6 +68,10 @@ export default class MakeClassOption extends Vue{
     return this.isManualClick;
   }
 
+  get loadingModel() {
+    return this.isLoading;
+  }
+
   public getSchoolNameInput( selector: string ): HTMLInputElement{
     return document.getElementById( selector ) as HTMLInputElement;
   }
@@ -81,59 +82,53 @@ export default class MakeClassOption extends Vue{
 
     //$nextTick - 해당하는 엘리먼트가 화면에 렌더링이 되고 난 후
     this.$nextTick( ()=>{
-      const keyup$: Observable<Event>=this.$fromDOMEvent('#searchSchool', 'keyup')
-        .pipe(
-          debounceTime(300),
-          map((event: any) => event.target.value ), /*KeyboardEvent 로 전달되는 데이터를 입력된 검색어로 변환.*/
-          distinctUntilChanged(), // 동일한 데이터가 계속 전달될 경우 이전과 다른 데이터가 전달되기 전까지 데이터를 전달하지 않는다. 즉 중복 데이터 처리
-          share()
-        );
 
-      const user$= keyup$
-        .pipe(
-          filter( ( value: any)=> value.trim().length>1), //검색어 길이가 0 보다 큰경우 즉 검색어가 있을 경우에만,
-          tap( ()=> this.checkLoading() ),
-          switchMap( ( value: any) => {
-            //빈번하게 발생하는 데이터를 처리하는 경우 mergeMap 보다는 switchMap 이 더욱 효과적.
-            //switchMap 은 기존에 존재하던 Observable 의 구독을 자동으로 해제함으로써 불피료한 데이터를 부르지 않는다.
-            // 또한 이미 처리했던 Observable 을 자동으로 unsubscribe 하기 때문에 메모리 누수 문제에 대해서도 자유롭다.
-            return MyClassService.getSearchSchool( value );
-          }),
-          tap( ()=> this.checkLoading() ),
-          retry(2),  // 검색어가 입력되어 2번의 오류가 발생하면 Observer.error 이 호출되어 keyup$ Observable 의  구독이 해제된다.
-          finalize( ()=>this.isLoading=false )
-        );
+      //키가 눌렸을 때 체크 Observable
+      // targetInputSelector: string
+      const keyup$ = searchKeyEventObservable('#searchSchool');
 
-      user$.subscribe({
-        next:( value: any ) =>{
-          this.searchResultItems=value.results.map( ( item: any )=> item );
+      //사용자가 입력한 값 처리 Observable
+      //obv$: Observable<any>, loadChk: ()=>void, promiseFunc: Promise<any>, isLoading: boolean
+      const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, MyClassService.getSearchSchool, this.isLoading );
+      userInter$.subscribe({
+        next:( searchData: any ) =>{
+          // console.log(searchData);
+          /*
+            message: "리스트 ....."
+            result_count: 2
+            results: (2) [{…}, {…}]
+            total: 2
+          */
+          this.searchResultItems=searchData.results.map( ( item: any )=> item );
         },
       });
 
-      const reset$ = keyup$
-        .pipe(
-          filter((value: any) => value.trim().length === 0),
-          tap((value) => {
-            this.isLoading=false;
-            this.searchResultItems = [];
-          }) // 검색어 입력이 없을시 이전 검색결과 없앤다.
-        ).subscribe();
-
+      //검색어 없을 시 리셋 Observable
+      //obv$: Observable<any>, reset: ()=>void
+      const reset$ = resetSearchInput(keyup$, ()=>{
+        this.isLoading=false;
+        this.searchResultItems = [];
+      });
+      reset$.subscribe();
     });
-
   }
 
+  /**
+   * 검색어와 매칭되는 키워드만 볼드 처리
+   * @param word
+   * @private
+   */
   private boldSearchResult( word: string): string{
-    // console.log(word.indexOf(this.searchResultValue) );
-
     const startIndex=word.indexOf(this.searchResultValue);
     const endIndex=startIndex+this.searchResultValue.length;
     const searchResultWord=word.substr(startIndex, this.searchResultValue.length);
-
     return [word.slice(0, startIndex), `<strong>${searchResultWord}</strong>`, word.slice(endIndex, word.length)].join('');
   }
 
-
+  /**
+   * 로딩바 체크 toggle
+   * @private
+   */
   private checkLoading(): void{
     this.isLoading=!this.isLoading;
   }
@@ -146,10 +141,20 @@ export default class MakeClassOption extends Vue{
     return this.activeItem === idx;
   }
 
+  /**
+   * 현재 학교를 선택했는지 체크
+   * @param idx
+   * @private
+   */
   private isSchoolSelected( idx: number ): boolean{
     return !!this.menuData[idx] && this.menuData[idx].key === 'school';
   }
 
+  /**
+   * 현재 단체를 선택했는지 체크
+   * @param idx
+   * @private
+   */
   private isOrganization( idx: number ): boolean{
     return !!this.menuData[idx] && this.menuData[idx].key === 'organization';
   }
@@ -178,30 +183,51 @@ export default class MakeClassOption extends Vue{
     this.isManualClick=true;
   }
 
+  /**
+   * 직접입력 -> 확인 버튼 클릭시
+   * @private
+   */
   private applyManualValClickHandler(): void{
-    const schoolNameField=this.getSchoolNameInput('schoolName');
-    schoolNameField.value=this.manualInputField;
+    this.changeSchoolNameValue(this.manualInputField);
     this.closeSchoolSearchPopup();
   }
 
-
-
+  /**
+   * autocomplete 로 검색된 리스트 중 하나를 클릭했을때 실행 -> 해당 클릭한 키워드값으로
+   * @param name
+   * @private
+   */
   private applySearchResult( name: string): void {
     this.closeSchoolSearchPopup();
     this.searchSchoolValue=name;
-
-    const schoolNameField=this.getSchoolNameInput('schoolName');
-    schoolNameField.value=this.searchSchoolValue;
+    this.changeSchoolNameValue(this.searchSchoolValue);
   }
 
+  /**
+   * 학교 이름 input  value 변경
+   * @param val
+   * @private
+   */
+  private changeSchoolNameValue(val: string) {
+    const schoolNameField=this.getSchoolNameInput('schoolName');
+    schoolNameField.value = val;
+  }
+
+  /**
+   * 1단계에서 다음 버튼 클릭시 -> 2단계로 진행 알림.
+   * @private
+   */
   private nextStepClickHandler(): void{
     this.classOptionSelect();
     this.$router.push('/make-class/step2');
     this.$emit('updateStep', 2);
   }
 
+  /**
+   *  step1 상태에서 다음 버튼 클릭시 -> 학교 / 단체 / 소모임 중에 어떤 것을 선택했는 지 상태를 알려줌.
+   * @private
+   */
   private classOptionSelect() {
-
     switch(this.activeItem){
       case 0 :
         this.CREATE_CLASS_LIST({ g_type:1, g_name: this.searchSchoolValue });
@@ -210,7 +236,6 @@ export default class MakeClassOption extends Vue{
         this.CREATE_CLASS_LIST({ g_type:2, g_name: this.groupNameValue });
         break;
       case 2:
-        console.log(this.activeItem);
         this.CREATE_CLASS_LIST({ g_type:3, g_name: '소모임' });
         break;
     }

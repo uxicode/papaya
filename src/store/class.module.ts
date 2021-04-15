@@ -6,7 +6,8 @@ import {
     IMakeClassInfo,
     IMakeClassInfoBase,
     IClassInfo,
-    IClassMemberInfo, IQuestionList
+    IClassMemberInfo,
+    IQuestionList
 } from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import {
@@ -70,6 +71,29 @@ export default class ClassModule extends VuexModule {
         contents_updated_type: 0,
         class_tags: [],
         class_link:  '',
+        me: {
+            class_id: 744,
+            createdAt: new Date(),
+            id: 825,
+            is_bookmarked: 0,
+            joinedAt: new Date(),
+            level: 1,
+            nickname: '홍길동1',
+            onoff_comment_noti: 1,
+            onoff_post_noti: 1,
+            onoff_push_noti: 0,
+            onoff_schedule_noti: 1,
+            open_level_email: 2,
+            open_level_id: 1,
+            open_level_mobileno: 0,
+            profile_image: null,
+            schedule_color: 0,
+            schedule_noti_intime: 10,
+            status: 1,
+            updatedAt: new Date(),
+            user_id: 45,
+            visited: 0
+        }
     };
 
     private makeClassInfo: IMakeClassInfo={
@@ -137,10 +161,8 @@ export default class ClassModule extends VuexModule {
     @Mutation
     public [POST_LIST](postData: IPostList[] ): void {
         this.postData =postData;
-
-        // console.log(this.postData);
         localStorage.setItem('postData', JSON.stringify(this.postData) );
-        this.count++;
+        // this.count++;
     }
 
     @Mutation
@@ -152,9 +174,7 @@ export default class ClassModule extends VuexModule {
     @Mutation
     public [CLASS_MEMBER_INFO](memberInfo: IClassMemberInfo[] ): void {
         this.memberInfo = memberInfo;
-
         localStorage.setItem('memberInfo', JSON.stringify(this.memberInfo) );
-        this.count++;
     }
 
     @Mutation
@@ -238,13 +258,13 @@ export default class ClassModule extends VuexModule {
 
     @Action({rawError: true})
     public [CLASS_MEMBER_INFO_ACTION](payload: { classId: number, memberId: number }): Promise<IClassMemberInfo[]>{
-        this.context.commit(SET_CLASS_ID, payload.classId);
+        // this.context.commit(SET_CLASS_ID, payload.classId);
         this.context.commit(SET_MEMBER_ID, payload.memberId);
 
         return MyClassService.getClassMemberInfo(payload.classId, payload.memberId)
           .then((data) => {
               this.context.commit(CLASS_MEMBER_INFO, data.member_info);
-              console.log(this.memberInfo);
+              // console.log(this.memberInfo);
               return Promise.resolve(this.memberInfo);
           })
           .catch((error) => {
