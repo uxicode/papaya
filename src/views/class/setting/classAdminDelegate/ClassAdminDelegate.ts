@@ -1,6 +1,6 @@
 import {Vue, Component} from 'vue-property-decorator';
-import WithRender from './ClassAdminDelegate.html';
 import Modal from '@/components/modal/modal.vue';
+import WithRender from './ClassAdminDelegate.html';
 
 @WithRender
 @Component({

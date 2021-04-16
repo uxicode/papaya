@@ -126,8 +126,8 @@ export default class ClassSettingMain extends Vue{
 
     public created() {
         this.getClassMemberInfo();
-        // this.getClassInfo();
-        // this.getJoinQuestion();
+        this.getClassInfo();
+        this.getJoinQuestion();
     }
 
     private getClassMemberInfo(): void {
@@ -242,10 +242,10 @@ export default class ClassSettingMain extends Vue{
      * @param newQuestion
      * @private
      */
-    private setJoinQuestion(newQuestion: any): void {
+    private setJoinQuestion(newQuestion: string): void {
         MyClassService.setClassQuestion(this.classID, this.questionID, {new_question: newQuestion})
           .then(() => {
-            console.log('가입 질문 수정 성공');
+            console.log(`question${this.questionID} 수정 성공`);
           });
         this.isJoinQnaSetting = false;
         this.tempData = '';

@@ -2,9 +2,9 @@ import MyClassService from '@/api/service/MyClassService';
 import {IClassMemberList} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import WithRender from './ClassMemberManage.html';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
+import WithRender from './ClassMemberManage.html';
 
 const MyClass = namespace('MyClass');
 
