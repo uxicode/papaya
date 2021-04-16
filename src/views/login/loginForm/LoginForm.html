@@ -33,7 +33,7 @@
                  placeholder="비밀번호를 입력해 주세요."
                  v-model="userPw"
                  rules="required"
-                 valid-name="비밀번호"></txt-field>
+                 valid-name="비밀번호" @keyup.enter="validate"></txt-field>
     </div>
 
     <div class="btn-group mgt-40">
