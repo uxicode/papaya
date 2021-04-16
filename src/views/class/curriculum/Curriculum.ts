@@ -6,20 +6,9 @@ import Btn from '@/components/button/Btn.vue';
 import {IClassInfo, IMakeEducation} from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
 import WithRender from './Curriculum.html';
-import ImageSettingService from "@/views/service/profileImg/ImageSettingService";
-
 
 
 const MyClass = namespace('MyClass');
-
-interface ICurriculumList{
-    listTit: string;
-    managerLevel: boolean;
-    classAdmin: string;
-    classCnt: string;
-    classCurrent: string;
-    isActive?: boolean;
-}
 
 
 @WithRender
@@ -49,12 +38,12 @@ export default class Curriculum extends Vue {
     private classCardIndex: number = 0;
     private classCurrIndex: number = 0;
 
-    private loopRangeModel: string = '반복없음';
-    private loopRangeItems: string[] = ['반복없음', '매일', '매주', '매월', '매년'];
-    private loopRangeCheck: boolean=false;
+    private testEduSettingsModel: string = '반복없음';
+    private testEduSettingsItems: string[] = ['반복없음', '매일', '매주', '매월', '매년'];
+    private testEduSettingsCheck: boolean=false;
 
-    get currentLoopRangeItems(): string[]{
-        return this.loopRangeItems;
+    get currentEduSettingsItems(): string[]{
+        return this.testEduSettingsItems;
     }
 
 
@@ -159,6 +148,7 @@ export default class Curriculum extends Vue {
     get makeEducationList(): IMakeEducation[] {
         return this.makeEducation;
     }
+
 
     // public created() {
     //     this.getMakeEducation();

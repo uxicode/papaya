@@ -35,21 +35,21 @@
                                 <v-menu
                                         nudge-left="30px"
                                         origin="center top"
-                                        v-model="loopRangeCheck"
+                                        v-model="testEduSettingsCheck"
                                         transition="scale-transition"
                                         content-class="time-select-menu bg-white"
                                         offset-y offset-x>
                                     <template v-slot:activator="{ on, attrs }">
                                         <button type="button" class="list-popup-btn"
-                                                v-model="loopRangeModel"
+                                                v-model="testEduSettingsModel"
                                                 v-bind="attrs"
-                                                v-on="on"><span>{{ loopRangeModel }}</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                                v-on="on"><span>{{ testEduSettingsModel }}</span><img :src="require('@/assets/images/more.svg')" class="sm" alt=""></button>
                                     </template>
                                     <v-list>
                                         <v-list-item
-                                                v-for="(item, index) in currentLoopRangeItems"
+                                                v-for="(item, index) in currentEduSettingsItems"
                                                 :key="index"
-                                                @click="loopRangeModel=item">
+                                                @click="testEduSettingsModel=item">
                                             <v-list-item-title>{{ item }}</v-list-item-title>
                                         </v-list-item>
                                     </v-list>
