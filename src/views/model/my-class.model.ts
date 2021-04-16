@@ -25,6 +25,8 @@ interface IMyClassList {
         visited: number | string;
     };
 }
+
+
 /*
 "myclass_list": [
     {
@@ -491,4 +493,18 @@ interface IQuestionList {
     question: string;
 }
 
-export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList, ISearchSchool, IMakeClassInfo, IMakeClassInfoBase, IClassMemberInfo, IClassMemberList, IQuestionList};
+interface IMakeEducation {
+    title: string;
+    goal: string;
+    course_list: {
+        index: number;
+        title: string;
+        startDay: string;
+        startTime: string;
+        endTime: string;
+        contents: string;
+    };
+}
+
+
+export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList, ISearchSchool, IMakeClassInfo, IMakeClassInfoBase, IClassMemberInfo, IClassMemberList, IQuestionList, IMakeEducation};

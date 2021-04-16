@@ -6,7 +6,7 @@ import {
     IClassMember,
     IPostList,
     IMakeClassInfo,
-    IClassMemberInfo
+    IClassMemberInfo, IMakeEducation
 } from '@/views/model/my-class.model';
 
 
@@ -112,6 +112,15 @@ class MyClassService {
     public deleteClassQuestion(classId: number, questionId: number): Promise<any> {
         return request('delete', `${CLASS_BASE_URL}/${classId}/question/${{questionId}}`);
     }
+
+    /**
+     * 클래스 교육과정
+     * @param classId
+     */
+    public getMakeEducation(classId: number, index: number): Promise<IMakeEducation> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/curriculum`, index);
+    }
+
 }
 
 export default new MyClassService();

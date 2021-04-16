@@ -1,12 +1,12 @@
 import {Component, Vue} from 'vue-property-decorator';
-
+import {namespace} from 'vuex-class';
 import SideMenu from '@/components/sideMenu/sideMenu.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
-import WithRender from './ClassEducation.html';
-import {IClassInfo} from '@/views/model/my-class.model';
-import {namespace} from 'vuex-class';
+import MyClassService from '@/api/service/MyClassService';
+import {IClassInfo, IClassMemberList, IMakeEducation} from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
+import WithRender from './ClassEducation.html';
 
 const MyClass = namespace('MyClass');
 
@@ -22,6 +22,8 @@ const MyClass = namespace('MyClass');
 export default class ClassEducation extends Vue {
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
+
+
 
     /* Modal 오픈 상태값 */
     private isCreateClass: boolean = false;
@@ -85,7 +87,6 @@ export default class ClassEducation extends Vue {
             isActive: false,
         },
     ];
-
     private classCurrDetail: object[] = [
         {
             classList:[
@@ -363,10 +364,56 @@ export default class ClassEducation extends Vue {
         }
     ];
 
+
     private currListNum: number = 0;
 
     private eduItems: Array< {title: string }>=[];
 
+    /****************************************/
+    private makeEducation: IMakeEducation[] = [
+        {
+            title: '파파야 교육과정 제목1',
+            goal: '파파야 교육과정 목표1',
+            course_list: {
+                index: 1,
+                title: '1회차수업',
+                startDay: '2019-11-15',
+                startTime: '10:00:00',
+                endTime: '11:00:00',
+                contents: '수업내용 100자이내로 설명.',
+            },
+        },
+        {
+            title: '파파야 교육과정 제목2',
+            goal: '파파야 교육과정 목표2',
+            course_list: {
+                index: 2,
+                title: '1회차수업',
+                startDay: '2019-11-15',
+                startTime: '10:00:00',
+                endTime: '11:00:00',
+                contents: '수업내용 100자이내로 설명.',
+            },
+        },
+        {
+            title: '파파야 교육과정 제목3',
+            goal: '파파야 교육과정 목표3',
+            course_list: {
+                index: 3,
+                title: '1회차수업',
+                startDay: '2019-11-15',
+                startTime: '10:00:00',
+                endTime: '11:00:00',
+                contents: '수업내용 100자이내로 설명.',
+            },
+        }
+    ];
+
+    get getMakeEducation(): IMakeEducation[] {
+        return this.makeEducation;
+    }
+
+    /****************************************/
 
     get currListNumModel(): Array< {title: string }>{
         return this.eduItems;
@@ -376,7 +423,6 @@ export default class ClassEducation extends Vue {
         this.currListNum=num;
         this.eduItems.length=num;
     }
-
 
     private moreMenuToggle(): void {
         this.isMoreMenu = !this.isMoreMenu;
@@ -413,8 +459,12 @@ export default class ClassEducation extends Vue {
         return ( imgUrl !== null && imgUrl !== undefined )? img : require( `@/assets/images/${img}` );
     }
 
-
-
+    /*
+    * 교육과정 리스트 클릭 */
+    private cardMore(index: number): void{
+        this.isClassCurrMore = true;
+        this.classCard(index);
+    }
 
     //
     //
