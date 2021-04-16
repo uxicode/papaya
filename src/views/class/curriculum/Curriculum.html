@@ -1,9 +1,12 @@
+
 <section class="contents-right">
+
     <div class="classes-curriculum">
         <div class="cnt-top">
             <h2 class="cnt-tit">교육과정</h2>
         </div>
 
+      <v-app style="background-color:transparent">
         <div class="curriculum-list clearfix">
             <div class="list-group">
                 <div v-for="(item, index) in makeEducationList" :key="index" class="curr-item">
@@ -32,25 +35,29 @@
                                   <a href="" class="list-popup-item">매월</a>
                                   <a href="" class="list-popup-item">매년</a>
                                 </div>-->
+
+                              <!--  v-model 를 수정함 카트 v-model="item.isChk"  -->
                                 <v-menu
                                         nudge-left="30px"
                                         origin="center top"
-                                        v-model="testEduSettingsCheck"
+                                        v-model="item.isChk"
                                         transition="scale-transition"
                                         content-class="time-select-menu bg-white"
-                                        offset-y offset-x>
+                                        min-width="180px"
+                                        offset-y
+                                        offset-x>
                                     <template v-slot:activator="{ on, attrs }">
                                         <button type="button" class="list-popup-btn"
-                                                v-model="testEduSettingsModel"
+                                                v-model="settingItemsModel[index].sItem"
                                                 v-bind="attrs"
-                                                v-on="on"><span>{{ testEduSettingsModel }}</span><img :src="require('@/assets/images/more.svg')" class="sm" alt=""></button>
+                                                v-on="on"><span>{{ getSelectedSettingMenuItem( index ) }}</span><img :src="require('@/assets/images/more.svg')" class="sm" alt=""></button>
                                     </template>
                                     <v-list>
                                         <v-list-item
-                                                v-for="(item, index) in currentEduSettingsItems"
-                                                :key="index"
-                                                @click="testEduSettingsModel=item">
-                                            <v-list-item-title>{{ item }}</v-list-item-title>
+                                                v-for="( mMenu, mIdx ) in settingItemsModel[index].vo"
+                                                :key="mIdx"
+                                                @click="settingMenuClickHandler( index, mMenu )">
+                                            <v-list-item-title>{{ mMenu }}</v-list-item-title>
                                         </v-list-item>
                                     </v-list>
                                 </v-menu>
@@ -60,13 +67,14 @@
                     </div>
                 </div>
             </div>
-
             <div class="curriculum-add">
                 <button class="curriculum-add-btn" @click="isCreateClass = true"></button>
             </div>
-
         </div>
+      </v-app>
+
     </div>
+
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.5.1 (교육과정 만들기) (4.5.5.1 ~ 4.5.5.1.1)-->
     <transition name="modal" >
@@ -440,3 +448,4 @@
     </transition>
     <!-- end: 공통 팝업 -->
 </section>
+

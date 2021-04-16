@@ -50,8 +50,8 @@ export default class Curriculum extends Vue {
     /**
      * 클래스 교육과정 메인리스트
      */
-
-    private makeEducation: IMakeEducation[] = [
+     // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
+    private makeEducation: IMakeEducation[]= [
         {
             title: '파파야 교육과정 제목1',
             goal: '파파야 교육과정 목표1',
@@ -59,28 +59,29 @@ export default class Curriculum extends Vue {
                 {
                     index: 1,
                     title: '1회차수업',
-                    startDay: '2019-11-15',
-                    startTime: '10:00:00',
-                    endTime: '11:00:00',
-                    contents: '수업내용 100자이내로 설명1.'
+                    startDay: new Date( 2019,12,15 ),
+                    startTime: new Date( 2019,12,15, 10, 0, 0 ),
+                    endTime: new Date( 2019,12,15, 11, 0, 0 ),
+                    contents: '수업내용 100자이내로 설명1-1.'
                 },
                 {
                     index: 2,
                     title: '2회차수업',
-                    startDay: '2019-11-16',
-                    startTime: '10:00:00',
-                    endTime: '11:00:00',
-                    contents: '수업내용 100자이내로 설명2.'
+                    startDay: new Date( 2019,12,15 ),
+                    startTime: new Date( 2019,12,15, 10, 0, 0 ),
+                    endTime: new Date( 2019,12,15, 11, 0, 0 ),
+                    contents: '수업내용 100자이내로 설명2-1.'
                 },
                 {
                     index: 3,
                     title: '3회차수업',
-                    startDay: '2019-11-17',
-                    startTime: '10:00:00',
-                    endTime: '11:00:00',
-                    contents: '수업내용 100자이내로 설명3.'
+                    startDay: new Date( 2019,12,15 ),
+                    startTime: new Date( 2019,12,15, 10, 0, 0 ),
+                    endTime: new Date( 2019,12,15, 11, 0, 0 ),
+                    contents: '수업내용 100자이내로 설명3-1.'
                 }
             ],
+            isChk: false,
         },
         {
             title: '파파야 교육과정 제목2',
@@ -89,20 +90,21 @@ export default class Curriculum extends Vue {
                 {
                     index: 1,
                     title: '1회차수업',
-                    startDay: '2019-11-15',
-                    startTime: '10:00:00',
-                    endTime: '11:00:00',
-                    contents: '수``업내용 100자이내로 설명11.'
+                    startDay: new Date( 2019,12,15 ),
+                    startTime: new Date( 2019,12,15, 10, 0, 0 ),
+                    endTime: new Date( 2019,12,15, 11, 0, 0 ),
+                    contents: '수업내용 100자이내로 설명1-2.'
                 },
                 {
                     index: 2,
                     title: '2회차수업',
-                    startDay: '2019-11-16',
-                    startTime: '10:00:00',
-                    endTime: '11:00:00',
-                    contents: '수업내용 100자이내로 설명.22'
+                    startDay: new Date( 2019,12,15 ),
+                    startTime: new Date( 2019,12,15, 10, 0, 0 ),
+                    endTime: new Date( 2019,12,15, 11, 0, 0 ),
+                    contents: '수업내용 100자이내로 설명2-2.'
                 }
             ],
+            isChk: false,
         },
         {
             title: '파파야 교육과정 제목3',
@@ -111,66 +113,64 @@ export default class Curriculum extends Vue {
                 {
                     index: 1,
                     title: '1회차수업',
-                    startDay: '2019-11-15',
-                    startTime: '10:00:00',
-                    endTime: '11:00:00',
-                    contents: '수업내용 100자이내로 설명.'
+                    startDay: new Date( 2019,12,15 ),
+                    startTime: new Date( 2019,12,15, 10, 0, 0 ),
+                    endTime: new Date( 2019,12,15, 11, 0, 0 ),
+                    contents: '수업내용 100자이내로 설명1-3.'
                 },
                 {
                     index: 2,
                     title: '2회차수업',
-                    startDay: '2019-11-16',
-                    startTime: '10:00:00',
-                    endTime: '11:00:00',
-                    contents: '수업내용 100자이내로 설명.'
-                },
-                {
-                    index: 3,
-                    title: '3회차수업',
-                    startDay: '2019-11-17',
-                    startTime: '10:00:00',
-                    endTime: '11:00:00',
-                    contents: '수업내용 100자이내로 설명.'
-                },
-                {
-                    index: 4,
-                    title: '4회차수업',
-                    startDay: '2019-11-17',
-                    startTime: '10:00:00',
-                    endTime: '11:00:00',
-                    contents: '수업내용 100자이내로 설명.'
+                    startDay: new Date( 2019,12,15 ),
+                    startTime: new Date( 2019,12,15, 10, 0, 0 ),
+                    endTime: new Date( 2019,12,15, 11, 0, 0 ),
+                    contents: '수업내용 100자이내로 설명2-3.'
                 }
             ],
+            isChk: false,
         },
     ];
+
+    private currListNum: number = 0;
+    private eduItems: Array< {title: string }>=[];
+    private settingItems: Array<{ vo: string[], sItem: string }> = [];
 
 
     get makeEducationList(): IMakeEducation[] {
         return this.makeEducation;
     }
 
-
-    // public created() {
-    //     this.getMakeEducation();
-    // }
-
-    // private getMakeEducation(): void {
-    //     MyClassService.getMakeEducation(this.classID).then();
-    // }
-
-
-    private currListNum: number = 0;
-
-    private eduItems: Array< {title: string }>=[];
-
+    get settingItemsModel(): Array<{ vo: string[], sItem: string }>{
+        return this.settingItems;
+    }
 
     /**
      * 교육과정 리스트
      */
-
     get currListNumModel(): Array< {title: string }>{
         return this.eduItems;
     }
+
+    public created(){
+        this.settingItems=this.mItemByMakeEduList();
+    }
+
+    public settingMenuClickHandler( mIdx: number, item: string ) {
+        console.log(mIdx, item);
+        this.settingItems[mIdx].sItem = item;
+    }
+
+    public getSelectedSettingMenuItem( idx: number ): string{
+        return this.settingItems[idx].sItem;
+    }
+
+    private mItemByMakeEduList(): any[] {
+        return this.makeEducation.map( ( item: IMakeEducation ) => {
+            return { vo: this.testEduSettingsItems, sItem:'반복없음' };
+        });
+    }
+
+
 
     private setCurriNum( num: number ): void{
         this.currListNum=num;

@@ -518,20 +518,24 @@ interface IQuestionList {
 interface IMakeEducation {
     title: string;
     goal: string;
-    course_list: [
-        {
-            index: number;
-            title: string;
-            startDay: string;
-            startTime: string;
-            endTime: string;
-            contents: string;
-        }
-    ];
-    writer: string;
+    course_list: Array<{ index: number; title: string; startDay: Date; startTime: Date; endTime: Date; contents: string; }>;
+    writer?: string;
+    isChk?: boolean;
 }
-
-
-
-
-export {IMyClassList, INotifyList, INotifyFeedList, IFeedList, IClassInfo, IClassMember, IPostList, ISearchSchool, IMakeClassInfo, IMakeClassInfoBase, IClassMemberInfo, IClassMemberList, IQuestionList, IClassMembers, IMakeEducation};
+export {
+    IMyClassList,
+    INotifyList,
+    INotifyFeedList,
+    IFeedList,
+    IClassInfo,
+    IClassMember,
+    IPostList,
+    ISearchSchool,
+    IMakeClassInfo,
+    IMakeClassInfoBase,
+    IClassMemberInfo,
+    IClassMemberList,
+    IQuestionList,
+    IClassMembers,
+    IMakeEducation
+};
