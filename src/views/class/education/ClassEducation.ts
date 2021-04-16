@@ -375,13 +375,6 @@ export default class ClassEducation extends Vue {
     ];
 
 
-    // get classCurrListModel(): object[]{
-    //     return this.classCurrList;
-    // }
-    //
-    // get classCurrDetailModel(): object[]{
-    //     return this.classCurrDetail;
-    // }
 
     /*start: 추가 테스트*/
     //datepicker
@@ -400,6 +393,7 @@ export default class ClassEducation extends Vue {
     private currListNum: number = 0;
 
     private eduItems: Array< {title: string }>=[];
+
 
     get currListNumModel(): Array< {title: string }>{
         return this.eduItems;
@@ -460,6 +454,20 @@ export default class ClassEducation extends Vue {
 
 
 
+    /*start: 추가 테스트*/
+
+
+
+
+
+    /*end: 추가 테스트*/
+
+
+
+
+
+
+
 
 
 
@@ -469,7 +477,6 @@ export default class ClassEducation extends Vue {
 
 
 }
-
 
 
 
