@@ -49,6 +49,14 @@ export default class Curriculum extends Vue {
     private classCardIndex: number = 0;
     private classCurrIndex: number = 0;
 
+    private loopRangeModel: string = '반복없음';
+    private loopRangeItems: string[] = ['반복없음', '매일', '매주', '매월', '매년'];
+    private loopRangeCheck: boolean=false;
+
+    get currentLoopRangeItems(): string[]{
+        return this.loopRangeItems;
+    }
+
 
     /**
      * 클래스 교육과정 메인리스트
