@@ -20031,15 +20031,15 @@ select::-ms-expand {
   font-size: 12px;
   color: #57576d;
 }
-.popup-dialog .popup-body .profile-qna-setting .qan-setting-top {
+.popup-dialog .popup-body .profile-qna-setting .qna-setting-top {
   position: relative;
   padding: 15px 40px;
   border-bottom: 1px solid #f4f5f6;
 }
-.popup-dialog .popup-body .profile-qna-setting .qan-setting-top p {
+.popup-dialog .popup-body .profile-qna-setting .qna-setting-top p {
   color: #848499;
 }
-.popup-dialog .popup-body .profile-qna-setting .qan-setting-top .qna-setting-btn {
+.popup-dialog .popup-body .profile-qna-setting .qna-setting-top .qna-setting-btn {
   position: absolute;
   top: 50%;
   right: 40px;

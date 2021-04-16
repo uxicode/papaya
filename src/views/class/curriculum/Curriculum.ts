@@ -3,12 +3,22 @@ import {namespace} from 'vuex-class';
 import SideMenu from '@/components/sideMenu/sideMenu.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
-import MyClassService from '@/api/service/MyClassService';
-import {IClassInfo, IClassMemberList, IMakeEducation} from '@/views/model/my-class.model';
+import {IClassInfo} from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
-import WithRender from './ClassEducation.html';
+import WithRender from './Curriculum.html';
+
 
 const MyClass = namespace('MyClass');
+
+interface ICurriculumList{
+    listTit: string;
+    managerLevel: boolean;
+    classAdmin: string;
+    classCnt: string;
+    classCurrent: string;
+    isActive?: boolean;
+}
+
 
 @WithRender
 @Component({
@@ -19,11 +29,9 @@ const MyClass = namespace('MyClass');
     }
 })
 
-export default class ClassEducation extends Vue {
+export default class Curriculum extends Vue {
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
-
-
 
     /* Modal 오픈 상태값 */
     private isCreateClass: boolean = false;
@@ -37,7 +45,7 @@ export default class ClassEducation extends Vue {
     private classCardIndex: number = 0;
     private classCurrIndex: number = 0;
 
-    private classCurrList: object[] = [
+    private classCurrList: ICurriculumList[] = [
         {
             listTit:'5학년 2학기 수학 교육과정',
             managerLevel: true,
@@ -87,6 +95,23 @@ export default class ClassEducation extends Vue {
             isActive: false,
         },
     ];
+
+
+    /*
+    * {
+  "title": "파파야 교육과정 제목",
+  "goal": "파파야 교육과정 목표",
+  "course_list": [
+    {
+      "index": number;
+      "title": string;
+      "startDay": Date;
+      "startTime": Date;
+      "endTime": Date;
+      "contents": string;
+    }
+  ]
+}*/
     private classCurrDetail: object[] = [
         {
             classList:[
@@ -364,28 +389,35 @@ export default class ClassEducation extends Vue {
         }
     ];
 
-
     private currListNum: number = 0;
 
     private eduItems: Array< {title: string }>=[];
 
-    /****************************************/
-    private makeEducation: IMakeEducation[] = [];
 
-    get getMakeEducation(): IMakeEducation[] {
-        return this.makeEducation;
+    /**
+     * 교육과정 리스트
+     */
+    get classCurrListModel(): object[]{
+        return this.classCurrList;
     }
 
-    /****************************************/
+    get classCurrDetailModel(): object[] {
+        return this.classCurrDetail;
+    }
 
     get currListNumModel(): Array< {title: string }>{
         return this.eduItems;
+    }
+
+    get classCardIndexModel(): number{
+        return this.classCardIndex;
     }
 
     private setCurriNum( num: number ): void{
         this.currListNum=num;
         this.eduItems.length=num;
     }
+
 
     private moreMenuToggle(): void {
         this.isMoreMenu = !this.isMoreMenu;
@@ -422,12 +454,12 @@ export default class ClassEducation extends Vue {
         return ( imgUrl !== null && imgUrl !== undefined )? img : require( `@/assets/images/${img}` );
     }
 
-    /*
-    * 교육과정 리스트 클릭 */
-    private cardMore(index: number): void{
+    private cardClickHandler( idx: number ) {
         this.isClassCurrMore = true;
-        this.classCard(index);
+        this.classCard(idx);
     }
+
+
 
     //
     //
