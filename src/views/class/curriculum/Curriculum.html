@@ -1,47 +1,80 @@
+
 <section class="contents-right">
+
     <div class="classes-curriculum">
         <div class="cnt-top">
             <h2 class="cnt-tit">교육과정</h2>
         </div>
 
+      <v-app style="background-color:transparent">
         <div class="curriculum-list clearfix">
             <div class="list-group">
-                <div v-for="(item, index) in classCurrListModel" :key="index" class="curr-item">
+                <div v-for="(item, index) in makeEducationList" :key="index" class="curr-item">
                     <div class="fd-head">
-                        <p class="fd-tit">{{ item.listTit }}</p>
+                        <p class="fd-tit">{{ item.title }}</p>
                         <div class="fd-writer type2">
                             <p class="writer">
-                                <span class="name" :class="{crown: item.managerLevel}">{{ item.classAdmin }}</span>
+                                <span class="name">김미영선생님</span>
                             </p>
                         </div>
                     </div>
                     <div class="fd-cnt">
                         <p class="fd-txt">
-                            <a href="#" @click.prevent="cardClickHandler( index )">{{ item.classCnt }}</a>
+                            <a href="#" @click.prevent="cardClickHandler( index )">요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요. 거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.</a>
                         </p>
                     </div>
                     <div class="fd-foot">
-                        <p class="en-count">{{ item.classCurrent }}</p>
+                        <p class="en-count">총 {{item.course_list.length}}회차 수업 등록</p>
                         <div class="fd-btn">
                             <div class="list-popup">
-                                <button type="button" class="list-popup-btn" @click="item.isActive = !item.isActive"><img :src="require('@/assets/images/more.svg')" class="sm" alt=""></button>
-                                <div class="list-popup-menu pos-right" :class="{'active': item.isActive}" style="transform:translate3d(24px, 0, 0);">
-                                    <button class="list-popup-item" value="0">교육과정 수정</button>
-                                    <button class="list-popup-item active" value="1">교육과정 삭제</button>
-                                </div>
+
+                                <!--<div class="list-popup-menu pos-right" style="transform:translate3d(87px, 0, 0)">
+                                  <a href="" class="list-popup-item">반복 없음</a>
+                                  <a href="" class="list-popup-item">매일</a>
+                                  <a href="" class="list-popup-item">매주</a>
+                                  <a href="" class="list-popup-item">매월</a>
+                                  <a href="" class="list-popup-item">매년</a>
+                                </div>-->
+
+                              <!--  v-model 를 수정함 카트 v-model="item.isChk"  -->
+                                <v-menu
+                                        nudge-left="30px"
+                                        origin="center top"
+                                        v-model="item.isChk"
+                                        transition="scale-transition"
+                                        content-class="time-select-menu bg-white"
+                                        min-width="180px"
+                                        offset-y
+                                        offset-x>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <button type="button" class="list-popup-btn"
+                                                v-model="settingItemsModel[index].sItem"
+                                                v-bind="attrs"
+                                                v-on="on"><span>{{ getSelectedSettingMenuItem( index ) }}</span><img :src="require('@/assets/images/more.svg')" class="sm" alt=""></button>
+                                    </template>
+                                    <v-list>
+                                        <v-list-item
+                                                v-for="( mMenu, mIdx ) in settingItemsModel[index].vo"
+                                                :key="mIdx"
+                                                @click="settingMenuClickHandler( index, mMenu )">
+                                            <v-list-item-title>{{ mMenu }}</v-list-item-title>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-menu>
                             </div>
                         </div>
 
                     </div>
                 </div>
             </div>
-
             <div class="curriculum-add">
                 <button class="curriculum-add-btn" @click="isCreateClass = true"></button>
             </div>
-
         </div>
+      </v-app>
+
     </div>
+
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.5.1 (교육과정 만들기) (4.5.5.1 ~ 4.5.5.1.1)-->
     <transition name="modal" >
@@ -291,7 +324,7 @@
         <modal v-if="isClassCurrMore" size="600px" body-padding="0" @modalClose="isClassCurrMore=false">
             <div slot="header">
                 <!-- header custom coding-->
-                <p class="popup-header-tit">{{ classCurrListModel[classCardIndex].listTit }}</p>
+                <p class="popup-header-tit">{{ makeEducationList[classCardIndex].title }}</p>
 
                 <div class="popup-btn">
                     <div class="list-popup mgl-20">
@@ -315,29 +348,29 @@
                                 <strong class="cls-name">{{myClassHomeModel.name}}</strong>
                             </p>
 
-                            <p class="post-writer" :class="{crown: classCurrListModel[classCardIndex].managerLevel}">{{ classCurrList[this.classCardIndex].classAdmin }}</p>
+                            <p class="post-writer">김미영선생님</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="popup-feed-detail">
                     <div class="fd-cnt">
-                        <p class="fd-txt">{{ classCurrListModel[this.classCardIndex].classCnt }}</p>
+                        <p class="fd-txt">요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요. 거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.</p>
 
                         <div class="fd-inner">
                             <div class="curriculum-list">
-                                <div v-for="(item, index) in classCurrDetailModel[this.classCardIndex].classList" :key="index" class="curriculum-item">
+                                <div v-for="(item, index) in makeEducationList[this.classCardIndex].course_list" :key="index" class="curriculum-item">
                                     <span class="turn">{{ item.index }} 회차</span>
                                     <div class="curriculum-info">
                                         <a href="#" @click="isClassCurrDetail = true;classCurr(index)">
-                                            <p class="subject-tit">{{ item.currTit }}</p>
+                                            <p class="subject-tit">{{ item.title }}</p>
                                             <div class="subject-schedule">
-                                                <span>{{ item.currDate }}</span>
-                                                <span>{{ item.currTime }}</span>
+                                                <span>2019. 9. 1 수요일</span>
+                                                <span>오전 10시 - 11시</span>
                                             </div>
                                             <div class="subject-sub">
-                                                <span>{{ item.currImg }}</span>
-                                                <span>{{ item.currFile }}</span>
+                                                <span>이미지 2</span>
+                                                <span>파일 1</span>
                                             </div>
                                         </a>
                                     </div>
@@ -364,16 +397,16 @@
             <div slot="body">
                 <!-- body custom coding-->
                 <div class="popup-cnt">
-                    <p class="popup-txt type2">{{ classCurrList[this.classCardIndex].listTit }}</p>
-                    <h2 class="popup-tit pdb-0">{{ classCurrDetail[this.classCardIndex].classList[classCurrIndex].currTit }}</h2>
+                    <p class="popup-txt type2">{{ makeEducationList[this.classCardIndex].title }}</p>
+                    <h2 class="popup-tit pdb-0">{{ makeEducationList[this.classCardIndex].course_list[classCurrIndex].title }}</h2>
                 </div>
 
                 <div class="popup-form">
                     <div class="popup-form-top">
                         <div class="form-item pd-desc">
                             <ul class="feed-info period clearfix">
-                                <li>{{ classCurrDetail[this.classCardIndex].classList[classCurrIndex].currDate }}</li>
-                                <li>{{ classCurrDetail[this.classCardIndex].classList[classCurrIndex].currTime }}</li>
+                                <li>2019. 9. 1 수요일</li>
+                                <li>오전 10시 - 11시</li>
                             </ul>
                         </div>
                     </div>
@@ -382,10 +415,10 @@
                 <div class="popup-feed-detail">
                     <div class="fd-cnt">
                         <p class="fd-txt">
-                            {{ classCurrList[this.classCardIndex].classCnt }}
+                            요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요. 거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.
                         </p>
 
-                        <div v-show="classCurrDetail[this.classCardIndex].classList[classCurrIndex].imgFile" class="fd-inner">
+                        <div class="fd-inner">
                             <ul class="img-list clearfix">
                                 <li><a href=""><img :src="require('@/assets/images/pic.png')" alt=""></a></li>
                                 <li><a href=""><img :src="require('@/assets/images/pic2.png')" alt=""></a></li>
@@ -393,12 +426,18 @@
                             </ul>
                         </div>
 
-                        <div v-show="classCurrDetail[this.classCardIndex].classList[classCurrIndex].fileList" class="fd-inner">
+                        <div class="fd-inner">
                             <p class="fd-inner-txt">첨부 파일 3</p>
 
                             <ul class="file-list clearfix">
-                                <li v-for="(item, index) in classCurrDetail[this.classCardIndex].classList[classCurrIndex].fileList" :key="index">
-                                    <a href="">{{ item.fileTit }}</a>
+                                <li>
+                                    <a href="">첨부파일1.pdf</a>
+                                </li>
+                                <li>
+                                    <a href="">첨부파일2.hwp</a>
+                                </li>
+                                <li>
+                                    <a href="">첨부파일3.pdf</a>
                                 </li>
                             </ul>
                         </div>
@@ -409,3 +448,4 @@
     </transition>
     <!-- end: 공통 팝업 -->
 </section>
+
