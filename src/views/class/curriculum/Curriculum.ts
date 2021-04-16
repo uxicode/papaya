@@ -5,10 +5,19 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
-import WithRender from './ClassEducation.html';
-// import ImageSettingService from "@/views/service/profileImg/ImageSettingService";
+import WithRender from './Curriculum.html';
+
 
 const MyClass = namespace('MyClass');
+
+interface ICurriculumList{
+    listTit: string;
+    managerLevel: boolean;
+    classAdmin: string;
+    classCnt: string;
+    classCurrent: string;
+    isActive?: boolean;
+}
 
 /*start: 추가 테스트*/
 interface ITimeModel{
@@ -17,7 +26,6 @@ interface ITimeModel{
     minute: string;
 }
 /*end: 추가 테스트*/
-
 
 @WithRender
 @Component({
@@ -28,7 +36,7 @@ interface ITimeModel{
     }
 })
 
-export default class ClassEducation extends Vue {
+export default class Curriculum extends Vue {
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
@@ -44,7 +52,7 @@ export default class ClassEducation extends Vue {
     private classCardIndex: number = 0;
     private classCurrIndex: number = 0;
 
-    private classCurrList: object[] = [
+    private classCurrList: ICurriculumList[] = [
         {
             listTit:'5학년 2학기 수학 교육과정',
             managerLevel: true,
@@ -95,6 +103,33 @@ export default class ClassEducation extends Vue {
         },
     ];
 
+
+    /*start: 추가 테스트*/
+    //datepicker
+    private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
+    private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
+    private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
+    private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
+    private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
+    private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
+
+    /*end: 추가 테스트*/
+
+    /*
+    * {
+  "title": "파파야 교육과정 제목",
+  "goal": "파파야 교육과정 목표",
+  "course_list": [
+    {
+      "index": number;
+      "title": string;
+      "startDay": Date;
+      "startTime": Date;
+      "endTime": Date;
+      "contents": string;
+    }
+  ]
+}*/
     private classCurrDetail: object[] = [
         {
             classList:[
@@ -370,34 +405,41 @@ export default class ClassEducation extends Vue {
                 }
             ]
         }
-
-
     ];
-
-
-
-    /*start: 추가 테스트*/
-    //datepicker
-    private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
-    private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
-    private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
-    private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-    private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
-    private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-
-    /*end: 추가 테스트*/
-
-
-
 
     private currListNum: number = 0;
 
     private eduItems: Array< {title: string }>=[];
 
 
+    /**
+     * 교육과정 리스트
+     */
+    get classCurrListModel(): object[]{
+        return this.classCurrList;
+    }
+
+    get classCurrDetailModel(): object[] {
+        return this.classCurrDetail;
+    }
+
     get currListNumModel(): Array< {title: string }>{
         return this.eduItems;
     }
+
+    get classCardIndexModel(): number{
+        return this.classCardIndex;
+    }
+
+    /*start: 추가 테스트*/
+    get currentStartTimeModel(): string{
+        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
+    }
+
+    get currentEndTimeModel(): string{
+        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
+    }
+    /*end: 추가 테스트*/
 
     private setCurriNum( num: number ): void{
         this.currListNum=num;
@@ -420,41 +462,30 @@ export default class ClassEducation extends Vue {
         this.classCurrIndex = num;
     }
 
-    // private getProfileImg(imgUrl: string | null | undefined ): string{
-    //     return ImageSettingService.getProfileImg( imgUrl );
-    // }
+    private getProfileImg( imgUrl: string | null | undefined ): string{
+        const randomImgItems = [
+            'image-a.jpg',
+            'image-b.jpg',
+            'image-c.jpg',
+            'image-d.jpg',
+            'image-e.jpg'
+        ];
+        let img: string= '';
+        if( imgUrl === null || imgUrl === undefined){
+            img=randomImgItems[ Utils.getRandomNum(0, 5) ];
+        }else if( !isNaN( parseInt(imgUrl, 10) ) ){
+            img=randomImgItems[ parseInt(imgUrl, 10) ];
+        }else{
+            img=imgUrl;
+        }
 
-
-
-    /*start: 추가 테스트*/
-    get currentStartTimeModel(): string{
-        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
+        return ( imgUrl !== null && imgUrl !== undefined )? img : require( `@/assets/images/${img}` );
     }
 
-    get currentEndTimeModel(): string{
-        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
+    private cardClickHandler( idx: number ) {
+        this.isClassCurrMore = true;
+        this.classCard(idx);
     }
-    /*end: 추가 테스트*/
-
-
-
-
-    /*start: 추가 테스트*/
-
-
-
-
-
-    /*end: 추가 테스트*/
-
-
-
-
-
-
-
-
-
 
 
 
@@ -462,6 +493,7 @@ export default class ClassEducation extends Vue {
 
 
 }
+
 
 
 

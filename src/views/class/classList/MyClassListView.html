@@ -45,7 +45,7 @@
             <template v-else>
               <a href="javascript:void(0);" class="class-info" @click.prevent="gotoClassClickHandler( item.me.class_id )">
                 <div class="info-img" :class="{ 'crown':item.me.level ===1}">
-                  <span><img :src="nullCheck( item.me.profile_image)" class="thumb" alt=""></span>
+                  <span><img :src="getProfileImg( index )" class="thumb" alt=""></span>
                 </div>
                 <div class="info-tit">
                   <p>{{  item.name }}</p>
