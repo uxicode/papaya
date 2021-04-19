@@ -35,10 +35,6 @@ export default class Curriculum extends Vue {
     private isClassCurrDetail: boolean = false;
     private isMoreMenu: boolean = false;
 
-
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
-
     @MyClass.Getter
     private classID!: number;
 
@@ -53,15 +49,14 @@ export default class Curriculum extends Vue {
      * 클래스 교육과정 메인리스트
      */
 
-    /*start: 추가 테스트*/
     //datepicker
     private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
     private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
     private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
     private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-    private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
+
     private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-    /*end: 추가 테스트*/
+    private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
 
 
      // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
@@ -155,6 +150,18 @@ export default class Curriculum extends Vue {
     private eduItems: Array< {title: string }>=[];
     private settingItems: Array<{ vo: string[], sItem: string }> = [];
 
+
+    @MyClass.Getter
+    private myClassHomeModel!: IClassInfo;
+
+
+    get currentStartTimeModel(): string{
+        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
+    }
+
+    get currentEndTimeModel(): string{
+        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
+    }
 
     get makeEducationList(): IMakeEducation[] {
         return this.makeEducation;
