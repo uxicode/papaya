@@ -10,14 +10,6 @@ import WithRender from './Curriculum.html';
 
 const MyClass = namespace('MyClass');
 
-/*start: 추가 테스트*/
-interface ITimeModel{
-    apm: string;
-    hour: string;
-    minute: string;
-}
-/*end: 추가 테스트*/
-
 
 @WithRender
 @Component({
@@ -48,9 +40,6 @@ export default class Curriculum extends Vue {
 
     private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
 
-
-
-
     /**
      * 멤버 등급별 아이콘
      * @param level
@@ -67,16 +56,6 @@ export default class Curriculum extends Vue {
         }
     }
 
-    /*start: 추가 테스트*/
-    //datepicker
-    private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
-    private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
-    private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
-    private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-    private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
-    private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-
-    /*end: 추가 테스트*/
 
     /**
      * 클래스 교육과정 메인리스트
@@ -207,16 +186,6 @@ export default class Curriculum extends Vue {
         });
     }
 
-    /*start: 추가 테스트*/
-    get currentStartTimeModel(): string{
-        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
-    }
-
-    get currentEndTimeModel(): string{
-        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
-    }
-    /*end: 추가 테스트*/
-
     private setCurriNum( num: number ): void{
         this.currListNum=num;
         this.eduItems.length=num;
@@ -261,12 +230,6 @@ export default class Curriculum extends Vue {
         this.isClassCurrMore = true;
         this.classCard(idx);
     }
-
-
-
-
-
-
 }
 
 
