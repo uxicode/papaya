@@ -1188,7 +1188,10 @@ $popupDepth: 10;
   transition: all 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6);
 }
 
-// 410 = modal height + snackbar height 값 - ksj
+/*
+   toast popup (v-snackbar)
+   410 = modal height + snackbar height 값 - ksj
+*/
 .v-snack {
   margin-bottom: calc(50% - 410px);
 }

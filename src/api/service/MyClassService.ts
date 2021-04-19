@@ -167,6 +167,10 @@ class MyClassService {
         return request('delete', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
 
+    public searchMembers(payload: {classId: number, searchWord: string}): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${payload.classId}/members/search/${payload.searchWord}`);
+    }
+
     /**
      * 클래스 가입 질문 전체 조회
      * @param classId
@@ -189,6 +193,15 @@ class MyClassService {
      */
     public getClassTags(classId: number): Promise<any> {
         return request('get', `${CLASS_BASE_URL}/${classId}/tags`);
+    }
+
+    /**
+     * 클래스 태그 삭제
+     * @param classId
+     * @param tagId
+     */
+    public deleteTag(classId: number, tagId: number): Promise<any> {
+        return request('delete', `${CLASS_BASE_URL}/${classId}/tags/${tagId}`);
     }
 
     /**

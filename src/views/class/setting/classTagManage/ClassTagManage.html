@@ -21,7 +21,7 @@
                              :key="idx"
                              class="hashtag">
                             <span class="tag-label">{{ item.keyword }}</span>
-                            <button type="button" class="tag-delete"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                            <button type="button" class="tag-delete" @click="deleteTag(item.id)"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                         </div>
                         <button type="button" class="btn ico-btn ico-left sm" @click="openTagSearchPopup"><img :src="require('@/assets/images/add.svg')" class="icon" alt="">태그추가</button>
                     </div>
@@ -33,8 +33,8 @@
         <!-- popup footer -->
         <div class="popup-footer">
             <div class="btn-group rt">
-                <btn type="outline" @btnClick="goBack">취소</btn>
-                <btn type="navi">저장</btn>
+                <btn type="outline" @btnClick="tagModifyCancel">취소</btn>
+                <btn type="navi" @btnClick="tagModifySave">저장</btn>
             </div>
         </div>
         <!--// popup footer -->
@@ -64,7 +64,7 @@
                                 placeholder="태그 이름을 검색해주세요."
                                 size="370" v-model="searchTagValue">
                         </txt-field>
-                        <btn type="grey" size="sm" @btnClick="">검색</btn>
+                        <btn type="grey" size="sm">검색</btn>
                         <!-- start: 로딩 바 -->
                         <div class="lds-roller" v-show="loadingModel"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                         <!-- end: 로딩 바 -->
@@ -78,7 +78,6 @@
                                 <li v-for="item in searchResults">
                                     <a href="" class="result-link" @click.prevent.stop="applySearchResult( item.keyword )">
                                         <div class="tb-cell result-tit" v-html="boldSearchResult( item.keyword )"></div>
-                                        <div class="tb-cell result-sub">{{ item.keyword }}</div>
                                     </a>
                                 </li>
                             </ul>

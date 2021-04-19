@@ -107,14 +107,8 @@ export default class ClassTagManage extends Vue {
             const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, MyClassService.searchTag, this.isLoading );
             userInter$.subscribe({
                 next:( searchData: any ) =>{
-                    // console.log(searchData);
-                    /*
-                      message: "리스트 ....."
-                      result_count: 2
-                      results: (2) [{…}, {…}]
-                      total: 2
-                    */
-                    this.searchResultItems=searchData.results.map( ( item: any )=> item );
+                    //console.log(searchData.tag_list);
+                    this.searchResultItems=searchData.tag_list.map( ( item: any )=> item );
                 },
             });
 
@@ -153,10 +147,11 @@ export default class ClassTagManage extends Vue {
      * @param name
      * @private
      */
-    private applySearchResult( name: string): void {
+    private applySearchResult(name: string): void {
         this.closeTagSearchPopup();
         this.searchTagValue=name;
-        this.changeTagNameValue(this.searchTagValue);
+
+        //this.changeTagNameValue(this.searchTagValue);
     }
 
     /**
@@ -170,11 +165,40 @@ export default class ClassTagManage extends Vue {
     }
 
     /**
+     * 클래스 태그 삭제
+     * @param tagId
+     * @private
+     */
+    private deleteTag(tagId: number): void {
+        MyClassService.deleteTag(this.classID, tagId)
+          .then(() => {
+             console.log(`${tagId} 태그 삭제 완료`);
+          });
+    }
+
+    /**
      * 뒤로가기
      * @private
      */
     private goBack(): void {
         this.$router.push('./')
             .then();
+    }
+
+    /**
+     * 태그 수정 취소
+     * @private
+     */
+    private tagModifyCancel(): void {
+        this.goBack();
+    }
+
+    /**
+     * 태그 수정 저장
+     * @private
+     */
+    private tagModifySave(): void {
+
+        this.goBack();
     }
 }
