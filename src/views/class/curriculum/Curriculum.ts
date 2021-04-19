@@ -28,6 +28,7 @@ export default class Curriculum extends Vue {
     private isClassCurrDetail: boolean = false;
     private isMoreMenu: boolean = false;
 
+
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
@@ -38,24 +39,7 @@ export default class Curriculum extends Vue {
     private classCardIndex: number = 0;
     private classCurrIndex: number = 0;
 
-    private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
-
-    /**
-     * 멤버 등급별 아이콘
-     * @param level
-     * @private
-     */
-    private memberLevelIcon(level: number): string {
-        switch (level) {
-            case 1:
-                return 'crown';
-            case 2:
-                return 'staff';
-            default:
-                return 'member';
-        }
-    }
-
+    private testEduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
 
     /**
      * 클래스 교육과정 메인리스트
@@ -91,8 +75,8 @@ export default class Curriculum extends Vue {
                     contents: '수업내용 100자이내로 설명3-1.'
                 }
             ],
-            writer: '김미영선생님',
             isChk: false,
+            writer: '김미영선생님',
             level: 1,
         },
         {
@@ -116,8 +100,8 @@ export default class Curriculum extends Vue {
                     contents: '수업내용 100자이내로 설명2-2.'
                 }
             ],
-            writer: '김경희선생님',
             isChk: false,
+            writer: '김경희선생님',
             level: 2,
         },
         {
@@ -141,8 +125,8 @@ export default class Curriculum extends Vue {
                     contents: '수업내용 100자이내로 설명2-3.'
                 }
             ],
-            writer: '박수한선생님',
             isChk: false,
+            writer: '박수한선생님',
             level: 2,
         },
     ];
@@ -182,24 +166,17 @@ export default class Curriculum extends Vue {
 
     private mItemByMakeEduList(): any[] {
         return this.makeEducation.map( ( item: IMakeEducation ) => {
-            return { vo: this.EduSettingsItems, /* sItem:'반복없음' */ };
+            return { vo: this.testEduSettingsItems, sItem:'반복없음' };
         });
     }
 
-    /*start: 추가 테스트*/
-    get currentStartTimeModel(): string{
-        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
-    }
 
-    get currentEndTimeModel(): string{
-        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
-    }
-    /*end: 추가 테스트*/
 
     private setCurriNum( num: number ): void{
         this.currListNum=num;
         this.eduItems.length=num;
     }
+
 
     private moreMenuToggle(): void {
         this.isMoreMenu = !this.isMoreMenu;
@@ -241,11 +218,21 @@ export default class Curriculum extends Vue {
         this.classCard(idx);
     }
 
-
-
-
-
-
+    /**
+     * 멤버 등급별 아이콘
+     * @param level
+     * @private
+     */
+    private memberLevelIcon(level: number): string {
+        switch (level) {
+            case 1:
+                return 'manager';
+            case 2:
+                return 'staff';
+            default:
+                return 'member';
+        }
+    }
 }
 
 

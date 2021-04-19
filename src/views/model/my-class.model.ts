@@ -523,13 +523,6 @@ interface IMakeEducation {
     isChk?: boolean;
     level?: number;
 }
-
-interface ITimeModel{
-    apm: string;
-    hour: string;
-    minute: string;
-}
-
 export {
     IMyClassList,
     INotifyList,
@@ -545,6 +538,5 @@ export {
     IClassMemberList,
     IQuestionList,
     IClassMembers,
-    IMakeEducation,
-    ITimeModel
+    IMakeEducation
 };
