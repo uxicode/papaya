@@ -186,6 +186,16 @@ export default class Curriculum extends Vue {
         });
     }
 
+    /*start: 추가 테스트*/
+    get currentStartTimeModel(): string{
+        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
+    }
+
+    get currentEndTimeModel(): string{
+        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
+    }
+    /*end: 추가 테스트*/
+
     private setCurriNum( num: number ): void{
         this.currListNum=num;
         this.eduItems.length=num;
@@ -230,6 +240,12 @@ export default class Curriculum extends Vue {
         this.isClassCurrMore = true;
         this.classCard(idx);
     }
+
+
+
+
+
+
 }
 
 
