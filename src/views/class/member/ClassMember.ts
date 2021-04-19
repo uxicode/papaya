@@ -20,7 +20,11 @@ export default class ClassMember extends Vue{
     private classID!: number;
 
     @MyClass.Getter
-    private memberID!: number;
+    private myClassHomeModel!: IClassInfo;
+
+    get memberID(): any {
+        return this.myClassHomeModel;
+    }
 
     /* 운영자/스탭/일반 멤버 토글 상태값 */
     private isAdminToggle: boolean = false;
@@ -67,7 +71,7 @@ export default class ClassMember extends Vue{
     }
 
     private getClassMemberLevel(): void {
-        MyClassService.getClassMemberInfo(this.classID, this.memberID)
+        MyClassService.getClassMemberInfo(this.classID, this.memberID.me.id)
           .then((data) => {
             //console.log(data.member_info);
             this.memberLevel = data.member_info.level;
@@ -105,5 +109,14 @@ export default class ClassMember extends Vue{
             default:
                 return '일반 멤버';
         }
+    }
+
+    /**
+     * 멤버 초대 팝업 닫기
+     * @private
+     */
+    private closeInvitePopup(): void {
+        this.isInvitePopup = false;
+        this.isSnackbar = false;
     }
 }

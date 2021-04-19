@@ -116,7 +116,7 @@
                 <!-- header custom coding-->
                 <div class="popup-icon add"></div>
                 <div class="popup-close">
-                    <button class="close" @click=""><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    <button class="close" @click="closeInvitePopup"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
             <div slot="body">
@@ -138,21 +138,22 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick>취소</btn>
-                    <btn type="navi" @btnClick>확인</btn>
+                    <btn type="outline" @btnClick="closeInvitePopup">취소</btn>
+                    <btn type="navi" @btnClick="closeInvitePopup">확인</btn>
                 </div>
             </div>
-            <v-snackbar v-model="isSnackbar"
-                        :absolute="true"
-                        :centered="true"
-                        :timeout="3000"
-                        :width="600"
-                        :height="50">
-                초대링크 복사가 완료되었습니다.
-            </v-snackbar>
         </modal>
     </transition>
     <!-- end: 공통 팝업 -->
+
+    <!-- start: W.4.5.6.3 (클래스 페이지-멤버 초대) 링크 복사 완료 토스트 팝업 -->
+    <v-snackbar v-model="isSnackbar"
+                :width="540"
+                :height="50"
+                :timeout="2000">
+        초대링크 복사가 완료되었습니다.
+    </v-snackbar>
+    <!-- end: W.4.5.6.3 (클래스 페이지-멤버 초대) 링크 복사 완료 토스트 팝업 -->
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.6.1 (멤버정보 - 상세) -->
     <transition name="modal">

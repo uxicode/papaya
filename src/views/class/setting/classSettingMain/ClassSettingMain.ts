@@ -28,7 +28,7 @@ export default class ClassSettingMain extends Vue{
     private classID!: number;
 
     @MyClass.Getter
-    private memberID!: number;
+    private myClassHomeModel!: IClassInfo;
 
     @MyClass.Getter
     private questionID!: number;
@@ -124,6 +124,10 @@ export default class ClassSettingMain extends Vue{
         return this.classInfo;
     }
 
+    get memberID(): any {
+        return this.myClassHomeModel;
+    }
+
     public created() {
         this.getClassMemberInfo();
         this.getClassInfo();
@@ -131,7 +135,7 @@ export default class ClassSettingMain extends Vue{
     }
 
     private getClassMemberInfo(): void {
-        this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.memberID})
+        this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.memberID.me.id})
           .then((data) => {
               console.log(`classId = ${this.classID}, memberId = ${this.memberID}`);
               this.classMemberInfo = data;
