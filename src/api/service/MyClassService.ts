@@ -208,6 +208,14 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/${classId}/posts`, payload );
     }
 
+    /**
+     * 클래스 교육과정
+     * @param classId
+     */
+    public  getMakeEducation(classId: number): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/curriculum` );
+    }
+
 
 }
 

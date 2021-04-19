@@ -17,7 +17,14 @@ interface ITimeModel{
     minute: string;
 }
 /*end: 추가 테스트*/
-
+interface IClassEdu{
+    listTit: string;
+    managerLevel: boolean;
+    classAdmin: string;
+    classCnt: string;
+    classCurrent: string;
+    isActive?: boolean;
+}
 
 @WithRender
 @Component({
@@ -44,14 +51,14 @@ export default class ClassEducation extends Vue {
     private classCardIndex: number = 0;
     private classCurrIndex: number = 0;
 
-    private classCurrList: object[] = [
+    private classCurrList: IClassEdu[] = [
         {
             listTit:'5학년 2학기 수학 교육과정',
             managerLevel: true,
             classAdmin:'김미영선생님',
-            classCnt:
-                '요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요.'+
-                '거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.',
+            classCnt: '요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요.'+
+                '거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 이럴 때일수록 한 마음을 모아서 꿈꾸는 5학년 1반 여러분과 함께  거기에 문장제 학습!스쿨수학에 서 ' +
+              '빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.',
             classCurrent:'총 5회차 수업 등록',
             isActive: false,
         },
@@ -390,10 +397,14 @@ export default class ClassEducation extends Vue {
 
 
 
+
     private currListNum: number = 0;
 
     private eduItems: Array< {title: string }>=[];
 
+    get classCurrListModel(): IClassEdu[]{
+        return this.classCurrList;
+    }
 
     get currListNumModel(): Array< {title: string }>{
         return this.eduItems;

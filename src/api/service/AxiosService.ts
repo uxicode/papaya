@@ -5,6 +5,8 @@ import {LOGOUT} from '@/store/mutation-auth-types';
 import {REMOVE_CLASS_DATA} from '@/store/mutation-class-types';
 
 axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
+
+//test userid - mobilej / pw - 0000
 /**
  * request interceptor
  */

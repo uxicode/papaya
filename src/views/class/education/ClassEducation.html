@@ -8,9 +8,9 @@
 
         <div class="curriculum-list clearfix">
             <div class="list-group">
-                <div v-for="(item, idx) in classCurrList" :key="idx" class="curr-item">
+                <div v-for="(item, index) in classCurrList" :key="index" class="curr-item">
                     <div class="fd-head">
-                        <p class="fd-tit">{{ item.listTit }}</p>
+                        <p class="fd-tit">{{ getMakeEducation.title }}</p>
                         <div class="fd-writer type2">
                             <p class="writer">
                                 <span class="name" :class="{crown: item.managerLevel}">{{ item.classAdmin }}</span>
@@ -19,7 +19,7 @@
                     </div>
                     <div class="fd-cnt">
                         <p class="fd-txt">
-                            <a href="#" @click="isClassCurrMore = true;classCard(idx)">
+                            <a href="#" @click="cardMore(index)">
                                 {{ item.classCnt }}
                             </a>
                         </p>
@@ -373,7 +373,7 @@
                         <div class="preview">
                             <div class="add-file">
 
-                                <div class="add-item-top">
+                                <div lass="add-item-top">
                                     <p class="add-item-tit">첨부 파일 3</p>
                                     <div class="add-item-btn">
                                         <a href="" class="txt-btn">전체삭제</a>
