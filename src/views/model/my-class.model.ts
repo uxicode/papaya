@@ -521,6 +521,7 @@ interface IMakeEducation {
     course_list: Array<{ index: number; title: string; startDay: Date; startTime: Date; endTime: Date; contents: string; }>;
     writer?: string;
     isChk?: boolean;
+    level?: number;
 }
 export {
     IMyClassList,

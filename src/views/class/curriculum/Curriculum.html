@@ -14,7 +14,7 @@
                         <p class="fd-tit">{{ item.title }}</p>
                         <div class="fd-writer type2">
                             <p class="writer">
-                                <span class="name">김미영선생님</span>
+                                <span class="name" :class="memberLevelIcon(item.level)">{{ item.writer }}</span>
                             </p>
                         </div>
                     </div>
@@ -24,7 +24,7 @@
                         </p>
                     </div>
                     <div class="fd-foot">
-                        <p class="en-count">총 {{item.course_list.length}}회차 수업 등록</p>
+                        <p class="en-count">총 {{ item.course_list.length }}회차 수업 등록</p>
                         <div class="fd-btn">
                             <div class="list-popup">
 
@@ -50,7 +50,10 @@
                                         <button type="button" class="list-popup-btn"
                                                 v-model="settingItemsModel[index].sItem"
                                                 v-bind="attrs"
-                                                v-on="on"><span>{{ getSelectedSettingMenuItem( index ) }}</span><img :src="require('@/assets/images/more.svg')" class="sm" alt=""></button>
+                                                v-on="on">
+                                            <!-- <span>{{ getSelectedSettingMenuItem( index ) }}</span> -->
+                                            <img :src="require('@/assets/images/more.svg')" class="sm" alt="">
+                                        </button>
                                     </template>
                                     <v-list>
                                         <v-list-item

@@ -38,12 +38,22 @@ export default class Curriculum extends Vue {
     private classCardIndex: number = 0;
     private classCurrIndex: number = 0;
 
-    private testEduSettingsModel: string = '반복없음';
-    private testEduSettingsItems: string[] = ['반복없음', '매일', '매주', '매월', '매년'];
-    private testEduSettingsCheck: boolean=false;
+    private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
 
-    get currentEduSettingsItems(): string[]{
-        return this.testEduSettingsItems;
+    /**
+     * 멤버 등급별 아이콘
+     * @param level
+     * @private
+     */
+    private memberLevelIcon(level: number): string {
+        switch (level) {
+            case 1:
+                return 'crown';
+            case 2:
+                return 'staff';
+            default:
+                return 'member';
+        }
     }
 
 
@@ -81,7 +91,9 @@ export default class Curriculum extends Vue {
                     contents: '수업내용 100자이내로 설명3-1.'
                 }
             ],
+            writer: '김미영선생님',
             isChk: false,
+            level: 1,
         },
         {
             title: '파파야 교육과정 제목2',
@@ -104,7 +116,9 @@ export default class Curriculum extends Vue {
                     contents: '수업내용 100자이내로 설명2-2.'
                 }
             ],
+            writer: '김경희선생님',
             isChk: false,
+            level: 2,
         },
         {
             title: '파파야 교육과정 제목3',
@@ -127,7 +141,9 @@ export default class Curriculum extends Vue {
                     contents: '수업내용 100자이내로 설명2-3.'
                 }
             ],
+            writer: '박수한선생님',
             isChk: false,
+            level: 2,
         },
     ];
 
@@ -160,23 +176,20 @@ export default class Curriculum extends Vue {
         this.settingItems[mIdx].sItem = item;
     }
 
-    public getSelectedSettingMenuItem( idx: number ): string{
-        return this.settingItems[idx].sItem;
-    }
+    // public getSelectedSettingMenuItem( idx: number ): string{
+    //     return this.settingItems[idx].sItem;
+    // }
 
     private mItemByMakeEduList(): any[] {
         return this.makeEducation.map( ( item: IMakeEducation ) => {
-            return { vo: this.testEduSettingsItems, sItem:'반복없음' };
+            return { vo: this.EduSettingsItems, /* sItem:'반복없음' */ };
         });
     }
-
-
 
     private setCurriNum( num: number ): void{
         this.currListNum=num;
         this.eduItems.length=num;
     }
-
 
     private moreMenuToggle(): void {
         this.isMoreMenu = !this.isMoreMenu;
