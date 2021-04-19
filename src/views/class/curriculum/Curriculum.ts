@@ -11,6 +11,14 @@ import WithRender from './Curriculum.html';
 const MyClass = namespace('MyClass');
 
 
+/*start: 추가 테스트*/
+interface ITimeModel{
+    apm: string;
+    hour: string;
+    minute: string;
+}
+/*end: 추가 테스트*/
+
 @WithRender
 @Component({
     components:{
@@ -39,11 +47,25 @@ export default class Curriculum extends Vue {
     private classCardIndex: number = 0;
     private classCurrIndex: number = 0;
 
-    private testEduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
+    private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
+
 
     /**
      * 클래스 교육과정 메인리스트
      */
+
+    /*start: 추가 테스트*/
+    //datepicker
+    private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
+    private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
+    private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
+    private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
+    private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
+    private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
+
+    /*end: 추가 테스트*/
+
+
      // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
     private makeEducation: IMakeEducation[]= [
         {
@@ -166,7 +188,7 @@ export default class Curriculum extends Vue {
 
     private mItemByMakeEduList(): any[] {
         return this.makeEducation.map( ( item: IMakeEducation ) => {
-            return { vo: this.testEduSettingsItems, sItem:'반복없음' };
+            return { vo: this.EduSettingsItems, sItem:'반복없음' };
         });
     }
 
