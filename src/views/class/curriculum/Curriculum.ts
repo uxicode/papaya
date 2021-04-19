@@ -35,6 +35,7 @@ export default class Curriculum extends Vue {
     private isClassCurrDetail: boolean = false;
     private isMoreMenu: boolean = false;
 
+
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
@@ -45,13 +46,7 @@ export default class Curriculum extends Vue {
     private classCardIndex: number = 0;
     private classCurrIndex: number = 0;
 
-    private testEduSettingsModel: string = '반복없음';
-    private testEduSettingsItems: string[] = ['반복없음', '매일', '매주', '매월', '매년'];
-    private testEduSettingsCheck: boolean=false;
-
-    get currentEduSettingsItems(): string[]{
-        return this.testEduSettingsItems;
-    }
+    private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
 
 
     /**
@@ -101,6 +96,8 @@ export default class Curriculum extends Vue {
                 }
             ],
             isChk: false,
+            writer: '김미영선생님',
+            level: 1,
         },
         {
             title: '파파야 교육과정 제목2',
@@ -124,6 +121,8 @@ export default class Curriculum extends Vue {
                 }
             ],
             isChk: false,
+            writer: '김경희선생님',
+            level: 2,
         },
         {
             title: '파파야 교육과정 제목3',
@@ -147,6 +146,8 @@ export default class Curriculum extends Vue {
                 }
             ],
             isChk: false,
+            writer: '박수한선생님',
+            level: 2,
         },
     ];
 
@@ -170,16 +171,6 @@ export default class Curriculum extends Vue {
         return this.eduItems;
     }
 
-    /*start: 추가 테스트*/
-    get currentStartTimeModel(): string{
-        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
-    }
-
-    get currentEndTimeModel(): string{
-        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
-    }
-    /*end: 추가 테스트*/
-
     public created(){
         this.settingItems=this.mItemByMakeEduList();
     }
@@ -189,13 +180,13 @@ export default class Curriculum extends Vue {
         this.settingItems[mIdx].sItem = item;
     }
 
-    public getSelectedSettingMenuItem( idx: number ): string{
-        return this.settingItems[idx].sItem;
-    }
+    // public getSelectedSettingMenuItem( idx: number ): string{
+    //     return this.settingItems[idx].sItem;
+    // }
 
     private mItemByMakeEduList(): any[] {
         return this.makeEducation.map( ( item: IMakeEducation ) => {
-            return { vo: this.testEduSettingsItems, sItem:'반복없음' };
+            return { vo: this.EduSettingsItems, sItem:'반복없음' };
         });
     }
 
@@ -245,6 +236,22 @@ export default class Curriculum extends Vue {
     private cardClickHandler( idx: number ) {
         this.isClassCurrMore = true;
         this.classCard(idx);
+    }
+
+    /**
+     * 멤버 등급별 아이콘
+     * @param level
+     * @private
+     */
+    private memberLevelIcon(level: number): string {
+        switch (level) {
+            case 1:
+                return 'manager';
+            case 2:
+                return 'staff';
+            default:
+                return 'member';
+        }
     }
 }
 
