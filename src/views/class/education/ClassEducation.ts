@@ -1,12 +1,12 @@
 import {Component, Vue} from 'vue-property-decorator';
-
+import {namespace} from 'vuex-class';
 import SideMenu from '@/components/sideMenu/sideMenu.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import {IClassInfo} from '@/views/model/my-class.model';
-import {namespace} from 'vuex-class';
 import {Utils} from '@/utils/utils';
 import WithRender from './ClassEducation.html';
+// import ImageSettingService from "@/views/service/profileImg/ImageSettingService";
 
 const MyClass = namespace('MyClass');
 
@@ -431,25 +431,10 @@ export default class ClassEducation extends Vue {
         this.classCurrIndex = num;
     }
 
-    private getProfileImg( imgUrl: string | null | undefined ): string{
-        const randomImgItems = [
-            'image-a.jpg',
-            'image-b.jpg',
-            'image-c.jpg',
-            'image-d.jpg',
-            'image-e.jpg'
-        ];
-        let img: string= '';
-        if( imgUrl === null || imgUrl === undefined){
-            img=randomImgItems[ Utils.getRandomNum(0, 5) ];
-        }else if( !isNaN( parseInt(imgUrl, 10) ) ){
-            img=randomImgItems[ parseInt(imgUrl, 10) ];
-        }else{
-            img=imgUrl;
-        }
+    // private getProfileImg(imgUrl: string | null | undefined ): string{
+    //     return ImageSettingService.getProfileImg( imgUrl );
+    // }
 
-        return ( imgUrl !== null && imgUrl !== undefined )? img : require( `@/assets/images/${img}` );
-    }
 
 
     /*start: 추가 테스트*/
