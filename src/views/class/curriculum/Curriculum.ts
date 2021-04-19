@@ -170,8 +170,6 @@ export default class Curriculum extends Vue {
         });
     }
 
-
-
     private setCurriNum( num: number ): void{
         this.currListNum=num;
         this.eduItems.length=num;

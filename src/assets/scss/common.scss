@@ -232,7 +232,7 @@ body {
   background-color: #f6f7fa;
 }
 
-
+.ft-bold {font-weight: bold;}
 .ct {text-align:center !important;}
 .lt {text-align:left !important;}
 .rt {text-align:right !important;}
@@ -528,6 +528,11 @@ body {
     @include pos-vertical($right:4px);
       }
     }
+
+.pos-right{
+  //$zIndex:null, $top:null, $left:null, $right:null, $bottom:null
+  @include pos-abs($top:0, $right:0);
+}
 
 @import "./transition";
 @import "./layout";

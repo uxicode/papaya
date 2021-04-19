@@ -10,9 +10,13 @@
     background-color:#1d1d4c;
   }
 }
+//현재 month 가 아닌 이전/다음 month 의 요일
 .theme--light.v-calendar-weekly .v-calendar-weekly__day.v-outside,
 .theme--light.v-calendar-weekly .v-calendar-weekly__head-weekday.v-outside{
-  background-color: #fff;
+  background-color: #f9f9f9;
+  .v-btn__content{
+    color:#9d9db2;
+  }
 }
 //달력 상단 요일
 .v-calendar-weekly__head-weekday{
@@ -45,4 +49,6 @@
   }
 }
 .form-item>p{margin-bottom:0;}
+//캘린더 헤더
+.v-calendar.v-calendar-events .v-calendar-weekly__head-weekday{margin-right:0;}
 

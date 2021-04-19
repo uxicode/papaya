@@ -1,4 +1,4 @@
-import {Vue, Component, Watch} from 'vue-property-decorator';
+import {Vue, Component } from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import TxtField from '@/components/form/txtField.vue';
@@ -6,7 +6,8 @@ import Btn from '@/components/button/Btn.vue';
 import WithRender from './ScheduleView.html';
 import {IClassInfo} from '@/views/model/my-class.model';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
-
+import getPrototypeOf = Reflect.getPrototypeOf;
+import {CalendarEvent} from 'vuetify';
 
 
 const MyClass = namespace('MyClass');
@@ -30,17 +31,29 @@ export default class ScheduleView extends Vue{
     private isTimeSelect: boolean=false;
 
     private type: string= 'month';
-    private types: string[] = ['month', 'week', 'day', '4day'];
-    private mode: string= 'stack';
-    private modes: string[] = ['stack', 'column'];
-    private weekday: number[] = [1, 2, 3, 4, 5, 6, 0];
-    private weekdays: Array<{text: string, value: number[] }>=[
+    private daysOfWeek: string[] = ['월', '화', '수', '목', '금', '토', '일'];
+    private weekdays: number[] = [1, 2, 3, 4, 5, 6, 0];
+/*    private weekdays: Array<{text: string, value: number[] }>=[
         { text: 'Sun - Sat', value: [0, 1, 2, 3, 4, 5, 6] },
         { text: 'Mon - Sun', value: [1, 2, 3, 4, 5, 6, 0] },
         { text: 'Mon - Fri', value: [1, 2, 3, 4, 5] },
         { text: 'Mon, Wed, Fri', value: [1, 3, 5] },
-    ];
-    private value: string= '';
+    ];*/
+
+    private selectedEvent ={};
+    private selectedElement: HTMLElement | null=null;
+    private selectedOpen: boolean= false;
+
+    private typeToLabel = {
+        'month': '월간',
+        'week': '주간',
+        'day': '일간',
+        '4day': '4일',
+        'custom-daily': '3일',
+    };
+
+
+    private calendarModel: string= '';
     private events: any[] = [];
     private colors: string[] = ['#3F51B5', '#00BCD4', '#673AB7', '#2196F3', '#4CAF50', '#FF9800', '#757575'];
     private names: string[] =  ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'];
@@ -70,17 +83,63 @@ export default class ScheduleView extends Vue{
     get currentStartTimeModel(): string{
         return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
     }
-
     get currentEndTimeModel(): string{
         return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
     }
 
-    public loopRangeCountClickHandler( value: string ){
-        this.loopRangeCount=value;
-        console.log(this.loopRangeCount);
+
+    public created(){
+        console.log(new Date().toISOString());
+    }
+    public mounted() {
+        // this.$refs.calendar.checkChange();
     }
 
-    public getEvents( time: { start: any, end: any } ) {
+
+    private loopRangeCountClickHandler( value: string ){
+        this.loopRangeCount=value;
+        // console.log(this.loopRangeCount);
+    }
+
+    private setToday() {
+        this.calendarModel = '';
+    }
+    private prev() {
+        // this.$refs.calendar.prev();
+    }
+    private next() {
+        // this.$refs.calendar.next();
+    }
+    private viewDay( data: { date: any }) {
+        this.calendarModel = data.date;
+        this.type = 'day';
+    }
+
+    //상단 월 달력 header 에 custom 요일 표시
+    private getDay( d: any ){
+        const dayIdx=( d.weekday - 1<0)? this.daysOfWeek.length-1 : d.weekday - 1;
+        return this.daysOfWeek[dayIdx];
+    }
+
+    private showEvent( eventObj: { nativeEvent: MouseEvent, event: CalendarEvent}) {
+        console.log( eventObj.event , eventObj.nativeEvent);
+        const open = () => {
+            this.selectedEvent = eventObj.event;
+            this.selectedElement = eventObj.nativeEvent.target as HTMLElement;
+            setTimeout(() => this.selectedOpen = true, 10);
+        };
+
+        if (this.selectedOpen) {
+            this.selectedOpen = false;
+            setTimeout( open, 10);
+        } else {
+            open();
+        }
+
+        eventObj.nativeEvent.stopPropagation();
+    }
+
+    private updateRange( time: { start: any, end: any } ) {
         const eventItems= [];
 
         const min = new Date(`${time.start.date}T00:00:00`);
@@ -106,20 +165,10 @@ export default class ScheduleView extends Vue{
 
         this.events = eventItems;
     }
-
-    public created(){
-        console.log(new Date().toISOString());
-    }
-
-    public getDay(date: any){
-        const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
-        // console.log(date.weekday);
-        return daysOfWeek[date.weekday];
-    }
-    public getEventColor(event: any) {
+    private getEventColor(event: any) {
         return event.color;
     }
-    public rnd(a: any, b: any): number {
+    private rnd(a: any, b: any): number {
         return Math.floor((b - a + 1) * Math.random()) + a;
     }
 
