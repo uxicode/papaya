@@ -10,7 +10,6 @@ import WithRender from './Curriculum.html';
 
 const MyClass = namespace('MyClass');
 
-
 /*start: 추가 테스트*/
 interface ITimeModel{
     apm: string;
@@ -67,7 +66,6 @@ export default class Curriculum extends Vue {
     private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
     private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
     private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-
     /*end: 추가 테스트*/
 
 
