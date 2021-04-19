@@ -1551,7 +1551,8 @@
       color:#848499;
 
       .curr-num {
-        margin-right:40px;
+        display:inline-block;
+        min-width:70px;
       }
     }
     .form-box {
