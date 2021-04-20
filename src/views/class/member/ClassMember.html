@@ -1,6 +1,6 @@
 <section class="contents-right">
     <div class="cnt-top">
-        <h2 class="cnt-tit">멤버 <strong>{{ totalMemberNum }}</strong></h2>
+        <h2 class="cnt-tit">멤버 <strong>{{ classMembers.length }}</strong></h2>
         <div class="cnt-top-btn">
             <button type="button" class="btn ico-btn ico-left navi sm" @click="isInvitePopup = true">
                 <img :src="require('@/assets/images/icn-18-add-white.svg')" class="icon" alt="">멤버 초대하기
@@ -12,7 +12,7 @@
         <input type="text" class="mb-search-bar"
                id="searchMember"
                placeholder="멤버를 검색해 주세요."
-               v-model="searchValue">
+               v-model="searchValue.searchWord">
         <button type="button" class="btn only-ico-btn"><img :src="require('@/assets/images/search.svg')" alt=""></button>
         <!-- start: 로딩 바 -->
         <div class="lds-roller" v-show="loadingModel"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>

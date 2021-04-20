@@ -124,7 +124,7 @@ export default class ClassSettingMain extends Vue{
         return this.classInfo;
     }
 
-    get memberID(): any {
+    get myClassInfo(): any {
         return this.myClassHomeModel;
     }
 
@@ -135,9 +135,9 @@ export default class ClassSettingMain extends Vue{
     }
 
     private getClassMemberInfo(): void {
-        this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.memberID.me.id})
+        this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.myClassInfo.me.id})
           .then((data) => {
-              console.log(`classId = ${this.classID}, memberId = ${this.memberID}`);
+              console.log(`classId = ${this.classID}, memberId = ${this.myClassInfo.me.id}`);
               this.classMemberInfo = data;
           });
     }
@@ -197,7 +197,7 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private pushToggle(): void {
-        MyClassService.setClassMemberInfo(this.classID, this.memberID, {onoff_push_noti: !this.onOffNoti})
+        MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {onoff_push_noti: !this.onOffNoti})
           .then(() => {
               console.log(`푸시 알림 : ${!this.onOffNoti}`);
           });
@@ -298,7 +298,7 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private withdrawSubmit(): void {
-        MyClassService.withdrawClass(this.classID, this.memberID)
+        MyClassService.withdrawClass(this.classID, this.myClassInfo.me.id)
           .then(() => {
              console.log('클래스 탈퇴 완료');
           });
