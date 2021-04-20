@@ -35,7 +35,7 @@ export default class ClassMember extends Vue{
         return this.isLoading;
     }
 
-    get searchResults(): object {
+    get searchResults() {
         return this.searchResultItems;
     }
 

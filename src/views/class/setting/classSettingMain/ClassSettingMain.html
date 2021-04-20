@@ -1,101 +1,99 @@
 <section class="contents-right">
-    <div class="classes-member">
-        <div class="cnt-top">
-            <h2 class="cnt-tit">클래스 설정</h2>
+    <div class="cnt-top">
+        <h2 class="cnt-tit">클래스 설정</h2>
+    </div>
+
+    <div class="classes-member-list">
+        <div class="list-group">
+            <p class="list-tit">사용 중인 프로필</p>
+            <ul class="member-list">
+                <li class="list-item">
+                    <div class="member-info admin"
+                         :class=memberLevelIcon(memberInfo.level)>
+                        <p class="name">{{ memberInfo.nickname }}</p>
+                        <span class="position">{{ memberLevelTxt(memberInfo.level) }}</span>
+                    </div>
+                    <div class="member-info-btn">
+                        <button type="button" class="btn only-ico-btn" @click="gotoLink('classProfile')"><img :src="require('@/assets/images/settings.svg')" alt=""></button>
+                    </div>
+                </li>
+            </ul>
         </div>
 
-        <div class="classes-member-list">
-            <div class="list-group">
-                <p class="list-tit">사용 중인 프로필</p>
-                <ul class="member-list">
-                    <li class="list-item">
-                        <div class="member-info admin"
-                             :class=memberLevelIcon(memberInfo.level)>
-                            <p class="name">{{ memberInfo.nickname }}</p>
-                            <span class="position">{{ memberLevelTxt(memberInfo.level) }}</span>
+        <div class="list-group">
+            <p class="list-tit">클래스 알림 설정</p>
+            <ul class="setting-list">
+                <li class="list-item">
+                    <p class="list-tit">푸시 알림 설정</p>
+                    <div class="setting-btn">
+                        <div class="form-switcher">
+                            <input type="checkbox"
+                                   id="onoff_push_noti"
+                                   v-model="memberInfo.onoff_push_noti"
+                                   @change="pushToggle">
+                            <label for="onoff_push_noti"></label>
                         </div>
+                    </div>
+                </li>
+                <!-- sub-list-item 에 클래스명 disabled추가 시 비활성화 -->
+                <li v-for="(item, idx) in classNotifyList"
+                    :key="idx"
+                    class="list-item sub-list-item"
+                    :class="{'disabled': memberInfo.onoff_push_noti === 0}">
+                    <p class="list-tit">{{ item.listTit }}</p>
+                    <div class="setting-btn">
                         <div class="member-info-btn">
-                            <button type="button" class="btn only-ico-btn" @click="gotoLink('classProfile')"><img :src="require('@/assets/images/settings.svg')" alt=""></button>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="list-group">
-                <p class="list-tit">클래스 알림 설정</p>
-                <ul class="setting-list">
-                    <li class="list-item">
-                        <p class="list-tit">푸시 알림 설정</p>
-                        <div class="setting-btn">
-                            <div class="form-switcher">
-                                <input type="checkbox"
-                                       id="onoff_push_noti"
-                                       v-model="memberInfo.onoff_push_noti"
-                                       @change="pushToggle">
-                                <label for="onoff_push_noti"></label>
-                            </div>
-                        </div>
-                    </li>
-                    <!-- sub-list-item 에 클래스명 disabled추가 시 비활성화 -->
-                    <li v-for="(item, idx) in classNotifyList"
-                        :key="idx"
-                        class="list-item sub-list-item"
-                        :class="{'disabled': memberInfo.onoff_push_noti === 0}">
-                        <p class="list-tit">{{ item.listTit }}</p>
-                        <div class="setting-btn">
-                            <div class="member-info-btn">
-                                <div class="list-popup">
-                                    <button type="button" class="list-popup-btn" @click="item.isActive = !item.isActive"><span>받지 않기</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
-                                    <div class="list-popup-menu pos-right" :class="{'active': item.isActive}" style="transform:translate3d(87px, 0, 0);">
-                                        <button class="list-popup-item" value="1" @click>받기</button>
-                                        <button class="list-popup-item" value="0" @click>받지 않기</button>
-                                    </div>
+                            <div class="list-popup">
+                                <button type="button" class="list-popup-btn" @click="item.isActive = !item.isActive"><span>받지 않기</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                <div class="list-popup-menu pos-right" :class="{'active': item.isActive}" style="transform:translate3d(87px, 0, 0);">
+                                    <button class="list-popup-item" value="1" @click>받기</button>
+                                    <button class="list-popup-item" value="0" @click>받지 않기</button>
                                 </div>
                             </div>
                         </div>
-                    </li>
-                </ul>
-            </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
 
-            <div class="list-group">
-                <p class="list-tit">클래스 관리</p>
-                <ul class="setting-list">
-                    <li v-for="(item, idx) in classManageList"
-                        :key="idx"
-                        class="list-item">
-                        <a href=""  class="list-tit">{{ item.title }}</a>
-                        <button class="setting-btn"
-                                @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
-                            <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                    </li>
-                </ul>
-            </div>
+        <div class="list-group">
+            <p class="list-tit">클래스 관리</p>
+            <ul class="setting-list">
+                <li v-for="(item, idx) in classManageList"
+                    :key="idx"
+                    class="list-item">
+                    <a href=""  class="list-tit">{{ item.title }}</a>
+                    <button class="setting-btn"
+                            @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
+                        <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
+                </li>
+            </ul>
+        </div>
 
-            <div class="list-group">
-                <p class="list-tit">멤버 관리</p>
-                <ul class="setting-list">
-                    <li v-for="(item, idx) in memberManageList"
-                        :key="idx"
-                        class="list-item">
-                        <a href=""  class="list-tit">{{ item.title }}</a>
-                        <button class="setting-btn" @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
-                            <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                    </li>
-                </ul>
-            </div>
+        <div class="list-group">
+            <p class="list-tit">멤버 관리</p>
+            <ul class="setting-list">
+                <li v-for="(item, idx) in memberManageList"
+                    :key="idx"
+                    class="list-item">
+                    <a href=""  class="list-tit">{{ item.title }}</a>
+                    <button class="setting-btn" @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
+                        <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
+                </li>
+            </ul>
+        </div>
 
-            <div class="list-group">
-                <p class="list-tit">기타</p>
-                <ul class="setting-list">
-                    <li v-for="(item, idx) in etcList"
-                        :key="idx"
-                        class="list-item">
-                        <a href=""  class="list-tit">{{ item.title }}</a>
-                        <button class="setting-btn" @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
-                            <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                    </li>
-                </ul>
-            </div>
+        <div class="list-group">
+            <p class="list-tit">기타</p>
+            <ul class="setting-list">
+                <li v-for="(item, idx) in etcList"
+                    :key="idx"
+                    class="list-item">
+                    <a href=""  class="list-tit">{{ item.title }}</a>
+                    <button class="setting-btn" @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
+                        <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
+                </li>
+            </ul>
         </div>
     </div>
 
