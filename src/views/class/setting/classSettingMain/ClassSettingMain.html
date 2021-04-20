@@ -101,7 +101,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.5 (클래스 가입 안내 문구 설정) -->
     <transition name="modal">
-        <modal v-if="isGuideTxt" size="600px" body-padding="0">
+        <modal v-if="isGuideTxt" size="600px" body-padding="0" @modalClose="isGuideTxt=false;">
             <div slot="header">
                 <p class="popup-header-tit">가입 안내 문구 설정</p>
                 <div class="popup-close">
@@ -135,7 +135,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.6 ~ W.4.5.7.6.1 (클래스 가입 질문 설정) -->
     <transition name="modal">
-        <modal v-if="isJoinQnaSetting" size="600px" body-padding="0">
+        <modal v-if="isJoinQnaSetting" size="600px" body-padding="0" @modalClose="isJoinQnaSetting=false;">
             <div slot="header">
                 <p class="popup-header-tit">가입 질문 설정</p>
                 <div class="popup-close">
@@ -202,7 +202,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.11.1 (클래스 탈퇴하기) -->
     <transition name="modal">
-        <modal v-if="isWithdraw" size="540px" body-padding="0">
+        <modal v-if="isWithdraw" size="540px" body-padding="0" @modalClose="isWithdraw=false;">
             <div slot="header">
                 <!-- header custom coding-->
                 <div class="popup-icon withdraw"></div>
