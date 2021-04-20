@@ -215,8 +215,6 @@ class MyClassService {
     public  getMakeEducation(classId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum` );
     }
-
-
 }
 
 export default new MyClassService();

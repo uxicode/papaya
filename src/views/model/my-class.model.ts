@@ -538,5 +538,5 @@ export {
     IClassMemberList,
     IQuestionList,
     IClassMembers,
-    IMakeEducation
+    IMakeEducation,
 };

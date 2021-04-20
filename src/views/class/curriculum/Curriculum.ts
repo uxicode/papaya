@@ -43,7 +43,7 @@ export default class Curriculum extends Vue {
     private classCurrIndex: number = 0;
 
     private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
-
+    private EduSettingsModel: string = '교육과정 수정';
 
     /**
      * 클래스 교육과정 메인리스트
@@ -154,6 +154,9 @@ export default class Curriculum extends Vue {
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
+    get currentSettingItems(): string[]{
+        return this.EduSettingsItems;
+    }
 
     get currentStartTimeModel(): string{
         return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
@@ -240,6 +243,11 @@ export default class Curriculum extends Vue {
     private cardClickHandler( idx: number ) {
         this.isClassCurrMore = true;
         this.classCard(idx);
+    }
+
+    private curriculumClickHandler( idx: number ) {
+        this.isClassCurr = true;
+        this.countNum(idx);
     }
 
     /**
