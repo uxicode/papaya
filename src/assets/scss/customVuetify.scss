@@ -50,11 +50,12 @@
 
 
 /*curriculum, schedule layout 수정*/
-.v-application {display: block;}
-.v-application a {color: #57576d !important;}
-.v-application p {margin-bottom: 0;}
+//.v-application a {color: #57576d !important;}
+//.v-application p {margin-bottom: 0;}
+//.v-application--wrap { display: block;}
+
 .v-application--wrap {
-  position: relative;
-  display: block;
-  min-height: 0;
+  .spacing-playground a {color: #57576d !important;}
+  .spacing-playground p {margin-bottom: 0;}
 }
+
