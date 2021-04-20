@@ -50,12 +50,8 @@
 
 
 /*curriculum, schedule layout 수정*/
-//.v-application a {color: #57576d !important;}
-//.v-application p {margin-bottom: 0;}
-//.v-application--wrap { display: block;}
 
-.v-application--wrap {
-  .spacing-playground a {color: #57576d !important;}
-  .spacing-playground p {margin-bottom: 0;}
+.v-application--wrap{
+  .curriculum-wrap a {color: #57576d !important;}
+  .curriculum-wrap p {margin-bottom: 0;}
 }
-
