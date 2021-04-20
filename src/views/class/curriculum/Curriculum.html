@@ -1,14 +1,14 @@
 <v-app>
     <section class="contents-right">
 
-    <div class="classes-curriculum">
+    <div class="mgt-10">
         <div class="cnt-top">
             <h2 class="cnt-tit">교육과정</h2>
         </div>
 
       <v-app style="background-color:transparent">
         <div class="curriculum-list clearfix">
-            <div class="list-group">
+            <div class="curr-list-group">
                 <div v-for="(item, index) in makeEducationList" :key="index" class="curr-item">
                     <div class="fd-head">
                         <p class="fd-tit">{{ item.title }}</p>
@@ -29,11 +29,8 @@
                             <div class="list-popup">
 
                                 <!--<div class="list-popup-menu pos-right" style="transform:translate3d(87px, 0, 0)">
-                                  <a href="" class="list-popup-item">반복 없음</a>
-                                  <a href="" class="list-popup-item">매일</a>
-                                  <a href="" class="list-popup-item">매주</a>
-                                  <a href="" class="list-popup-item">매월</a>
-                                  <a href="" class="list-popup-item">매년</a>
+                                  <a href="" class="list-popup-item">교육과정 수정</a>
+                                  <a href="" class="list-popup-item">교육과정 삭제</a>
                                 </div>-->
 
                               <!--  v-model 를 수정함 카트 v-model="item.isChk"  -->
@@ -130,12 +127,34 @@
                                     </p>
                                     <div class="form-box">
                                         <div class="list-popup">
-                                            <button type="button" class="list-popup-btn" @click="moreMenuToggle()"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                            <!-- 더보기 -->
-                                            <div class="list-popup-menu pos-right" :class="{'active': isMoreMenu}" style="transform:translate3d(35px, 0, 0);">
-                                                <button class="list-popup-item" value="0" >교육과정 수정</button>
-                                                <button class="list-popup-item active" value="1" >교육과정 삭제</button>
-                                            </div>
+<!--                                            <button type="button" class="list-popup-btn" @click="moreMenuToggle()"><img :src="require('@/assets/images/more.svg')" alt=""></button>-->
+<!--                                            &lt;!&ndash; 더보기 &ndash;&gt;-->
+<!--                                            <div class="list-popup-menu pos-right" :class="{'active': isMoreMenu}" style="transform:translate3d(35px, 0, 0);">-->
+<!--                                                <button class="list-popup-item" value="0" >교육과정 수정</button>-->
+<!--                                                <button class="list-popup-item active" value="1" >교육과정 삭제</button>-->
+<!--                                            </div>-->
+
+                                            <v-menu
+                                                    nudge-left="30px"
+                                                    origin="center top"
+                                                    v-model="currListNumModel[index]"
+                                                    transition="scale-transition"
+                                                    content-class="time-select-menu bg-white"
+                                                    offset-y offset-x>
+                                                <template v-slot:activator="{ on, attrs }">
+                                                    <button type="button" class="list-popup-btn"
+                                                            v-bind="attrs"
+                                                            v-on="on"><img :src="require('@/assets/images/more.svg')" class="sm" alt=""></button>
+                                                </template>
+                                                <v-list>
+                                                    <v-list-item
+                                                            v-for="(item, index) in currentSettingItems"
+                                                            :key="index"
+                                                            @click="EduSettingsModel=item">
+                                                        <v-list-item-title>{{ item }}</v-list-item-title>
+                                                    </v-list-item>
+                                                </v-list>
+                                            </v-menu>
                                         </div>
                                     </div>
                                 </div>
@@ -421,12 +440,32 @@
 
                 <div class="popup-btn">
                     <div class="list-popup mgl-20">
-                        <button type="button" class="list-popup-btn" @click="moreMenuToggle()"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                        <!-- 더보기 -->
-                        <div class="list-popup-menu pos-right" :class="{'active': isMoreMenu}" style="transform:translate3d(35px, 0, 0);">
-                            <button class="list-popup-item" value="0" @click>교육과정 수정</button>
-                            <button class="list-popup-item active" value="1" @click>교육과정 삭제</button>
-                        </div>
+<!--                        <button type="button" class="list-popup-btn" @click="moreMenuToggle()"><img :src="require('@/assets/images/more.svg')" alt=""></button>-->
+<!--                        &lt;!&ndash; 더보기 &ndash;&gt;-->
+<!--                        <div class="list-popup-menu pos-right" :class="{'active': isMoreMenu}" style="transform:translate3d(35px, 0, 0);">-->
+<!--                            <button class="list-popup-item" value="0" @click>교육과정 수정</button>-->
+<!--                            <button class="list-popup-item active" value="1" @click>교육과정 삭제</button>-->
+<!--                        </div>-->
+                        <v-menu
+                                nudge-left="30px"
+                                origin="center top"
+                                transition="scale-transition"
+                                content-class="time-select-menu bg-white"
+                                offset-y offset-x>
+                            <template v-slot:activator="{ on, attrs }">
+                                <button type="button" class="list-popup-btn"
+                                        v-bind="attrs"
+                                        v-on="on"><img :src="require('@/assets/images/more.svg')" class="sm" alt=""></button>
+                            </template>
+                            <v-list>
+                                <v-list-item
+                                        v-for="(item, index) in currentSettingItems"
+                                        :key="index"
+                                        @click="EduSettingsModel=item">
+                                    <v-list-item-title>{{ item }}</v-list-item-title>
+                                </v-list-item>
+                            </v-list>
+                        </v-menu>
                     </div>
                 </div>
             </div>
