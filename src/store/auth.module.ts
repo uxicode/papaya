@@ -98,7 +98,7 @@ export default class AuthModule extends VuexModule {
 
   @Mutation
   public [GET_TOKEN](token: string | null): void {
-    console.log('token=', this.token);
+    // console.log('token=', this.token);
     if (token !== null) {
       this.token = token;
       AuthService.setAuthToken(this.token);
@@ -128,6 +128,7 @@ export default class AuthModule extends VuexModule {
     delete localStorage.signupName;
   }
 
+  //localstorage 에 있는 token 값 존재 확인하여 데이터를
   @Action({rawError: true})
   public [SIGNIN_BY_TOKEN]( token: string ){
     this.context.commit(GET_TOKEN, token);
@@ -142,7 +143,6 @@ export default class AuthModule extends VuexModule {
 
   @Action({rawError: true})
   public [LOGIN_ACTION]( payload: { uid: string, password: string }): Promise<any> {
-    console.log(payload);
     return AuthService.login(payload.uid, payload.password)
       .then((data: any) => {
         // console.log(data);
@@ -237,7 +237,7 @@ export default class AuthModule extends VuexModule {
   }): Promise<any>{
     return UserService.signUp( payload )
       .then( (data: any)=>{
-        console.log('payload.fullname=', payload.fullname, data.user.fullname );
+        // console.log('payload.fullname=', payload.fullname, data.user.fullname );
         this.context.commit(SIGN_UP, payload.fullname );
         /*
         {

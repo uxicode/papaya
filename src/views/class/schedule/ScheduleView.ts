@@ -7,6 +7,7 @@ import WithRender from './ScheduleView.html';
 import {IClassInfo} from '@/views/model/my-class.model';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 import {CalendarEvent} from 'vuetify';
+import MyClassService from '@/api/service/MyClassService';
 
 
 const MyClass = namespace('MyClass');
@@ -26,6 +27,11 @@ interface ITimeModel{
     }
 })
 export default class ScheduleView extends Vue{
+
+    @MyClass.Getter
+    private classID!: string | number;
+
+
     private isPopup: boolean=false;
     private isTimeSelect: boolean=false;
 
@@ -87,8 +93,6 @@ export default class ScheduleView extends Vue{
     private loopRangeCheck: boolean=false;
     private loopRangeCount: number | string=10;
 
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
 
     get currentLoopRangeItems(): string[]{
         return this.loopRangeItems;
@@ -102,12 +106,22 @@ export default class ScheduleView extends Vue{
 
 
     public created(){
-        console.log(new Date().toISOString());
+        // console.log(new Date().toISOString());
+        this.getScheduleList();
     }
 
     public mounted() {
         //시작일과 종료일이 변경되었는지 확인합니다. 변경된 경우 변경 이벤트를 업데이트하고 내 보냅니다.
         ( this.$refs.calendar as CalendarEvent).checkChange();
+    }
+
+    private getScheduleList(): void{
+        if( this.classID === this.$route.params.classId ){
+            MyClassService.getAllScheduleByClassId( this.classID ).then((data)=>{
+                console.log( data );
+            });
+        }
+
     }
 
     private loopRangeCountClickHandler( value: string ){

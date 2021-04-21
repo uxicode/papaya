@@ -57,7 +57,12 @@
         <!--          @click:more="viewDay"
                 @click:date="viewDay"
                 @click:event="showEvent"
-                @click:more="viewMoreDay"-->
+                @click:more="viewMoreDay"
+                @mousedown:event="startDrag"
+                @mousedown:time="startTime"
+                @mousemove:time="mouseMove"
+                @mouseup:time="endDrag"
+                @mouseleave.native="cancelDrag" -->
         <v-calendar
                 ref="calendar"
                 v-model="calendarModel"
@@ -69,12 +74,7 @@
                 :weekday-format="getDay"
                 @change="updateRange"
                 :event-ripple="false"
-                @click:event="showEvent"
-                @mousedown:event="startDrag"
-                @mousedown:time="startTime"
-                @mousemove:time="mouseMove"
-                @mouseup:time="endDrag"
-                @mouseleave.native="cancelDrag">
+                >
           <template v-slot:event="{ event, timed, eventSummary }">
             <div class="v-event-draggable" v-html="eventSummary()"></div>
             <div v-if="timed" class="v-event-drag-bottom" @mousedown.stop="extendBottom(event)"></div>

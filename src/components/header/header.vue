@@ -42,6 +42,7 @@ import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 
 const Auth = namespace('Auth');
+const MyClass = namespace('MyClass');
 
 @Component
 export default class AppHeader extends Vue {
@@ -53,8 +54,13 @@ export default class AppHeader extends Vue {
   @Auth.Mutation
   private LOGOUT!: () => void;
 
+  @MyClass.Mutation
+  private REMOVE_CLASS_DATA!:()=>void;
+
+  
   private isLogout(): void {
     this.LOGOUT();
+    this.REMOVE_CLASS_DATA();
     this.$router.push('/login');
   }
 

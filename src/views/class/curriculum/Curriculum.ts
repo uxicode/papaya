@@ -28,8 +28,6 @@ export default class Curriculum extends Vue {
     private isClassCurrDetail: boolean = false;
     private isMoreMenu: boolean = false;
 
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
 
     @MyClass.Getter
     private classID!: number;
