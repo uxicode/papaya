@@ -33,7 +33,6 @@ export default class Curriculum extends Vue {
     private isClassCurr: boolean = false;
     private isClassCurrMore: boolean = false;
     private isClassCurrDetail: boolean = false;
-    private isMoreMenu: boolean = false;
 
     @MyClass.Getter
     private classID!: number;
@@ -174,6 +173,8 @@ export default class Curriculum extends Vue {
         return this.settingItems;
     }
 
+
+
     /**
      * 교육과정 리스트
      */
@@ -200,16 +201,9 @@ export default class Curriculum extends Vue {
         });
     }
 
-
-
     private setCurriNum( num: number ): void{
         this.currListNum=num;
         this.eduItems.length=num;
-    }
-
-
-    private moreMenuToggle(): void {
-        this.isMoreMenu = !this.isMoreMenu;
     }
 
     private countNum(num: number): void{
