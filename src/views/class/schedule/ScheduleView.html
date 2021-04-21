@@ -54,7 +54,8 @@
 
       <!-- start: 캘린더 -->
       <v-sheet height="674">
-
+        <!--          @click:more="viewDay"
+                @click:date="viewDay" -->
         <v-calendar
                 ref="calendar"
                 v-model="calendarModel"
@@ -65,10 +66,28 @@
                 :weekdays="weekdays"
                 :weekday-format="getDay"
                 @click:event="showEvent"
-                @click:more="viewDay"
-                @click:date="viewDay"
-                @change="updateRange"></v-calendar>
+                @click:more="viewMoreDay"
+                @change="updateRange"
+                :event-ripple="false"
+                @mousedown:event="startDrag"
+                @mousedown:time="startTime"
+                @mousemove:time="mouseMove"
+                @mouseup:time="endDrag"
+                @mouseleave.native="cancelDrag">
+          <template #event="{ event, timed, eventSummary }">
+            <div
+                    class="v-event-draggable"
+                    v-html="eventSummary()"
+            ></div>
+            <div
+                    v-if="timed"
+                    class="v-event-drag-bottom"
+                    @mousedown.stop="extendBottom(event)"
+            ></div>
+          </template>
+        </v-calendar>
 
+        <!-- start: 상세내역 팝업 -->
         <v-menu
                 v-model="selectedOpen"
                 :close-on-content-click="false"
@@ -88,6 +107,8 @@
             </v-card-actions>
           </v-card>
         </v-menu>
+        <!-- end: 상세내역 팝업 -->
+
       </v-sheet>
       <!-- end: 캘린더 -->
 
