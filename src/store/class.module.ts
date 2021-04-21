@@ -45,7 +45,7 @@ export default class ClassModule extends VuexModule {
     private count: number = 0;
     private classId: number = 0;
     private sideMenuNum: number=0;
-    private memberId: number = 0;
+    private memberId: string | number = 0;
     private questionId: string | number = 0;
     private myClassHomeData: IClassInfo={
         contents_updatedAt:new Date(),
@@ -121,10 +121,6 @@ export default class ClassModule extends VuexModule {
         return (!this.myClassHomeData)? this.myClassHomeData : JSON.parse( localStorage.getItem('homeData') as string );
     }
 
-    get memberID(): string | null | number{
-        return (  localStorage.getItem('memberId') !==null )? localStorage.getItem('memberId') : this.memberId;
-    }
-
     get questionID(): string | null | number{
         return (  localStorage.getItem('questionId') !==null )? localStorage.getItem('questionId') : this.questionId;
     }
@@ -165,9 +161,8 @@ export default class ClassModule extends VuexModule {
     }
 
     @Mutation
-    public [SET_MEMBER_ID](): void {
-        this.memberId = (this.myClassHomeData.me as any).id;
-        localStorage.setItem('memberId', String(this.memberId) );
+    public [SET_MEMBER_ID](memberId: number): void {
+        this.memberId = memberId;
     }
 
     @Mutation
@@ -257,7 +252,6 @@ export default class ClassModule extends VuexModule {
 
     @Action({rawError: true})
     public [CLASS_MEMBER_INFO_ACTION](payload: { classId: number, memberId: number }): Promise<IClassMemberInfo[]>{
-        payload.memberId = (this.myClassHomeData.me as any).id;
 
         return MyClassService.getClassMemberInfo(payload.classId, payload.memberId)
           .then((data) => {

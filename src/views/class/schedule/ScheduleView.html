@@ -1,47 +1,100 @@
 <v-app style="background-color: transparent">
-    <div>
-        <section class="contents-right" style="position:relative">
-      <div class="classes-feed home">
+  <div>
+    <section class="contents-right" style="position:relative">
+      <div class="cnt-top">
         <h2 class="cnt-tit">일정</h2>
-        <div class="top-notify">
+        <div class="pos-right">
+        <v-btn fab text small color="grey darken-2">
+          <v-icon>mdi-cog-outline</v-icon>
+        </v-btn>
         </div>
-          <v-sheet height="674">
-            <v-btn
-                    fab
-                    small
-                    absolute
-                    left
-                    color="primary"
-                    @click="$refs.calendar.prev()">
-              <v-icon dark>mdi-chevron-left</v-icon>
-            </v-btn>
-
-            <v-btn
-                    fab
-                    small
-                    absolute
-                    right
-                    color="primary"
-                    @click="$refs.calendar.next()">
-              <v-icon dark>mdi-chevron-right</v-icon>
-            </v-btn>
-
-            <v-calendar
-                    ref="calendar"
-                    v-model="value"
-                    :weekdays="weekday"
-                    :weekday-format="getDay"
-                    :type="type"
-                    :events="events"
-                    :event-overlap-mode="mode"
-                    :event-overlap-threshold="90"
-                    :event-color="getEventColor"
-                    @change="getEvents"></v-calendar>
-          </v-sheet>
       </div>
+      <!-- start: 상단 컨트롤러 -->
+      <v-sheet height="64">
+        <v-toolbar flat color="white">
+          <v-btn fab text x-small outlined color="grey darken-2" @click="prev">
+            <v-icon small>mdi-chevron-left</v-icon>
+          </v-btn>
+          <v-btn fab text x-small outlined color="grey darken-2" @click="next">
+            <v-icon small>mdi-chevron-right</v-icon>
+          </v-btn>
+          <v-toolbar-title v-if="$refs.calendar" class="ml-4 ft-bold">{{ $refs.calendar.title }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn rounded depressed class="mr-4" @click="setToday">오늘</v-btn>
+          <v-menu bottom right>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                      rounded
+                      outlined
+                      v-bind="attrs"
+                      v-on="on"
+                      min-width="100px">
+                <span>{{ typeToLabel[type] }}</span>
+                <v-icon right>mdi-menu-down</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item @click="type = 'day'">
+                <v-list-item-title>일간</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="type = 'week'">
+                <v-list-item-title>주</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="type = 'month'">
+                <v-list-item-title>월간</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="type = '4day'">
+                <v-list-item-title>4 days</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-toolbar>
+      </v-sheet>
+      <!-- end: 상단 컨트롤러 -->
+
+      <!-- start: 캘린더 -->
+      <v-sheet height="674">
+
+        <v-calendar
+                ref="calendar"
+                v-model="calendarModel"
+                color="primary"
+                :events="events"
+                :event-color="getEventColor"
+                :type="type"
+                :weekdays="weekdays"
+                :weekday-format="getDay"
+                @click:event="showEvent"
+                @click:more="viewDay"
+                @click:date="viewDay"
+                @change="updateRange"></v-calendar>
+
+        <v-menu
+                v-model="selectedOpen"
+                :close-on-content-click="false"
+                :activator="selectedElement"
+                offset-x>
+          <v-card color="grey lighten-4" min-width="350px" flat>
+            <v-toolbar :color="selectedEvent.color" dark>
+              <v-btn icon><v-icon>mdi-pencil</v-icon></v-btn>
+              <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn icon><v-icon>mdi-heart</v-icon></v-btn>
+              <v-btn icon><v-icon>mdi-dots-vertical</v-icon></v-btn>
+            </v-toolbar>
+            <v-card-text><span v-html="selectedEvent.details"></span></v-card-text>
+            <v-card-actions>
+              <v-btn text color="secondary" @click="selectedOpen = false">Cancel</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-menu>
+      </v-sheet>
+      <!-- end: 캘린더 -->
+
       <div class="add-schedule">
         <a href="" class="add-schedule-btn" @click.stop.prevent="addScheduleOpen"></a>
       </div>
+
       <!-- start: 공통 팝업 / 파일명 : W.4.5.3.3.4.2 (일정 만들기) (4.5.3.3.1 ~ 4.5.3.3.4.2)-->
       <transition name="modal">
         <modal v-if="isPopup" size="600px" body-padding="0" @modalClose="isPopup=false;menu1 = false">
@@ -49,7 +102,7 @@
             <!-- header custom coding-->
             <p class="popup-header-tit">새 일정 등록</p>
             <div class="popup-close" @click="closePopup">
-              <buttonmyClassHomeModel class="close"><img :src="require('@/assets/images/close.svg')" alt=""></buttonmyClassHomeModel>
+              <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
           </div>
           <div slot="body">
@@ -59,12 +112,12 @@
                 <div class="form-item post-classes selected"> <!-- class 선택 시 form-item에 selected 추가됨 -->
                   <p>
                     <span class="icon"><img :src="getProfileImg(myClassHomeModel.image_url)" class="icon-img" alt=""></span>
-                    <span class="gr-name">{{myClassHomeModel.g_name}}</span>
-                    <strong class="cls-name">{{myClassHomeModel.name}}</strong>
+                    <span class="gr-name">{{ myClassHomeModel.g_name }}</span>
+                    <strong class="cls-name">{{ myClassHomeModel.name }}</strong>
                   </p>
                 </div>
                 <div class="form-item">
-    <!--              <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">-->
+                  <!--              <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">-->
                   <txt-field add-class="popup-type" placeholder="제목을 20자 이내로 작성해 주세요."></txt-field>
                 </div>
               </div>
@@ -114,11 +167,11 @@
                           </v-text-field>
                         </template>
                         <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                        <v-date-picker v-model="startDatePickerModel" no-title  @input="startDateMenu = false"></v-date-picker>
+                        <v-date-picker v-model="startDatePickerModel" no-title @input="startDateMenu = false"></v-date-picker>
                       </v-menu>
                     </div>
 
-                    <div class="form-group time"  style="float:left;margin-left:0;">
+                    <div class="form-group time" style="float:left;margin-left:0;">
                       <v-menu
                               nudge-left="30px"
                               origin="center top"
@@ -141,17 +194,17 @@
                         <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
                         <v-select v-model="startTimeSelectModel.apm" :items="['오전', '오후'] " placeholder="오전" hide-details solo flat style="display:inline-block;width:70px;">
                           <template v-slot:selection="{item, index}">
-                            <span style="font-size:14px;">{{item}}</span>
+                            <span style="font-size:14px;">{{ item }}</span>
                           </template>
                         </v-select>
                         <v-select v-model="startTimeSelectModel.hour" :items="[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] " placeholder="12 시" hide-details solo flat style="display:inline-block;width:70px;">
                           <template v-slot:selection="{item, index}">
-                            <span style="font-size:14px;">{{item}}시</span>
+                            <span style="font-size:14px;">{{ item }}시</span>
                           </template>
                         </v-select>
                         <v-select v-model="startTimeSelectModel.minute" :items="[ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00'] " placeholder="00 분" hide-details solo flat style="display:inline-block;width:70px">
                           <template v-slot:selection="{item, index}">
-                            <span style="font-size:14px;">{{item}}분</span>
+                            <span style="font-size:14px;">{{ item }}분</span>
                           </template>
                         </v-select>
                       </v-menu>
@@ -196,11 +249,11 @@
                           </v-text-field>
                         </template>
                         <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                        <v-date-picker v-model="endDatePickerModel" no-title  @input="endDateMenu = false"></v-date-picker>
+                        <v-date-picker v-model="endDatePickerModel" no-title @input="endDateMenu = false"></v-date-picker>
                       </v-menu>
                     </div>
 
-                    <div class="form-group time"  style="float:left;margin-left:0;">
+                    <div class="form-group time" style="float:left;margin-left:0;">
                       <v-menu
                               nudge-left="30px"
                               origin="center top"
@@ -223,17 +276,17 @@
                         <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
                         <v-select v-model="endTimeSelectModel.apm" :items="['오전', '오후'] " placeholder="오전" hide-details solo flat style="display:inline-block;width:70px;">
                           <template v-slot:selection="{item, index}">
-                            <span style="font-size:14px;">{{item}}</span>
+                            <span style="font-size:14px;">{{ item }}</span>
                           </template>
                         </v-select>
                         <v-select v-model="endTimeSelectModel.hour" :items="[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] " placeholder="12 시" hide-details solo flat style="display:inline-block;width:70px;">
                           <template v-slot:selection="{item, index}">
-                            <span style="font-size:14px;">{{item}}시</span>
+                            <span style="font-size:14px;">{{ item }}시</span>
                           </template>
                         </v-select>
                         <v-select v-model="endTimeSelectModel.minute" :items="[ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00'] " placeholder="00 분" hide-details solo flat style="display:inline-block;width:70px">
                           <template v-slot:selection="{item, index}">
-                            <span style="font-size:14px;">{{item}}분</span>
+                            <span style="font-size:14px;">{{ item }}분</span>
                           </template>
                         </v-select>
                       </v-menu>
@@ -266,7 +319,10 @@
                           <button type="button" class="list-popup-btn"
                                   v-model="loopRangeModel"
                                   v-bind="attrs"
-                                  v-on="on"><span>{{ loopRangeModel }}</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                  v-on="on"><span>{{
+                              loopRangeModel
+                                                  }}</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
+                          </button>
                         </template>
                         <v-list>
                           <v-list-item
@@ -286,7 +342,7 @@
                   <p>반복 횟수</p>
                   <div class="form-box">
                     <div class="form-group">
-    <!--                  <input type="number" class="form-control" value="10">-->
+                      <!--                  <input type="number" class="form-control" value="10">-->
                       <txt-field input-type="number" v-model="loopRangeCount" @input="loopRangeCountClickHandler"></txt-field>
                     </div>
                   </div>
@@ -329,7 +385,8 @@
             <button type="button" class="btn only-ico-btn sm bookmark active"></button>
 
             <div class="list-popup mgl-20">
-              <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+              <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt="">
+              </button>
               <div class="list-popup-menu pos-right active" style="transform:translate3d(42px, 0,0);">
                 <a href="" class="list-popup-item">일정 수정</a>
                 <a href="" class="list-popup-item">일정 보관</a>
@@ -368,7 +425,8 @@
                   운동회는, 전교생이 청군과 백군으로 나눠 운동장에서 하루 동안 대결을 펼치는 운동회입니다. 달리기를 하면 1등에서 3등까지는 등수 별로 도장을 받았습니다.
                 </p>
                 <p class="fd-txt">
-                  손목위에 찍힌 도장을 확인하며, 학용품도 받았죠. 또한, 김밥과 치킨 등 부모님께서 준비한 도시락을 먹는 것도 운동회에 대한 추억입니다. 이번에는 운동회의 역사와 현재의 운동회를 알아보는 시간을 가져보겠습니다.
+                  손목위에 찍힌 도장을 확인하며, 학용품도 받았죠. 또한, 김밥과 치킨 등 부모님께서 준비한 도시락을 먹는 것도 운동회에 대한 추억입니다. 이번에는 운동회의 역사와 현재의 운동회를
+                  알아보는 시간을 가져보겠습니다.
                 </p>
 
                 <div class="fd-inner">
@@ -400,7 +458,8 @@
                   <div class="main-comment">
                     <p class="comment-writer">박정수 <span class="wr-time">15분 전</span></p>
                     <p class="comment-txt">
-                      댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
+                      댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
+                      댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
                     </p>
 
                     <div class="reply-state">
@@ -412,20 +471,23 @@
                   <div class="reply">
                     <p class="comment-writer">김동현 <span class="wr-time">15분 전</span></p>
                     <p class="comment-txt">
-                      댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
+                      댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
+                      댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
                     </p>
                   </div>
 
                   <div class="reply">
                     <p class="comment-writer">김동현 <span class="wr-time">15분 전</span></p>
                     <p class="comment-txt">
-                      댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
+                      댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
+                      댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
                     </p>
                   </div>
                 </div>
               </div>
               <div class="comment-btm">
-                <button type="button" class="btn only-ico-btn"><img :src="require('@/assets/images/image.svg')" alt=""></button>
+                <button type="button" class="btn only-ico-btn"><img :src="require('@/assets/images/image.svg')" alt="">
+                </button>
                 <input type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;">
                 <a href="" class="txt-btn disabled">등록</a>
               </div>
@@ -435,5 +497,5 @@
       </modal>
       <!-- end: 공통 팝업 -->
     </section>
-    </div>
+  </div>
 </v-app>
