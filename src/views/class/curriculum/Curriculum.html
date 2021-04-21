@@ -2,79 +2,79 @@
     <div class="curriculum-wrap">
         <section class="contents-right">
 
-    <div class="mgt-10">
-        <div class="cnt-top">
-            <h2 class="cnt-tit">교육과정</h2>
-        </div>
+        <div class="mgt-10">
+            <div class="cnt-top">
+                <h2 class="cnt-tit">교육과정</h2>
+            </div>
 
-      <v-app style="background-color:transparent">
-        <div class="curriculum-list clearfix">
-            <div class="curr-list-group">
-                <div v-for="(item, index) in makeEducationList" :key="index" class="curr-item">
-                    <div class="fd-head">
-                        <p class="fd-tit">{{ item.title }}</p>
-                        <div class="fd-writer type2">
-                            <p class="writer">
-                                <span class="name" :class="memberLevelIcon(item.level)">{{ item.writer }}</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="fd-cnt">
-                        <p class="fd-txt">
-                            <a href="#" @click.prevent="cardClickHandler( index )">요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요. 거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.</a>
-                        </p>
-                    </div>
-                    <div class="fd-foot">
-                        <p class="en-count">총 {{item.course_list.length}}회차 수업 등록</p>
-                        <div class="fd-btn">
-                            <div class="list-popup">
+            <v-app style="background-color:transparent">
+                <div class="curriculum-list clearfix">
+                    <div class="curr-list-group">
+                        <div v-for="(item, index) in makeEducationList" :key="index" class="curr-item">
+                            <div class="fd-head">
+                                <p class="fd-tit">{{ item.title }}</p>
+                                <div class="fd-writer type2">
+                                    <p class="writer">
+                                        <span class="name" :class="memberLevelIcon(item.level)">{{ item.writer }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="fd-cnt">
+                                <p class="fd-txt">
+                                    <a href="#" @click.prevent="cardClickHandler( index )">요즘 여러분 덕분에우리 단원평가 거뜬히 준비하고 있어요. 거기에 문장제 학습!스쿨수학에 서 빼놓을수 없는 부분인데요. 우리 한번 열심히 해보아요.</a>
+                                </p>
+                            </div>
+                            <div class="fd-foot">
+                                <p class="en-count">총 {{item.course_list.length}}회차 수업 등록</p>
+                                <div class="fd-btn">
+                                    <div class="list-popup">
 
-                                <!--<div class="list-popup-menu pos-right" style="transform:translate3d(87px, 0, 0)">
-                                  <a href="" class="list-popup-item">교육과정 수정</a>
-                                  <a href="" class="list-popup-item">교육과정 삭제</a>
-                                </div>-->
+                                        <!--<div class="list-popup-menu pos-right" style="transform:translate3d(87px, 0, 0)">
+                                          <a href="" class="list-popup-item">교육과정 수정</a>
+                                          <a href="" class="list-popup-item">교육과정 삭제</a>
+                                        </div>-->
 
-                              <!--  v-model 를 수정함 카트 v-model="item.isChk"  -->
-                                <v-menu
-                                        nudge-left="30px"
-                                        origin="center top"
-                                        v-model="item.isChk"
-                                        transition="scale-transition"
-                                        content-class="time-select-menu bg-white"
-                                        min-width="180px"
-                                        offset-y
-                                        offset-x>
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <button type="button" class="list-popup-btn"
-                                                v-model="settingItemsModel[index].sItem"
-                                                v-bind="attrs"
-                                                v-on="on">
-                                            <!--<span>{{ getSelectedSettingMenuItem( index ) }}</span>-->
-                                            <img :src="require('@/assets/images/more.svg')" class="sm" alt="">
-                                        </button>
-                                    </template>
-                                    <v-list>
-                                        <v-list-item
-                                                v-for="( mMenu, mIdx ) in settingItemsModel[index].vo"
-                                                :key="mIdx"
-                                                @click="settingMenuClickHandler( index, mMenu )">
-                                            <v-list-item-title>{{ mMenu }}</v-list-item-title>
-                                        </v-list-item>
-                                    </v-list>
-                                </v-menu>
+                                      <!--  v-model 를 수정함 카트 v-model="item.isChk"  -->
+                                        <v-menu
+                                                nudge-left="30px"
+                                                origin="center top"
+                                                v-model="item.isChk"
+                                                transition="scale-transition"
+                                                content-class="time-select-menu bg-white"
+                                                min-width="180px"
+                                                offset-y
+                                                offset-x>
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <button type="button" class="list-popup-btn"
+                                                        v-model="settingItemsModel[index].sItem"
+                                                        v-bind="attrs"
+                                                        v-on="on">
+                                                    <!--<span>{{ getSelectedSettingMenuItem( index ) }}</span>-->
+                                                    <img :src="require('@/assets/images/more.svg')" class="sm" alt="">
+                                                </button>
+                                            </template>
+                                            <v-list>
+                                                <v-list-item
+                                                        v-for="( mMenu, mIdx ) in settingItemsModel[index].vo"
+                                                        :key="mIdx"
+                                                        @click="settingMenuClickHandler( index, mMenu )">
+                                                    <v-list-item-title>{{ mMenu }}</v-list-item-title>
+                                                </v-list-item>
+                                            </v-list>
+                                        </v-menu>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-
+                    </div>
+                    <div class="curriculum-add">
+                        <button class="curriculum-add-btn" @click="isCreateClass = true"></button>
                     </div>
                 </div>
-            </div>
-            <div class="curriculum-add">
-                <button class="curriculum-add-btn" @click="isCreateClass = true"></button>
-            </div>
-        </div>
-      </v-app>
+              </v-app>
 
-    </div>
+        </div>
 
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.5.1 (교육과정 만들기) (4.5.5.1 ~ 4.5.5.1.1)-->
