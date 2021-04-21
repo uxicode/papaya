@@ -137,10 +137,23 @@ export default class ScheduleView extends Vue{
         return this.daysOfWeek[dayIdx];
     }
 
+    /**
+     * drag 시작
+     * @param dragObj
+     * @private
+     */
     private startDrag( dragObj: { event: any, timed: any }) {
         console.log(dragObj.event, dragObj.timed);
 
-        //event - this.createEvent
+        /*
+        dragObj.event=>
+           this.createEvent: {
+                name: string,
+                color: string,
+                start: number,
+                end: number,
+                timed: boolean
+            }*/
         if (dragObj.event && dragObj.timed) {
             this.dragEvent = dragObj.event;
             this.dragTime = null;
@@ -169,14 +182,31 @@ export default class ScheduleView extends Vue{
         }
     }
 
-    private extendBottom(event: any) {
-        // console.log( event )
+    private extendBottom(event: any ) {
+        console.log('extendBottom=', event );
         this.createEvent = event;
         this.createStart = event.start;
         this.extendOriginal = event.end;
     }
 
-    private mouseMove(tms: any) {
+    private mouseMove( tms: {
+        date: Date,
+        day: number,
+        future: boolean,
+        hasDay: boolean,
+        hasTime: boolean,
+        hour: number,
+        minute: number,
+        minutesToPixels: ()=>void,
+        month: number,
+        past: boolean
+        present: boolean
+        time: string,
+        timeDelta: ()=>void,
+        timeToY: ()=>void,
+        week: [],
+        weekday: number,
+        year: number } ) {
         /*
         tms-
         {
@@ -218,7 +248,10 @@ export default class ScheduleView extends Vue{
             this.createEvent.start = min;
             this.createEvent.end = max;
         }
+
+        // console.log(mouse);
     }
+
     private endDrag() {
         this.dragTime = null;
         this.dragEvent = null;
@@ -226,6 +259,7 @@ export default class ScheduleView extends Vue{
         this.createStart = null;
         this.extendOriginal = null;
     }
+    //캘린더 영역에서 완전히 벗어날 때
     private cancelDrag() {
         if (this.createEvent) {
             if (this.extendOriginal) {
@@ -242,6 +276,7 @@ export default class ScheduleView extends Vue{
         this.createStart = null;
         this.dragTime = null;
         this.dragEvent = null;
+
     }
     //time 은 timestamp 수치
     private getTimestamp( time: number, down: boolean = true): number{
@@ -251,7 +286,24 @@ export default class ScheduleView extends Vue{
         return down ? time - time%roundDownTime : time + (roundDownTime - (time % roundDownTime));
     }
     // timestamp 를 반환
-    private toTime( tms: any ): number{
+    private toTime( tms: {
+        date: Date,
+        day: number,
+        future: boolean,
+        hasDay: boolean,
+        hasTime: boolean,
+        hour: number,
+        minute: number,
+        minutesToPixels: ()=>void,
+        month: number,
+        past: boolean
+        present: boolean
+        time: string,
+        timeDelta: ()=>void,
+        timeToY: ()=>void,
+        week: [],
+        weekday: number,
+        year: number } ): number{
         // console.log('tms=', typeof tms);
         return new Date(tms.year, tms.month - 1, tms.day, tms.hour, tms.minute).getTime();
     }
@@ -266,22 +318,23 @@ export default class ScheduleView extends Vue{
     }
 
     //상세내역 팝업
-    private showEvent( eventObj: { nativeEvent: MouseEvent, event: CalendarEvent}) {
-        // console.log( eventObj.event , eventObj.nativeEvent);
-        const open = () => {
-            this.selectedEvent = eventObj.event;
-            this.selectedElement = eventObj.nativeEvent.target as HTMLElement;
-            setTimeout(() => this.selectedOpen = true, 10);
-        };
+    private showEvent( eventObj: { nativeEvent: MouseEvent, event: CalendarEvent} ) {
+        // console.log( eventObj.event );
+        if (this.type === 'month') {
+            const open = () => {
+                this.selectedEvent = eventObj.event;
+                this.selectedElement = eventObj.nativeEvent.target as HTMLElement;
+                setTimeout(() => this.selectedOpen = true, 10);
+            };
 
-        if (this.selectedOpen) {
-            this.selectedOpen = false;
-            setTimeout( open, 10);
-        } else {
-            open();
+            if (this.selectedOpen) {
+                this.selectedOpen = false;
+                setTimeout( open, 10);
+            } else {
+                open();
+            }
+            eventObj.nativeEvent.stopPropagation();
         }
-
-        eventObj.nativeEvent.stopPropagation();
     }
 
     private updateRange( time: { start: any, end: any } ) {

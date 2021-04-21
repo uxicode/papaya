@@ -55,7 +55,9 @@
       <!-- start: 캘린더 -->
       <v-sheet height="674">
         <!--          @click:more="viewDay"
-                @click:date="viewDay" -->
+                @click:date="viewDay"
+                @click:event="showEvent"
+                @click:more="viewMoreDay"-->
         <v-calendar
                 ref="calendar"
                 v-model="calendarModel"
@@ -65,25 +67,17 @@
                 :type="type"
                 :weekdays="weekdays"
                 :weekday-format="getDay"
-                @click:event="showEvent"
-                @click:more="viewMoreDay"
                 @change="updateRange"
                 :event-ripple="false"
+                @click:event="showEvent"
                 @mousedown:event="startDrag"
                 @mousedown:time="startTime"
                 @mousemove:time="mouseMove"
                 @mouseup:time="endDrag"
                 @mouseleave.native="cancelDrag">
-          <template #event="{ event, timed, eventSummary }">
-            <div
-                    class="v-event-draggable"
-                    v-html="eventSummary()"
-            ></div>
-            <div
-                    v-if="timed"
-                    class="v-event-drag-bottom"
-                    @mousedown.stop="extendBottom(event)"
-            ></div>
+          <template v-slot:event="{ event, timed, eventSummary }">
+            <div class="v-event-draggable" v-html="eventSummary()"></div>
+            <div v-if="timed" class="v-event-drag-bottom" @mousedown.stop="extendBottom(event)"></div>
           </template>
         </v-calendar>
 
