@@ -18,7 +18,10 @@
       <template v-if="isSchoolSelected(activeItem)">
         <div class="form-group inline">
           <label for="schoolName">학교 이름</label>
-          <txt-field id="schoolName" placeholder="학교를 검색해주세요." size="387" v-model="searchSchoolValue"></txt-field>
+          <txt-field id="schoolName" placeholder="학교를 검색해주세요." size="387"
+                     v-model="searchSchoolValue"
+                     @input="watchBySearchSchoolModel"
+                     :key-enter="schoolNameSearchKeyEnter"></txt-field>
           <btn type="grey" size="sm" @btnClick="openSchoolSearchPopup">검색</btn>
         </div>
       </template>
@@ -63,7 +66,7 @@
           <txt-field
                   id="searchSchool"
                   placeholder="학교 이름을 검색해주세요."
-                  size="370" v-model="searchSchoolValue">
+                  size="370" v-model="searchSchoolValue" @input="onSchSchoolValChangeHandler">
           </txt-field>
           <btn type="grey" size="sm" @btnClick="">검색</btn>
           <!-- start: 로딩 바 -->
@@ -74,7 +77,7 @@
       </div>
       <div class="search-result">
         <div class="search-result-cnt">
-          <template v-if="searchResults.length>1">
+          <template v-if="searchResults.length>0">
           <ul class="search-result-item">
               <li v-for="item in searchResults">
                 <a href="" class="result-link" @click.prevent.stop="applySearchResult( item.name )">
@@ -84,9 +87,10 @@
               </li>
           </ul>
           </template>
-          <template v-else-if="searchResultValue.length>0">
+          <template v-else>
             <div class="search-result">
-              <p class="search-none">‘<strong>{{searchResultValue}}</strong>’에 대한 검색 결과가 없습니다.</p>
+              <p class="search-none" v-if="searchResultValue.length===0">검색어를 입력해 주세요.</p>
+              <p class="search-none" v-else>‘<strong>{{searchResultValue}}</strong>’에 대한 검색 결과가 없습니다.</p>
             </div>
           </template>
         </div>

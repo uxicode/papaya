@@ -22,7 +22,7 @@
              :placeholder="placeholder"
              :value="inputData"
              @input="inputChange(  $event.target.value )"
-             @keyup="resultValidate( $event.target, passed )">
+             @keyup="resultValidate( $event.target, passed )" @keyup.enter="onKeyEnter">
       <template v-if="failed">
         <p class="form-message error">{{ errors[0] }}</p>
       </template>
@@ -46,6 +46,9 @@ export default class TxtField extends Vue{
 
   @Prop(String)
   private readonly validName: string | undefined;
+
+  @Prop(Function)
+  private keyEnter!: () => void | undefined | null;
 
   @Prop(String)
   private readonly addClass: string | undefined;
@@ -98,6 +101,13 @@ export default class TxtField extends Vue{
 
   get inputFieldType(): string {
     return this.inputType===undefined? 'text' : this.inputType;
+  }
+
+  public onKeyEnter() {
+    // this.keyEnter.call(this);
+    if( this.keyEnter ){
+      this.keyEnter();
+    }
   }
 
   public errorClassCheck(value: unknown): string {

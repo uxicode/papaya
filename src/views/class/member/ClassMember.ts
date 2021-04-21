@@ -82,6 +82,7 @@ export default class ClassMember extends Vue{
                 (item: IClassMembers) => item.level === 2);
               this.memberList = data.classinfo.class_members.filter(
                 (item: IClassMembers) => item.level === 3);
+
               this.totalMemberNum = data.classinfo.class_members.length;
               this.classMembers = data.classinfo.class_members;
               console.log(this.classMembers);
@@ -176,7 +177,7 @@ export default class ClassMember extends Vue{
             const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, MyClassService.searchMembers, this.isLoading );
             userInter$.subscribe({
                 next:( searchData: any ) =>{
-                    // console.log(searchData);
+                    console.log(searchData);
                     /*
                       message: "리스트 ....."
                       result_count: 2

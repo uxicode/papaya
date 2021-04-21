@@ -85,6 +85,8 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private getClassMemberInfo(): void {
+        console.log(`classId = ${this.classID}, memberId = ${this.memberID}`);
+
         this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.memberID})
           .then((data) => {
               console.log(`classId = ${this.classID}, memberId = ${this.memberID}`);
