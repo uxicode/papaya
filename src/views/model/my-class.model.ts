@@ -553,7 +553,7 @@ interface IMakeEducation {
         updatedAt: Date;
         id: number;
         class_id: number;
-        board_id: null,
+        board_id: null | number;
         post_type: number;
         type: number;
         user_id: number;
@@ -599,7 +599,7 @@ interface IMakeEducation {
             startTime: Date;
             endTime: Date;
             deletedYN: boolean;
-            attachment: [];
+            attachment: []
         }>;
     };
     course_list: Array<{

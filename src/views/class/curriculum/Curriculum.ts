@@ -109,7 +109,6 @@ export default class Curriculum extends Vue {
 
     public created(){
         this.settingItems=this.mItemByMakeEduList();
-        this.getMakeEducation();
         this.getEduList();
     }
 
@@ -150,17 +149,8 @@ export default class Curriculum extends Vue {
     /**
      * 클래스 교육과정 생성
      */
-    get addEducation(): IMakeEducation[] {
-        return this.makeEducation;
-    }
 
-    private getMakeEducation(): void {
-        MyClassService.getMakeEducation(this.classID)
-            .then((data) => {
-                this.makeEducation = data.makeEducation;
-                console.log(this.makeEducation);
-            });
-    }
+
 
     /**
      * 클래스 교육과정 전체 조회

@@ -222,15 +222,7 @@ class MyClassService {
     }
 
     /**
-     * 클래스 교육과정 생성
-     * @param classId
-     */
-    public getMakeEducation(classId: number, payload: {title: string, text: string}): Promise<any>{
-        return request('post', `${CLASS_BASE_URL}/${classId}/curriculum`, payload );
-    }
-
-    /**
-     * 클래스 교육과정 전체 조회
+     * 클래스 교육과정
      * @param classId
      */
     public getEducationList(classId: number): Promise<any>{
