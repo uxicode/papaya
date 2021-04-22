@@ -558,7 +558,7 @@ interface IMakeEducation {
         type: number;
         user_id: number;
         user_member_id: number;
-        title: string;
+        title?: string | undefined;
         text: string;
         count: number;
         param1: number;
@@ -594,7 +594,7 @@ interface IMakeEducation {
             curriculum_id: number;
             class_id: number;
             index: number;
-            title: string;
+            title?: string;
             contents: string;
             startTime: Date;
             endTime: Date;
@@ -609,7 +609,7 @@ interface IMakeEducation {
         deletedYN: boolean;
         id: number;
         index: number;
-        title: string;
+        title?: string | undefined;
         startTime: Date;
         endTime: Date;
         contents: string;
@@ -647,7 +647,7 @@ interface ICurriculumList {
         count: number;
         param1: number;
         deletedYN: boolean;
-        owner: {
+        owner?: {
             joinedAt: Date;
             createdAt: Date;
             updatedAt: Date;
@@ -670,7 +670,7 @@ interface ICurriculumList {
             schedule_noti_intime: number;
             visited: number;
         },
-        course_list: Array<{
+        course_list?: Array<{
             startDay: Date;
             createdAt: Date;
             updatedAt: Date;
@@ -678,7 +678,7 @@ interface ICurriculumList {
             curriculum_id: number;
             class_id: number;
             index: number;
-            title: string;
+            title?: string | undefined;
             contents: string;
             startTime: Date;
             endTime: Date;
@@ -710,7 +710,7 @@ interface ICurriculumList {
             }>;
         }>;
     };
-    message: string;
+    message?: string;
 }
 
 interface ICourseList {
@@ -722,7 +722,7 @@ interface ICourseList {
         curriculum_id: number;
         class_id: number;
         index: number;
-        title: string;
+        title?: string | undefined;
         contents: string;
         startTime: Date;
         endTime: Date;

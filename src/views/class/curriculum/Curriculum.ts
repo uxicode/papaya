@@ -72,7 +72,28 @@ export default class Curriculum extends Vue {
     private makeEducation: IMakeEducation[]= [];
 
     private allEduList: IEducationList[]= [];
-    private curList: ICurriculumList[]= [];
+    private curList: ICurriculumList={
+        curriculum: {
+            startAt:new Date(),
+            endAt:new Date(),
+            expiredAt:new Date(),
+            createdAt:new Date(),
+            updatedAt:new Date(),
+            id: 0,
+            class_id: 0,
+            board_id: 0,
+            post_type:0,
+            type: 0,
+            user_id: 0,
+            user_member_id: 0,
+            title:'',
+            text: '',
+            count: 0,
+            param1: 0,
+            deletedYN: false,
+            course_list: [],
+        }
+    };
     private allCourseList: ICourseList[]= [];
 
     private currListNum: number = 0;
@@ -171,7 +192,7 @@ export default class Curriculum extends Vue {
     /**
      * 클래스 교육과정 정보 조회
      */
-    get curriculumList(): ICurriculumList[] {
+    get curriculumList(): ICurriculumList{
         return this.curList;
     }
 
@@ -179,11 +200,11 @@ export default class Curriculum extends Vue {
         return this.cardId;
     }
 
-    private getEduCurList(): void {
-        MyClassService.getEduCurList(this.classID, this.cardIdNumber)
+    private getEduCurList(cardId: number): void {
+        MyClassService.getEduCurList(this.classID, cardId)
             .then((data) => {
                 this.curList = data;
-                console.log(data);
+                console.log('getEduCurList 함수 데이터', data);
             });
     }
 
@@ -230,9 +251,13 @@ export default class Curriculum extends Vue {
 
     private cardClickHandler( idx: number ) {
         this.isClassCurrMore = true;
-        this.clickCard(idx);
+        // this.clickCard(idx);
+        this.cardId=idx;
+        this.$nextTick(()=>{
+            this.getEduCurList(this.cardId);
+        });
+
         // console.log(this.cardId);
-        this.getEduCurList();
     }
 
     private curriculumClickHandler( idx: number ) {
@@ -262,6 +287,10 @@ export default class Curriculum extends Vue {
             default:
                 return 'member';
         }
+    }
+
+    private getCurrItemTitleById( title: string): string {
+        return (title)? title : '';
     }
 }
 
