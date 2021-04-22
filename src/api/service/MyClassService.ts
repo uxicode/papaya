@@ -167,6 +167,10 @@ class MyClassService {
         return request('delete', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
 
+    public searchMembers(payload: {classId: number, searchWord: string}): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${payload.classId}/members/search/${payload.searchWord}`);
+    }
+
     /**
      * 클래스 가입 질문 전체 조회
      * @param classId
@@ -192,7 +196,16 @@ class MyClassService {
     }
 
     /**
-     *  태그 검색
+     * 클래스 태그 삭제
+     * @param classId
+     * @param tagId
+     */
+    public deleteTag(classId: number, tagId: number): Promise<any> {
+        return request('delete', `${CLASS_BASE_URL}/${classId}/tags/${tagId}`);
+    }
+
+    /**
+     * 태그 검색
      * @param searchText
      */
     public searchTag(searchText: string): Promise<any> {
@@ -209,11 +222,37 @@ class MyClassService {
     }
 
     /**
-     * 클래스 교육과정
+     * 클래스 교육과정 생성
      * @param classId
      */
-    public  getMakeEducation(classId: number): Promise<any>{
+    public getMakeEducation(classId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum` );
+    }
+
+    /**
+     * 클래스 교육과정 전체 조회
+     * @param classId
+     */
+    public getEducationList(classId: number): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/curriculum` );
+    }
+
+    /**
+     * 클래스 교육과정 정보 조회
+     * @param classId
+     * @param curriculumId
+     */
+    public getEduCurList(classId: number, curriculumId: number): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}` );
+    }
+
+    /**
+     * 클래스 교육과정 개별코스 정보 조회
+     * @param classId
+     * @param curriculumId
+     */
+    public getEduCourseList(classId: number, curriculumId: number, courseId: number): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course/${courseId}` );
     }
 }
 
