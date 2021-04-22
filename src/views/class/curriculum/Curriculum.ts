@@ -150,7 +150,7 @@ export default class Curriculum extends Vue {
     /**
      * 클래스 교육과정 생성
      */
-    get makeNewEducation(): IMakeEducation[] {
+    get addEducation(): IMakeEducation[] {
         return this.makeEducation;
     }
 

@@ -225,8 +225,8 @@ class MyClassService {
      * 클래스 교육과정 생성
      * @param classId
      */
-    public getMakeEducation(classId: number): Promise<any>{
-        return request('get', `${CLASS_BASE_URL}/${classId}/curriculum` );
+    public getMakeEducation(classId: number, payload: {title: string, text: string}): Promise<any>{
+        return request('post', `${CLASS_BASE_URL}/${classId}/curriculum`, payload );
     }
 
     /**
