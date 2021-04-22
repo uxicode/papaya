@@ -187,6 +187,10 @@ class MyClassService {
         return request('delete', `${CLASS_BASE_URL}/${classId}/question/${{questionId}}`);
     }
 
+    public makeClassQuestion(classId: number, payload: {question: string}): Promise<any> {
+        return request('post', `${CLASS_BASE_URL}/${classId}/question`, payload);
+    }
+
     /**
      * 클래스 태그 조회
      * @param classId

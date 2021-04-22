@@ -1,6 +1,6 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {IClassInfo, IClassMemberInfo, IMyClassList, IQuestionList} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo, IQuestionList} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
@@ -131,7 +131,7 @@ export default class ClassSettingMain extends Vue{
     public created() {
         this.getClassMemberInfo();
         this.getClassInfo();
-        this.getJoinQuestion();
+        // this.getJoinQuestion();
     }
 
     private getClassMemberInfo(): void {
@@ -255,10 +255,27 @@ export default class ClassSettingMain extends Vue{
         this.tempData = '';
     }
 
+    /**
+     * 가입 질문 삭제
+     * @param questionId
+     * @private
+     */
     private deleteJoinQuestion(questionId: number): void {
         MyClassService.deleteClassQuestion(this.classID, questionId)
           .then(() => {
               console.log('가입 질문 삭제 성공');
+          });
+    }
+
+    /**
+     * 가입 질문 생성
+     * @param question
+     * @private
+     */
+    private makeJoinQuestion(text: string): void {
+        MyClassService.makeClassQuestion(this.classID, {question: text})
+          .then(() => {
+            console.log(`${text} 질문 추가 성공`);
           });
     }
 
@@ -286,6 +303,7 @@ export default class ClassSettingMain extends Vue{
                 break;
             case 'joinQnaSettingModal':
                 this.isJoinQnaSetting = true;
+                this.getJoinQuestion();
                 break;
             case 'withdrawModal':
                 this.isWithdraw = true;

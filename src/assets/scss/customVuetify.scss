@@ -45,11 +45,3 @@
   }
 }
 .form-item>p{margin-bottom:0;}
-
-/*
-   toast popup (v-snackbar)
-   410 = modal height + snackbar height 값 - ksj
-*/
-.popup-btm {
-  margin-bottom: calc(50% - 410px);
-}
