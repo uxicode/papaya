@@ -68,9 +68,10 @@ class MyClassService {
     /**
      * classId 값을 갖는 해당 클래스 일정 전체 조회
      * @param classId
+     * @param payload
      */
-    public getAllScheduleByClassId(classId: string | number ): Promise<any>{
-        return request('get', `${CLASS_BASE_URL}/${classId}/schedule`);
+    public getAllScheduleByClassId(classId: string | number, payload: { page_no: number, count: number}={ page_no: 0, count: 5 } ): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/schedule`, payload );
     }
 
     /**

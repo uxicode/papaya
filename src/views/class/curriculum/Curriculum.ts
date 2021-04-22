@@ -32,6 +32,9 @@ export default class Curriculum extends Vue {
     @MyClass.Getter
     private classID!: number;
 
+    @MyClass.Getter
+    private myClassHomeModel!: IClassInfo;
+
     private countNumber: number = 0;
     private classCardIndex: number = 0;
     private classCurrIndex: number = 0;
