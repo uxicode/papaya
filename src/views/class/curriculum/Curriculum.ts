@@ -247,6 +247,22 @@ export default class Curriculum extends Vue {
         this.isClassCurrMore = true;
         this.classCard(idx);
     }
+
+    /**
+     * 멤버 등급에 따른 아이콘 클래스 바인딩
+     * @param level
+     * @private
+     */
+    private memberLevelIcon(level: number): string {
+        switch (level) {
+            case 1:
+                return 'admin';
+            case 2:
+                return 'staff';
+            default:
+                return 'member';
+        }
+    }
 }
 
 
