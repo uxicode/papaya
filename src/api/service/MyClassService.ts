@@ -191,6 +191,10 @@ class MyClassService {
         return request('delete', `${CLASS_BASE_URL}/${classId}/question/${{questionId}}`);
     }
 
+    public makeClassQuestion(classId: number, payload: {question: string}): Promise<any> {
+        return request('post', `${CLASS_BASE_URL}/${classId}/question`, payload);
+    }
+
     /**
      * 클래스 태그 조회
      * @param classId
@@ -217,7 +221,16 @@ class MyClassService {
     }
 
     /**
-     * 클래스 알림 전제 초회 (최신 위쪽에 )
+     * 클래스 태그 추가
+     * @param classId
+     * @param keyword
+     */
+    public addClassTag(classId: number, payload: {keyword: string}): Promise<any> {
+        return request('post', `${CLASS_BASE_URL}/${classId}/tags`, payload);
+    }
+
+    /**
+     * 클래스 알림 전체 조회 (최신 위쪽에 )
      * @param classId
      * @param payload
      */

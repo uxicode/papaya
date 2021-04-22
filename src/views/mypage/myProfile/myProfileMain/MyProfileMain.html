@@ -86,7 +86,7 @@
 
     <transition name="modal">
         <!-- start: 이름 수정 팝업 -->
-        <modal v-if="isModifyNameModal" size="540px" body-padding="0">
+        <modal v-if="isModifyNameModal" size="540px" body-padding="0" @modalClose="isModifyNameModal=false;">
             <div slot="header">
                 <div class="popup-icon">
                     <img :src="require('@/assets/images/popup-icon-profile.svg')">

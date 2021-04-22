@@ -1,5 +1,5 @@
 import MyClassService from '@/api/service/MyClassService';
-import {IClassInfo, IClassMembers} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberList, IClassMembers} from '@/views/model/my-class.model';
 import {
     resetSearchInput,
     searchKeyEventObservable,

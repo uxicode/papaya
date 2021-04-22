@@ -31,7 +31,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.3.2 (멤버 활동 관리 - 차단목록-차단해제확인) -->
     <transition name="modal">
-        <modal v-if="isUnblockModal" size="540px" body-padding="0">
+        <modal v-if="isUnblockModal" size="540px" body-padding="0" @modalClose="isUnblockModal=false;">
             <!-- popup header -->
             <div slot="header">
                 <div class="popup-icon add"></div>
@@ -75,7 +75,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.3.3 (멤버 활동 관리-차단목록-차단해제완료) -->
     <transition name="modal">
-        <modal v-if="isUnblockCompleteModal" size="540px" body-padding="0">
+        <modal v-if="isUnblockCompleteModal" size="540px" body-padding="0" @modalClose="isUnblockCompleteModal=false;">
             <!-- popup header -->
             <div slot="header">
                 <div class="popup-icon confirm"></div>

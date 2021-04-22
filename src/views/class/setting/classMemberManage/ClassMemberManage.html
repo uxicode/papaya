@@ -45,7 +45,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.1.1 (멤버 활동 관리-차단-확인) -->
     <transition name="modal">
-        <modal v-if="isBlockModal" size="540px" body-padding="0">
+        <modal v-if="isBlockModal" size="540px" body-padding="0" @modalClose="isBlockModal=false;">
             <div slot="header">
                 <!-- header custom coding-->
                 <div class="popup-icon block"></div>
@@ -87,7 +87,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.1.2 (멤버 활동 관리-차단-완료) -->
     <transition name="modal">
-        <modal v-if="isBlockCompleteModal" size="540px" body-padding="0">
+        <modal v-if="isBlockCompleteModal" size="540px" body-padding="0" @modalClose="isBlockCompleteModal=false;">
             <div slot="header">
                 <div class="popup-icon block"></div>
                 <div class="popup-close">
@@ -122,7 +122,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.2.1 (멤버 활동 관리-탈퇴-확인) -->
     <transition name="modal">
-        <modal v-if="isBanModal" size="540px" body-padding="0">
+        <modal v-if="isBanModal" size="540px" body-padding="0" @modalClose="isBanModal=false;">
             <div slot="header">
                 <div class="popup-icon leave"></div>
                 <div class="popup-close">
@@ -161,7 +161,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.2.2 (멤버 활동 관리-탈퇴-완료) -->
     <transition name="modal">
-        <modal v-if="isBanCompleteModal" size="540px" body-padding="0">
+        <modal v-if="isBanCompleteModal" size="540px" body-padding="0" @modalClose="isBanCompleteModal=false;">
             <div slot="header">
                 <div class="popup-icon leave"></div>
                 <div class="popup-close">
