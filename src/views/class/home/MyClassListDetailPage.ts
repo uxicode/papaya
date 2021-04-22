@@ -16,6 +16,8 @@ const MyClass = namespace('MyClass');
   }
 })
 export default class MyClassListDetailPage extends Vue {
+  @MyClass.Getter
+  private classID!: string | number;
 
   private activeMenuNum: number=0;
 
@@ -23,16 +25,12 @@ export default class MyClassListDetailPage extends Vue {
     return this.activeMenuNum;
   }
 
-  @MyClass.Getter
-  private classID!: string | number;
-
   public created(){
     //화면 새로고침시에
     if (performance.navigation.type === 1) {
       this.activeMenuNum=0;
     }
   }
-
 
   private update(idx: number): void{
     this.activeMenuNum=idx;

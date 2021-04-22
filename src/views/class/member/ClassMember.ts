@@ -35,7 +35,7 @@ export default class ClassMember extends Vue{
         return this.isLoading;
     }
 
-    get searchResults() {
+    get searchResults(): object {
         return this.searchResultItems;
     }
 
@@ -51,16 +51,17 @@ export default class ClassMember extends Vue{
     private isBanModal: boolean = false;
 
     private memberLevel: number = 0;
+    private totalMemberNum: number = 0;
 
+    private classMembers: IClassMembers[] = [];
     private adminList: IClassMembers[] = [];
     private staffList: IClassMembers[] = [];
     private memberList: IClassMembers[] = [];
-    private classMembers: IClassMembers[] = [...this.adminList, ...this.staffList, ...this.memberList];
 
     /* 멤버 검색 관련 */
-    private searchValue: {classId: number, searchWord: string} = {classId: this.classID, searchWord: ''};
+    private searchValue: string = '';
     private isLoading: boolean = false;
-    private searchResultItems: IClassMemberList[] = [];
+    private searchResultItems: [] = [];
 
     public created() {
         this.getClassMembers();
@@ -81,6 +82,8 @@ export default class ClassMember extends Vue{
                 (item: IClassMembers) => item.level === 2);
               this.memberList = data.classinfo.class_members.filter(
                 (item: IClassMembers) => item.level === 3);
+
+              this.totalMemberNum = data.classinfo.class_members.length;
               this.classMembers = data.classinfo.class_members;
               console.log(this.classMembers);
           });
@@ -159,7 +162,7 @@ export default class ClassMember extends Vue{
     }
 
     private search(){
-        this.searchValue.searchWord = '';
+        this.searchValue = '';
         this.searchResultItems=[];
 
         //$nextTick - 해당하는 엘리먼트가 화면에 렌더링이 되고 난 후
@@ -176,11 +179,12 @@ export default class ClassMember extends Vue{
                 next:( searchData: any ) =>{
                     console.log(searchData);
                     /*
-                        class_member_list: []
-                        message: "클래스 멤버 조회"
-                        total: 0
+                      message: "리스트 ....."
+                      result_count: 2
+                      results: (2) [{…}, {…}]
+                      total: 2
                     */
-                    //console.log(`클래스 아이디: ${this.classID}, 검색어: ${this.searchValue.searchWord}`);
+                    console.log(searchData.class_member_list);
                     this.searchResultItems=searchData.class_member_list.map( ( item: any )=> item );
                 },
             });

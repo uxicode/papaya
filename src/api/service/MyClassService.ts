@@ -65,9 +65,12 @@ class MyClassService {
         return request('upload', `/upload/class/${classId}/banner`, file );
     }
 
-    // tslint:disable-next-line:no-shadowed-variable
-    public getAllScheduleByClassId(classId: string | number, pageNum: number, count: number = 5): Promise<any>{
-        return request('get', `${CLASS_BASE_URL}/${classId}/schedule`, {page_no:pageNum, count});
+    /**
+     * classId 값을 갖는 해당 클래스 일정 전체 조회
+     * @param classId
+     */
+    public getAllScheduleByClassId(classId: string | number ): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/schedule`);
     }
 
     /**
@@ -232,6 +235,14 @@ class MyClassService {
      */
     public getPosts(classId: number, payload: {page_no: number, count: number}): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/posts`, payload );
+    }
+
+    /**
+     * 클래스 교육과정
+     * @param classId
+     */
+    public  getMakeEducation(classId: number): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/curriculum` );
     }
 
 

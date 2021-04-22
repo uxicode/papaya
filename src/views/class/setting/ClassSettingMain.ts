@@ -233,11 +233,14 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private getJoinQuestion(): void {
+        console.log('classID=', this.classID);
         MyClassService.getClassQuestion(this.classID)
           .then((data) => {
               this.questionList = data.questionlist;
               console.log(this.questionList);
-          });
+          }).catch((error)=>{
+            console.log('getJoinQuestion=', error);
+        });
     }
 
     /**
@@ -285,6 +288,7 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private gotoLink(key: string): void {
+        console.log('key=', key, 'classID=', this.classID);
         this.$router.push(`/class/${this.classID}/setting/${key}`)
           .then(() => {
               console.log(`${key}로 이동`);

@@ -5,6 +5,9 @@ import {LOGOUT} from '@/store/mutation-auth-types';
 import {REMOVE_CLASS_DATA} from '@/store/mutation-class-types';
 
 axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
+
+//test userid - mobilej / pw - 0000
+//test id - sstest07 / pw - 0000 ---> curriculum_list 있음 해당 클래스 아이디 : 724
 /**
  * request interceptor
  */

@@ -66,7 +66,7 @@ export default class MyClassListPage extends Vue {
   private myClassLists!: IMyClassList[];
 
   @MyClass.Getter
-  private classID!: string | number;
+  private classID!: number;
 
   @MyClass.Action
   private MYCLASS_LIST_ACTION!: ()=> Promise<IMyClassList[]>;
@@ -77,6 +77,10 @@ export default class MyClassListPage extends Vue {
 
 
   //start : get method ================================================
+  get classIdModel() {
+    return this.classID;
+  }
+
   get classListMoreInfos():  IClassMember[]{
     return this.moreInfos;
   }
@@ -303,11 +307,9 @@ export default class MyClassListPage extends Vue {
       });*/
     });
   }
-
   private moreClickEventHandler(): void {
     this.getMoreDisplay();
   }
-
   /**
    * 클래스 홈 ( 디테일 페이지 ) 보기
    * @param id - store 에 저장된 class id
@@ -315,7 +317,10 @@ export default class MyClassListPage extends Vue {
    */
   private gotoClassListDetailView( id: string | number ): void{
        this.MYCLASS_HOME(id).then((data)=>{
-         this.$router.push({path: `${CLASS_BASE_URL}/${id}`});
+         this.$router.push({path: `${CLASS_BASE_URL}/${id}`})
+           .then((data)=>{
+             console.log('MYCLASS_HOME 호출후 this.classID = ', this.classID, localStorage.getItem('classId'), this.classIdModel );
+           });
        });
   }
 

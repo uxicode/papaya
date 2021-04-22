@@ -7,6 +7,7 @@ import {IMakeClassInfo, ISearchSchool} from '@/views/model/my-class.model';
 import WithRender from './MakeClassOption.html';
 import MyClassService from '@/api/service/MyClassService';
 import { searchUserKeyValueObservable, resetSearchInput, searchKeyEventObservable} from '@/views/service/search/SearchService';
+import {fromEvent, Subject } from 'rxjs';
 
 
 const MyClass = namespace('MyClass');
@@ -76,13 +77,28 @@ export default class MakeClassOption extends Vue{
     return document.getElementById( selector ) as HTMLInputElement;
   }
 
-  private search(){
-    this.searchSchoolValue='';
+  private search( value: string=''){
+    this.searchSchoolValue=( value!=='' )? value : '';
     this.searchResultItems=[];
 
     //$nextTick - 해당하는 엘리먼트가 화면에 렌더링이 되고 난 후
     this.$nextTick( ()=>{
 
+      const searchSchool = document.querySelector('#searchSchool') as HTMLInputElement;
+      // console.log(searchSchool);
+      searchSchool.focus();
+
+      // console.log( searchSchool.value )
+
+      if (searchSchool.value !== '') {
+        this.checkLoading();
+        // const valueToSearch$=fromEvent(searchSchool, 'input');
+        MyClassService.getSearchSchool(this.searchSchoolValue)
+          .then((data: any) => {
+            this.checkLoading();
+            this.searchResultItems = data.results.map((item: any) => item);
+          });
+      }
       //키가 눌렸을 때 체크 Observable
       // targetInputSelector: string
       const keyup$ = searchKeyEventObservable('#searchSchool');
@@ -92,7 +108,7 @@ export default class MakeClassOption extends Vue{
       const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, MyClassService.getSearchSchool, this.isLoading );
       userInter$.subscribe({
         next:( searchData: any ) =>{
-          // console.log(searchData);
+          console.log(searchData);
           /*
             message: "리스트 ....."
             result_count: 2
@@ -159,6 +175,18 @@ export default class MakeClassOption extends Vue{
     return !!this.menuData[idx] && this.menuData[idx].key === 'organization';
   }
 
+  private watchBySearchSchoolModel(val: string) {
+    this.searchSchoolValue=val;
+  }
+
+  private schoolNameSearchKeyEnter() {
+    // console.log(this.searchSchoolValue);
+    this.openPopupStatus=true;
+
+    this.search( this.searchSchoolValue );
+
+  }
+
   /**
    * 팝업 열기
    * @param status
@@ -201,6 +229,12 @@ export default class MakeClassOption extends Vue{
     this.closeSchoolSearchPopup();
     this.searchSchoolValue=name;
     this.changeSchoolNameValue(this.searchSchoolValue);
+    this.getSchoolNameInput('searchSchool');
+  }
+
+  private onSchSchoolValChangeHandler(val: string) {
+    this.searchSchoolValue=val;
+    console.log(val);
   }
 
   /**
