@@ -18,10 +18,15 @@ const store = new Vuex.Store({
 });
 
 const {classId, homeData} = localStorage;
-console.log('vue store index.ts/ localStorage 추출값 classId=', classId);
-console.log('vue store index.ts/ localStorage 추출값 homeData=', homeData);
+// console.log('vue store index.ts/ localStorage 추출값 classId=', classId);
+// console.log('vue store index.ts/ localStorage 추출값 homeData=', homeData);
 
-store.commit(`MyClass/${SET_CLASS_ID}`, localStorage.getItem('classId') );
-store.commit(`MyClass/${SET_MYCLASS_HOME_DATA}`, localStorage.getItem('homeData') );
+if ( classId ) {
+  store.commit(`MyClass/${SET_CLASS_ID}`, localStorage.getItem('classId') );
+}
+if (homeData) {
+  store.commit(`MyClass/${SET_MYCLASS_HOME_DATA}`, localStorage.getItem('homeData') );
+}
+
 // store.commit(`Auth/${ACCESS_TOKEN}`, localStorage.getItem('user'));
 export default store;

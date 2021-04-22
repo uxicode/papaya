@@ -115,6 +115,9 @@ export default class ClassModule extends VuexModule {
         return  this.classIdx;
     }
 
+    /**
+     * 클래스 홈 ( 클래스 리스트 상세 내역 ) 데이터
+     */
     get myClassHomeModel(): IClassInfo {
         return this.myClassHomeData;
     }
@@ -122,6 +125,7 @@ export default class ClassModule extends VuexModule {
     get questionID(): string | null | number{
         return (  localStorage.getItem('questionId') !==null )? localStorage.getItem('questionId') : this.questionId;
     }
+
     /* Mutations */
     @Mutation
     public [SET_MYCLASS_HOME_DATA]( info: IClassInfo ): void{
@@ -129,6 +133,10 @@ export default class ClassModule extends VuexModule {
         localStorage.setItem('homeData', JSON.stringify(this.myClassHomeData) );
     }
 
+    /**
+     * classId  변경 시킴
+     * @param id
+     */
     @Mutation
     public [SET_CLASS_ID]( id: number  ): void {
         this.classIdx=Number( id );
@@ -168,9 +176,12 @@ export default class ClassModule extends VuexModule {
         localStorage.setItem('memberInfo', JSON.stringify(this.memberInfo) );
     }
 
+    /**
+     * 클래스 데이터 제거
+     */
     @Mutation
     public [REMOVE_CLASS_DATA](): void{
-        console.log('클래스 데이터 제거');
+        // console.log('클래스 데이터 제거');
         localStorage.removeItem('homeData');
         localStorage.removeItem('classData');
         localStorage.removeItem('classId');
@@ -227,6 +238,10 @@ export default class ClassModule extends VuexModule {
           });
     }
 
+    /**
+     * 클래스 상세 내역 가져오기
+     * @param id
+     */
     @Action({rawError: true})
     public [MYCLASS_HOME]( id: string | number ): Promise<any>{
         this.context.commit(SET_CLASS_ID, id);
