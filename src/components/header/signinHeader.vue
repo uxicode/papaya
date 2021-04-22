@@ -30,7 +30,7 @@ export default class SignInHeader extends Vue {
   private isAuth!: boolean;
 
   @MyClass.Mutation
-  private REMOVE_CLASS_DATA!:()=>void;
+  private REMOVE_CLASS_DATA!: ()=>void;
 
 
   private gotoSignUpPage(): void {

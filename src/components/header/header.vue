@@ -55,9 +55,9 @@ export default class AppHeader extends Vue {
   private LOGOUT!: () => void;
 
   @MyClass.Mutation
-  private REMOVE_CLASS_DATA!:()=>void;
+  private REMOVE_CLASS_DATA!: () => void;
 
-  
+
   private isLogout(): void {
     this.LOGOUT();
     this.REMOVE_CLASS_DATA();

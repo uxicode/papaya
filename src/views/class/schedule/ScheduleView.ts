@@ -32,6 +32,10 @@ export default class ScheduleView extends Vue{
     private classID!: string | number;
 
 
+    @MyClass.Getter
+    private myClassHomeModel!: IClassInfo;
+
+
     private isPopup: boolean=false;
     private isTimeSelect: boolean=false;
 
@@ -116,10 +120,12 @@ export default class ScheduleView extends Vue{
     }
 
     private getScheduleList(): void{
+        // console.log(this.classID === Number( this.$route.params.classId ) );
         if( this.classID === this.$route.params.classId ){
-            MyClassService.getAllScheduleByClassId( this.classID ).then((data)=>{
-                console.log( data );
-            });
+            MyClassService.getAllScheduleByClassId( this.classID )
+              .then((data)=>{
+                console.log( 'getAllScheduleByClassId=', data );
+              });
         }
 
     }
@@ -151,182 +157,7 @@ export default class ScheduleView extends Vue{
         return this.daysOfWeek[dayIdx];
     }
 
-    /**
-     * drag 시작
-     * @param dragObj
-     * @private
-     */
-    private startDrag( dragObj: { event: any, timed: any }) {
-        console.log(dragObj.event, dragObj.timed);
 
-        /*
-        dragObj.event=>
-           this.createEvent: {
-                name: string,
-                color: string,
-                start: number,
-                end: number,
-                timed: boolean
-            }*/
-        if (dragObj.event && dragObj.timed) {
-            this.dragEvent = dragObj.event;
-            this.dragTime = null;
-            this.extendOriginal = null;
-        }
-    }
-
-    private startTime(tms: any ) {
-        const mouse = this.toTime(tms);
-
-        if (this.dragEvent && this.dragTime === null) {
-            const start = this.dragEvent.start;
-
-            this.dragTime = mouse - start;
-        } else {
-            this.createStart = this.getTimestamp(mouse);
-            this.createEvent = {
-                name: `Event #${this.events.length}`,
-                color: this.rndElement(this.colors),
-                start: this.createStart,
-                end: this.createStart,
-                timed: true
-            };
-
-            this.events.push(this.createEvent);
-        }
-    }
-
-    private extendBottom(event: any ) {
-        console.log('extendBottom=', event );
-        this.createEvent = event;
-        this.createStart = event.start;
-        this.extendOriginal = event.end;
-    }
-
-    private mouseMove( tms: {
-        date: Date,
-        day: number,
-        future: boolean,
-        hasDay: boolean,
-        hasTime: boolean,
-        hour: number,
-        minute: number,
-        minutesToPixels: ()=>void,
-        month: number,
-        past: boolean
-        present: boolean
-        time: string,
-        timeDelta: ()=>void,
-        timeToY: ()=>void,
-        week: [],
-        weekday: number,
-        year: number } ) {
-        /*
-        tms-
-        {
-        date: "2021-04-20"
-        day: 20
-        future: false
-        hasDay: true
-        hasTime: true
-        hour: 0
-        minute: 1
-        minutesToPixels: ƒ ()
-        month: 4
-        past: true
-        present: false
-        time: "00:01"
-        timeDelta: ƒ ()
-        timeToY: ƒ ()
-        week: [{…}]
-        weekday: 2
-        year: 2021 } */
-
-        const mouse = this.toTime(tms);
-
-        if (this.dragEvent && this.dragTime !== null ) {
-            const start = this.dragEvent.start;
-            const end = this.dragEvent.end;
-            const duration = end - start;
-            const newStartTime = mouse - this.dragTime;
-            const newStart = this.getTimestamp(newStartTime);
-            const newEnd = newStart + duration;
-
-            this.dragEvent.start = newStart;
-            this.dragEvent.end = newEnd;
-        } else if (this.createEvent && this.createStart !== null) {
-            const mouseRounded = this.getTimestamp(mouse, false);
-            const min = Math.min(mouseRounded, this.createStart);
-            const max = Math.max(mouseRounded, this.createStart);
-
-            this.createEvent.start = min;
-            this.createEvent.end = max;
-        }
-
-        // console.log(mouse);
-    }
-
-    private endDrag() {
-        this.dragTime = null;
-        this.dragEvent = null;
-        this.createEvent = null;
-        this.createStart = null;
-        this.extendOriginal = null;
-    }
-    //캘린더 영역에서 완전히 벗어날 때
-    private cancelDrag() {
-        if (this.createEvent) {
-            if (this.extendOriginal) {
-                this.createEvent.end = this.extendOriginal;
-            } else {
-                const i = this.events.indexOf(this.createEvent);
-                if (i !== -1) {
-                    this.events.splice(i, 1);
-                }
-            }
-        }
-
-        this.createEvent = null;
-        this.createStart = null;
-        this.dragTime = null;
-        this.dragEvent = null;
-
-    }
-    //time 은 timestamp 수치
-    private getTimestamp( time: number, down: boolean = true): number{
-        // console.log( 'time=',typeof time )
-        const roundTo = 15; // minutes
-        const roundDownTime = roundTo * 60 * 1000;
-        return down ? time - time%roundDownTime : time + (roundDownTime - (time % roundDownTime));
-    }
-    // timestamp 를 반환
-    private toTime( tms: {
-        date: Date,
-        day: number,
-        future: boolean,
-        hasDay: boolean,
-        hasTime: boolean,
-        hour: number,
-        minute: number,
-        minutesToPixels: ()=>void,
-        month: number,
-        past: boolean
-        present: boolean
-        time: string,
-        timeDelta: ()=>void,
-        timeToY: ()=>void,
-        week: [],
-        weekday: number,
-        year: number } ): number{
-        // console.log('tms=', typeof tms);
-        return new Date(tms.year, tms.month - 1, tms.day, tms.hour, tms.minute).getTime();
-    }
-    private rndElement(arr: string[]){
-        return arr[this.rnd(0, arr.length - 1)];
-    }
-    private rnd(a: any, b: any): number {
-        return Math.floor((b - a + 1) * Math.random()) + a;
-    }
     private getEventColor(event: CalendarEvent) {
         return event.color;
     }
@@ -397,5 +228,182 @@ export default class ScheduleView extends Vue{
     }
 
 
+
+    /**
+     * drag 시작
+     * @param dragObj
+     * @private
+     */
+    private startDrag( dragObj: { event: any, timed: any }) {
+        console.log(dragObj.event, dragObj.timed);
+
+        /*
+        dragObj.event=>
+           this.createEvent: {
+                name: string,
+                color: string,
+                start: number,
+                end: number,
+                timed: boolean
+            }*/
+        if (dragObj.event && dragObj.timed) {
+            this.dragEvent = dragObj.event;
+            this.dragTime = null;
+            this.extendOriginal = null;
+        }
+    }
+
+    private startTime(tms: any ) {
+        const mouse = this.toTime(tms);
+
+        if (this.dragEvent && this.dragTime === null) {
+            const start = this.dragEvent.start;
+
+            this.dragTime = mouse - start;
+        } else {
+            this.createStart = this.getTimeStamp(mouse);
+            this.createEvent = {
+                name: `Event #${this.events.length}`,
+                color: this.rndElement(this.colors),
+                start: this.createStart,
+                end: this.createStart,
+                timed: true
+            };
+
+            this.events.push(this.createEvent);
+        }
+    }
+
+    private extendBottom(event: any ) {
+        console.log('extendBottom=', event );
+        this.createEvent = event;
+        this.createStart = event.start;
+        this.extendOriginal = event.end;
+    }
+
+    private mouseMove( tms: {
+        date: Date,
+        day: number,
+        future: boolean,
+        hasDay: boolean,
+        hasTime: boolean,
+        hour: number,
+        minute: number,
+        minutesToPixels: ()=>void,
+        month: number,
+        past: boolean
+        present: boolean
+        time: string,
+        timeDelta: ()=>void,
+        timeToY: ()=>void,
+        week: [],
+        weekday: number,
+        year: number } ) {
+        /*
+        tms-
+        {
+        date: "2021-04-20"
+        day: 20
+        future: false
+        hasDay: true
+        hasTime: true
+        hour: 0
+        minute: 1
+        minutesToPixels: ƒ ()
+        month: 4
+        past: true
+        present: false
+        time: "00:01"
+        timeDelta: ƒ ()
+        timeToY: ƒ ()
+        week: [{…}]
+        weekday: 2
+        year: 2021 } */
+
+        const mouse = this.toTime(tms);
+
+        if (this.dragEvent && this.dragTime !== null ) {
+            const start = this.dragEvent.start;
+            const end = this.dragEvent.end;
+            const duration = end - start;
+            const newStartTime = mouse - this.dragTime;
+            const newStart = this.getTimeStamp(newStartTime);
+            const newEnd = newStart + duration;
+
+            this.dragEvent.start = newStart;
+            this.dragEvent.end = newEnd;
+        } else if (this.createEvent && this.createStart !== null) {
+            const mouseRounded = this.getTimeStamp(mouse, false);
+            const min = Math.min(mouseRounded, this.createStart);
+            const max = Math.max(mouseRounded, this.createStart);
+
+            this.createEvent.start = min;
+            this.createEvent.end = max;
+        }
+
+        // console.log(mouse);
+    }
+
+    private endDrag() {
+        this.dragTime = null;
+        this.dragEvent = null;
+        this.createEvent = null;
+        this.createStart = null;
+        this.extendOriginal = null;
+    }
+    //캘린더 영역에서 완전히 벗어날 때
+    private cancelDrag() {
+        if (this.createEvent) {
+            if (this.extendOriginal) {
+                this.createEvent.end = this.extendOriginal;
+            } else {
+                const i = this.events.indexOf(this.createEvent);
+                if (i !== -1) {
+                    this.events.splice(i, 1);
+                }
+            }
+        }
+
+        this.createEvent = null;
+        this.createStart = null;
+        this.dragTime = null;
+        this.dragEvent = null;
+
+    }
+    //time 은 timestamp 수치
+    private getTimeStamp( time: number, down: boolean = true): number{
+        // console.log( 'time=',typeof time )
+        const roundTo = 15; // minutes
+        const roundDownTime = roundTo * 60 * 1000;
+        return down ? time - time%roundDownTime : time + (roundDownTime - (time % roundDownTime));
+    }
+    // timestamp 를 반환
+    private toTime( tms: {
+        date: Date,
+        day: number,
+        future: boolean,
+        hasDay: boolean,
+        hasTime: boolean,
+        hour: number,
+        minute: number,
+        minutesToPixels: ()=>void,
+        month: number,
+        past: boolean
+        present: boolean
+        time: string,
+        timeDelta: ()=>void,
+        timeToY: ()=>void,
+        week: [],
+        weekday: number,
+        year: number } ): number{
+        // console.log('tms=', typeof tms);
+        return new Date(tms.year, tms.month - 1, tms.day, tms.hour, tms.minute).getTime();
+    }
+    private rndElement(arr: string[]){
+        return arr[this.rnd(0, arr.length - 1)];
+    }
+    private rnd(a: any, b: any): number {
+        return Math.floor((b - a + 1) * Math.random()) + a;
+    }
 
 }

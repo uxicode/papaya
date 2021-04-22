@@ -77,7 +77,6 @@ import MyClassService from '@/api/service/MyClassService';
 import {CLASS_BASE_URL} from '@/api/base';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 
-
 interface ISideMenu{
   id: number;
   title: string;
@@ -112,7 +111,6 @@ export default class SideMenu extends Vue{
   @MyClass.Action
   private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
 
-
   private sideMenuData: ISideMenu[]=[
     {id:0, title: '클래스 홈', linkKey:'' },
     {id:1, title: '알림', linkKey:'alert' },
@@ -143,6 +141,8 @@ export default class SideMenu extends Vue{
   }
 
   public getHashTag( items: any[] ): string | undefined {
+    if( items === undefined ){ return; }
+    // console.log(' items=',  items)
     if( items.length === 0 ){ return; }
     const keywords= items.map(( prop ) => '#' + prop.keyword);
     return keywords.join(' ');
@@ -173,12 +173,14 @@ export default class SideMenu extends Vue{
   private async uploadProfileImg( files: any ){
     const formData = new FormData();
     formData.append('file', files[0] );
+    //클래스 대표 이미지 수정
     await MyClassService.setUploadProfileImg( this.classID, formData )
         .then((data) => {
           console.log(data);
         }).catch((error) => {
            console.log(error);
         });
+    //클래스 대표 이미지 수정하여 업데이트 된 데이터를 화면에 반영한다.
     await this.MYCLASS_HOME( this.classID )
         .then( (data) => {
           console.log(data);

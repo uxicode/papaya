@@ -57,7 +57,7 @@ export default class MyClassListView extends Vue{
   public beforeEnter(el: HTMLElement): void {
     if(el.dataset.index !=='0'){
       // el.classList.add('skeleton-inner');
-      console.log(this.startNum, this.endNum);
+      // console.log(this.startNum, this.endNum);
       this.isLoading=true;
       const delayTime = parseInt(el.dataset.index as string, 10);
       el.style.transitionDelay =200*(delayTime%this.listLoadNum) + 'ms';
