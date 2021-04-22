@@ -27,13 +27,19 @@ Vue.config.errorHandler = (err: Error, vm: Vue, info: string) => {
 function init(){
   const {token} = localStorage;
   if( token ){
+    console.log( '여기는 init()/  token 존재하는 경우 ', token);
+    //토큰이 존재하면 UserService.getUserMe() api 호출해서 userMe 데이터를 갱신한다.
     return store.dispatch(`Auth/${SIGNIN_BY_TOKEN}`, token);
   }else{
+    console.log( '여기는 init()/ token 없는 경우 ', token);
     return Promise.resolve();
   }
 }
 
+
 init().then((res)=>{
+  //token 이 존재하지 않을 경우 vue 를 초기화 시킨다.
+  console.log('여기는 main.ts =', res );
   new Vue({
     router,
     store,

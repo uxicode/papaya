@@ -6,8 +6,8 @@ import Btn from '@/components/button/Btn.vue';
 import WithRender from './ScheduleView.html';
 import {IClassInfo} from '@/views/model/my-class.model';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
-import getPrototypeOf = Reflect.getPrototypeOf;
 import {CalendarEvent} from 'vuetify';
+import MyClassService from '@/api/service/MyClassService';
 
 
 const MyClass = namespace('MyClass');
@@ -27,6 +27,11 @@ interface ITimeModel{
     }
 })
 export default class ScheduleView extends Vue{
+
+    @MyClass.Getter
+    private classID!: string | number;
+
+
     private isPopup: boolean=false;
     private isTimeSelect: boolean=false;
 
@@ -55,6 +60,20 @@ export default class ScheduleView extends Vue{
 
     private calendarModel: string= '';
     private events: any[] = [];
+    private dragTime: number | null=null;
+    private dragEvent: any | null= null;
+    private dragStart: any | null= null;
+    private extendOriginal: any | null= null;
+    private createStart: number | null=0;
+    private createEvent: {
+        name: string,
+        color: string,
+        start: number,
+        end: number,
+        timed: boolean
+    } | null | undefined;
+
+
     private colors: string[] = ['#3F51B5', '#00BCD4', '#673AB7', '#2196F3', '#4CAF50', '#FF9800', '#757575'];
     private names: string[] =  ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'];
 
@@ -74,8 +93,6 @@ export default class ScheduleView extends Vue{
     private loopRangeCheck: boolean=false;
     private loopRangeCount: number | string=10;
 
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
 
     get currentLoopRangeItems(): string[]{
         return this.loopRangeItems;
@@ -89,12 +106,23 @@ export default class ScheduleView extends Vue{
 
 
     public created(){
-        console.log(new Date().toISOString());
-    }
-    public mounted() {
-        // this.$refs.calendar.checkChange();
+        // console.log(new Date().toISOString());
+        this.getScheduleList();
     }
 
+    public mounted() {
+        //시작일과 종료일이 변경되었는지 확인합니다. 변경된 경우 변경 이벤트를 업데이트하고 내 보냅니다.
+        ( this.$refs.calendar as CalendarEvent).checkChange();
+    }
+
+    private getScheduleList(): void{
+        if( this.classID === this.$route.params.classId ){
+            MyClassService.getAllScheduleByClassId( this.classID ).then((data)=>{
+                console.log( data );
+            });
+        }
+
+    }
 
     private loopRangeCountClickHandler( value: string ){
         this.loopRangeCount=value;
@@ -105,14 +133,16 @@ export default class ScheduleView extends Vue{
         this.calendarModel = '';
     }
     private prev() {
-        // this.$refs.calendar.prev();
+        ( this.$refs.calendar as CalendarEvent).prev();
     }
     private next() {
-        // this.$refs.calendar.next();
+        ( this.$refs.calendar as CalendarEvent).next();
     }
-    private viewDay( data: { date: any }) {
+    private viewMoreDay( data: { date: any }) {
         this.calendarModel = data.date;
-        this.type = 'day';
+
+        console.log(data);
+        // this.type = 'day';
     }
 
     //상단 월 달력 header 에 custom 요일 표시
@@ -121,56 +151,234 @@ export default class ScheduleView extends Vue{
         return this.daysOfWeek[dayIdx];
     }
 
-    private showEvent( eventObj: { nativeEvent: MouseEvent, event: CalendarEvent}) {
-        console.log( eventObj.event , eventObj.nativeEvent);
-        const open = () => {
-            this.selectedEvent = eventObj.event;
-            this.selectedElement = eventObj.nativeEvent.target as HTMLElement;
-            setTimeout(() => this.selectedOpen = true, 10);
-        };
+    /**
+     * drag 시작
+     * @param dragObj
+     * @private
+     */
+    private startDrag( dragObj: { event: any, timed: any }) {
+        console.log(dragObj.event, dragObj.timed);
 
-        if (this.selectedOpen) {
-            this.selectedOpen = false;
-            setTimeout( open, 10);
+        /*
+        dragObj.event=>
+           this.createEvent: {
+                name: string,
+                color: string,
+                start: number,
+                end: number,
+                timed: boolean
+            }*/
+        if (dragObj.event && dragObj.timed) {
+            this.dragEvent = dragObj.event;
+            this.dragTime = null;
+            this.extendOriginal = null;
+        }
+    }
+
+    private startTime(tms: any ) {
+        const mouse = this.toTime(tms);
+
+        if (this.dragEvent && this.dragTime === null) {
+            const start = this.dragEvent.start;
+
+            this.dragTime = mouse - start;
         } else {
-            open();
+            this.createStart = this.getTimestamp(mouse);
+            this.createEvent = {
+                name: `Event #${this.events.length}`,
+                color: this.rndElement(this.colors),
+                start: this.createStart,
+                end: this.createStart,
+                timed: true
+            };
+
+            this.events.push(this.createEvent);
+        }
+    }
+
+    private extendBottom(event: any ) {
+        console.log('extendBottom=', event );
+        this.createEvent = event;
+        this.createStart = event.start;
+        this.extendOriginal = event.end;
+    }
+
+    private mouseMove( tms: {
+        date: Date,
+        day: number,
+        future: boolean,
+        hasDay: boolean,
+        hasTime: boolean,
+        hour: number,
+        minute: number,
+        minutesToPixels: ()=>void,
+        month: number,
+        past: boolean
+        present: boolean
+        time: string,
+        timeDelta: ()=>void,
+        timeToY: ()=>void,
+        week: [],
+        weekday: number,
+        year: number } ) {
+        /*
+        tms-
+        {
+        date: "2021-04-20"
+        day: 20
+        future: false
+        hasDay: true
+        hasTime: true
+        hour: 0
+        minute: 1
+        minutesToPixels: ƒ ()
+        month: 4
+        past: true
+        present: false
+        time: "00:01"
+        timeDelta: ƒ ()
+        timeToY: ƒ ()
+        week: [{…}]
+        weekday: 2
+        year: 2021 } */
+
+        const mouse = this.toTime(tms);
+
+        if (this.dragEvent && this.dragTime !== null ) {
+            const start = this.dragEvent.start;
+            const end = this.dragEvent.end;
+            const duration = end - start;
+            const newStartTime = mouse - this.dragTime;
+            const newStart = this.getTimestamp(newStartTime);
+            const newEnd = newStart + duration;
+
+            this.dragEvent.start = newStart;
+            this.dragEvent.end = newEnd;
+        } else if (this.createEvent && this.createStart !== null) {
+            const mouseRounded = this.getTimestamp(mouse, false);
+            const min = Math.min(mouseRounded, this.createStart);
+            const max = Math.max(mouseRounded, this.createStart);
+
+            this.createEvent.start = min;
+            this.createEvent.end = max;
         }
 
-        eventObj.nativeEvent.stopPropagation();
+        // console.log(mouse);
+    }
+
+    private endDrag() {
+        this.dragTime = null;
+        this.dragEvent = null;
+        this.createEvent = null;
+        this.createStart = null;
+        this.extendOriginal = null;
+    }
+    //캘린더 영역에서 완전히 벗어날 때
+    private cancelDrag() {
+        if (this.createEvent) {
+            if (this.extendOriginal) {
+                this.createEvent.end = this.extendOriginal;
+            } else {
+                const i = this.events.indexOf(this.createEvent);
+                if (i !== -1) {
+                    this.events.splice(i, 1);
+                }
+            }
+        }
+
+        this.createEvent = null;
+        this.createStart = null;
+        this.dragTime = null;
+        this.dragEvent = null;
+
+    }
+    //time 은 timestamp 수치
+    private getTimestamp( time: number, down: boolean = true): number{
+        // console.log( 'time=',typeof time )
+        const roundTo = 15; // minutes
+        const roundDownTime = roundTo * 60 * 1000;
+        return down ? time - time%roundDownTime : time + (roundDownTime - (time % roundDownTime));
+    }
+    // timestamp 를 반환
+    private toTime( tms: {
+        date: Date,
+        day: number,
+        future: boolean,
+        hasDay: boolean,
+        hasTime: boolean,
+        hour: number,
+        minute: number,
+        minutesToPixels: ()=>void,
+        month: number,
+        past: boolean
+        present: boolean
+        time: string,
+        timeDelta: ()=>void,
+        timeToY: ()=>void,
+        week: [],
+        weekday: number,
+        year: number } ): number{
+        // console.log('tms=', typeof tms);
+        return new Date(tms.year, tms.month - 1, tms.day, tms.hour, tms.minute).getTime();
+    }
+    private rndElement(arr: string[]){
+        return arr[this.rnd(0, arr.length - 1)];
+    }
+    private rnd(a: any, b: any): number {
+        return Math.floor((b - a + 1) * Math.random()) + a;
+    }
+    private getEventColor(event: CalendarEvent) {
+        return event.color;
+    }
+
+    //상세내역 팝업
+    private showEvent( eventObj: { nativeEvent: MouseEvent, event: CalendarEvent} ) {
+        // console.log( eventObj.event );
+        if (this.type === 'month') {
+            const open = () => {
+                this.selectedEvent = eventObj.event;
+                this.selectedElement = eventObj.nativeEvent.target as HTMLElement;
+                setTimeout(() => this.selectedOpen = true, 10);
+            };
+
+            if (this.selectedOpen) {
+                this.selectedOpen = false;
+                setTimeout( open, 10);
+            } else {
+                open();
+            }
+            eventObj.nativeEvent.stopPropagation();
+        }
     }
 
     private updateRange( time: { start: any, end: any } ) {
-        const eventItems= [];
+        const eventItems = [];
 
-        const min = new Date(`${time.start.date}T00:00:00`);
-        const max = new Date(`${time.end.date}T23:59:59`);
-        const days = (max.getTime() - min.getTime()) / 86400000;
+        const min = new Date(`${time.start.date}T00:00:00`).getTime();
+        const max = new Date(`${time.end.date}T23:59:59`).getTime();
+        const days = (max - min) / 86400000;
         const eventCount = this.rnd(days, days + 20);
 
         for (let i = 0; i < eventCount; i++) {
-            const allDay = this.rnd(0, 3) === 0;
-            const firstTimestamp = this.rnd(min.getTime(), max.getTime());
-            const first = new Date(firstTimestamp - (firstTimestamp % 900000));
-            const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000;
-            const second = new Date(first.getTime() + secondTimestamp);
+            const timed = this.rnd(0, 3) !== 0;
+            const firstTimestamp = this.rnd(min, max);
+            const secondTimestamp = this.rnd(2, timed ? 8 : 288) * 900000;
+            const start = firstTimestamp - (firstTimestamp % 900000);
+            const end = start + secondTimestamp;
 
             eventItems.push({
-                name: this.names[this.rnd(0, this.names.length - 1)],
-                start: first,
-                end: second,
-                color: this.colors[this.rnd(0, this.colors.length - 1)],
-                timed: !allDay,
+                name: this.rndElement(this.names),
+                color: this.rndElement(this.colors),
+                start,
+                end,
+                timed,
             });
         }
 
         this.events = eventItems;
     }
-    private getEventColor(event: any) {
-        return event.color;
-    }
-    private rnd(a: any, b: any): number {
-        return Math.floor((b - a + 1) * Math.random()) + a;
-    }
+
+
 
     private updatePopup(isOpen: boolean) {
         this.isPopup=isOpen;

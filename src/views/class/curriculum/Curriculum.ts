@@ -10,6 +10,7 @@ import WithRender from './Curriculum.html';
 
 const MyClass = namespace('MyClass');
 
+
 /*start: 추가 테스트*/
 interface ITimeModel{
     apm: string;
@@ -35,6 +36,7 @@ export default class Curriculum extends Vue {
     private isClassCurrDetail: boolean = false;
     private isMoreMenu: boolean = false;
 
+
     @MyClass.Getter
     private classID!: number;
 
@@ -42,24 +44,19 @@ export default class Curriculum extends Vue {
     private classCardIndex: number = 0;
     private classCurrIndex: number = 0;
 
-    private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
+    private testEduSettingsModel: string = '반복없음';
+    private testEduSettingsItems: string[] = ['반복없음', '매일', '매주', '매월', '매년'];
+    private testEduSettingsCheck: boolean=false;
+
+    get currentEduSettingsItems(): string[]{
+        return this.testEduSettingsItems;
+    }
 
 
     /**
      * 클래스 교육과정 메인리스트
      */
-
-        //datepicker
-    private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
-    private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
-    private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
-    private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-
-    private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-    private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
-
-
-    // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
+     // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
     private makeEducation: IMakeEducation[]= [
         {
             title: '파파야 교육과정 제목1',
@@ -91,8 +88,6 @@ export default class Curriculum extends Vue {
                 }
             ],
             isChk: false,
-            writer: '김미영선생님',
-            level: 1,
         },
         {
             title: '파파야 교육과정 제목2',
@@ -116,8 +111,6 @@ export default class Curriculum extends Vue {
                 }
             ],
             isChk: false,
-            writer: '김경희선생님',
-            level: 2,
         },
         {
             title: '파파야 교육과정 제목3',
@@ -141,8 +134,6 @@ export default class Curriculum extends Vue {
                 }
             ],
             isChk: false,
-            writer: '박수한선생님',
-            level: 2,
         },
     ];
 
@@ -151,17 +142,18 @@ export default class Curriculum extends Vue {
     private settingItems: Array<{ vo: string[], sItem: string }> = [];
 
 
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
 
+    /*start: 추가 테스트*/
+    //datepicker
+    private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
+    private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
+    private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
+    private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
+    private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
+    private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
 
-    get currentStartTimeModel(): string{
-        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
-    }
+    /*end: 추가 테스트*/
 
-    get currentEndTimeModel(): string{
-        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
-    }
 
     get makeEducationList(): IMakeEducation[] {
         return this.makeEducation;
@@ -187,20 +179,31 @@ export default class Curriculum extends Vue {
         this.settingItems[mIdx].sItem = item;
     }
 
-    // public getSelectedSettingMenuItem( idx: number ): string{
-    //     return this.settingItems[idx].sItem;
-    // }
+    public getSelectedSettingMenuItem( idx: number ): string{
+        return this.settingItems[idx].sItem;
+    }
 
     private mItemByMakeEduList(): any[] {
         return this.makeEducation.map( ( item: IMakeEducation ) => {
-            return { vo: this.EduSettingsItems, sItem:'반복없음' };
+            return { vo: this.testEduSettingsItems, sItem:'반복없음' };
         });
     }
+
+    /*start: 추가 테스트*/
+    get currentStartTimeModel(): string{
+        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
+    }
+
+    get currentEndTimeModel(): string{
+        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
+    }
+    /*end: 추가 테스트*/
 
     private setCurriNum( num: number ): void{
         this.currListNum=num;
         this.eduItems.length=num;
     }
+
 
     private moreMenuToggle(): void {
         this.isMoreMenu = !this.isMoreMenu;
@@ -240,22 +243,6 @@ export default class Curriculum extends Vue {
     private cardClickHandler( idx: number ) {
         this.isClassCurrMore = true;
         this.classCard(idx);
-    }
-
-    /**
-     * 멤버 등급별 아이콘
-     * @param level
-     * @private
-     */
-    private memberLevelIcon(level: number): string {
-        switch (level) {
-            case 1:
-                return 'manager';
-            case 2:
-                return 'staff';
-            default:
-                return 'member';
-        }
     }
 }
 

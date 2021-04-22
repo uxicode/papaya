@@ -18,8 +18,10 @@
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import {REMOVE_CLASS_DATA} from '@/store/mutation-class-types';
 
 const Auth = namespace('Auth');
+const MyClass = namespace('Auth');
 
 @Component
 export default class SignInHeader extends Vue {
@@ -27,13 +29,9 @@ export default class SignInHeader extends Vue {
   @Auth.Getter
   private isAuth!: boolean;
 
-  @Auth.Mutation
-  private LOGOUT!: () => void;
+  @MyClass.Mutation
+  private REMOVE_CLASS_DATA!:()=>void;
 
-  private isLogout(): void {
-    this.LOGOUT();
-    this.$router.push('/login');
-  }
 
   private gotoSignUpPage(): void {
     // this.HISTORY_PAGE({history:'signup'});

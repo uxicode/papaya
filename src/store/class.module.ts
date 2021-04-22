@@ -31,8 +31,6 @@ import {
     MODIFY_CLASS_INFO,
     MODIFY_QUESTION,
 } from '@/store/action-class-types';
-
-
 @Module({
     namespaced: true,
 })
@@ -43,7 +41,7 @@ export default class ClassModule extends VuexModule {
     private memberInfo: IClassMemberInfo[] = [];
     private questionData: IQuestionList[] = [];
     private count: number = 0;
-    private classId: number = 0;
+    private classIdx: number = -1;
     private sideMenuNum: number=0;
     private memberId: string | number = 0;
     private questionId: string | number = 0;
@@ -113,20 +111,18 @@ export default class ClassModule extends VuexModule {
         return this.makeClassInfo;
     }
 
-    get classID(): string | null | number{
-        return (  localStorage.getItem('classId') !==null )? localStorage.getItem('classId') : this.classId;
+    get classID(): number {
+        return  this.classIdx;
     }
 
     get myClassHomeModel(): IClassInfo {
-        return (!this.myClassHomeData)? this.myClassHomeData : JSON.parse( localStorage.getItem('homeData') as string );
+        return this.myClassHomeData;
     }
 
     get questionID(): string | null | number{
         return (  localStorage.getItem('questionId') !==null )? localStorage.getItem('questionId') : this.questionId;
     }
-
     /* Mutations */
-
     @Mutation
     public [SET_MYCLASS_HOME_DATA]( info: IClassInfo ): void{
         this.myClassHomeData=info;
@@ -134,9 +130,10 @@ export default class ClassModule extends VuexModule {
     }
 
     @Mutation
-    public [SET_CLASS_ID]( id: number ): void {
-        this.classId=id;
-        localStorage.setItem('classId', String(this.classId) );
+    public [SET_CLASS_ID]( id: number  ): void {
+        this.classIdx=Number( id );
+        console.log('this.classIdx', this.classIdx );
+        localStorage.setItem('classId', String( this.classIdx ) );
     }
 
     @Mutation
@@ -179,7 +176,7 @@ export default class ClassModule extends VuexModule {
         localStorage.removeItem('classId');
         this.classData=[];
         this.postData=[];
-        this.classId=0;
+        this.classIdx=-1;
     }
 
     @Mutation
@@ -218,7 +215,7 @@ export default class ClassModule extends VuexModule {
     public [MAKE_CLASS]( infos: IMakeClassInfoBase ): Promise<IMakeClassInfo>{
         this.context.commit( CREATE_CLASS_LIST, infos );
 
-        console.log(this.makeClassInfo);
+        // console.log(this.makeClassInfo);
         return MyClassService.setMakeClass( this.makeClassInfo )
           .then( (data: any)=>{
               console.log(data.classinfo);
@@ -237,9 +234,7 @@ export default class ClassModule extends VuexModule {
         return MyClassService.getClassInfoById( id )
           .then( (data)=>{
               this.context.commit(SET_MYCLASS_HOME_DATA, data.classinfo);
-
-              console.log(this.myClassHomeModel);
-
+              console.log('통신 후 vuex MYCLASS_HOME=', this.classID, '::리스트 클릭 id=', id, this.classIdx );
               return Promise.resolve(this.myClassHomeModel);
           }).catch((error)=>{
               console.log(error);
