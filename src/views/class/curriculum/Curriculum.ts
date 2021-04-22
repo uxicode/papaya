@@ -43,13 +43,13 @@ export default class Curriculum extends Vue {
     private classCurrIndex: number = 0;
 
     private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
-    private EduSettingsModel: string = '교육과정 수정';
+
 
     /**
      * 클래스 교육과정 메인리스트
      */
 
-    //datepicker
+        //datepicker
     private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
     private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
     private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
@@ -59,7 +59,7 @@ export default class Curriculum extends Vue {
     private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
 
 
-     // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
+    // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
     private makeEducation: IMakeEducation[]= [
         {
             title: '파파야 교육과정 제목1',
@@ -154,9 +154,6 @@ export default class Curriculum extends Vue {
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
-    get currentSettingItems(): string[]{
-        return this.EduSettingsItems;
-    }
 
     get currentStartTimeModel(): string{
         return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
@@ -243,11 +240,6 @@ export default class Curriculum extends Vue {
     private cardClickHandler( idx: number ) {
         this.isClassCurrMore = true;
         this.classCard(idx);
-    }
-
-    private curriculumClickHandler( idx: number ) {
-        this.isClassCurr = true;
-        this.countNum(idx);
     }
 
     /**
