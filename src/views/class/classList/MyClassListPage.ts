@@ -343,7 +343,8 @@ export default class MyClassListPage extends Vue {
        this.MYCLASS_HOME(id).then((data)=>{
          this.$router.push({path: `${CLASS_BASE_URL}/${id}`})
            .then(( )=>{
-             console.log('MYCLASS_HOME 호출후 this.classID = ', this.classID, localStorage.getItem('classId'), this.classIdModel );
+             console.log(this.classID, ':: 해당 클래스 홈 이동');
+             // console.log('MYCLASS_HOME 호출후 this.classID = ', this.classID, localStorage.getItem('classId'), this.classIdModel );
            });
        });
   }
