@@ -182,7 +182,7 @@ export default class ClassModule extends VuexModule {
     @Mutation
     public [SET_QUESTION_ID](questionId: number): void {
         this.questionId = questionId;
-        localStorage.setItem('questionId', String(this.questionId) );
+        // localStorage.setItem('questionId', String(this.questionId) );
     }
 
 

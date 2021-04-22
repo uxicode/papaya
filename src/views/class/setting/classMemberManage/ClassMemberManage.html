@@ -23,7 +23,7 @@
                         <li v-for="(item, idx) in classMembers"
                             :key="idx"
                             class="member-item">
-                            <div class="member-type manager"
+                            <div class="member-type"
                                  :class="memberLevelIcon(item.level)">
                                 <p class="member-name">{{ item.nickname }}</p>
                                 <p class="member-tit">{{ memberLevelTxt(item.level) }}</p>
@@ -31,8 +31,8 @@
                             <div class="list-popup">
                                 <button type="button" class="member-more" @click="isActive = !isActive"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                 <div class="list-popup-menu pos-right" :class="{'active': isActive === true}" style="transform:translate3d(87px, 0, 0);">
-                                    <button class="list-popup-item" @click="isActive = false; isBlockModal = true">멤버 차단</button>
-                                    <button class="list-popup-item" @click="isActive = false; isBanModal = true">강제 탈퇴</button>
+                                    <button class="list-popup-item" @click="blockModalOpen(item.id)">멤버 차단</button>
+                                    <button class="list-popup-item" @click="banModalOpen(item.id)">강제 탈퇴</button>
                                 </div>
                             </div>
                         </li>
@@ -65,9 +65,10 @@
                     <div class="member-management-list bd-none">
                         <ul>
                             <li class="member-item bd-none">
-                                <div class="member-type staff">
-                                    <p class="member-name">김경희선생님</p>
-                                    <p class="member-tit">스탭 멤버</p>
+                                <div class="member-type"
+                                     :class="memberLevelIcon(this.memberLevel)">
+                                    <p class="member-name">{{ this.memberNickname }}</p>
+                                    <p class="member-tit">{{ memberLevelTxt(this.memberLevel) }}</p>
                                 </div>
                             </li>
                         </ul>
@@ -78,7 +79,7 @@
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
                     <btn type="outline" @btnClick="isBlockModal = false">취소</btn>
-                    <btn type="navi" @btnClick="isBlockModal = false">차단하기</btn>
+                    <btn type="navi" @btnClick="memberBlockSubmit">차단하기</btn>
                 </div>
             </div>
         </modal>
@@ -102,9 +103,10 @@
                     <div class="member-management-list bd-none">
                         <ul>
                             <li class="member-item bd-none">
-                                <div class="member-type staff">
-                                    <p class="member-name">김경희선생님</p>
-                                    <p class="member-tit">스탭 멤버</p>
+                                <div class="member-type"
+                                     :class="memberLevelIcon(this.memberLevel)">
+                                    <p class="member-name">{{ this.memberNickname }}</p>
+                                    <p class="member-tit">{{ memberLevelTxt(this.memberLevel) }}</p>
                                 </div>
                             </li>
                         </ul>
@@ -133,16 +135,17 @@
                 <div class="popup-cnt">
                     <h2 class="popup-tit">선택한 멤버를 강제 탈퇴시키겠습니까?</h2>
                     <p class="popup-txt">
-                        멤버 강제 탈퇴 시 멤버가 작제성했던 글, 댓글 등은 삭제되지 않습니다.
+                        멤버 강제 탈퇴 시 멤버가 작성했던 글, 댓글 등은 삭제되지 않습니다.
                     </p>
                 </div>
                 <div class="member-activity">
                     <div class="member-management-list bd-none">
                         <ul>
                             <li class="member-item bd-none">
-                                <div class="member-type staff">
-                                    <p class="member-name">김경희선생님</p>
-                                    <p class="member-tit">스탭 멤버</p>
+                                <div class="member-type"
+                                     :class="memberLevelIcon(this.memberLevel)">
+                                    <p class="member-name">{{ this.memberNickname }}</p>
+                                    <p class="member-tit">{{ memberLevelTxt(this.memberLevel) }}</p>
                                 </div>
                             </li>
                         </ul>
@@ -176,9 +179,10 @@
                     <div class="member-management-list bd-none">
                         <ul>
                             <li class="member-item bd-none">
-                                <div class="member-type staff">
-                                    <p class="member-name">김경희선생님</p>
-                                    <p class="member-tit">스탭 멤버</p>
+                                <div class="member-type"
+                                     :class="memberLevelIcon(this.memberLevel)">
+                                    <p class="member-name">{{ this.memberNickname }}</p>
+                                    <p class="member-tit">{{ memberLevelTxt(this.memberLevel) }}</p>
                                 </div>
                             </li>
                         </ul>

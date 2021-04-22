@@ -166,7 +166,7 @@
                                     <div class="form-group" style="width:490px;">
                                         <input type="text" class="form-control popup-type"
                                                v-model="item.question"
-                                               @input="valueChange($event)"
+                                               @input="valueChange($event, item.id)"
                                                :id="`question${item.id}`">
                                         <!-- form-delete active 시 display:block; -->
                                         <button type="button" class="btn only-ico-btn form-delete active" @click="deleteJoinQuestion(item.id)"><img :src="require('@/assets/images/delete.svg')" alt=""></button>

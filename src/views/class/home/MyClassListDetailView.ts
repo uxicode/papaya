@@ -32,7 +32,7 @@ export default class MyClassListDetailView extends Vue{
   private getClassList(): void{
     getAllPromise([
       MyClassService.getAllPostsByClassId( this.classID, this.pagingCount ),
-      MyClassService.getAllScheduleByClassId( this.classID, this.pagingCount ),
+      MyClassService.getAllScheduleByClassId( this.classID ),
       MyClassService.getAllCurriculumByClassId( this.classID, this.pagingCount ),
     ]).then( ( data: any )=>{
       this.allData=data;
