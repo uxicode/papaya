@@ -11,6 +11,7 @@ import {
   SIGN_UP,
   SIGN_UP_MOVE,
   SET_MY_INFO,
+  GET_REFRESH_TOKEN
 } from '@/store/mutation-auth-types';
 import {
   LOGIN_ACTION,
@@ -35,9 +36,14 @@ export default class AuthModule extends VuexModule {
   public inputUserEmail: string = '';
   public signupName: string = '';
   public resetPwByVerifyInfo: object = {};
+  private refreshToken: string | null= null;
 
   get isAuth(): boolean {
     return !!this.token;
+  }
+
+  get isRefreshAuth(): boolean{
+    return !!this.refreshToken;
   }
 
   get findUserId(): string {
@@ -106,12 +112,21 @@ export default class AuthModule extends VuexModule {
     }
   }
 
+  @Mutation
+  public [GET_REFRESH_TOKEN]( refreshToken: string | null ): void{
+    if (refreshToken !== null) {
+      this.refreshToken=refreshToken;
+      localStorage.setItem('refresh_token', this.refreshToken);
+    }
+  }
+
 
   @Mutation
   public [LOGOUT](): void {
     console.log('logout');
     localStorage.removeItem('token');
     localStorage.removeItem('me');
+    localStorage.removeItem('refresh_token' );
     this.token = null;
     this.me=null;
   }
@@ -141,6 +156,10 @@ export default class AuthModule extends VuexModule {
       });
   }
 
+  /**
+   * 로그인~
+   * @param payload
+   */
   @Action({rawError: true})
   public [LOGIN_ACTION]( payload: { uid: string, password: string }): Promise<any> {
     return AuthService.login(payload.uid, payload.password)
@@ -157,6 +176,8 @@ export default class AuthModule extends VuexModule {
         // console.log(data.user, data.access_token);
         // mutation( type, payload, option ) 이렇게 매개변수가 지정되어 있다.z
         this.context.commit(GET_TOKEN, data.access_token );
+        this.context.commit(GET_REFRESH_TOKEN, data.refreshToken );
+
         return UserService.getUserMe().then( ( userMe: any)=>{
             this.context.commit(SET_MY_INFO, userMe.user);
             return Promise.resolve( userMe.user);
@@ -166,6 +187,9 @@ export default class AuthModule extends VuexModule {
       });
   }
 
+  /**
+   * 마이프로필에서 수정 적용시
+   */
   @Action({rawError: true})
   public [USER_ME_ACTION](): Promise<IUserMe>{
     return UserService.getUserMe().then( ( userMe: any)=>{

@@ -60,6 +60,14 @@ class AuthService {
     });
   }
 
+  /**
+   * 리프레시 토큰 전송
+   * @param token
+   */
+  public sendRefreshToken(token: string): Promise<any>{
+    return request('get', `${AUTH_BASE_URL}/accesstoken/${token}`);
+  }
+
 }
 
 

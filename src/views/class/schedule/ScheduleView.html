@@ -15,7 +15,7 @@
           <v-btn fab text x-small outlined color="grey darken-2" @click="prev">
             <v-icon small>mdi-chevron-left</v-icon>
           </v-btn>
-          <v-btn fab text x-small outlined color="grey darken-2" @click="next">
+          <v-btn class="ml-2" fab text x-small outlined color="grey darken-2" @click="next">
             <v-icon small>mdi-chevron-right</v-icon>
           </v-btn>
           <v-toolbar-title v-if="$refs.calendar" class="ml-4 ft-bold">{{ $refs.calendar.title }}</v-toolbar-title>
@@ -75,7 +75,7 @@
                 :weekdays="weekdays"
                 :weekday-format="getDay"
                 :day-format="(timestamp) => new Date(timestamp.date).getDate()"
-                :month-format="(timestamp)=> new Date(timestamp.date).getMonth()+1"
+                :month-format="(timestamp)=> (new Date(timestamp.date).getMonth()+1)+'월' "
                 @change="updateRange"
                 @click:event="showEvent"
                 :event-ripple="false">
