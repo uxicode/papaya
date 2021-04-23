@@ -1047,6 +1047,8 @@
           transform:translateY(-50%);
         }
       }
+      .txt-right{text-align: right;}
+      .txt-left{text-align: left;}
     }
 
     .search-none {
@@ -1106,8 +1108,8 @@
     .scroll-body {
       overflow-y: scroll;
       &.file {
-        padding-right: 250px;
-        margin-right: -250px;
+        padding-right: 200px;
+        margin-right: -200px;
         -ms-overflow-style: none; /* IE and Edge */
         &::-webkit-scrollbar {
           display: none; /* Chrome, Safari, Opera*/
