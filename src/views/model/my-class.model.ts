@@ -547,6 +547,8 @@ interface IMakeEducation {
     writer?: string;
     isChk?: boolean;
 }
+
+
 export {
     IMyClassList,
     INotifyList,

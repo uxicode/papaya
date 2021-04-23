@@ -128,7 +128,7 @@ export default class SideMenu extends Vue{
   public created(){
     //화면 새로고침시에
     if (performance.navigation.type === 1) {
-      this.sideMenuClickHandler( 0 );
+      this.sideMenuClickHandler(2);
     }
 
     /*window.onpageshow = function(event) {

@@ -1,22 +1,19 @@
 import {Vue, Component } from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import {IClassInfo} from '@/views/model/my-class.model';
+import {IScheduleTotal, ITimeModel } from '@/views/model/schedule.model';
+import {CalendarEvent} from 'vuetify';
+import MyClassService from '@/api/service/MyClassService';
+import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
+import {Utils} from '@/utils/utils';
 import Modal from '@/components/modal/modal.vue';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './ScheduleView.html';
-import {IClassInfo} from '@/views/model/my-class.model';
-import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
-import {CalendarEvent} from 'vuetify';
-import MyClassService from '@/api/service/MyClassService';
 
 
 const MyClass = namespace('MyClass');
 
-interface ITimeModel{
-    apm: string;
-    hour: string;
-    minute: string;
-}
 
 @WithRender
 @Component({
@@ -61,7 +58,7 @@ export default class ScheduleView extends Vue{
         'custom-daily': '3일',
     };
 
-
+    private scheduleLists: IScheduleTotal[]=[];
     private calendarModel: string= '';
     private events: any[] = [];
     private dragTime: number | null=null;
@@ -77,9 +74,23 @@ export default class ScheduleView extends Vue{
         timed: boolean
     } | null | undefined;
 
+    private startDate: string | number | Date = '';
+    private endDate: string | number | Date = '';
 
-    private colors: string[] = ['#3F51B5', '#00BCD4', '#673AB7', '#2196F3', '#4CAF50', '#FF9800', '#757575'];
-    private names: string[] =  ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'];
+
+    private colors: string[] = [
+        '#FF4D4D',
+        '#191955',
+        '#57576D',
+        '#1CDBC9',
+        '#2183DE',
+        '#A062CB',
+        '#FF90AA',
+        '#FF972B',
+        '#FFD100',
+        '#ADC500',
+        '#629F00'
+    ];
 
     //datepicker
     private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
@@ -108,6 +119,15 @@ export default class ScheduleView extends Vue{
         return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
     }
 
+    get scheduleListsModel(): IScheduleTotal[]{
+        return this.scheduleLists;
+    }
+    get startDateModel(): string | Date | number{
+        return this.startDate;
+    }
+    get endDateModel(): string | Date | number{
+        return this.endDate;
+    }
 
     public created(){
         // console.log(new Date().toISOString());
@@ -121,12 +141,11 @@ export default class ScheduleView extends Vue{
 
     private getScheduleList(): void{
         // console.log(this.classID === Number( this.$route.params.classId ) );
-        if( this.classID === this.$route.params.classId ){
-            MyClassService.getAllScheduleByClassId( this.classID )
-              .then((data)=>{
-                console.log( 'getAllScheduleByClassId=', data );
-              });
-        }
+        MyClassService.getAllScheduleByClassId( this.classID )
+          .then((data)=>{
+              console.log( 'getAllScheduleByClassId=', data.class_schedule_list );
+              this.scheduleLists=data.class_schedule_list;
+          });
 
     }
 
@@ -165,48 +184,65 @@ export default class ScheduleView extends Vue{
     //상세내역 팝업
     private showEvent( eventObj: { nativeEvent: MouseEvent, event: CalendarEvent} ) {
         // console.log( eventObj.event );
-        if (this.type === 'month') {
-            const open = () => {
-                this.selectedEvent = eventObj.event;
-                this.selectedElement = eventObj.nativeEvent.target as HTMLElement;
-                setTimeout(() => this.selectedOpen = true, 10);
-            };
+        const open = () => {
+            this.selectedEvent = eventObj.event;
+            this.selectedElement = eventObj.nativeEvent.target as HTMLElement;
+            setTimeout(() => this.selectedOpen = true, 10);
+        };
 
-            if (this.selectedOpen) {
-                this.selectedOpen = false;
-                setTimeout( open, 10);
-            } else {
-                open();
-            }
-            eventObj.nativeEvent.stopPropagation();
+        if (this.selectedOpen) {
+            this.selectedOpen = false;
+            setTimeout( open, 10);
+        } else {
+            open();
         }
+        eventObj.nativeEvent.stopPropagation();
     }
 
     private updateRange( time: { start: any, end: any } ) {
-        const eventItems = [];
 
-        const min = new Date(`${time.start.date}T00:00:00`).getTime();
-        const max = new Date(`${time.end.date}T23:59:59`).getTime();
-        const days = (max - min) / 86400000;
-        const eventCount = this.rnd(days, days + 20);
+        this.$nextTick(() => {
+            const eventItems = [];
 
-        for (let i = 0; i < eventCount; i++) {
-            const timed = this.rnd(0, 3) !== 0;
-            const firstTimestamp = this.rnd(min, max);
-            const secondTimestamp = this.rnd(2, timed ? 8 : 288) * 900000;
-            const start = firstTimestamp - (firstTimestamp % 900000);
-            const end = start + secondTimestamp;
+            // const days = (max - min) / 86400000;
+            const eventCount = this.scheduleListsModel.length;///this.rnd(days, days + 20);
 
-            eventItems.push({
-                name: this.rndElement(this.names),
-                color: this.rndElement(this.colors),
-                start,
-                end,
-                timed,
+            const startTimes = [];
+            const endTimes = [];
+            for (let i: number = 0; i < eventCount; i++) {
+
+                startTimes.push(new Date(this.scheduleLists[i].startAt).getTime());
+                endTimes.push(new Date(this.scheduleLists[i].endAt).getTime());
+
+                eventItems.push({
+                    name: this.scheduleLists[i].title,
+                    details: this.scheduleLists[i].text,
+                    color: this.colors[this.scheduleLists[i].owner.schedule_color],
+                    start: new Date(this.scheduleLists[i].startAt),
+                    end: new Date(this.scheduleLists[i].endAt),
+                    repeat: this.scheduleLists[i].count,
+                    timed:true,
+                });
+            }
+
+           /*
+            const min = startTimes.reduce( (prv, cur) => {
+                return (prv > cur) ? cur : prv;
             });
-        }
+            const max = endTimes.reduce( (prv, cur) => {
+                return (prv > cur) ? prv : cur;
+            });
 
-        this.events = eventItems;
+            const startDateItems = Utils.getTodayFullValue(new Date(min));
+            const endDateItems = Utils.getTodayFullValue(new Date(max));
+
+            this.startDate=Utils.getDateDashFormat( startDateItems[0], startDateItems[1], startDateItems[2] );
+            this.endDate=Utils.getDateDashFormat( endDateItems[0], endDateItems[1], endDateItems[2] );*/
+
+            this.events = eventItems;
+        });
+
+
     }
 
 
