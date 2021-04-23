@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 import AuthModule from '@/store/auth.module';
 import ClassModule from '@/store/class.module';
 import PageHistoryStatus from '@/store/PageHistoryStatus';
-import {GET_TOKEN} from '@/store/mutation-auth-types';
 import {SET_CLASS_ID, SET_MYCLASS_HOME_DATA} from '@/store/mutation-class-types';
 
 Vue.use(Vuex);
