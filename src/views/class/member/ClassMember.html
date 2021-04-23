@@ -35,7 +35,7 @@
                         <div class="member-info-btn">
                             <div class="list-popup">
                                 <button type="button" class="list-popup-btn" @click="isAdminToggle = !isAdminToggle"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                <div class="list-popup-menu pos-right" :class="{'active': isAdminToggle}" style="transform:translate3d(42px, 0,0);">
+                                <div class="list-popup-menu pos-right" :class="{'active': isAdminToggle}" style="transform:translate3d(42px,0,0);">
                                     <button type="button" class="list-popup-item" @click="isDetailPopup = true">멤버정보</button>
                                 </div>
                             </div>
@@ -184,9 +184,10 @@
                 </div>
                 <div class="member-profile">
                     <div class="profile-inner">
-                        <div class="profile-info staff">
-                            <p>김경희선생님</p>
-                            <span>스탭 멤버</span>
+                        <div class="profile-info"
+                             :class="memberLevelIcon()">
+                            <p>{{  }}</p>
+                            <span>{{ memberLevelTxt() }}</span>
                         </div>
                         <div class="profile-btn">
                             <div class="list-popup">

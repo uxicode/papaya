@@ -8,7 +8,7 @@
             <p class="list-tit">사용 중인 프로필</p>
             <ul class="member-list">
                 <li class="list-item">
-                    <div class="member-info admin"
+                    <div class="member-info"
                          :class=memberLevelIcon(memberInfo.level)>
                         <p class="name">{{ memberInfo.nickname }}</p>
                         <span class="position">{{ memberLevelTxt(memberInfo.level) }}</span>
@@ -62,7 +62,8 @@
                 <li v-for="(item, idx) in classManageList"
                     :key="idx"
                     class="list-item">
-                    <a href=""  class="list-tit">{{ item.title }}</a>
+                    <a href="" class="list-tit"
+                       @click.stop.prevent="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">{{ item.title }}</a>
                     <button class="setting-btn"
                             @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
                         <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
@@ -76,7 +77,8 @@
                 <li v-for="(item, idx) in memberManageList"
                     :key="idx"
                     class="list-item">
-                    <a href=""  class="list-tit">{{ item.title }}</a>
+                    <a href="" class="list-tit"
+                       @click.stop.prevent="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">{{ item.title }}</a>
                     <button class="setting-btn" @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
                         <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                 </li>
@@ -89,7 +91,8 @@
                 <li v-for="(item, idx) in etcList"
                     :key="idx"
                     class="list-item">
-                    <a href=""  class="list-tit">{{ item.title }}</a>
+                    <a href="" class="list-tit"
+                       @click.stop.prevent="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">{{ item.title }}</a>
                     <button class="setting-btn" @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
                         <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                 </li>
@@ -213,7 +216,7 @@
                 <div class="popup-cnt">
                     <h2 class="popup-tit">클래스 탈퇴하기</h2>
                     <p class="popup-txt">
-                        <strong>꿈꾸는 5학년 1반</strong> 클래스 탈퇴 전 꼭 확인하세요.<br>
+                        <strong>{{ info.name }}</strong> 클래스 탈퇴 전 꼭 확인하세요.<br>
                         클래스에서 탈퇴 시 작성한 글, 사진, 댓글 등을 삭제하거나 수정할 수 없습니다.<br>
                         원하시면 탈퇴 전에 삭제 혹은 수정하시기 바랍니다.
                     </p>
