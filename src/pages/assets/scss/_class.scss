@@ -1004,10 +1004,12 @@
     .list-tit {
       font-size:12px;
       color:#57576d;
-      &.file-txt{
+      &.file-info{
+        padding: 15px 20px;
         font-size: 14px;
         font-weight: 500;
         color: #848499;
+        background-color: #ffffff;
       }
     }
 
@@ -1097,6 +1099,18 @@
 
         &.disabled {
           opacity:0.2;
+        }
+      }
+    }
+
+    .scroll-body {
+      overflow-y: scroll;
+      &.file {
+        padding-right: 250px;
+        margin-right: -250px;
+        -ms-overflow-style: none; /* IE and Edge */
+        &::-webkit-scrollbar {
+          display: none; /* Chrome, Safari, Opera*/
         }
       }
     }
@@ -1226,3 +1240,7 @@
     color:#848499;
   }
 }
+
+
+
+
