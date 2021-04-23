@@ -231,6 +231,15 @@ class MyClassService {
     }
 
     /**
+     * 클래스 멤버 답변 전체 조회
+     * @param classId
+     * @param memberId
+     */
+    public getMemberClassQnA(classId: number, memberId: number): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/members/${memberId}/answer`);
+    }
+
+    /**
      * 클래스 태그 조회
      * @param classId
      */

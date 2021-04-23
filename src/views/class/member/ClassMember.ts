@@ -1,5 +1,6 @@
 import MyClassService from '@/api/service/MyClassService';
-import {IClassInfo, IClassMemberList, IClassMembers} from '@/views/model/my-class.model';
+import UserService from '@/api/service/UserService';
+import {IClassInfo, IClassMemberList, IClassMembers, IQuestionList} from '@/views/model/my-class.model';
 import {
     resetSearchInput,
     searchKeyEventObservable,
@@ -39,29 +40,41 @@ export default class ClassMember extends Vue{
         return this.searchResultItems;
     }
 
-    /* 운영자/스탭/일반 멤버 토글 상태값 */
-    private isAdminToggle: boolean = false;
-    private isStaffToggle: boolean = false;
-    private isMemberToggle: boolean = false;
-
-    private isInvitePopup: boolean = false;
-    private isSnackbar: boolean = false;
-    private isDetailPopup: boolean = false;
-    private isBlockModal: boolean = false;
-    private isBanModal: boolean = false;
-
-    private memberLevel: number = 0;
-    private totalMemberNum: number = 0;
-
+    /* 전체 멤버 리스트 */
     private classMembers: IClassMembers[] = [];
     private adminList: IClassMembers[] = [];
     private staffList: IClassMembers[] = [];
     private memberList: IClassMembers[] = [];
+    private memberLevel: number = 0;
+    private totalMemberNum: number = 0;
 
     /* 멤버 검색 관련 */
     private searchValue: string = '';
     private isLoading: boolean = false;
     private searchResultItems: [] = [];
+
+    /* 운영자/스탭/일반 멤버 토글 상태값 */
+    private isAdminToggle: boolean = false;
+    private isStaffToggle: boolean = false;
+    private isMemberToggle: boolean = false;
+    private isInvitePopup: boolean = false;
+    private isSnackbar: boolean = false;
+    private isDetailPopup: boolean = false;
+    private isBlockModal: boolean = false;
+    private isBlockCompleteModal: boolean = false;
+    private isBanModal: boolean = false;
+    private isBanCompleteModal: boolean = false;
+
+    /* 멤버정보 상세 팝업 */
+    private nickname: string = '';
+    private detailMemberNum: number = 0;
+    private userIdNum: number = 0;
+    private mobileNo: number = 0;
+    private userId: string = '';
+    private email: string = '';
+    private memberId: number = 0;
+    private qnaList: IQuestionList[] = [];
+    private isActive: boolean = false;
 
     public created() {
         this.getClassMembers();
@@ -197,5 +210,82 @@ export default class ClassMember extends Vue{
             });
             reset$.subscribe();
         });
+    }
+
+    /**
+     * 멤버 프로필 상세 팝업 열면서 해당 멤버의 정보 불러온다.
+     * @param id
+     * @param level
+     * @param nickname
+     * @private
+     */
+    private detailPopupOpen(userId: number, level: number, nickname: string, memberId: number): void {
+        this.userIdNum = userId;
+        this.isDetailPopup = true;
+        this.detailMemberNum = level;
+        this.nickname = nickname;
+        this.memberId = memberId;
+        UserService.getUserInfo(userId)
+          .then((data) => {
+              this.mobileNo = data.user.mobile_no;
+              this.userId = data.user.user_id;
+              this.email = data.user.email;
+          });
+        this.getMemberQna(this.memberId);
+    }
+
+    /**
+     * 멤버 프로필 상세 팝업 내에 들어가는 질문 답변 가져오기
+     * @param memberId
+     * @private
+     */
+    private getMemberQna(memberId: number): void {
+        MyClassService.getMemberClassQnA(this.classID, memberId)
+          .then((data) => {
+              this.qnaList = data.qnalist;
+          });
+    }
+
+    /**
+     * 멤버 차단 / 강제탈퇴 팝업 오픈시 해당 멤버의 정보를 불러온다.
+     * @private
+     */
+    // private getMemberInfo(): void {
+    //
+    // }
+
+    /**
+     * 멤버 차단 팝업 열기
+     * @private
+     */
+    private blockModalOpen(id: number): void {
+        this.isActive = false;
+        this.isBlockModal = true;
+        this.memberId = id;
+        // this.getMemberInfo();
+    }
+
+    /**
+     * 멤버 차단 전송
+     * @private
+     */
+    private memberBlockSubmit(): void {
+        this.isBlockModal = false;
+        this.isBlockCompleteModal = true;
+        MyClassService.blockClassMember(this.classID, this.memberId)
+          .then(() => {
+              console.log(`${this.memberId} 멤버 차단 완료`);
+          });
+    }
+
+    /**
+     * 멤버 강제 탈퇴 팝업 열기
+     * @private
+     */
+    private banModalOpen(id: number): void {
+        this.isActive = false;
+        this.isBanModal = true;
+        this.memberId = id;
+        // this.getMemberInfo();
     }
 }
