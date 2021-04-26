@@ -94,7 +94,21 @@ export default class Curriculum extends Vue {
             course_list: [],
         }
     };
-    private allCourseList: ICourseList[]= [];
+    private allCourseList: ICourseList={
+        course: {
+            startDay:new Date(),
+            createdAt:new Date(),
+            updatedAt:new Date(),
+            id: 0,
+            curriculum_id: 0,
+            class_id: 0,
+            index: 0,
+            title: 'string',
+            contents: '',
+            startTime:new Date(),
+            endTime:new Date(),
+        }
+    };
 
     private currListNum: number = 0;
     private eduItems: Array< {title: string }>=[];
@@ -157,14 +171,9 @@ export default class Curriculum extends Vue {
         this.countNumber = num;
     }
 
-    private clickCard(num: number): void{
-        this.cardId = num;
-        console.log(this.cardId);
-    }
-
     private clickCourse(num: number): void{
         this.courseId = num;
-        console.log(this.courseId);
+        // console.log(this.courseId);
     }
 
     /**
@@ -184,7 +193,7 @@ export default class Curriculum extends Vue {
         MyClassService.getEducationList(this.classID)
             .then((data) => {
                 this.allEduList = data;
-                console.log(this.allEduList);
+                // console.log(this.allEduList);
             });
     }
 
@@ -211,7 +220,7 @@ export default class Curriculum extends Vue {
     /**
      * 클래스 교육과정 개별코스 정보 조회
      */
-    get courseList(): ICourseList[] {
+    get courseList(): ICourseList{
         return this.allCourseList;
     }
 
@@ -223,8 +232,7 @@ export default class Curriculum extends Vue {
         MyClassService.getEduCourseList(this.classID, this.cardIdNumber, this.courseIdNumber )
             .then((data) => {
                 this.allCourseList = data;
-                console.log(data);
-                // console.log(this.courseIdNumber);
+                console.log('getEduCourseList 함수 데이터', data);
             });
     }
 
@@ -291,6 +299,10 @@ export default class Curriculum extends Vue {
 
     private getCurrItemTitleById( title: string): string {
         return (title)? title : '';
+    }
+
+    private getCurrCourseItemTitleById( title: string ): string {
+        return (title)? title: '';
     }
 }
 

@@ -722,12 +722,12 @@ interface ICourseList {
         curriculum_id: number;
         class_id: number;
         index: number;
-        title?: string | undefined;
+        title: string | undefined;
         contents: string;
         startTime: Date;
         endTime: Date;
     };
-    message: string;
+    message?: string;
 }
 
 
