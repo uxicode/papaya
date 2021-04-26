@@ -174,7 +174,7 @@ export default class ClassMember extends Vue{
 
             //사용자가 입력한 값 처리 Observable
             //obv$: Observable<any>, loadChk: ()=>void, promiseFunc: Promise<any>, isLoading: boolean
-            const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, MyClassService.searchMembers, this.isLoading );
+            const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, { fn: MyClassService.searchMembers, args:[Number(this.classID)] }, this.isLoading );
             userInter$.subscribe({
                 next:( searchData: any ) =>{
                     console.log(searchData);

@@ -7,7 +7,7 @@
 <!--          <a href="" class="img-change"><img :src="require('@/assets/images/btn-round 2.png')" alt=""></a>-->
 
           <!-- start: profile image upload -->
-          <form class="file-form img-change" enctype="multipart/form-data" accept-charset="utf-8" novalidate>
+          <form v-if="isOwner" class="file-form img-change" enctype="multipart/form-data" accept-charset="utf-8" novalidate>
             <!-- accept 종류 : image/*, .pdf, .xls, .xlsx, .ppt, .pptx, .doc, .docx-->
             <input class="input-file" type="file" name="files" id="fileInput" accept="image/*" @change="uploadProfileImg( $event.target.files )"/>
             <img :src="require('@/assets/images/btn-round2.png')" alt="">
@@ -120,6 +120,10 @@ export default class SideMenu extends Vue{
     {id:5, title: '클래스 설정', linkKey:'setting' },
   ];
   private isPopup: boolean=false;
+
+  get isOwner(): boolean{
+    return (this.myClassHomeModel.owner_id === this.myClassHomeModel.me?.user_id);
+  }
 
   get sideMenuModel(): ISideMenu[]{
     return this.sideMenuData;

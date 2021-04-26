@@ -171,8 +171,8 @@ class MyClassService {
         return request('delete', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
 
-    public searchMembers(payload: {classId: number, searchWord: string}): Promise<any> {
-        return request('get', `${CLASS_BASE_URL}/${payload.classId}/members/search/${payload.searchWord}`);
+    public searchMembers( classId: number, searchWord: string): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/members/search/${searchWord}`);
     }
 
     /**
