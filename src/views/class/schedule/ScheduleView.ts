@@ -2,7 +2,7 @@ import {Vue, Component } from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {IScheduleTotal, ITimeModel } from '@/views/model/schedule.model';
-import {CalendarEvent} from 'vuetify';
+import {CalendarEvent, CalendarEventParsed} from 'vuetify';
 import MyClassService from '@/api/service/MyClassService';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 import {Utils} from '@/utils/utils';
@@ -10,7 +10,7 @@ import Modal from '@/components/modal/modal.vue';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './ScheduleView.html';
-
+import { RRule, RRuleSet, rrulestr } from 'rrule';
 
 const MyClass = namespace('MyClass');
 
@@ -59,7 +59,7 @@ export default class ScheduleView extends Vue{
     };
 
     private scheduleLists: IScheduleTotal[]=[];
-    private calendarModel: string= '';
+    private calendarModel: string= '2020-3-01';
     private events: any[] = [];
     private dragTime: number | null=null;
     private dragEvent: any | null= null;
@@ -108,6 +108,24 @@ export default class ScheduleView extends Vue{
     private loopRangeCheck: boolean=false;
     private loopRangeCount: number | string=10;
 
+    private scheduleData: {
+        repeat_type: number,
+        repeat_count: number,
+        fullday: string | boolean,
+        title: string,
+        body: string,
+        startAt: Date,  //2019-11-15 10:00:00
+        endAt: Date;
+    } = {
+        repeat_type: 0,
+        repeat_count: 0,
+        fullday: '',
+        title: '',
+        body: '',
+        startAt:new Date(),  //2019-11-15 10:00:00
+        endAt: new Date()
+    };
+
 
     get currentLoopRangeItems(): string[]{
         return this.loopRangeItems;
@@ -129,25 +147,75 @@ export default class ScheduleView extends Vue{
         return this.endDate;
     }
 
-    public created(){
+    get scheduleEvents(): any[] {
+        return this.events;
+    }
+
+    private get calendarInstance(): Vue & {
+        prev: () => void,
+        next: () => void,
+        checkChange: () => void,
+        updateTimes: () => void,
+        getVisibleEvents: () => CalendarEventParsed[],
+        getFormatter: (format: any) => any } {
+        return this.$refs.calendar as Vue & {
+            prev: () => void,
+            next: () => void,
+            checkChange: () => void,
+            updateTimes: () => void,
+            getVisibleEvents: () => CalendarEventParsed[],
+            getFormatter: (format: any) => any
+        };
+    }
+
+
+
+    public async created(){
         // console.log(new Date().toISOString());
-        this.getScheduleList();
+        await this.getScheduleList();
+        await this.calendarInstance.prev();
+        await this.calendarInstance.next();
+
+        const rule = new RRule({
+            freq: RRule.WEEKLY,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
+            dtstart: new Date(Date.UTC(2021, 3, 30, 4, 28, 0)),
+            count: 30,
+            interval: 1
+        });
+        console.log(rule.all());
     }
 
-    public mounted() {
+    public  mounted() {
         //시작일과 종료일이 변경되었는지 확인합니다. 변경된 경우 변경 이벤트를 업데이트하고 내 보냅니다.
-        ( this.$refs.calendar as CalendarEvent).checkChange();
+         this.calendarInstance.checkChange();
     }
 
-    private getScheduleList(): void{
+    /**
+     * 일정 생성 데이터 초기화
+     * @private
+     */
+    private resetToAddScheduleData() {
+        this.scheduleData = {
+            repeat_type: 0,
+            repeat_count: 0,
+            fullday: '',
+            title: '',
+            body: '',
+            startAt:new Date(),  //2019-11-15 10:00:00
+            endAt: new Date()
+        };
+    }
+
+    private async getScheduleList(): Promise<void>{
         // console.log(this.classID === Number( this.$route.params.classId ) );
-        MyClassService.getAllScheduleByClassId( this.classID )
+        await MyClassService.getAllScheduleByClassId( this.classID )
           .then((data)=>{
               console.log( 'getAllScheduleByClassId=', data.class_schedule_list );
               this.scheduleLists=data.class_schedule_list;
           });
 
     }
+
 
     private loopRangeCountClickHandler( value: string ){
         this.loopRangeCount=value;
@@ -158,10 +226,10 @@ export default class ScheduleView extends Vue{
         this.calendarModel = '';
     }
     private prev() {
-        ( this.$refs.calendar as CalendarEvent).prev();
+        this.calendarInstance.prev();
     }
     private next() {
-        ( this.$refs.calendar as CalendarEvent).next();
+        this.calendarInstance.next();
     }
     private viewMoreDay( data: { date: any }) {
         this.calendarModel = data.date;
@@ -180,6 +248,11 @@ export default class ScheduleView extends Vue{
     private getEventColor(event: CalendarEvent) {
         return event.color;
     }
+
+    private getFullDay(date: Date): string{
+        return Utils.getFullDay( date );
+    }
+
 
     //상세내역 팝업
     private showEvent( eventObj: { nativeEvent: MouseEvent, event: CalendarEvent} ) {
@@ -218,8 +291,8 @@ export default class ScheduleView extends Vue{
                     name: this.scheduleLists[i].title,
                     details: this.scheduleLists[i].text,
                     color: this.colors[this.scheduleLists[i].owner.schedule_color],
-                    start: new Date(this.scheduleLists[i].startAt),
-                    end: new Date(this.scheduleLists[i].endAt),
+                    start: new Date( this.scheduleLists[i].startAt),
+                    end: new Date( this.scheduleLists[i].endAt ),
                     repeat: this.scheduleLists[i].count,
                     timed:true,
                 });
@@ -263,7 +336,41 @@ export default class ScheduleView extends Vue{
         return ImageSettingService.getProfileImg( imgUrl );
     }
 
+    /**
+     * 일정 등록시 타이틀 부분
+     * @param val
+     * @private
+     */
+    private addScheduleTitleChange(val: string) {
+        this.scheduleData.title=val;
+        console.log(this.scheduleData.title);
+    }
 
+    /**
+     * 일정 등록시  하루종일 표시 유무 - true/false 로 등록하기에 전송시 0/1 로 변환해서 전송필요.
+     * @param val
+     * @private
+     */
+    private fulldayCheckChange(val: boolean | string) {
+        this.scheduleData.fullday=!!val;
+    }
+
+    /**
+     * 시작일시 - datepicker 일자 선택시
+     * @private
+     */
+    private startDatePickerChange( ) {
+        this.startDateMenu = false;
+        console.log(this.startDatePickerModel);
+    }
+
+    private addStartApmSchedule( val: string ) {
+        console.log(val, this.currentStartTimeModel );
+    }
+
+    private startTimeChange(){
+        console.log(this.currentStartTimeModel);
+    }
 
     /**
      * drag 시작
@@ -335,26 +442,6 @@ export default class ScheduleView extends Vue{
         week: [],
         weekday: number,
         year: number } ) {
-        /*
-        tms-
-        {
-        date: "2021-04-20"
-        day: 20
-        future: false
-        hasDay: true
-        hasTime: true
-        hour: 0
-        minute: 1
-        minutesToPixels: ƒ ()
-        month: 4
-        past: true
-        present: false
-        time: "00:01"
-        timeDelta: ƒ ()
-        timeToY: ƒ ()
-        week: [{…}]
-        weekday: 2
-        year: 2021 } */
 
         const mouse = this.toTime(tms);
 
@@ -440,6 +527,11 @@ export default class ScheduleView extends Vue{
     }
     private rnd(a: any, b: any): number {
         return Math.floor((b - a + 1) * Math.random()) + a;
+    }
+
+    private onAddSchedulePopupCloseHandler(): void{
+        this.isPopup=false;
+        this.loopRangeCheck = false;
     }
 
 }

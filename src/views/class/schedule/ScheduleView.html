@@ -69,7 +69,7 @@
                 ref="calendar"
                 v-model="calendarModel"
                 color="primary"
-                :events="events"
+                :events="scheduleEvents"
                 :event-color="getEventColor"
                 :type="type"
                 :weekdays="weekdays"
@@ -78,7 +78,7 @@
                 :month-format="(timestamp)=> (new Date(timestamp.date).getMonth()+1)+'월' "
                 @change="updateRange"
                 @click:event="showEvent"
-                :event-ripple="false">
+                >
           <template v-slot:event="{ event, timed, eventSummary }">
             <div class="v-event-draggable" v-html="eventSummary()"></div>
             <div v-if="timed" class="v-event-drag-bottom" @mousedown.stop="extendBottom(event)"></div>
@@ -114,9 +114,9 @@
         <a href="" class="add-schedule-btn" @click.stop.prevent="addScheduleOpen"></a>
       </div>
 
-      <!-- start: 공통 팝업 / 파일명 : W.4.5.3.3.4.2 (일정 만들기) (4.5.3.3.1 ~ 4.5.3.3.4.2)-->
+      <!-- start: 공통 팝업 / 파일명 : W.4.5.3.3.4.2 (일정 만들기) (4.5.3.3.1 ~ 4.5.3.3.4.2) isPopup=false;loopRangeCheck = false-->
       <transition name="modal">
-        <modal v-if="isPopup" size="600px" body-padding="0" @modalClose="isPopup=false;menu1 = false">
+        <modal v-if="isPopup" size="600px" body-padding="0" @modalClose="onAddSchedulePopupCloseHandler">
           <div slot="header">
             <!-- header custom coding-->
             <p class="popup-header-tit">새 일정 등록</p>
@@ -137,7 +137,7 @@
                 </div>
                 <div class="form-item">
                   <!--              <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">-->
-                  <txt-field add-class="popup-type" placeholder="제목을 20자 이내로 작성해 주세요."></txt-field>
+                  <txt-field add-class="popup-type" placeholder="제목을 20자 이내로 작성해 주세요." v-model="scheduleData.title" @input="addScheduleTitleChange"></txt-field>
                 </div>
               </div>
               <div class="popup-form-cnt">
@@ -145,7 +145,7 @@
                   <p>하루종일</p>
                   <div class="form-box">
                     <div class="form-switcher">
-                      <input type="checkbox" id="toggle1">
+                      <input type="checkbox" id="toggle1" v-model="scheduleData.fullday"  @input="fulldayCheckChange(  $event.target.value )">
                       <label for="toggle1"></label>
                     </div>
                   </div>
@@ -179,14 +179,17 @@
                           <v-text-field
                                   v-model="startDatePickerModel"
                                   v-bind="attrs"
-                                  v-on="on" hide-details solo flat>
+                                  v-on="on"
+                                  hide-details
+                                  solo
+                                  flat>
                             <template v-slot:append>
                               <button type="button" class="btn form-btn form-calendar" v-on="on"></button>
                             </template>
                           </v-text-field>
                         </template>
                         <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                        <v-date-picker v-model="startDatePickerModel" no-title @input="startDateMenu = false"></v-date-picker>
+                        <v-date-picker v-model="startDatePickerModel" no-title @input="startDatePickerChange"></v-date-picker>
                       </v-menu>
                     </div>
 
@@ -211,17 +214,17 @@
                           </v-text-field>
                         </template>
                         <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
-                        <v-select v-model="startTimeSelectModel.apm" :items="['오전', '오후'] " placeholder="오전" hide-details solo flat style="display:inline-block;width:70px;">
+                        <v-select v-model="startTimeSelectModel.apm" :items="['오전', '오후'] " placeholder="오전" hide-details solo flat style="display:inline-block;width:70px;" @input="addStartApmSchedule">
                           <template v-slot:selection="{item, index}">
                             <span style="font-size:14px;">{{ item }}</span>
                           </template>
                         </v-select>
-                        <v-select v-model="startTimeSelectModel.hour" :items="[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] " placeholder="12 시" hide-details solo flat style="display:inline-block;width:70px;">
+                        <v-select v-model="startTimeSelectModel.hour" :items="[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] " placeholder="12 시" hide-details solo flat style="display:inline-block;width:70px;" @input="addStartApmSchedule">
                           <template v-slot:selection="{item, index}">
                             <span style="font-size:14px;">{{ item }}시</span>
                           </template>
                         </v-select>
-                        <v-select v-model="startTimeSelectModel.minute" :items="[ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00'] " placeholder="00 분" hide-details solo flat style="display:inline-block;width:70px">
+                        <v-select v-model="startTimeSelectModel.minute" :items="[ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00'] " placeholder="00 분" hide-details solo flat style="display:inline-block;width:70px"  @input="addStartApmSchedule">
                           <template v-slot:selection="{item, index}">
                             <span style="font-size:14px;">{{ item }}분</span>
                           </template>
@@ -333,14 +336,15 @@
                               v-model="loopRangeCheck"
                               transition="scale-transition"
                               content-class="time-select-menu bg-white"
-                              offset-y offset-x>
+                              offset-y
+                              offset-x
+                              min-width="180px">
                         <template v-slot:activator="{ on, attrs }">
                           <button type="button" class="list-popup-btn"
                                   v-model="loopRangeModel"
                                   v-bind="attrs"
-                                  v-on="on"><span>{{
-                              loopRangeModel
-                                                  }}</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
+                                  v-on="on">
+                            <span>{{ loopRangeModel }}</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
                           </button>
                         </template>
                         <v-list>
@@ -367,7 +371,7 @@
                   </div>
                 </div>
                 <div class="form-item post-cnt" style="height:154px;">
-                  <textarea class="form-textarea" placeholder="일정 내용을 작성해 주세요."></textarea>
+                  <textarea v-model="scheduleData.body"  class="form-textarea" placeholder="일정 내용을 작성해 주세요."></textarea>
                 </div>
               </div>
 
@@ -398,7 +402,7 @@
         <modal v-if="selectedOpen" size="600px" body-padding="0" footerPadding="0" @modalClose="selectedOpen=false">
           <div slot="header">
             <!-- header custom coding-->
-            <p class="popup-header-tit">2019년 10월 가을체험학습</p>
+            <p class="popup-header-tit">{{ selectedEvent.name }}</p>
 
             <div class="popup-btn">
               <button type="button" class="btn only-ico-btn sm bookmark active"></button>
@@ -450,8 +454,8 @@
                 <div class="popup-form-top">
                   <div class="form-item pd-desc">
                     <ul class="feed-state clearfix">
-                      <li class="state-item"><p class="period">2019. 10. 30 화요일 오전 10시 - 2019. 10. 31 수요일 오후 1시</p></li>
-                      <li class="state-item"><p class="repeat">매주 반복</p></li>
+                      <li class="state-item"><p class="period">{{ getFullDay( selectedEvent.start) }} - {{ getFullDay( selectedEvent.end ) }}</p></li>
+                      <li class="state-item"><p class="repeat">{{ selectedEvent.repeat }}</p></li>
                     </ul>
                   </div>
 
@@ -470,11 +474,7 @@
               <div class="popup-feed-detail pdb-40">
                 <div class="fd-cnt">
                   <p class="fd-txt">
-                    운동회는, 전교생이 청군과 백군으로 나눠 운동장에서 하루 동안 대결을 펼치는 운동회입니다. 달리기를 하면 1등에서 3등까지는 등수 별로 도장을 받았습니다.
-                  </p>
-                  <p class="fd-txt">
-                    손목위에 찍힌 도장을 확인하며, 학용품도 받았죠. 또한, 김밥과 치킨 등 부모님께서 준비한 도시락을 먹는 것도 운동회에 대한 추억입니다. 이번에는 운동회의 역사와 현재의 운동회를
-                    알아보는 시간을 가져보겠습니다.
+                    {{ selectedEvent.details }}
                   </p>
 
                   <div class="fd-inner">

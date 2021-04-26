@@ -45,8 +45,7 @@ export default class ClassMember extends Vue{
     private memberLevel: number = 0;
 
     /* 멤버 검색 관련 */
-    private searchWord: string = '';
-    private searchValue: object = {};
+    private searchValue: string = '';
     private isLoading: boolean = false;
     private searchResultItems: [] = [];
 
@@ -76,7 +75,7 @@ export default class ClassMember extends Vue{
     public created() {
         this.getClassMembers();
         this.getClassMemberLevel();
-        //this.search();
+        this.search();
     }
 
     /**
@@ -181,28 +180,12 @@ export default class ClassMember extends Vue{
         this.isLoading=!this.isLoading;
     }
 
-    private search(value: string = ''){
-        this.searchWord=( value!=='' )? value : '';
-        //this.searchValue = {classId: this.classID, searchWord: this.searchWord};
-        console.log(this.searchValue);
+    private search(){
+        this.searchValue = '';
         this.searchResultItems=[];
 
         //$nextTick - 해당하는 엘리먼트가 화면에 렌더링이 되고 난 후
         this.$nextTick( ()=>{
-
-            const searchMember = document.querySelector('#searchMember') as HTMLInputElement;
-            // console.log(searchSchool);
-            searchMember.focus();
-
-            if (searchMember.value !== '') {
-                this.checkLoading();
-                // const valueToSearch$=fromEvent(searchSchool, 'input');
-                MyClassService.searchMembers({classId: this.classID, searchWord: this.searchWord})
-                  .then((data: any) => {
-                      this.checkLoading();
-                      this.searchResultItems = data.results.map((item: any) => item);
-                  });
-            }
 
             //키가 눌렸을 때 체크 Observable
             // targetInputSelector: string
@@ -210,7 +193,7 @@ export default class ClassMember extends Vue{
 
             //사용자가 입력한 값 처리 Observable
             //obv$: Observable<any>, loadChk: ()=>void, promiseFunc: Promise<any>, isLoading: boolean
-            const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, MyClassService.searchMembers, this.isLoading );
+            const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, { fn: MyClassService.searchMembers, args:[Number(this.classID)] }, this.isLoading );
             userInter$.subscribe({
                 next:( searchData: any ) =>{
                     console.log(searchData);

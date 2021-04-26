@@ -52,7 +52,7 @@ export default class ClassTagManage extends Vue {
     get loadingModel() {
         return this.isLoading;
     }
-    
+
     // public created() {
     //     this.getClassTags();
     // }
@@ -105,7 +105,7 @@ export default class ClassTagManage extends Vue {
 
             //사용자가 입력한 값 처리 Observable
             //obv$: Observable<any>, loadChk: ()=>void, promiseFunc: Promise<any>, isLoading: boolean
-            const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, MyClassService.searchTag, this.isLoading );
+            const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, { fn: MyClassService.searchTag, args: null} , this.isLoading );
             userInter$.subscribe({
                 next:( searchData: any ) =>{
                     //console.log(searchData.tag_list);
@@ -142,7 +142,7 @@ export default class ClassTagManage extends Vue {
     private checkLoading(): void{
         this.isLoading=!this.isLoading;
     }
-    
+
     /**
      * autocomplete 로 검색된 리스트 중 하나를 클릭했을때 실행 -> 해당 클릭한 키워드값으로
      * @param name
