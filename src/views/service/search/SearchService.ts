@@ -32,7 +32,7 @@ function searchKeyEventObservable( targetInputSelector: string, eventName: strin
  * @param promiseFunc - 통신할 promise 반환 api 함수
  * @param isLoading  - 로딩완료됨을 알릴 toggle 변수
  */
-function searchUserKeyValueObservable(obv$: Observable<any>, loadChk: () => void, promiseFunc: { fn: (...args: any[])=> Promise<any>, args: any[] | null }, isLoading: boolean) {
+function searchUserKeyValueObservable( obv$: Observable<any>, loadChk: () => void, promiseFunc: { fn: (...args: any[])=> Promise<any>, args: any[] | null }, isLoading: boolean) {
   return obv$.pipe(
     filter( ( value: any)=> value.trim().length>1), //검색어 길이가 0 보다 큰경우 즉 검색어가 있을 경우에만,
     tap( ()=> loadChk() ), // 어떤 동작을 수행하는 오퍼레이터

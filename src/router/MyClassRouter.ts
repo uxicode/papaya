@@ -13,7 +13,7 @@ const MyClassRouter=[
   {
     path: '/class/:classId',
     name: 'myClassListDetailPage',
-    // beforeEnter: getIsAuth,
+    beforeEnter: getIsAuth,
     components: {default: () => import('@/views/class/home/MyClassListDetailPage'), header: AppHeader, footer: AppFooter},
     children: [
       {path: '', name: 'myClassListDetailView', component: () => import('../views/class/home/MyClassListDetailView')}, //가입리스트 중 하나 클릭시-> 클래스 홈( 상세 )

@@ -328,6 +328,23 @@
   }
 }
 
+.info-img {
+  position:relative;
+  display:inline-block;
+
+  img {
+    width:100%;
+  }
+  .input-file{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 32px;
+    height: 32px;
+    opacity: 0;
+  }
+}
+
 .class-home {
   padding-bottom:10px;
   border-radius: 5px;
@@ -339,14 +356,8 @@
     text-align:center;
 
     .info-img {
-      position:relative;
-      //display:inline-block;
       width:80px;
       margin:0 auto;
-
-      img {
-        width:100%;
-      }
       .circle{
         border-radius: 50%;//jbc
       }
@@ -355,14 +366,6 @@
         bottom:0;
         right:0;
         width:32px;
-      }
-      .input-file{
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 32px;
-        height: 32px;
-        opacity: 0;
       }
     }
 

@@ -76,6 +76,7 @@ export default class ScheduleView extends Vue{
 
     private startDate: string | number | Date = '';
     private endDate: string | number | Date = '';
+    private isFocusContentsArea: boolean=true;
 
 
     private colors: string[] = [
@@ -125,6 +126,8 @@ export default class ScheduleView extends Vue{
         startAt:new Date(),  //2019-11-15 10:00:00
         endAt: new Date()
     };
+
+
 
 
     get currentLoopRangeItems(): string[]{
@@ -182,7 +185,7 @@ export default class ScheduleView extends Vue{
             count: 30,
             interval: 1
         });
-        console.log(rule.all());
+        // console.log(rule.all());
     }
 
     public  mounted() {
@@ -534,4 +537,116 @@ export default class ScheduleView extends Vue{
         this.loopRangeCheck = false;
     }
 
+    private scheduleDetailAreaInputHandler(value: any) {
+        console.log(value);
+        this.scheduleData.body=value;
+    }
+
+    private scheduleDetailAreaFocusHandler(value: any) {
+        this.isFocusContentsArea=false;
+
+        this.$nextTick(()=>{
+            const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLElement;
+            scheduleDetailAreaTxt.focus();
+        });
+
+    }
+
+    private scheduleDetailAreaBlurHandler(value: any) {
+        this.isFocusContentsArea=true;
+    }
+
+    //파일 다운로드 설정.
+    //var filenamesHeader= res.headers['content-disposition'];
+    //var filename=filenamesHeader.substr( filenamesHeader.indexOf('="')+1 );
+    //res.data, 'application/zip', `${filename.replace(/[\"]/g, '' ) }`
+    //res.data, res.headers['content-type'], selectedFile.originalname
+    private fileDown( data: any, downType: string, fileName: string ){
+        const blob = new Blob([data], {type: downType});
+        const blobURL = window.URL.createObjectURL(blob);
+
+        const dummyLink = document.createElement('a');
+        dummyLink.style.display = 'none';
+        dummyLink.href = blobURL;
+        dummyLink.setAttribute('download', fileName );
+
+        if (typeof dummyLink.download === 'undefined') {
+            dummyLink.setAttribute('target', '_blank');
+        }
+
+        document.body.appendChild(dummyLink);
+        dummyLink.click();
+        document.body.removeChild(dummyLink);
+        window.URL.revokeObjectURL(blobURL);
+    }
+
+    private addFileInputFocus() {
+        const event = new MouseEvent('click', {
+            view: window,
+            bubbles: false,
+            cancelable: false
+        });
+        const imgFileInput =this.$refs.imgFileInput as HTMLInputElement;
+        imgFileInput.dispatchEvent(event);
+        // console.log('클릭', imgFileInput);
+    }
+
+    private addFileToImage(files: any ) {
+        // const multipleContainer = document.querySelector("#multipleImgs")
+        const contentsPreview= document.querySelector('#contentsPreview') as HTMLElement;
+        const fileArr = Array.from(files);
+        console.log(fileArr);
+        fileArr.forEach( (file: any, index: number) => {
+            // const reader = new FileReader();
+            const $imgDiv = document.createElement('div');
+            const $img = document.createElement('img');
+            $img.classList.add('img-responsive');
+            $imgDiv.classList.add('float-lt');
+            $imgDiv.classList.add('wd-half');
+            $imgDiv.appendChild($img);
+            $img.src=URL.createObjectURL(file);
+            contentsPreview.appendChild($imgDiv);
+            contentsPreview.classList.add('clearfix');
+        });
+
+
+
+        // 인풋 태그에 파일들이 있는 경우
+        /* if(input.files) {
+             // 이미지 파일 검사 (생략)
+             console.log(input.files)
+             // 유사배열을 배열로 변환 (forEach문으로 처리하기 위해)
+             const fileArr = Array.from(input.files)
+             const $colDiv1 = document.createElement("div")
+             const $colDiv2 = document.createElement("div")
+             $colDiv1.classList.add("column")
+             $colDiv2.classList.add("column")
+             fileArr.forEach((file, index) => {
+                 const reader = new FileReader()
+                 const $imgDiv = document.createElement("div")
+                 const $img = document.createElement("img")
+                 $img.classList.add("image")
+                 const $label = document.createElement("label")
+                 $label.classList.add("image-label")
+                 $label.textContent = file.name
+                 $imgDiv.appendChild($img)
+                 $imgDiv.appendChild($label)
+                 reader.onload = e => {
+                     $img.src = e.target.result
+
+                     $imgDiv.style.width = ($img.naturalWidth) * 0.2 + "px"
+                     $imgDiv.style.height = ($img.naturalHeight) * 0.2 + "px"
+                 }
+
+                 console.log(file.name)
+                 if(index % 2 == 0) {
+                     $colDiv1.appendChild($imgDiv)
+                 } else {
+                     $colDiv2.appendChild($imgDiv)
+                 }
+                 reader.readAsDataURL(file)
+             })
+             multipleContainer.appendChild($colDiv1)
+         }*/
+    }
 }

@@ -30,7 +30,7 @@
       </div>
       <div class="class-menu">
         <ul class="menu-list">
-          <li v-for="(item, index) in sideMenuModel" :key="`item-${index}`">
+          <li v-for="(item, index) in sideMenuModel" :key="`item-${index}`" v-if="visibleSettingMenus(index)">
             <a href="" :class="[`type${index+1}`, {'active': index===activeNum }]" @click.prevent="sideMenuClickHandler( index )">{{ item.title }}</a>
           </li>
 <!--          <li><a href="" class="type2">알림</a></li>
@@ -203,6 +203,14 @@ export default class SideMenu extends Vue{
 
   private gotoClassMemberPage(): void{
     this.$router.push(`/class/${this.classID}/member`);
+  }
+
+  private visibleSettingMenus(idx: number): boolean{
+    if( idx === this.sideMenuModel.length-1 ){
+      return (this.isOwner);
+    }else{
+      return true;
+    }
   }
 }
 

@@ -251,7 +251,9 @@ body {
 
 .bd-none {border:none !important;}
 .pd-none {padding:0 !important;}
-
+.float-lt{float: left !important;}
+.float-rt{float: right !important;}
+.wd-half{width:50%;}
 .required {
   &:after {
     content:'';
@@ -536,6 +538,10 @@ body {
 .pos-right{
   //$zIndex:null, $top:null, $left:null, $right:null, $bottom:null
   @include pos-abs($top:0, $right:0);
+}
+.img-responsive{
+  max-width: 100%;
+  height:auto;
 }
 
 @import "./transition";

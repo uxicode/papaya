@@ -370,15 +370,32 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-item post-cnt" style="height:154px;">
-                  <textarea v-model="scheduleData.body"  class="form-textarea" placeholder="일정 내용을 작성해 주세요."></textarea>
+                <div class="form-item post-cnt" style="height:154px;overflow-y:auto;">
+                  <div v-if="isFocusContentsArea" class="form-textarea" aria-placeholder="일정 내용을 작성해 주세요." id="contentsPreview" @click="scheduleDetailAreaFocusHandler">
+                    <p style="opacity: 0.2;" v-if="scheduleData.body.length===0">일정 내용을 작성해 주세요.</p>
+                    <p v-else>{{scheduleData.body}}</p>
+                  </div>
+                  <textarea v-else
+                            ref="scheduleDetailAreaTxt"
+                            v-model="scheduleData.body"
+                            class="form-textarea"
+                            placeholder="일정 내용을 작성해 주세요."
+                            @input="scheduleDetailAreaInputHandler( $event.target.value )"
+                            @blur="scheduleDetailAreaBlurHandler"></textarea>
+
                 </div>
               </div>
 
               <div class="popup-form-btm">
                 <div class="form-add-btn">
                   <ul class="clearfix">
-                    <li><a href=""><img :src="require('@/assets/images/image.svg')" alt=""></a></li>
+                    <li>
+                      <a href="#" class="info-img" @click.prevent.stop="addFileInputFocus">
+                        <img :src="require('@/assets/images/image.svg')" alt="">
+                        <input class="input-file" type="file" name="files" ref="imgFileInput" accept="image/*" @change="addFileToImage( $event.target.files )" hidden />
+                      </a>
+
+                    </li>
                     <li><a href=""><img :src="require('@/assets/images/file.svg')" alt=""></a></li>
                   </ul>
 
