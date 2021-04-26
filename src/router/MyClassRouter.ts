@@ -40,17 +40,17 @@ const MyClassRouter=[
     components: {default: () => import('../views/class/setting/ClassWithdrawComplete'), header: AppHeader, footer: AppFooter}, // W.4.5.7.11.1.1
   },
   {
-    path: '/applyOpenClass',
-    name: 'applyOpenClass',
-    beforeEnter: getIsAuth,
-    components: {default: () => import('../views/class/apply/apply.4.4.2'), header: AppHeader, footer: AppFooter}, // W.4.4.2
-  },
-  {
     path: '/applyPrivateClass',
     name: 'applyPrivateClass',
     beforeEnter: getIsAuth,
-    components: {default: () => import('../views/class/apply/apply.4.4.1.1'), header: AppHeader, footer: AppFooter}, // W.4.4.1.1
+    components: {default: () => import('../views/class/apply/applyPrivateClass'), header: AppHeader, footer: AppFooter}, // W.4.4.1.1
   },
+  {
+    path: '/applyOpenClass',
+    name: 'applyOpenClass',
+    beforeEnter: getIsAuth,
+    components: {default: () => import('../views/class/apply/applyOpenClass'), header: AppHeader, footer: AppFooter}, // W.4.4.2
+  }
 ];
 
 export {MyClassRouter};
