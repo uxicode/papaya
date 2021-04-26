@@ -229,8 +229,26 @@ class MyClassService {
      * 클래스 교육과정
      * @param classId
      */
-    public  getMakeEducation(classId: number): Promise<any>{
+    public getEducationList(classId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum` );
+    }
+
+    /**
+     * 클래스 교육과정 정보 조회
+     * @param classId
+     * @param curriculumId
+     */
+    public getEduCurList(classId: number, curriculumId: number): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}` );
+    }
+
+    /**
+     * 클래스 교육과정 개별코스 정보 조회
+     * @param classId
+     * @param curriculumId
+     */
+    public getEduCourseList(classId: number, curriculumId: number, courseId: number): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course/${courseId}` );
     }
 }
 
