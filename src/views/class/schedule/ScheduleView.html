@@ -371,17 +371,29 @@
                   </div>
                 </div>
                 <div class="form-item post-cnt" style="height:154px;overflow-y:auto;">
-                  <div v-if="isFocusContentsArea" class="form-textarea" aria-placeholder="일정 내용을 작성해 주세요." id="contentsPreview" @click="scheduleDetailAreaFocusHandler">
-                    <p style="opacity: 0.2;" v-if="scheduleData.body.length===0">일정 내용을 작성해 주세요.</p>
-                    <p v-else>{{scheduleData.body}}</p>
-                  </div>
-                  <textarea v-else
+
+                  <textarea
                             ref="scheduleDetailAreaTxt"
                             v-model="scheduleData.body"
                             class="form-textarea"
                             placeholder="일정 내용을 작성해 주세요."
                             @input="scheduleDetailAreaInputHandler( $event.target.value )"
-                            @blur="scheduleDetailAreaBlurHandler"></textarea>
+                            ></textarea>
+                  <div class="add-item-cnt" style="padding:0" v-if="fileURLItems.length>0">
+                    <div class="add-photo">
+                      <ul class="add-photo-list clearfix">
+                        <li v-for="(item, index) in fileURLItems" :key="`file-${index}`">
+                          <div class="add-img"><img :src="item" class="thumb" alt=""></div>
+                          <div class="add-img-delete" @click="removeThumb( index )"><img :src="require('@/assets/images/delete.svg')" alt=""></div>
+                        </li>
+                      </ul>
+                      <div class="add-photo-control">
+                        <a href="" class="btn only-ico-btn scroll-prev"><img :src="require('@/assets/images/arrow-left.svg')" alt=""></a>
+                        <a href="" class="btn only-ico-btn scroll-next active"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
+                      </div>
+                    </div>
+                  </div>
+
 
                 </div>
               </div>

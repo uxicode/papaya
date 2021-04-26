@@ -9,8 +9,8 @@ import {Utils} from '@/utils/utils';
 import Modal from '@/components/modal/modal.vue';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
+import { RRule } from 'rrule';
 import WithRender from './ScheduleView.html';
-import { RRule, RRuleSet, rrulestr } from 'rrule';
 
 const MyClass = namespace('MyClass');
 
@@ -34,7 +34,7 @@ export default class ScheduleView extends Vue{
 
 
     private isPopup: boolean=false;
-    private isTimeSelect: boolean=false;
+    // private isTimeSelect: boolean=false;
 
     private type: string= 'month';
     private daysOfWeek: string[] = ['월', '화', '수', '목', '금', '토', '일'];
@@ -126,6 +126,9 @@ export default class ScheduleView extends Vue{
         startAt:new Date(),  //2019-11-15 10:00:00
         endAt: new Date()
     };
+
+
+    private fileURLItems: string[] = [];
 
 
 
@@ -538,22 +541,7 @@ export default class ScheduleView extends Vue{
     }
 
     private scheduleDetailAreaInputHandler(value: any) {
-        console.log(value);
         this.scheduleData.body=value;
-    }
-
-    private scheduleDetailAreaFocusHandler(value: any) {
-        this.isFocusContentsArea=false;
-
-        this.$nextTick(()=>{
-            const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLElement;
-            scheduleDetailAreaTxt.focus();
-        });
-
-    }
-
-    private scheduleDetailAreaBlurHandler(value: any) {
-        this.isFocusContentsArea=true;
     }
 
     //파일 다운로드 설정.
@@ -581,72 +569,53 @@ export default class ScheduleView extends Vue{
     }
 
     private addFileInputFocus() {
-        const event = new MouseEvent('click', {
-            view: window,
-            bubbles: false,
-            cancelable: false
-        });
+        //이벤트 생성
+        const event = this.createMouseEvent('click');
+
+        //파일 input 에 이벤트 붙이기~
         const imgFileInput =this.$refs.imgFileInput as HTMLInputElement;
         imgFileInput.dispatchEvent(event);
         // console.log('클릭', imgFileInput);
     }
 
-    private addFileToImage(files: any ) {
-        // const multipleContainer = document.querySelector("#multipleImgs")
-        const contentsPreview= document.querySelector('#contentsPreview') as HTMLElement;
-        const fileArr = Array.from(files);
-        console.log(fileArr);
-        fileArr.forEach( (file: any, index: number) => {
-            // const reader = new FileReader();
-            const $imgDiv = document.createElement('div');
-            const $img = document.createElement('img');
-            $img.classList.add('img-responsive');
-            $imgDiv.classList.add('float-lt');
-            $imgDiv.classList.add('wd-half');
-            $imgDiv.appendChild($img);
-            $img.src=URL.createObjectURL(file);
-            contentsPreview.appendChild($imgDiv);
-            contentsPreview.classList.add('clearfix');
+    /**
+     * 마우스 이벤트 생성
+     * @param eventName
+     * @private
+     */
+    private createMouseEvent(eventName: string): MouseEvent{
+        return new MouseEvent( eventName, {
+            view: window,
+            bubbles: false,
+            cancelable: false
         });
+    }
 
+    /**
+     * 모델에 이미지 파일 추가
+     * @param files
+     * @private
+     */
+    private addFileToImage( files: any ) {
+        const fileArr = Array.from( files );
+        this.fileURLItems = this.getImageFileItem(fileArr);
+    }
 
+    /**
+     * 이미지 파일 배열생성.
+     * @param items
+     * @private
+     */
+    private getImageFileItem(items: any[]) {
+        return items.map( ( file: any) => URL.createObjectURL(file) );
+    }
 
-        // 인풋 태그에 파일들이 있는 경우
-        /* if(input.files) {
-             // 이미지 파일 검사 (생략)
-             console.log(input.files)
-             // 유사배열을 배열로 변환 (forEach문으로 처리하기 위해)
-             const fileArr = Array.from(input.files)
-             const $colDiv1 = document.createElement("div")
-             const $colDiv2 = document.createElement("div")
-             $colDiv1.classList.add("column")
-             $colDiv2.classList.add("column")
-             fileArr.forEach((file, index) => {
-                 const reader = new FileReader()
-                 const $imgDiv = document.createElement("div")
-                 const $img = document.createElement("img")
-                 $img.classList.add("image")
-                 const $label = document.createElement("label")
-                 $label.classList.add("image-label")
-                 $label.textContent = file.name
-                 $imgDiv.appendChild($img)
-                 $imgDiv.appendChild($label)
-                 reader.onload = e => {
-                     $img.src = e.target.result
-
-                     $imgDiv.style.width = ($img.naturalWidth) * 0.2 + "px"
-                     $imgDiv.style.height = ($img.naturalHeight) * 0.2 + "px"
-                 }
-
-                 console.log(file.name)
-                 if(index % 2 == 0) {
-                     $colDiv1.appendChild($imgDiv)
-                 } else {
-                     $colDiv2.appendChild($imgDiv)
-                 }
-                 reader.readAsDataURL(file)
-             })
-             multipleContainer.appendChild($colDiv1)
-         }*/
+    /**
+     * 추가된 이미지 파일 제거하기
+     * @param idx
+     * @private
+     */
+    private removeThumb(idx: number) {
+        this.fileURLItems.splice(idx, 1);
     }
 }
