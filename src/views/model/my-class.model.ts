@@ -683,7 +683,7 @@ interface ICurriculumList {
             startTime: Date;
             endTime: Date;
             deletedYN: boolean;
-            attachment: Array<{
+            attachment?: Array<{
                 createdAt: Date;
                 updatedAt: Date;
                 id: number;
