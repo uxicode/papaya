@@ -13,14 +13,16 @@
         <div class="popup-body">
             <div class="member-activity">
                 <div class="activity-tit">
-                    <p>차단된 멤버 3</p>
+                    <p>차단된 멤버 {{ blockedMemberList.length }}</p>
                 </div>
                 <div class="member-management-list scroll-body" style="height:540px;">
                     <ul>
-                        <li class="member-item">
-                            <p class="member-name">정재진엄마</p>
-                            <p class="member-date">1분 전 차단</p>
-                            <button type="button" class="member-more clear" @click="isUnblockModal = true">차단 해제하기</button>
+                        <li v-for="(item, idx) in blockedMemberList"
+                            :key="idx"
+                            class="member-item">
+                            <p class="member-name">{{ item.nickname }}</p>
+                            <p class="member-date">{{ item.updatedAt }} 차단</p>
+                            <button type="button" class="member-more clear" @click="unblockModalOpen(item.id)">차단 해제하기</button>
                         </li>
                     </ul>
                 </div>
@@ -50,9 +52,10 @@
                     <div class="member-management-list bd-none">
                         <ul>
                             <li class="member-item bd-none">
-                                <div class="member-type staff">
-                                    <p class="member-name">정재진엄마</p>
-                                    <p class="member-tit">스탭 멤버</p>
+                                <div class="member-type"
+                                     :class="memberLevelIcon(blockedMemberLevel)">
+                                    <p class="member-name">{{ blockedMemberNickname }}</p>
+                                    <p class="member-tit">{{ memberLevelTxt(blockedMemberLevel) }}</p>
                                 </div>
                             </li>
                         </ul>

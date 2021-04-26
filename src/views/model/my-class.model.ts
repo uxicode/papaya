@@ -455,33 +455,28 @@ interface IClassMemberInfo {
 }
 
 interface IClassMemberList {
-    error?: number;
-    class_member_list: {
-        joinedAt: Date;
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
-        class_id: number;
-        user_id: number;
-        nickname: string;
-        profile_image: string;
-        is_bookmarked: number;
-        schedule_color: number;
-        level: number;
-        status: number;
-        open_level_id: number;
-        open_level_mobileno: number;
-        open_level_email: number;
-        onoff_push_noti: number;
-        onoff_post_noti: number;
-        onoff_comment_noti: number;
-        onoff_schedule_noti: number;
-        schedule_noti_intime: number;
-        visited: number;
-        class_member_auths: []
-    };
-    total: number;
-    message?: string;
+    joinedAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
+    id: number;
+    class_id: number;
+    user_id: number;
+    nickname: string;
+    profile_image: string;
+    is_bookmarked: number;
+    schedule_color: number;
+    level: number;
+    status: number;
+    open_level_id: number;
+    open_level_mobileno: number;
+    open_level_email: number;
+    onoff_push_noti: number;
+    onoff_post_noti: number;
+    onoff_comment_noti: number;
+    onoff_schedule_noti: number;
+    schedule_noti_intime: number;
+    visited: number;
+    class_member_auths: [];
 }
 
 interface IClassMembers {
@@ -538,6 +533,17 @@ interface IQuestionList {
     id: number;
     class_id: number;
     question: string;
+}
+
+interface IQnaList {
+    createdAt: Date;
+    updatedAt: Date;
+    id: number;
+    member_id: number;
+    class_id: number;
+    index: number;
+    question: string;
+    answer: string;
 }
 
 interface IMakeEducation {
@@ -713,6 +719,8 @@ interface ICurriculumList {
     message?: string;
 }
 
+
+
 interface ICourseList {
     course: {
         startDay: Date;
@@ -745,6 +753,7 @@ export {
     IClassMemberInfo,
     IClassMemberList,
     IQuestionList,
+    IQnaList,
     IClassMembers,
     IMakeEducation,
     IEducationList,

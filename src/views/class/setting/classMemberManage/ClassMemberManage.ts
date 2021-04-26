@@ -1,5 +1,5 @@
 import MyClassService from '@/api/service/MyClassService';
-import {IClassMemberList} from '@/views/model/my-class.model';
+import {IClassMember, IClassMemberList} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Btn from '@/components/button/Btn.vue';
@@ -26,6 +26,9 @@ export default class ClassMemberManage extends Vue{
     private classID!: number;
 
     private classMemberList: IClassMemberList[] = [];
+    private memberId: number = 0;
+    private memberNickname: string = '';
+    private memberLevel: number = 0;
 
     get classMembers(): IClassMemberList[] {
         return this.classMemberList;
@@ -73,10 +76,58 @@ export default class ClassMemberManage extends Vue{
             case 1:
                 return '운영자';
             case 2:
-                return '스태프';
+                return '스탭 멤버';
             default:
-                return '일반';
+                return '일반 멤버';
         }
+    }
+
+    /**
+     * 멤버 차단 팝업 열기
+     * @private
+     */
+    private blockModalOpen(id: number): void {
+        this.isActive = false;
+        this.isBlockModal = true;
+        this.memberId = id;
+        this.getMemberInfo();
+    }
+
+    /**
+     * 멤버 차단 전송
+     * @private
+     */
+    private memberBlockSubmit(): void {
+        this.isBlockModal = false;
+        this.isBlockCompleteModal = true;
+        MyClassService.blockClassMember(this.classID, this.memberId)
+          .then(() => {
+             console.log(`${this.memberId} 멤버 차단 완료`);
+          });
+    }
+
+    /**
+     * 멤버 강제 탈퇴 팝업 열기
+     * @private
+     */
+    private banModalOpen(id: number): void {
+        this.isActive = false;
+        this.isBanModal = true;
+        this.memberId = id;
+        this.getMemberInfo();
+    }
+
+    /**
+     * Modal 안에 들어갈 정보
+     * @private
+     */
+    private getMemberInfo(): void {
+        MyClassService.getClassMemberInfo(this.classID, this.memberId)
+          .then((data) => {
+            console.log(data);
+            this.memberNickname = data.member_info.nickname;
+            this.memberLevel = data.member_info.level;
+          });
     }
 
     /**

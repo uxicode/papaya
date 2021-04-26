@@ -117,6 +117,13 @@ class UserService {
     return request('delete', `${USER_BASE_URL}/me`);
   }
 
+  /**
+   * 사용자 정보 고유번호로 조회하기
+   * @param userId
+   */
+  public getUserInfo(userId: number): Promise<any> {
+    return request('get', `${USER_BASE_URL}/${userId}/info`);
+  }
 }
 
 

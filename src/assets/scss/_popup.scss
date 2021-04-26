@@ -229,7 +229,7 @@ $popupDepth: 10;
           @include pos-vertical($left:0);
         }
 
-        &.crown:before {background:#ffba36 url(../../assets/images/member-manager.svg) no-repeat center / 8px;}
+        &.manager:before, &.crown:before {background:#ffba36 url(../../assets/images/member-manager.svg) no-repeat center / 8px;}
       }
     }
 

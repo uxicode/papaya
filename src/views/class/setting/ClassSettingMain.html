@@ -8,7 +8,7 @@
             <p class="list-tit">사용 중인 프로필</p>
             <ul class="member-list">
                 <li class="list-item">
-                    <div class="member-info admin"
+                    <div class="member-info"
                          :class=memberLevelIcon(memberInfo.level)>
                         <p class="name">{{ memberInfo.nickname }}</p>
                         <span class="position">{{ memberLevelTxt(memberInfo.level) }}</span>
@@ -29,8 +29,8 @@
                         <div class="form-switcher">
                             <input type="checkbox"
                                    id="onoff_push_noti"
-                                   v-model="memberInfo.onoff_push_noti"
-                                   @change="pushToggle">
+                                   v-model="onOffNoti"
+                                   @input="pushToggle($event.target.value)">
                             <label for="onoff_push_noti"></label>
                         </div>
                     </div>
@@ -40,12 +40,12 @@
                     :key="idx"
                     class="list-item sub-list-item"
                     :class="{'disabled': memberInfo.onoff_push_noti === 0}">
-                    <p class="list-tit">{{ item.listTit }}</p>
+                    <p class="list-tit">{{ item.title }}</p>
                     <div class="setting-btn">
                         <div class="member-info-btn">
                             <div class="list-popup">
-                                <button type="button" class="list-popup-btn" @click="item.isActive = !item.isActive"><span>받지 않기</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
-                                <div class="list-popup-menu pos-right" :class="{'active': item.isActive}" style="transform:translate3d(87px, 0, 0);">
+                                <button type="button" class="list-popup-btn" @click="item.active = !item.active"><span>받지 않기</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                <div class="list-popup-menu pos-right" :class="{'active': item.active}" style="transform:translate3d(87px, 0, 0);">
                                     <button class="list-popup-item" value="1" @click>받기</button>
                                     <button class="list-popup-item" value="0" @click>받지 않기</button>
                                 </div>
@@ -62,7 +62,8 @@
                 <li v-for="(item, idx) in classManageList"
                     :key="idx"
                     class="list-item">
-                    <a href=""  class="list-tit">{{ item.title }}</a>
+                    <a href="" class="list-tit"
+                       @click.stop.prevent="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">{{ item.title }}</a>
                     <button class="setting-btn"
                             @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
                         <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
@@ -76,7 +77,8 @@
                 <li v-for="(item, idx) in memberManageList"
                     :key="idx"
                     class="list-item">
-                    <a href=""  class="list-tit">{{ item.title }}</a>
+                    <a href="" class="list-tit"
+                       @click.stop.prevent="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">{{ item.title }}</a>
                     <button class="setting-btn" @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
                         <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                 </li>
@@ -89,7 +91,8 @@
                 <li v-for="(item, idx) in etcList"
                     :key="idx"
                     class="list-item">
-                    <a href=""  class="list-tit">{{ item.title }}</a>
+                    <a href="" class="list-tit"
+                       @click.stop.prevent="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">{{ item.title }}</a>
                     <button class="setting-btn" @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
                         <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                 </li>
@@ -166,7 +169,7 @@
                                     <div class="form-group" style="width:490px;">
                                         <input type="text" class="form-control popup-type"
                                                v-model="item.question"
-                                               @input="valueChange($event)"
+                                               @input="valueChange($event, item.id)"
                                                :id="`question${item.id}`">
                                         <!-- form-delete active 시 display:block; -->
                                         <button type="button" class="btn only-ico-btn form-delete active" @click="deleteJoinQuestion(item.id)"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
@@ -213,7 +216,7 @@
                 <div class="popup-cnt">
                     <h2 class="popup-tit">클래스 탈퇴하기</h2>
                     <p class="popup-txt">
-                        <strong>꿈꾸는 5학년 1반</strong> 클래스 탈퇴 전 꼭 확인하세요.<br>
+                        <strong>{{ info.name }}</strong> 클래스 탈퇴 전 꼭 확인하세요.<br>
                         클래스에서 탈퇴 시 작성한 글, 사진, 댓글 등을 삭제하거나 수정할 수 없습니다.<br>
                         원하시면 탈퇴 전에 삭제 혹은 수정하시기 바랍니다.
                     </p>
