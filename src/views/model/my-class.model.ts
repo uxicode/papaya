@@ -542,10 +542,192 @@ interface IQuestionList {
 
 interface IMakeEducation {
     title: string;
-    goal: string;
-    course_list: Array<{ index: number; title: string; startDay: Date; startTime: Date; endTime: Date; contents: string; }>;
-    writer?: string;
-    isChk?: boolean;
+    text: string;
+    startAt: Date;
+    endAt: Date;
+    curriculum: {
+        startAt: Date;
+        endAt: Date;
+        expiredAt: Date;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        class_id: number;
+        board_id: null | number;
+        post_type: number;
+        type: number;
+        user_id: number;
+        user_member_id: number;
+        title?: string | undefined;
+        text: string;
+        count: number;
+        param1: number;
+        deletedYN: boolean;
+        owner: {
+            joinedAt: Date;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            class_id: number;
+            user_id: number;
+            nickname: string;
+            profile_image: null | string;
+            is_bookmarked: number;
+            schedule_color: number;
+            level: number;
+            status: number;
+            open_level_id: number;
+            open_level_mobileno: number;
+            open_level_email: number;
+            onoff_push_noti: number;
+            onoff_post_noti: number;
+            onoff_comment_noti: number;
+            onoff_schedule_noti: number;
+            schedule_noti_intime: number;
+            visited: number;
+        };
+        course_list: Array<{
+            startDay: Date;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            curriculum_id: number;
+            class_id: number;
+            index: number;
+            title?: string;
+            contents: string;
+            startTime: Date;
+            endTime: Date;
+            deletedYN: boolean;
+            attachment: []
+        }>;
+    };
+    course_list: Array<{
+        startDay: Date;
+        createdAt: Date;
+        updatedAt: Date;
+        deletedYN: boolean;
+        id: number;
+        index: number;
+        title?: string | undefined;
+        startTime: Date;
+        endTime: Date;
+        contents: string;
+        curriculum_id: number;
+        class_id: number;
+    }>;
+    message: string;
+}
+
+interface IEducationList {
+    total: number;
+    page_no: null | number;
+    pages: null | string;
+    item_count: number;
+    curriculum_list: [];
+    message: string;
+}
+
+interface ICurriculumList {
+    curriculum: {
+        startAt: Date;
+        endAt: Date;
+        expiredAt: Date;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        class_id: number;
+        board_id: null | number;
+        post_type: number;
+        type: number;
+        user_id: number;
+        user_member_id: number;
+        title: string;
+        text: string;
+        count: number;
+        param1: number;
+        deletedYN: boolean;
+        owner?: {
+            joinedAt: Date;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            class_id: number;
+            user_id: number;
+            nickname: string;
+            profile_image: null | string;
+            is_bookmarked: number;
+            schedule_color: number;
+            level: number;
+            status: number;
+            open_level_id: number;
+            open_level_mobileno: number;
+            open_level_email: number;
+            onoff_push_noti: number;
+            onoff_post_noti: number;
+            onoff_comment_noti: number;
+            onoff_schedule_noti: number;
+            schedule_noti_intime: number;
+            visited: number;
+        },
+        course_list?: Array<{
+            startDay: Date;
+            createdAt: Date;
+            updatedAt: Date;
+            id: number;
+            curriculum_id: number;
+            class_id: number;
+            index: number;
+            title?: string | undefined;
+            contents: string;
+            startTime: Date;
+            endTime: Date;
+            deletedYN: boolean;
+            attachment: Array<{
+                createdAt: Date;
+                updatedAt: Date;
+                id: number;
+                user_id: number;
+                member_id: null | number;
+                parent_id: number;
+                group_name: string;
+                fieldname: string;
+                originalname: string;
+                encoding: string;
+                mimetype: string;
+                size: number;
+                bucket: string;
+                key: string;
+                acl: string;
+                contentType: string;
+                contentDisposition: null;
+                storageClass: string;
+                serverSideEncryption: null;
+                metadata: null;
+                location: string;
+                etag: string;
+                deletedYN: boolean;
+            }>;
+        }>;
+    };
+    message?: string;
+}
+
+interface ICourseList {
+    course: {
+        startDay: Date;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+        curriculum_id: number;
+        class_id: number;
+        index: number;
+        title: string | undefined;
+        contents: string;
+        startTime: Date;
+        endTime: Date;
+    };
+    message?: string;
 }
 
 
@@ -564,5 +746,8 @@ export {
     IClassMemberList,
     IQuestionList,
     IClassMembers,
-    IMakeEducation
+    IMakeEducation,
+    IEducationList,
+    ICurriculumList,
+    ICourseList
 };

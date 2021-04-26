@@ -581,7 +581,7 @@
             background:#57576d url(../../assets/images/member-staff.svg) no-repeat center / 8px 8px;
           }
 
-          &.crown {
+          &.manager {
             &:before {
               background:#ffba36 url(../../assets/images/member-manager.svg) no-repeat center / 8px 8px;
             }
@@ -677,13 +677,13 @@
       }
     }
 
-    .no-notify {
+    .no-notify, .simple-notify {
       position:relative;
       height:600px;
       border-radius: 5px;
       background-color:#fff;
 
-      .no-data {
+      .no-data, .simple-data{
         @include pos-abs($top:50%, $left:50%);
         transform:translate(-50%, -50%);
         text-align:center;
@@ -944,44 +944,41 @@
   }
 }
 
-.classes-curriculum {
-  margin-top:10px;
 
-  .list-group {
-    column-width:295px;
-    column-gap: 10px;
-  }
+.curr-list-group {
+  column-width:295px;
+  column-gap: 10px;
+}
 
-  .curr-item {
-    display:inline-block;
-    width:295px;
-    margin-bottom:10px;
-    padding: 20px 30px 30px;
-    border-radius: 5px;
-    border: solid 1px #f4f5f6;
-    background-color: #ffffff;
+.curr-item {
+  display:inline-block;
+  width:295px;
+  margin-bottom:10px;
+  padding: 20px 30px 30px;
+  border-radius: 5px;
+  border: solid 1px #f4f5f6;
+  background-color: #ffffff;
 
 
-    .fd-foot {
-      position:relative;
-      padding:0;
-      margin-top:22px;
+  .fd-foot {
+    position:relative;
+    padding:0;
+    margin-top:22px;
 
-      .en-count {
-        font-weight:500;
-      }
+    .en-count {
+      font-weight:500;
     }
   }
+}
 
-  .curriculum-add {
-    @include pos-abs($right:-10%, $bottom:35%);
+.curriculum-add {
+  @include pos-abs($right:-10%, $bottom:35%);
 
-    &-btn {
-      display:block;
-      width:80px;
-      height:80px;
-      background:url(../../assets/images/add-btn.svg) no-repeat;
-    }
+  &-btn {
+    display:block;
+    width:80px;
+    height:80px;
+    background:url(../../assets/images/add-btn.svg) no-repeat;
   }
 }
 
@@ -1552,7 +1549,8 @@
       color:#848499;
 
       .curr-num {
-        margin-right:40px;
+        display:inline-block;
+        min-width:70px;
       }
     }
     .form-box {
