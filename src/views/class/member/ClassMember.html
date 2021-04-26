@@ -13,8 +13,7 @@
             <input type="text" class="mb-search-bar"
                    id="searchMember"
                    placeholder="멤버를 검색해 주세요."
-                   @keyup="search(searchWord)"
-                   v-model="searchWord">
+                   v-model="searchValue">
 
             <button type="button" class="btn only-ico-btn"><img :src="require('@/assets/images/search.svg')" alt=""></button>
             <!-- start: 로딩 바 -->
@@ -22,7 +21,7 @@
             <!-- end: 로딩 바 -->
         </div>
 
-        <template v-if="true">
+        <template v-if="searchResultItems.length >= 1">
             <div class="classes-member-list">
                 <p class="list-tit">클래스 운영자</p>
                 <ul class="member-list">

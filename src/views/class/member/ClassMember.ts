@@ -1,6 +1,6 @@
 import MyClassService from '@/api/service/MyClassService';
 import UserService from '@/api/service/UserService';
-import {IClassInfo, IClassMemberList, IClassMembers, IQuestionList} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMembers, IQuestionList} from '@/views/model/my-class.model';
 import {
     resetSearchInput,
     searchKeyEventObservable,
@@ -98,7 +98,7 @@ export default class ClassMember extends Vue{
      * @private
      */
     private classifyLevel(level: number): IClassMembers[] {
-        return this.classMemberList.filter(
+        return this.searchResultItems.filter(
           (item: IClassMembers) => item.level === level
         );
     }
