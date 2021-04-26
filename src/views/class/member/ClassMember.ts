@@ -49,7 +49,8 @@ export default class ClassMember extends Vue{
     private totalMemberNum: number = 0;
 
     /* 멤버 검색 관련 */
-    private searchValue: string = '';
+    private searchWord: string = '';
+    private searchValue: object = {};
     private isLoading: boolean = false;
     private searchResultItems: [] = [];
 
@@ -174,8 +175,10 @@ export default class ClassMember extends Vue{
         this.isLoading=!this.isLoading;
     }
 
-    private search(){
-        this.searchValue = '';
+    private search(value: string = ''){
+        this.searchWord=( value!=='' )? value : '';
+        this.searchValue = {classId: this.classID, searchWord: this.searchWord};
+        console.log(this.searchValue);
         this.searchResultItems=[];
 
         //$nextTick - 해당하는 엘리먼트가 화면에 렌더링이 되고 난 후
