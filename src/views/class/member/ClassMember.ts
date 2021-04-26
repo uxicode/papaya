@@ -14,6 +14,11 @@ import WithRender from './ClassMember.html';
 
 const MyClass = namespace('MyClass');
 
+interface IAccordionList {
+    listTit: string;
+    level: number;
+}
+
 @WithRender
 @Component({
     components:{
@@ -40,9 +45,11 @@ export default class ClassMember extends Vue{
         return this.searchResultItems;
     }
 
+    private memberLevel: number = 0; // 내 멤버 등급
+
     /* 전체 멤버 리스트 */
     private classMemberList: IClassMembers[] = [];
-    private memberLevel: number = 0;
+    private totalMemberNum: number = 0;
 
     /* 멤버 검색 관련 */
     private searchValue: string = '';
@@ -72,10 +79,22 @@ export default class ClassMember extends Vue{
     private qnaList: IQuestionList[] = [];
     private isActive: boolean = false;
 
+    /* 아코디언 리스트 관련(스탭 멤버, 일반 멤버) */
+    private accordionList: IAccordionList[] = [
+        {
+            listTit: '스탭 멤버',
+            level: 2
+        },
+        {
+            listTit: '일반 멤버',
+            level: 3
+        }
+    ];
+
     public created() {
         this.getClassMembers();
         this.getClassMemberLevel();
-        this.search();
+        //this.search();
     }
 
     /**
@@ -89,6 +108,7 @@ export default class ClassMember extends Vue{
               this.classMemberList = data.classinfo.class_members.filter(
                 (item: IClassMembers) => item.status === 1);
               console.log(this.classMemberList);
+              this.totalMemberNum = this.classMemberList.length;
           });
     }
 
@@ -98,7 +118,7 @@ export default class ClassMember extends Vue{
      * @private
      */
     private classifyLevel(level: number): IClassMembers[] {
-        return this.searchResultItems.filter(
+        return this.classMemberList.filter(
           (item: IClassMembers) => item.level === level
         );
     }
@@ -180,9 +200,9 @@ export default class ClassMember extends Vue{
         this.isLoading=!this.isLoading;
     }
 
-    private search(){
-        this.searchValue = '';
-        this.searchResultItems=[];
+    private search(value: string){
+        this.searchValue = (value === '') ? '' : value;
+        this.classMemberList=[];
 
         //$nextTick - 해당하는 엘리먼트가 화면에 렌더링이 되고 난 후
         this.$nextTick( ()=>{
@@ -198,13 +218,11 @@ export default class ClassMember extends Vue{
                 next:( searchData: any ) =>{
                     console.log(searchData);
                     /*
-                      message: "리스트 ....."
-                      result_count: 2
-                      results: (2) [{…}, {…}]
-                      total: 2
+                      class_member_list: [{…}]
+                      message: "클래스 멤버 조회"
+                      total: 1
                     */
-                    console.log(searchData.class_member_list);
-                    this.searchResultItems=searchData.class_member_list.map( ( item: any )=> item );
+                    this.classMemberList=searchData.class_member_list.map( ( item: any )=> item );
                 },
             });
 
@@ -212,7 +230,7 @@ export default class ClassMember extends Vue{
             //obv$: Observable<any>, reset: ()=>void
             const reset$ = resetSearchInput(keyup$, ()=>{
                 this.isLoading=false;
-                this.searchResultItems = [];
+                this.classMemberList = [];
             });
             reset$.subscribe();
         });
