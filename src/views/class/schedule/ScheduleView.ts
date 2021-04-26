@@ -100,7 +100,7 @@ export default class ScheduleView extends Vue{
 
     private endDatePickerModel: string= new Date().toISOString().substr(0, 10);
     private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
-    private endDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
+
     private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
 
     private loopRangeModel: string = '반복없음';

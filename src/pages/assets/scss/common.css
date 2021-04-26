@@ -21374,7 +21374,7 @@ select::-ms-expand {
   border-radius: 50%;
   background: #57576d url(../../assets/images/member-staff.svg) no-repeat center/8px 8px;
 }
-.fd-head .fd-writer.type2 .writer .name.crown:before {
+.fd-head .fd-writer.type2 .writer .name.manager:before {
   background: #ffba36 url(../../assets/images/member-manager.svg) no-repeat center/8px 8px;
 }
 

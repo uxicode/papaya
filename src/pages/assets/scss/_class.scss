@@ -659,13 +659,13 @@
       }
     }
 
-    .no-notify {
+    .no-notify, .simple-notify {
       position:relative;
       height:600px;
       border-radius: 5px;
       background-color:#fff;
 
-      .no-data {
+      .no-data, .simple-data {
         @include pos-abs($top:50%, $left:50%);
         transform:translate(-50%, -50%);
         text-align:center;
@@ -926,6 +926,7 @@
   }
 }
 
+
 .classes-curriculum {
   margin-top:10px;
 
@@ -969,7 +970,7 @@
   }
 }
 
-.classes-member {
+.classes-member, .classes-file {
   margin-top:10px;
 
   .member-search {
@@ -997,15 +998,22 @@
     }
   }
 
-  .classes-member-list {
+  .classes-member-list, .classes-file-list {
     margin-top:20px;
 
     .list-tit {
       font-size:12px;
       color:#57576d;
+      &.file-info{
+        padding: 15px 20px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #848499;
+        background-color: #ffffff;
+      }
     }
 
-    .member-list {
+    .member-list, .file-group {
       margin:6px 0 30px;
 
       .list-item {
@@ -1013,7 +1021,7 @@
         padding:15px 20px;
         background-color:#fff;
 
-        .member-info {
+        .member-info, .file-info {
           padding-left:42px;
           background-repeat: no-repeat;
           background-position: left center;
@@ -1027,6 +1035,9 @@
           &.admin {background-image:url(../../assets/images/btn-round-admin.svg);}
           &.staff {background-image:url(../../assets/images/btn-round-staff.svg);}
           &.member {background-image:url(../../assets/images/btn-round-member.svg);}
+
+          &.pdf-file {background-image:url(../../assets/images/icn-32-file-pdf.svg);}
+          &.unknown-file {background-image:url(../../assets/images/icn-32-file-unknown.svg);}
         }
 
         .member-info-btn {
@@ -1036,6 +1047,8 @@
           transform:translateY(-50%);
         }
       }
+      .txt-right{text-align: right;}
+      .txt-left{text-align: left;}
     }
 
     .search-none {
@@ -1088,6 +1101,18 @@
 
         &.disabled {
           opacity:0.2;
+        }
+      }
+    }
+
+    .scroll-body {
+      overflow-y: scroll;
+      &.file {
+        padding-right: 200px;
+        margin-right: -200px;
+        -ms-overflow-style: none; /* IE and Edge */
+        &::-webkit-scrollbar {
+          display: none; /* Chrome, Safari, Opera*/
         }
       }
     }
@@ -1217,3 +1242,7 @@
     color:#848499;
   }
 }
+
+
+
+
