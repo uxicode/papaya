@@ -98,6 +98,7 @@ export default class Curriculum extends Vue {
             course_list: [],
         }
     };
+
     private allCourseList: ICourseList={
         course: {
             startDay:new Date(),
@@ -107,7 +108,7 @@ export default class Curriculum extends Vue {
             curriculum_id: 0,
             class_id: 0,
             index: 0,
-            title: 'string',
+            title: '',
             contents: '',
             startTime:new Date(),
             endTime:new Date(),
@@ -175,6 +176,7 @@ export default class Curriculum extends Vue {
     }
 
     private setCurriNum( num: number ): void{
+
         if( this.currListNum > 50 ){
             this.isCreateError = true;
             this.currListNum=50;
@@ -183,6 +185,7 @@ export default class Curriculum extends Vue {
             this.currListNum=num;
             this.eduItems.length=num;
         }
+
     }
 
     private countNum(num: number): void{
@@ -222,11 +225,12 @@ export default class Curriculum extends Vue {
         return this.cardId;
     }
 
-    private getEducurrList(cardId: number): void {
-        MyClassService.getEducurrList(this.classID, cardId)
+    private getEduCurrList(cardId: number): void {
+        MyClassService.getEduCurrList(this.classID, cardId)
             .then((data) => {
                 this.currList = data;
-                console.log('getEducurrList 함수 데이터', data);
+                console.log(cardId);
+                console.log('getEduCurrList 함수 데이터', data);
             });
     }
 
@@ -280,7 +284,7 @@ export default class Curriculum extends Vue {
         // this.clickCard(idx);
         this.cardId=idx;
         this.$nextTick(()=>{
-            this.getEducurrList(this.cardId);
+            this.getEduCurrList(this.cardId);
         });
 
         // console.log(this.cardId);

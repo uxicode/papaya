@@ -13,7 +13,7 @@
                         <p class="fd-tit">{{ item.title }}</p>
                         <div class="fd-writer type2">
                             <p class="writer">
-                                <span class="name">김미영선생님</span>
+                                <span class="name" :class="memberLevelIcon(item.owner.level)">{{ item.owner.nickname }}</span>
                             </p>
                         </div>
                     </div>
@@ -468,7 +468,7 @@
                                 <strong class="cls-name">{{myClassHomeModel.name}}</strong>
                             </p>
 
-                            <p class="post-writer">김미영선생님</p>
+                            <p class="post-writer" :class="memberLevelIcon(curriculumList.curriculum.owner.level)">{{ curriculumList.curriculum.owner.nickname }}</p>
                         </div>
                     </div>
                 </div>
@@ -490,7 +490,7 @@
                                             </div>
                                             <div class="subject-sub">
                                                 <span>이미지 2</span>
-                                                <span>파일 1</span>
+                                                <span v-show="item.attachment.length > 0">파일 {{ item.attachment.length }}</span>
                                             </div>
                                         </a>
                                     </div>
@@ -539,7 +539,7 @@
                         </p>
 
                         <div class="fd-inner">
-                            <ul class="img-list clearfix">
+                            <ul class="img-list pdl-0 clearfix">
                                 <li><a href=""><img :src="require('@/assets/images/pic.png')" alt=""></a></li>
                                 <li><a href=""><img :src="require('@/assets/images/pic2.png')" alt=""></a></li>
                                 <li><a href=""><img :src="require('@/assets/images/pic3.png')" alt=""></a></li>
@@ -548,7 +548,7 @@
 
                         <div class="fd-inner">
                             <p class="fd-inner-txt">첨부 파일 3</p>
-                            <ul class="file-list clearfix">
+                            <ul class="file-list pdl-0 clearfix">
                                 <li>
                                     <a href="">첨부파일1.pdf</a>
                                 </li>
