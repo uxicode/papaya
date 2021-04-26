@@ -19,9 +19,12 @@
                                 #꿈꾸는아이들 #파파야초등학교 #재미있는 #파파야 #어드벤처
                             </p>
                         </div>
+
+                        <!-- 가입 신청 버튼 / 신청 완료 시 primary 제거 후 disabled 클래스 추가 -->
                         <div class="class-bookmark">
                             <button type="button" class="btn primary navi" style="font-size: 12px;">가입 신청</button>
                         </div>
+
                     </div>
                     <div class="class-menu">
                         <ul class="menu-list">
@@ -36,12 +39,20 @@
                         <h2 class="cnt-tit">클래스 홈</h2>
                     </div>
 
-                    <div class="no-notify">
-                        <div class="no-data">
+                    <div class="simple-notify">
+                        <div class="simple-data">
                             <img :src="require('@/assets/images/class.png')" alt="">
                             <p class="pdb-10">비공개 클래스입니다.</p>
                             <span>가입신청을 통해 클래스에 가입해 보세요.</span>
                         </div>
+
+                        <!-- 가입 신청 완료 후 텍스트 내용 변경 -->
+                        <div class="simple-data" style="display: none">
+                            <img :src="require('@/assets/images/class.png')" alt="">
+                            <p class="pdb-10">클래스 가입 신청이 완료되었습니다.</p>
+                            <span>운영자의 승인을 대기해주시길 바랍니다.</span>
+                        </div>
+
                     </div>
 
                 </div>
@@ -51,7 +62,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.4.1.1 (클래스 페이지 - 가입신청 - 비공개 클래스 ) -->
     <transition name="modal" >
-        <modal v-if="true" size="600px" body-padding="0">
+        <modal v-if="false" size="600px" body-padding="0">
         <div slot="header">
             <!-- header custom coding-->
             <p class="popup-header-tit">가입 신청하기</p>

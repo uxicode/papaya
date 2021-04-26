@@ -674,13 +674,13 @@
       }
     }
 
-    .no-notify {
+    .no-notify, .simple-notify {
       position:relative;
       height:600px;
       border-radius: 5px;
       background-color:#fff;
 
-      .no-data {
+      .no-data, .simple-data{
         @include pos-abs($top:50%, $left:50%);
         transform:translate(-50%, -50%);
         text-align:center;
