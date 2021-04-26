@@ -1,12 +1,17 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {IClassInfo, IClassMemberInfo, IQuestionList} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo, INotifyList, IQuestionList} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './ClassSettingMain.html';
 
 const MyClass = namespace('MyClass');
+
+interface INotiMenu {
+    title: string;
+    active: boolean;
+}
 
 interface ISettingMenu {
     title: string;
@@ -46,20 +51,21 @@ export default class ClassSettingMain extends Vue{
 
     private onOffNoti: boolean = true;
 
-    private classNotifyList: object[] = [
+    private classNotifyList: INotiMenu[] = [
         {
-            listTit: '새 알림',
-            isActive: false
+            title: '새 알림',
+            active: false
         },
         {
-            listTit: '새 댓글',
-            isActive: false
+            title: '새 댓글',
+            active: false
         },
         {
-            listTit: '일정',
-            isActive: false
+            title: '일정',
+            active: false
         },
     ];
+
     /* 클래스 관리 / 멤버 관리 / 기타 텍스트 및 링크 */
     private classManageList: ISettingMenu[] = [
         {
@@ -127,19 +133,27 @@ export default class ClassSettingMain extends Vue{
     }
 
     public created() {
-        this.getClassMemberInfo();
+        this.getMyClassMemberInfo();
         this.getClassInfo();
         // this.getJoinQuestion();
     }
 
-    private getClassMemberInfo(): void {
+    /**
+     * 나의 클래스 멤버 정보를 가져오기
+     * @private
+     */
+    private getMyClassMemberInfo(): void {
         this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.myClassInfo.me.id})
           .then((data) => {
-              console.log(`classId = ${this.classID}, memberId = ${this.myClassInfo.me.id}`);
               this.classMemberInfo = data;
+              console.log(this.classMemberInfo);
           });
     }
 
+    /**
+     * 클래스 정보 가져오기
+     * @private
+     */
     private getClassInfo(): void {
         MyClassService.getClassInfoById(this.classID)
           .then((data) => {
@@ -195,10 +209,13 @@ export default class ClassSettingMain extends Vue{
      * @param item
      * @private
      */
-    private pushToggle(): void {
-        MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {onoff_push_noti: !this.onOffNoti})
+    private pushToggle(value: boolean): void {
+        this.onOffNoti = !!value;
+        MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {onoff_push_noti: this.onOffNoti})
           .then(() => {
-              console.log(`푸시 알림 : ${!this.onOffNoti}`);
+              setTimeout(()=>{
+                  console.log(this.onOffNoti);
+              }, 250 );
           });
     }
 

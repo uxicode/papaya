@@ -41,12 +41,8 @@ export default class ClassMember extends Vue{
     }
 
     /* 전체 멤버 리스트 */
-    private classMembers: IClassMembers[] = [];
-    private adminList: IClassMembers[] = [];
-    private staffList: IClassMembers[] = [];
-    private memberList: IClassMembers[] = [];
+    private classMemberList: IClassMembers[] = [];
     private memberLevel: number = 0;
-    private totalMemberNum: number = 0;
 
     /* 멤버 검색 관련 */
     private searchWord: string = '';
@@ -80,29 +76,39 @@ export default class ClassMember extends Vue{
     public created() {
         this.getClassMembers();
         this.getClassMemberLevel();
-        this.search();
+        //this.search();
     }
 
     /**
-     * 전체 멤버 리스트를 가져와서 등급별로 나눈다.
+     * 전체 멤버 리스트를 가져온다.
      * @private
      */
     private getClassMembers(): void {
         MyClassService.getClassInfoById(this.classID)
           .then((data) => {
-              this.adminList = data.classinfo.class_members.filter(
-                (item: IClassMembers) => item.level === 1);
-              this.staffList = data.classinfo.class_members.filter(
-                (item: IClassMembers) => item.level === 2);
-              this.memberList = data.classinfo.class_members.filter(
-                (item: IClassMembers) => item.level === 3);
-
-              this.totalMemberNum = data.classinfo.class_members.length;
-              this.classMembers = data.classinfo.class_members;
-              console.log(this.classMembers);
+              // 가입 승인된 멤버만 불러온다.
+              this.classMemberList = data.classinfo.class_members.filter(
+                (item: IClassMembers) => item.status === 1);
+              console.log(this.classMemberList);
           });
     }
 
+    /**
+     * 등급별로 멤버 리스트를 구분
+     * @param level
+     * @private
+     */
+    private classifyLevel(level: number): IClassMembers[] {
+        return this.classMemberList.filter(
+          (item: IClassMembers) => item.level === level
+        );
+    }
+
+    /**
+     * 권한별로 더보기 메뉴가 다르기 때문에
+     * 나의 멤버 등급을 가져온다.
+     * @private
+     */
     private getClassMemberLevel(): void {
         MyClassService.getClassMemberInfo(this.classID, this.memberID.me.id)
           .then((data) => {
@@ -177,12 +183,26 @@ export default class ClassMember extends Vue{
 
     private search(value: string = ''){
         this.searchWord=( value!=='' )? value : '';
-        this.searchValue = {classId: this.classID, searchWord: this.searchWord};
+        //this.searchValue = {classId: this.classID, searchWord: this.searchWord};
         console.log(this.searchValue);
         this.searchResultItems=[];
 
         //$nextTick - 해당하는 엘리먼트가 화면에 렌더링이 되고 난 후
         this.$nextTick( ()=>{
+
+            const searchMember = document.querySelector('#searchMember') as HTMLInputElement;
+            // console.log(searchSchool);
+            searchMember.focus();
+
+            if (searchMember.value !== '') {
+                this.checkLoading();
+                // const valueToSearch$=fromEvent(searchSchool, 'input');
+                MyClassService.searchMembers({classId: this.classID, searchWord: this.searchWord})
+                  .then((data: any) => {
+                      this.checkLoading();
+                      this.searchResultItems = data.results.map((item: any) => item);
+                  });
+            }
 
             //키가 눌렸을 때 체크 Observable
             // targetInputSelector: string

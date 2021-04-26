@@ -198,7 +198,7 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
 
-    public setClassMemberInfo(classId: number, memberId: number, info: any): Promise<IClassMemberInfo> {
+    public setClassMemberInfo(classId: number, memberId: number, info: object): Promise<IClassMemberInfo> {
         return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`, info);
     }
 

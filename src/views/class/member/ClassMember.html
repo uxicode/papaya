@@ -1,7 +1,7 @@
 <section class="contents-right">
     <div class="classes-member">
         <div class="cnt-top">
-            <h2 class="cnt-tit">멤버 <strong>{{ totalMemberNum }}</strong></h2>
+            <h2 class="cnt-tit">멤버 <strong>{{ classMemberList.length }}</strong></h2>
             <div class="cnt-top-btn">
                 <button type="button" class="btn ico-btn ico-left navi sm" @click="isInvitePopup = true">
                     <img :src="require('@/assets/images/icn-18-add-white.svg')" class="icon" alt="">멤버 초대하기
@@ -13,6 +13,7 @@
             <input type="text" class="mb-search-bar"
                    id="searchMember"
                    placeholder="멤버를 검색해 주세요."
+                   @keyup="search(searchWord)"
                    v-model="searchWord">
 
             <button type="button" class="btn only-ico-btn"><img :src="require('@/assets/images/search.svg')" alt=""></button>
@@ -25,12 +26,12 @@
             <div class="classes-member-list">
                 <p class="list-tit">클래스 운영자</p>
                 <ul class="member-list">
-                    <li v-for="(item, idx) in adminList"
+                    <li v-for="(item, idx) in classifyLevel(1)"
                         :key="idx"
                         class="list-item">
-                        <div class="member-info" :class="memberLevelIcon(item.level)">
+                        <div class="member-info" :class="memberLevelIcon(1)">
                             <p class="name">{{ item.nickname }}</p>
-                            <span class="position">{{ memberLevelTxt(item.level) }}</span>
+                            <span class="position">{{ memberLevelTxt(1) }}</span>
                         </div>
                         <div class="member-info-btn">
                             <div class="list-popup">
@@ -45,18 +46,18 @@
                 <div class="accordion">
                     <!-- accordion 1-->
                     <div class="accordion-tit">
-                        <p class="list-tit">스탭 멤버 <strong>{{ staffList.length }}</strong></p>
+                        <p class="list-tit">스탭 멤버 <strong>{{ classifyLevel(2).length }}</strong></p>
                         <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
                         <button class="accordion-btn sm rt-10 active" data-toggle="collapse" data-target="#accordion1"></button>
                     </div>
                     <div class="accordion-cnt active">
                         <ul class="member-list">
-                            <li v-for="(item, idx) in staffList"
+                            <li v-for="(item, idx) in classifyLevel(2)"
                                 :key="idx"
                                 class="list-item">
-                                <div class="member-info" :class="memberLevelIcon(item.level)">
+                                <div class="member-info" :class="memberLevelIcon(2)">
                                     <p class="name">{{ item.nickname }}</p>
-                                    <span class="position">{{ memberLevelTxt(item.level) }}</span>
+                                    <span class="position">{{ memberLevelTxt(2) }}</span>
                                 </div>
                                 <div class="member-info-btn">
                                     <div class="list-popup">
@@ -74,18 +75,18 @@
 
                     <!-- accordion 1-->
                     <div class="accordion-tit">
-                        <p class="list-tit">일반 멤버 <strong>{{ memberList.length }}</strong></p>
+                        <p class="list-tit">일반 멤버 <strong>{{ classifyLevel(3).length }}</strong></p>
                         <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
                         <button class="accordion-btn sm rt-10 active" data-toggle="collapse" data-target="#accordion1"></button>
                     </div>
                     <div class="accordion-cnt active">
                         <ul class="member-list">
-                            <li v-for="(item, idx) in memberList"
+                            <li v-for="(item, idx) in classifyLevel(3)"
                                 :key="idx"
                                 class="list-item">
-                                <div class="member-info" :class="memberLevelIcon(item.level)">
+                                <div class="member-info" :class="memberLevelIcon(3)">
                                     <p class="name">{{ item.nickname }}</p>
-                                    <span class="position">{{ memberLevelTxt(item.level) }}</span>
+                                    <span class="position">{{ memberLevelTxt(3) }}</span>
                                 </div>
                                 <div class="member-info-btn">
                                     <div class="list-popup">

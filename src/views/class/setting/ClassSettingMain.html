@@ -29,8 +29,8 @@
                         <div class="form-switcher">
                             <input type="checkbox"
                                    id="onoff_push_noti"
-                                   v-model="memberInfo.onoff_push_noti"
-                                   @change="pushToggle">
+                                   v-model="onOffNoti"
+                                   @input="pushToggle($event.target.value)">
                             <label for="onoff_push_noti"></label>
                         </div>
                     </div>
@@ -40,12 +40,12 @@
                     :key="idx"
                     class="list-item sub-list-item"
                     :class="{'disabled': memberInfo.onoff_push_noti === 0}">
-                    <p class="list-tit">{{ item.listTit }}</p>
+                    <p class="list-tit">{{ item.title }}</p>
                     <div class="setting-btn">
                         <div class="member-info-btn">
                             <div class="list-popup">
-                                <button type="button" class="list-popup-btn" @click="item.isActive = !item.isActive"><span>받지 않기</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
-                                <div class="list-popup-menu pos-right" :class="{'active': item.isActive}" style="transform:translate3d(87px, 0, 0);">
+                                <button type="button" class="list-popup-btn" @click="item.active = !item.active"><span>받지 않기</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                <div class="list-popup-menu pos-right" :class="{'active': item.active}" style="transform:translate3d(87px, 0, 0);">
                                     <button class="list-popup-item" value="1" @click>받기</button>
                                     <button class="list-popup-item" value="0" @click>받지 않기</button>
                                 </div>

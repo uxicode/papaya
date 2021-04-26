@@ -28,8 +28,8 @@
                                 <p class="member-name">{{ item.nickname }}</p>
                                 <p class="member-tit">{{ memberLevelTxt(item.level) }}</p>
                             </div>
+                            <a href="" class="member-more" @click.stop.prevent="isActive = !isActive"><img :src="require('@/assets/images/more.svg')" alt=""></a>
                             <div class="list-popup">
-                                <button type="button" class="member-more" @click="isActive = !isActive"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                 <div class="list-popup-menu pos-right" :class="{'active': isActive === true}" style="transform:translate3d(87px, 0, 0);">
                                     <button class="list-popup-item" @click="blockModalOpen(item.id)">멤버 차단</button>
                                     <button class="list-popup-item" @click="banModalOpen(item.id)">강제 탈퇴</button>

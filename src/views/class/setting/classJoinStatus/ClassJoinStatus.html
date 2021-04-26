@@ -17,50 +17,12 @@
 
             <div class="apply-list scroll-body" style="height:580px;">
                 <ul>
-                    <li class="apply-item">
-                        <p class="apply-name">김민재아빠</p>
-                        <span class="apply-date">2분 전 신청</span>
-                        <button class="apply-more" @click="isJoinDetail = true"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                    </li>
-                    <li class="apply-item">
-                        <p class="apply-name">태수 엄마</p>
-                        <span class="apply-date">어제 신청</span>
-                        <a href="" class="apply-more"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
-                    </li>
-                    <li class="apply-item">
-                        <p class="apply-name">김기태</p>
-                        <span class="apply-date">2020. 1. 21 신청</span>
-                        <a href="" class="apply-more"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
-                    </li>
-                    <li class="apply-item">
-                        <p class="apply-name">김미나</p>
-                        <span class="apply-date">2020. 1. 3 신청</span>
-                        <a href="" class="apply-more"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
-                    </li>
-                    <li class="apply-item">
-                        <p class="apply-name">윤태민</p>
-                        <span class="apply-date">2019. 12. 31 신청</span>
-                        <a href="" class="apply-more"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
-                    </li>
-                    <li class="apply-item">
-                        <p class="apply-name">윤태민</p>
-                        <span class="apply-date">2019. 12. 29 신청</span>
-                        <a href="" class="apply-more"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
-                    </li>
-                    <li class="apply-item">
-                        <p class="apply-name">윤태민</p>
-                        <span class="apply-date">2019. 12. 29 신청</span>
-                        <a href="" class="apply-more"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
-                    </li>
-                    <li class="apply-item">
-                        <p class="apply-name">윤태민</p>
-                        <span class="apply-date">2019. 12. 29 신청</span>
-                        <a href="" class="apply-more"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
-                    </li>
-                    <li class="apply-item">
-                        <p class="apply-name">윤태민</p>
-                        <span class="apply-date">2019. 12. 29 신청</span>
-                        <a href="" class="apply-more"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
+                    <li v-for="(item, idx) in applyMembers"
+                        :key="idx"
+                        class="apply-item">
+                        <p class="apply-name">{{ item.nickname }}</p>
+                        <span class="apply-date">{{ item.createdAt }} 신청</span>
+                        <button class="apply-more" @click="openJoinDetail(item.id)"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                 </ul>
             </div>
@@ -82,22 +44,20 @@
                     <h2 class="popup-tit pdb-0">가입 신청 상세</h2>
                 </div>
                 <div class="member-profile">
-                    <p class="request-date">2019. 10. 30 오후 11:00에 신청</p>
+                    <p class="request-date">{{ classMemberInfo.createdAt }}에 신청</p>
 
                     <div class="join-detail">
                         <div class="join-detail-top">
                             <p class="join-top-tit">클래스 닉네임</p>
-                            <span class="join-top-txt">김민재아빠</span>
+                            <span class="join-top-txt">{{ classMemberInfo.nickname }}</span>
                         </div>
 
                         <div class="join-detail-cnt">
-                            <div class="join-qna">
-                                <p class="join-qna-q">1. 자녀와의 관계가 어떻게 되시나요? (예. 엄마, 아빠 등)</p>
-                                <p class="join-qna-a">아빠</p>
-                            </div>
-                            <div class="join-qna">
-                                <p class="join-qna-q">2. 살고 있는 지역을 간단히 써주세요. (예. 서울 성북구)</p>
-                                <p class="join-qna-a">서울 강남구</p>
+                            <div v-for="(item, idx) in answerList"
+                                 :key-="idx"
+                                 class="join-qna">
+                                <p class="join-qna-q">{{ idx+1 }}. {{ item.question }}</p>
+                                <p class="join-qna-a">{{ item.answer }}</p>
                             </div>
                         </div>
                     </div>
