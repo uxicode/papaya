@@ -94,6 +94,7 @@ $popupDepth: 10;
   .popup-icon {
     width:50px;
     height:50px;
+    border-radius:50%;
 
     &.error {background:url(../../assets/images/popup-icon-error.png) no-repeat;}
     &.search {background:url(../../assets/images/popup-icon-search.png) no-repeat;}

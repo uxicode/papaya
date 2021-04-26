@@ -42,6 +42,7 @@ export default class Curriculum extends Vue {
     private isClassCurr: boolean = false;
     private isClassCurrMore: boolean = false;
     private isClassCurrDetail: boolean = false;
+    private isCreateError: boolean = false;
 
     @MyClass.Getter
     private classID!: number;
@@ -53,6 +54,9 @@ export default class Curriculum extends Vue {
 
     private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
     private EduSettingsModel: string = '교육과정 수정';
+
+    private CourseSettingsItems: string[] = ['수업 내용 수정', '수업 삭제'];
+    private CourseSettingsModel: string = '수업 내용 수정';
 
     /**
      * 클래스 교육과정 메인리스트
@@ -110,7 +114,7 @@ export default class Curriculum extends Vue {
         }
     };
 
-    private currListNum: number = 0;
+    private currListNum: number = 10;
     private eduItems: Array< {title: string }>=[];
     private settingItems: Array<{ vo: string[], sItem: string }> = [];
 
@@ -120,6 +124,10 @@ export default class Curriculum extends Vue {
 
     get currentSettingItems(): string[]{
         return this.EduSettingsItems;
+    }
+
+    get currentCourseSettingItems(): string[]{
+        return this.CourseSettingsItems;
     }
 
     get currentStartTimeModel(): string{
@@ -138,10 +146,6 @@ export default class Curriculum extends Vue {
     /**
      * 교육과정 리스트
      */
-    get currListNumModel(): Array< {title: string }>{
-        return this.eduItems;
-    }
-
     public created(){
         this.settingItems=this.mItemByMakeEduList();
         this.getEduList();
@@ -162,18 +166,27 @@ export default class Curriculum extends Vue {
         });
     }
 
+    /**
+     * 교육과정 수업 회차 설정
+     */
+    get currListNumModel(): Array< {title: string }>{
+        this.eduItems.length = 10;
+        return this.eduItems;
+    }
+
     private setCurriNum( num: number ): void{
-        this.currListNum=num;
-        this.eduItems.length=num;
+        if( this.currListNum > 50 ){
+            this.isCreateError = true;
+            this.currListNum=50;
+            this.eduItems.length=50;
+        }else {
+            this.currListNum=num;
+            this.eduItems.length=num;
+        }
     }
 
     private countNum(num: number): void{
         this.countNumber = num;
-    }
-
-    private clickCourse(num: number): void{
-        this.courseId = num;
-        console.log(this.courseId);
     }
 
     /**
@@ -220,6 +233,11 @@ export default class Curriculum extends Vue {
     /**
      * 클래스 교육과정 개별코스 정보 조회
      */
+    private clickCourse(num: number): void{
+        this.courseId = num;
+        console.log(this.courseId);
+    }
+
     get courseList(): ICourseList{
         return this.allCourseList;
     }

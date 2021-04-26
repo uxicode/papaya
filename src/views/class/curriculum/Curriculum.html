@@ -147,9 +147,9 @@
                                                 </template>
                                                 <v-list>
                                                     <v-list-item
-                                                            v-for="(item, index) in currentSettingItems"
+                                                            v-for="(item, index) in currentCourseSettingItems"
                                                             :key="index"
-                                                            @click="EduSettingsModel=item">
+                                                            @click="CourseSettingsModel=item">
                                                         <v-list-item-title>{{ item }}</v-list-item-title>
                                                     </v-list-item>
                                                 </v-list>
@@ -171,7 +171,7 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <button type="button" class="btn primary navi" disabled>등록</button>
+                    <button type="button" class="btn navi" disabled>등록</button>
                 </div>
             </div>
         </modal>
@@ -204,16 +204,13 @@
                     <div class="popup-form-cnt">
                         <div class="form-item">
                             <p>수업 날짜</p>
-                            <!--                            <div class="form-box">-->
-                            <!--                                <div class="form-group date">-->
-                            <!--                                    <input type="text" class="form-control" size="10" value="2020. 2. 28">-->
-                            <!--                                    <span class="date-area">2020. 2. 28</span>-->
-                            <!--                                    <button type="button" class="btn form-btn form-calendar"></button>-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
-
-
-
+                            <!--<div class="form-box">-->
+                            <!--<div class="form-group date">-->
+                            <!--<input type="text" class="form-control" size="10" value="2020. 2. 28">-->
+                            <!--<span class="date-area">2020. 2. 28</span>-->
+                            <!--<button type="button" class="btn form-btn form-calendar"></button>-->
+                            <!-- </div>-->
+                            <!--</div>-->
 
                             <div class="form-box">
                                 <div class="form-group date" style="float:left;">
@@ -251,23 +248,15 @@
                                         <v-date-picker v-model="startDatePickerModel" no-title  @input="startDateMenu = false"></v-date-picker>
                                     </v-menu>
                                 </div>
-
-
                             </div>
-
-
-
-
-
-
                         </div>
                         <div class="form-item">
                             <p>수업 시작 시간</p>
                             <div class="form-box">
-                                <!--                                <div class="form-group time">-->
-                                <!--                                    <input type="text" class="time-control no-time" size="8" value="시간 없음">-->
-                                <!--                                    <button type="button" class="btn form-btn form-time"></button>-->
-                                <!--                                </div>-->
+                                <!--<div class="form-group time">-->
+                                <!--<input type="text" class="time-control no-time" size="8" value="시간 없음">-->
+                                <!--<button type="button" class="btn form-btn form-time"></button>-->
+                                <!--</div>-->
                                 <div class="form-group time">
                                     <v-menu
                                             nudge-left="30px"
@@ -312,10 +301,10 @@
                         <div class="form-item">
                             <p>수업 종료 시간</p>
                             <div class="form-box">
-                                <!--                                <div class="form-group time">-->
-                                <!--                                    <input type="text" class="time-control no-time" size="8" value="시간 없음">-->
-                                <!--                                    <button type="button" class="btn form-btn form-time"></button>-->
-                                <!--                                </div>-->
+                                <!--<div class="form-group time">-->
+                                <!--<input type="text" class="time-control no-time" size="8" value="시간 없음">-->
+                                <!--<button type="button" class="btn form-btn form-time"></button>-->
+                                <!--</div>-->
                                 <div class="form-group time">
                                     <v-menu
                                             nudge-left="30px"
@@ -403,15 +392,15 @@
                                 </ul>
                             </div>
 
-                            <!--                                    <ul>-->
-                            <!--                                        <li v-for="(todoItem, index) in todoItems" :key="todoItem" class="shadow">-->
-                            <!--                                            <i class="checkBtn fas fa-check" aria-hidden="true"></i>-->
-                            <!--                                            {{ todoItem }}-->
-                            <!--                                            <span class="removeBtn" type="button" @click="removeTodo(todoItem, index)">-->
-                            <!--                                                 <a href="" class="add-file-delete" aria-hidden="true"><img :src="require('@/assets/images/delete.svg')" alt=""></a>-->
-                            <!--                                            </span>-->
-                            <!--                                        </li>-->
-                            <!--                                    </ul>-->
+                            <!--<ul>-->
+                            <!--<li v-for="(todoItem, index) in todoItems" :key="todoItem" class="shadow">-->
+                            <!--<i class="checkBtn fas fa-check" aria-hidden="true"></i>-->
+                            <!--{{ todoItem }}-->
+                            <!--<span class="removeBtn" type="button" @click="removeTodo(todoItem, index)">-->
+                            <!--<a href="" class="add-file-delete" aria-hidden="true"><img :src="require('@/assets/images/delete.svg')" alt=""></a>-->
+                            <!--</span>-->
+                            <!--</li>-->
+                            <!--</ul>-->
 
                         </div>
                     </div>
@@ -423,7 +412,7 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <button type="button" class="btn primary navi" disabled>완료</button>
+                    <button type="button" class="btn navi" disabled>완료</button>
                 </div>
             </div>
         </modal>
@@ -484,7 +473,7 @@
                     </div>
                 </div>
 
-                <div class="popup-feed-detail">
+                <div class="popup-feed-detail scroll-body" style="max-height:500px;">
                     <div class="fd-cnt">
                         <p class="fd-txt">{{ curriculumList.curriculum.text }}</p>
 
@@ -566,6 +555,35 @@
                             </ul>
                         </div>
                     </div>
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / (수업 회차 50 초과 입력시 안내 팝업) -->
+    <transition name="modal">
+        <modal v-if="isCreateError" size="540px" body-padding="0" @modalClose="isClassCurr=false">
+            <div slot="header">
+                <!-- header custom coding-->
+                <div class="popup-icon error"></div>
+                <div class="popup-close">
+                    <button class="close" @click="isCreateError = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">잘못된 회차 설정입니다.</h2>
+                    <p class="popup-txt">
+                        회차 설정은 최대 50회까지 입력할 수 있습니다.
+                    </p>
+                </div>
+            </div>
+            <div slot="footer">
+                <!-- footer custom coding-->
+                <div class="btn-group rt">
+                    <button type="button" @click="isCreateError = false" class="btn navi">확인</button>
                 </div>
             </div>
         </modal>
