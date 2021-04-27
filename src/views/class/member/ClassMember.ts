@@ -10,6 +10,7 @@ import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
+import { VSnackbar } from 'vuetify/lib';
 import WithRender from './ClassMember.html';
 
 const MyClass = namespace('MyClass');
@@ -17,6 +18,7 @@ const MyClass = namespace('MyClass');
 interface IAccordionList {
     listTit: string;
     level: number;
+    active: boolean;
 }
 
 @WithRender
@@ -24,6 +26,7 @@ interface IAccordionList {
     components:{
         Modal,
         Btn,
+        VSnackbar
     }
 })
 export default class ClassMember extends Vue{
@@ -83,11 +86,13 @@ export default class ClassMember extends Vue{
     private accordionList: IAccordionList[] = [
         {
             listTit: '스탭 멤버',
-            level: 2
+            level: 2,
+            active: true
         },
         {
             listTit: '일반 멤버',
-            level: 3
+            level: 3,
+            active: true
         }
     ];
 

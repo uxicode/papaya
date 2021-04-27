@@ -43,35 +43,33 @@
                         </div>
                     </li>
                 </ul>
-                <div class="accordion">
-                    <div v-for="(item, idx) in accordionList" :key="idx">
-                        <div class="accordion-tit">
-                            <p class="list-tit">{{ item.listTit }} <strong>{{ classifyLevel(item.level).length }}</strong></p>
-                            <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
-                            <button class="accordion-btn sm rt-10 active" data-toggle="collapse" data-target="#accordion1"></button>
-                        </div>
-                        <div class="accordion-cnt active">
-                            <ul class="member-list">
-                                <li v-for="(data, index) in classifyLevel(item.level)"
-                                    :key="index"
-                                    class="list-item">
-                                    <div class="member-info" :class="memberLevelIcon(data.level)">
-                                        <p class="name">{{ data.nickname }}</p>
-                                        <span class="position">{{ memberLevelTxt(data.level) }}</span>
-                                    </div>
-                                    <div class="member-info-btn">
-                                        <div class="list-popup">
-                                            <button type="button" class="list-popup-btn" @click="isStaffToggle = !isStaffToggle"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                            <div class="list-popup-menu pos-right" :class="{'active': isStaffToggle}" style="transform:translate3d(42px, 0,0);">
-                                                <button type="button" class="list-popup-item" @click="detailPopupOpen(data.user_id, data.level, data.nickname, data.id)">멤버정보</button>
-                                                <button v-show="memberLevel===1" type="button" class="list-popup-item" @click="blockModalOpen(data.id)">멤버 차단</button>
-                                                <button v-show="memberLevel===1" type="button" class="list-popup-item" @click="banModalOpen(data.id)">멤버 강제 탈퇴</button>
-                                            </div>
+                <div v-for="(item, idx) in accordionList" :key="idx" class="accordion mgb-28">
+                    <div class="accordion-tit">
+                        <p class="list-tit">{{ item.listTit }} <strong>{{ classifyLevel(item.level).length }}</strong></p>
+                        <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
+                        <button class="accordion-btn sm rt-10" :class="{'active': item.active}" @click="item.active = !item.active"></button>
+                    </div>
+                    <div class="accordion-cnt" :class="{'active': item.active}">
+                        <ul class="member-list">
+                            <li v-for="(data, index) in classifyLevel(item.level)"
+                                :key="index"
+                                class="list-item">
+                                <div class="member-info" :class="memberLevelIcon(data.level)">
+                                    <p class="name">{{ data.nickname }}</p>
+                                    <span class="position">{{ memberLevelTxt(data.level) }}</span>
+                                </div>
+                                <div class="member-info-btn">
+                                    <div class="list-popup">
+                                        <button type="button" class="list-popup-btn" @click="isStaffToggle = !isStaffToggle"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                        <div class="list-popup-menu pos-right" :class="{'active': isStaffToggle}" style="transform:translate3d(42px, 0,0);">
+                                            <button type="button" class="list-popup-item" @click="detailPopupOpen(data.user_id, data.level, data.nickname, data.id)">멤버정보</button>
+                                            <button v-show="memberLevel===1" type="button" class="list-popup-item" @click="blockModalOpen(data.id)">멤버 차단</button>
+                                            <button v-show="memberLevel===1" type="button" class="list-popup-item" @click="banModalOpen(data.id)">멤버 강제 탈퇴</button>
                                         </div>
                                     </div>
-                                </li>
-                            </ul>
-                        </div>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
