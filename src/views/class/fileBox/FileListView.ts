@@ -8,6 +8,6 @@ import SideMenu from '@/components/sideMenu/sideMenu.vue';
         SideMenu
     }
 })
-export default class FileListView extends Vue {
+export default class FileBox extends Vue {
 
 }

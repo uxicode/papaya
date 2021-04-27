@@ -41,7 +41,7 @@ export default class SignUpForm extends Vue {
     private SUCCESS_MEMBERSHIP: string = 'success-membership';
     private ERROR_VERIFY_NUM: string = 'error-verify-num';
     private ERROR_DISABLED_ID: string = 'error-disabled-id';
-    private ERROR_FAIL_SIGNUP: string = 'error-fail-apply';
+    private ERROR_FAIL_SIGNUP: string = 'error-fail-enroll';
     private ERROR_DISABLED_EMAIL: string = 'error-disabled-email';
 
     private modalMsgData: ISignupModalMsg[]= [
@@ -229,7 +229,7 @@ export default class SignUpForm extends Vue {
      * @private
      */
     private memberSuccess(): void{
-        this.$router.push('/apply/complete').then(()=>{
+        this.$router.push('/enroll/complete').then(()=>{
             console.log('회원가입 성공');
         });
     }

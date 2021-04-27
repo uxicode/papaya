@@ -6,5 +6,5 @@ export const TERMS_BASE_URL: string = '/terms';
 export const FAQ_BASE_URL: string = '/faqs';
 export const CLASS_BASE_URL: string = '/class';
 export const LOGIN_URL: string = '/login';
-export const SIGN_UP_URL: string = '/apply';
+export const SIGN_UP_URL: string = '/enroll';
 export const SCHOOL_URL: string = '/school';

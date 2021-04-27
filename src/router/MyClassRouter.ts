@@ -40,22 +40,22 @@ const MyClassRouter=[
     components: {default: () => import('../views/class/setting/ClassWithdrawComplete'), header: AppHeader, footer: AppFooter}, // W.4.5.7.11.1.1
   },
   {
-    path: '/applyPrivateClass',
-    name: 'applyPrivateClass',
+    path: '/enrollPrivateClass',
+    name: 'enrollPrivateClass',
     beforeEnter: getIsAuth,
-    components: {default: () => import('../views/class/apply/ApplyPrivateClass'), header: AppHeader, footer: AppFooter}, // W.4.4.1.1
+    components: {default: () => import('../views/class/enroll/EnrollPrivateClass'), header: AppHeader, footer: AppFooter}, // W.4.4.1.1
   },
   {
-    path: '/applyOpenClass',
-    name: 'applyOpenClass',
+    path: '/enrollOpenClass',
+    name: 'enrollOpenClass',
     beforeEnter: getIsAuth,
-    components: {default: () => import('../views/class/apply/ApplyOpenClass'), header: AppHeader, footer: AppFooter}, // W.4.4.2
+    components: {default: () => import('../views/class/enroll/EnrollOpenClass'), header: AppHeader, footer: AppFooter}, // W.4.4.2
   },
   {
-    path: '/fileManager',
-    name: 'fileManager',
+    path: '/fileBox',
+    name: 'fileBox',
     beforeEnter: getIsAuth,
-    components: {default: () => import('../views/class/fileManager/FileListView'), header: AppHeader, footer: AppFooter}, // W.4.4.2
+    components: {default: () => import('../views/class/fileBox/FileListView'), header: AppHeader, footer: AppFooter}, // W.4.5.4
   }
 
 

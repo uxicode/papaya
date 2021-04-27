@@ -511,7 +511,7 @@ $popupDepth: 10;
     }
     // end: link
 
-    // start: fileManager
+    // start: fileBox
     .add-file-list {
       li {
         position:relative;
@@ -527,18 +527,18 @@ $popupDepth: 10;
         }
       }
     }
-    // end: fileManager
+    // end: fileBox
   }
 
-  // start: apply
-  .apply-tit{
+  // start: enroll
+  .enroll-tit{
     margin: 0 40px;
     padding: 15px 0;
     font-weight: 500;
     color: #373749;
   }
 
-  .apply-qna {
+  .enroll-qna {
     margin: 0 40px;
     p {
       padding: 20px 0;
@@ -551,7 +551,7 @@ $popupDepth: 10;
       border: 1px solid #c9cad5;
     }
   }
-  // end: apply
+  // end: enroll
 }
 
 .form-add-btn {
