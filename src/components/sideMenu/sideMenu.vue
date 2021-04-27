@@ -7,7 +7,7 @@
 <!--          <a href="" class="img-change"><img :src="require('@/assets/images/btn-round 2.png')" alt=""></a>-->
 
           <!-- start: profile image upload -->
-          <form class="file-form img-change" enctype="multipart/form-data" accept-charset="utf-8" novalidate>
+          <form v-if="isOwner" class="file-form img-change" enctype="multipart/form-data" accept-charset="utf-8" novalidate>
             <!-- accept 종류 : image/*, .pdf, .xls, .xlsx, .ppt, .pptx, .doc, .docx-->
             <input class="input-file" type="file" name="files" id="fileInput" accept="image/*" @change="uploadProfileImg( $event.target.files )"/>
             <img :src="require('@/assets/images/btn-round2.png')" alt="">
@@ -30,7 +30,7 @@
       </div>
       <div class="class-menu">
         <ul class="menu-list">
-          <li v-for="(item, index) in sideMenuModel" :key="`item-${index}`">
+          <li v-for="(item, index) in sideMenuModel" :key="`item-${index}`" v-if="visibleSettingMenus(index)">
             <a href="" :class="[`type${index+1}`, {'active': index===activeNum }]" @click.prevent="sideMenuClickHandler( index )">{{ item.title }}</a>
           </li>
 <!--          <li><a href="" class="type2">알림</a></li>
@@ -121,6 +121,10 @@ export default class SideMenu extends Vue{
   ];
   private isPopup: boolean=false;
 
+  get isOwner(): boolean{
+    return (this.myClassHomeModel.owner_id === this.myClassHomeModel.me?.user_id);
+  }
+
   get sideMenuModel(): ISideMenu[]{
     return this.sideMenuData;
   }
@@ -128,7 +132,7 @@ export default class SideMenu extends Vue{
   public created(){
     //화면 새로고침시에
     if (performance.navigation.type === 1) {
-      this.sideMenuClickHandler( 0 );
+      this.sideMenuClickHandler(2);
     }
 
     /*window.onpageshow = function(event) {
@@ -199,6 +203,14 @@ export default class SideMenu extends Vue{
 
   private gotoClassMemberPage(): void{
     this.$router.push(`/class/${this.classID}/member`);
+  }
+
+  private visibleSettingMenus(idx: number): boolean{
+    if( idx === this.sideMenuModel.length-1 ){
+      return (this.isOwner);
+    }else{
+      return true;
+    }
   }
 }
 

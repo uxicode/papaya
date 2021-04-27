@@ -23,16 +23,16 @@
                         <li v-for="(item, idx) in classMembers"
                             :key="idx"
                             class="member-item">
-                            <div class="member-type manager"
+                            <div class="member-type"
                                  :class="memberLevelIcon(item.level)">
                                 <p class="member-name">{{ item.nickname }}</p>
                                 <p class="member-tit">{{ memberLevelTxt(item.level) }}</p>
                             </div>
+                            <a href="" class="member-more" @click.stop.prevent="isActive = !isActive"><img :src="require('@/assets/images/more.svg')" alt=""></a>
                             <div class="list-popup">
-                                <button type="button" class="member-more" @click="isActive = !isActive"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                 <div class="list-popup-menu pos-right" :class="{'active': isActive === true}" style="transform:translate3d(87px, 0, 0);">
-                                    <button class="list-popup-item" @click="isActive = false; isBlockModal = true">멤버 차단</button>
-                                    <button class="list-popup-item" @click="isActive = false; isBanModal = true">강제 탈퇴</button>
+                                    <button class="list-popup-item" @click="blockModalOpen(item.id)">멤버 차단</button>
+                                    <button class="list-popup-item" @click="banModalOpen(item.id)">강제 탈퇴</button>
                                 </div>
                             </div>
                         </li>
@@ -45,7 +45,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.1.1 (멤버 활동 관리-차단-확인) -->
     <transition name="modal">
-        <modal v-if="isBlockModal" size="540px" body-padding="0">
+        <modal v-if="isBlockModal" size="540px" body-padding="0" @modalClose="isBlockModal=false;">
             <div slot="header">
                 <!-- header custom coding-->
                 <div class="popup-icon block"></div>
@@ -65,9 +65,10 @@
                     <div class="member-management-list bd-none">
                         <ul>
                             <li class="member-item bd-none">
-                                <div class="member-type staff">
-                                    <p class="member-name">김경희선생님</p>
-                                    <p class="member-tit">스탭 멤버</p>
+                                <div class="member-type"
+                                     :class="memberLevelIcon(this.memberLevel)">
+                                    <p class="member-name">{{ this.memberNickname }}</p>
+                                    <p class="member-tit">{{ memberLevelTxt(this.memberLevel) }}</p>
                                 </div>
                             </li>
                         </ul>
@@ -78,7 +79,7 @@
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
                     <btn type="outline" @btnClick="isBlockModal = false">취소</btn>
-                    <btn type="navi" @btnClick="isBlockModal = false">차단하기</btn>
+                    <btn type="navi" @btnClick="memberBlockSubmit">차단하기</btn>
                 </div>
             </div>
         </modal>
@@ -87,7 +88,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.1.2 (멤버 활동 관리-차단-완료) -->
     <transition name="modal">
-        <modal v-if="isBlockCompleteModal" size="540px" body-padding="0">
+        <modal v-if="isBlockCompleteModal" size="540px" body-padding="0" @modalClose="isBlockCompleteModal=false;">
             <div slot="header">
                 <div class="popup-icon block"></div>
                 <div class="popup-close">
@@ -102,9 +103,10 @@
                     <div class="member-management-list bd-none">
                         <ul>
                             <li class="member-item bd-none">
-                                <div class="member-type staff">
-                                    <p class="member-name">김경희선생님</p>
-                                    <p class="member-tit">스탭 멤버</p>
+                                <div class="member-type"
+                                     :class="memberLevelIcon(this.memberLevel)">
+                                    <p class="member-name">{{ this.memberNickname }}</p>
+                                    <p class="member-tit">{{ memberLevelTxt(this.memberLevel) }}</p>
                                 </div>
                             </li>
                         </ul>
@@ -122,7 +124,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.2.1 (멤버 활동 관리-탈퇴-확인) -->
     <transition name="modal">
-        <modal v-if="isBanModal" size="540px" body-padding="0">
+        <modal v-if="isBanModal" size="540px" body-padding="0" @modalClose="isBanModal=false;">
             <div slot="header">
                 <div class="popup-icon leave"></div>
                 <div class="popup-close">
@@ -133,16 +135,17 @@
                 <div class="popup-cnt">
                     <h2 class="popup-tit">선택한 멤버를 강제 탈퇴시키겠습니까?</h2>
                     <p class="popup-txt">
-                        멤버 강제 탈퇴 시 멤버가 작제성했던 글, 댓글 등은 삭제되지 않습니다.
+                        멤버 강제 탈퇴 시 멤버가 작성했던 글, 댓글 등은 삭제되지 않습니다.
                     </p>
                 </div>
                 <div class="member-activity">
                     <div class="member-management-list bd-none">
                         <ul>
                             <li class="member-item bd-none">
-                                <div class="member-type staff">
-                                    <p class="member-name">김경희선생님</p>
-                                    <p class="member-tit">스탭 멤버</p>
+                                <div class="member-type"
+                                     :class="memberLevelIcon(this.memberLevel)">
+                                    <p class="member-name">{{ this.memberNickname }}</p>
+                                    <p class="member-tit">{{ memberLevelTxt(this.memberLevel) }}</p>
                                 </div>
                             </li>
                         </ul>
@@ -161,7 +164,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.2.2 (멤버 활동 관리-탈퇴-완료) -->
     <transition name="modal">
-        <modal v-if="isBanCompleteModal" size="540px" body-padding="0">
+        <modal v-if="isBanCompleteModal" size="540px" body-padding="0" @modalClose="isBanCompleteModal=false;">
             <div slot="header">
                 <div class="popup-icon leave"></div>
                 <div class="popup-close">
@@ -176,9 +179,10 @@
                     <div class="member-management-list bd-none">
                         <ul>
                             <li class="member-item bd-none">
-                                <div class="member-type staff">
-                                    <p class="member-name">김경희선생님</p>
-                                    <p class="member-tit">스탭 멤버</p>
+                                <div class="member-type"
+                                     :class="memberLevelIcon(this.memberLevel)">
+                                    <p class="member-name">{{ this.memberNickname }}</p>
+                                    <p class="member-tit">{{ memberLevelTxt(this.memberLevel) }}</p>
                                 </div>
                             </li>
                         </ul>

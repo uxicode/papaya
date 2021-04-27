@@ -49,6 +49,41 @@ class MyClassService {
         return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
 
+    /**
+     * 클래스 차단 멤버 전체 조회
+     * @param classId
+     */
+    public getBlockedClassMembers(classId: number): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/members/blocked`);
+    }
+
+    /**
+     * 클래스 멤버 차단
+     * @param classId
+     * @param memberId
+     */
+    public blockClassMember(classId: number, memberId: number): Promise<any> {
+        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/block`);
+    }
+
+    /**
+     * 클래스 멤버 차단 해제
+     * @param classId
+     * @param memberId
+     */
+    public unblockClassMember(classId: number, memberId: number): Promise<any> {
+        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/unblock`);
+    }
+
+    /**
+     * 클래스 멤버 강제 탈퇴
+     * @param classId
+     * @param memberId
+     */
+    public banClassMember(classId: number, memberId: number): Promise<any> {
+        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/ban`);
+    }
+
     public getSearchSchool(name: string): Promise<any> {
         return request('get', `${SCHOOL_URL}/searchbyname/${name}`);
     }
@@ -70,7 +105,7 @@ class MyClassService {
      * @param classId
      * @param payload
      */
-    public getAllScheduleByClassId(classId: string | number, payload: { page_no: number, count: number}={ page_no: 0, count: 5 } ): Promise<any>{
+    public getAllScheduleByClassId(classId: string | number, payload: { page_no: number | null, count: number | null }={page_no:null, count:null} ): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/schedule`, payload );
     }
 
@@ -163,7 +198,7 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
 
-    public setClassMemberInfo(classId: number, memberId: number, info: any): Promise<IClassMemberInfo> {
+    public setClassMemberInfo(classId: number, memberId: number, info: object): Promise<IClassMemberInfo> {
         return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`, info);
     }
 
@@ -171,8 +206,8 @@ class MyClassService {
         return request('delete', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
 
-    public searchMembers(payload: {classId: number, searchWord: string}): Promise<any> {
-        return request('get', `${CLASS_BASE_URL}/${payload.classId}/members/search/${payload.searchWord}`);
+    public searchMembers( classId: number, searchWord: string): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/members/search/${searchWord}`);
     }
 
     /**
@@ -184,11 +219,24 @@ class MyClassService {
     }
 
     public setClassQuestion(classId: number, questionId: number, payload: {new_question: string}): Promise<any> {
-        return request('put', `${CLASS_BASE_URL}/${classId}/question/${{questionId}}`, payload);
+        return request('put', `${CLASS_BASE_URL}/${classId}/question/${questionId}`, payload);
     }
 
     public deleteClassQuestion(classId: number, questionId: number): Promise<any> {
-        return request('delete', `${CLASS_BASE_URL}/${classId}/question/${{questionId}}`);
+        return request('delete', `${CLASS_BASE_URL}/${classId}/question/${questionId}`);
+    }
+
+    public makeClassQuestion(classId: number, payload: {question: string}): Promise<any> {
+        return request('post', `${CLASS_BASE_URL}/${classId}/question`, payload);
+    }
+
+    /**
+     * 클래스 멤버 답변 전체 조회
+     * @param classId
+     * @param memberId
+     */
+    public getMemberClassQnA(classId: number, memberId: number): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/members/${memberId}/answer`);
     }
 
     /**
@@ -217,7 +265,16 @@ class MyClassService {
     }
 
     /**
-     * 클래스 알림 전제 초회 (최신 위쪽에 )
+     * 클래스 태그 추가
+     * @param classId
+     * @param keyword
+     */
+    public addClassTag(classId: number, payload: {keyword: string}): Promise<any> {
+        return request('post', `${CLASS_BASE_URL}/${classId}/tags`, payload);
+    }
+
+    /**
+     * 클래스 알림 전체 조회 (최신 위쪽에 )
      * @param classId
      * @param payload
      */

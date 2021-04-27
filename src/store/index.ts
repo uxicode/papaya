@@ -3,7 +3,6 @@ import Vuex from 'vuex';
 import AuthModule from '@/store/auth.module';
 import ClassModule from '@/store/class.module';
 import PageHistoryStatus from '@/store/PageHistoryStatus';
-import {GET_TOKEN} from '@/store/mutation-auth-types';
 import {SET_CLASS_ID, SET_MYCLASS_HOME_DATA} from '@/store/mutation-class-types';
 
 Vue.use(Vuex);
@@ -25,8 +24,7 @@ if ( classId ) {
   store.commit(`MyClass/${SET_CLASS_ID}`, localStorage.getItem('classId') );
 }
 if (homeData) {
-  store.commit(`MyClass/${SET_MYCLASS_HOME_DATA}`, localStorage.getItem('homeData') );
+  store.commit(`MyClass/${SET_MYCLASS_HOME_DATA}`, JSON.parse( localStorage.getItem('homeData') as string ) );
 }
-
 // store.commit(`Auth/${ACCESS_TOKEN}`, localStorage.getItem('user'));
 export default store;

@@ -54,7 +54,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.2.1 (클래스 프로필 설정 - 닉네임 변경) -->
     <transition name="modal">
-        <modal v-if="isNicknameModify" size="540px" body-padding="0">
+        <modal v-if="isNicknameModify" size="540px" body-padding="0" @modalClose="isNicknameModify=false;">
             <div slot="header">
                 <!-- header custom coding-->
                 <div class="popup-icon profile"></div>

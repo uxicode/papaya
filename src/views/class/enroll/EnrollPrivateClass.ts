@@ -14,4 +14,5 @@ import Btn from '@/components/button/Btn.vue';
 })
 export default class Enroll extends Vue {
 
+
 }

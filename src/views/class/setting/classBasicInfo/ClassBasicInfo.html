@@ -17,24 +17,27 @@
                     <div class="info-form">
                         <div class="form-group">
                             <label for="schoolName">학교 이름</label>
-                            <btn type="grey" size="sm">검색</btn>
+                            <btn type="grey" size="sm" @btnClick="openSchoolSearchPopup">검색</btn>
                             <input type="text" class="form-control" id="schoolName"
-                                   v-model="info.g_name" readonly style="width:430px">
+                                   :placeholder="info.g_name"
+                                   v-model="searchResultValue"
+                                   @input="watchBySearchSchoolModel"
+                                   :key-enter="schoolNameSearchKeyEnter"
+                                   readonly style="width:430px">
                         </div>
                         <div class="form-group mgt-40">
                             <label for="className">클래스 이름</label>
-                            <input type="text" class="form-control" id="className"
-                                   v-model="info.name">
+                            <input type="text" class="form-control" id="className" v-model="info.name">
                         </div>
                         <div class="form-group mgt-40">
                             <span class="label">공개 범위 <button type="button" class="tip-info"><img :src="require('@/assets/images/info.svg')" class="icon-img" alt=""></button></span>
                             <div class="checkbox-group">
                                 <div class="btn-radio">
-                                    <input type="radio" name="privacy" id="closedClass" :checked="classInfo.is_private === true">
+                                    <input type="radio" name="privacy" id="closedClass" :checked="info.is_private === true">
                                     <label for="closedClass">비공개 클래스</label>
                                 </div>
                                 <div class="btn-radio">
-                                    <input type="radio" name="privacy" id="openedClass" :checked="classInfo.is_private === false">
+                                    <input type="radio" name="privacy" id="openedClass" :checked="info.is_private === false">
                                     <label for="openedClass">오픈 클래스</label>
                                 </div>
                             </div>
@@ -46,8 +49,83 @@
         <div class="popup-footer">
             <div class="btn-group rt">
                 <btn type="outline" @btnClick="goBack">취소</btn>
-                <btn type="navi">저장</btn>
+                <btn type="navi" @btnClick="changeInfoSave">저장</btn>
             </div>
         </div>
     </div>
+
+    <!-- start: 학교 이름 검색 팝업 -->
+    <transition name="modal">
+        <modal v-if="isOpenPopup" size="540px" body-padding="10px 0 20px" @modalClose="closeSchoolSearchPopup">
+            <div slot="header">
+                <!-- header custom coding-->
+                <div class="popup-icon search"></div>
+                <div class="popup-close" @click="closeSchoolSearchPopup">
+                    <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-search">
+                    <h2 class="popup-tit">학교 이름을 검색해 주세요.</h2>
+                    <div class="form-group inline" style="position:relative;">
+                        <!--<input type="text"
+                               class="form-control"
+                               id="searchSchool"
+                               style="width:370px"
+                               placeholder="학교 이름을 검색해주세요."
+                               v-stream:keyup="keyup$">-->
+                        <txt-field
+                                id="searchSchool"
+                                placeholder="학교 이름을 검색해주세요."
+                                size="370" v-model="searchSchoolValue" @input="onSchSchoolValChangeHandler">
+                        </txt-field>
+                        <btn type="grey" size="sm" @btnClick="">검색</btn>
+                        <!-- start: 로딩 바 -->
+                        <div class="lds-roller" v-show="loadingModel"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                        <!-- end: 로딩 바 -->
+
+                    </div>
+                </div>
+                <div class="search-result">
+                    <div class="search-result-cnt">
+                        <template v-if="searchResults.length>0">
+                            <ul class="search-result-item">
+                                <li v-for="item in searchResults">
+                                    <a href="" class="result-link" @click.prevent.stop="applySearchResult( item.name )">
+                                        <div class="tb-cell result-tit" v-html="boldSearchResult( item.name )"></div>
+                                        <div class="tb-cell result-sub">{{ item.rd_addr }}</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </template>
+                        <template v-else>
+                            <div class="search-result">
+                                <p class="search-none" v-if="searchResultValue.length===0">검색어를 입력해 주세요.</p>
+                                <p class="search-none" v-else>‘<strong>{{searchResultValue}}</strong>’에 대한 검색 결과가 없습니다.</p>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+            <div slot="footer">
+                <!-- footer custom coding-->
+
+                <template v-if="!manualChk">
+                    <div class="btn-group ct">
+                        <btn type="outline" @btnClick="manualInputClickHandler">직접입력</btn>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="popup-search-input">
+                        <txt-field size="320" v-model="manualInputField" placeholder="학교 이름을 직접 입력해 주세요."></txt-field>
+                    </div>
+                    <div class="btn-group rt">
+                        <btn type="navi" @btnClick="applyManualValClickHandler">확인</btn>
+                    </div>
+                </template>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 학교 이름 검색 팝업 -->
 </section>

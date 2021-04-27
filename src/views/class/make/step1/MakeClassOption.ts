@@ -105,7 +105,7 @@ export default class MakeClassOption extends Vue{
 
       //사용자가 입력한 값 처리 Observable
       //obv$: Observable<any>, loadChk: ()=>void, promiseFunc: Promise<any>, isLoading: boolean
-      const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, MyClassService.getSearchSchool, this.isLoading );
+      const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, { fn: MyClassService.getSearchSchool, args: null }, this.isLoading );
       userInter$.subscribe({
         next:( searchData: any ) =>{
           console.log(searchData);

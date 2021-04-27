@@ -1,4 +1,4 @@
-import {Vue, Component, Prop} from 'vue-property-decorator';
+import {Vue, Component, Watch} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {
     resetSearchInput,
@@ -11,7 +11,7 @@ import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import WithRender from './ClassTagManage.html';
 
-interface ITagList {
+interface ITagInfo {
     id: number;
     class_id: number;
     keyword: string;
@@ -31,12 +31,12 @@ const MyClass = namespace('MyClass');
 })
 
 export default class ClassTagManage extends Vue {
-    private tagList: ITagList[] = [];
+    private tagList: ITagInfo[] = [];
 
     private isClassTagSearch: boolean = false;
     private isLoading: boolean = false;
     private searchTagValue: string = '';
-    private searchResultItems: ITagList[] = [];
+    private searchResultItems: ITagInfo[] = [];
 
     @MyClass.Getter
     private classID!: number;
@@ -45,7 +45,7 @@ export default class ClassTagManage extends Vue {
         return this.searchTagValue;
     }
 
-    get searchResults(): ITagList[] {
+    get searchResults(): ITagInfo[] {
         return this.searchResultItems;
     }
 
@@ -53,24 +53,25 @@ export default class ClassTagManage extends Vue {
         return this.isLoading;
     }
 
-    public getTagNameInput( selector: string ): HTMLInputElement{
-        return document.getElementById( selector ) as HTMLInputElement;
-    }
-    
-    public created() {
-        this.getClassTags();
-    }
+    // public created() {
+    //     this.getClassTags();
+    // }
+
 
     /**
-     * 클래스 태그 가져오기
+     * 클래스 태그 가져오기(처음 실행시, 즉시 갱신)
      * @private
      */
+    // immediate : 즉시 호출하겠다는 의미.
+    // deep : object 내의 속성값까지 감시.
+    // @Watch('감시할 변수', {immediate: true, deep: true})
+    @Watch('tagList',{immediate: true, deep: false})
     private getClassTags(): void {
-        console.log('동적라우트값=' , this.$route.params.classId, this.classID);
+        //console.log('동적라우트값=' , this.$route.params.classId, this.classID);
         MyClassService.getClassTags(this.classID)
           .then((data) => {
               this.tagList = data.tag_list;
-              console.log(this.tagList);
+              //console.log(this.tagList);
           });
     }
 
@@ -104,7 +105,7 @@ export default class ClassTagManage extends Vue {
 
             //사용자가 입력한 값 처리 Observable
             //obv$: Observable<any>, loadChk: ()=>void, promiseFunc: Promise<any>, isLoading: boolean
-            const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, MyClassService.searchTag, this.isLoading );
+            const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, { fn: MyClassService.searchTag, args: null} , this.isLoading );
             userInter$.subscribe({
                 next:( searchData: any ) =>{
                     //console.log(searchData.tag_list);
@@ -141,7 +142,7 @@ export default class ClassTagManage extends Vue {
     private checkLoading(): void{
         this.isLoading=!this.isLoading;
     }
-    
+
     /**
      * autocomplete 로 검색된 리스트 중 하나를 클릭했을때 실행 -> 해당 클릭한 키워드값으로
      * @param name
@@ -150,18 +151,20 @@ export default class ClassTagManage extends Vue {
     private applySearchResult(name: string): void {
         this.closeTagSearchPopup();
         this.searchTagValue=name;
-
-        //this.changeTagNameValue(this.searchTagValue);
+        this.addTag(this.searchTagValue);
     }
 
     /**
-     * 태그 이름 input value 변경
+     * 태그 이름 추가
      * @param val
      * @private
      */
-    private changeTagNameValue(val: string) {
-        const TagNameField=this.getTagNameInput('tagName');
-        TagNameField.value = val;
+    private addTag(val: string): void {
+        MyClassService.addClassTag(this.classID, {keyword: val})
+          .then((data) => {
+              data.taginfo.keyword = val;
+              console.log(`${data.taginfo.keyword} 태그 추가 완료`);
+          });
     }
 
     /**

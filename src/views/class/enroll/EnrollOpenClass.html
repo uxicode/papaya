@@ -46,7 +46,7 @@
                                 </a>
                             </div>
 
-                            <div class="accordion-cnt"  id="accordion1">
+                            <div class="accordion-cnt active" id="accordion1">
                                 <div class="notify-feed">
                                     <h3 class="fd-tit">6월의 카페모임 일정 공지드려요</h3>
                                     <div class="fd-writer type2">
@@ -58,7 +58,7 @@
                                     <div class="fd-btn">
                                         <div class="list-popup">
                                             <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                            <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
+                                            <div class="list-popup-menu pos-right active" style="transform:translate3d(42px, 0,0);">
                                                 <a href="" class="list-popup-item">알림 수정</a>
                                                 <a href="" class="list-popup-item">공지로 등록</a>
                                                 <a href="" class="list-popup-item">알림 보관</a>
@@ -265,30 +265,10 @@
                             <div class="form-group inline">
                                 <input type="text" class="form-control" placeholder="검색어를 입력해 주세요."
                                        style="width:430px">
-                                <button type="button" class="btn primary grey sm">중복확인</button>
+                                <btn type="grey" size="sm">중복확인</btn>
                             </div>
                         </div>
                         <ul class="enroll-qna">
-                            <li>
-                                <p>1. 홍대 감성카페 모임을 알게된 경로가 어떻게 되나요?</p>
-                                <textarea class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
-                            </li>
-                            <li>
-                                <p>2. 살고 있는 지역을 간단히 써주세요. (예. 서울 성북구)</p>
-                                <textarea class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
-                            </li>
-                            <li>
-                                <p>1. 홍대 감성카페 모임을 알게된 경로가 어떻게 되나요?</p>
-                                <textarea class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
-                            </li>
-                            <li>
-                                <p>1. 홍대 감성카페 모임을 알게된 경로가 어떻게 되나요?</p>
-                                <textarea class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
-                            </li>
-                            <li>
-                                <p>2. 살고 있는 지역을 간단히 써주세요. (예. 서울 성북구)</p>
-                                <textarea class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
-                            </li>
                             <li>
                                 <p>1. 홍대 감성카페 모임을 알게된 경로가 어떻게 되나요?</p>
                                 <textarea class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
@@ -301,7 +281,7 @@
 
         <div slot="footer">
             <div class="btn-group rt">
-                <button type="button" class="btn primary navi disabled">가입하기</button>
+                <btn type="navi">가입하기</btn>
             </div>
         </div>
     </modal>
@@ -343,8 +323,8 @@
 
             <div slot="footer">
                 <div class="btn-group rt">
-                    <button type="button" class="btn outline">취소</button>
-                    <button type="button" class="btn primary navi">확인</button>
+                    <btn type="outline">취소</btn>
+                    <btn type="navi">확인</btn>
                 </div>
             </div>
         </modal>
