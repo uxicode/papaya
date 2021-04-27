@@ -1,3 +1,5 @@
+import MyClassService from '@/api/service/MyClassService';
+import {IQuestionList} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import WithRender from './applyPrivateClass.html';
 import Modal from '@/components/modal/modal.vue';
@@ -12,6 +14,36 @@ import Btn from '@/components/button/Btn.vue';
         Btn
     }
 })
-export default class Apply extends Vue {
+export default class ApplyPrivateClass extends Vue {
 
+    /* 추후 동적으로 값을 받아와야 함 (MyClassService.getClassInfoById 이용) */
+    private classID: number = 744;
+    private isPrivate: boolean = true;
+
+    private questionList: IQuestionList[] = [];
+
+    private isClassApplyModal: boolean = false;
+    private isClassApplyComplete: boolean = false;
+
+    /**
+     * 가입신청 modal 오픈 (가입 질문을 바로 가져옴)
+     * @private
+     */
+    private openApplyClassModal(): void {
+        this.isClassApplyModal = true;
+
+        MyClassService.getClassQuestion(this.classID)
+          .then((data) => {
+              this.questionList = data.questionlist;
+              console.log(this.questionList);
+          });
+    }
+
+    /**
+     * 닉네임과 가입 질문 답변 정보를 포함하여 가입 신청
+     * @private
+     */
+    private enrollClassSubmit(): void {
+
+    }
 }

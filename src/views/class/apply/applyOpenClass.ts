@@ -12,6 +12,6 @@ import Btn from '@/components/button/Btn.vue';
         Btn
     }
 })
-export default class Apply extends Vue {
+export default class ApplyOpenClass extends Vue {
 
 }
