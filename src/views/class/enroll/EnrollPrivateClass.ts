@@ -1,7 +1,7 @@
 import MyClassService from '@/api/service/MyClassService';
 import {IQuestionList} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
-import WithRender from './applyPrivateClass.html';
+import WithRender from './EnrollPrivateClass.html';
 import Modal from '@/components/modal/modal.vue';
 import SideMenu from '@/components/sideMenu/sideMenu.vue';
 import Btn from '@/components/button/Btn.vue';
@@ -14,7 +14,7 @@ import Btn from '@/components/button/Btn.vue';
         Btn
     }
 })
-export default class ApplyPrivateClass extends Vue {
+export default class EnrollPrivateClass extends Vue {
 
     /* 추후 동적으로 값을 받아와야 함 (MyClassService.getClassInfoById 이용) */
     private classID: number = 744;
