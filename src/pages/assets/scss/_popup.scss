@@ -520,14 +520,7 @@
     // end: fileBox
   }
 
-  // start: enroll
-  .enroll-tit{
-    margin: 0 40px;
-    padding: 15px 0;
-    font-weight: 500;
-    color: #373749;
-  }
-
+  // start: 가입신청
   .enroll-qna {
     margin: 0 40px;
     p {
@@ -536,12 +529,8 @@
       font-weight: bold;
       color: #848499;
     }
-    .form-textarea {
-      padding: 10px 14px;
-      border: 1px solid #c9cad5;
-    }
   }
-  // end: enroll
+  // end: 가입신청
 }
 
 .form-add-btn {
@@ -874,7 +863,7 @@
 
 .join-detail {border-top:1px solid #f4f5f6;}
 
-.join-detail-top {
+.join-detail-top, .enroll-tit {
   position:relative;
   border-bottom:1px solid #f4f5f6;
   padding:15px 0;

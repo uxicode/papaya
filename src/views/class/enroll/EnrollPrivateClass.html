@@ -76,14 +76,47 @@
                 <div class="popup-form">
                     <div class="scroll-body" style="height:526px">
                         <div class="popup-form-top">
-                            <div class="form-item post-classes">
+                            <div class="form-item post-classes selected"> <!-- class 선택 시 form-item에 selected 추가됨 -->
                                 <p>
                                     <span class="icon"><img :src="require('@/assets/images/bg-icon.png')" class="icon-img" alt=""></span>
                                     <span class="gr-name">파파야초등학교</span>
                                     <strong class="cls-name">꿈꾸는 5학년 1반</strong>
                                 </p>
+                                <div class="post-classes-select">
+                                    <div class="list-popup">
+                                        <button type="button" class="list-popup-btn"><img src="assets/images/arrow-right.svg" alt=""></button>
+                                        <div class="list-popup-menu pos-right" style="width:300px; transform:translate3d(42px, 0,0);">
+                                            <p class="list-popup-tit">클래스 선택</p>
+                                            <div class="list-popup-scroll" style="height:280px;">
+                                                <a href="" class="list-popup-item">
+                                                    <div class="list-popup-pic"><img src="assets/images/bg-icon.png" class="thumb" alt=""></div>
+                                                    <span class="pdl-52">내 일정</span>
+                                                </a>
+                                                <a href="" class="list-popup-item">
+                                                    <div class="list-popup-pic"><img src="assets/images/bg-icon.png" class="thumb" alt=""></div>
+                                                    <span class="pdl-52">1학년 3반 수학</span>
+                                                </a>
+                                                <a href="" class="list-popup-item">
+                                                    <div class="list-popup-pic"><img src="assets/images/bg-icon.png" class="thumb" alt=""></div>
+                                                    <span class="pdl-52">특목 고등학교 입시 미술반</span>
+                                                </a>
+                                                <a href="" class="list-popup-item">
+                                                    <div class="list-popup-pic"><img src="assets/images/bg-icon.png" class="thumb" alt=""></div>
+                                                    <span class="pdl-52">6학년 3반 독서부</span>
+                                                </a>
+                                                <a href="" class="list-popup-item">
+                                                    <div class="list-popup-pic"><img src="assets/images/bg-icon.png" class="thumb" alt=""></div>
+                                                    <span class="pdl-52">미술 아동반</span>
+                                                </a>
+                                                <a href="" class="list-popup-item">
+                                                    <div class="list-popup-pic"><img src="assets/images/bg-icon.png" class="thumb" alt=""></div>
+                                                    <span class="pdl-52">검정고시반</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-
                         </div>
                         <div class="popup-form-cnt bd-btm">
                             <p class="form-item post-cnt ft-dsec">
@@ -91,7 +124,7 @@
                             </p>
                         </div>
                         <div class="popup-form-btm" >
-                            <p class="apply-tit bd-btm" style="font-size: 14px;">클래스 닉네임</p>
+                            <p class="enroll-tit" style="font-size: 14px;">클래스 닉네임</p>
                             <div class="popup-search">
                                 <div class="form-group inline">
                                     <input type="text" class="form-control" id="input3" placeholder="검색어를 입력해 주세요."
@@ -99,7 +132,7 @@
                                     <button type="button" class="btn primary grey sm">중복확인</button>
                                 </div>
                             </div>
-                            <ul class="apply-qna">
+                            <ul class="enroll-qna">
                                 <li>
                                     <p>1. 자녀와의 관계가 어떻게 되시나요? (예. 엄마, 아빠 등)</p>
                                     <textarea class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
