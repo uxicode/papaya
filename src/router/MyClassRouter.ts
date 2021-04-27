@@ -50,6 +50,12 @@ const MyClassRouter=[
     name: 'enrollOpenClass',
     beforeEnter: getIsAuth,
     components: {default: () => import('../views/class/enroll/EnrollOpenClass'), header: AppHeader, footer: AppFooter}, // W.4.4.2
+  },
+  {
+    path: '/fileBox',
+    name: 'fileBox',
+    beforeEnter: getIsAuth,
+    components: {default: () => import('../views/class/fileBox/FileListView'), header: AppHeader, footer: AppFooter}, // W.4.5.4
   }
 ];
 

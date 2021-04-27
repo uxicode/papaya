@@ -115,7 +115,7 @@ export default class SideMenu extends Vue{
     {id:0, title: '클래스 홈', linkKey:'' },
     {id:1, title: '알림', linkKey:'alert' },
     {id:2, title: '일정', linkKey:'schedule' },
-    {id:3, title: '파일함', linkKey:'fileManger' },
+    {id:3, title: '파일함', linkKey:'fileBox' },
     {id:4, title: '교육과정', linkKey:'curriculum' },
     {id:5, title: '클래스 설정', linkKey:'setting' },
   ];
@@ -171,7 +171,7 @@ export default class SideMenu extends Vue{
 
   /**
    * 프로필 이미지 수정
-   * @param files - input type=file 의 onChange 이벤트로  $event.target.files 값
+   * @param files - input type=fileBox 의 onChange 이벤트로  $event.target.files 값
    * @private
    */
   private async uploadProfileImg( files: any ){
