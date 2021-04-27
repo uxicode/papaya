@@ -543,9 +543,9 @@ interface IQuestionList {
 interface IMakeEducation {
     title: string;
     text: string;
-    startAt: Date;
-    endAt: Date;
-    curriculum: {
+    startAt?: Date;
+    endAt?: Date;
+    curriculum?: {
         startAt: Date;
         endAt: Date;
         expiredAt: Date;
@@ -602,7 +602,7 @@ interface IMakeEducation {
             attachment: []
         }>;
     };
-    course_list: Array<{
+    course_list?: Array<{
         startDay: Date;
         createdAt: Date;
         updatedAt: Date;
@@ -616,7 +616,7 @@ interface IMakeEducation {
         curriculum_id: number;
         class_id: number;
     }>;
-    message: string;
+    message?: string;
 }
 
 interface IEducationList {

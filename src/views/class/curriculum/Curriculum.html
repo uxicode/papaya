@@ -24,44 +24,36 @@
                     </div>
                     <div class="fd-foot">
                         <p class="en-count">총 {{ item.course_list.length }}회차 수업 등록</p>
-<!--                        <div class="fd-btn">-->
-<!--                            <div class="list-popup">-->
-
-<!--                                &lt;!&ndash;<div class="list-popup-menu pos-right" style="transform:translate3d(87px, 0, 0)">-->
-<!--                                  <a href="" class="list-popup-item">교육과정 수정</a>-->
-<!--                                  <a href="" class="list-popup-item">교육과정 삭제</a>-->
-<!--                                </div>&ndash;&gt;-->
-
-<!--                              &lt;!&ndash;  v-model 를 수정함 카트 v-model="item.isChk"  &ndash;&gt;-->
-<!--                                <v-menu-->
-<!--                                        nudge-left="30px"-->
-<!--                                        origin="center top"-->
-<!--                                        v-model="item.isChk"-->
-<!--                                        transition="scale-transition"-->
-<!--                                        content-class="time-select-menu bg-white"-->
-<!--                                        min-width="180px"-->
-<!--                                        offset-y-->
-<!--                                        offset-x>-->
-<!--                                    <template v-slot:activator="{ on, attrs }">-->
-<!--                                        <button type="button" class="list-popup-btn"-->
-<!--                                                v-model="settingItemsModel[index].sItem"-->
-<!--                                                v-bind="attrs"-->
-<!--                                                v-on="on">-->
-<!--                                            &lt;!&ndash;<span>{{ getSelectedSettingMenuItem( index ) }}</span>&ndash;&gt;-->
-<!--                                            <img :src="require('@/assets/images/more.svg')" class="sm" alt="">-->
-<!--                                        </button>-->
-<!--                                    </template>-->
-<!--                                    <v-list>-->
-<!--                                        <v-list-item-->
-<!--                                                v-for="( mMenu, mIdx ) in settingItemsModel[index].vo"-->
-<!--                                                :key="mIdx"-->
-<!--                                                @click="settingMenuClickHandler( index, mMenu )">-->
-<!--                                            <v-list-item-title>{{ mMenu }}</v-list-item-title>-->
-<!--                                        </v-list-item>-->
-<!--                                    </v-list>-->
-<!--                                </v-menu>-->
-<!--                            </div>-->
-<!--                        </div>-->
+                        <div class="fd-btn">
+                            <div class="list-popup mgl-20">
+                                <!--                        <button type="button" class="list-popup-btn" @click="moreMenuToggle()"><img :src="require('@/assets/images/more.svg')" alt=""></button>-->
+                                <!--                        &lt;!&ndash; 더보기 &ndash;&gt;-->
+                                <!--                        <div class="list-popup-menu pos-right" :class="{'active': isMoreMenu}" style="transform:translate3d(35px, 0, 0);">-->
+                                <!--                            <button class="list-popup-item" value="0" @click>교육과정 수정</button>-->
+                                <!--                            <button class="list-popup-item active" value="1" @click>교육과정 삭제</button>-->
+                                <!--                        </div>-->
+                                <v-menu
+                                        nudge-left="30px"
+                                        origin="center top"
+                                        transition="scale-transition"
+                                        content-class="time-select-menu bg-white"
+                                        offset-y offset-x>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <button type="button" class="list-popup-btn"
+                                                v-bind="attrs"
+                                                v-on="on"><img :src="require('@/assets/images/more.svg')" class="sm" alt=""></button>
+                                    </template>
+                                    <v-list>
+                                        <v-list-item
+                                                v-for="(item, index) in currentSettingItems"
+                                                :key="index"
+                                                @click="EduSettingsModel=item">
+                                            <v-list-item-title>{{ item }}</v-list-item-title>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-menu>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -97,12 +89,17 @@
                             </p>
                         </div>
                         <div class="form-item">
-                            <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">
+                            <txt-field add-class="popup-type"
+                                       placeholder="제목을 20자 이내로 작성해 주세요."
+                                       v-model="makeEducation.title"
+                                       rules="required"
+                                       valid-name="제목"></txt-field>
+<!--                            <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">-->
                         </div>
                     </div>
                     <div class="popup-form-cnt">
                         <div class="form-item post-cnt" style="height:154px;">
-                            <textarea class="form-textarea" placeholder="일정 내용을 작성해 주세요."></textarea>
+                            <textarea class="form-textarea" placeholder="일정 내용을 작성해 주세요." v-model="makeEducation.text"></textarea>
                         </div>
 
                         <div class="add-curriculum bd-top">

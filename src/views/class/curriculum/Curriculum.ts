@@ -1,6 +1,7 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import SideMenu from '@/components/sideMenu/sideMenu.vue';
+import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import {
@@ -31,6 +32,7 @@ interface ITimeModel{
 @Component({
     components:{
         SideMenu,
+        TxtField,
         Modal,
         Btn
     }
@@ -73,7 +75,10 @@ export default class Curriculum extends Vue {
 
 
      // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
-    private makeEducation: IMakeEducation[]= [];
+    private makeEducation: IMakeEducation={
+        title: '',
+        text: ''
+    };
 
     private allEduList: IEducationList[]= [];
     private currList: ICurriculumList={
@@ -117,7 +122,7 @@ export default class Curriculum extends Vue {
 
     private currListNum: number = 10;
     private eduItems: Array< {title: string }>=[];
-    private settingItems: Array<{ vo: string[], sItem: string }> = [];
+    // private settingItems: Array<{ vo: string[], sItem: string }> = [];
 
 
     @MyClass.Getter
@@ -139,33 +144,33 @@ export default class Curriculum extends Vue {
         return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
     }
 
-    get settingItemsModel(): Array<{ vo: string[], sItem: string }>{
-        return this.settingItems;
-    }
+    // get settingItemsModel(): Array<{ vo: string[], sItem: string }>{
+    //     return this.settingItems;
+    // }
 
 
     /**
      * 교육과정 리스트
      */
     public created(){
-        this.settingItems=this.mItemByMakeEduList();
+        // this.settingItems=this.mItemByMakeEduList();
         this.getEduList();
     }
 
-    public settingMenuClickHandler( mIdx: number, item: string ) {
-        console.log(mIdx, item);
-        this.settingItems[mIdx].sItem = item;
-    }
+    // public settingMenuClickHandler( mIdx: number, item: string ) {
+    //     console.log(mIdx, item);
+    //     this.settingItems[mIdx].sItem = item;
+    // }
 
     // public getSelectedSettingMenuItem( idx: number ): string{
     //     return this.settingItems[idx].sItem;
     // }
 
-    private mItemByMakeEduList(): any[] {
-        return this.makeEducation.map( ( item: IMakeEducation ) => {
-            return { vo: this.EduSettingsItems, sItem:'반복없음' };
-        });
-    }
+    // private mItemByMakeEduList(): any[] {
+    //     return this.makeEducation.map( ( item: IMakeEducation ) => {
+    //         return { vo: this.EduSettingsItems, sItem:'반복없음' };
+    //     });
+    // }
 
     /**
      * 교육과정 수업 회차 설정
