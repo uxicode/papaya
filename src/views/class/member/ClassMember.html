@@ -63,8 +63,8 @@
                                         <button type="button" class="list-popup-btn" @click="listPopupToggle(idx, index)"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                         <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
                                             <button type="button" class="list-popup-item" @click="detailPopupOpen(data.user_id, data.level, data.nickname, data.id)">멤버정보</button>
-                                            <button v-show="memberLevel===1" type="button" class="list-popup-item" @click="blockModalOpen(data.id)">멤버 차단</button>
-                                            <button v-show="memberLevel===1" type="button" class="list-popup-item" @click="banModalOpen(data.id)">멤버 강제 탈퇴</button>
+                                            <button v-show="myMemberLevel===1" type="button" class="list-popup-item" @click="blockModalOpen(data.id)">멤버 차단</button>
+                                            <button v-show="myMemberLevel===1" type="button" class="list-popup-item" @click="banModalOpen(data.id)">멤버 강제 탈퇴</button>
                                         </div>
                                     </div>
                                 </div>
@@ -157,14 +157,14 @@
                 <div class="member-profile">
                     <div class="profile-inner">
                         <div class="profile-info"
-                             :class="memberLevelIcon(detailMemberNum)">
+                             :class="memberLevelIcon(memberLevel)">
                             <p>{{ nickname }}</p>
-                            <span>{{ memberLevelTxt(detailMemberNum) }}</span>
+                            <span>{{ memberLevelTxt(memberLevel) }}</span>
                         </div>
                         <div class="profile-btn">
                             <div class="list-popup">
-                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                <div class="list-popup-menu pos-right active" style="transform:translate3d(42px, 0, 0);">
+                                <button type="button" class="list-popup-btn" @click="isDetailMenu = !isDetailMenu"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                <div class="list-popup-menu pos-right" :class="{'active': isDetailMenu}" style="transform:translate3d(42px, 0, 0);">
                                     <button class="list-popup-item" @click="blockModalOpen(memberId)">멤버 차단</button>
                                     <button class="list-popup-item" @click="banModalOpen(memberId)">강제 탈퇴</button>
                                 </div>
@@ -196,14 +196,14 @@
                             <div class="basic-info">
                                 <div class="accordion-tit">
                                     <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
-                                    <button class="accordion-btn" data-toggle="collapse" data-target="#qnaList"></button>
+                                    <button class="accordion-btn" :class="{'active': isDetailAccordion}" @click="isDetailAccordion = !isDetailAccordion"></button>
                                 </div>
                             </div>
                         </li>
                     </ul>
 
                     <!-- class="active" 일 경우 open -->
-                    <div class="accordion-cnt active" id="qnaList">
+                    <div class="accordion-cnt" :class="{'active': isDetailAccordion}">
                         <ul class="profile-qna">
                             <li v-for="(item, idx) in qnaList" :key="idx">
                                 <p class="question">{{ idx+1 }}. {{ item.question }}</p>
@@ -279,9 +279,9 @@
                         <ul>
                             <li class="member-item bd-none">
                                 <div class="member-type"
-                                     :class="memberLevelIcon(this.memberLevel)">
-                                    <p class="member-name">{{ this.memberNickname }}</p>
-                                    <p class="member-tit">{{ memberLevelTxt(this.memberLevel) }}</p>
+                                     :class="memberLevelIcon(memberLevel)">
+                                    <p class="member-name">{{ nickname }}</p>
+                                    <p class="member-tit">{{ memberLevelTxt(memberLevel) }}</p>
                                 </div>
                             </li>
                         </ul>
@@ -318,9 +318,9 @@
                         <ul>
                             <li class="member-item bd-none">
                                 <div class="member-type"
-                                     :class="memberLevelIcon(this.memberLevel)">
-                                    <p class="member-name">{{ this.memberNickname }}</p>
-                                    <p class="member-tit">{{ memberLevelTxt(this.memberLevel) }}</p>
+                                     :class="memberLevelIcon(memberLevel)">
+                                    <p class="member-name">{{ nickname }}</p>
+                                    <p class="member-tit">{{ memberLevelTxt(memberLevel) }}</p>
                                 </div>
                             </li>
                         </ul>
@@ -355,9 +355,9 @@
                         <ul>
                             <li class="member-item bd-none">
                                 <div class="member-type"
-                                     :class="memberLevelIcon(this.memberLevel)">
-                                    <p class="member-name">{{ this.memberNickname }}</p>
-                                    <p class="member-tit">{{ memberLevelTxt(this.memberLevel) }}</p>
+                                     :class="memberLevelIcon(memberLevel)">
+                                    <p class="member-name">{{ nickname }}</p>
+                                    <p class="member-tit">{{ memberLevelTxt(memberLevel) }}</p>
                                 </div>
                             </li>
                         </ul>
