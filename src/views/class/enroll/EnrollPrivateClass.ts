@@ -22,15 +22,15 @@ export default class EnrollPrivateClass extends Vue {
 
     private questionList: IQuestionList[] = [];
 
-    private isClassApplyModal: boolean = false;
-    private isClassApplyComplete: boolean = false;
+    private isClassEnrollModal: boolean = false;
+    private isClassEnrollComplete: boolean = false;
 
     /**
      * 가입신청 modal 오픈 (가입 질문을 바로 가져옴)
      * @private
      */
-    private openApplyClassModal(): void {
-        this.isClassApplyModal = true;
+    private openEnrollClassModal(): void {
+        this.isClassEnrollModal = true;
 
         MyClassService.getClassQuestion(this.classID)
           .then((data) => {
