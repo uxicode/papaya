@@ -34,7 +34,7 @@ export default class SignInHeader extends Vue {
 
 
   private gotoSignUpPage(): void {
-    // this.HISTORY_PAGE({history:'enroll'});
+    // this.HISTORY_PAGE({history:'signup'});
     // this.$router.push(RestApi.SIGN_UP_URL);
   }
 

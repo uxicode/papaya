@@ -51,7 +51,6 @@ const MyClassRouter=[
     beforeEnter: getIsAuth,
     components: {default: () => import('../views/class/enroll/EnrollOpenClass'), header: AppHeader, footer: AppFooter}, // W.4.4.2
   }
-
 ];
 
 export {MyClassRouter};

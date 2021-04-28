@@ -12,7 +12,7 @@ import Btn from '@/components/button/Btn.vue';
         Btn
     }
 })
-export default class Enroll extends Vue {
+export default class EnrollOpenClass extends Vue {
 
 
 }
