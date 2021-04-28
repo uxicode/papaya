@@ -18,7 +18,7 @@ export default class EnrollPrivateClass extends Vue {
 
     /* 추후 동적으로 값을 받아와야 함 (MyClassService.getClassInfoById 이용) */
     private classID: number = 744;
-    private isPrivate: boolean = true;
+    private isPrivate: boolean = true; // 클래스 공개여부
 
     private questionList: IQuestionList[] = [];
 

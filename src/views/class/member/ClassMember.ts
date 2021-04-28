@@ -61,8 +61,6 @@ export default class ClassMember extends Vue{
 
     /* 운영자/스탭/일반 멤버 토글 상태값 */
     private isAdminToggle: boolean = false;
-    private isStaffToggle: boolean = false;
-    private isMemberToggle: boolean = false;
     private isInvitePopup: boolean = false;
     private isSnackbar: boolean = false;
     private isDetailPopup: boolean = false;
@@ -239,6 +237,21 @@ export default class ClassMember extends Vue{
             });
             reset$.subscribe();
         });
+    }
+
+    /**
+     * accordion 안에 있는 list-popup toggle
+     * 첫번째 인자는 accordion 의 인덱스, 두번째 인자는 해당 아코디언의 list-popup 인덱스
+     * @param idx
+     * @param index
+     * @private
+     */
+    private listPopupToggle(idx: number, index: number): void {
+        const accCnt = document.querySelectorAll('.accordion-cnt');
+        //console.log(accCnt.length);
+        const listPopup = accCnt[idx].querySelectorAll('.list-popup-menu');
+        //console.log(listPopupMenu.length);
+        listPopup[index].classList.toggle('active');
     }
 
     /**
