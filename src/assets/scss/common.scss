@@ -251,7 +251,9 @@ body {
 
 .bd-none {border:none !important;}
 .pd-none {padding:0 !important;}
-
+.float-lt{float: left !important;}
+.float-rt{float: right !important;}
+.wd-half{width:50%;}
 .required {
   &:after {
     content:'';
@@ -334,29 +336,33 @@ body {
     letter-spacing:0;
 
     a {
+      position:relative;
+      display:inline-block;
       padding:0 6px 11px 6px;
+      &:after {
+        content:'';
+        position:absolute;
+        width:100%;
+        height:2px;
+        bottom:0;
+        left:0;
+        background-color:#0f0f15;
+        transform: scale(0);
+        transition: all 0.35s ease;
+      }
     }
 
     &.active {
       a {
-        position:relative;
-        display:inline-block;
-        padding:0 6px;
         font-weight:500;
-
         &:after {
-          content:'';
-          position:absolute;
-          width:100%;
-          height:2px;
-          bottom:0;
-          left:0;
-          background-color:#0f0f15;
+          transform: scale(1);
         }
       }
     }
   }
 }
+
 
 // tb-style
 .tb-style {
@@ -532,6 +538,10 @@ body {
 .pos-right{
   //$zIndex:null, $top:null, $left:null, $right:null, $bottom:null
   @include pos-abs($top:0, $right:0);
+}
+.img-responsive{
+  max-width: 100%;
+  height:auto;
 }
 
 @import "./transition";

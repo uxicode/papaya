@@ -260,7 +260,7 @@ export default class ResetPassword extends Vue {
         this.openSuccessPopup(this.MOBILE_AUTH_STATUS);
 
         this.isVerifiedCode = true;
-        this.formData.verifiedCode = '';
+        // this.formData.verifiedCode = '';
         this.setErrorMessage('');
       }).catch((error) => {
         this.errorOpenPopup=true;
@@ -322,6 +322,7 @@ export default class ResetPassword extends Vue {
    * @private
    */
   private confirmClickHandler(): void {
+    this.formData.verifiedCode = '';
     this.isConfirmComplete = true;
   }
 

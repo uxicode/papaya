@@ -110,6 +110,7 @@ $popupDepth: 10;
     &.staff {background:url(../../assets/images/popup-icon-staff.svg) no-repeat;}
     &.leave {background:url(../../assets/images/popup-icon-leave.svg) no-repeat;}
     &.block {background:url(../../assets/images/popup-icon-block.svg) no-repeat;}
+    &.success {background:url(../../assets/images/popup-icon-success.svg) no-repeat;}
   }
 
   .popup-close, .popup-btn {
@@ -230,7 +231,7 @@ $popupDepth: 10;
           @include pos-vertical($left:0);
         }
 
-        &.manager:before {background:#ffba36 url(../../assets/images/member-manager.svg) no-repeat center / 8px;}
+        &.manager:before, &.crown:before {background:#ffba36 url(../../assets/images/member-manager.svg) no-repeat center / 8px;}
       }
     }
 
@@ -374,162 +375,184 @@ $popupDepth: 10;
 .popup-form-btm {
   .form-add-list + .form-add-list {margin-top:20px;}
 
-  .add-item-top {
-    position:relative;
-    margin:0 40px;
-    padding:16px 0 14px;
-    border-bottom:1px solid #f4f5f6;
-
-    .add-item-tit {font-weight:500;}
-
-    .add-item-btn {
-      @include pos-vertical($right:0);
-      .txt-btn {
-        font-weight:500;
-
-        + .txt-btn {margin-left: 20px;}
-      }
-    }
+  // start: apply - 이부분 추가 왜 된것인지????
+  .apply-tit{
+    margin: 0 40px;
+    padding: 15px 0;
+    font-weight: 500;
+    color: #373749;
   }
 
-  .add-item-cnt {
-    padding:10px 40px;
-
-    // start: photo 추가 리스트
-    .add-photo {
-      position:relative;
-      padding:0 34px;
+  .apply-qna {
+    margin: 0 40px;
+    p {
+      padding: 20px 0;
+      font-size: 12px;
+      font-weight: bold;
+      color: #848499;
     }
-
-    .add-photo-list {
-      height:80px;
-      overflow-x: auto;
-      overflow-y: hidden;
-      white-space:nowrap;
-
-      li {
-        position: relative;
-        display: inline-block;
-        width: 80px;
-        height: 80px;
-        overflow: hidden;
-
-        .add-img-delete {
-          @include pos-abs($top: 0, $right: 0);
-        }
-      }
+    .form-textarea {
+      padding: 10px 14px;
+      border: 1px solid #c9cad5;
     }
+  }
+  // end: apply - 이부분 추가 왜 된것인지????
+}
+//이미지 파일 미리보기
+.add-item-top {
+  position:relative;
+  margin:0 40px;
+  padding:16px 0 14px;
+  border-bottom:1px solid #f4f5f6;
 
-    .add-photo-control {
-      .btn {
-        @include pos-vertical();
-        opacity:0.2;
+  .add-item-tit {font-weight:500;}
 
-        &.scroll-prev {left:0;}
-        &.scroll-next {right:0;}
-        &.active {opacity: 1;}
-      }
-    }
-    // end: photo 추가 리스트
-
-    // start: vote
-    .add-vote {
-      padding:12px 0 12px 46px;
-      border:1px solid #c9cad5;
-      border-radius:5px;
-      background:url(../../assets/images/vote.svg) no-repeat left 12px top 12px;
-    }
-
-    .add-vote-tit {
-      font-size:16px;
+  .add-item-btn {
+    @include pos-vertical($right:0);
+    .txt-btn {
       font-weight:500;
-      line-height:1.5;
+
+      + .txt-btn {margin-left: 20px;}
     }
-
-    .add-vote-type {
-      li {
-        position:relative;
-        float:left;
-        padding-right:10px;
-        margin-right:10px;
-        font-size:12px;
-        line-height:1.5;
-        color:#848499;
-
-        &:not(:last-child):after {
-          content:'';
-          display:block;
-          width:1px;
-          height:12px;
-          background-color:#848499;
-          @include pos-vertical($right:0)
-        }
-
-      }
-    }
-    // end: vote
-
-    // start: link
-    .add-link {
-      position:relative;
-      padding:20px;
-      border:1px solid #c9cad5;
-      border-radius:5px;
-    }
-
-    .add-link-cnt {
-      width:calc(100% - 180px);
-
-      .add-link-tit {
-        font-weight:500;
-      }
-
-      .add-link-txt {
-        margin:10px 0;
-        font-size:12px;
-        color:#57576d;
-      }
-
-      .add-link-url {
-        a {
-          display:block;
-          white-space:nowrap;
-          overflow:hidden;
-          text-overflow:ellipsis;
-
-          .link-logo {
-            margin-right:10px;
-          }
-        }
-      }
-    }
-
-    .add-link-thumb {
-      width:160px;
-      height:100%;
-      overflow:hidden;
-      @include pos-abs($top:0, $right:0);
-    }
-    // end: link
-
-    // start: file
-    .add-file-list {
-      li {
-        position:relative;
-
-        p {
-          padding:15px 0 15px 42px;
-          border-bottom:1px solid #f4f5f6;
-          background:url(../../assets/images/file.svg) no-repeat left center;
-        }
-
-        .add-file-delete {
-          @include pos-vertical($right:0);
-        }
-      }
-    }
-    // end: file
   }
+}
+.add-item-cnt {
+  padding:10px 40px;
+
+  // start: photo 추가 리스트
+  .add-photo {
+    position:relative;
+    padding:0 34px;
+  }
+
+  .add-photo-list {
+    height:80px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space:nowrap;
+
+    li {
+      position: relative;
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+      overflow: hidden;
+
+      .add-img-delete {
+        @include pos-abs($top: 0, $right: 0);
+      }
+    }
+  }
+
+  .add-photo-control {
+    .btn {
+      @include pos-vertical();
+      opacity:0.2;
+
+      &.scroll-prev {left:0;}
+      &.scroll-next {right:0;}
+      &.active {opacity: 1;}
+    }
+  }
+  // end: photo 추가 리스트
+
+  // start: vote
+  .add-vote {
+    padding:12px 0 12px 46px;
+    border:1px solid #c9cad5;
+    border-radius:5px;
+    background:url(../../assets/images/vote.svg) no-repeat left 12px top 12px;
+  }
+
+  .add-vote-tit {
+    font-size:16px;
+    font-weight:500;
+    line-height:1.5;
+  }
+
+  .add-vote-type {
+    li {
+      position:relative;
+      float:left;
+      padding-right:10px;
+      margin-right:10px;
+      font-size:12px;
+      line-height:1.5;
+      color:#848499;
+
+      &:not(:last-child):after {
+        content:'';
+        display:block;
+        width:1px;
+        height:12px;
+        background-color:#848499;
+        @include pos-vertical($right:0)
+      }
+
+    }
+  }
+  // end: vote
+
+  // start: link
+  .add-link {
+    position:relative;
+    padding:20px;
+    border:1px solid #c9cad5;
+    border-radius:5px;
+  }
+
+  .add-link-cnt {
+    width:calc(100% - 180px);
+
+    .add-link-tit {
+      font-weight:500;
+    }
+
+    .add-link-txt {
+      margin:10px 0;
+      font-size:12px;
+      color:#57576d;
+    }
+
+    .add-link-url {
+      a {
+        display:block;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+
+        .link-logo {
+          margin-right:10px;
+        }
+      }
+    }
+  }
+
+  .add-link-thumb {
+    width:160px;
+    height:100%;
+    overflow:hidden;
+    @include pos-abs($top:0, $right:0);
+  }
+  // end: link
+
+  // start: file
+  .add-file-list {
+    li {
+      position:relative;
+
+      p {
+        padding:15px 0 15px 42px;
+        border-bottom:1px solid #f4f5f6;
+        background:url(../../assets/images/file.svg) no-repeat left center;
+      }
+
+      .add-file-delete {
+        @include pos-vertical($right:0);
+      }
+    }
+  }
+  // end: file
 }
 
 .form-add-btn {
@@ -1188,20 +1211,4 @@ $popupDepth: 10;
 .modal-leave-active .popup-dialog {
   transform: translate(-50%, -50%) scale(0.3);
   transition: all 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6);
-}
-
-/*
-   toast popup (v-snackbar)
-   410 = modal height + snackbar height 값 - ksj
-*/
-.v-snack {
-  margin-bottom: calc(50% - 410px);
-}
-
-.v-snack__wrapper {
-  margin: 0;
-}
-
-.v-sheet.v-snack__wrapper {
-  border-radius: 0;
 }

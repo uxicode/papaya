@@ -17,21 +17,21 @@ const MyPageRouter=[
                     {
                         path: '/',
                         name: 'myProfileMain',
-                        component: () =>import('../views/mypage/myProfile/myProfileMain/MyProfileMain'),
+                        component: () =>import('../views/mypage/myProfile/myProfileMain/MyProfileMain'), // MY프로필 (W7.1.1)
                     },
                     {
                         path: 'modifyMobile',
                         name: 'modifyMobile',
-                        component: () =>import('../views/mypage/myProfile/modifyMobile/ModifyMobile'),
+                        component: () =>import('../views/mypage/myProfile/modifyMobile/ModifyMobile'), // MY프로필-모바일 번호 설정 (W7.1.3.2)
                     },
                     {
                         path: 'modifyPw',
                         name: 'modifyPw',
-                        component: () =>import('../views/mypage/myProfile/modifyPw/ModifyPassword'),
+                        component: () =>import('../views/mypage/myProfile/modifyPw/ModifyPassword'), // MY프로필-비밀번호 재설정 (W7.1.3.5)
                     }
                 ]
             },
-            { path: 'bookmark', name: 'bookmark', component: () =>import('../views/mypage/bookmark/Bookmark') },
+            { path: 'bookmark', name: 'bookmark', component: () =>import('../views/mypage/bookmark/Bookmark') }, // 보관함-알림-Default (W7.1.1.1)
         ],
         beforeEnter: getIsAuth,
     },

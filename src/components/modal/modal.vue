@@ -25,7 +25,7 @@
         <!--// popup body -->
 
         <!-- popup footer -->
-        <div class="popup-footer">
+        <div class="popup-footer" :style="{padding: footerPadding }">
           <slot name="footer"></slot>
           <!--<div class="btn-group rt">
             <button type="button" class="btn outline">취소</button>
@@ -54,6 +54,9 @@ export default class Modal extends Vue{
 
   @Prop(String)
   private bodyPadding!: string;
+
+  @Prop(String)
+  private footerPadding!: string;
 
   public close(): void{
     console.log('클릭');

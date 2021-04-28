@@ -220,6 +220,25 @@ class Utils{
     return yyyy+'-'+( mm<10 ? '0'+mm : mm )+'-'+( dd<10 ? '0'+dd : dd );
   }
 
+  public static dayToString( date: Date ): string{
+    const dayNum: string[] = ['일', '월', '화', '수', '목', '금', '토'];
+    return dayNum[date.getDay()]+'요일';
+  }
+
+  public static getFullDay(date: Date): string{
+    return Utils.getTodayParseFormat(date)+' '+Utils.dayToString( date )+' '+Utils.getFullTimes( date );
+  }
+
+  public static getFullTimes( date: Date ): string{
+    const hours=Utils.hoursConvertToApm( date.getHours() );
+    const minutes =date.getMinutes();
+    return hours + '시 ' + minutes + '분';
+  }
+
+  public static hoursConvertToApm( hours: number ): string | number{
+    return hours>12? String( '오후 '+( hours-12) ) : hours;
+  }
+
   public static getRandomNum( min: number, max: number ): number {
     return Math.floor(Math.random()*(max-min+1)) + min;
   }

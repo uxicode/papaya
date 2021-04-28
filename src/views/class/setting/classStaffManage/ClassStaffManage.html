@@ -13,23 +13,25 @@
         <div class="popup-body">
             <div class="member-activity">
                 <div class="activity-tit">
-                    <p>스탭 1</p>
+                    <p>스탭 {{ totalStaffNum }}</p>
                 </div>
                 <div style="height:586px;">
                     <div class="member-management-list scroll-body" style="max-height:536px;">
                         <ul>
-                            <li class="member-item">
+                            <li v-for="(item, idx) in classStaffList"
+                                :key="idx"
+                                class="member-item">
                                 <div class="member-type staff">
-                                    <p class="member-name">김경희선생님</p>
+                                    <p class="member-name">{{ item.nickname }}</p>
                                     <p class="member-tit">스탭 멤버</p>
                                 </div>
-                                <a href="" class="member-more"><img :src="require('@/assets/images/more.svg')" alt=""></a>
+                                <a href="#" class="member-more" @click.stop.prevent><img :src="require('@/assets/images/more.svg')" alt=""></a>
                             </li>
                         </ul>
                     </div>
 
                     <div class="add-staff">
-                        <a href="" class="txt-btn"><img :src="require('@/assets/images/add.svg')" alt="">스탭 추가</a>
+                        <a href="#" class="txt-btn" @click.stop.prevent="gotoAddStaff"><img :src="require('@/assets/images/add.svg')" alt="">스탭 추가</a>
                     </div>
                 </div>
             </div>
@@ -39,7 +41,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.9.2 (스탭 관리-권한 수정) -->
     <transition name="modal">
-        <modal v-if="false" size="540px" body-padding="0">
+        <modal v-if="false" size="540px" body-padding="0" @modalClose>
             <div slot="header">
                 <div class="popup-icon staff"></div>
                 <div class="popup-close">
@@ -105,7 +107,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.9.2.1 (스탭 관리-권한 수정-일반멤버로 전환 확인) -->
     <transition name="modal">
-        <modal v-if="false" size="540px" body-padding="0">
+        <modal v-if="false" size="540px" body-padding="0" @modalClose>
             <div slot="header">
                 <div class="popup-icon change"></div>
                 <div class="popup-close">
@@ -127,7 +129,7 @@
                                     <p class="member-name">김경희선생님</p>
                                     <p class="member-tit">
                                         <span>스탭 멤버</span>
-                                        <img src="../assets/images/arrow-line.svg" class="icon-img sm" alt="">
+                                        <img :src="require('@/assets/images/arrow-line.svg')" class="icon-img sm" alt="">
                                         <span>일반 멤버</span>
                                     </p>
                                 </div>
@@ -148,7 +150,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.9.2.2 (스탭 관리-권한 수정-일반멤버로 전환 완료) -->
     <transition name="modal">
-        <modal v-if="false" size="540px" body-padding="0">
+        <modal v-if="false" size="540px" body-padding="0" @modalClose>
             <div slot="header">
                 <div class="popup-icon confirm"></div>
                 <div class="popup-close">

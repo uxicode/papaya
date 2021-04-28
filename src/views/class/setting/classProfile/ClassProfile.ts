@@ -1,6 +1,6 @@
 import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
-import {IClassMemberInfo} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo} from '@/views/model/my-class.model';
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
@@ -37,7 +37,7 @@ export default class ClassProfile extends Vue {
     private classID!: number;
 
     @MyClass.Getter
-    private memberID!: number;
+    private myClassHomeModel!: IClassInfo;
 
     @MyClass.Action
     private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo[]>;
@@ -76,6 +76,10 @@ export default class ClassProfile extends Vue {
         return this.classMemberInfo;
     }
 
+    get myClassInfo(): any {
+        return this.myClassHomeModel;
+    }
+
     public created() {
         this.getClassMemberInfo();
     }
@@ -85,9 +89,9 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private getClassMemberInfo(): void {
-        this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.memberID})
+        this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.myClassInfo.me.id})
           .then((data) => {
-              console.log(`classId = ${this.classID}, memberId = ${this.memberID}`);
+              console.log(`classId = ${this.classID}, memberId = ${this.myClassInfo.me.id}`);
               this.classMemberInfo = data;
           });
     }
@@ -107,9 +111,9 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private modifyNickname(newNickname: string): void {
-        MyClassService.setClassMemberInfo(this.classID, this.memberID, {nickname: newNickname})
+        MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {nickname: newNickname})
           .then(() => {
-              this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.memberID}).then(() => {
+              this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.myClassInfo.me.id}).then(() => {
                   console.log('닉네임 변경 완료');
                   this.tempData = '';
               });
@@ -126,19 +130,19 @@ export default class ClassProfile extends Vue {
     private openLevelModify(data: string, level: number): void {
         switch (data) {
             case 'open_level_id':
-                MyClassService.setClassMemberInfo(this.classID, this.memberID, {open_level_id: level})
+                MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {open_level_id: level})
                   .then(() => {
                     console.log('아이디 공개 여부 수정');
                   });
                 break;
             case 'open_level_mobileno':
-                MyClassService.setClassMemberInfo(this.classID, this.memberID, {open_level_mobileno: level})
+                MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {open_level_mobileno: level})
                   .then(() => {
                       console.log('모바일 공개 여부 수정');
                   });
                 break;
             case 'open_level_email':
-                MyClassService.setClassMemberInfo(this.classID, this.memberID, {open_level_email: level})
+                MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {open_level_email: level})
                   .then(() => {
                       console.log('이메일 공개 여부 수정');
                   });

@@ -84,9 +84,9 @@ export default class Curriculum extends Vue {
             {
                 index: 1,
                 title: '',
-                startDay:new Date(),
-                startTime:new Date(),
-                endTime:new Date(),
+                startDay:'2019-11-17',
+                startTime:'10:00:00',
+                endTime:'10:00:00',
                 contents: '',
             }
         ]
@@ -216,13 +216,11 @@ export default class Curriculum extends Vue {
      * 클래스 교육과정 생성
      */
     private makeCurriculumSubmit(): void{
+        // console.log(this.classID, this.makeCurriculumItems);
         MyClassService.setEducationList( this.classID, this.makeCurriculumItems )
-            .then(() => {
-                console.log( '교육과정 생성 성공' );
-
-                this.$nextTick(()=>{
-                    this.isCreateClass = false;
-                });
+            .then((data) => {
+                console.log( '교육과정 생성 성공', data );
+                this.isCreateClass = false;
             });
     }
 

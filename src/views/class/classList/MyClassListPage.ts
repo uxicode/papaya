@@ -66,7 +66,7 @@ export default class MyClassListPage extends Vue {
   private myClassLists!: IMyClassList[];
 
   @MyClass.Getter
-  private classID!: string | number;
+  private classID!: number;
 
   @MyClass.Action
   private MYCLASS_LIST_ACTION!: ()=> Promise<IMyClassList[]>;
@@ -77,6 +77,10 @@ export default class MyClassListPage extends Vue {
 
 
   //start : get method ================================================
+  get classIdModel() {
+    return this.classID;
+  }
+
   get classListMoreInfos():  IClassMember[]{
     return this.moreInfos;
   }
@@ -90,6 +94,10 @@ export default class MyClassListPage extends Vue {
 
   get userName(): string {
     return ( this.userInfo as IUserMe).fullname;
+  }
+
+  get totalCount(): number{
+    return this.originalClassItems.length;
   }
   //end : get method ================================================
 
@@ -156,7 +164,6 @@ export default class MyClassListPage extends Vue {
    * this.pageCount 는 더 보기 클릭시 카운팅 하여 paging 처리 한다.
    */
   private getMoreDisplay(): void{
-    ++this.pageCount;
     this.getUpdateList();
   }
 
@@ -170,11 +177,17 @@ export default class MyClassListPage extends Vue {
 
     // console.log(begin, end);
     //end 가 classItem 개수보다 많을 때 여기서 종료
-    if( end>= this.myClassLists.length ){ return; }
+
+    console.log(this.totalCount, this.startNum, this.endNum);
+    if( end>this.totalCount ){
+      this.endNum=this.totalCount;
+      return;
+    }
 
     this.findMemberRange( begin, end ).then(( data )=>{
       this.classItems=[...this.classItems, ...data];
     });
+    ++this.pageCount;
   }
 
   /**
@@ -203,16 +216,31 @@ export default class MyClassListPage extends Vue {
    * @private
    */
   private rangeOfCount(): { begin: number, end: number} {
+
+    let pageNumByTotalCount= Math.ceil(this.totalCount / this.numOfPage );
+
+    if (this.totalCount % this.numOfPage > 0) {
+      pageNumByTotalCount++;
+    }
+
+
+    //현재 페이지가 pageCount와 같을 때를 유의하며 (page-1)을 하고
+     // +1은 첫페이지가 0이나 10이 아니라 1이나 11로 하기 위함임
     let begin: number;
-    let end: number;
+
+    // -1은 첫페이지가 1이나 11 등과 같을때 1~10, 11~20으로 지정하기 위함임
+    let end: number ;
+
 
     if( this.pageCount===0 ){
       begin=0;
       end=this.numOfPage-2;
     }else{
-      begin=this.pageCount*this.numOfPage;
-      end = (this.pageCount*this.numOfPage)+this.numOfPage-1;
+      begin=this.pageCount*this.numOfPage-1;
+      end = (this.pageCount*this.numOfPage)+this.numOfPage-2;
     }
+    console.log('begin=', begin, 'end=', end);
+
     return {
       begin,
       end
@@ -303,11 +331,9 @@ export default class MyClassListPage extends Vue {
       });*/
     });
   }
-
   private moreClickEventHandler(): void {
     this.getMoreDisplay();
   }
-
   /**
    * 클래스 홈 ( 디테일 페이지 ) 보기
    * @param id - store 에 저장된 class id
@@ -315,7 +341,11 @@ export default class MyClassListPage extends Vue {
    */
   private gotoClassListDetailView( id: string | number ): void{
        this.MYCLASS_HOME(id).then((data)=>{
-         this.$router.push({path: `${CLASS_BASE_URL}/${id}`});
+         this.$router.push({path: `${CLASS_BASE_URL}/${id}`})
+           .then(( )=>{
+             console.log(this.classID, ':: 해당 클래스 홈 이동');
+             // console.log('MYCLASS_HOME 호출후 this.classID = ', this.classID, localStorage.getItem('classId'), this.classIdModel );
+           });
        });
   }
 

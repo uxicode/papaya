@@ -2,9 +2,14 @@
     <div class="non-popup">
         <!-- popup header -->
         <div class="popup-header">
-            <p class="popup-header-tit"><a href="" class="mgr-10"><img src="assets/images/arrow-left.svg" alt=""></a> 스탭 추가하기 목록</p>
+            <p class="popup-header-tit">
+                <a href="#" class="mgr-10" @click.stop.prevent="goBack">
+                    <img :src="require('@/assets/images/arrow-left.svg')" alt="">
+                </a>
+                스탭 추가하기 목록
+            </p>
             <div class="popup-close">
-                <button class="close"><img src="assets/images/close.svg" alt=""></button>
+                <button class="close" @click="goBack"><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
         </div>
         <!--// popup header -->
@@ -13,93 +18,18 @@
         <div class="popup-body">
             <div class="member-activity">
                 <div class="activity-tit">
-                    <p>일반 멤버 2115</p>
+                    <p>일반 멤버 {{ totalMemberNum }}</p>
                 </div>
                 <div class="member-management-list scroll-body" style="height:586px;">
                     <ul>
-                        <li class="member-item">
+                        <li v-for="(item, idx) in classMemberList"
+                            :key="idx"
+                            class="member-item">
                             <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
+                                <p class="member-name">{{ item.nickname }}</p>
                                 <p class="member-tit">일반 멤버</p>
                             </div>
-                            <a href="" class="member-more">스탭 추가하기</a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more">스탭 추가하기</a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more">스탭 추가하기</a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more">스탭 추가하기</a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more">스탭 추가하기</a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more">스탭 추가하기</a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more">스탭 추가하기</a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more">스탭 추가하기</a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more">스탭 추가하기</a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more">스탭 추가하기</a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more">스탭 추가하기</a>
-                        </li>
-                        <li class="member-item">
-                            <div class="member-type member">
-                                <p class="member-name">박정수 엄마</p>
-                                <p class="member-tit">일반 멤버</p>
-                            </div>
-                            <a href="" class="member-more">스탭 추가하기</a>
+                            <a href="#" class="member-more" @click.stop.prevent>스탭 추가하기</a>
                         </li>
                     </ul>
                 </div>
@@ -110,7 +40,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.9.1.1 (스탭 관리-스탭 추가 목록-권한 설정) -->
     <transition name="modal">
-        <modal v-if="false" size="540px" body-padding="0">
+        <modal v-if="false" size="540px" body-padding="0" @modalClose>
             <div slot="header">
                 <div class="popup-icon add"></div>
                 <div class="popup-close">
@@ -129,7 +59,7 @@
                                     <p class="member-name">박정수 엄마</p>
                                     <p class="member-tit">
                                         <span>일반 멤버</span>
-                                        <img src="../assets/images/arrow-line.svg" class="icon-img sm" alt="">
+                                        <img :src="require('@/assets/images/arrow-line.svg')" class="icon-img sm" alt="">
                                         <span>스탭 멤버</span>
                                     </p>
                                 </div>
@@ -179,11 +109,11 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.9.1.2 (스탭 관리-스탭 추가 목록-추가 완료) -->
     <transition name="modal">
-        <modal v-if="false" size="540px" body-padding="0">
+        <modal v-if="false" size="540px" body-padding="0" @modalClose>
             <div slot="header">
                 <div class="popup-icon confirm"></div>
                 <div class="popup-close">
-                    <button class="close"><img src="assets/images/close.svg" alt=""></button>
+                    <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
             <div slot="body">

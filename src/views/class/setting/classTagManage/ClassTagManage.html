@@ -42,7 +42,7 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.4.1 ~ W.4.5.7.4.2 (클래스 태그 검색) -->
     <transition name="modal">
-        <modal v-if="isClassTagSearch" size="540px" body-padding="0">
+        <modal v-if="isClassTagSearch" size="540px" body-padding="0" @modalClose="isClassTagSearch=false;">
             <div slot="header">
                 <div class="popup-icon search"></div>
                 <div class="popup-close">

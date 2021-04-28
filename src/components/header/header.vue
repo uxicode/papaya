@@ -18,7 +18,10 @@
         <li><a href="#"><img src="../../assets/images/icn-32-alert-white-on.svg" alt="" /></a></li>
         <li><a href="#"><img src="../../assets/images/mypage-white.svg" alt="" /></a></li>
         <li>
-          <a href="#" class="arrow-down" :class="{'active': isActive}" @click="menuToggle"><img src="../../assets/images/a-down.png" alt="" /></a>
+          <a v-click-outside="onClickOutside"
+             href="#" class="arrow-down"
+             :class="{'active': isActive}"
+             @click.stop.prevent="subMenuToggle"><img src="../../assets/images/a-down.png" alt="" /></a>
           <ul class="depth-2" :class="{'active': isActive}">
             <li><router-link :to="{path:'/myProfile'}">MY프로필</router-link></li>
             <li><router-link :to="{path:'/bookmark'}">보관함</router-link></li>
@@ -42,6 +45,7 @@ import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 
 const Auth = namespace('Auth');
+const MyClass = namespace('MyClass');
 
 @Component
 export default class AppHeader extends Vue {
@@ -53,13 +57,18 @@ export default class AppHeader extends Vue {
   @Auth.Mutation
   private LOGOUT!: () => void;
 
+  @MyClass.Mutation
+  private REMOVE_CLASS_DATA!: () => void;
+
+
   private isLogout(): void {
     this.LOGOUT();
+    this.REMOVE_CLASS_DATA();
     this.$router.push('/login');
   }
 
   private gotoSignUpPage(): void {
-    // this.HISTORY_PAGE({history:'signup'});
+    // this.HISTORY_PAGE({history:'apply'});
     // this.$router.push(RestApi.SIGN_UP_URL);
   }
 
@@ -72,8 +81,17 @@ export default class AppHeader extends Vue {
    * 우측 화살표 버튼 클릭시 하위 메뉴 노출
    * @private
    */
-  private menuToggle(): void {
+  private subMenuToggle(): void {
     this.isActive = !this.isActive;
+  }
+
+  /**
+   * v-click-outside 속성 이용하여
+   * 바깥쪽 영역 클릭시 subMenuToggle 닫음
+   * @private
+   */
+  private onClickOutside(): void {
+    this.isActive = false;
   }
 }
 </script>
