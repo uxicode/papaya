@@ -10,6 +10,7 @@ import {
     IEducationList,
     ICurriculumList,
     IClassMembers,
+    IMakeCourse,
     ICourseList
 } from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
@@ -75,10 +76,16 @@ export default class Curriculum extends Vue {
 
 
      // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
-    private makeEducation: IMakeEducation={
+    private makeEducationItems: IMakeEducation={
         title: '',
-        text: ''
-    };
+        goal: '',
+        course_list: [
+            {
+                title: '',
+                contents: '',
+            }
+        ]
+    }
 
     private allEduList: IEducationList[]= [];
     private currList: ICurriculumList={
@@ -103,6 +110,12 @@ export default class Curriculum extends Vue {
             course_list: [],
         }
     };
+
+    private makeCourseItems: IMakeCourse={
+        title: '',
+        contents: '',
+        index: 0,
+    }
 
     private allCourseList: ICourseList={
         course: {
@@ -167,7 +180,7 @@ export default class Curriculum extends Vue {
     // }
 
     // private mItemByMakeEduList(): any[] {
-    //     return this.makeEducation.map( ( item: IMakeEducation ) => {
+    //     return this.makeEducationItems.map( ( item: IMakeEducation ) => {
     //         return { vo: this.EduSettingsItems, sItem:'반복없음' };
     //     });
     // }
@@ -201,6 +214,17 @@ export default class Curriculum extends Vue {
      * 클래스 교육과정 생성
      */
 
+    private makeCurriculumSubmit(): void{
+        // console.log(this.userNameState, this.userIDState, this.pwState, this.isMobileChk, this.isValidEmail);
+        MyClassService.getEducationList(this.classID)
+            .then((data) => {
+                console.log('test', data);
+            });
+    }
+
+    /**
+     * 클래스 교육회차 생성
+     */
 
 
     /**

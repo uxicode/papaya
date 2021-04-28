@@ -542,81 +542,15 @@ interface IQuestionList {
 
 interface IMakeEducation {
     title: string;
-    text: string;
-    startAt?: Date;
-    endAt?: Date;
-    curriculum?: {
-        startAt: Date;
-        endAt: Date;
-        expiredAt: Date;
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
-        class_id: number;
-        board_id: null | number;
-        post_type: number;
-        type: number;
-        user_id: number;
-        user_member_id: number;
-        title?: string | undefined;
-        text: string;
-        count: number;
-        param1: number;
-        deletedYN: boolean;
-        owner: {
-            joinedAt: Date;
-            createdAt: Date;
-            updatedAt: Date;
-            id: number;
-            class_id: number;
-            user_id: number;
-            nickname: string;
-            profile_image: null | string;
-            is_bookmarked: number;
-            schedule_color: number;
-            level: number;
-            status: number;
-            open_level_id: number;
-            open_level_mobileno: number;
-            open_level_email: number;
-            onoff_push_noti: number;
-            onoff_post_noti: number;
-            onoff_comment_noti: number;
-            onoff_schedule_noti: number;
-            schedule_noti_intime: number;
-            visited: number;
-        };
-        course_list: Array<{
-            startDay: Date;
-            createdAt: Date;
-            updatedAt: Date;
-            id: number;
-            curriculum_id: number;
-            class_id: number;
-            index: number;
-            title?: string;
-            contents: string;
-            startTime: Date;
-            endTime: Date;
-            deletedYN: boolean;
-            attachment: []
-        }>;
-    };
+    goal: string;
     course_list?: Array<{
-        startDay: Date;
-        createdAt: Date;
-        updatedAt: Date;
-        deletedYN: boolean;
-        id: number;
-        index: number;
-        title?: string | undefined;
-        startTime: Date;
-        endTime: Date;
-        contents: string;
-        curriculum_id: number;
-        class_id: number;
-    }>;
-    message?: string;
+        index?: 1,
+        title?: string,
+        startDay?: Date,
+        startTime?: Date,
+        endTime?: Date,
+        contents?: string,
+    }>
 }
 
 interface IEducationList {
@@ -713,6 +647,15 @@ interface ICurriculumList {
     message?: string;
 }
 
+interface IMakeCourse {
+    title: string;
+    contents: string;
+    index: number;
+    startDay?: Date;
+    startTime?: Date;
+    endTime?: Date;
+}
+
 interface ICourseList {
     course: {
         startDay: Date;
@@ -748,6 +691,7 @@ export {
     IClassMembers,
     IMakeEducation,
     IEducationList,
+    IMakeCourse,
     ICurriculumList,
     ICourseList
 };
