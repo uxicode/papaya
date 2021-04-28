@@ -1,3 +1,4 @@
+import {MODIFY_CLASS_INFO} from '@/store/action-class-types';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo, IClassMemberInfo, INotifyList, IQuestionList} from '@/views/model/my-class.model';
@@ -34,6 +35,9 @@ export default class ClassSettingMain extends Vue{
 
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
+
+    @MyClass.Action
+    private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
 
     @MyClass.Action
     private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo[]>;

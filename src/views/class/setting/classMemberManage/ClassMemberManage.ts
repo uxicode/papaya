@@ -83,6 +83,16 @@ export default class ClassMemberManage extends Vue{
     }
 
     /**
+     * 리스트 팝업 토글
+     * @param idx
+     * @private
+     */
+    private listPopupToggle(idx: number): void {
+        const listPopup = document.querySelectorAll('.list-popup-menu');
+        listPopup[idx].classList.toggle('active');
+    }
+
+    /**
      * 멤버 차단 팝업 열기
      * @private
      */

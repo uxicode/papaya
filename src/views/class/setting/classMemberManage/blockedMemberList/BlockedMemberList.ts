@@ -99,7 +99,7 @@ export default class BlockedMemberList extends Vue {
     }
 
     private goBack(): void {
-        this.$router.push('./')
+        this.$router.push(`/class/${this.classID}/setting/classMemberManage`)
           .then();
     }
 }

@@ -63,8 +63,8 @@
                                         <button type="button" class="list-popup-btn" @click="listPopupToggle(idx, index)"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                         <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
                                             <button type="button" class="list-popup-item" @click="detailPopupOpen(data.user_id, data.level, data.nickname, data.id)">멤버정보</button>
-                                            <button v-show="myMemberLevel===1" type="button" class="list-popup-item" @click="blockModalOpen(data.id)">멤버 차단</button>
-                                            <button v-show="myMemberLevel===1" type="button" class="list-popup-item" @click="banModalOpen(data.id)">멤버 강제 탈퇴</button>
+                                            <button v-if="myMemberLevel===1" type="button" class="list-popup-item" @click="blockModalOpen(data.id)">멤버 차단</button>
+                                            <button v-if="myMemberLevel===1" type="button" class="list-popup-item" @click="banModalOpen(data.id)">멤버 강제 탈퇴</button>
                                         </div>
                                     </div>
                                 </div>
@@ -109,7 +109,7 @@
                         <div class="form-group inline">
                             <input type="text" class="form-control"
                                    id="inviteLink"
-                                   :value="'https://papayaclass.com/class/bbhca62kmlxzb28'"
+                                   :value="classInfo.class_link"
                                    style="width:370px;color:#373749;"
                                    readonly>
                             <btn type="grey" size="sm" @btnClick="copyLink">링크복사</btn>
@@ -161,7 +161,7 @@
                             <p>{{ nickname }}</p>
                             <span>{{ memberLevelTxt(memberLevel) }}</span>
                         </div>
-                        <div class="profile-btn">
+                        <div v-if="myMemberLevel===1" class="profile-btn">
                             <div class="list-popup">
                                 <button type="button" class="list-popup-btn" @click="isDetailMenu = !isDetailMenu"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                                 <div class="list-popup-menu pos-right" :class="{'active': isDetailMenu}" style="transform:translate3d(42px, 0, 0);">
@@ -191,7 +191,7 @@
                                 <p>{{ email }}</p>
                             </div>
                         </li>
-                        <li class="list-item">
+                        <li v-if="myMemberLevel===1" class="list-item">
                             <p class="list-tit">가입 질문 응답</p>
                             <div class="basic-info">
                                 <div class="accordion-tit">
@@ -203,7 +203,7 @@
                     </ul>
 
                     <!-- class="active" 일 경우 open -->
-                    <div class="accordion-cnt" :class="{'active': isDetailAccordion}">
+                    <div v-if="myMemberLevel===1" class="accordion-cnt" :class="{'active': isDetailAccordion}">
                         <ul class="profile-qna">
                             <li v-for="(item, idx) in qnaList" :key="idx">
                                 <p class="question">{{ idx+1 }}. {{ item.question }}</p>

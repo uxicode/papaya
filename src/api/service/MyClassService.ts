@@ -265,6 +265,16 @@ class MyClassService {
     }
 
     /**
+     * 클래스 멤버 닉네임 조회
+     * 중복확인시 사용
+     * @param classId
+     * @param nickname
+     */
+    public searchNickname(classId: number, nickname: string): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/members/bynickname/${nickname}`);
+    }
+
+    /**
      * 클래스 태그 추가
      * @param classId
      * @param keyword
