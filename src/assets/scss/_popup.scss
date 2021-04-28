@@ -396,14 +396,24 @@ $popupDepth: 10;
   }
   // end: apply - 이부분 추가 왜 된것인지????
 }
+.auto-resize{
+  display: block;
+  width: 100%;
+  height:auto;
+  min-height: auto;
+  appearance: none;
+}
 //이미지 파일 미리보기
 .add-item-top {
   position:relative;
-  margin:0 40px;
+  //margin:0 40px;
   padding:16px 0 14px;
   border-bottom:1px solid #f4f5f6;
 
-  .add-item-tit {font-weight:500;}
+  .add-item-tit {
+    margin-bottom:0;
+    font-weight: 500;
+  }
 
   .add-item-btn {
     @include pos-vertical($right:0);
@@ -415,27 +425,38 @@ $popupDepth: 10;
   }
 }
 .add-item-cnt {
+  position: relative;
   padding:10px 40px;
 
   // start: photo 추가 리스트
   .add-photo {
-    position:relative;
-    padding:0 34px;
+    position: relative;
+    width: 520px;
+    margin: 0 auto;
+    overflow: hidden;
+    height: 80px;
   }
 
   .add-photo-list {
+    overflow: hidden;
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
     height:80px;
-    overflow-x: auto;
-    overflow-y: hidden;
+    padding:10px 0;
     white-space:nowrap;
-
+    transition: all .35s ease;
     li {
+      overflow: hidden;
       position: relative;
       display: inline-block;
       width: 80px;
       height: 80px;
-      overflow: hidden;
-
+      margin-left:10px;
+      &:first-child{
+        margin-left:0;
+      }
       .add-img-delete {
         @include pos-abs($top: 0, $right: 0);
       }
@@ -443,9 +464,13 @@ $popupDepth: 10;
   }
 
   .add-photo-control {
+    position: absolute;
+    width: 100%;
+    height: 35px;
+    @include pos-vertical();
     .btn {
       @include pos-vertical();
-      opacity:0.2;
+      //opacity:0.2;
 
       &.scroll-prev {left:0;}
       &.scroll-next {right:0;}

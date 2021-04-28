@@ -1,4 +1,4 @@
-import {Vue, Component } from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {IScheduleTotal, ITimeModel } from '@/views/model/schedule.model';
@@ -10,7 +10,9 @@ import Modal from '@/components/modal/modal.vue';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
 import { RRule } from 'rrule';
+import ImagePreview from '@/components/preview/imagePreview.vue';
 import WithRender from './ScheduleView.html';
+
 
 const MyClass = namespace('MyClass');
 
@@ -20,7 +22,8 @@ const MyClass = namespace('MyClass');
     components:{
         Modal,
         TxtField,
-        Btn
+        Btn,
+        ImagePreview
     }
 })
 export default class ScheduleView extends Vue{
@@ -28,11 +31,14 @@ export default class ScheduleView extends Vue{
     @MyClass.Getter
     private classID!: string | number;
 
-
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
 
+    private fileURLItems: string[] = [];
+    private imgFileDatas: any[] = [];
+    private formData!: FormData;
+    private imageLoadedCount: number=0;
     private isPopup: boolean=false;
     // private isTimeSelect: boolean=false;
 
@@ -102,12 +108,15 @@ export default class ScheduleView extends Vue{
     private endDatePickerModel: string= new Date().toISOString().substr(0, 10);
     private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
 
+    private endDateMenu: boolean=false;  // 캘린더 셀렉트 열고 닫게 하는 toggle 변수
     private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
 
     private loopRangeModel: string = '반복없음';
     private loopRangeItems: string[] = ['반복없음', '매일', '매주', '매월', '매년'];
     private loopRangeCheck: boolean=false;
     private loopRangeCount: number | string=10;
+
+
 
     private scheduleData: {
         repeat_type: number,
@@ -127,11 +136,13 @@ export default class ScheduleView extends Vue{
         endAt: new Date()
     };
 
+    get fileURLItemsModel(): string[] {
+        return this.fileURLItems;
+    }
 
-    private fileURLItems: string[] = [];
-
-
-
+    get imgFileDatasModel(): any[] {
+        return this.imgFileDatas;
+    }
 
     get currentLoopRangeItems(): string[]{
         return this.loopRangeItems;
@@ -174,8 +185,6 @@ export default class ScheduleView extends Vue{
         };
     }
 
-
-
     public async created(){
         // console.log(new Date().toISOString());
         await this.getScheduleList();
@@ -191,9 +200,9 @@ export default class ScheduleView extends Vue{
         // console.log(rule.all());
     }
 
-    public  mounted() {
+    public async mounted() {
         //시작일과 종료일이 변경되었는지 확인합니다. 변경된 경우 변경 이벤트를 업데이트하고 내 보냅니다.
-         this.calendarInstance.checkChange();
+        await this.calendarInstance.checkChange();
     }
 
     /**
@@ -216,7 +225,7 @@ export default class ScheduleView extends Vue{
         // console.log(this.classID === Number( this.$route.params.classId ) );
         await MyClassService.getAllScheduleByClassId( this.classID )
           .then((data)=>{
-              console.log( 'getAllScheduleByClassId=', data.class_schedule_list );
+              // console.log( 'getAllScheduleByClassId=', data.class_schedule_list );
               this.scheduleLists=data.class_schedule_list;
           });
 
@@ -240,7 +249,7 @@ export default class ScheduleView extends Vue{
     private viewMoreDay( data: { date: any }) {
         this.calendarModel = data.date;
 
-        console.log(data);
+        // console.log(data);
         // this.type = 'day';
     }
 
@@ -330,10 +339,6 @@ export default class ScheduleView extends Vue{
         this.isPopup=isOpen;
     }
 
-    private closePopup(): void{
-        this.isPopup=false;
-    }
-
     private addScheduleOpen(): void{
         this.updatePopup(true);
     }
@@ -349,7 +354,7 @@ export default class ScheduleView extends Vue{
      */
     private addScheduleTitleChange(val: string) {
         this.scheduleData.title=val;
-        console.log(this.scheduleData.title);
+        // console.log(this.scheduleData.title);
     }
 
     /**
@@ -367,11 +372,11 @@ export default class ScheduleView extends Vue{
      */
     private startDatePickerChange( ) {
         this.startDateMenu = false;
-        console.log(this.startDatePickerModel);
+        // console.log(this.startDatePickerModel);
     }
 
     private addStartApmSchedule( val: string ) {
-        console.log(val, this.currentStartTimeModel );
+        // console.log(val, this.currentStartTimeModel );
     }
 
     private startTimeChange(){
@@ -384,7 +389,7 @@ export default class ScheduleView extends Vue{
      * @private
      */
     private startDrag( dragObj: { event: any, timed: any }) {
-        console.log(dragObj.event, dragObj.timed);
+        // console.log(dragObj.event, dragObj.timed);
 
         /*
         dragObj.event=>
@@ -424,7 +429,7 @@ export default class ScheduleView extends Vue{
     }
 
     private extendBottom(event: any ) {
-        console.log('extendBottom=', event );
+        // console.log('extendBottom=', event );
         this.createEvent = event;
         this.createStart = event.start;
         this.extendOriginal = event.end;
@@ -540,16 +545,173 @@ export default class ScheduleView extends Vue{
         this.loopRangeCheck = false;
     }
 
+    /**
+     * textarea height 값 텍스트 라인 수에 맞추어 계산
+     * @param value
+     * @private
+     */
+    private autoResizeTextArea( value: string ): number{
+        const numOfLine: number = (value.match(/\n/g) || []).length;
+        // min-height + lines x line-height
+        return 20 + numOfLine* 20;
+    }
+
+    /**
+     *  새일정 등록 > textarea 에 글 입력시
+     * @param value
+     * @private
+     */
     private scheduleDetailAreaInputHandler(value: any) {
         this.scheduleData.body=value;
+        const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLInputElement;
+        scheduleDetailAreaTxt.style.height = String( this.autoResizeTextArea(this.scheduleData.body) + 'px');
     }
+
+    /**
+     * 이미지등록 아이콘 클릭시 > input type=file 에 클릭 이벤트 발생시킴.
+     * @private
+     */
+    private addFileInputFocus() {
+        //파일 input 에 클릭 이벤트 붙이기~
+        const imgFileInput =document.querySelector('#imgFileInput') as HTMLInputElement;
+        //input click event 발생시키기.
+        imgFileInput.dispatchEvent( Utils.createMouseEvent('click') );
+        // console.log(imgFileInput.value);
+        // console.log('클릭', imgFileInput);
+    }
+
+    /**
+     * 이미지 파일 -> 배열에 지정 / 미리보기 link( blob link) 배열 생성~
+     * @param data
+     * @private
+     */
+    private setImageFileData( data: FileList ): void {
+        // console.log(data);
+        for (const file of data) {
+            // console.log(data,  item, Utils.getFileType(item) );
+            this.imgFileDatas.push(file);
+            this.fileURLItems.push( URL.createObjectURL( file ) );
+        }
+    }
+
+    /**
+     * 이미지 파일이 저장된 배열을 전송할 formdata 에 값 대입.
+     * @private
+     */
+    private setImageFormData() {
+        if( !this.imgFileDatas.length ){ return; }
+
+        this.formData= new FormData();
+        this.imgFileDatas.forEach(( item: File, index: number )=>{
+            // console.log(item, item.name);
+            // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
+            this.formData.append('files', item, item.name );
+        });
+    }
+
+    //모델에 이미지 파일 추가
+    private async addFileToImage( files: FileList ){
+        //전달되는 파일없을시 여기서 종료.
+        if( !files.length ){ return; }
+
+        /*if( this.formData ){
+            console.log( this.formData.getAll('files') );
+        }*/
+
+        await this.setRevokeObjectURL().then( ()=>{
+            this.setImageFileData(files);
+            //file type input
+            const imgFileInput =document.querySelector('#imgFileInput') as HTMLInputElement;
+            imgFileInput.value = '';
+          });
+    }
+
+    /**
+     * // blob url 폐기시키고 가비지 컬렉터 대상화시킴
+     * - 확인하는 방법은 현재 이미지에 적용된 src 주소값을 복사해서 현재 브라우저에 주소를 붙여 실행해 보면 된다. 이미지가 보이면 url 이 폐기되지 않은 것이다.
+     * @private
+     */
+    private removeBlobURL( items: string[] ) {
+        items.forEach((item) => URL.revokeObjectURL(item));
+    }
+
+    /**
+     * 이미지가 로드 되었는지 체크
+     * @private
+     */
+    private setRevokeObjectURL(): Promise<string>{
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (this.imageLoadedCount === this.fileURLItems.length) {
+                    return resolve('loaded');
+                } else {
+                    return reject('wait');
+                }
+            }, 500);
+        });
+    }
+    //이미지 로드 완료 카운트
+    private imageLoadedCheck(): void{
+        this.imageLoadedCount++;
+        console.log(this.imageLoadedCount);
+    }
+
+
+    /**
+     * 추가된 이미지 파일 제거하기
+     * @param idx
+     * @private
+     */
+    private removePreviewItems(idx: number): void{
+        const blobURLs=this.fileURLItems.splice(idx, 1);
+        this.removeBlobURL( blobURLs ); // blob url 제거
+        this.imgFileDatas.splice(idx, 1);
+        //console.log( this.formData.getAll('files')  );
+
+    }
+
+    /**
+     * 추가된 이미지 파일 모두 지우기
+     * @private
+     */
+    private removeAllPreview(): void {
+        this.fileURLItems = [];
+        this.imgFileDatas=[];
+        this.imageLoadedCount=0;
+    }
+
+    /**
+     * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
+     * @private
+     */
+    private submitAddSchedule(): void{
+        //시나리오 --> 등록 버튼 클릭 > 이미지 추가한 배열값 formdata에 입력 > 전송 >전송 성공후> filesAllClear 호출 > 팝업 닫기
+        this.setImageFormData();
+
+        //전송이 완료 되었다는 전제하에 아래 구문 수행
+        setTimeout(() => {
+            this.isPopup=false;
+            this.filesAllClear();
+        }, 500);
+
+    }
+
+    private filesAllClear() {
+        this.fileURLItems = [];
+        this.imgFileDatas=[];
+        this.formData.delete('files');
+        this.imageLoadedCount=0;
+    }
+
+
+
 
     //파일 다운로드 설정.
     //var filenamesHeader= res.headers['content-disposition'];
     //var filename=filenamesHeader.substr( filenamesHeader.indexOf('="')+1 );
     //res.data, 'application/zip', `${filename.replace(/[\"]/g, '' ) }`
     //res.data, res.headers['content-type'], selectedFile.originalname
-    private fileDown( data: any, downType: string, fileName: string ){
+    private fileDown( data: any, downType: string, fileName: string ): void{
         const blob = new Blob([data], {type: downType});
         const blobURL = window.URL.createObjectURL(blob);
 
@@ -567,55 +729,5 @@ export default class ScheduleView extends Vue{
         document.body.removeChild(dummyLink);
         window.URL.revokeObjectURL(blobURL);
     }
-
-    private addFileInputFocus() {
-        //이벤트 생성
-        const event = this.createMouseEvent('click');
-
-        //파일 input 에 이벤트 붙이기~
-        const imgFileInput =this.$refs.imgFileInput as HTMLInputElement;
-        imgFileInput.dispatchEvent(event);
-        // console.log('클릭', imgFileInput);
-    }
-
-    /**
-     * 마우스 이벤트 생성
-     * @param eventName
-     * @private
-     */
-    private createMouseEvent(eventName: string): MouseEvent{
-        return new MouseEvent( eventName, {
-            view: window,
-            bubbles: false,
-            cancelable: false
-        });
-    }
-
-    /**
-     * 모델에 이미지 파일 추가
-     * @param files
-     * @private
-     */
-    private addFileToImage( files: any ) {
-        const fileArr = Array.from( files );
-        this.fileURLItems = this.getImageFileItem(fileArr);
-    }
-
-    /**
-     * 이미지 파일 배열생성.
-     * @param items
-     * @private
-     */
-    private getImageFileItem(items: any[]) {
-        return items.map( ( file: any) => URL.createObjectURL(file) );
-    }
-
-    /**
-     * 추가된 이미지 파일 제거하기
-     * @param idx
-     * @private
-     */
-    private removeThumb(idx: number) {
-        this.fileURLItems.splice(idx, 1);
-    }
 }
+
