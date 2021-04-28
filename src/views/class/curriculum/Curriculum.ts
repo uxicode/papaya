@@ -19,6 +19,7 @@ import WithRender from './Curriculum.html';
 
 
 
+
 const MyClass = namespace('MyClass');
 
 /*start: 추가 테스트*/
@@ -76,25 +77,24 @@ export default class Curriculum extends Vue {
 
 
      // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
-    private makeEducationItems: IMakeEducation={
+    private makeCurriculumItems: IMakeEducation={
         title: '',
         goal: '',
         course_list: [
             {
+                index: 1,
                 title: '',
+                startDay:new Date(),
+                startTime:new Date(),
+                endTime:new Date(),
                 contents: '',
             }
         ]
-    }
+    };
 
     private allEduList: IEducationList[]= [];
     private currList: ICurriculumList={
         curriculum: {
-            startAt:new Date(),
-            endAt:new Date(),
-            expiredAt:new Date(),
-            createdAt:new Date(),
-            updatedAt:new Date(),
             id: 0,
             class_id: 0,
             board_id: 0,
@@ -114,8 +114,10 @@ export default class Curriculum extends Vue {
     private makeCourseItems: IMakeCourse={
         title: '',
         contents: '',
-        index: 0,
-    }
+        startDay:new Date(),
+        startTime:new Date(),
+        endTime:new Date(),
+    };
 
     private allCourseList: ICourseList={
         course: {
@@ -180,7 +182,7 @@ export default class Curriculum extends Vue {
     // }
 
     // private mItemByMakeEduList(): any[] {
-    //     return this.makeEducationItems.map( ( item: IMakeEducation ) => {
+    //     return this.makeCurriculumItems.map( ( item: IMakeEducation ) => {
     //         return { vo: this.EduSettingsItems, sItem:'반복없음' };
     //     });
     // }
@@ -213,18 +215,26 @@ export default class Curriculum extends Vue {
     /**
      * 클래스 교육과정 생성
      */
-
     private makeCurriculumSubmit(): void{
-        // console.log(this.userNameState, this.userIDState, this.pwState, this.isMobileChk, this.isValidEmail);
-        MyClassService.getEducationList(this.classID)
-            .then((data) => {
-                console.log('test', data);
+        MyClassService.setEducationList( this.classID, this.makeCurriculumItems )
+            .then(() => {
+                console.log( '교육과정 생성 성공' );
+
+                this.$nextTick(()=>{
+                    this.isCreateClass = false;
+                });
             });
     }
 
     /**
-     * 클래스 교육회차 생성
+     * 클래스 교육과정 삭제
      */
+    private deleteCurriculum( curriculumID: number ): void{
+        MyClassService.deleteEducationList ( this.classID, curriculumID )
+            .then(() => {
+                console.log('교육과정 삭제 성공');
+            });
+    }
 
 
     /**

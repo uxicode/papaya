@@ -6,7 +6,8 @@ import {
     IClassMember,
     IPostList,
     IMakeClassInfo,
-    IClassMemberInfo
+    IClassMemberInfo,
+    IMakeEducation
 } from '@/views/model/my-class.model';
 import {count} from 'rxjs/operators';
 
@@ -221,6 +222,7 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/${classId}/posts`, payload );
     }
 
+
     /**
      * 클래스 교육과정
      * @param classId
@@ -228,6 +230,23 @@ class MyClassService {
     public getEducationList(classId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum` );
     }
+
+    /**
+     * 클래스 교육과정 생성
+     * @param classId
+     */
+    public setEducationList(classId: number, curriculumItems: IMakeEducation): Promise<any>{
+        return request('post', `${CLASS_BASE_URL}/${classId}/curriculum`, curriculumItems );
+    }
+
+    /**
+     * 클래스 교육과정 삭제
+     * @param classId
+     */
+    public deleteEducationList(classId: number, curriculumId: number): Promise<any>{
+        return request('delete', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}` );
+    }
+
 
     /**
      * 클래스 교육과정 정보 조회
@@ -238,6 +257,7 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}` );
     }
 
+
     /**
      * 클래스 교육과정 개별코스 정보 조회
      * @param classId
@@ -245,6 +265,14 @@ class MyClassService {
      */
     public getEduCourseList(classId: number, curriculumId: number, courseId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course/${courseId}` );
+    }
+
+    /**
+     * 클래스 교육과정 개별코스 생성
+     * @param classId
+     */
+    public setEduCourseList(classId: number, curriculumId: number): Promise<any>{
+        return request('post', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course` );
     }
 }
 

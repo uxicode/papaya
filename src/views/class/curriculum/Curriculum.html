@@ -44,11 +44,18 @@
                                                 v-on="on"><img :src="require('@/assets/images/more.svg')" class="sm" alt=""></button>
                                     </template>
                                     <v-list>
-                                        <v-list-item
-                                                v-for="(item, index) in currentSettingItems"
-                                                :key="index"
-                                                @click="EduSettingsModel=item">
-                                            <v-list-item-title>{{ item }}</v-list-item-title>
+<!--                                        <v-list-item-->
+<!--                                                v-for="(item, index) in currentSettingItems"-->
+<!--                                                :key="index"-->
+<!--                                                @click="EduSettingsModel=item">-->
+<!--                                            <v-list-item-title>{{ item }}</v-list-item-title>-->
+<!--                                        </v-list-item>-->
+
+                                        <v-list-item>
+                                            <v-list-item-title>교육과정 수정</v-list-item-title>
+                                        </v-list-item>
+                                        <v-list-item>
+                                            <v-list-item-title @click="deleteCurriculum( item.id )">교육과정 삭제</v-list-item-title>
                                         </v-list-item>
                                     </v-list>
                                 </v-menu>
@@ -92,7 +99,7 @@
                             <txt-field id="curriculumTitle"
                                        add-class="popup-type"
                                        placeholder="제목을 20자 이내로 작성해 주세요."
-                                       v-model="makeEducationItems.title"
+                                       v-model="makeCurriculumItems.title"
                                        rules="required"
                                        valid-name="제목">
                             </txt-field>
@@ -100,7 +107,7 @@
                     </div>
                     <div class="popup-form-cnt">
                         <div class="form-item post-cnt" style="height:154px;">
-                            <textarea class="form-textarea" v-model="makeEducationItems.goal" placeholder="일정 내용을 작성해 주세요."></textarea>
+                            <textarea class="form-textarea" v-model="makeCurriculumItems.goal" placeholder="일정 내용을 작성해 주세요."></textarea>
                         </div>
 
                         <div class="add-curriculum bd-top">
@@ -196,13 +203,7 @@
                 <div class="popup-form">
                     <div class="popup-form-top">
                         <div class="form-item">
-                            <txt-field id="curriculumTitle"
-                                       add-class="popup-type"
-                                       placeholder="수업 제목을 20자 이내로 작성해 주세요."
-                                       v-model="makeCourseItems.title"
-                                       rules="required"
-                                       valid-name="제목">
-                            </txt-field>
+                            <input type="text" class="form-control popup-type" placeholder="수업 제목을 20자 이내로 작성해 주세요.">
                         </div>
                     </div>
                     <div class="popup-form-cnt">
@@ -350,7 +351,7 @@
                             </div>
                         </div>
                         <div class="form-item post-cnt" style="height:120px;">
-                            <textarea class="form-textarea" v-model="makeCourseItems.contents" placeholder="수업 내용을 100자 이내로 작성해 주세요."></textarea>
+                            <textarea class="form-textarea" placeholder="수업 내용을 100자 이내로 작성해 주세요."></textarea>
                         </div>
                     </div>
 
