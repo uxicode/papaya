@@ -80,6 +80,7 @@ export default class ImagePreview extends Vue{
       }
     }
   }
+
   private imgPreviewMove( isLeft: boolean ): void{
 
     const photoList=document.querySelector('.add-photo-list') as HTMLElement;

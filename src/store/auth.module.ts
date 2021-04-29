@@ -176,7 +176,7 @@ export default class AuthModule extends VuexModule {
         // console.log(data.user, data.access_token);
         // mutation( type, payload, option ) 이렇게 매개변수가 지정되어 있다.z
         this.context.commit(GET_TOKEN, data.access_token );
-        this.context.commit(GET_REFRESH_TOKEN, data.refreshToken );
+        this.context.commit(GET_REFRESH_TOKEN, data.refresh_token );
 
         return UserService.getUserMe().then( ( userMe: any)=>{
             this.context.commit(SET_MY_INFO, userMe.user);
