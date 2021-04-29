@@ -118,7 +118,7 @@
 
         <div slot="footer">
             <div class="btn-group rt">
-                <btn type="navi" @btnClick="enrollClassSubmit">가입 신청</btn>
+                <btn type="navi" :disabled="isApproval === false" @btnClick="enrollClassSubmit">가입 신청</btn>
             </div>
         </div>
     </modal>

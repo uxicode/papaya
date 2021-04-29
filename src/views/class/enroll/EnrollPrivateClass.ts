@@ -1,9 +1,9 @@
 import MyClassService from '@/api/service/MyClassService';
 import {IQuestionList} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
-import WithRender from './EnrollPrivateClass.html';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
+import WithRender from './EnrollPrivateClass.html';
 
 @WithRender
 @Component({
@@ -44,13 +44,13 @@ export default class EnrollPrivateClass extends Vue {
     }
 
     /**
-     * 중복확인 버튼 클릭시 닉네임 검색 통신 후 메시지 표시
+     * 중복확인 버튼 클릭시 해당 닉네임 존재여부 확인 후 메시지 표시
      * @param nickname
      * @private
      */
-    private async checkDuplicateNickname(nickname: string) {
+    private checkDuplicateNickname(nickname: string): void {
         this.showMsg = true;
-        await MyClassService.searchNickname(this.classID, nickname)
+        MyClassService.searchNickname(this.classID, nickname)
           .then((data) => {
               console.log(data);
               this.isError = true;
@@ -58,7 +58,7 @@ export default class EnrollPrivateClass extends Vue {
           }).catch((error) => { // 검색 결과가 없을 경우 404 error 발생
               //console.log(error);
               this.isApproval = true;
-              this.msg = '사용할 수 있는 닉네임입니다.'
+              this.msg = '사용할 수 있는 닉네임입니다.';
               return Promise.reject(error);
         });
     }
