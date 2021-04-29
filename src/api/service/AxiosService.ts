@@ -1,4 +1,4 @@
-import axios, {AxiosResponse, AxiosRequestConfig} from 'axios';
+import axios, {AxiosResponse, AxiosRequestConfig, AxiosPromise} from 'axios';
 import router from '@/router';
 import store from '@/store';
 import {GET_REFRESH_TOKEN, GET_TOKEN, LOGOUT} from '@/store/mutation-auth-types';
@@ -53,6 +53,7 @@ axios.interceptors.response.use((response: AxiosResponse) => {
 }, (error: any) => {
 
   const {status} = error.response;
+  // let errorMsg: any = error;
   // console.log('error=', error);
   // console.log(':::status=', status);
   switch (status){
@@ -60,7 +61,7 @@ axios.interceptors.response.use((response: AxiosResponse) => {
      definedRefreshToken();
      break;
    case 404:
-     // errorMsg = '잘못된 정보입니다.' + error.response.data.error_code;
+     //errorMsg = `${error.status} 요청한 정보에 해당하지 않음`;
      break;
    case 400:
      mismatchAccess();

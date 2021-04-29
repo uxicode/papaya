@@ -55,45 +55,19 @@
                 </li>
             </ul>
         </div>
-
-        <div class="list-group">
-            <p class="list-tit">클래스 관리</p>
+        <!-- 클래스 관리/멤버 관리/기타 메뉴 -->
+        <div v-for="(data, index) in listGroup"
+             :key="index"
+             class="list-group">
+            <p class="list-tit">{{ data.tit }}</p>
             <ul class="setting-list">
-                <li v-for="(item, idx) in classManageList"
+                <li v-for="(item, idx) in data.list"
                     :key="idx"
                     class="list-item">
                     <a href="" class="list-tit"
                        @click.stop.prevent="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">{{ item.title }}</a>
                     <button class="setting-btn"
                             @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
-                        <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                </li>
-            </ul>
-        </div>
-
-        <div class="list-group">
-            <p class="list-tit">멤버 관리</p>
-            <ul class="setting-list">
-                <li v-for="(item, idx) in memberManageList"
-                    :key="idx"
-                    class="list-item">
-                    <a href="" class="list-tit"
-                       @click.stop.prevent="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">{{ item.title }}</a>
-                    <button class="setting-btn" @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
-                        <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                </li>
-            </ul>
-        </div>
-
-        <div class="list-group">
-            <p class="list-tit">기타</p>
-            <ul class="setting-list">
-                <li v-for="(item, idx) in etcList"
-                    :key="idx"
-                    class="list-item">
-                    <a href="" class="list-tit"
-                       @click.stop.prevent="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">{{ item.title }}</a>
-                    <button class="setting-btn" @click="item.type.indexOf('Modal') !== -1 ? openModal(item.type) : gotoLink(item.type)">
                         <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                 </li>
             </ul>

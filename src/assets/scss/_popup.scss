@@ -373,15 +373,8 @@ $popupDepth: 10;
 .popup-form-btm {
   .form-add-list + .form-add-list {margin-top:20px;}
 
-  // start: apply - 이부분 추가 왜 된것인지????
-  .apply-tit{
-    margin: 0 40px;
-    padding: 15px 0;
-    font-weight: 500;
-    color: #373749;
-  }
-
-  .apply-qna {
+  // start: 가입신청
+  .enroll-qna {
     margin: 0 40px;
     p {
       padding: 20px 0;
@@ -389,12 +382,9 @@ $popupDepth: 10;
       font-weight: bold;
       color: #848499;
     }
-    .form-textarea {
-      padding: 10px 14px;
-      border: 1px solid #c9cad5;
-    }
   }
-  // end: apply - 이부분 추가 왜 된것인지????
+  // end: 가입신청
+
 }
 .auto-resize{
   display: block;
@@ -577,6 +567,30 @@ $popupDepth: 10;
   }
   // end: file
 }
+
+  // start: enroll
+  .enroll-tit{
+    margin: 0 40px;
+    padding: 15px 0;
+    font-weight: 500;
+    color: #373749;
+  }
+
+  .enroll-qna {
+    margin: 0 40px;
+    p {
+      padding: 20px 0;
+      font-size: 12px;
+      font-weight: bold;
+      color: #848499;
+    }
+    .form-textarea {
+      padding: 10px 14px;
+      border: 1px solid #c9cad5;
+    }
+  }
+  // end: enroll
+
 
 .form-add-btn {
   position:relative;
@@ -921,7 +935,7 @@ $popupDepth: 10;
 
 .join-detail {border-top:1px solid #f4f5f6;}
 
-.join-detail-top {
+.join-detail-top, .enroll-tit {
   position:relative;
   border-bottom:1px solid #f4f5f6;
   padding:15px 0;

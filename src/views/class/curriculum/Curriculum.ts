@@ -8,7 +8,7 @@ import {
     IMakeEducation,
     IEducationList,
     ICurriculumList,
-    IClassMembers,
+    IClassMemberInfo,
     ICourseList
 } from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
