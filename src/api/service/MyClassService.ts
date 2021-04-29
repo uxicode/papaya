@@ -105,8 +105,8 @@ class MyClassService {
      * @param classId
      * @param payload
      */
-    public getAllScheduleByClassId(classId: string | number, payload: { page_no: number | null, count: number | null }={page_no:null, count:null} ): Promise<any>{
-        return request('get', `${CLASS_BASE_URL}/${classId}/schedule`, payload );
+    public async getAllScheduleByClassId(classId: string | number, payload: { page_no: number | null, count: number | null }={page_no:null, count:null} ): Promise<any>{
+        return await request('get', `${CLASS_BASE_URL}/${classId}/schedule`, payload );
     }
 
     /**
