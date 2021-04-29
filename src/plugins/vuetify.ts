@@ -14,7 +14,8 @@ import Vuetify, {
   VSpacer,
   VTextField,
   VSelect,
-  VDatePicker
+  VDatePicker,
+  VSnackbar
 } from 'vuetify/lib';
 import {Ripple} from 'vuetify/lib/directives';
 import '@mdi/font/css/materialdesignicons.css';
@@ -37,7 +38,8 @@ Vue.use( Vuetify, {
     VSpacer,
     VTextField,
     VSelect,
-    VDatePicker
+    VDatePicker,
+    VSnackbar
   },
   directives: {
     Ripple,
