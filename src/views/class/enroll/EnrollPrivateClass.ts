@@ -1,9 +1,18 @@
+import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
 import {IQuestionList} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './EnrollPrivateClass.html';
+
+interface IQnaList {
+    question: string;
+    answer: string;
+}
+
+const Auth = namespace('Auth');
 
 @WithRender
 @Component({
@@ -13,6 +22,8 @@ import WithRender from './EnrollPrivateClass.html';
     }
 })
 export default class EnrollPrivateClass extends Vue {
+    @Auth.Getter
+    private userInfo!: IUserMe;
 
     /* 추후 동적으로 값을 받아와야 함 (MyClassService.getClassInfoById 이용) */
     private classID: number = 744;
@@ -24,7 +35,9 @@ export default class EnrollPrivateClass extends Vue {
     private isError: boolean = false;
     private isApproval: boolean = false;
     private questionList: IQuestionList[] = [];
+    private answerList: string[] = [];
 
+    /* Modal 상태 값 */
     private isClassEnrollModal: boolean = false;
     private isClassEnrollComplete: boolean = false;
     private isClassSignupComplete: boolean = false;
@@ -53,13 +66,14 @@ export default class EnrollPrivateClass extends Vue {
         MyClassService.searchNickname(this.classID, nickname)
           .then((data) => {
               console.log(data);
+              this.isApproval = false;
               this.isError = true;
               this.msg = '이미 사용중인 닉네임입니다.';
-          }).catch((error) => { // 검색 결과가 없을 경우 404 error 발생
-              //console.log(error);
+          }).catch((error) => { // 검색 결과가 없을 경우 404 error 발생하므로 예외처리
+              console.log(error);
+              this.isError = false;
               this.isApproval = true;
               this.msg = '사용할 수 있는 닉네임입니다.';
-              return Promise.reject(error);
         });
     }
 
@@ -68,6 +82,15 @@ export default class EnrollPrivateClass extends Vue {
      * @private
      */
     private enrollClassSubmit(): void {
+
+        MyClassService.addClassMembers(this.classID, {
+            user_id: this.userInfo.id,
+            nickname: this.inputNickname,
+            qna_list: []
+        }).then((result) => {
+            console.log(result);
+        });
+
         this.isClassEnrollModal = false;
         this.isClassEnrollComplete = true;
     }

@@ -108,7 +108,7 @@
                         <ul class="enroll-qna">
                             <li v-for="(item, idx) in questionList">
                                 <p>{{ idx+1 }}. {{ item.question }}</p>
-                                <textarea class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
+                                <textarea v-model="answerList[idx]" class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
                             </li>
                         </ul>
                     </div>
@@ -118,7 +118,7 @@
 
         <div slot="footer">
             <div class="btn-group rt">
-                <btn type="navi" :disabled="isApproval === false" @btnClick="enrollClassSubmit">가입 신청</btn>
+                <btn type="navi" :disabled="true" @btnClick="enrollClassSubmit">가입 신청</btn>
             </div>
         </div>
     </modal>
