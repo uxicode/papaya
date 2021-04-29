@@ -1,5 +1,5 @@
 import MyClassService from '@/api/service/MyClassService';
-import {IClassMember, IClassMemberList} from '@/views/model/my-class.model';
+import { IClassMemberList } from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Btn from '@/components/button/Btn.vue';

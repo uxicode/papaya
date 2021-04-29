@@ -104,7 +104,7 @@ interface IClassInfo{
     question_showYN: string | boolean;
     deletedYN: string | boolean;
     contents_updated_type: string | number;
-    class_tags: Array<{ id: string | number, keyword: string }>;
+    class_tags: Array< { id: string | number, keyword: string } >;
     class_link: string;
     me?: {
         class_id: number;
@@ -131,12 +131,7 @@ interface IClassInfo{
     };
 }
 
-interface IClassMember{
-    member_count: number;
-    is_private: boolean;
-    message?: string;
-    image_url?: string;
-}
+type ClassEachInfo = Pick<IClassInfo, 'member_count' | 'is_private' | 'image_url' | 'g_name'>;
 
 interface INotifyList {
     profile_image: () => void;
@@ -745,7 +740,7 @@ export {
     INotifyFeedList,
     IFeedList,
     IClassInfo,
-    IClassMember,
+    ClassEachInfo,
     IPostList,
     ISearchSchool,
     IMakeClassInfo,
