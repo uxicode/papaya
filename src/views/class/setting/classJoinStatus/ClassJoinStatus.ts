@@ -1,5 +1,5 @@
 import MyClassService from '@/api/service/MyClassService';
-import {IClassMemberInfo, IClassMemberList, IClassMembers, IQnaList, IQuestionList} from '@/views/model/my-class.model';
+import {IClassMemberInfo, IQnaList, IQuestionList} from '@/views/model/my-class.model';
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Btn from '@/components/button/Btn.vue';
@@ -19,7 +19,7 @@ const MyClass = namespace('MyClass');
 export default class ClassJoinStatus extends Vue {
     private isJoinDetail: boolean = false;
 
-    private applyList: IClassMemberList[] = [];
+    private applyList: IClassMemberInfo[] = [];
     private classMemberInfo: any = [];
     private answerList: IQnaList[] = [];
 
@@ -43,11 +43,11 @@ export default class ClassJoinStatus extends Vue {
           .then((data) => {
               // 가입 대기 상태인 멤버의 리스트만 나와야하지만 현재 api에서 따로 조회가 안됨.
               // this.applyList = data.class_member_list.filter(
-              //   (item: IClassMembers) => item.status === 0
+              //   (item: IClassMemberInfo) => item.status === 0
               // );
               // 운영자를 제외한 나머지 멤버만 조회
               this.applyList = data.class_member_list.filter(
-                (item: IClassMembers) => item.level !== 1
+                (item: IClassMemberInfo) => item.level !== 1
               );
               console.log(this.applyList);
           });
@@ -58,7 +58,7 @@ export default class ClassJoinStatus extends Vue {
 
         MyClassService.getClassMemberInfo(this.classID, id)
           .then((data) => {
-              this.classMemberInfo = data.member_info;
+              this.classMemberInfo = data;
           });
 
         MyClassService.getMemberClassQnA(this.classID, id)

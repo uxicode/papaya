@@ -1,15 +1,13 @@
 import {request} from '@/api/service/AxiosService';
 import {CLASS_BASE_URL, SCHOOL_URL} from '@/api/base';
 import {
-    IClassInfo,
     IMyClassList,
-    IClassMember,
     IPostList,
     IMakeClassInfo,
+    ClassEachInfo,
     IClassMemberInfo,
     IMakeEducation
 } from '@/views/model/my-class.model';
-import {count} from 'rxjs/operators';
 
 
 class MyClassService {
@@ -42,11 +40,11 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/me/keep/schedules`);
     }
 
-    public setClassBookmark(classId: number, memberId: number, payload: { is_bookmarked: number; nickname: string | undefined }): Promise<IClassMember>{
+    public setClassBookmark(classId: number, memberId: number, payload: { is_bookmarked: number; nickname: string | undefined }): Promise<ClassEachInfo>{
         return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`, payload);
     }
 
-    public getClassBookmark(classId: number, memberId: number): Promise<IClassMember>{
+    public getClassBookmark(classId: number, memberId: number): Promise<ClassEachInfo>{
         return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
 
@@ -106,8 +104,8 @@ class MyClassService {
      * @param classId
      * @param payload
      */
-    public getAllScheduleByClassId(classId: string | number, payload: { page_no: number | null, count: number | null }={page_no:null, count:null} ): Promise<any>{
-        return request('get', `${CLASS_BASE_URL}/${classId}/schedule`, payload );
+    public async getAllScheduleByClassId(classId: string | number, payload: { page_no: number | null, count: number | null }={page_no:null, count:null} ): Promise<any>{
+        return await request('get', `${CLASS_BASE_URL}/${classId}/schedule`, payload );
     }
 
     /**
@@ -178,16 +176,24 @@ class MyClassService {
     }
 
     /**
-     * 클래스 맴버 생성 - 클래스 가입 시키기
+     * 클래스 멤버 전체 조회
      * @param classId
      */
     public getClassMembers(classId: number): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/members`);
+    }
+
+    /**
+     * 클래스 맴버 생성 - 클래스 가입 시키기
+     * @param classId
+     */
+    public addClassMembers(classId: number, data: object): Promise<any> {
        /* "user_id": 250, - user_id 넘버 값
           "nickname": "test-for클래스1",
           "open_level_id": 1,
           "open_level_mobileno": 1,
           "open_level_email": 1*/
-        return request('get', `${CLASS_BASE_URL}/${classId}/members`);
+        return request('post', `${CLASS_BASE_URL}/${classId}/members`, data);
     }
 
     /**
@@ -266,6 +272,16 @@ class MyClassService {
     }
 
     /**
+     * 클래스 멤버 닉네임 조회
+     * 중복확인시 사용
+     * @param classId
+     * @param nickname
+     */
+    public searchNickname(classId: number, nickname: string): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/members/bynickname/${nickname}`);
+    }
+
+    /**
      * 클래스 태그 추가
      * @param classId
      * @param keyword
@@ -282,7 +298,6 @@ class MyClassService {
     public getPosts(classId: number, payload: {page_no: number, count: number}): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/posts`, payload );
     }
-
 
     /**
      * 클래스 교육과정
@@ -317,7 +332,6 @@ class MyClassService {
     public getEduCurrList(classId: number, curriculumId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}` );
     }
-
 
     /**
      * 클래스 교육과정 개별코스 정보 조회

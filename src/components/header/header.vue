@@ -68,7 +68,7 @@ export default class AppHeader extends Vue {
   }
 
   private gotoSignUpPage(): void {
-    // this.HISTORY_PAGE({history:'apply'});
+    // this.HISTORY_PAGE({history:'enroll'});
     // this.$router.push(RestApi.SIGN_UP_URL);
   }
 

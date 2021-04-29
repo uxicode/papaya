@@ -120,7 +120,7 @@
           <div slot="header">
             <!-- header custom coding-->
             <p class="popup-header-tit">새 일정 등록</p>
-            <div class="popup-close" @click="closePopup">
+            <div class="popup-close" @click="onAddSchedulePopupCloseHandler">
               <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
           </div>
@@ -370,29 +370,31 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-item post-cnt" style="height:154px;overflow-y:auto;">
+                <div class="form-item post-cnt" style="max-height:300px;height:auto;overflow-y:auto;overflow-x:hidden;margin:0;">
 
+                  <!-- start: 일정 상세 내용 입력창 -->
                   <textarea
-                            ref="scheduleDetailAreaTxt"
-                            v-model="scheduleData.body"
-                            class="form-textarea"
-                            placeholder="일정 내용을 작성해 주세요."
-                            @input="scheduleDetailAreaInputHandler( $event.target.value )"
-                            ></textarea>
-                  <div class="add-item-cnt" style="padding:0" v-if="fileURLItems.length>0">
-                    <div class="add-photo">
-                      <ul class="add-photo-list clearfix">
-                        <li v-for="(item, index) in fileURLItems" :key="`file-${index}`">
-                          <div class="add-img"><img :src="item" class="thumb" alt=""></div>
-                          <div class="add-img-delete" @click="removeThumb( index )"><img :src="require('@/assets/images/delete.svg')" alt=""></div>
-                        </li>
-                      </ul>
-                      <div class="add-photo-control">
-                        <a href="" class="btn only-ico-btn scroll-prev"><img :src="require('@/assets/images/arrow-left.svg')" alt=""></a>
-                        <a href="" class="btn only-ico-btn scroll-next active"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
-                      </div>
-                    </div>
-                  </div>
+                          style="margin: 0 40px;"
+                          ref="scheduleDetailAreaTxt"
+                          v-model="scheduleData.body"
+                          class="form-textarea auto-resize"
+                          placeholder="일정 내용을 작성해 주세요."
+                          @input="scheduleDetailAreaInputHandler( $event.target.value )"></textarea>
+                  <!-- end: 일정 상세 내용 입력창 -->
+
+
+                  <!-- start: 첨부 이미지 파일 미리보기 -->
+                  <image-preview :file-items="imgFileURLItemsModel"
+                                 @remove="removeImgPreviewItems"
+                                 @loaded="imageLoadedCheck"
+                                 @removeAll="removeAllPreview"></image-preview>
+                  <!-- end: 첨부 이미지 파일 미리보기 -->
+
+                  <!-- start: 첨부 파일 리스트 -->
+                  <file-preview :file-items="attachFileItems"
+                                @removeFile="removeAttachFileItem"
+                                @removeAttachFileAll="removeAllAttachFile"></file-preview>
+                  <!-- end: 첨부 파일 리스트 -->
 
 
                 </div>
@@ -402,16 +404,20 @@
                 <div class="form-add-btn">
                   <ul class="clearfix">
                     <li>
-                      <a href="#" class="info-img" @click.prevent.stop="addFileInputFocus">
+                      <a href="#" class="info-img" @click.prevent="addImgFileInputFocus">
                         <img :src="require('@/assets/images/image.svg')" alt="">
-                        <input class="input-file" type="file" name="files" ref="imgFileInput" accept="image/*" @change="addFileToImage( $event.target.files )" hidden />
+                        <input class="input-file" type="file" name="files" id="imgFileInput" accept="image/*" multiple @change="addFileToImage( $event.target.files )" hidden />
                       </a>
 
                     </li>
-                    <li><a href=""><img :src="require('@/assets/images/file.svg')" alt=""></a></li>
+                    <li>
+                      <a href="#" @click.prevent="addFilesInputFocus">
+                        <img :src="require('@/assets/images/file.svg')" alt="">
+                        <input class="input-file" type="file" name="files" id="attachFileInput" accept=".pdf, .xls, .xlsx, .ppt, .pptx, .doc, .docx" multiple @change="addAttachFileTo( $event.target.files )" hidden />
+                      </a>
+                    </li>
                   </ul>
 
-                  <div class="form-temp-save"><a href="" class="txt-btn">임시저장</a></div>
                 </div>
               </div>
             </div>
@@ -419,7 +425,7 @@
           <div slot="footer">
             <!-- footer custom coding-->
             <div class="btn-group rt">
-              <button type="button" class="btn primary navi" disabled @click="closePopup">등록</button>
+              <button type="button" class="btn primary navi"  @click="submitAddSchedule">등록</button>
             </div>
           </div>
         </modal>

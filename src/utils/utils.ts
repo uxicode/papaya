@@ -247,6 +247,50 @@ class Utils{
     window.location.reload();
   }
 
+  /**
+   * 마우스 이벤트 생성
+   * @param eventName
+   */
+  public static createMouseEvent(eventName: string): MouseEvent{
+    return new MouseEvent( eventName, {
+      view: window,
+      bubbles: false,
+      cancelable: false
+    });
+  }
+
+  public static getFileType(file: File) {
+    let fileVerifiedType: any = '';
+    const slice = file.slice(0, 4);
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(slice); // 파일 조각 읽어들임.
+    reader.onload =  ( e: ProgressEvent<FileReader>) => {
+      const buffer = reader.result as ArrayBuffer; // 결과 ArrayBuffer
+      const view = new DataView( buffer ); // 결과 바이트의 접근 권한을 획득.
+      const resultByBytes = view.getUint32(0, false);// 빅 엔디언으로  4바이트를 읽어 들인다.
+      console.log('resultByBytes=', resultByBytes);
+      switch (resultByBytes) {
+        case 0x89504E47:
+          fileVerifiedType = 'image/png';
+          break;
+        case 0x47494638:
+          fileVerifiedType = 'image/gif';
+          break;
+        case 0x25504446:
+          fileVerifiedType = 'application/pdf';
+          break;
+        case 0x504b0304:
+          fileVerifiedType = 'application/zip';
+          break;
+      }
+    };
+
+    return fileVerifiedType;
+  }
+
+
+  // ({}).toString.call( value ) ==='[object Array]'
+
   /*
   어떤 페이지를 로딩하는 데 필요한 전체 시간 계산하기.
   * var perfData = window.performance.timing;

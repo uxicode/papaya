@@ -1,3 +1,4 @@
+import {MODIFY_CLASS_INFO} from '@/store/action-class-types';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo, IClassMemberInfo, INotifyList, IQuestionList} from '@/views/model/my-class.model';
@@ -36,6 +37,9 @@ export default class ClassSettingMain extends Vue{
     private myClassHomeModel!: IClassInfo;
 
     @MyClass.Action
+    private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
+
+    @MyClass.Action
     private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo[]>;
 
     @MyClass.Action
@@ -66,7 +70,7 @@ export default class ClassSettingMain extends Vue{
         },
     ];
 
-    /* 클래스 관리 / 멤버 관리 / 기타 텍스트 및 링크 */
+    /* 클래스 관리 / 멤버 관리 / 기타 리스트 타이틀 및 링크 */
     private classManageList: ISettingMenu[] = [
         {
             title: '클래스 기본 정보 관리',
@@ -107,6 +111,20 @@ export default class ClassSettingMain extends Vue{
         {
             title: '클래스 탈퇴하기',
             type: 'withdrawModal'
+        }
+    ];
+    private listGroup: any = [
+        {
+            tit: '클래스 관리',
+            list: this.classManageList
+        },
+        {
+            tit: '멤버 관리',
+            list: this.memberManageList
+        },
+        {
+            tit: '기타',
+            list: this.etcList
         }
     ];
 

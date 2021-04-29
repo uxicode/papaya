@@ -81,7 +81,7 @@ interface IMyClassList {
     }
 }*/
 
-
+// 가입클래스에서 상세 클릭시> 클래스 홈 정보 - 사용된 카테고리 ( / sidemenu / 일정  / 클래스 멤버 / 클래스 설정 / 클래스 교육과정 )
 interface IClassInfo{
     contents_updatedAt: Date;
     createdAt: Date;
@@ -104,7 +104,7 @@ interface IClassInfo{
     question_showYN: string | boolean;
     deletedYN: string | boolean;
     contents_updated_type: string | number;
-    class_tags: Array<{ id: string | number, keyword: string }>;
+    class_tags: Array< { id: string | number, keyword: string } >;
     class_link: string;
     me?: {
         class_id: number;
@@ -130,13 +130,8 @@ interface IClassInfo{
         visited: number;
     };
 }
-
-interface IClassMember{
-    member_count: number;
-    is_private: boolean;
-    message?: string;
-    image_url?: string;
-}
+// 가입 클래스 - 멤버수 / 비공개-공개 / 클래스 이미지 / 클래스 이름
+type ClassEachInfo = Pick<IClassInfo, 'member_count' | 'is_private' | 'image_url' | 'g_name'>;
 
 interface INotifyList {
     profile_image: () => void;
@@ -160,7 +155,7 @@ interface IFeedList {
     feedViewer: number;
     comment: number;
 }
-
+//보관함
 interface IPostList {
     startAt: string;
     endAt: string;
@@ -427,34 +422,6 @@ interface IMakeClassInfo extends IMakeClassInfoBase{
 }*/
 
 interface IClassMemberInfo {
-    member_info: {
-        joinedAt: Date;
-        createdAt: Date;
-        updatedAt: Date;
-        id: number;
-        class_id: number;
-        user_id: number;
-        nickname: string;
-        profile_image?: string;
-        is_bookmarked: number;
-        schedule_color: number;
-        level: number;
-        status: number;
-        open_level_id: number;
-        open_level_mobileno: number;
-        open_level_email: number;
-        onoff_push_noti: number;
-        onoff_post_noti: number;
-        onoff_comment_noti: number;
-        onoff_schedule_noti: number;
-        schedule_noti_intime: number;
-        visited: number;
-        class_member_auths: [];
-    };
-    message?: string;
-}
-
-interface IClassMemberList {
     joinedAt: Date;
     createdAt: Date;
     updatedAt: Date;
@@ -462,7 +429,7 @@ interface IClassMemberList {
     class_id: number;
     user_id: number;
     nickname: string;
-    profile_image: string;
+    profile_image?: string;
     is_bookmarked: number;
     schedule_color: number;
     level: number;
@@ -477,30 +444,6 @@ interface IClassMemberList {
     schedule_noti_intime: number;
     visited: number;
     class_member_auths: [];
-}
-
-interface IClassMembers {
-    joinedAt: Date;
-    createdAt: Date;
-    updatedAt: Date;
-    id: number;
-    class_id: number;
-    user_id: number;
-    nickname: string;
-    profile_image: string | null;
-    is_bookmarked: number;
-    schedule_color: number;
-    level: number;
-    status: number;
-    open_level_id: number;
-    open_level_mobileno: number;
-    open_level_email: number;
-    onoff_push_noti: number;
-    onoff_post_noti: number;
-    onoff_comment_noti: number;
-    onoff_schedule_noti: number;
-    schedule_noti_intime: number;
-    visited: number;
 }
 
 interface ISearchMembers {
@@ -756,16 +699,14 @@ export {
     INotifyFeedList,
     IFeedList,
     IClassInfo,
-    IClassMember,
+    ClassEachInfo,
     IPostList,
     ISearchSchool,
     IMakeClassInfo,
     IMakeClassInfoBase,
     IClassMemberInfo,
-    IClassMemberList,
     IQuestionList,
     IQnaList,
-    IClassMembers,
     IMakeEducation,
     IEducationList,
     IMakeCourse,

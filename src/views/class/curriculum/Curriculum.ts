@@ -1,7 +1,6 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import SideMenu from '@/components/sideMenu/sideMenu.vue';
-import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import {
@@ -9,8 +8,7 @@ import {
     IMakeEducation,
     IEducationList,
     ICurriculumList,
-    IClassMembers,
-    IMakeCourse,
+    IClassMemberInfo,
     ICourseList
 } from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';

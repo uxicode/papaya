@@ -1,5 +1,5 @@
 import {Component, Vue, Prop} from 'vue-property-decorator';
-import {IClassMember, IMyClassList} from '@/views/model/my-class.model';
+import {ClassEachInfo, IMyClassList} from '@/views/model/my-class.model';
 import Btn from '@/components/button/Btn.vue';
 import {Utils} from '@/utils/utils';
 import {CLASS_BASE_URL} from '@/api/base';
@@ -31,7 +31,7 @@ export default class MyClassListView extends Vue{
   private classListData: IMyClassList[] | undefined;
 
   @Prop(Array)
-  private moreInfo!: IClassMember[];
+  private moreInfo!: ClassEachInfo[];
 
   get loadingChk(): boolean{
     return this.isLoading;
@@ -41,8 +41,14 @@ export default class MyClassListView extends Vue{
     return this.classListData;
   }
 
-  get classMoreInfo(): IClassMember[]{
+  get classMoreInfo(): ClassEachInfo[]{
     return this.moreInfo;
+  }
+
+  public mounted(){
+    setTimeout(() => {
+      console.log(this.classMoreInfo);
+    }, 2000);
   }
 
   public getYears( dateTxt: string ): string{
@@ -52,6 +58,7 @@ export default class MyClassListView extends Vue{
   public nullCheck(value: string ): string{
     return (value===null)? '' : value;
   }
+
 
   // 트랜지션을 시작할 때 인덱스 * 100 ms 만큼의 딜레이를 적용합니다.
   public beforeEnter(el: HTMLElement): void {
@@ -119,6 +126,15 @@ export default class MyClassListView extends Vue{
       is_bookmarked: item.me.is_bookmarked
     } );
 
+  }
+
+
+  private getClassName(idx: number ): string{
+    if(this.classMoreInfo[idx - 1]===undefined){
+      return '';
+    }else{
+      return this.classMoreInfo[idx - 1].g_name;
+    }
   }
 
   /**

@@ -1,16 +1,16 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import { IClassMember, IMyClassList} from '@/views/model/my-class.model';
+import { IMyClassList, ClassEachInfo} from '@/views/model/my-class.model';
 import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
 import { getAllPromise } from '@/views/model/types';
 import MyClassListView from '@/views/class/classList/MyClassListView';
 import WithRender from './MyClassListPage.html';
-import {MYCLASS_HOME} from '@/store/action-class-types';
 import {CLASS_BASE_URL} from '@/api/base';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
+
 
 @WithRender
 @Component({
@@ -57,7 +57,8 @@ export default class MyClassListPage extends Vue {
       }
     }
   ];
-  private moreInfos: IClassMember[]=[];
+  // private moreInfos: IClassMember[]=[];
+  private moreInfos: ClassEachInfo[]=[];
 
   @Auth.Getter
   private userInfo!: IUserMe;
@@ -81,7 +82,7 @@ export default class MyClassListPage extends Vue {
     return this.classID;
   }
 
-  get classListMoreInfos():  IClassMember[]{
+  get classListMoreInfos(): ClassEachInfo[] {
     return this.moreInfos;
   }
   get originalClassItems(): IMyClassList[] {
@@ -288,7 +289,8 @@ export default class MyClassListPage extends Vue {
         return {
           member_count:item.classinfo.member_count,
           is_private:item.classinfo.is_private,
-          image_url:item.classinfo.image_url
+          image_url:item.classinfo.image_url,
+          g_name: item.classinfo.g_name
         };
       });
       this.moreInfos = [...this.moreInfos, ...member];
@@ -305,7 +307,7 @@ export default class MyClassListPage extends Vue {
       payload.memberId, {
         nickname: payload.nickname,
         is_bookmarked: payload.bookmarkValue
-      }).then((data: IClassMember) => {
+      }).then((data: ClassEachInfo) => {
       console.log(data);
        /*
        * {

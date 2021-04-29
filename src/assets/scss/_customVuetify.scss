@@ -98,8 +98,8 @@
 .v-sheet.v-snack__wrapper {
   border-radius: 0;
 }
-
-
+//전체 a태그에 vuetify 가 컬러를 변경하고 있어서 여기서 변경해줌. 그외에 a 태크에 color 는 전부 별도 설정 해야 함.
+.v-application a{ color: #0f0f15 !important; }
 /*curriculum 수정*/
 .v-application--wrap{
   .curriculum-wrap a {color: #57576d !important;}
