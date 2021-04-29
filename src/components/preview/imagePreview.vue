@@ -1,8 +1,8 @@
 <template>
   <div class="form-add-list">
     <!-- start: 상단 -->
-    <div class="add-item" style="margin: 0 40px;">
-      <div class="add-item-top" v-if="fileItems.length>0">
+    <div class="add-item">
+      <div class="add-item-top" v-show="fileItems.length>0">
         <p class="add-item-tit">{{ getTitle() }}</p>
         <div class="add-item-btn">
           <a href="" class="txt-btn" @click.prevent="removeAll">전체삭제</a>
@@ -12,9 +12,8 @@
     <!-- end: 상단 -->
 
     <!-- start: 이미지 뷰 -->
-    <div class="add-item-cnt" style="padding:0" v-if="fileItems !==undefined">
-      <div class="add-photo" >
-
+    <div class="add-item-cnt" style="padding:0" v-show="fileItems.length>0">
+      <div class="add-photo">
         <ul class="add-photo-list clearfix" :style="moveX">
           <li v-for="(item, index) in fileItems" :key="`file-${index}`">
             <div class="add-img"><img :src="item" class="thumb" alt=""></div>
@@ -43,6 +42,7 @@ export default class ImagePreview extends Vue{
 
   private moveCount: number=0;
   private moveX: string = '';
+  private ableMoveCountLen: number=0;
 
   @Prop(Array)
   private fileItems!: string[];
@@ -65,9 +65,9 @@ export default class ImagePreview extends Vue{
   }
 
 
-  private moveCountCal( isLeft: boolean =true ): void {
+  private moveCountCal( totalCount: number,  isLeft: boolean =true ): void {
 
-    const md = Math.ceil(this.fileItems.length / 2)-1;
+    const md = totalCount;
     if (isLeft) {
       this.moveCount--;
       if (this.moveCount <=0) {
@@ -81,7 +81,7 @@ export default class ImagePreview extends Vue{
     }
   }
   private imgPreviewMove( isLeft: boolean ): void{
-    this.moveCountCal(isLeft);
+
     const photoList=document.querySelector('.add-photo-list') as HTMLElement;
 
     // console.log('this.fileItems.length=', this.fileItems?.length);
@@ -90,20 +90,21 @@ export default class ImagePreview extends Vue{
       const itemLen=this.fileItems.length;
       const rectInfo=photoList.getClientRects();
       // console.log('rectInfo=', rectInfo[0].width);
-      // itemLen*(80+10);
+      //이미지 width: 80 / margin-left : 10 / 첫번째 엘리먼트는 margin-left:0; 이기에 -10
       const itemTotalSize=itemLen*(80+10);
-      //이미지 width > 총 width = 이미지 width/90 = move total count
 
-
-      this.moveX =(itemTotalSize>rectInfo[0].width)? `transform: translateX( ${-1 * this.moveCount * 80}px )` : '' ;
-      console.log('this.moveX=', this.moveX, this.moveCount );
+      // 이미지 width > 총 width 이라면
+      // 이미지 width/90 = move total count
+      if( itemTotalSize>rectInfo[0].width ){
+        const mv=( itemTotalSize-rectInfo[0].width )/90;
+        this.ableMoveCountLen=parseInt(`${mv}`, 10 );
+        this.moveCountCal( this.ableMoveCountLen, isLeft );
+      }
+      this.moveX =(itemTotalSize>rectInfo[0].width)? `transform: translateX( ${-1 * this.moveCount * 90}px )` : '' ;
+      // console.log('this.moveX=', this.moveX, this.moveCount );
     }
-
   }
 
-  private getMoveTotalCount( imgW: number, ): void{
-
-  }
 
   private getTitle() {
     return (!this.fileItems)? '' : `사진 ${this.fileItems.length}`;

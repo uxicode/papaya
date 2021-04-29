@@ -9,12 +9,12 @@
         </div>
       </div>
 
-      <div class="add-item-cnt pdt-desc"  style="padding:0" v-if="fileItems !==undefined">
+      <div class="add-item-cnt pdt-desc"  style="padding:0" v-show="fileItems.length>0">
         <div class="add-file">
-          <ul class="add-file-list">
+          <ul class="add-file-list" style="padding:0;">
             <li v-for="(item, index) in fileItems" :key="`file-${index}`">
               <p>{{ item.name }}</p>
-              <a href="#" class="add-img-delete" @click.prevent.stop="removeFile( index )"><img :src="require('@/assets/images/delete.svg')" alt="" @load="loadedFile"></a>
+              <a href="#" class="add-file-delete" @click.prevent.stop="removeFile( index )"><img :src="require('@/assets/images/delete.svg')" alt="" @load="loadedFile"></a>
             </li>
           </ul>
         </div>
@@ -45,7 +45,7 @@ export default class FilePreview extends Vue{
 
   @Emit()
   private removeAll(): void{
-    this.$emit('removeAll');
+    this.$emit('removeAttachFileAll');
   }
 
   private getTitle() {
