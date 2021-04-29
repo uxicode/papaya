@@ -3,14 +3,15 @@ import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {IScheduleTotal, ITimeModel } from '@/views/model/schedule.model';
 import {CalendarEvent, CalendarEventParsed} from 'vuetify';
+import {Utils} from '@/utils/utils';
+import { RRule } from 'rrule';
 import MyClassService from '@/api/service/MyClassService';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
-import {Utils} from '@/utils/utils';
 import Modal from '@/components/modal/modal.vue';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
-import { RRule } from 'rrule';
 import ImagePreview from '@/components/preview/imagePreview.vue';
+import FilePreview from '@/components/preview/filePreview.vue';
 import WithRender from './ScheduleView.html';
 
 
@@ -23,7 +24,8 @@ const MyClass = namespace('MyClass');
         Modal,
         TxtField,
         Btn,
-        ImagePreview
+        ImagePreview,
+        FilePreview
     }
 })
 export default class ScheduleView extends Vue{
@@ -35,8 +37,10 @@ export default class ScheduleView extends Vue{
     private myClassHomeModel!: IClassInfo;
 
 
-    private fileURLItems: string[] = [];
+    private imgFileURLItems: string[] = [];
     private imgFileDatas: any[] = [];
+
+    private attachFileItems: any[] = [];
     private formData!: FormData;
     private imageLoadedCount: number=0;
     private isPopup: boolean=false;
@@ -136,12 +140,16 @@ export default class ScheduleView extends Vue{
         endAt: new Date()
     };
 
-    get fileURLItemsModel(): string[] {
-        return this.fileURLItems;
+    get imgFileURLItemsModel(): string[] {
+        return this.imgFileURLItems;
     }
 
     get imgFileDatasModel(): any[] {
         return this.imgFileDatas;
+    }
+
+    get attachFileItemsModel(): any[] {
+        return this.attachFileItems;
     }
 
     get currentLoopRangeItems(): string[]{
@@ -590,7 +598,7 @@ export default class ScheduleView extends Vue{
         for (const file of data) {
             // console.log(data,  item, Utils.getFileType(item) );
             this.imgFileDatas.push(file);
-            this.fileURLItems.push( URL.createObjectURL( file ) );
+            this.imgFileURLItems.push( URL.createObjectURL( file ) );
         }
     }
 
@@ -613,10 +621,6 @@ export default class ScheduleView extends Vue{
     private async addFileToImage( files: FileList ){
         //전달되는 파일없을시 여기서 종료.
         if( !files.length ){ return; }
-
-        /*if( this.formData ){
-            console.log( this.formData.getAll('files') );
-        }*/
 
         await this.setRevokeObjectURL().then( ()=>{
             this.setImageFileData(files);
@@ -642,7 +646,7 @@ export default class ScheduleView extends Vue{
     private setRevokeObjectURL(): Promise<string>{
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                if (this.imageLoadedCount === this.fileURLItems.length) {
+                if (this.imageLoadedCount === this.imgFileURLItems.length) {
                     return resolve('loaded');
                 } else {
                     return reject('wait');
@@ -662,8 +666,8 @@ export default class ScheduleView extends Vue{
      * @param idx
      * @private
      */
-    private removePreviewItems(idx: number): void{
-        const blobURLs=this.fileURLItems.splice(idx, 1);
+    private removeImgPreviewItems(idx: number): void{
+        const blobURLs=this.imgFileURLItems.splice(idx, 1);
         this.removeBlobURL( blobURLs ); // blob url 제거
         this.imgFileDatas.splice(idx, 1);
         //console.log( this.formData.getAll('files')  );
@@ -675,7 +679,7 @@ export default class ScheduleView extends Vue{
      * @private
      */
     private removeAllPreview(): void {
-        this.fileURLItems = [];
+        this.imgFileURLItems = [];
         this.imgFileDatas=[];
         this.imageLoadedCount=0;
     }
@@ -691,13 +695,13 @@ export default class ScheduleView extends Vue{
         //전송이 완료 되었다는 전제하에 아래 구문 수행
         setTimeout(() => {
             this.isPopup=false;
-            this.filesAllClear();
+            this.imgFilesAllClear();
         }, 500);
 
     }
 
-    private filesAllClear() {
-        this.fileURLItems = [];
+    private imgFilesAllClear() {
+        this.imgFileURLItems = [];
         this.imgFileDatas=[];
         this.formData.delete('files');
         this.imageLoadedCount=0;

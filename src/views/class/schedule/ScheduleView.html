@@ -380,10 +380,12 @@
                             placeholder="일정 내용을 작성해 주세요."
                             @input="scheduleDetailAreaInputHandler( $event.target.value )"></textarea>
 
-                  <image-preview :file-items="fileURLItemsModel"
-                                 @remove="removePreviewItems"
+                  <image-preview :file-items="imgFileURLItemsModel"
+                                 @remove="removeImgPreviewItems"
                                  @loaded="imageLoadedCheck"
                                  @removeAll="removeAllPreview"></image-preview>
+
+<!--                  <file-preview></file-preview>-->
                   <!--<div class="add-item-cnt" style="padding:0" v-if="fileURLItems.length>0">
                     <div class="add-photo">
                       <ul class="add-photo-list clearfix">
@@ -584,4 +586,3 @@
     </section>
   </div>
 </v-app>
-
