@@ -53,7 +53,7 @@ axios.interceptors.response.use((response: AxiosResponse) => {
 }, (error: any) => {
 
   const {status} = error.response;
-  let errorMsg: any = error;
+  // let errorMsg: any = error;
   // console.log('error=', error);
   // console.log(':::status=', status);
   switch (status){

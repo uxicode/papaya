@@ -1,6 +1,6 @@
 import MyClassService from '@/api/service/MyClassService';
 import UserService from '@/api/service/UserService';
-import {IClassInfo, IClassMembers, IQuestionList} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo, IQuestionList} from '@/views/model/my-class.model';
 import {
     resetSearchInput,
     searchKeyEventObservable,
@@ -10,7 +10,6 @@ import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
-import { VSnackbar } from 'vuetify/lib';
 import WithRender from './ClassMember.html';
 
 const MyClass = namespace('MyClass');
@@ -26,7 +25,6 @@ interface IAccordionList {
     components:{
         Modal,
         Btn,
-        VSnackbar
     }
 })
 export default class ClassMember extends Vue{
@@ -51,7 +49,7 @@ export default class ClassMember extends Vue{
     private myMemberLevel: number = 0; // 내 멤버 등급
 
     /* 전체 멤버 리스트 */
-    private classMemberList: IClassMembers[] = [];
+    private classMemberList: IClassMemberInfo[] = [];
     private totalMemberNum: number = 0;
 
     /* 멤버 검색 관련 */
@@ -111,7 +109,7 @@ export default class ClassMember extends Vue{
           .then((data) => {
               // 가입 승인된 멤버만 불러온다.
               this.classMemberList = data.classinfo.class_members.filter(
-                (item: IClassMembers) => item.status === 1);
+                (item: IClassMemberInfo) => item.status === 1);
               console.log(this.classMemberList);
               this.totalMemberNum = this.classMemberList.length;
           });
@@ -122,9 +120,9 @@ export default class ClassMember extends Vue{
      * @param level
      * @private
      */
-    private classifyLevel(level: number): IClassMembers[] {
+    private classifyLevel(level: number): IClassMemberInfo[] {
         return this.classMemberList.filter(
-          (item: IClassMembers) => item.level === level
+          (item: IClassMemberInfo) => item.level === level
         );
     }
 
@@ -137,7 +135,7 @@ export default class ClassMember extends Vue{
         MyClassService.getClassMemberInfo(this.classID, this.classInfo.me.id)
           .then((data) => {
             //console.log(data.member_info);
-            this.myMemberLevel = data.member_info.level;
+            this.myMemberLevel = data.level;
             //console.log(this.myMemberLevel);
           });
     }
