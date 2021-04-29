@@ -1,7 +1,7 @@
 import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
 import {IClassInfo, IClassMemberInfo} from '@/views/model/my-class.model';
-import {Vue, Component, Prop} from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
@@ -72,7 +72,7 @@ export default class ClassProfile extends Vue {
         return this.userInfo;
     }
 
-    get memberInfo(): IClassMemberInfo[] {
+    get memberInfo(): any {
         return this.classMemberInfo;
     }
 
@@ -152,6 +152,11 @@ export default class ClassProfile extends Vue {
         }
     }
 
+    /**
+     * 정보 공개 여부 텍스트 바인딩
+     * @param level
+     * @private
+     */
     private openLevelTxt(level: number): string {
         switch (level) {
             case 0:

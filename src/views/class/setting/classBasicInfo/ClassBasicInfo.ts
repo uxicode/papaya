@@ -28,7 +28,6 @@ export default class ClassBasicInfo extends Vue {
 
     private openPopupStatus: boolean = false;
     private searchSchoolValue: string = '';
-    private groupNameValue: string = '';
     private isLoading: boolean= false;
     private isManualClick: boolean=false;
     private manualInputField: string = '';
@@ -69,6 +68,10 @@ export default class ClassBasicInfo extends Vue {
         return document.getElementById( selector ) as HTMLInputElement;
     }
 
+    /**
+     * 현재 클래스의 정보 가져온다.
+     * @private
+     */
     private getClassInfo(): void {
         MyClassService.getClassInfoById(this.classID)
           .then((data) => {
