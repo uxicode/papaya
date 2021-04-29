@@ -84,17 +84,24 @@ export default class ImagePreview extends Vue{
     this.moveCountCal(isLeft);
     const photoList=document.querySelector('.add-photo-list') as HTMLElement;
 
-    console.log('this.fileItems.length=', this.fileItems?.length);
+    // console.log('this.fileItems.length=', this.fileItems?.length);
 
     if(this.fileItems){
       const itemLen=this.fileItems.length;
       const rectInfo=photoList.getClientRects();
-      console.log('rectInfo=', rectInfo[0].width);
+      // console.log('rectInfo=', rectInfo[0].width);
       // itemLen*(80+10);
       const itemTotalSize=itemLen*(80+10);
+      //이미지 width > 총 width = 이미지 width/90 = move total count
+
+
       this.moveX =(itemTotalSize>rectInfo[0].width)? `transform: translateX( ${-1 * this.moveCount * 80}px )` : '' ;
       console.log('this.moveX=', this.moveX, this.moveCount );
     }
+
+  }
+
+  private getMoveTotalCount( imgW: number, ): void{
 
   }
 

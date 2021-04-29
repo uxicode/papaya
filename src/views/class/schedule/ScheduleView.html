@@ -408,14 +408,13 @@
                     <li>
                       <a href="#" class="info-img" @click.prevent.stop="addFileInputFocus">
                         <img :src="require('@/assets/images/image.svg')" alt="">
-                        <input class="input-file" type="file" name="files" id="imgFileInput" accept="*" multiple @change="addFileToImage( $event.target.files )" hidden />
+                        <input class="input-file" type="file" name="files" id="imgFileInput" accept="image/*" multiple @change="addFileToImage( $event.target.files )" hidden />
                       </a>
 
                     </li>
                     <li><a href=""><img :src="require('@/assets/images/file.svg')" alt=""></a></li>
                   </ul>
 
-                  <div class="form-temp-save"><a href="" class="txt-btn">임시저장</a></div>
                 </div>
               </div>
             </div>
