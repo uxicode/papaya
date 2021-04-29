@@ -1,14 +1,12 @@
 import {request} from '@/api/service/AxiosService';
 import {CLASS_BASE_URL, SCHOOL_URL} from '@/api/base';
 import {
-    IClassInfo,
     IMyClassList,
-    IClassMember,
     IPostList,
     IMakeClassInfo,
-    IClassMemberInfo
+    IClassMemberInfo,
+    ClassEachInfo
 } from '@/views/model/my-class.model';
-import {count} from 'rxjs/operators';
 
 
 class MyClassService {
@@ -41,11 +39,11 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/me/keep/schedules`);
     }
 
-    public setClassBookmark(classId: number, memberId: number, payload: { is_bookmarked: number; nickname: string | undefined }): Promise<IClassMember>{
+    public setClassBookmark(classId: number, memberId: number, payload: { is_bookmarked: number; nickname: string | undefined }): Promise<ClassEachInfo>{
         return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`, payload);
     }
 
-    public getClassBookmark(classId: number, memberId: number): Promise<IClassMember>{
+    public getClassBookmark(classId: number, memberId: number): Promise<ClassEachInfo>{
         return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
 
