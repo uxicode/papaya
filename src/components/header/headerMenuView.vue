@@ -13,7 +13,7 @@
      <li><a href="#" class="top-search"></a></li>
      <li><a href="#" class="top-alert"></a></li>
      <li>
-       <div class="list-popup" v-click-outside="onClickOutside">3
+       <div class="list-popup" v-click-outside="onClickOutside">
          <!-- sub-menu-btn 에 active 추가 시 arrow 버튼 활성화 -->
          <button type="button" class="list-popup-btn sub-menu-btn" :class="{'active': isActive}" @click.stop.prevent="subMenuToggle">
 <!--           <img :src="replaceUserMenuImg()? require('@/assets/images/mypage-white.svg' ) : require('@/assets/images/mypage.svg' )" alt="" />-->
