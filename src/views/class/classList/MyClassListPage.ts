@@ -1,15 +1,16 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import { getAllPromise } from '@/views/model/types';
+import {CLASS_BASE_URL} from '@/api/base';
 import { IMyClassList, ClassEachInfo} from '@/views/model/my-class.model';
 import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
-import { getAllPromise } from '@/views/model/types';
 import MyClassListView from '@/views/class/classList/MyClassListView';
 import WithRender from './MyClassListPage.html';
-import {CLASS_BASE_URL} from '@/api/base';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
+
 
 
 @WithRender
@@ -94,7 +95,7 @@ export default class MyClassListPage extends Vue {
   }
 
   get userName(): string {
-    return ( this.userInfo as IUserMe).fullname;
+    return ( this.userInfo )? ( this.userInfo as IUserMe).fullname : '';
   }
 
   get totalCount(): number{
@@ -290,7 +291,8 @@ export default class MyClassListPage extends Vue {
           member_count:item.classinfo.member_count,
           is_private:item.classinfo.is_private,
           image_url:item.classinfo.image_url,
-          g_name: item.classinfo.g_name
+          g_name: item.classinfo.g_name,
+          me: item.classinfo.me
         };
       });
       this.moreInfos = [...this.moreInfos, ...member];
