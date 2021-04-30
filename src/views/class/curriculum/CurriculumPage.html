@@ -1,15 +1,6 @@
-<div class="contents home">
-    <div class="contents-inner">
-        <div class="contents-group">
-            <!-- 좌측 메뉴 -->
-            <side-menu :active-num="activeMenuNumModel" @sideClick="update"></side-menu>
+<v-app style="background-color: transparent">
+    <transition name="fade" mode="out-in">
+        <router-view></router-view>
+    </transition>
+</v-app>
 
-            <transition name="fade" mode="out-in">
-                <router-view></router-view>
-            </transition>
-
-        </div>
-    </div>
-
-
-</div>

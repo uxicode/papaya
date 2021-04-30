@@ -1,5 +1,8 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import TxtField from '@/components/form/txtField.vue';
+import Modal from '@/components/modal/modal.vue';
+import Btn from '@/components/button/Btn.vue';
 import {
     IClassInfo,
     IMakeEducation,
@@ -25,7 +28,13 @@ interface ITimeModel{
 /*end: 추가 테스트*/
 
 @WithRender
-@Component
+@Component({
+    components:{
+        TxtField,
+        Modal,
+        Btn
+    }
+})
 export default class CurriculumListView extends Vue {
     /* Modal 오픈 상태값 */
     private isCreateClass: boolean = false;

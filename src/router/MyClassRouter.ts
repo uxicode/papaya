@@ -23,15 +23,6 @@ const MyClassRouter=[
     ]
   },
   {
-    path: '/class/:classId/curriculum',
-    name:'curriculum',
-    beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/curriculum/CurriculumPage'), header: AppHeader, footer: AppFooter},
-    children: [
-      {path: '', name: 'curriculumListView', component: () => import('../views/class/curriculum/CurriculumListView')}, // 클래스 페이지-교육과정 (W4.5.5)
-    ]
-  },
-  {
     path: '/make-class',
     name: 'makeClass',
     components: {default: () => import('../views/class/make/MakeClassPage'), header: AppHeader, footer: AppFooter},  // 클래스 만들기 컨테이너
