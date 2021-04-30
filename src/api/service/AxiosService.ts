@@ -5,8 +5,25 @@ import {GET_REFRESH_TOKEN, GET_TOKEN, LOGOUT} from '@/store/mutation-auth-types'
 import {REMOVE_CLASS_DATA} from '@/store/mutation-class-types';
 import AuthService from '@/api/service/AuthService';
 
+
+
+
 axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
 
+/**
+ * 로그아웃 시키기
+ */
+const onUnauthorized = () => {
+  router.push(`/login?rPath=${encodeURIComponent(location.pathname)}`)
+    .then(() => {
+      // console.log( res );
+      store.commit(`Auth/${LOGOUT}`);
+      store.commit(`MyClass/${REMOVE_CLASS_DATA}`);
+    });
+};
+const setAuthorization = (token: string) => {
+  axios.defaults.headers.common.Authorization = (token) ? `Bearer ${token}` : null;
+};
 //test userid - mobilej / pw - 0000
 //test id - sstest07 / pw - 0000 ---> curriculum_list 있음 해당 클래스 아이디 : 724
 /**
@@ -26,9 +43,12 @@ const definedRefreshToken= ()=>{
   // alert('사용자 세션이 만료되었습니다. 다시 로그인 해주세요~');
   if( store.getters['Auth/isAuth'] && refresh_token!==null ){
     AuthService.sendRefreshToken( refresh_token ).then((data)=>{
-      // console.log(data.access_token, data.refresh_token);
+      console.log(data.access_token, data.refresh_token);
       store.commit( `Auth/${GET_TOKEN}`, data.access_token );
       store.commit( `Auth/${GET_REFRESH_TOKEN}`, data.refresh_token );
+    }).catch((error)=>{
+      alert('사용자 세션이 만료되었습니다. 다시 로그인 해주세요~');
+      onUnauthorized();
     });
   }else{
     //토큰 및 리프레시 둘다 만료이기에 강제 로그아웃 시킨다.
@@ -75,22 +95,6 @@ axios.interceptors.response.use((response: AxiosResponse) => {
   return Promise.reject(error);
 });
 
-
-
-/**
- * 로그아웃 시키기
- */
-const onUnauthorized = () => {
-  router.push(`/login?rPath=${encodeURIComponent(location.pathname)}`)
-    .then(() => {
-      // console.log( res );
-      store.commit(`Auth/${LOGOUT}`);
-      store.commit(`MyClass/${REMOVE_CLASS_DATA}`);
-    });
-};
-const setAuthorization = (token: string) => {
-  axios.defaults.headers.common.Authorization = (token) ? `Bearer ${token}` : null;
-};
 const request = (method: string, url: string, data: any | null = null ): Promise<any> => {
   // console.log( 'data status=', method, data, url );
   let reqObj: object;

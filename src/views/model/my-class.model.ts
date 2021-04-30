@@ -81,7 +81,7 @@ interface IMyClassList {
     }
 }*/
 
-
+// 가입클래스에서 상세 클릭시> 클래스 홈 정보 - 사용된 카테고리 ( / sidemenu / 일정  / 클래스 멤버 / 클래스 설정 / 클래스 교육과정 )
 interface IClassInfo{
     contents_updatedAt: Date;
     createdAt: Date;
@@ -130,8 +130,8 @@ interface IClassInfo{
         visited: number;
     };
 }
-
-type ClassEachInfo = Pick<IClassInfo, 'member_count' | 'is_private' | 'image_url' | 'g_name'>;
+// 가입 클래스 - 멤버수 / 비공개-공개 / 클래스 이미지 / 클래스 이름
+type ClassEachInfo = Pick<IClassInfo, 'member_count' | 'is_private' | 'image_url' | 'g_name' | 'me' >;
 
 interface INotifyList {
     profile_image: () => void;
@@ -155,7 +155,7 @@ interface IFeedList {
     feedViewer: number;
     comment: number;
 }
-
+//보관함
 interface IPostList {
     startAt: string;
     endAt: string;
