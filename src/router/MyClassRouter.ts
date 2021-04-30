@@ -2,6 +2,7 @@ import AppHeader from '@/components/header/header.vue';
 import AppFooter from '@/components/footer/footer.vue';
 import {getIsAuth} from '@/router/AuthGuard';
 import {MyClassSubRouter} from '@/router/MyClassSubRouter';
+import MyClassHeader from '@/components/header/myClassHeader.vue';
 
 const MyClassRouter=[
   {
@@ -14,7 +15,7 @@ const MyClassRouter=[
     path: '/class/:classId',
     name: 'myClassListDetailPage',
     beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/home/MyClassListDetailPage'), header: AppHeader, footer: AppFooter},
+    components: {default: () => import('@/views/class/home/MyClassListDetailPage'), header: MyClassHeader, footer: AppFooter},
     children: [
       {path: '', name: 'myClassListDetailView', component: () => import('../views/class/home/MyClassListDetailView')}, //가입리스트 중 하나 클릭시-> 클래스 홈( 상세 )
       {path: 'member', name: 'classMember', component: () => import('../views/class/member/ClassMember')},  // 상세 -> 클래스 멤버

@@ -49,7 +49,7 @@ export default class MyClassListView extends Vue{
 
   public mounted(){
     setTimeout(() => {
-      console.log(this.classMoreInfo);
+      // console.log(this.classMoreInfo);
     }, 2000);
   }
 

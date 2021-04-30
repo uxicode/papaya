@@ -132,7 +132,7 @@ export default class SideMenu extends Vue{
   public created(){
     //화면 새로고침시에
     if (performance.navigation.type === 1) {
-      this.sideMenuClickHandler(2);
+      this.sideMenuClickHandler(0);
     }
 
     /*window.onpageshow = function(event) {
@@ -145,7 +145,7 @@ export default class SideMenu extends Vue{
   }
 
   public getHashTag( items: any[] ): string | undefined {
-    if( items === undefined ){ return; }
+    if( !items ){ return; }
     // console.log(' items=',  items)
     if( items.length === 0 ){ return; }
     const keywords= items.map(( prop ) => '#' + prop.keyword);
