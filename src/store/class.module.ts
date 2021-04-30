@@ -7,7 +7,7 @@ import {
     IMakeClassInfoBase,
     IClassInfo,
     IClassMemberInfo,
-    IQuestionList
+    IQuestionInfo
 } from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import {

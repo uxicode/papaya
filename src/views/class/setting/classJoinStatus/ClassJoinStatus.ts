@@ -1,5 +1,5 @@
 import MyClassService from '@/api/service/MyClassService';
-import {IClassMemberInfo, IQnaList, IQuestionList} from '@/views/model/my-class.model';
+import {IClassMemberInfo, IQnaInfo} from '@/views/model/my-class.model';
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Btn from '@/components/button/Btn.vue';
@@ -21,7 +21,7 @@ export default class ClassJoinStatus extends Vue {
 
     private applyList: IClassMemberInfo[] = [];
     private classMemberInfo: any = [];
-    private answerList: IQnaList[] = [];
+    private answerList: IQnaInfo[] = [];
 
     @MyClass.Getter
     private classID!: number;
@@ -38,6 +38,10 @@ export default class ClassJoinStatus extends Vue {
         this.getApplyMembers();
     }
 
+    /**
+     * 가입 대기자 리스트 불러오기
+     * @private
+     */
     private getApplyMembers(): void {
         MyClassService.getClassMembers(this.classID)
           .then((data) => {
@@ -53,6 +57,11 @@ export default class ClassJoinStatus extends Vue {
           });
     }
 
+    /**
+     * 멤버 정보 상세 팝업 오픈 -> 기본 정보와 질문 답변 내용 불러온다.
+     * @param id
+     * @private
+     */
     private openJoinDetail(id: number): void {
         this.isJoinDetail = true;
 

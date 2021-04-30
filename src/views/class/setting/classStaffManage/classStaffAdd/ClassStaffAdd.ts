@@ -35,10 +35,7 @@ export default class ClassStaffAdd extends Vue {
       .then((data) => {
         // 가입 승인된 일반 멤버만 불러온다.
         this.classMemberList = data.classinfo.class_members.filter( (item: any )=> (item.status === 1 && item.level === 3) );
-
-        // this.classMemberList = data.classinfo.class_members.filter( (item: IClassMemberInfo) => item.status === 1).filter( (item: IClassMemberInfo) => item.level === 3);
-        // console.log('this.classMemberList=', this.classMemberList);
-
+        // console.log(this.classMemberList);
         this.totalMemberNum = this.classMemberList.length;
       });
   }

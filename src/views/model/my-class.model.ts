@@ -446,39 +446,14 @@ interface IClassMemberInfo {
     class_member_auths: [];
 }
 
-interface ISearchMembers {
-    joinedAt: Date;
-    createdAt: Date;
-    updatedAt: Date;
-    id: number;
-    class_id: number;
-    user_id: number;
-    nickname: string;
-    profile_image: null | string;
-    is_bookmarked: number;
-    schedule_color: number;
-    level: number;
-    status: number;
-    open_level_id: number;
-    open_level_mobileno: number;
-    open_level_email: number;
-    onoff_push_noti: number;
-    onoff_post_noti: number;
-    onoff_comment_noti: number;
-    onoff_schedule_noti: number;
-    schedule_noti_intime: number;
-    visited: number;
-    class_member_auths: [];
-}
-
-interface IQuestionList {
+interface IQuestionInfo {
     createdAt?: Date;
     id: number;
     class_id: number;
     question: string;
 }
 
-interface IQnaList {
+interface IQnaInfo {
     createdAt: Date;
     updatedAt: Date;
     id: number;
@@ -694,8 +669,8 @@ export {
     IMakeClassInfo,
     IMakeClassInfoBase,
     IClassMemberInfo,
-    IQuestionList,
-    IQnaList,
+    IQuestionInfo,
+    IQnaInfo,
     IMakeEducation,
     IEducationList,
     ICurriculumList,
