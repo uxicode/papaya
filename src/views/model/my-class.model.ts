@@ -600,6 +600,11 @@ interface ICurriculumList {
 
 interface ICurriculumList {
     curriculum: {
+        startAt: Date | string;
+        endAt: Date | string;
+        expiredAt: Date | string;
+        createdAt: Date | string;
+        updatedAt: Date | string;
         id: number;
         class_id: number;
         board_id: null | number;
@@ -612,59 +617,36 @@ interface ICurriculumList {
         count: number;
         param1: number;
         deletedYN: boolean;
-        owner?: {
-            id: number;
-            class_id: number;
-            user_id: number;
+        owner: {
+            id?: number;
+            class_id?: number;
+            user_id?: number;
             nickname: string;
-            profile_image: null | string;
-            is_bookmarked: number;
-            schedule_color: number;
+            profile_image?: null | string;
             level: number;
-            status: number;
-        },
-        course_list?: Array<{
-            startDay: Date;
-            createdAt: Date;
-            updatedAt: Date;
-            id: number;
-            curriculum_id: number;
-            class_id: number;
-            index: number;
-            title?: string | undefined;
-            contents: string;
-            startTime: Date;
-            endTime: Date;
-            deletedYN: boolean;
-            attachment?: Array<{
-                createdAt: Date;
-                updatedAt: Date;
+            status?: number;
+        };
+        course_list?: [
+            {
+                startDay: Date | string;
+                createdAt: Date | string;
+                updatedAt: Date | string;
                 id: number;
-                user_id: number;
-                member_id: null | number;
-                parent_id: number;
-                group_name: string;
-                fieldname: string;
-                originalname: string;
-                encoding: string;
-                mimetype: string;
-                size: number;
-                bucket: string;
-                key: string;
-                acl: string;
-                contentType: string;
-                contentDisposition: null;
-                storageClass: string;
-                serverSideEncryption: null;
-                metadata: null;
-                location: string;
-                etag: string;
+                curriculum_id: number;
+                class_id: number;
+                index: number;
+                title: string;
+                contents: string;
+                startTime: Date | string;
+                endTime: Date | string;
                 deletedYN: boolean;
-            }>;
-        }>;
+                attachment: [];
+            },
+        ]
     };
     message?: string;
 }
+
 
 interface IMakeCourse {
     title: string;

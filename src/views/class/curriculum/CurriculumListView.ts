@@ -61,7 +61,7 @@ export default class CurriculumListView extends Vue {
      * 클래스 교육과정 메인리스트
      */
 
-    //datepicker
+        //datepicker
     private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
     private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
     private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
@@ -71,7 +71,7 @@ export default class CurriculumListView extends Vue {
     private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
 
 
-     // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
+    // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
     private makeCurriculumItems: IMakeEducation={
         title: '',
         goal: '',
@@ -90,19 +90,44 @@ export default class CurriculumListView extends Vue {
     private allEduList: IEducationList[]= [];
     private currList: ICurriculumList={
         curriculum: {
+            startAt: '2019-11-17 10:00:00',
+            endAt: '2019-11-17 10:00:00',
+            expiredAt: '2019-11-17 10:00:00',
+            createdAt: '2019-11-17 10:00:00',
+            updatedAt: '2019-11-17 10:00:00',
             id: 0,
             class_id: 0,
             board_id: 0,
-            post_type:0,
+            post_type: 0,
             type: 0,
             user_id: 0,
             user_member_id: 0,
-            title:'',
+            title: '',
             text: '',
             count: 0,
             param1: 0,
             deletedYN: false,
-            course_list: [],
+            owner: {
+                nickname: '',
+                level: 0,
+            },
+            course_list: [
+                {
+                    startDay: '2019-11-17',
+                    createdAt: '2019-11-17 10:00:00',
+                    updatedAt: '2019-11-17 10:00:00',
+                    id: 0,
+                    curriculum_id: 0,
+                    class_id: 0,
+                    index: 0,
+                    title: '',
+                    contents: '',
+                    startTime: '10:00:00',
+                    endTime: '10:00:00',
+                    deletedYN: false,
+                    attachment: [],
+                },
+            ]
         }
     };
 
@@ -349,6 +374,8 @@ export default class CurriculumListView extends Vue {
             default:
                 return 'member';
         }
+
+        console.log('test' , level);
     }
 
     private getCurrItemTitleById( title: string): string {
