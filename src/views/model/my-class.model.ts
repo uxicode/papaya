@@ -131,7 +131,7 @@ interface IClassInfo{
     };
 }
 // 가입 클래스 - 멤버수 / 비공개-공개 / 클래스 이미지 / 클래스 이름
-type ClassEachInfo = Pick<IClassInfo, 'member_count' | 'is_private' | 'image_url' | 'g_name'>;
+type ClassEachInfo = Pick<IClassInfo, 'member_count' | 'is_private' | 'image_url' | 'g_name' | 'me' >;
 
 interface INotifyList {
     profile_image: () => void;
