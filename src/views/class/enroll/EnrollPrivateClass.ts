@@ -41,8 +41,9 @@ export default class EnrollPrivateClass extends Vue {
     private showMsg: boolean = false;
     private isError: boolean = false;
     private isApproval: boolean = false;
-    private questionList: Array<Pick<IQuestionInfo, 'question'>> = [];
-    private answerList: string[] = ['', '', ''];
+    private questionList: Array<Pick<IQuestionInfo, 'question'>> = [{question: ''},{question: ''},{question: ''}];
+    private answerList: any = [{answer: ''}, {answer: ''}, {answer: ''},];
+    private qnaList: [] = Object.assign(this.questionList, this.answerList);
     private enrollMemberInfo!: IEnrollMemberInfo;
 
     /* Modal 상태 값 */
@@ -90,7 +91,16 @@ export default class EnrollPrivateClass extends Vue {
      * @private
      */
     private enrollClassSubmit(): void {
-
+        this.enrollMemberInfo = {
+            user_id: 92,
+            nickname: this.inputNickname,
+            qna_list: [
+              {
+                question: this.questionList[0].question,
+                answer: this.answerList[0].answer
+              },
+            ],
+        };
         MyClassService.addClassMembers(this.classID, this.enrollMemberInfo)
           .then((result) => {
             console.log(result);
