@@ -12,7 +12,7 @@ const MyClassRouter=[
   },
   {
     path: '/class/:classId',
-    name: 'myClassListDetailPage',
+    // name: 'myClassListDetailPage',
     beforeEnter: getIsAuth,
     components: {default: () => import('@/views/class/home/MyClassListDetailPage'), header: AppHeader, footer: AppFooter},
     children: [
@@ -20,6 +20,15 @@ const MyClassRouter=[
       {path: 'member', name: 'classMember', component: () => import('../views/class/member/ClassMember')},  // 상세 -> 클래스 멤버
       {path: 'schedule', name: 'scheduleView', component: () => import('../views/class/schedule/ScheduleView')}, //상세 -> 클래스 일정
       ...MyClassSubRouter
+    ]
+  },
+  {
+    path: '/class/:classId/curriculum',
+    // name:'curriculum',
+    beforeEnter: getIsAuth,
+    components: {default: () => import('@/views/class/curriculum/CurriculumPage'), header: AppHeader, footer: AppFooter},
+    children: [
+      {path: '', name: 'curriculumListView', component: () => import('../views/class/curriculum/CurriculumListView')}, // 클래스 페이지-교육과정 (W4.5.5)
     ]
   },
   {

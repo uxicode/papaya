@@ -11,7 +11,7 @@ const MyPageRouter=[
         children: [
             {
                 path: 'myProfile',
-                name: 'myProfile',
+                // name: 'myProfile',
                 component: () =>import('../views/mypage/myProfile/MyProfile'),
                 children: [
                     {

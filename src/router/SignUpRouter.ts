@@ -11,7 +11,7 @@ const SignUpRouter=[
   },
   {
     path: '/signForm',
-    name: 'signForm',
+    // name: 'signForm',
     components: { default:SignUp, header: SignUpHeader, footer: AppFooter},
     children:[
       { path: '', name: 'termsCheck', component: () =>import('../views/signup/termsCheck/TermsCheck') },
