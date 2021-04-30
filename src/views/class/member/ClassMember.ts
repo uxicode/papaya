@@ -1,6 +1,6 @@
 import MyClassService from '@/api/service/MyClassService';
 import UserService from '@/api/service/UserService';
-import {IClassInfo, IClassMemberInfo, IQuestionList} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import {
     resetSearchInput,
     searchKeyEventObservable,
@@ -77,7 +77,7 @@ export default class ClassMember extends Vue{
     private userId: string = '';
     private email: string = '';
     private memberId: number = 0;
-    private qnaList: IQuestionList[] = [];
+    private qnaList: IQuestionInfo[] = [];
     private isActive: boolean = false;
 
     /* 아코디언 리스트 관련(스탭 멤버, 일반 멤버) */

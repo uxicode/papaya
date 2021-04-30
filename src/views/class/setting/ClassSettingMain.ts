@@ -1,6 +1,6 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {IClassInfo, IClassMemberInfo, IQuestionList} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
@@ -45,7 +45,7 @@ export default class ClassSettingMain extends Vue{
     private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<IClassMemberInfo[]>;
 
     @MyClass.Action
-    private MODIFY_CLASS_QUESTION!: (payload: {classId: number, questionId: number}, text: {new_question: string}) => Promise<IQuestionList[]>;
+    private MODIFY_CLASS_QUESTION!: (payload: {classId: number, questionId: number}, text: {new_question: string}) => Promise<IQuestionInfo[]>;
 
     /* Modal 오픈 상태값 */
     private isGuideTxt: boolean = false;
@@ -135,7 +135,7 @@ export default class ClassSettingMain extends Vue{
 
     /* 가입 질문 설정 관련 */
     private maxQuestionCount: number = 3; // 최대 질문 갯수
-    private questionList: IQuestionList[] = [];
+    private questionList: IQuestionInfo[] = [];
     private tempData: string = '';
     private questionId: number = 0;
     private newQuestion: string = '';
