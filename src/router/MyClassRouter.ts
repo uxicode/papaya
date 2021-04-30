@@ -12,7 +12,7 @@ const MyClassRouter=[
   },
   {
     path: '/class/:classId',
-    // name: 'myClassListDetailPage',
+    name: 'myClassListDetailPage',
     beforeEnter: getIsAuth,
     components: {default: () => import('@/views/class/home/MyClassListDetailPage'), header: AppHeader, footer: AppFooter},
     children: [
@@ -24,7 +24,7 @@ const MyClassRouter=[
   },
   {
     path: '/class/:classId/curriculum',
-    // name:'curriculum',
+    name:'curriculum',
     beforeEnter: getIsAuth,
     components: {default: () => import('@/views/class/curriculum/CurriculumPage'), header: AppHeader, footer: AppFooter},
     children: [
