@@ -7,11 +7,17 @@ import {LoginRouter} from '@/router/LoginRouter';
 import {SignUpRouter} from '@/router/SignUpRouter';
 import {MyPageRouter} from '@/router/MyPageRouter';
 import {MyClassRouter} from '@/router/MyClassRouter';
+import AppHeader from '@/components/header/header.vue';
+import AppFooter from '@/components/footer/footer.vue';
 
 Vue.use(VueRouter);
 
 // @ts-ignore
 const routes: RouteConfig[] = [
+  {
+    path: '/class/search',
+    components: {default: () => import('@/views/class/search/SearchPage'), header: AppHeader, footer: AppFooter}
+  },
   ...MyClassRouter,
   ...LoginRouter,
   ...SignUpRouter,

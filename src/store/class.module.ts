@@ -154,7 +154,7 @@ export default class ClassModule extends VuexModule {
     @Mutation
     public [POST_LIST](postData: IPostList[] ): void {
         this.postData =postData;
-        localStorage.setItem('postData', JSON.stringify(this.postData) );
+        // localStorage.setItem('postData', JSON.stringify(this.postData) );
         // this.count++;
     }
 

@@ -26,7 +26,7 @@ const MyClassRouter=[
   {
     path: '/make-class',
     name: 'makeClass',
-    components: {default: () => import('../views/class/make/MakeClassPage'), header: AppHeader, footer: AppFooter},  // 클래스 만들기 컨테이너
+    components: {default: () => import('@/views/class/make/MakeClassPage'), header: AppHeader, footer: AppFooter},  // 클래스 만들기 컨테이너
     beforeEnter: getIsAuth,
     children: [
       {path: 'step1', name: 'makeClassOption', component: () => import('../views/class/make/step1/MakeClassOption')}, //클래스 만들기 step 1 ( 학교 검색 포함 )
@@ -38,25 +38,25 @@ const MyClassRouter=[
     path: '/classWithdrawComplete',
     name: 'classWithdrawComplete',
     beforeEnter: getIsAuth,
-    components: {default: () => import('../views/class/setting/ClassWithdrawComplete'), header: AppHeader, footer: AppFooter}, // W.4.5.7.11.1.1
+    components: {default: () => import('@/views/class/setting/ClassWithdrawComplete'), header: AppHeader, footer: AppFooter}, // W.4.5.7.11.1.1
   },
   {
-    path: '/enrollPrivateClass',
+    path: '/class/enrollPrivateClass',
     name: 'enrollPrivateClass',
     beforeEnter: getIsAuth,
-    components: {default: () => import('../views/class/enroll/EnrollPrivateClass'), header: AppHeader, footer: AppFooter}, // W.4.4.1.1
+    components: {default: () => import('@/views/class/enroll/EnrollPrivateClass'), header: AppHeader, footer: AppFooter}, // W.4.4.1.1
   },
   {
-    path: '/enrollOpenClass',
+    path: '/class/enrollOpenClass',
     name: 'enrollOpenClass',
     beforeEnter: getIsAuth,
-    components: {default: () => import('../views/class/enroll/EnrollOpenClass'), header: AppHeader, footer: AppFooter}, // W.4.4.2
+    components: {default: () => import('@/views/class/enroll/EnrollOpenClass'), header: AppHeader, footer: AppFooter}, // W.4.4.2
   },
   {
-    path: '/fileBox',
+    path: '/class/fileBox',
     name: 'fileBox',
     beforeEnter: getIsAuth,
-    components: {default: () => import('../views/class/fileBox/FileListView'), header: AppHeader, footer: AppFooter}, // W.4.5.4
+    components: {default: () => import('@/views/class/fileBox/FileListView'), header: AppHeader, footer: AppFooter}, // W.4.5.4
   }
 ];
 

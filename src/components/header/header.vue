@@ -17,14 +17,14 @@
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator';
 import HeaderMenuView from '@/components/header/headerMenuView.vue';
-
-
 @Component({
   components:{
     HeaderMenuView
   }
 })
-export default class AppHeader extends Vue {}
+export default class AppHeader extends Vue {
+
+}
 </script>
 
 <style>
