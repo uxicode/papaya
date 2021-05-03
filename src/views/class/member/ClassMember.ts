@@ -251,6 +251,7 @@ export default class ClassMember extends Vue{
         //console.log(accCnt.length);
         const listPopup = accCnt[idx].querySelectorAll('.list-popup-menu');
         //console.log(listPopupMenu.length);
+        listPopup.forEach((item) => item.classList.remove('active'));
         listPopup[index].classList.toggle('active');
     }
 

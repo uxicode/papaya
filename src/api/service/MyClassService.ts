@@ -26,6 +26,14 @@ class MyClassService {
     }
 
     /**
+     * 해당 클래스의 내 정보 조회
+     * @param id
+     */
+    public getMyInfoInThisClass(id: number): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${id}/me`);
+    }
+
+    /**
      * 내가 가입한 클래스 알림글 북마크한 글조회
      */
     public getMyKeepPosts(): Promise<IPostList> {
