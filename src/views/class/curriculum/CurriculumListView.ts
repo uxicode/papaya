@@ -18,6 +18,7 @@ import FilePreview from '@/components/preview/filePreview.vue';
 import WithRender from './CurriculumListView.html';
 
 
+
 const MyClass = namespace('MyClass');
 
 /*start: 추가 테스트*/
@@ -97,6 +98,8 @@ export default class CurriculumListView extends Vue {
             }
         ]
     };
+
+    // private testCourse: Array<Pick<IMakeEducation, 'course_list'>> = [];
 
     private allEduList: IEducationList[]= [];
     private currList: ICurriculumList={
@@ -235,7 +238,6 @@ export default class CurriculumListView extends Vue {
     }
 
     private setCurriNum( num: number ): void{
-
         if( this.currListNum > 50 ){
             this.isCreateError = true;
             this.currListNum=50;
@@ -244,7 +246,6 @@ export default class CurriculumListView extends Vue {
             this.currListNum=num;
             this.eduItems.length=num;
         }
-
     }
 
     private countNum(num: number): void{
