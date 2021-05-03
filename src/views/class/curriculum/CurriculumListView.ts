@@ -18,7 +18,6 @@ import FilePreview from '@/components/preview/filePreview.vue';
 import WithRender from './CurriculumListView.html';
 
 
-
 const MyClass = namespace('MyClass');
 
 /*start: 추가 테스트*/
