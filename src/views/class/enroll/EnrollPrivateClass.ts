@@ -1,8 +1,8 @@
-import {IUserMe} from '@/api/model/user.model';
-import MyClassService from '@/api/service/MyClassService';
-import {IQuestionInfo} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import {IUserMe} from '@/api/model/user.model';
+import {IQuestionInfo} from '@/views/model/my-class.model';
+import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './EnrollPrivateClass.html';

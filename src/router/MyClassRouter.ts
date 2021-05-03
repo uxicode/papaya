@@ -39,24 +39,6 @@ const MyClassRouter=[
     name: 'classWithdrawComplete',
     beforeEnter: getIsAuth,
     components: {default: () => import('@/views/class/setting/ClassWithdrawComplete'), header: AppHeader, footer: AppFooter}, // W.4.5.7.11.1.1
-  },
-  {
-    path: '/class/enrollPrivateClass',
-    name: 'enrollPrivateClass',
-    beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/enroll/EnrollPrivateClass'), header: AppHeader, footer: AppFooter}, // W.4.4.1.1
-  },
-  {
-    path: '/class/enrollOpenClass',
-    name: 'enrollOpenClass',
-    beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/enroll/EnrollOpenClass'), header: AppHeader, footer: AppFooter}, // W.4.4.2
-  },
-  {
-    path: '/class/fileBox',
-    name: 'fileBox',
-    beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/fileBox/FileListView'), header: AppHeader, footer: AppFooter}, // W.4.5.4
   }
 ];
 

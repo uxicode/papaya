@@ -323,6 +323,13 @@ class MyClassService {
     public getEduCourseList(classId: number, curriculumId: number, courseId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course/${courseId}` );
     }
+
+    /**
+     * search 랜딩 페이지
+     */
+    public getSearchHome(): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/search/home`);
+    }
 }
 
 export default new MyClassService();
