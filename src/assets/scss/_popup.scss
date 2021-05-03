@@ -427,7 +427,8 @@ $popupDepth: 10;
   // start: photo 추가 리스트
   .add-photo {
     position: relative;
-    width: 530px;
+    //width: 530px;
+    width: calc(100% - 80px); // 20200503 lyj 수정
     margin: 0 auto;
     overflow: hidden;
     height: 80px;
