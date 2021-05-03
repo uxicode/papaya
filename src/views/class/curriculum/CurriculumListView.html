@@ -477,7 +477,7 @@
                     <div class="fd-cnt">
                         <p class="fd-txt">{{ curriculumList.curriculum.text }}</p>
 
-                        <div class="fd-inner">
+                        <div class="fd-inner" v-show="curriculumList.curriculum.course_list">
                             <div class="curriculum-list">
                                 <div v-for="(item, index) in curriculumList.curriculum.course_list" :key="index" class="curriculum-item">
                                     <span class="turn">{{ item.index }} 회차</span>
