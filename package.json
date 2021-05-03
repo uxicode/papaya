@@ -3,12 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "build": "vue-cli-service build",
     "serve": "vue-cli-service serve --open --mode development",
     "prod": "vue-cli-service build --open --mode production",
     "lint": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit"
+  },
+  "resolutions": {
+    "graceful-fs": "4.2.3"
   },
   "dependencies": {
     "axios": "^0.21.1",
