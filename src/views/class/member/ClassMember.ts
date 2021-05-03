@@ -1,6 +1,6 @@
 import MyClassService from '@/api/service/MyClassService';
 import UserService from '@/api/service/UserService';
-import {IClassInfo, IClassMembers, IQuestionList} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo, IQuestionList} from '@/views/model/my-class.model';
 import {
     resetSearchInput,
     searchKeyEventObservable,
@@ -10,7 +10,6 @@ import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
-import { VSnackbar } from 'vuetify/lib';
 import WithRender from './ClassMember.html';
 
 const MyClass = namespace('MyClass');
@@ -26,7 +25,6 @@ interface IAccordionList {
     components:{
         Modal,
         Btn,
-        VSnackbar
     }
 })
 export default class ClassMember extends Vue{
@@ -36,7 +34,7 @@ export default class ClassMember extends Vue{
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
-    get memberID(): any {
+    get classInfo(): any {
         return this.myClassHomeModel;
     }
 
@@ -48,10 +46,10 @@ export default class ClassMember extends Vue{
         return this.searchResultItems;
     }
 
-    private memberLevel: number = 0; // 내 멤버 등급
+    private myMemberLevel: number = 0; // 내 멤버 등급
 
     /* 전체 멤버 리스트 */
-    private classMemberList: IClassMembers[] = [];
+    private classMemberList: IClassMemberInfo[] = [];
     private totalMemberNum: number = 0;
 
     /* 멤버 검색 관련 */
@@ -64,6 +62,8 @@ export default class ClassMember extends Vue{
     private isInvitePopup: boolean = false;
     private isSnackbar: boolean = false;
     private isDetailPopup: boolean = false;
+    private isDetailMenu: boolean = false;
+    private isDetailAccordion: boolean = true;
     private isBlockModal: boolean = false;
     private isBlockCompleteModal: boolean = false;
     private isBanModal: boolean = false;
@@ -71,7 +71,7 @@ export default class ClassMember extends Vue{
 
     /* 멤버정보 상세 팝업 */
     private nickname: string = '';
-    private detailMemberNum: number = 0;
+    private memberLevel: number = 0;
     private userIdNum: number = 0;
     private mobileNo: number = 0;
     private userId: string = '';
@@ -96,7 +96,7 @@ export default class ClassMember extends Vue{
 
     public created() {
         this.getClassMembers();
-        this.getClassMemberLevel();
+        this.getMyMemberLevel();
         //this.search();
     }
 
@@ -109,7 +109,7 @@ export default class ClassMember extends Vue{
           .then((data) => {
               // 가입 승인된 멤버만 불러온다.
               this.classMemberList = data.classinfo.class_members.filter(
-                (item: IClassMembers) => item.status === 1);
+                (item: IClassMemberInfo) => item.status === 1);
               console.log(this.classMemberList);
               this.totalMemberNum = this.classMemberList.length;
           });
@@ -120,9 +120,9 @@ export default class ClassMember extends Vue{
      * @param level
      * @private
      */
-    private classifyLevel(level: number): IClassMembers[] {
+    private classifyLevel(level: number): IClassMemberInfo[] {
         return this.classMemberList.filter(
-          (item: IClassMembers) => item.level === level
+          (item: IClassMemberInfo) => item.level === level
         );
     }
 
@@ -131,12 +131,12 @@ export default class ClassMember extends Vue{
      * 나의 멤버 등급을 가져온다.
      * @private
      */
-    private getClassMemberLevel(): void {
-        MyClassService.getClassMemberInfo(this.classID, this.memberID.me.id)
+    private getMyMemberLevel(): void {
+        MyClassService.getClassMemberInfo(this.classID, this.classInfo.me.id)
           .then((data) => {
             //console.log(data.member_info);
-            this.memberLevel = data.member_info.level;
-            //console.log(this.memberLevel);
+            this.myMemberLevel = data.level;
+            //console.log(this.myMemberLevel);
           });
     }
 
@@ -256,15 +256,16 @@ export default class ClassMember extends Vue{
 
     /**
      * 멤버 프로필 상세 팝업 열면서 해당 멤버의 정보 불러온다.
-     * @param id
+     * @param userId
      * @param level
      * @param nickname
+     * @param memberId
      * @private
      */
     private detailPopupOpen(userId: number, level: number, nickname: string, memberId: number): void {
         this.userIdNum = userId;
         this.isDetailPopup = true;
-        this.detailMemberNum = level;
+        this.memberLevel = level;
         this.nickname = nickname;
         this.memberId = memberId;
         UserService.getUserInfo(userId)
@@ -289,14 +290,6 @@ export default class ClassMember extends Vue{
     }
 
     /**
-     * 멤버 차단 / 강제탈퇴 팝업 오픈시 해당 멤버의 정보를 불러온다.
-     * @private
-     */
-    // private getMemberInfo(): void {
-    //
-    // }
-
-    /**
      * 멤버 차단 팝업 열기
      * @private
      */
@@ -304,7 +297,6 @@ export default class ClassMember extends Vue{
         this.isActive = false;
         this.isBlockModal = true;
         this.memberId = id;
-        // this.getMemberInfo();
     }
 
     /**
@@ -328,6 +320,5 @@ export default class ClassMember extends Vue{
         this.isActive = false;
         this.isBanModal = true;
         this.memberId = id;
-        // this.getMemberInfo();
     }
 }

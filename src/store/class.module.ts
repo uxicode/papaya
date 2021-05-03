@@ -252,7 +252,7 @@ export default class ClassModule extends VuexModule {
         return MyClassService.getClassMemberInfo(payload.classId, payload.memberId)
           .then((data) => {
               this.context.commit(SET_MEMBER_ID, payload.memberId);
-              this.context.commit(CLASS_MEMBER_INFO, data.member_info);
+              this.context.commit(CLASS_MEMBER_INFO, data);
               // console.log(this.memberInfo);
               return Promise.resolve(this.memberInfo);
           })

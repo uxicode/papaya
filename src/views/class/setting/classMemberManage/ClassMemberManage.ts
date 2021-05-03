@@ -1,5 +1,5 @@
 import MyClassService from '@/api/service/MyClassService';
-import {IClassMember, IClassMemberList} from '@/views/model/my-class.model';
+import { IClassMemberInfo } from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Btn from '@/components/button/Btn.vue';
@@ -25,12 +25,12 @@ export default class ClassMemberManage extends Vue{
     @MyClass.Getter
     private classID!: number;
 
-    private classMemberList: IClassMemberList[] = [];
+    private classMemberList: IClassMemberInfo[] = [];
     private memberId: number = 0;
     private memberNickname: string = '';
     private memberLevel: number = 0;
 
-    get classMembers(): IClassMemberList[] {
+    get classMembers(): IClassMemberInfo[] {
         return this.classMemberList;
     }
 
@@ -83,6 +83,16 @@ export default class ClassMemberManage extends Vue{
     }
 
     /**
+     * 리스트 팝업 토글
+     * @param idx
+     * @private
+     */
+    private listPopupToggle(idx: number): void {
+        const listPopup = document.querySelectorAll('.list-popup-menu');
+        listPopup[idx].classList.toggle('active');
+    }
+
+    /**
      * 멤버 차단 팝업 열기
      * @private
      */
@@ -125,8 +135,8 @@ export default class ClassMemberManage extends Vue{
         MyClassService.getClassMemberInfo(this.classID, this.memberId)
           .then((data) => {
             console.log(data);
-            this.memberNickname = data.member_info.nickname;
-            this.memberLevel = data.member_info.level;
+            this.memberNickname = data.nickname;
+            this.memberLevel = data.level;
           });
     }
 

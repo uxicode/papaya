@@ -22,7 +22,7 @@
 
                         <!-- 가입 신청 버튼 / 신청 완료 시 primary 제거 후 disabled 클래스 추가 -->
                         <div class="class-bookmark">
-                            <button type="button" class="btn primary navi" style="font-size: 12px;" @click="openEnrollClassModal">가입 신청</button>
+                            <button type="button" class="btn primary navi" :class="{'disabled': isClassEnrollComplete}" style="font-size: 12px;" @click="openApplyClassModal">가입 신청</button>
                         </div>
 
                     </div>
@@ -95,15 +95,20 @@
                         <p class="enroll-tit bd-btm" style="font-size: 14px;">클래스 닉네임</p>
                         <div class="popup-search">
                             <div class="form-group inline">
-                                <input type="text" class="form-control" id="input3" placeholder="닉네임을 입력해 주세요."
+                                <input v-model="inputNickname"
+                                       type="text" class="form-control"
+                                       :class="{'error': isError, 'approval': isApproval}"
+                                       placeholder="닉네임을 입력해 주세요."
                                        style="width:430px">
-                                <btn type="grey" size="sm">중복확인</btn>
+                                <p v-if="showMsg" class="form-message"
+                                   :class="{'error': isError, 'approval': isApproval}">{{ msg }}</p>
+                                <btn type="grey" size="sm" @btnClick="checkDuplicateNickname(inputNickname)">중복확인</btn>
                             </div>
                         </div>
                         <ul class="enroll-qna">
                             <li v-for="(item, idx) in questionList">
                                 <p>{{ idx+1 }}. {{ item.question }}</p>
-                                <textarea class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
+                                <textarea v-model="answerList[idx]" class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
                             </li>
                         </ul>
                     </div>
@@ -113,7 +118,7 @@
 
         <div slot="footer">
             <div class="btn-group rt">
-                <btn type="navi" @btnClick="enrollClassSubmit">가입 신청</btn>
+                <btn type="navi" :disabled="true" @btnClick="enrollClassSubmit">가입 신청</btn>
             </div>
         </div>
     </modal>
@@ -122,12 +127,12 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.4.3 (클래스 페이지 - 가입완료 안내) -->
    <transition name="modal">
-        <modal v-if="false" size="600px" body-padding="0" @modalClose>
+        <modal v-if="isClassSignupComplete" size="600px" body-padding="0" @modalClose="isClassSignupComplete = false;">
         <div slot="header">
             <!-- header custom coding-->
             <div class="popup-icon success"></div>
             <div class="popup-close">
-                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                <button class="close" @click="isClassSignupComplete = false;"><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
         </div>
 
@@ -155,8 +160,8 @@
 
         <div slot="footer">
             <div class="btn-group rt">
-                <btn type="outline">취소</btn>
-                <btn type="navi">확인</btn>
+                <btn type="outline" @btnClick="isClassSignupComplete = false;">취소</btn>
+                <btn type="navi" @btnClick="isClassSignupComplete = false;">확인</btn>
             </div>
         </div>
     </modal>

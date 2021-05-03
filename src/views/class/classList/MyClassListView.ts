@@ -1,10 +1,10 @@
 import {Component, Vue, Prop} from 'vue-property-decorator';
-import {IClassMember, IMyClassList} from '@/views/model/my-class.model';
+import {ClassEachInfo, IMyClassList} from '@/views/model/my-class.model';
 import Btn from '@/components/button/Btn.vue';
 import {Utils} from '@/utils/utils';
 import {CLASS_BASE_URL} from '@/api/base';
-import WithRender from './MyClassListView.html';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
+import WithRender from './MyClassListView.html';
 
 @WithRender
 @Component({
@@ -31,7 +31,9 @@ export default class MyClassListView extends Vue{
   private classListData: IMyClassList[] | undefined;
 
   @Prop(Array)
-  private moreInfo!: IClassMember[];
+  private moreInfo!: ClassEachInfo[];
+
+  // private bookmarkItems: any[]=[];
 
   get loadingChk(): boolean{
     return this.isLoading;
@@ -41,8 +43,14 @@ export default class MyClassListView extends Vue{
     return this.classListData;
   }
 
-  get classMoreInfo(): IClassMember[]{
+  get classMoreInfo(): ClassEachInfo[]{
     return this.moreInfo;
+  }
+
+  public mounted(){
+    setTimeout(() => {
+      console.log(this.classMoreInfo);
+    }, 2000);
   }
 
   public getYears( dateTxt: string ): string{
@@ -52,6 +60,7 @@ export default class MyClassListView extends Vue{
   public nullCheck(value: string ): string{
     return (value===null)? '' : value;
   }
+
 
   // 트랜지션을 시작할 때 인덱스 * 100 ms 만큼의 딜레이를 적용합니다.
   public beforeEnter(el: HTMLElement): void {
@@ -110,6 +119,7 @@ export default class MyClassListView extends Vue{
    * @private
    */
   private bookmarkToggle(item: IMyClassList ): void{
+    //화면에 바인딩되는 데이터를 직접 접근해서 변경하게 되면 Vue는 변화를 감지하여 re-rendering을 하게 된다. 즉 전체 렌더링을 다시하게 된다.
     item.me.is_bookmarked =( item.me.is_bookmarked === 0)? 1 : 0;
 
     this.$emit('updateBookmark', {
@@ -119,6 +129,15 @@ export default class MyClassListView extends Vue{
       is_bookmarked: item.me.is_bookmarked
     } );
 
+  }
+
+
+  private getClassName(idx: number ): string{
+    if(this.classMoreInfo[idx - 1]===undefined){
+      return '';
+    }else{
+      return this.classMoreInfo[idx - 1].g_name;
+    }
   }
 
   /**
@@ -170,13 +189,7 @@ export default class MyClassListView extends Vue{
   }
 
   private getProfileImg( idx: number ): string{
-/*
-    if(this.classMoreInfo[idx - 1]===undefined){
-      return '';
-    }else{
-      return this.classMoreInfo[idx - 1].image_url;
-    }*/
-
+    // console.log('this.classMoreInfo[idx - 1].image_url=', this.classMoreInfo[idx - 1].image_url);
     return (this.classMoreInfo[idx - 1]===undefined) ? '' : ImageSettingService.getProfileImg( this.classMoreInfo[idx - 1].image_url );
   }
 

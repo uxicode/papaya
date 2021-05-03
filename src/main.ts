@@ -8,7 +8,7 @@ import store from './store';
 import {SIGNIN_BY_TOKEN} from '@/store/action-auth-types';
 import './filters/index';
 import './components/validation/validation';
-import Rx from 'rxjs';
+// import Rx from 'rxjs';
 // import VueRx from 'vue-rx';
 import vuetify from '@/plugins/vuetify';
 
