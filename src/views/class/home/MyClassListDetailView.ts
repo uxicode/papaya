@@ -36,7 +36,7 @@ export default class MyClassListDetailView extends Vue{
       MyClassService.getAllCurriculumByClassId( this.classID, this.pagingCount ),
     ]).then( ( data: any )=>{
       this.allData=data;
-      // console.log( data );
+      console.log(  this.allData );
     }).catch((error)=>{
       console.log('class more info error', error );
     });

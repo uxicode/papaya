@@ -19,19 +19,10 @@ export default class MyClassListDetailPage extends Vue {
   @MyClass.Getter
   private classID!: string | number;
 
-  private activeMenuNum: number=2;
+  private activeMenuNum: number= 0;
 
   get activeMenuNumModel(): number {
     return this.activeMenuNum;
-  }
-
-  private created(){
-    //화면 새로고침시에
-    if (performance.navigation.type === 1) {
-      this.activeMenuNum=2;
-
-      console.log(this.activeMenuNum);
-    }
   }
 
   private update(idx: number): void{

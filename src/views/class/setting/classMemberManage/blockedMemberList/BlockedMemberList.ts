@@ -1,6 +1,5 @@
 import MyClassService from '@/api/service/MyClassService';
-import {IClassMemberInfo} from '@/views/model/my-class.model';
-import {Vue, Component, Prop} from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';

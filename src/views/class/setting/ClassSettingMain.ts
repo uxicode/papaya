@@ -1,7 +1,6 @@
-import {MODIFY_CLASS_INFO} from '@/store/action-class-types';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {IClassInfo, IClassMemberInfo, INotifyList, IQuestionList} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
@@ -46,12 +45,13 @@ export default class ClassSettingMain extends Vue{
     private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<IClassMemberInfo[]>;
 
     @MyClass.Action
-    private MODIFY_CLASS_QUESTION!: (payload: {classId: number, questionId: number}, text: {new_question: string}) => Promise<IQuestionList[]>;
+    private MODIFY_CLASS_QUESTION!: (payload: {classId: number, questionId: number}, text: {new_question: string}) => Promise<IQuestionInfo[]>;
 
     /* Modal 오픈 상태값 */
     private isGuideTxt: boolean = false;
     private isJoinQnaSetting: boolean = false;
     private isWithdraw: boolean = false;
+    private isWithdrawDenied: boolean = false;
 
     private onOffNoti: boolean = true;
 
@@ -134,15 +134,19 @@ export default class ClassSettingMain extends Vue{
     private guideTxt: string = '';
 
     /* 가입 질문 설정 관련 */
-    private questionList: IQuestionList[] = [];
+    private maxQuestionCount: number = 3; // 최대 질문 갯수
+    private questionList: IQuestionInfo[] = [];
     private tempData: string = '';
     private questionId: number = 0;
+    private newQuestion: string = '';
 
-    get memberInfo(): IClassMemberInfo[] {
+    private isChecked: boolean = false; // 클래스 탈퇴하기 체크박스
+
+    get memberInfo(): any {
         return this.classMemberInfo;
     }
 
-    get info(): IClassInfo[] {
+    get info(): any {
         return this.classInfo;
     }
 
@@ -153,7 +157,6 @@ export default class ClassSettingMain extends Vue{
     public created() {
         this.getMyClassMemberInfo();
         this.getClassInfo();
-        // this.getJoinQuestion();
     }
 
     /**
@@ -251,7 +254,7 @@ export default class ClassSettingMain extends Vue{
     }
 
     /**
-     * 가입 안내 문구 글자 수 제한
+     * 가입 안내 문구 글자 수 제한 (100자)
      * @param text
      * @private
      */
@@ -281,13 +284,14 @@ export default class ClassSettingMain extends Vue{
      * @param newQuestion
      * @private
      */
-    private setJoinQuestion(newQuestion: string): void {
-        MyClassService.setClassQuestion(this.classID, this.questionId, {new_question: newQuestion})
+    private setJoinQuestion(question: string): void {
+        MyClassService.setClassQuestion(this.classID, this.questionId, {new_question: question})
           .then(() => {
             console.log(`question${this.questionId} 수정 성공`);
           });
         this.isJoinQnaSetting = false;
         this.tempData = '';
+        this.makeJoinQuestion(this.newQuestion);
     }
 
     /**
@@ -304,14 +308,16 @@ export default class ClassSettingMain extends Vue{
 
     /**
      * 가입 질문 생성
-     * @param question
+     * @param newQuestion
      * @private
      */
-    private makeJoinQuestion(text: string): void {
-        MyClassService.makeClassQuestion(this.classID, {question: text})
-          .then(() => {
-            console.log(`${text} 질문 추가 성공`);
-          });
+    private makeJoinQuestion(newQuestion: string): void {
+        if (newQuestion !== '') {
+            MyClassService.makeClassQuestion(this.classID, {question: newQuestion})
+              .then(() => {
+                  console.log(`${newQuestion} 질문 추가 성공`);
+              });
+        }
     }
 
     /**
@@ -352,11 +358,19 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private withdrawSubmit(): void {
-        MyClassService.withdrawClass(this.classID, this.myClassInfo.me.id)
-          .then(() => {
-             console.log('클래스 탈퇴 완료');
-          });
-        this.$router.push('../classWithdrawComplete')
-          .then();
+        const {class_members, me} = this.info;
+        //console.log(class_members.length, me.level);
+
+        // 클래스에 멤버가 있으며 나의 멤버 등급이 운영자일 경우 탈퇴 불가
+        if (class_members.length >= 1 && me.level === 1) {
+            this.isWithdrawDenied = true;
+        } else {
+            MyClassService.withdrawClass(this.classID, this.myClassInfo.me.id)
+              .then(() => {
+                  console.log('클래스 탈퇴 완료');
+              });
+            this.$router.push('../classWithdrawComplete')
+              .then();
+        }
     }
 }
