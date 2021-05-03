@@ -424,7 +424,7 @@ export default class CurriculumListView extends Vue {
         MyClassService.getEducationList(this.classID)
             .then((data) => {
                 this.allEduList = data;
-                console.log(this.allEduList);
+                // console.log(this.allEduList);
             });
     }
 
