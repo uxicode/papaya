@@ -1,15 +1,21 @@
 import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
-import {IQuestionList} from '@/views/model/my-class.model';
+import {IQuestionInfo} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './EnrollPrivateClass.html';
 
-interface IQnaList {
-    question: string;
-    answer: string;
+interface IEnrollMemberInfo {
+    user_id: number;
+    nickname: string;
+    qna_list: [
+        {
+            question: string;
+            answer: string;
+        }
+    ];
 }
 
 const Auth = namespace('Auth');
@@ -25,17 +31,20 @@ export default class EnrollPrivateClass extends Vue {
     @Auth.Getter
     private userInfo!: IUserMe;
 
-    /* 추후 동적으로 값을 받아와야 함 (MyClassService.getClassInfoById 이용) */
+    /* 추후 동적으로 값을 받아와야 하는 변수들
+    (MyClassService.getClassInfoById 이용) */
     private classID: number = 744;
-    private isPrivate: boolean = true; // 클래스 공개여부
+    private isPrivate: boolean = true; // 클래스 비공개여부
 
     private inputNickname: string = '';
     private msg: string = '';
     private showMsg: boolean = false;
     private isError: boolean = false;
     private isApproval: boolean = false;
-    private questionList: IQuestionList[] = [];
-    private answerList: string[] = [];
+    private questionList: Array<Pick<IQuestionInfo, 'question'>> = [{question: ''},{question: ''},{question: ''}];
+    private answerList: any = [{answer: ''}, {answer: ''}, {answer: ''},];
+    private qnaList: [] = Object.assign(this.questionList, this.answerList);
+    private enrollMemberInfo!: IEnrollMemberInfo;
 
     /* Modal 상태 값 */
     private isClassEnrollModal: boolean = false;
@@ -46,7 +55,7 @@ export default class EnrollPrivateClass extends Vue {
      * 가입신청 modal 오픈 (가입 질문을 바로 가져옴)
      * @private
      */
-    private openApplyClassModal(): void {
+    private openEnrollClassModal(): void {
         this.isClassEnrollModal = true;
 
         MyClassService.getClassQuestion(this.classID)
@@ -82,12 +91,18 @@ export default class EnrollPrivateClass extends Vue {
      * @private
      */
     private enrollClassSubmit(): void {
-
-        MyClassService.addClassMembers(this.classID, {
-            user_id: this.userInfo.id,
+        this.enrollMemberInfo = {
+            user_id: 92,
             nickname: this.inputNickname,
-            qna_list: []
-        }).then((result) => {
+            qna_list: [
+              {
+                question: this.questionList[0].question,
+                answer: this.answerList[0].answer
+              },
+            ],
+        };
+        MyClassService.addClassMembers(this.classID, this.enrollMemberInfo)
+          .then((result) => {
             console.log(result);
         });
 

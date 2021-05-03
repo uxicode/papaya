@@ -9,7 +9,6 @@ import {
     IMakeCourse,
     IEducationList,
     ICurriculumList,
-    IClassMemberInfo,
     ICourseList
 } from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
