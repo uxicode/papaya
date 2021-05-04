@@ -623,15 +623,6 @@ interface ICurriculumList {
 }
 
 
-interface IMakeCourse {
-    title: string;
-    contents: string;
-    index?: number;
-    startDay: Date;
-    startTime: Date;
-    endTime: Date;
-}
-
 interface ICourseList {
     course: {
         startDay: Date;
@@ -666,7 +657,6 @@ export {
     IQnaInfo,
     IMakeEducation,
     IEducationList,
-    IMakeCourse,
     ICurriculumList,
     ICourseList
 };

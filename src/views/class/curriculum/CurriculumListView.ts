@@ -6,7 +6,6 @@ import Btn from '@/components/button/Btn.vue';
 import {
     IClassInfo,
     IMakeEducation,
-    IMakeCourse,
     IEducationList,
     ICurriculumList,
     ICourseList
@@ -98,6 +97,15 @@ export default class CurriculumListView extends Vue {
         ]
     };
 
+    private makeTest: any[]= [{
+        index: 1,
+        title: '',
+        startDay:'2019-11-17',
+        startTime:'10:00:00',
+        endTime:'10:00:00',
+        contents: ''
+    }];
+
     // private testCourse: Array<Pick<IMakeEducation, 'course_list'>> = [];
 
     private allEduList: IEducationList[]= [];
@@ -142,14 +150,6 @@ export default class CurriculumListView extends Vue {
                 },
             ]
         }
-    };
-
-    private makeCourseItems: IMakeCourse={
-        title: '',
-        contents: '',
-        startDay:new Date(),
-        startTime:new Date(),
-        endTime:new Date(),
     };
 
     private allCourseList: ICourseList={
@@ -245,11 +245,16 @@ export default class CurriculumListView extends Vue {
             this.currListNum=num;
             this.eduItems.length=num;
         }
+
+
+        // const test = Array.from(  )
+
     }
 
     private countNum(num: number): void{
         this.countNumber = num;
     }
+
 
     /**
      * 이미지등록 아이콘 클릭시 > input type=file 에 클릭 이벤트 발생시킴.
