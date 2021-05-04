@@ -22,16 +22,10 @@ const routes: RouteConfig[] = [
   },
   {
     path: '/class/enrollClass',
-    name: 'EnrollPrivateClass',
+    name: 'EnrollClass',
     beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/enroll/EnrollPrivateClass'), header: AppHeader, footer: AppFooter}, // W.4.4.1.1
+    components: {default: () => import('@/views/class/enroll/EnrollClass'), header: AppHeader, footer: AppFooter}, // W.4.4.1.1
   },
-  /*{
-    path: '/class/enrollOpenClass',
-    name: 'enrollOpenClass',
-    beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/enroll/EnrollOpenClass'), header: AppHeader, footer: AppFooter}, // W.4.4.2
-  },*/
   {
     path: '/class/fileBox',
     name: 'fileBox',

@@ -1,11 +1,11 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IUserMe} from '@/api/model/user.model';
-import {IQuestionInfo} from '@/views/model/my-class.model';
+import {IClassInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
-import WithRender from './EnrollPrivateClass.html';
+import WithRender from './EnrollClass.html';
 
 interface IEnrollMemberInfo {
     user_id: number;
@@ -19,6 +19,7 @@ interface IEnrollMemberInfo {
 }
 
 const Auth = namespace('Auth');
+const MyClass = namespace('MyClass');
 
 @WithRender
 @Component({
@@ -27,13 +28,16 @@ const Auth = namespace('Auth');
         Btn
     }
 })
-export default class EnrollPrivateClass extends Vue {
+export default class EnrollClass extends Vue {
     @Auth.Getter
     private userInfo!: IUserMe;
 
-    /* 추후 동적으로 값을 받아와야 하는 변수들
-    (MyClassService.getClassInfoById 이용) */
+    //@MyClass.Getter
     private classID: number = 744;
+
+    /* 동적으로 값을 받아와야 하는 변수들
+    (MyClassService.getClassInfoById 이용) */
+    private classInfo: {} = {};
     private isPrivate: boolean = true; // 클래스 비공개여부
 
     private inputNickname: string = '';
@@ -50,6 +54,23 @@ export default class EnrollPrivateClass extends Vue {
     private isClassEnrollModal: boolean = false;
     private isClassEnrollComplete: boolean = false;
     private isClassSignupComplete: boolean = false;
+
+    public created() {
+        console.log(this.classID);
+        this.getClassInfo();
+    }
+
+    /**
+     * 현재 클래스의 정보 가져온다.
+     * @private
+     */
+    private getClassInfo(): void {
+        MyClassService.getClassInfoById(this.classID)
+          .then((data) => {
+              this.classInfo = data.classinfo;
+              console.log(this.classInfo);
+          });
+    }
 
     /**
      * 가입신청 modal 오픈 (가입 질문을 바로 가져옴)

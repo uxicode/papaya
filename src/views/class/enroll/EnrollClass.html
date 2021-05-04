@@ -314,6 +314,65 @@
     </transition>
     <!-- end: 공통 팝업 -->
 
+    <!-- start: 공통 팝업 / 파일명 : W.4.4.2.1 (클래스 페이지 - 가입신청 - 오픈 클래스 ) -->
+    <transition name="modal">
+        <modal v-if="false" size="600px" body-padding="0">
+            <div slot="header">
+                <!-- header custom coding-->
+                <p class="popup-header-tit">가입하기</p>
+                <div class="popup-close">
+                    <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-form">
+                    <div class="scroll-body" style="height:524px">
+                        <div class="popup-form-top">
+                            <div class="form-item post-classes">
+                                <p>
+                                    <span class="icon"><img :src="require('@/assets/images/bg-icon.png')" class="icon-img" alt=""></span>
+                                    <span class="gr-name">소모임</span>
+                                    <strong class="cls-name">홍대 감성카페 모임</strong>
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="popup-form-cnt bd-btm">
+                            <p class="form-item post-cnt">
+                                홍대피플이라면 가입하고 싶은 홍대감성카페모임입니다. 홍대, 연남동 중심으로 카페를 홍보 및 추천드리고 있으며 아래의 간단한 질문을 답해주시길 바랍니다.
+                            </p>
+                        </div>
+                        <div class="popup-form-btm">
+                            <p class="enroll-tit bd-btm" style="font-size: 14px;">클래스 닉네임</p>
+                            <div class="popup-search">
+                                <div class="form-group inline">
+                                    <input type="text" class="form-control" placeholder="검색어를 입력해 주세요."
+                                           style="width:430px">
+                                    <btn type="grey" size="sm">중복확인</btn>
+                                </div>
+                            </div>
+                            <ul class="enroll-qna">
+                                <li>
+                                    <p>1. 홍대 감성카페 모임을 알게된 경로가 어떻게 되나요?</p>
+                                    <textarea class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="navi">가입하기</btn>
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
+
     <!-- start: 공통 팝업 / 파일명 : W.4.4.3 (클래스 페이지 - 가입완료 안내) -->
    <transition name="modal">
         <modal v-if="isClassSignupComplete" size="600px" body-padding="0" @modalClose="isClassSignupComplete = false;">

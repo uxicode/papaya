@@ -1,7 +1,7 @@
+import {Vue, Component} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import {IUserMe} from '@/api/model/user.model';
 import UserService from '@/api/service/UserService';
-import {namespace} from 'vuex-class';
-import {Vue, Component} from 'vue-property-decorator';
 import Btn from '@/components/button/Btn.vue';
 import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -30,6 +30,10 @@ export default class MyProfileMain extends Vue {
         return this.userInfo;
     }
 
+    get startDateModel(): string | Date | number{
+        return this.startDate;
+    }
+
     /* 팝업 및 페이지 변경 상태 값 */
     private isModifyNameModal: boolean = false;
     private isModifyGender: boolean = false;
@@ -41,6 +45,11 @@ export default class MyProfileMain extends Vue {
     private isWithdrawDeniedModal: boolean = false;
 
     private tempData: any = '';
+
+    /* 생일 datepicker 관련 */
+    private startDate: string | number | Date = '';
+    private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
+    private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
 
     /**
      * 정보변경 modal 혹은 dropdown 열기
@@ -102,6 +111,15 @@ export default class MyProfileMain extends Vue {
     }
 
     /**
+     * 시작일시 - datepicker 일자 선택시
+     * @private
+     */
+    private startDatePickerChange( ) {
+        this.startDateMenu = false;
+        // console.log(this.startDatePickerModel);
+    }
+
+    /**
      * 성별 변경
      * @param event
      * @param newGender
@@ -117,6 +135,10 @@ export default class MyProfileMain extends Vue {
                 });
             });
         this.isModifyGender = !this.isModifyGender;
+    }
+
+    private closeListMenu(): void {
+        this.isModifyGender = false;
     }
 
     /**
