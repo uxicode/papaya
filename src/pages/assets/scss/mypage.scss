@@ -231,18 +231,14 @@
 .panel-heading{
   padding:15px 20px;
   background-color: #fff;
-  .txt{
+  .bt-cnt{
     position: relative;
-    display: inline-block;
+    display: block;
     width: 100%;
-    font-size: 14px;
-    font-weight:500;
-    color: #0f0f15;
-    line-height:18px; //아래 화살표 이미지 높이값과 동일해야 정중앙 위치.
+    line-height:18px;
 
     .bt-icon {
       position: absolute;
-      line-height:1;
       top:50%;
       right: 0;
       transform:translateY(-50%) rotate(-180deg);
@@ -255,14 +251,9 @@
         transition: all .3s ease-in-out;
       }
     }
-
-    //&.collapsed{font-weight: normal;}
-    &.collapsed:after{
-      transform: rotate(0deg);
-    }
   }
 
-  .agreement-txt{
+  .agr-txt{
     float: right;
     font-size: 12px;
     color: #629f00;
@@ -277,10 +268,8 @@
 
 .panel-group .panel+.panel{margin-top:0;}
 
-
 .td-tit{color: #848499; font-weight: 500;}
-.tb-date{color: #7a7a7a; font-size: 12px;}
-
+.td-date{color: #7a7a7a; font-size: 12px;}
 
 .txt-overflow{
   overflow: hidden;
@@ -289,3 +278,4 @@
   white-space: nowrap;
   vertical-align: text-bottom;
 }
+

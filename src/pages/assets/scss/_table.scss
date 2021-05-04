@@ -6,14 +6,6 @@
     .mid {vertical-align: middle;}
     .btm {vertical-align: bottom;}
 
-    &.ct {
-      th, td {
-        padding-left: 0 !important;
-        text-align: center !important;
-      }
-    }
-
-
     &.tb-form {
       tr{
         th, td {
@@ -38,33 +30,6 @@
         }
       }
     }
-
-    //&.tb-md-search {
-    //  tr {
-    //    th, td {
-    //      padding:15px 0;
-    //      border-bottom:1px solid #f4f5f6;
-    //      text-align:left;
-    //    }
-    //
-    //    th {
-    //      padding-left:40px;
-    //      font-weight:400;
-    //      strong {font-weight:500;}
-    //    }
-    //    td {
-    //      padding-left:20px;
-    //      color:#848499;
-    //    }
-    //
-    //    &:last-child {
-    //      th, td {
-    //        border-bottom:none;
-    //      }
-    //    }
-    //  }
-    //}
-
 
     // search page table
     &.tb-search {
@@ -93,6 +58,7 @@
       }
     }
 
+    // my page table
     &.basic {
       thead {
         th {
@@ -126,7 +92,7 @@
       .panel-heading {
         padding: 0;
 
-        .txt {
+        .bt-cnt {
           .bt-icon {
             right: auto;
           }
@@ -138,12 +104,7 @@
       }
     }
 
-
-
-
-
   }
-
 }
 
 
