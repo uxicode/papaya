@@ -249,10 +249,29 @@ export default class CurriculumListView extends Vue {
             }
         }
 
-        const testArrayFrom = Array.from({length: num}, () => this.makeCourseItems);
+        // const testArrayFrom = Array.from({length: num}, () => this.makeCourseItems);
         this.makeCurriculumItems.course_list = [];
-        testArrayFrom.map( (item: any) => this.makeCurriculumItems.course_list.push(item) );
+        // testArrayFrom.forEach( (item: any) => this.makeCurriculumItems.course_list.push(item) );
 
+
+        for (let i = 0; i < num; i++) {
+            this.makeCurriculumItems.course_list.push({
+                index: i,
+                title: '1회차수업',
+                startDay: '2021-11-15',
+                startTime: '10:00:00',
+                endTime: '11:00:00',
+                contents: '수업내용 100자이내로 설명.'
+            });
+        }
+        /*{
+            "index": 1,
+            "title": "1회차수업",
+            "startDay": "2019-11-15",
+            "startTime": "10:00:00",
+            "endTime": "11:00:00",
+            "contents": "수업내용 100자이내로 설명."
+        }*/
         console.log(this.makeCurriculumItems);
     }
 
