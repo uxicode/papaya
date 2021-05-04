@@ -67,6 +67,8 @@ export default class CurriculumListView extends Vue {
     private imageLoadedCount: number=0;
     private isPopup: boolean=false;
 
+    private makeCourseList: any[] = [];
+
     /**
      * 클래스 교육과정 메인리스트
      */
@@ -85,26 +87,22 @@ export default class CurriculumListView extends Vue {
     private makeCurriculumItems: IMakeEducation={
         title: '',
         goal: '',
-        course_list: [
-            {
-                index: 1,
-                title: '',
-                startDay:'2019-11-17',
-                startTime:'10:00:00',
-                endTime:'10:00:00',
-                contents: '',
-            }
-        ]
+        course_list: []
     };
 
-    private makeTest: any[]= [{
-        index: 1,
+    private makeCourseItems: {
+        title: string,
+        startDay: Date | string,
+        startTime: Date | string,
+        endTime: Date | string,
+        contents: string,
+    } = {
         title: '',
         startDay:'2019-11-17',
         startTime:'10:00:00',
         endTime:'10:00:00',
         contents: ''
-    }];
+    };
 
     // private testCourse: Array<Pick<IMakeEducation, 'course_list'>> = [];
 
@@ -231,24 +229,51 @@ export default class CurriculumListView extends Vue {
     /**
      * 교육과정 수업 회차 설정
      */
-    get currListNumModel(): Array< {title: string }>{
+    get courseListNumModel(): Array< {title: string }>{
         this.eduItems.length = 10;
         return this.eduItems;
     }
 
-    private setCurriNum( num: number ): void{
-        if( this.currListNum > 50 ){
-            this.isCreateError = true;
-            this.currListNum=50;
-            this.eduItems.length=50;
-        }else {
+
+    private setCourseList( num: number ): void{
+        if( this.currListNum >= 0 ){
             this.currListNum=num;
             this.eduItems.length=num;
+
+            if( this.currListNum > 50){
+                this.isCreateError = true;
+
+                num = 50;
+                this.currListNum=50;
+                this.eduItems.length=50;
+            }
         }
 
+        const testArrayFrom = Array.from({length: num}, () => this.makeCourseItems);
+        this.makeCurriculumItems.course_list = [];
+        testArrayFrom.map( (item: any) => this.makeCurriculumItems.course_list.push(item) );
 
-        // const test = Array.from(  )
+        console.log(this.makeCurriculumItems);
+    }
 
+
+    private makeCourseSubmit(): void{
+        this.isClassCurr = false;
+
+        /* test */
+        // this.makeCourseList.push(this.makeCourseItems);
+        // this.makeCourseItems = {
+        //     title: '',
+        //     startDay:'2019-11-17',
+        //     startTime:'10:00:00',
+        //     endTime:'10:00:00',
+        //     contents: ''
+        // };
+        //
+        // console.log('test1', this.makeCourseItems)
+        // console.log('test2', this.makeCourseList);
+        //
+        // console.log(this.makeCurriculumItems);
     }
 
     private countNum(num: number): void{
@@ -407,6 +432,8 @@ export default class CurriculumListView extends Vue {
             });
     }
 
+
+
     /**
      * 클래스 교육과정 삭제
      */
@@ -518,7 +545,16 @@ export default class CurriculumListView extends Vue {
     private curriculumDetailClickHandler( idx: number ) {
         this.isClassCurrDetail = true;
         this.clickCourse(idx);
-        this.getEduCourseList();
+    }
+
+    private addCurriculumHandler(idx: number) {
+        this.isCreateClass= true;
+        this.setCourseList(10);
+    }
+
+    private testHandler(idx: number){
+        this.isClassCurr = false;
+        console.log(this.makeCourseItems);
     }
 
     /**

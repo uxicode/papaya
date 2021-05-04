@@ -73,7 +73,7 @@
     </div>
 
     <div class="curriculum-add" v-show="isOwner">
-        <button class="curriculum-add-btn" @click="isCreateClass = true"></button>
+        <button class="curriculum-add-btn" @click="addCurriculumHandler"></button>
     </div>
 
 
@@ -120,24 +120,25 @@
                                 <p class="add-curr-tit">수업 회차</p>
                                 <div class="form-box">
                                     <div class="form-group">
-                                        <input type="number" class="form-control" v-model.number="currListNum" @input="setCurriNum($event.target.value)">
+                                        <input type="number" class="form-control" v-model="currListNum" @input="setCourseList($event.target.value)">
                                     </div>
                                 </div>
                             </div>
                             <div class="scroll-body" style="height:124px;">
-                                <div v-for="(item, index) in currListNumModel" class="add-curr-item" :key="`currListNum-${index}`">
+                                <div v-for="(item, index) in courseListNumModel" class="add-curr-item" :key="`currListNum-${index}`">
                                     <p class="add-curr-tit">
                                         <a href="#" @click.prevent="curriculumClickHandler( index )">
                                             <span class="curr-num">{{ index+1 }} 회차</span>
                                             <span>새 교육과정 {{ index+1 }}</span>
                                         </a>
                                     </p>
+                                    <!--
                                     <div class="form-box">
                                         <div class="list-popup">
                                             <v-menu
                                                     nudge-left="30px"
                                                     origin="center top"
-                                                    v-model="currListNumModel[index]"
+                                                    v-model="courseListNumModel[index]"
                                                     transition="scale-transition"
                                                     content-class="time-select-menu bg-white"
                                                     offset-y offset-x>
@@ -157,6 +158,7 @@
                                             </v-menu>
                                         </div>
                                     </div>
+                                    -->
                                 </div>
                             </div>
                         </div>
@@ -194,7 +196,7 @@
                     <div class="scroll-body" style="max-height:432px;">
                         <div class="popup-form-top">
                             <div class="form-item">
-                                <input type="text" class="form-control popup-type" placeholder="수업 제목을 20자 이내로 작성해 주세요.">
+                                <input type="text" v-model="makeCourseItems.title" class="form-control popup-type" placeholder="수업 제목을 20자 이내로 작성해 주세요.">
                             </div>
                         </div>
                         <div class="popup-form-cnt">
@@ -224,7 +226,7 @@
                                                offset-y   // 메뉴 버튼을 중심으로 y 값으로 정렬 배치
                                      -->
                                         <v-menu
-                                                v-model="startDateMenu"
+                                                v-model="makeCourseItems.startDay"
                                                 :close-on-content-click="false"
                                                 transition="scale-transition"
                                                 offset-y
@@ -234,7 +236,10 @@
                                                 <v-text-field
                                                         v-model="startDatePickerModel"
                                                         v-bind="attrs"
-                                                        v-on="on" hide-details solo flat>
+                                                        v-on="on"
+                                                        hide-details
+                                                        solo
+                                                        flat>
                                                     <template v-slot:append>
                                                         <button type="button" class="btn form-btn form-calendar" v-on="on"></button>
                                                     </template>
@@ -257,7 +262,7 @@
                                         <v-menu
                                                 nudge-left="30px"
                                                 origin="center top"
-                                                v-model="startTimeMenu"
+                                                v-model="makeCourseItems.startTime"
                                                 :close-on-content-click="false"
                                                 transition="scale-transition"
                                                 content-class="time-select-menu bg-white"
@@ -305,7 +310,7 @@
                                         <v-menu
                                                 nudge-left="30px"
                                                 origin="center top"
-                                                v-model="endTimeMenu"
+                                                v-model="makeCourseItems.endTime"
                                                 :close-on-content-click="false"
                                                 transition="scale-transition"
                                                 content-class="time-select-menu bg-white"
@@ -342,7 +347,7 @@
                                 </div>
                             </div>
                             <div class="form-item post-cnt" style="height:120px;">
-                                <textarea class="form-textarea" placeholder="수업 내용을 100자 이내로 작성해 주세요."></textarea>
+                                <textarea class="form-textarea" v-model="makeCourseItems.contents" placeholder="수업 내용을 100자 이내로 작성해 주세요."></textarea>
                             </div>
                         </div>
                         <div class="popup-form-btm">
@@ -384,7 +389,7 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <button type="button" class="btn navi" disabled>완료</button>
+                    <button type="button" class="btn navi" @click="makeCourseSubmit">완료</button>
                 </div>
             </div>
         </modal>

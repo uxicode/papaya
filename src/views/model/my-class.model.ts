@@ -467,14 +467,23 @@ interface IQnaInfo {
 interface IMakeEducation {
     title: string;
     goal: string;
-    course_list: [{
+    course_list: Array<{
         index: number;
         title: string;
         startDay: Date | string;
         startTime: Date | string;
         endTime: Date | string;
         contents: string;
-    }];
+    }>;
+}
+
+interface IMakeCourse {
+    title: string;
+    contents: string;
+    index: number;
+    startDay: Date | string;
+    startTime: Date | string;
+    endTime: Date | string;
 }
 
 interface IEducationList {
@@ -656,6 +665,7 @@ export {
     IQuestionInfo,
     IQnaInfo,
     IMakeEducation,
+    IMakeCourse,
     IEducationList,
     ICurriculumList,
     ICourseList
