@@ -194,7 +194,7 @@ class MyClassService {
      * 클래스 맴버 생성 - 클래스 가입 시키기
      * @param classId
      */
-    public addClassMembers(classId: number, data: object): Promise<any> {
+    public addClassMembers(classId: number, data: any): Promise<any> {
        /* "user_id": 250, - user_id 넘버 값
           "nickname": "test-for클래스1",
           "open_level_id": 1,

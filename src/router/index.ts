@@ -1,3 +1,4 @@
+import MyClassHeader from '@/components/header/myClassHeader.vue';
 import Vue from 'vue';
 import VueRouter, {RawLocation, RouteConfig} from 'vue-router';
 // import AppHeader from '@/components/header/header.vue';
@@ -21,10 +22,10 @@ const routes: RouteConfig[] = [
     components: {default: () => import('@/views/class/search/SearchPage'), header: AppHeader, footer: AppFooter}
   },
   {
-    path: '/class/enrollClass',
+    path: '/class/:classId/enrollClass',
     name: 'EnrollClass',
     beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/enroll/EnrollClass'), header: AppHeader, footer: AppFooter}, // W.4.4.1.1
+    components: {default: () => import('@/views/class/enroll/EnrollClass'), header: MyClassHeader, footer: AppFooter}, // W.4.4.1.1
   },
   {
     path: '/class/fileBox',
