@@ -611,11 +611,15 @@ export default class ScheduleView extends Vue{
      */
     private setImgFilePreviewSave(data: FileList ): void {
         // console.log(data);
-        for (const file of data) {
-            // console.log(data,  item, Utils.getFileType(item) );
-            this.imgFileDatas.push(file);
-            this.imgFileURLItems.push( URL.createObjectURL( file ) );
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < data.length; i++) {
+            this.imgFileDatas.push(data[i]);
+            this.imgFileURLItems.push(URL.createObjectURL(data[i]));
         }
+        /*data.forEach( ( item: File ) => {
+            // console.log(data,  item, Utils.getFileType(item) );
+
+        }); */
     }
 
     private setAttachFileSave(data: FileList ): void {
@@ -648,7 +652,7 @@ export default class ScheduleView extends Vue{
             this.formData= new FormData();
         }
         // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-        this.appendFormData(this.attachFileItems, 'files');
+        this.appendFormData(this.attachFileItems, 'files'  );
     }
 
     private appendFormData( targetLists: File[], appendName: string | string[] ) {
@@ -663,16 +667,20 @@ export default class ScheduleView extends Vue{
         });
     }
     //모델에 이미지 파일 추가
-    private async addFileToImage( files: FileList ){
+    private addFileToImage( files: FileList ){
+
+
         //전달되는 파일없을시 여기서 종료.
         if( !files.length ){ return; }
 
-        await this.setRevokeObjectURL().then( ()=>{
-            this.setImgFilePreviewSave(files);
-            //file type input
-            const imgFileInput =document.querySelector('#imgFileInput') as HTMLInputElement;
-            imgFileInput.value = '';
-          });
+        /*this.setRevokeObjectURL().then( ()=>{
+
+          });*/
+
+        this.setImgFilePreviewSave(files);
+        //file type input
+        const imgFileInput =document.querySelector('#imgFileInput') as HTMLInputElement;
+        imgFileInput.value = '';
     }
 
     //모델에 이미지 파일 추가
