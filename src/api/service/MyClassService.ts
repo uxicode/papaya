@@ -338,6 +338,10 @@ class MyClassService {
     public getSearchHome(): Promise<any> {
         return request('get', `${CLASS_BASE_URL}/search/home`);
     }
+
+    public getSearchResult( searchWord: string): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/search/all/${searchWord}`);
+    }
 }
 
 export default new MyClassService();
