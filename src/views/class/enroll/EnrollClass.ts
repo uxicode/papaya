@@ -57,7 +57,7 @@ export default class EnrollClass extends Vue {
     private inputNickname: string = '';
     private msg: string = '';
     private showMsg: boolean = false;
-    private isError: boolean = false;
+    private isError: boolean = true;
     private isApproval: boolean = false;
     private questionList: Array<Pick<IQuestionInfo, 'question'>> = [{question: ''},{question: ''},{question: ''}];
     private answerList: any = [{answer: ''}, {answer: ''}, {answer: ''},];

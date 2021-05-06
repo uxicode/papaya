@@ -72,62 +72,62 @@
     <!-- start: 공통 팝업 / 파일명 : W.4.4.1.1 , W.4.4.2.1 (클래스 페이지 - 가입신청) -->
     <transition name="modal" >
         <modal v-if="isClassEnrollModal" size="600px" body-padding="0" @modalClose="isClassEnrollModal=false">
-        <div slot="header">
-            <!-- header custom coding-->
-            <p class="popup-header-tit">가입 신청하기</p>
-            <div class="popup-close">
-                <button class="close" @click="isClassEnrollModal=false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            <div slot="header">
+                <!-- header custom coding-->
+                <p class="popup-header-tit">가입 신청하기</p>
+                <div class="popup-close">
+                    <button class="close" @click="isClassEnrollModal=false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
             </div>
-        </div>
 
-        <div slot="body">
-            <!-- body custom coding-->
-            <div class="popup-form">
-                <div class="scroll-body" style="height:526px">
-                    <div class="popup-form-top">
-                        <div class="form-item post-classes selected">
-                            <p>
-                                <span class="icon"><img :src="require('@/assets/images/bg-icon.png')" class="icon-img" alt=""></span>
-                                <span class="gr-name">{{ classInfo.g_name }}</span>
-                                <strong class="cls-name">{{ classInfo.name }}</strong>
-                            </p>
-                        </div>
-
-                    </div>
-                    <div class="popup-form-cnt bd-btm">
-                        <p class="form-item post-cnt ft-desc">{{ classInfo.description }}</p>
-                    </div>
-                    <div class="popup-form-btm" >
-                        <p class="enroll-tit bd-btm" style="font-size: 14px;">클래스 닉네임</p>
-                        <div class="popup-search">
-                            <div class="form-group inline">
-                                <input v-model="inputNickname"
-                                       type="text" class="form-control"
-                                       :class="{'error': isError, 'approval': isApproval}"
-                                       placeholder="닉네임을 입력해 주세요."
-                                       style="width:430px">
-                                <p v-if="showMsg" class="form-message"
-                                   :class="{'error': isError, 'approval': isApproval}">{{ msg }}</p>
-                                <btn type="grey" size="sm" @btnClick="checkDuplicateNickname(inputNickname)">중복확인</btn>
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-form">
+                    <div class="scroll-body" style="height:526px">
+                        <div class="popup-form-top">
+                            <div class="form-item post-classes selected">
+                                <p>
+                                    <span class="icon"><img :src="require('@/assets/images/bg-icon.png')" class="icon-img" alt=""></span>
+                                    <span class="gr-name">{{ classInfo.g_name }}</span>
+                                    <strong class="cls-name">{{ classInfo.name }}</strong>
+                                </p>
                             </div>
+
                         </div>
-                        <ul class="enroll-qna">
-                            <li v-for="(item, idx) in questionList">
-                                <p>{{ idx+1 }}. {{ item.question }}</p>
-                                <textarea v-model="answerList[idx].answer" class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
-                            </li>
-                        </ul>
+                        <div class="popup-form-cnt bd-btm">
+                            <p class="form-item post-cnt ft-desc">{{ classInfo.description }}</p>
+                        </div>
+                        <div class="popup-form-btm" >
+                            <p class="enroll-tit bd-btm" style="font-size: 14px;">클래스 닉네임</p>
+                            <div class="popup-search">
+                                <div class="form-group inline">
+                                    <input v-model="inputNickname"
+                                           type="text" class="form-control"
+                                           :class="{'error': isError, 'approval': isApproval}"
+                                           placeholder="닉네임을 입력해 주세요."
+                                           style="width:430px">
+                                    <p v-if="showMsg" class="form-message"
+                                       :class="{'error': isError, 'approval': isApproval}">{{ msg }}</p>
+                                    <btn type="grey" size="sm" @btnClick="checkDuplicateNickname(inputNickname)">중복확인</btn>
+                                </div>
+                            </div>
+                            <ul class="enroll-qna">
+                                <li v-for="(item, idx) in questionList">
+                                    <p>{{ idx+1 }}. {{ item.question }}</p>
+                                    <textarea v-model="answerList[idx].answer" class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div slot="footer">
-            <div class="btn-group rt">
-                <btn type="navi" @btnClick="enrollClassSubmit">가입 신청</btn>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="navi" @btnClick="enrollClassSubmit">가입 신청</btn>
+                </div>
             </div>
-        </div>
-    </modal>
+        </modal>
     </transition>
     <!-- end: 공통 팝업 -->
 
