@@ -136,6 +136,7 @@ import {
   searchUserKeyValueObservable
 } from '@/views/service/search/SearchService';
 import {Log} from '@/decorators';
+import {CLASS_BASE_URL} from '@/api/base';
 
 
 const SEARCH_TYPE={
@@ -219,9 +220,17 @@ export default class Search extends Vue {
     return keywords.join(' ');
   }
 
-  private gotoLink(item: any): void {
-    this.$router.push('/class/enrollClass').then(() => {
-      console.log(item.class.g_name, '으로 이동');
+  private gotoLink( item: any ): void {
+    console.log(item);
+
+    let shortcutURL=( item.me !==null )? `${CLASS_BASE_URL}/${item.id}` :
+    if( item.me === null ){
+
+    }else{
+
+    }
+    this.$router.push(`${CLASS_BASE_URL}/${item.id}`).then(() => {
+      console.log(item, '으로 이동');
     });
   }
 

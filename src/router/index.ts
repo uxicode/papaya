@@ -10,28 +10,19 @@ import {MyClassRouter} from '@/router/MyClassRouter';
 import AppHeader from '@/components/header/header.vue';
 import AppFooter from '@/components/footer/footer.vue';
 import {getIsAuth} from '@/router/AuthGuard';
+import {SearchRouter} from '@/router/SearchRouter';
 
 Vue.use(VueRouter);
 
 // @ts-ignore
 const routes: RouteConfig[] = [
-  {
-    path: '/class/search',
-    name: 'SearchPage',
-    components: {default: () => import('@/views/class/search/SearchPage'), header: AppHeader, footer: AppFooter}
-  },
+  ...SearchRouter,
   {
     path: '/class/enrollClass',
     name: 'EnrollPrivateClass',
     beforeEnter: getIsAuth,
     components: {default: () => import('@/views/class/enroll/EnrollPrivateClass'), header: AppHeader, footer: AppFooter}, // W.4.4.1.1
   },
-  /*{
-    path: '/class/enrollOpenClass',
-    name: 'enrollOpenClass',
-    beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/enroll/EnrollOpenClass'), header: AppHeader, footer: AppFooter}, // W.4.4.2
-  },*/
   {
     path: '/class/fileBox',
     name: 'fileBox',
