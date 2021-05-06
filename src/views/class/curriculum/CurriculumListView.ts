@@ -249,15 +249,12 @@ export default class CurriculumListView extends Vue {
             }
         }
 
-        // const testArrayFrom = Array.from({length: num}, () => this.makeCourseItems);
         this.makeCurriculumItems.course_list = [];
-        // testArrayFrom.forEach( (item: any) => this.makeCurriculumItems.course_list.push(item) );
-
 
         for (let i = 0; i < num; i++) {
             this.makeCurriculumItems.course_list.push({
                 index: i,
-                title: '1회차수업',
+                title: (i+1)+'회차수업',
                 startDay: '2021-11-15',
                 startTime: '10:00:00',
                 endTime: '11:00:00',
@@ -278,21 +275,7 @@ export default class CurriculumListView extends Vue {
 
     private makeCourseSubmit(): void{
         this.isClassCurr = false;
-
-        /* test */
-        // this.makeCourseList.push(this.makeCourseItems);
-        // this.makeCourseItems = {
-        //     title: '',
-        //     startDay:'2019-11-17',
-        //     startTime:'10:00:00',
-        //     endTime:'10:00:00',
-        //     contents: ''
-        // };
-        //
-        // console.log('test1', this.makeCourseItems)
-        // console.log('test2', this.makeCourseList);
-        //
-        // console.log(this.makeCurriculumItems);
+        console.log(this.makeCurriculumItems);
     }
 
     private countNum(num: number): void{
@@ -504,8 +487,9 @@ export default class CurriculumListView extends Vue {
      * 클래스 교육과정 개별코스 정보 조회
      */
     private clickCourse(num: number): void{
-        this.courseId = num;
-        console.log(this.courseId);
+
+        console.log('test',this.courseId);
+        console.log('test2', this.curriculumList.curriculum);
     }
 
     get courseList(): ICourseList{
@@ -568,13 +552,9 @@ export default class CurriculumListView extends Vue {
 
     private addCurriculumHandler(idx: number) {
         this.isCreateClass= true;
-        this.setCourseList(10);
+        // this.setCourseList(10);
     }
 
-    private testHandler(idx: number){
-        this.isClassCurr = false;
-        console.log(this.makeCourseItems);
-    }
 
     /**
      * 멤버 등급별 아이콘
