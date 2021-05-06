@@ -9,14 +9,14 @@
        <li><a href="#" class="top-search" :class="{'active': isSearch}" @click="onSearch"></a></li>
        <li><a href="#" class="top-alert"></a></li>
        <li>
-         <div class="list-popup" v-click-outside="onClickOutside">
+         <div class="list-popup" v-click-outside="closeListMenu">
            <!-- sub-menu-btn 에 active 추가 시 arrow 버튼 활성화 -->
            <button type="button" class="list-popup-btn sub-menu-btn" :class="{'active': isActive}" @click.stop.prevent="subMenuToggle">
              <!--           <img :src="replaceUserMenuImg()? require('@/assets/images/mypage-white.svg' ) : require('@/assets/images/mypage.svg' )" alt="" />-->
            </button>
-           <div class="list-popup-menu depth-2" :class="{'active': isActive}">
-             <router-link :to="{path:'/myProfile'}" class="list-popup-item"  @click.native="onClickOutside">MY프로필</router-link>
-             <router-link :to="{path:'/bookmark'}" class="list-popup-item"  @click.native="onClickOutside">보관함</router-link>
+           <div class="list-popup-menu depth-2" :class="{'active': isActive}" >
+             <router-link :to="{path:'/myProfile'}" class="list-popup-item" @click.native="closeListMenu">MY프로필</router-link>
+             <router-link :to="{path:'/bookmark'}" class="list-popup-item" @click.native="closeListMenu">보관함</router-link>
              <a href="" class="list-popup-item">활동내역</a>
              <div class="line"></div>
              <a href="" class="list-popup-item">공지사항</a>
@@ -95,12 +95,11 @@ nk :to="{path:'/class/schedule'}">모든 일정</route
   }
 
   /**
-   * v-click-outside 속성 이용하여
-   * 바깥쪽 영역 클릭시 subMenuToggle 닫음
+   * 바깥 영역 클릭하거나 링크 자신 클릭시
+   * subMenuToggle 닫기
    * @private
    */
-  private onClickOutside(): void {
-    // console.log('라우터 클릭');
+  private closeListMenu(): void {
     this.isActive = false;
   }
 
