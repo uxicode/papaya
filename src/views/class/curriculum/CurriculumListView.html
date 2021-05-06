@@ -189,7 +189,7 @@
                 <!-- body custom coding-->
                 <div class="popup-cnt">
                     <p class="popup-txt type2">교육과정</p>
-                    <h2 class="popup-tit pdb-0">{{ countNumber + 1 }} 회차 수업</h2>
+                    <h2 class="popup-tit pdb-0">{{ countCourseNumber + 1 }} 회차 수업</h2>
                 </div>
 
                 <div class="popup-form">
@@ -199,7 +199,7 @@
                                 <txt-field id="courseTitle"
                                            add-class="popup-type"
                                            placeholder="수업 제목을 20자 이내로 작성해 주세요."
-                                           v-model="makeCurriculumItems.course_list[countNumber].title"
+                                           v-model="makeCurriculumItems.course_list[countCourseNumber].title"
                                            rules="required"
                                            valid-name="수업제목">
                                 </txt-field>
@@ -465,7 +465,7 @@
                                 <div v-for="(item, index) in curriculumList.curriculum.course_list" :key="index" class="curriculum-item">
                                     <span class="turn">{{ item.index }} 회차</span>
                                     <div class="curriculum-info">
-                                        <a href="#" @click="curriculumDetailClickHandler( item.index )">
+                                        <a href="#" @click="curriculumDetailClickHandler( index )">
                                             <p class="subject-tit">{{ item.title }}</p>
                                             <div class="subject-schedule">
                                                 <span>{{ item.startDay }}</span>
@@ -501,7 +501,7 @@
                 <!-- body custom coding-->
                 <div class="popup-cnt">
                     <p class="popup-txt type2">{{ curriculumList.curriculum.title }}</p>
-                    <h2 class="popup-tit pdb-0">{{ curriculumList.curriculum.course_list }}</h2>
+                    <h2 class="popup-tit pdb-0">{{ curriculumList.curriculum.course_list[countCourseNumber].title }}</h2>
                 </div>
 
                 <div class="popup-form">
@@ -518,7 +518,7 @@
                 <div class="popup-feed-detail">
                     <div class="fd-cnt">
                         <p class="fd-txt">
-                            {{ courseList.course.contents }}
+                            {{ curriculumList.curriculum.course_list[countCourseNumber].contents }}
                         </p>
 
                         <div class="fd-inner">
@@ -529,11 +529,11 @@
                             </ul>
                         </div>
 
-                        <div class="fd-inner">
+                        <div class="fd-inner" v-show="curriculumList.curriculum.course_list[countCourseNumber].attachment.length>0">
                             <p class="fd-inner-txt">첨부 파일 3</p>
                             <ul class="file-list pdl-0 clearfix">
-                                <li>
-                                    <a href="">첨부파일1.pdf</a>
+                                <li v-for="(item, index) in curriculumList.curriculum.course_list[countCourseNumber].attachment" :key="index">
+                                    <a href="">{{ item.originalname }}</a>
                                 </li>
                             </ul>
                         </div>

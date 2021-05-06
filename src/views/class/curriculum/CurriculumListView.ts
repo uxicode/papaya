@@ -48,7 +48,7 @@ export default class CurriculumListView extends Vue {
     @MyClass.Getter
     private classID!: number;
 
-    private countNumber: number = 0;
+    private countCourseNumber: number = 0;
 
     private cardId: number = 0;
     private courseId: number = 0;
@@ -144,7 +144,6 @@ export default class CurriculumListView extends Vue {
                     startTime: '10:00:00',
                     endTime: '10:00:00',
                     deletedYN: false,
-                    attachment: [],
                 },
             ]
         }
@@ -251,6 +250,7 @@ export default class CurriculumListView extends Vue {
 
         this.makeCurriculumItems.course_list = [];
 
+
         for (let i = 0; i < num; i++) {
             this.makeCurriculumItems.course_list.push({
                 index: i,
@@ -275,11 +275,10 @@ export default class CurriculumListView extends Vue {
 
     private makeCourseSubmit(): void{
         this.isClassCurr = false;
-        console.log(this.makeCurriculumItems);
     }
 
-    private countNum(num: number): void{
-        this.countNumber = num;
+    private countCourseNum(num: number): void{
+        this.countCourseNumber = num;
     }
 
 
@@ -371,12 +370,14 @@ export default class CurriculumListView extends Vue {
         //전달되는 파일없을시 여기서 종료.
         if( !files.length ){ return; }
 
-        await this.setRevokeObjectURL().then( ()=>{
-            this.setImgFilePreviewSave(files);
-            //file type input
-            const imgFileInput =document.querySelector('#imgFileInput') as HTMLInputElement;
-            imgFileInput.value = '';
-        });
+        this.setImgFilePreviewSave(files);
+        //file type input
+        const imgFileInput =document.querySelector('#imgFileInput') as HTMLInputElement;
+        imgFileInput.value = '';
+
+        // await this.setRevokeObjectURL().then( ()=>{
+        //
+        // });
     }
 
     //모델에 이미지 파일 추가
@@ -483,16 +484,11 @@ export default class CurriculumListView extends Vue {
             });
     }
 
+
     /**
      * 클래스 교육과정 개별코스 정보 조회
      */
-    private clickCourse(num: number): void{
-
-        console.log('test',this.courseId);
-        console.log('test2', this.curriculumList.curriculum);
-    }
-
-    get courseList(): ICourseList{
+        get courseList(): ICourseList{
         return this.allCourseList;
     }
 
@@ -531,28 +527,24 @@ export default class CurriculumListView extends Vue {
 
     private cardClickHandler( idx: number ) {
         this.isClassCurrMore = true;
-        // this.clickCard(idx);
         this.cardId=idx;
         this.$nextTick(()=>{
             this.getEduCurrList(this.cardId);
         });
-
-        // console.log(this.cardId);
     }
 
     private curriculumClickHandler( idx: number ) {
         this.isClassCurr = true;
-        this.countNum(idx);
     }
 
     private curriculumDetailClickHandler( idx: number ) {
         this.isClassCurrDetail = true;
-        this.clickCourse(idx);
+        this.countCourseNum(idx);
     }
 
     private addCurriculumHandler(idx: number) {
         this.isCreateClass= true;
-        // this.setCourseList(10);
+        this.setCourseList(10);
     }
 
 
