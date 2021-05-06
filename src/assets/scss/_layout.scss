@@ -99,19 +99,16 @@ header {
 
           &:after {
             content: '';
-            display: block;
+            @include pos-abs($bottom:2px, $left: 50%);
             width: 0;
             height: 0;
-
-            @include pos-abs($bottom: -18px, $left: 50%);
-
             transform: translateX(-50%);
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
             border-bottom: 7px solid #fff;
           }
 
-          background: url(../../assets/images/close-white.svg) no-repeat;
+          background: url(../../assets/images/close-white.svg)  50% 50% no-repeat;
         }
       }
       .top-alert {
