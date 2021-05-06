@@ -1,3 +1,4 @@
+import {Utils} from '@/utils/utils';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IUserMe} from '@/api/model/user.model';
@@ -25,13 +26,9 @@ export default class MyProfileMain extends Vue {
     @Auth.Action
     public USER_ME_ACTION!: () => Promise<IUserMe>;
 
-    get myInfo(): object {
+    get myInfo() {
         // console.log( 'this.userInfo=', this.userInfo );
         return this.userInfo;
-    }
-
-    get startDateModel(): string | Date | number{
-        return this.startDate;
     }
 
     /* 팝업 및 페이지 변경 상태 값 */
@@ -47,9 +44,13 @@ export default class MyProfileMain extends Vue {
     private tempData: any = '';
 
     /* 생일 datepicker 관련 */
-    private startDate: string | number | Date = '';
-    private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
+    private birthday: string = '';
+    //private startDatePickerModel: string = new Date().toISOString().substr(0, 10);
     private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
+
+    public created() {
+        this.dashedBirthdayModel();
+    }
 
     /**
      * 정보변경 modal 혹은 dropdown 열기
@@ -111,10 +112,36 @@ export default class MyProfileMain extends Vue {
     }
 
     /**
+     * 생일이 있으면 8자리 문자열로 되어 있는 생일을 '-' 가 있는 형태로 변환
+     * 없으면 공백
+     */
+    private dashedBirthdayModel(): any {
+        if (this.myInfo.birthday !== null) {
+            const yyyy = this.myInfo.birthday.substring(0,4);
+            const mm = this.myInfo.birthday.substring(5,6);
+            const dd = this.myInfo.birthday.substring(7,8);
+            this.birthday = Utils.getDateDashFormat(yyyy,mm,dd);
+        }
+    }
+
+    /**
+     * '-' 형태의 생일을 구분자 없는 문자열로 변환 후
+     * 생일 변경 통신
+     * @private
+     */
+    private birthdayModify(birthday: string): any {
+        const newBirthday = Utils.dateDashFormatUndo(birthday).join('');
+        UserService.setUserInfo(this.userInfo.user_id, {birthday: newBirthday})
+          .then((data) => {
+              console.log(`${data.user_id} 생일 ${data.birthday} 로 변경 완료`);
+          });
+    }
+
+    /**
      * 시작일시 - datepicker 일자 선택시
      * @private
      */
-    private startDatePickerChange( ) {
+    private startDatePickerChange() {
         this.startDateMenu = false;
         // console.log(this.startDatePickerModel);
     }

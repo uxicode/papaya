@@ -19,8 +19,9 @@
                             <!--<button type="button" class="btn form-btn form-calendar"></button>-->
                             <v-menu
                                     nudge-top="65px"
-                                    nudge-left="auto"
+                                    nudge-right="-450px"
                                     origin="top right"
+                                    ref="menu"
                                     v-model="startDateMenu"
                                     :close-on-content-click="false"
                                     transition="scale-transition"
@@ -29,7 +30,7 @@
                                 <template v-slot:activator="{ on, attrs }">
                                     <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
                                     <v-text-field
-                                            v-model="startDatePickerModel"
+                                            v-model="birthday"
                                             v-bind="attrs"
                                             v-on="on"
                                             hide-details
@@ -41,7 +42,10 @@
                                     </v-text-field>
                                 </template>
                                 <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                                <v-date-picker v-model="startDatePickerModel" no-title @input="startDatePickerChange"></v-date-picker>
+                                <v-date-picker v-model="birthday"
+                                               no-title
+                                               @input="startDatePickerChange"
+                                               @click:birthday="birthdayModify(birthday)"></v-date-picker>
                             </v-menu>
                         </div>
                     </div>

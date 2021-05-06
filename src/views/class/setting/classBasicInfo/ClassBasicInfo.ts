@@ -44,7 +44,7 @@ export default class ClassBasicInfo extends Vue {
         return this.searchResultItems;
     }
 
-    get info(): IClassInfo[] {
+    get info() {
         return this.classInfo;
     }
 
@@ -206,7 +206,7 @@ export default class ClassBasicInfo extends Vue {
         this.closeSchoolSearchPopup();
         this.searchSchoolValue=name;
         this.changeSchoolNameValue(this.searchSchoolValue);
-        this.getSchoolNameInput('searchSchool');
+        this.getSchoolNameInput('#searchSchool');
     }
 
     private onSchSchoolValChangeHandler(val: string) {
@@ -220,9 +220,10 @@ export default class ClassBasicInfo extends Vue {
      * @private
      */
     private changeSchoolNameValue(val: string) {
-        const schoolNameField=this.getSchoolNameInput('schoolName');
-        schoolNameField.value = val;
+        //const schoolNameField=this.getSchoolNameInput('#schoolName');
+        this.searchSchoolValue = val;
     }
+
 
     /**
      * 변경 내용 저장
