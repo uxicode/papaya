@@ -14,7 +14,7 @@
            <button type="button" class="list-popup-btn sub-menu-btn" :class="{'active': isActive}" @click.stop.prevent="subMenuToggle">
              <!--           <img :src="replaceUserMenuImg()? require('@/assets/images/mypage-white.svg' ) : require('@/assets/images/mypage.svg' )" alt="" />-->
            </button>
-           <div class="list-popup-menu depth-2" :class="{'active': isActive}" >
+           <div class="list-popup-menu" :class="{'active': isActive}" >
              <router-link :to="{path:'/myProfile'}" class="list-popup-item" @click.native="closeListMenu">MY프로필</router-link>
              <router-link :to="{path:'/bookmark'}" class="list-popup-item" @click.native="closeListMenu">보관함</router-link>
              <a href="" class="list-popup-item">활동내역</a>

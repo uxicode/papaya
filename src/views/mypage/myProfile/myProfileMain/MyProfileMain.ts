@@ -164,8 +164,14 @@ export default class MyProfileMain extends Vue {
         this.isModifyGender = !this.isModifyGender;
     }
 
+    /**
+     * 토글 메뉴 바깥 영역 클릭시 메뉴 닫기
+     * @private
+     */
     private closeListMenu(): void {
-        this.isModifyGender = false;
+        console.log('click outside');
+        const listPopup = document.querySelectorAll('.list-popup-menu');
+        listPopup.forEach((item) => item.classList.remove('active'));
     }
 
     /**

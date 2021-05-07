@@ -43,8 +43,8 @@ export default class EnrollClass extends Vue {
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
-    @MyClass.Getter
-    private classID!: number;
+    //@MyClass.Getter
+    private classID: number = 744;
 
     /* 동적으로 값을 받아와야 하는 변수들
     (MyClassService.getClassInfoById 이용) */

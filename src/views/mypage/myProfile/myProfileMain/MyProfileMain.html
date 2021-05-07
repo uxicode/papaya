@@ -160,7 +160,7 @@
                         <h2 class="popup-tit">이메일 주소 변경</h2>
                         <div class="popup-input">
                             <div class="form-group inline">
-                                <input type="email" class="form-control" :value="myInfo.email">
+                                <input type="email" class="form-control" :value="myInfo.email" @input="valueChange($event)">
                             </div>
                         </div>
                     </div>
