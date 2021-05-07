@@ -5,9 +5,9 @@
       <h1 class="logo">
         <router-link :to="{path:'/'}"><img :src="require('@/assets/images/logo-logotype-white.png')" alt="papaya" /></router-link>
       </h1>
-      <header-menu-view @search="onSearch"></header-menu-view>
+      <header-menu-view></header-menu-view>
     </div>
-    <search v-if="isSearch"></search>
+    <search v-if="isSearchChk"></search>
   </header>
   <!-- //end: header -->
 
@@ -17,6 +17,10 @@
 import {Vue, Component} from 'vue-property-decorator';
 import HeaderMenuView from '@/components/header/headerMenuView.vue';
 import Search from '@/components/header/search.vue';
+import {namespace} from 'vuex-class';
+
+const SearchStatus = namespace('SearchStatus');
+
 @Component({
   components:{
     HeaderMenuView,
@@ -25,12 +29,9 @@ import Search from '@/components/header/search.vue';
 })
 export default class AppHeader extends Vue {
 
-  private isSearch: boolean=false;
+  @SearchStatus.Getter
+  private isSearchChk!: boolean;
 
-  private onSearch( isClick: boolean ) {
-    // console.log('isClick=' + isClick);
-    this.isSearch=isClick;
-  }
 }
 </script>
 

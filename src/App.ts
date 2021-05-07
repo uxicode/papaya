@@ -6,8 +6,8 @@ import WithRender from './App.html';
 @WithRender
 @Component
 export  default class App extends Vue {
-    public updated(){
-        // console.log('현재페이지 상태', this.pageHistory );
-    }
+  private getPageStatus( item: any ) {
+    console.log(item);
+  }
 }
 

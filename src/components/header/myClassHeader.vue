@@ -21,9 +21,9 @@
         </select>
       </div>
 
-      <header-menu-view @search="onSearch"></header-menu-view>
+      <header-menu-view></header-menu-view>
     </div>
-    <search v-if="isSearch"></search>
+    <search v-if="isSearchChk"></search>
   </header>
   <!-- //end: header -->
 
@@ -31,8 +31,12 @@
 
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import HeaderMenuView from '@/components/header/headerMenuView.vue';
 import Search from '@/components/header/search.vue';
+
+const SearchStatus = namespace('SearchStatus');
+
 @Component({
   components:{
     HeaderMenuView,
@@ -40,12 +44,8 @@ import Search from '@/components/header/search.vue';
   }
 })
 export default class MyClassHeader extends Vue {
-  private isSearch: boolean=false;
-
-  private onSearch( isClick: boolean ) {
-    // console.log('isClick=' + isClick);
-    this.isSearch=isClick;
-  }
+  @SearchStatus.Getter
+  private isSearchChk!: boolean;
 }
 </script>
 

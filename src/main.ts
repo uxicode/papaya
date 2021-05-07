@@ -18,13 +18,21 @@ import './registerServiceWorker';
 import './assets/scss/common.scss';
 
 // Vue.use(VueRx, Rx);
-
+//false로 설정하면 배포에 대한 팁을 출력하지 않습니다.
 Vue.config.productionTip = false;
+
 Vue.config.errorHandler = (err: Error, vm: Vue, info: string) => {
   console.log(`Error ${err.toString()}\n info: ${info}`, err, vm);
 };
 
-function init(){
+new Vue({
+  router,
+  store,
+  render: (h) => h(App),
+  vuetify
+}).$mount('#app');
+
+/*function init(){
   const {token} = localStorage;
   if( token ){
     // console.log( '여기는 init()/  token 존재하는 경우 ', token);
@@ -36,17 +44,16 @@ function init(){
   }
 }
 
-
-init().then((res)=>{
+init().then((res) => {
   //token 이 존재하지 않을 경우 vue 를 초기화 시킨다.
-  console.log('여기는 main.ts =', res );
+  console.log('여기는 main.ts =', res);
   new Vue({
     router,
     store,
     render: (h) => h(App),
     vuetify
   }).$mount('#app');
-});
+});*/
 
 
 /*

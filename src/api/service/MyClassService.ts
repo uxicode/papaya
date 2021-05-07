@@ -332,16 +332,7 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course/${courseId}` );
     }
 
-    /**
-     * search 랜딩 페이지
-     */
-    public getSearchHome(): Promise<any> {
-        return request('get', `${CLASS_BASE_URL}/search/home`);
-    }
 
-    public getSearchResult( searchWord: string): Promise<any> {
-        return request('get', `${CLASS_BASE_URL}/search/all/${searchWord}`);
-    }
 }
 
 export default new MyClassService();

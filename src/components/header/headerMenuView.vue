@@ -6,7 +6,7 @@
        <li><router-link :to="{path:'/class/notify'}">모든 알림</router-link></li>
        <li><router-link :to="{path:'/class/schedule'}">모든 일정</router-link></li>
        <li><a href="">자료실</a></li>
-       <li><a href="#" class="top-search" :class="{'active': isSearch}" @click="onSearch"></a></li>
+       <li><a href="#" class="top-search" :class="{'active': isSearchChk}" @click.prevent.stop="onSearch"></a></li>
        <li><a href="#" class="top-alert"></a></li>
        <li>
          <div class="list-popup" v-click-outside="closeListMenu">
@@ -57,10 +57,12 @@
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import {SEARCHING} from '@/store/mutation-search-types';
 
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
+const SearchStatus = namespace('SearchStatus');
 
 @Component
 export default class HeaderMenuView extends Vue {
@@ -73,6 +75,12 @@ export default class HeaderMenuView extends Vue {
   @MyClass.Mutation
   private REMOVE_CLASS_DATA!: () => void;
 
+  @SearchStatus.Getter
+  private isSearchChk!: boolean;
+
+  @SearchStatus.Mutation
+  private SEARCHING!: ( chk: boolean )=>void;
+
 /*nk :to="{path:'/'}">홈</router-link></li>
 nk :to="{path:'/class/notify'}">모든 알림</router-
 nk :to="{path:'/class/schedule'}">모든 일정</route
@@ -80,6 +88,7 @@ nk :to="{path:'/class/schedule'}">모든 일정</route
   /*private menuInfos: ( string[] )=[
     {gnb:[], lnb:[] }
   ]*/
+
   private isLogout(): void {
     this.LOGOUT();
     this.REMOVE_CLASS_DATA();
@@ -104,8 +113,11 @@ nk :to="{path:'/class/schedule'}">모든 일정</route
   }
 
   private onSearch(): void {
+    if( this.isSearchChk !== this.isSearch){
+      this.isSearch=this.isSearchChk;
+    }
     this.isSearch=!this.isSearch;
-    this.$emit('search', this.isSearch);
+    this.SEARCHING(this.isSearch);
     // console.log('search 클릭');
   }
 }

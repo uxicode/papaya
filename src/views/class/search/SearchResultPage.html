@@ -1,39 +1,42 @@
-<!--
-    클래스 찾기 모음
-    4.2.3.1 / 4.2.3.2 / 4.2.3.3 / 4.2.3.4
--->
-
 <div class="contents">
     <div class="contents-inner">
         <div class="result-top">
-            <h2><strong>‘파파야’</strong>에 대한 <strong class="fc-red">223</strong>건의 검색결과</h2>
+            <h2><strong> ‘{{keyword }}’</strong>에 대한 <strong class="fc-red">{{ searchTotal }}</strong>건의 검색결과</h2>
             <div class="result-filter">
                 <div class="checkbox-group">
-                    <div class="btn-radio">
-                        <input type="radio" name="radio1" id="allCheck" checked>
-                        <label for="allCheck">전체</label>
-                    </div>
+                  <!--<div class="btn-radio">
+                      <input type="radio" name="radio1" id="allCheck" checked>
+                      <label for="allCheck">전체</label>
+                  </div>
 
-                    <div class="btn-radio">
-                        <input type="radio" name="radio1" id="radio1">
-                        <label for="radio1">소속기관</label>
-                    </div>
+                 <divss="btn-radio">
+                      <input type="radio" name="radio1" id="radio1">
+                      <label for="radio1">소속기관</label>
+                  </div>
 
-                    <div class="btn-radio">
-                        <input type="radio" name="radio1" id="radio2">
-                        <label for="radio2">클래스</label>
-                    </div>
+                  <div class="btn-radio">
+                      <input type="radio" name="radio1" id="radio2">
+                      <label for="radio2">클래스</label>
+                  </div>
 
-                    <div class="btn-radio">
-                        <input type="radio" name="radio1" id="radio3">
-                        <label for="radio3">태그</label>
-                    </div>
+                  <div class="btn-radio">
+                      <input type="radio" name="radio1" id="radio3">
+                      <label for="radio3">태그</label>
+                  </div>-->
+
+                  <radio-button v-for="(item, index) in radioItems"
+                                :btn-id="`chk${index}`"
+                                radio-name="radio"
+                                :btn-value="item.value"
+                                active-value="all"
+                                v-model="radioValue"
+                                @click="optionChange">{{ item.name }}</radio-button>
                 </div>
             </div>
         </div>
 
         <div class="result-cnt">
-            <div class="search-classes">
+            <div class="search-classes" style="box-shadow: none;">
                 <div class="tb-cnt">
                     <table class="tb tb-search">
                         <colgroup>
@@ -49,28 +52,28 @@
                         </tr>
                         </thead>
                       <transition-group tag="tbody" name="slideY" @before-enter="beforeEnter" @after-enter="afterEnter">
-                        <tr v-for="( bestItem, index ) in bestItems" :key="`cell-${index}`" :data-index="index">
+                        <tr v-for="( item, index ) in searchResultsModel" :key="`cell-${index}`" :data-index="index">
                           <td>
-                            <a href="" @click.prevent="gotoLink( bestItem )">
+                            <a href="" @click.prevent="gotoLink( item )">
                               <div class="tb-style">
-                                <div class="tb-cell wd-30">{{ bestItem.rank }}</div>
+<!--                                <div class="tb-cell wd-30">{{ item.rank }}</div>-->
                                 <div class="tb-cell">
-                                  <img :src="getProfileImg(  bestItem.class.image_url )" alt="" style="width:32px; height:32px;border-radius:50%;">
+                                  <img :src="getProfileImg(  item.image_url )" alt="" style="width:32px; height:32px;border-radius:50%;">
                                 </div>
                                 <div class="tb-cell pdl-10">
-                                  <span class="group-tit">{{ bestItem.class.g_name }}</span>
-                                  <p class="class-tit">{{ bestItem.class.name }}</p>
+                                  <span class="group-tit">{{ item.g_name }}</span>
+                                  <p class="class-tit">{{ item.name }}</p>
                                 </div>
                               </div>
                             </a>
                           </td>
                           <td>
-                            <p class="class-admin">{{ bestItem.class.owner.nickname }}</p>
+                            <p class="class-admin">{{ }}</p>
                           </td>
                           <td>
                             <div class="class-tag">
-                              <a href="" @click.prevent="gotoLink( bestItem )">
-                                <p>{{ getHashTag(bestItem.class.class_tags) }}</p>
+                              <a href="" @click.prevent="gotoLink( item )">
+                                <p>{{ getHashTag(item.class_tags) }}</p>
                                 <span class="search-more"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></span>
                               </a>
                             </div>
@@ -97,3 +100,7 @@
         </div>
     </div>
 </div>
+<!--
+    클래스 찾기 모음
+    4.2.3.1 / 4.2.3.2 / 4.2.3.3 / 4.2.3.4
+-->
