@@ -60,8 +60,8 @@ export default class EnrollPrivateClass extends Vue {
 
         MyClassService.getClassQuestion(this.classID)
           .then((data) => {
-              console.log(data);
               this.questionList = data.questionlist;
+              // console.log(data);
           });
     }
 

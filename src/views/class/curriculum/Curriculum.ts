@@ -18,13 +18,11 @@ import WithRender from './Curriculum.html';
 
 const MyClass = namespace('MyClass');
 
-/*start: 추가 테스트*/
 interface ITimeModel{
     apm: string;
     hour: string;
     minute: string;
 }
-/*end: 추가 테스트*/
 
 @WithRender
 @Component({
