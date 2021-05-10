@@ -147,7 +147,7 @@ export default class ClassModule extends VuexModule {
         this.classData =classData;
 
         // console.log(this.classData);
-        localStorage.setItem('classData', JSON.stringify(this.classData) );
+        // localStorage.setItem('classData', JSON.stringify(this.classData) );
         this.count++;
     }
 
@@ -176,7 +176,7 @@ export default class ClassModule extends VuexModule {
     public [REMOVE_CLASS_DATA](): void{
         // console.log('클래스 데이터 제거');
         localStorage.removeItem('homeData');
-        localStorage.removeItem('classData');
+        // localStorage.removeItem('classData');
         localStorage.removeItem('classId');
         this.classData=[];
         this.postData=[];

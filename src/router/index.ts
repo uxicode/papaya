@@ -26,7 +26,7 @@ const routes: RouteConfig[] = [
     components: {default: () => import('@/views/class/enroll/EnrollClass'), header: MyClassHeader, footer: AppFooter}, // W.4.4.1.1
   },
   {
-    path: '/class/fileBox',
+    path: '/fileBox',
     name: 'fileBox',
     beforeEnter: getIsAuth,
     components: {default: () => import('@/views/class/fileBox/FileListView'), header: AppHeader, footer: AppFooter}, // W.4.5.4
