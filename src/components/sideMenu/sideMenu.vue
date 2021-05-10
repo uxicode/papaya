@@ -157,16 +157,16 @@ export default class SideMenu extends Vue{
     return ImageSettingService.getProfileImg( imgUrl );
   }
 
-  private sideMenuClickHandler(idx: number): void{
+  private sideMenuClickHandler(idx: number): void {
     this.$emit('sideClick', idx);
-
-    this.$router.push(CLASS_BASE_URL+'/'+this.classID+'/'+this.sideMenuData[idx].linkKey )
-    .catch((error)=>{
-      console.log(error);
-      //에러 난 경우 새로고침
-      // window.location.reload();
-      Utils.getWindowReload();
-    });
+    const queryVal = (idx === 0) ? {} : {timestamp: `${new Date().getTime()}`};
+    this.$router.push({path:`${CLASS_BASE_URL }/${this.classID}/${this.sideMenuData[idx].linkKey}`} )
+        .catch((error) => {
+          console.log('side-menu 에서 error', error);
+          //에러 난 경우 새로고침
+          // window.location.reload();
+          Utils.getWindowReload();
+        });
   }
 
   /**
@@ -202,7 +202,8 @@ export default class SideMenu extends Vue{
   }
 
   private gotoClassMemberPage(): void{
-    this.$router.push(`/class/${this.classID}/member`);
+    console.log('멤버보기 클릭=', this.classID);
+    this.$router.push({path:`${CLASS_BASE_URL}/${this.classID}/member`});
   }
 
   private visibleSettingMenus(idx: number): boolean{

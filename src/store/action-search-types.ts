@@ -1,0 +1,3 @@
+export const SEARCHING_ACTION: string = 'SEARCHING_ACTION';
+export const SEARCH_RESULT_ACTION: string = 'SEARCH_RESULT_ACTION';
+

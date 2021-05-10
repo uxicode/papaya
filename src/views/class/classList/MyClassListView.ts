@@ -47,11 +47,6 @@ export default class MyClassListView extends Vue{
     return this.moreInfo;
   }
 
-  public mounted(){
-    setTimeout(() => {
-      // console.log(this.classMoreInfo);
-    }, 2000);
-  }
 
   public getYears( dateTxt: string ): string{
     return ( String(dateTxt).split('-') )[0];

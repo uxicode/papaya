@@ -11,9 +11,9 @@
                          add-class="form-search no-border"
                          v-model="searchValue"
                          @input="watchBySearchModel"
-                         :key-enter="schoolNameSearchKeyEnter"></txt-field>
+                         :key-enter="moveToSearchResult"></txt-field>
             </div>
-            <div class="tb-cell rt"><button type="button" class="btn primary red">검색</button></div>
+            <div class="tb-cell rt"><button type="button" class="btn primary red" @click.prevent.stop="moveToSearchResult( searchValue )">검색</button></div>
           </div>
         </div>
       </div>
@@ -23,7 +23,7 @@
         <div class="search-inner">
           <ul class="search-word-list">
             <li v-for="(item, index) in searchItems" :key="`searchItems-${index}`">
-              <a href="" class="result-link" @click.prevent.stop="applySearchResult">
+              <a href="" class="result-link" @click.prevent.stop="moveToSearchResult( item.name )">
                 <div class="tb-cell result-tit" v-html="boldSearchResult( item.name )"></div>
               </a>
             </li>
@@ -88,7 +88,7 @@
               <transition-group tag="tbody" name="slideY" @before-enter="beforeEnterBestItem" @after-enter="afterEnter">
                 <tr v-for="( bestItem, index ) in bestItems" :key="`cell-${index}`" :data-index="index">
                   <td>
-                    <a href="" @click.prevent="gotoLink( bestItem )">
+                    <a href="#" @click.prevent.stop="gotoLink( bestItem )">
                       <div class="tb-style">
                         <div class="tb-cell wd-30">{{ bestItem.rank }}</div>
                         <div class="tb-cell">
@@ -106,7 +106,7 @@
                   </td>
                   <td>
                     <div class="class-tag">
-                      <a href="" @click.prevent="gotoLink( bestItem )">
+                      <a href="#" @click.prevent.stop="gotoLink( bestItem )">
                         <p>{{ getHashTag(bestItem.class.class_tags) }}</p>
                         <span class="search-more"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></span>
                       </a>
@@ -127,8 +127,8 @@
 <script lang="ts">
 
 import {Component, Vue} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import TxtField from '@/components/form/txtField.vue';
-import MyClassService from '@/api/service/MyClassService';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 import {
   resetSearchInput,
@@ -136,7 +136,12 @@ import {
   searchUserKeyValueObservable
 } from '@/views/service/search/SearchService';
 import {Log} from '@/decorators';
+import {CLASS_BASE_URL} from '@/api/base';
+import {SearchApiService} from '@/api/service/SearchApiService';
+import {Utils} from '@/utils/utils';
 
+
+const SearchStatus = namespace('SearchStatus');
 
 const SEARCH_TYPE={
   HOME:'home',
@@ -159,13 +164,14 @@ export default class Search extends Vue {
   private searchType: string = 'home';
 
 
+  @SearchStatus.Mutation
+  private SEARCHING!: ( chk: boolean )=>void;
+
+  @SearchStatus.Action
+  private SEARCH_RESULT_ACTION!: ( keyword: string )=>Promise<any>;
 
   get bestItemsModel() {
     return this.bestItems;
-  }
-
-  get recommandItemsModel() {
-    return this.recommandItems;
   }
 
   get isLandingPage() {
@@ -197,7 +203,7 @@ export default class Search extends Vue {
   }
 
   private getSearchHome() {
-    MyClassService.getSearchHome()
+    SearchApiService.getSearchHome()
         .then( (data)=>{
           // console.log(data);
           this.bestItems=data.best_classlist;
@@ -219,10 +225,17 @@ export default class Search extends Vue {
     return keywords.join(' ');
   }
 
-  private gotoLink(item: any): void {
-    this.$router.push('/class/enrollClass').then(() => {
-      console.log(item.class.g_name, '으로 이동');
+  private gotoLink( item: any ): void {
+    console.log(item);
+    this.searchType = SEARCH_TYPE.RESULT;
+    const shortcutURL = (item.class.me !== null) ? `${CLASS_BASE_URL}/${item.class_id}` : `${CLASS_BASE_URL}/${item.class_id}/enrollClass`;
+
+    this.$router.push({path:shortcutURL}).then(() => {
+      console.log(shortcutURL, '으로 이동');
     });
+
+    this.SEARCHING(false);
+
   }
 
   // 트랜지션을 시작할 때 인덱스 * 100 ms 만큼의 딜레이를 적용합니다.
@@ -265,14 +278,6 @@ export default class Search extends Vue {
 
   }
 
-  private schoolNameSearchKeyEnter() {
-    // console.log(this.searchSchoolValue);
-    // this.openPopupStatus=true;
-
-    // this.search();
-    //classlist
-    //total  ??
-  }
 
   private search(){
     // this.searchSchoolValue=( value!=='' )? value : '';
@@ -291,7 +296,7 @@ export default class Search extends Vue {
       // targetInputSelector: string
       const key$ = searchKeyEventObservable('#searchInput');
 
-      const userInter$ =searchUserKeyValueObservable( key$, this.changeLoaded, { fn: MyClassService.getSearchResult, args: null}, this.isLoading);
+      const userInter$ =searchUserKeyValueObservable( key$, this.changeLoaded, { fn: SearchApiService.getSearchResult, args: null}, this.isLoading);
       userInter$.subscribe({
         next:( data: any ) =>{
           // console.log( data.classlist );
@@ -326,12 +331,29 @@ export default class Search extends Vue {
     return [word.slice(0, startIndex), `<strong>${searchResultWord}</strong>`, word.slice(endIndex, word.length)].join('');
   }
 
-  private applySearchResult( name: string): void {
-    // this.closeSchoolSearchPopup();
-    // this.searchSchoolValue=name;
-    // this.changeSchoolNameValue(this.searchSchoolValue);
-    // this.getSchoolNameInput('searchSchool');
+  private moveToSearchResult( keyword: string='' ): void {
+
     this.searchType=SEARCH_TYPE.RESULT;
+    this.SEARCHING(false);
+    const schKeyword = (keyword === '') ? this.searchValue : keyword;
+    //item ==='' 상태이면 입력후 enter 키나 검색 버튼을 누른 상태 ~
+    console.log('schKeyword=', schKeyword, this.searchValue , keyword);
+    this.SEARCH_RESULT_ACTION(schKeyword)
+        .then((data) => {
+          // console.log(data);
+          // console.log(this.$router.currentRoute); /////==='/search/result'
+          // this.$router.go(this.$router.currentRoute);
+          // , query: { timeStamp: `${new Date().getTime()}` } 처럼 query 값을 같이 주는 이유는 새로고침 후
+          // 검색결과  router 주소값이 매번 /search/result 와 같이 똑같은 url 값으로 라우터 이동이 이루어지기 때문에
+          //주소값을 매번 검색시 갱신해 줄 필요가 있다.
+
+          this.$router.push({ path: '/search/result', query: { q: `${new Date().getTime()}` } }).then(() => {
+            console.log(`SearchResultPage` + '으로 이동');
+            // Utils.getWindowReload();
+          }).catch((error)=>{
+            console.log(error);
+          });
+        });
   }
 
 
