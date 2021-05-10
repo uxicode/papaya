@@ -15,9 +15,9 @@ import WithRender from './MyProfile.html';
 export default class MyProfile extends Vue {
     private currentPage: string = '';
 
-    public created() {
+    public updated() {
         window.onpopstate = () => {
-            this.updateTitle('');
+            this.updateTitle(this.currentPage);
         };
     }
 

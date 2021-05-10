@@ -1,0 +1,180 @@
+<div class="contents home">
+    <div class="contents-inner">
+        <div class="contents-group">
+            <section class="contents-left">
+                <div class="class-home">
+                    <div class="class-home-info">
+                        <div class="info-img">
+                            <img :src="require('@/assets/images/bg-icon.png')" alt="">
+                        </div>
+                        <div class="info-txt">
+                            <p class="info-cn">{{ classInfo.name }}</p>
+                            <span class="info-or">{{ classInfo.g_name }}</span>
+                            <ul class="info-list">
+                                <li>{{ classInfo.startday }}</li>
+                                <li>{{ classInfo.is_private ? '비공개클래스' : '오픈클래스' }}</li>
+                                <li><a href="">멤버 {{ classInfo.member_count }}</a></li>
+                            </ul>
+                            <p class="info-tag">
+                                {{ getHashTag(classInfo.class_tags) }}
+                            </p>
+                        </div>
+
+                        <!-- 가입 신청 버튼 / 신청 완료 시 primary 제거 후 disabled 클래스 추가 -->
+                        <div class="class-bookmark">
+                            <btn type="navi" :class="{'disabled': isClassEnrollComplete}" style="font-size: 12px;" @btnClick="openEnrollClassModal">가입 신청</btn>
+                        </div>
+
+                    </div>
+                    <div class="class-menu">
+                        <ul class="menu-list">
+                            <li v-for="(item, index) in sideMenuModel" :key="`item-${index}`" v-if="visibleSettingMenus(index)">
+                                <a href="" :class="[`type${index+1}`, {'active': index===activeNum }]" @click.prevent="sideMenuClickHandler( index )">{{ item.title }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 비공개 클래스일 경우 -->
+            <template v-if="true">
+                <section class="contents-right">
+                    <div class="classes-feed notification">
+                        <div class="cnt-top">
+                            <h2 class="cnt-tit">클래스 홈</h2>
+                        </div>
+                        <!-- 비공개 클래스일 경우 -->
+                        <div class="simple-notify">
+                            <!-- 가입 신청 완료 후 텍스트 내용 변경 -->
+                            <div v-if="isClassEnrollComplete" class="simple-data">
+                                <img :src="require('@/assets/images/class.png')" alt="">
+                                <p class="pdb-10">클래스 가입 신청이 완료되었습니다.</p>
+                                <span>운영자의 승인을 대기해주시길 바랍니다.</span>
+                            </div>
+                            <div v-else class="simple-data">
+                                <img :src="require('@/assets/images/class.png')" alt="">
+                                <p class="pdb-10">비공개 클래스입니다.</p>
+                                <span>가입신청을 통해 클래스에 가입해 보세요.</span>
+                            </div>
+                        </div>
+                        <!-- 공개 클래스일 경우 -->
+                    </div>
+                </section>
+            </template>
+
+            <!-- 공개 클래스일 경우 -->
+<!--            <template v-else>-->
+<!--                <my-class-list-detail-view></my-class-list-detail-view>-->
+<!--            </template>-->
+        </div>
+    </div>
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.4.1.1 , W.4.4.2.1 (클래스 페이지 - 가입신청) -->
+    <transition name="modal" >
+        <modal v-if="isClassEnrollModal" size="600px" body-padding="0" @modalClose="isClassEnrollModal=false">
+            <div slot="header">
+                <!-- header custom coding-->
+                <p class="popup-header-tit">가입 신청하기</p>
+                <div class="popup-close">
+                    <button class="close" @click="isClassEnrollModal=false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-form">
+                    <div class="scroll-body" style="height:526px">
+                        <div class="popup-form-top">
+                            <div class="form-item post-classes selected">
+                                <p>
+                                    <span class="icon"><img :src="require('@/assets/images/bg-icon.png')" class="icon-img" alt=""></span>
+                                    <span class="gr-name">{{ classInfo.g_name }}</span>
+                                    <strong class="cls-name">{{ classInfo.name }}</strong>
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="popup-form-cnt bd-btm">
+                            <p class="form-item post-cnt ft-desc">{{ classInfo.description }}</p>
+                        </div>
+                        <div class="popup-form-btm">
+                            <p class="enroll-tit bd-btm" style="font-size: 14px;">클래스 닉네임</p>
+                            <div class="popup-search">
+                                <div class="form-group inline">
+                                    <input v-model="inputNickname"
+                                           type="text" class="form-control"
+                                           :class="{'error': isError, 'approval': isApproval}"
+                                           placeholder="닉네임을 입력해 주세요."
+                                           style="width:430px">
+                                    <p v-if="showMsg" class="form-message"
+                                       :class="{'error': isError, 'approval': isApproval}">{{ msg }}</p>
+                                    <btn type="grey" size="sm" @btnClick="checkDuplicateNickname(inputNickname)">중복확인</btn>
+                                </div>
+                            </div>
+                            <ul class="enroll-qna">
+                                <li v-for="(item, idx) in questionList">
+                                    <p>{{ idx+1 }}. {{ item.question }}</p>
+                                    <textarea v-model="answerList[idx].answer" class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="navi" @btnClick="enrollClassSubmit">가입 신청</btn>
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.4.3 (클래스 페이지 - 가입완료 안내) -->
+   <transition name="modal">
+        <modal v-if="isClassEnrollCompleteModal" size="600px" body-padding="0" @modalClose="isClassEnrollCompleteModal = false;">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon success"></div>
+            <div class="popup-close">
+                <button class="close" @click="isClassEnrollCompleteModal = false;"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+
+        <div slot="body">
+            <div class="popup-cnt">
+                <h2 class="popup-tit">가입이 완료되었습니다.</h2>
+                <p class="popup-txt">
+                    환영합니다. <strong>{{ enrollMemberInfo.nickname }}</strong>님.<br>
+                    <strong>{{ classInfo.name }}</strong>에 가입이 완료되었습니다.
+                </p>
+            </div>
+            <div class="member-activity">
+                <div class="member-management-list bd-none">
+                    <ul>
+                        <li class="member-item bd-none">
+                            <div class="member-type member">
+                                <p class="member-name">{{ enrollMemberInfo.nickname }}</p>
+                                <p class="member-tit">일반 멤버</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div slot="footer">
+            <div class="btn-group rt">
+                <btn type="outline" @btnClick="isClassEnrollCompleteModal = false;">취소</btn>
+                <btn type="navi" @btnClick="isClassEnrollCompleteModal = false;">확인</btn>
+            </div>
+        </div>
+    </modal>
+   </transition>
+    <!-- end: 공통 팝업 -->
+
+</div>
+
+
+

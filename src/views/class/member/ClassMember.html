@@ -43,7 +43,7 @@
                         </div>
                     </li>
                 </ul>
-                <div v-for="(item, idx) in accordionList" :key="idx" class="accordion mgb-28">
+                <div v-for="(item, idx) in accordionList" :key="idx" class="accordion" style="margin-bottom:28px;">
                     <div class="accordion-tit">
                         <p class="list-tit">{{ item.listTit }} <strong>{{ classifyLevel(item.level).length }}</strong></p>
                         <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->

@@ -5,97 +5,95 @@
 
     <div class="my-bookmark">
         <div class="bookmark-top">
-            <button type="button" class="txt-btn" :class="{'active': bookmarkType === 'notification' }" @click="bookmarkType = 'notification'">보관된 알림</button>
-            <button type="button" class="txt-btn" :class="{'active': bookmarkType === 'schedule' }" @click="bookmarkType = 'schedule'">보관된 일정</button>
+            <button type="button" class="txt-btn" :class="{'active': tabIndex === 0}" @click="openPostTab">보관된 알림</button>
+            <button type="button" class="txt-btn" :class="{'active': tabIndex === 1}" @click="openScheduleTab">보관된 일정</button>
             <div class="bookmark-btn">
                 <btn type="grey" size="sm" @btnClick="resetModalOpen">비우기</btn>
             </div>
         </div>
 
-        <div class="bookmark-list">
+        <!-- start: 보관된 알림 -->
+        <div v-if="tabIndex === 0" class="bookmark-list" v-click-outside="closeToggle">
+            <div v-for="(item, idx) in myPostLists"
+                 :key="idx"
+                 class="bookmark-item">
+                <div class="item-top">
+                    <span class="bookmark-class">{{ item.class.name }}</span>
+                    <p class="bookmark-tit">{{ item.title }}</p>
 
-            <!-- start: 보관된 알림 -->
-            <template v-if="bookmarkType === 'notification'">
-                <div v-for="item in myPostLists"
-                     class="bookmark-item">
-                    <div class="item-top">
-                        <span class="bookmark-class">{{ item.class.name }}</span>
-                        <p class="bookmark-tit">{{ item.title }}</p>
+                    <div class="bookmark-option-btn">
+                        <button type="button" class="btn only-ico-btn sm bookmark active"></button>
 
-                        <div class="bookmark-option-btn">
-                            <button type="button" class="btn only-ico-btn sm bookmark active"></button>
-
-                            <div class="list-popup">
-                                <button type="button" class="list-popup-btn" @click="moreMenuToggle()"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                <!-- 더보기 -->
-                                <div class="list-popup-menu pos-right" :class="{'active': isMoreMenu}" style="transform:translate3d(35px, 0, 0);">
-                                    <a href="" class="list-popup-item">알림 수정</a>
-                                    <a href="" class="list-popup-item">해당 클래스의 공지로 등록</a>
-                                    <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
-                                    <a href="" class="list-popup-item">알림 보관 해제</a>
-                                    <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
-                                </div>
-                                <!-- 더보기 (일반멤버) -->
-                                <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
-                                    <a href="" class="list-popup-item">알림 보관 해제</a>
-                                </div>
+                        <div class="list-popup">
+                            <button type="button" class="list-popup-btn" @click="listPopupToggle(tabIndex, idx)"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                            <!-- 더보기 (일반멤버) -->
+                            <div v-if="myMemberLevel == 3" class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
+                                <a href="" class="list-popup-item">알림 보관 해제</a>
+                            </div>
+                            <!-- 더보기 (운영자/스탭) -->
+                            <div v-else class="list-popup-menu pos-right"
+                                 style="transform:translate3d(35px, 0, 0);">
+                                <a href="" class="list-popup-item" @click.stop.prevent>알림 수정</a>
+                                <a href="" class="list-popup-item" @click.stop.prevent>해당 클래스의 공지로 등록</a>
+                                <a href="" class="list-popup-item" @click.stop.prevent>다른 클래스에도 등록하기</a>
+                                <a href="" class="list-popup-item" @click.stop.prevent>알림 보관 해제</a>
+                                <a href="" class="list-popup-item" @click.stop.prevent>해당 클래스에서 알림 삭제</a>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="item-cnt">
-                        <p class="post-txt">{{ item.text }}</p>
-                        <div class="post-sub">
-                            <span>{{ item.owner.nickname }}</span>
-                            <span class="date">{{ item.updatedAt }}</span>
-                        </div>
+                <div class="item-cnt">
+                    <p class="post-txt">{{ item.text }}</p>
+                    <div class="post-sub">
+                        <span>{{ item.owner.nickname }}</span>
+                        <span class="date">{{ item.updatedAt }}</span>
                     </div>
                 </div>
-            </template>
-            <!-- end: 보관된 알림 -->
-
-            <!-- start: 보관된 일정 -->
-            <template v-else-if="bookmarkType === 'schedule'">
-                <div class="bookmark-item">
-                    <div class="item-top">
-                        <span class="bookmark-class">1학년 3반 수학</span>
-                        <p class="bookmark-tit">파파야초등학교 10월 가을 체험학습</p>
-
-                        <div class="bookmark-option-btn">
-                            <button type="button" class="btn only-ico-btn sm bookmark active"></button>
-
-                            <div class="list-popup">
-                                <button type="button" class="list-popup-btn" @click="moreMenuToggle()"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                <!-- 더보기 -->
-                                <div class="list-popup-menu pos-right" :class="{'active': isMoreMenu}" style="transform:translate3d(35px, 0, 0);">
-                                    <a href="" class="list-popup-item">알림 수정</a>
-                                    <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
-                                    <a href="" class="list-popup-item">일정 보관 해제</a>
-                                    <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
-                                </div>
-                                <!-- 더보기 (일반멤버) -->
-                                <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
-                                    <a href="" class="list-popup-item">일정 보관 해제</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="item-cnt">
-                        <p class="post-txt">오늘은 3단원을 시작하도록 합니다.</p>
-                        <div class="schedule-box">
-                            <p>2019. 12. 10 오전 10시 - 11시</p>
-                        </div>
-                        <div class="post-sub">
-                            <span>박수한선생님</span>
-                            <span class="date">1분 전</span>
-                        </div>
-                    </div>
-                </div>
-            </template>
-            <!-- end: 보관된 일정 -->
-
+            </div>
         </div>
+        <!-- end: 보관된 알림 -->
+
+        <!-- start: 보관된 일정 -->
+        <div v-else-if="tabIndex === 1" class="bookmark-list">
+            <div class="bookmark-item">
+                <div class="item-top">
+                    <span class="bookmark-class">1학년 3반 수학</span>
+                    <p class="bookmark-tit">파파야초등학교 10월 가을 체험학습</p>
+
+                    <div class="bookmark-option-btn">
+                        <button type="button" class="btn only-ico-btn sm bookmark active"></button>
+
+                        <div class="list-popup">
+                            <button type="button" class="list-popup-btn" @click="listPopupToggle(tabIndex, idx)"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                            <!-- 더보기 -->
+                            <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
+                                <a href="" class="list-popup-item">알림 수정</a>
+                                <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
+                                <a href="" class="list-popup-item">일정 보관 해제</a>
+                                <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
+                            </div>
+                            <!-- 더보기 (일반멤버) -->
+                            <!--                                <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">-->
+                            <!--                                    <a href="" class="list-popup-item">일정 보관 해제</a>-->
+                            <!--                                </div>-->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item-cnt">
+                    <p class="post-txt">오늘은 3단원을 시작하도록 합니다.</p>
+                    <div class="schedule-box">
+                        <p>2019. 12. 10 오전 10시 - 11시</p>
+                    </div>
+                    <div class="post-sub">
+                        <span>박수한선생님</span>
+                        <span class="date">1분 전</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end: 보관된 일정 -->
 
     </div>
 

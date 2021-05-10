@@ -251,7 +251,14 @@ export default class ClassMember extends Vue{
         //console.log(accCnt.length);
         const listPopup = accCnt[idx].querySelectorAll('.list-popup-menu');
         //console.log(listPopupMenu.length);
+        //listPopup.forEach((item) => item.classList.remove('active'));
         listPopup[index].classList.toggle('active');
+    }
+
+    private closeListMenu(): void {
+        console.log('click outside');
+        const listPopup = document.querySelectorAll('.list-popup-menu');
+        listPopup.forEach((item) => item.classList.remove('active'));
     }
 
     /**
@@ -264,10 +271,10 @@ export default class ClassMember extends Vue{
      */
     private detailPopupOpen(userId: number, level: number, nickname: string, memberId: number): void {
         this.userIdNum = userId;
-        this.isDetailPopup = true;
         this.memberLevel = level;
         this.nickname = nickname;
         this.memberId = memberId;
+        this.isDetailPopup = true;
         UserService.getUserInfo(userId)
           .then((data) => {
               this.mobileNo = data.user.mobile_no;

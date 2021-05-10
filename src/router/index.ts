@@ -1,47 +1,36 @@
 import Vue from 'vue';
 import VueRouter, {RawLocation, RouteConfig} from 'vue-router';
-// import AppHeader from '@/components/header/header.vue';
-// import AppFooter from '@/components/footer/footer.vue';
-// import {getIsAuth} from '@/router/AuthGuard';
+import {getIsAuth} from '@/router/AuthGuard';
 import {LoginRouter} from '@/router/LoginRouter';
 import {SignUpRouter} from '@/router/SignUpRouter';
 import {MyPageRouter} from '@/router/MyPageRouter';
 import {MyClassRouter} from '@/router/MyClassRouter';
+import MyClassHeader from '@/components/header/myClassHeader.vue';
 import AppHeader from '@/components/header/header.vue';
 import AppFooter from '@/components/footer/footer.vue';
-import {getIsAuth} from '@/router/AuthGuard';
+import {SearchResultRouter} from '@/router/SearchResultRouter';
 
 Vue.use(VueRouter);
 
 // @ts-ignore
 const routes: RouteConfig[] = [
-  {
-    path: '/class/search',
-    name: 'SearchPage',
-    components: {default: () => import('@/views/class/search/SearchPage'), header: AppHeader, footer: AppFooter}
-  },
-  {
-    path: '/class/enrollClass',
-    name: 'EnrollPrivateClass',
-    beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/enroll/EnrollPrivateClass'), header: AppHeader, footer: AppFooter}, // W.4.4.1.1
-  },
-  /*{
-    path: '/class/enrollOpenClass',
-    name: 'enrollOpenClass',
-    beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/enroll/EnrollOpenClass'), header: AppHeader, footer: AppFooter}, // W.4.4.2
-  },*/
-  {
-    path: '/class/fileBox',
-    name: 'fileBox',
-    beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/fileBox/FileListView'), header: AppHeader, footer: AppFooter}, // W.4.5.4
-  },
   ...MyClassRouter,
   ...LoginRouter,
   ...SignUpRouter,
   ...MyPageRouter,
+  ...SearchResultRouter,
+  {
+    path: '/class/:classId/enrollClass',
+    name: 'EnrollClass',
+    beforeEnter: getIsAuth,
+    components: {default: () => import('@/views/class/enroll/EnrollClass'), header: MyClassHeader, footer: AppFooter}, // W.4.4.1.1
+  },
+  {
+    path: '/fileBox',
+    name: 'fileBox',
+    beforeEnter: getIsAuth,
+    components: {default: () => import('@/views/class/fileBox/FileListView'), header: AppHeader, footer: AppFooter}, // W.4.5.4
+  },
   {
     path: '*',
     name: 'notfound',
@@ -49,13 +38,13 @@ const routes: RouteConfig[] = [
   },
 ];
 
-/*$router.push 로 같은 링크 재차 클릭 에러 방지.*/
+/*  main.ts  에서 token 체크를 하고 있는데 해당 부분이 비동기이기에 새로고침시 무한 루프에 빠진다. 아래 코드로 무한루프 방지*/
 const originalPath = VueRouter.prototype.push;
 VueRouter.prototype.push = function(url: RawLocation) {
   // @ts-ignore
   return originalPath.call(this, url).catch((error: any) => {
     if (error.name !== 'NavigationDuplicated') {
-      location.reload();
+      // location.reload();
     }
   });
 };

@@ -26,6 +26,14 @@ class MyClassService {
     }
 
     /**
+     * 해당 클래스의 내 정보 조회
+     * @param id
+     */
+    public getMyInfoInThisClass(id: number): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${id}/me`);
+    }
+
+    /**
      * 내가 가입한 클래스 알림글 북마크한 글조회
      */
     public getMyKeepPosts(): Promise<IPostList> {
@@ -186,7 +194,7 @@ class MyClassService {
      * 클래스 맴버 생성 - 클래스 가입 시키기
      * @param classId
      */
-    public addClassMembers(classId: number, data: object): Promise<any> {
+    public addClassMembers(classId: number, data: any): Promise<any> {
        /* "user_id": 250, - user_id 넘버 값
           "nickname": "test-for클래스1",
           "open_level_id": 1,
@@ -324,16 +332,7 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course/${courseId}` );
     }
 
-    /**
-     * search 랜딩 페이지
-     */
-    public getSearchHome(): Promise<any> {
-        return request('get', `${CLASS_BASE_URL}/search/home`);
-    }
 
-    public getSearchResult( searchWord: string): Promise<any> {
-        return request('get', `${CLASS_BASE_URL}/search/all/${searchWord}`);
-    }
 }
 
 export default new MyClassService();

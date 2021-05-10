@@ -88,7 +88,7 @@ export default class ClassMemberManage extends Vue{
      * @private
      */
     private listPopupToggle(idx: number): void {
-        const listPopup = document.querySelectorAll('.list-popup-menu');
+        const listPopup = document.querySelectorAll('.member-item .list-popup-menu');
         listPopup[idx].classList.toggle('active');
     }
 

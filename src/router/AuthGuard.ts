@@ -11,7 +11,7 @@ import {NavigationGuardNext, Route} from 'vue-router';
 const getIsAuth = (to: Route, from: Route, next: NavigationGuardNext): void => {
   // console.log(to.path);
   const loginPath: string = `/login?rqPath=${encodeURIComponent(to.path)}`;
-  console.log('store.getters[\'Auth/isAuth\']', store.getters['Auth/isAuth']);
+  // console.log('store.getters[\'Auth/isAuth\']', store.getters['Auth/isAuth']);
   if ( store.getters['Auth/isAuth']) {
     next();
   } else {

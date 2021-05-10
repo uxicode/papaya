@@ -1,9 +1,9 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import Btn from '@/components/button/Btn.vue';
 import CheckButton from '@/components/check/CheckButton.vue';
-import WithRender from './TermsCheck.html';
 import TermsService from '@/api/service/TermsService';
 import {ITermData, ICheckData} from '@/views/model/terms.model';
+import WithRender from './TermsCheck.html';
 
 @WithRender
 @Component({
@@ -14,10 +14,10 @@ import {ITermData, ICheckData} from '@/views/model/terms.model';
 })
 export default class TermsCheck extends Vue {
     public allCheckValue: string = 'all';
+    private allChecked: boolean = true;
     private step: number = 1;
     private stepTotal: number = 3;
     private pageTitle: string = '일반 회원가입';
-    private allChecked: boolean = true;
     private termsItems: ITermData[]=[];
     private termsCheckData: string[] = [];
     private termsList: ICheckData[] = [

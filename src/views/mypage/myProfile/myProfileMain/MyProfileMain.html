@@ -1,213 +1,245 @@
-<div class="my-profile">
-    <div class="my-profile-section">
-        <p class="section-tit">내 정보</p>
+<v-app style="background-color:transparent;">
+    <div class="my-profile">
+        <div class="my-profile-section">
+            <p class="section-tit">내 정보</p>
 
-        <div class="my-profile-list">
-            <div class="list-item">
-                <p class="list-tit">이름</p>
-                <div class="list-right">
-                    <span>{{ myInfo.fullname }}</span>
-                    <button type="button" class="list-btn" @click="openModify('name')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
-                </div>
-            </div>
-            <div class="list-item">
-                <p class="list-tit">생일</p>
-                <div class="list-right">
-                    <div class="form-group date">
-                        <span class="date-area">{{ myInfo.birthday }}</span>
-                        <button type="button" class="btn form-btn form-calendar"></button>
+            <div class="my-profile-list">
+                <div class="list-item">
+                    <p class="list-tit">이름</p>
+                    <div class="list-right">
+                        <span>{{ myInfo.fullname }}</span>
+                        <button type="button" class="list-btn" @click="openModify('name')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                     </div>
                 </div>
-            </div>
-            <div class="list-item">
-                <p class="list-tit">성별</p>
-                <div class="list-right">
-                    <div class="list-popup">
-                        <button type="button" class="list-popup-btn" @click="openModify('gender')">
-                            {{ myInfo.gender === '1' ? '남자' : '여자' }}
-                            <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
-                        </button>
-                        <div class="list-popup-menu" :class="{'active': isModifyGender}">
-                            <button type="button" class="list-popup-item" value="0" @click="modifyGender($event, $event.target.value )">여자</button>
-                            <button type="button" class="list-popup-item" value="1" @click="modifyGender($event, $event.target.value )">남자</button>
+                <div class="list-item">
+                    <p class="list-tit">생일</p>
+                    <div class="list-right">
+                        <div class="form-group date" style="float:left">
+                            <!--<span class="date-area">{{ myInfo.birthday }}</span>-->
+                            <!--<button type="button" class="btn form-btn form-calendar"></button>-->
+                            <v-menu
+                                    nudge-top="65px"
+                                    nudge-right="-450px"
+                                    origin="top right"
+                                    ref="menu"
+                                    v-model="startDateMenu"
+                                    :close-on-content-click="false"
+                                    transition="scale-transition"
+                                    offset-y
+                                    min-width="auto">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
+                                    <v-text-field
+                                            v-model="birthday"
+                                            v-bind="attrs"
+                                            v-on="on"
+                                            hide-details
+                                            solo
+                                            flat>
+                                        <template v-slot:append>
+                                            <button type="button" class="btn form-btn form-calendar" v-on="on"></button>
+                                        </template>
+                                    </v-text-field>
+                                </template>
+                                <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
+                                <v-date-picker v-model="birthday"
+                                               no-title
+                                               @input="startDatePickerChange"
+                                               @click:birthday="birthdayModify(birthday)"></v-date-picker>
+                            </v-menu>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-item">
+                    <p class="list-tit">성별</p>
+                    <div class="list-right" v-click-outside="closeListMenu">
+                        <div class="list-popup">
+                            <button type="button" class="list-popup-btn" @click="openModify('gender')">
+                                {{ myInfo.gender === '1' ? '남자' : '여자' }}
+                                <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
+                            </button>
+                            <div class="list-popup-menu" :class="{'active': isModifyGender}">
+                                <button type="button" class="list-popup-item" value="0" @click="modifyGender($event, $event.target.value )">여자</button>
+                                <button type="button" class="list-popup-item" value="1" @click="modifyGender($event, $event.target.value )">남자</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="my-profile-section">
-        <p class="section-tit">가입 정보</p>
+        <div class="my-profile-section">
+            <p class="section-tit">가입 정보</p>
 
-        <div class="my-profile-list">
-            <div class="list-item">
-                <p class="list-tit">아이디</p>
-                <div class="list-right">
-                    <span>{{ myInfo.user_id }}</span>
+            <div class="my-profile-list">
+                <div class="list-item">
+                    <p class="list-tit">아이디</p>
+                    <div class="list-right">
+                        <span>{{ myInfo.user_id }}</span>
+                    </div>
                 </div>
-            </div>
-            <div class="list-item">
-                <p class="list-tit">모바일 번호</p>
-                <div class="list-right">
-                    <span>{{ myInfo.mobile_no }}</span>
-                    <button type="button" class="list-btn" @click="gotoLink('modifyMobile')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                <div class="list-item">
+                    <p class="list-tit">모바일 번호</p>
+                    <div class="list-right">
+                        <span>{{ myInfo.mobile_no }}</span>
+                        <button type="button" class="list-btn" @click="gotoLink('modifyMobile')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                    </div>
                 </div>
-            </div>
-            <div class="list-item">
-                <p class="list-tit">이메일 주소</p>
-                <div class="list-right">
-                    <span>{{ myInfo.email }}</span>
-                    <button type="button" class="list-btn" @click="openModify('email')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                <div class="list-item">
+                    <p class="list-tit">이메일 주소</p>
+                    <div class="list-right">
+                        <span>{{ myInfo.email }}</span>
+                        <button type="button" class="list-btn" @click="openModify('email')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                    </div>
                 </div>
-            </div>
-            <div class="list-item">
-                <p class="list-tit">비밀번호</p>
-                <div class="list-right">
-                    <span>********</span>
-                    <button type="button" class="list-btn" @click="gotoLink('modifyPw')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="my-profile-section">
-        <p class="section-tit">기타</p>
-
-        <div class="my-profile-list">
-            <div class="list-item">
-                <p class="list-tit">서비스 탈퇴하기</p>
-                <div class="list-right">
-                    <button type="button" class="list-btn" @click="openModify('withdraw')"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <transition name="modal">
-        <!-- start: 이름 수정 팝업 -->
-        <modal v-if="isModifyNameModal" size="540px" body-padding="0" @modalClose="isModifyNameModal=false;">
-            <div slot="header">
-                <div class="popup-icon">
-                    <img :src="require('@/assets/images/popup-icon-profile.svg')">
-                </div>
-                <div class="popup-close">
-                    <button class="close" @click="isModifyNameModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-                </div>
-            </div>
-            <div slot="body">
-                <div class="popup-cnt">
-                    <h2 class="popup-tit">이름 변경</h2>
-                    <div class="popup-input">
-                        <div class="form-group inline">
-                            <input type="text" class="form-control" :value="myInfo.fullname" @input="valueChange($event)">
-                        </div>
+                <div class="list-item">
+                    <p class="list-tit">비밀번호</p>
+                    <div class="list-right">
+                        <span>********</span>
+                        <button type="button" class="list-btn" @click="gotoLink('modifyPw')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                     </div>
                 </div>
             </div>
-            <div slot="footer">
-                <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isModifyNameModal = false; tempData = myInfo.fullname">취소</btn>
-                    <btn type="navi" @btnClick="modifyName(tempData);">변경하기</btn>
-                </div>
-            </div>
-        </modal>
-        <!-- end: 이름 수정 팝업 -->
+        </div>
 
-        <!-- start: 이메일 수정 팝업 -->
-        <modal v-else-if="isModifyEmailModal" size="540px" body-padding="0">
-            <div slot="header">
-                <div class="popup-icon">
-                    <img :src="require('@/assets/images/popup-icon-profile.svg')">
-                </div>
-                <div class="popup-close">
-                    <button class="close" @click="isModifyEmailModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-                </div>
-            </div>
-            <div slot="body">
-                <div class="popup-cnt">
-                    <h2 class="popup-tit">이메일 주소 변경</h2>
-                    <div class="popup-input">
-                        <div class="form-group inline">
-                            <input type="email" class="form-control" :value="myInfo.email">
-                        </div>
+        <div class="my-profile-section">
+            <p class="section-tit">기타</p>
+
+            <div class="my-profile-list">
+                <div class="list-item">
+                    <p class="list-tit">서비스 탈퇴하기</p>
+                    <div class="list-right">
+                        <button type="button" class="list-btn" @click="openModify('withdraw')"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </div>
                 </div>
             </div>
-            <div slot="footer">
-                <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isModifyEmailModal = false">취소</btn>
-                    <btn type="navi" @btnClick="modifyEmail(tempData)">변경하기</btn>
-                </div>
-            </div>
-        </modal>
-        <!-- end: 이메일 수정 팝업 -->
+        </div>
 
-        <!-- start: 서비스 탈퇴-확인 팝업 -->
-        <modal v-else-if="isWithdrawModal" size="540px" body-padding="0">
-            <div slot="header">
-                <div class="popup-close">
-                    <button class="close" @click="isWithdrawModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+        <transition name="modal">
+            <!-- start: 이름 수정 팝업 -->
+            <modal v-if="isModifyNameModal" size="540px" body-padding="0" @modalClose="isModifyNameModal=false;">
+                <div slot="header">
+                    <div class="popup-icon">
+                        <img :src="require('@/assets/images/popup-icon-profile.svg')">
+                    </div>
+                    <div class="popup-close">
+                        <button class="close" @click="isModifyNameModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    </div>
                 </div>
-            </div>
-            <div slot="body">
-                <div class="popup-cnt">
-                    <h2 class="popup-tit">정말 탈퇴 하시겠습니까?</h2>
-                    <p class="popup-txt">서비스 탈퇴 시 개인정보는 모두 삭제됩니다. 자세한 내용은 이용약관을 확인해주세요.</p>
+                <div slot="body">
+                    <div class="popup-cnt">
+                        <h2 class="popup-tit">이름 변경</h2>
+                        <div class="popup-input">
+                            <div class="form-group inline">
+                                <input type="text" class="form-control" :value="myInfo.fullname" @input="valueChange($event)">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div slot="footer">
-                <div class="btn-group rt">
-                    <btn type="outline" @btnClick="withdraw">네</btn>
-                    <btn type="navi" @btnClick="isWithdrawModal = false">아니오</btn>
+                <div slot="footer">
+                    <div class="btn-group rt">
+                        <btn type="outline" @btnClick="isModifyNameModal = false; tempData = myInfo.fullname">취소</btn>
+                        <btn type="navi" @btnClick="modifyName(tempData);">변경하기</btn>
+                    </div>
                 </div>
-            </div>
-        </modal>
-        <!-- end: 서비스 탈퇴-확인 팝업 -->
+            </modal>
+            <!-- end: 이름 수정 팝업 -->
 
-        <!-- start: 서비스 탈퇴-완료 팝업 -->
-        <modal v-else-if="isWithdrawCompleteModal" size="540px" body-padding="0">
-            <div slot="header">
-                <div class="popup-close">
-                    <button class="close" @click="gotoLogin"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            <!-- start: 이메일 수정 팝업 -->
+            <modal v-else-if="isModifyEmailModal" size="540px" body-padding="0">
+                <div slot="header">
+                    <div class="popup-icon">
+                        <img :src="require('@/assets/images/popup-icon-profile.svg')">
+                    </div>
+                    <div class="popup-close">
+                        <button class="close" @click="isModifyEmailModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    </div>
                 </div>
-            </div>
-            <div slot="body">
-                <div class="popup-cnt">
-                    <h2 class="popup-tit">탈퇴가 완료되었습니다.</h2>
-                    <p class="popup-txt">파파야 클래스를 이용해 주셔서 감사합니다.</p>
+                <div slot="body">
+                    <div class="popup-cnt">
+                        <h2 class="popup-tit">이메일 주소 변경</h2>
+                        <div class="popup-input">
+                            <div class="form-group inline">
+                                <input type="email" class="form-control" :value="myInfo.email" @input="valueChange($event)">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div slot="footer">
-                <div class="btn-group rt">
-                    <btn type="navi" @btnClick="gotoLogin">확인</btn>
+                <div slot="footer">
+                    <div class="btn-group rt">
+                        <btn type="outline" @btnClick="isModifyEmailModal = false">취소</btn>
+                        <btn type="navi" @btnClick="modifyEmail(tempData)">변경하기</btn>
+                    </div>
                 </div>
-            </div>
-        </modal>
-        <!-- end: 서비스 탈퇴-완료 팝업 -->
+            </modal>
+            <!-- end: 이메일 수정 팝업 -->
 
-        <!-- start: 서비스 탈퇴-탈퇴 불가 팝업 -->
-        <modal v-else-if="isWithdrawDeniedModal" size="540px" body-padding="0">
-            <div slot="header">
-                <div class="popup-icon">
-                    <img :src="require('@/assets/images/popup-icon-error.png')">
+            <!-- start: 서비스 탈퇴-확인 팝업 -->
+            <modal v-else-if="isWithdrawModal" size="540px" body-padding="0">
+                <div slot="header">
+                    <div class="popup-close">
+                        <button class="close" @click="isWithdrawModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    </div>
                 </div>
-                <div class="popup-close">
-                    <button class="close" @click="isWithdrawDeniedModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                <div slot="body">
+                    <div class="popup-cnt">
+                        <h2 class="popup-tit">정말 탈퇴 하시겠습니까?</h2>
+                        <p class="popup-txt">서비스 탈퇴 시 개인정보는 모두 삭제됩니다. 자세한 내용은 이용약관을 확인해주세요.</p>
+                    </div>
                 </div>
-            </div>
-            <div slot="body">
-                <div class="popup-cnt">
-                    <h2 class="popup-tit">클래스에 멤버가 있을 시 운영자는 탈퇴가 불가능합니다.</h2>
-                    <p class="popup-txt">운영자 위임 신청을 원하신다면 ‘클래스 설정 > 클래스 관리 > 운영자 위임 신청’을 통해 진행해 주시기 바랍니다.</p>
+                <div slot="footer">
+                    <div class="btn-group rt">
+                        <btn type="outline" @btnClick="withdraw">네</btn>
+                        <btn type="navi" @btnClick="isWithdrawModal = false">아니오</btn>
+                    </div>
                 </div>
-            </div>
-            <div slot="footer">
-                <div class="btn-group rt">
-                    <btn type="navi" @btnClick="isWithdrawDeniedModal = false">확인</btn>
+            </modal>
+            <!-- end: 서비스 탈퇴-확인 팝업 -->
+
+            <!-- start: 서비스 탈퇴-완료 팝업 -->
+            <modal v-else-if="isWithdrawCompleteModal" size="540px" body-padding="0">
+                <div slot="header">
+                    <div class="popup-close">
+                        <button class="close" @click="gotoLogin"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    </div>
                 </div>
-            </div>
-        </modal>
-        <!-- end: 서비스 탈퇴-탈퇴 불가 팝업 -->
-    </transition>
-</div>
+                <div slot="body">
+                    <div class="popup-cnt">
+                        <h2 class="popup-tit">탈퇴가 완료되었습니다.</h2>
+                        <p class="popup-txt">파파야 클래스를 이용해 주셔서 감사합니다.</p>
+                    </div>
+                </div>
+                <div slot="footer">
+                    <div class="btn-group rt">
+                        <btn type="navi" @btnClick="gotoLogin">확인</btn>
+                    </div>
+                </div>
+            </modal>
+            <!-- end: 서비스 탈퇴-완료 팝업 -->
+
+            <!-- start: 서비스 탈퇴-탈퇴 불가 팝업 -->
+            <modal v-else-if="isWithdrawDeniedModal" size="540px" body-padding="0">
+                <div slot="header">
+                    <div class="popup-icon">
+                        <img :src="require('@/assets/images/popup-icon-error.png')">
+                    </div>
+                    <div class="popup-close">
+                        <button class="close" @click="isWithdrawDeniedModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    </div>
+                </div>
+                <div slot="body">
+                    <div class="popup-cnt">
+                        <h2 class="popup-tit">클래스에 멤버가 있을 시 운영자는 탈퇴가 불가능합니다.</h2>
+                        <p class="popup-txt">운영자 위임 신청을 원하신다면 ‘클래스 설정 > 클래스 관리 > 운영자 위임 신청’을 통해 진행해 주시기 바랍니다.</p>
+                    </div>
+                </div>
+                <div slot="footer">
+                    <div class="btn-group rt">
+                        <btn type="navi" @btnClick="isWithdrawDeniedModal = false">확인</btn>
+                    </div>
+                </div>
+            </modal>
+            <!-- end: 서비스 탈퇴-탈퇴 불가 팝업 -->
+        </transition>
+    </div>
+</v-app>

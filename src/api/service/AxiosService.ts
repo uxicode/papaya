@@ -5,9 +5,6 @@ import {GET_REFRESH_TOKEN, GET_TOKEN, LOGOUT} from '@/store/mutation-auth-types'
 import {REMOVE_CLASS_DATA} from '@/store/mutation-class-types';
 import AuthService from '@/api/service/AuthService';
 
-
-
-
 axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
 
 /**
