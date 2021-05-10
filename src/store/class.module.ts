@@ -166,7 +166,7 @@ export default class ClassModule extends VuexModule {
     @Mutation
     public [CLASS_MEMBER_INFO](memberInfo: IClassMemberInfo[] ): void {
         this.memberInfo = memberInfo;
-        localStorage.setItem('memberInfo', JSON.stringify(this.memberInfo) );
+        //localStorage.setItem('memberInfo', JSON.stringify(this.memberInfo) );
     }
 
     /**

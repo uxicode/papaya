@@ -23,7 +23,9 @@
                     <td><p class="txt-overflow" style="width: 250px;">{{ item.title }}</p></td>
                     <td class="td-date">{{ String(item.createdAt).substr(0,10) }}</td>
                     <td class="ico-cell">
-                        <div class="panel-heading"><a class="bt-cnt" @click="accordionToggle(idx)"><img :src="require('@/assets/images/icn-18-arrow-down.png')"></a></div>
+                        <div class="panel-heading"><a class="bt-cnt collapsed" @click="accordionToggle(idx)">
+                            <div class="bt-icon"><img :src="require('@/assets/images/icn-18-arrow-down.png')"></div>
+                        </a></div>
                     </td>
                 </tr>
                 <tr>
