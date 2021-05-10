@@ -19,9 +19,9 @@
              <router-link :to="{path:'/bookmark'}" class="list-popup-item" @click.native="closeListMenu">보관함</router-link>
              <a href="" class="list-popup-item">활동내역</a>
              <div class="line"></div>
-             <a href="" class="list-popup-item">공지사항</a>
-             <a href="" class="list-popup-item">고객센터</a>
-             <a href="" class="list-popup-item">이용약관</a>
+             <router-link :to="{path:'/noticeBoard'}" class="list-popup-item">공지사항</router-link>
+             <router-link :to="{path:'/customerCenter'}" class="list-popup-item">고객센터</router-link>
+             <router-link :to="{path:'/termsOfService'}" class="list-popup-item">이용약관</router-link>
              <div class="line"></div>
              <a href="" class="list-popup-item" @click="isLogout">로그아웃</a>
            </div>
