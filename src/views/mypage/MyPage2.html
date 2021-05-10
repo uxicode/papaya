@@ -14,9 +14,15 @@
             </section>
 
             <section class="contents-right">
-                <transition name="fade" mode="out-in">
-                    <router-view></router-view>
-                </transition>
+                <div class="mypage-cnt">
+                    <div class="cnt-top">
+                        <div class="cnt-tit">{{ currentTitle() }}</div>
+                    </div>
+                    <transition name="fade" mode="out-in">
+                        <router-view></router-view>
+                    </transition>
+                </div>
+
             </section>
         </div>
     </div>

@@ -43,10 +43,29 @@ export default class MyPage2 extends Vue {
 
     private gotoMyPageLink( idx: number ): void {
         this.activeNum=idx;
-
         this.$router.push('/' + this.myPageListModel[idx].key)
             .then(() => {
                 console.log(this.myPageListModel[idx].key + '로 이동됨.');
             });
+    }
+
+    /**
+     * 타이틀 변경
+     * @private
+     */
+    private currentTitle(): string {
+        let result;
+        switch (this.activeNum) {
+            case 1:
+                result = '고객센터';
+                break;
+            case 2:
+                result = '이용약관';
+                break;
+            default:
+                result = '공지사항';
+                break;
+        }
+        return result;
     }
 }
