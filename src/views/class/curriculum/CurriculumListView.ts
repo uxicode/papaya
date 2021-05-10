@@ -463,6 +463,9 @@ export default class CurriculumListView extends Vue {
             });
     }
 
+    private getFullDay(date: Date): string{
+        return Utils.getFullDay( date );
+    }
 
     /**
      * 클래스 교육과정 정보 조회

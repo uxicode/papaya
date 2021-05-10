@@ -17,7 +17,7 @@
                             <div class="tb-cell basic-info">
                                 <!-- basic-info-item에 class show -->
                                 <p class="basic-info-item show">{{ memberInfo.nickname }}</p>
-                                <button type="button" class="edit-btn" @click="isNicknameModify = true"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+                                <button type="button" class="edit-btn" @click="openNicknameModal(memberInfo.nickname)"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                             </div>
                         </div>
                     </li>
@@ -30,8 +30,8 @@
                                 <p>{{ myInfo[item.data] }}</p>
 
                                 <div class="list-popup">
-                                    <button type="button" class="list-popup-btn" @click="item.isActive = !item.isActive"><span>{{ openLevelTxt(memberInfo[item.open]) }}</span> <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
-                                    <div class="list-popup-menu pos-right" :class="{'active': item.isActive}" style="transform:translate3d(87px, 0,0);">
+                                    <button type="button" class="list-popup-btn" @click="listPopupToggle(idx)"><span>{{ openLevelTxt(memberInfo[item.open]) }}</span> <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                    <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
                                         <button type="button" class="list-popup-item" value="0" @click="openLevelModify(item.open, 0)">비공개</button>
                                         <button type="button" class="list-popup-item" value="1" @click="openLevelModify(item.open, 1)">전체 공개</button>
                                         <button type="button" class="list-popup-item" value="2" @click="openLevelModify(item.open, 2)">운영자에게만 공개</button>
@@ -71,10 +71,13 @@
                     <div class="popup-input">
                         <div class="form-group inline">
                             <input type="text" class="form-control"
-                                   :value="memberInfo.nickname"
-                                   @input="valueChange($event)"
+                                   :class="{'error': isError,
+                                            'approval': isApproval}"
+                                   v-model="tempData"
                                    style="width:370px;">
-                            <btn type="grey" size="sm">중복확인</btn>
+                            <p v-if="showMessage" class="form-message"
+                               :class="{'error': isError, 'approval': isApproval}">{{ msg }}</p>
+                            <btn type="grey" size="sm" @btnClick="checkDuplicateNickname(tempData)">중복확인</btn>
                         </div>
                     </div>
                 </div>
@@ -82,8 +85,8 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isNicknameModify = false; this.tempData = ''">취소</btn>
-                    <btn type="navi" @btnClick="modifyNickname(tempData)">변경하기</btn>
+                    <btn type="outline" @btnClick="closeNicknameModal">취소</btn>
+                    <btn type="navi" :disabled="isError || tempData===memberInfo.nickname" @btnClick="modifyNickname(tempData)">변경하기</btn>
                 </div>
             </div>
         </modal>

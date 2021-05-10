@@ -14,7 +14,6 @@ interface IProfileData {
     type: string;
     data: any;
     open: any;
-    isActive: boolean;
 }
 
 @WithRender
@@ -29,6 +28,9 @@ export default class ClassProfile extends Vue {
     private classMemberInfo: IClassMemberInfo[] = [];
 
     private tempData: any = '';
+    private msg: string = '';
+    private isError: boolean = false;
+    private isApproval: boolean = false;
 
     @Auth.Getter
     private userInfo!: IUserMe;
@@ -52,19 +54,16 @@ export default class ClassProfile extends Vue {
             type: '아이디',
             data: 'user_id',
             open: 'open_level_id',
-            isActive: false,
         },
         {
             type: '모바일 번호',
             data: 'mobile_no',
             open: 'open_level_mobileno',
-            isActive: false
         },
         {
             type: '이메일 주소',
             data: 'email',
             open: 'open_level_email',
-            isActive: false
         }
     ];
 
@@ -90,10 +89,63 @@ export default class ClassProfile extends Vue {
      */
     private getClassMemberInfo(): void {
         this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.myClassInfo.me.id})
-          .then((data) => {
+          .then((data: any) => {
               console.log(`classId = ${this.classID}, memberId = ${this.myClassInfo.me.id}`);
-              this.classMemberInfo = data;
+              this.classMemberInfo = data.member_info;
           });
+    }
+
+    /**
+     * 중복확인 버튼 클릭시 해당 닉네임 존재여부 확인 후 메시지 표시
+     * @param nickname
+     * @private
+     */
+    private checkDuplicateNickname(nickname: string): void {
+        this.showMessage();
+        MyClassService.searchNickname(this.classID, nickname)
+          .then((data) => {
+              console.log(data);
+              this.isApproval = false;
+              this.isError = true;
+              this.msg = '이미 사용중인 닉네임입니다.';
+          }).catch((error) => { // 검색 결과가 없을 경우 404 error 발생하므로 예외처리
+            console.log(error);
+            this.isError = false;
+            this.isApproval = true;
+            this.msg = '사용할 수 있는 닉네임입니다.';
+        });
+    }
+
+    /**
+     * 중복확인 버튼 클릭시 안내메시지 노출 여부
+     * @private
+     */
+    private showMessage(): boolean {
+        if (this.tempData !== this.memberInfo.nickname) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 리스트 팝업 토글
+     * @param idx
+     * @private
+     */
+    private listPopupToggle(idx: number): void {
+        const listPopup = document.querySelectorAll('.basic-info .list-popup-menu');
+        // listPopup.forEach((item) => item.classList.remove('active'));
+        listPopup[idx].classList.toggle('active');
+    }
+
+    /**
+     * 토글 메뉴 바깥 영역 클릭시 메뉴 닫기
+     * @private
+     */
+    private closeToggle(): void {
+        const listPopup = document.querySelectorAll('.basic-info .list-popup-menu');
+        listPopup.forEach((item) => item.classList.remove('active'));
     }
 
     /**
@@ -103,6 +155,24 @@ export default class ClassProfile extends Vue {
      */
     private valueChange(event: any): void {
         this.tempData = event.target.value;
+    }
+
+    /**
+     * 닉네임 변경 팝업 열기
+     * @private
+     */
+    private openNicknameModal(prevNickname: string): void {
+        this.isNicknameModify = true;
+        this.tempData = prevNickname;
+    }
+
+    /**
+     * 닉네임 변경 팝업 닫기
+     * @private
+     */
+    private closeNicknameModal(): void {
+        this.isNicknameModify = false;
+        this.tempData = '';
     }
 
     /**
