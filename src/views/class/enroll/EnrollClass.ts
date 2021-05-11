@@ -40,14 +40,7 @@ export default class EnrollClass extends Vue {
     @Auth.Getter
     private userInfo!: IUserMe;
 
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
-
-    //@MyClass.Getter
-    private classID: number = 744;
-
-    /* 동적으로 값을 받아와야 하는 변수들
-    (MyClassService.getClassInfoById 이용) */
+    private classID: number = Number(window.location.pathname.split('/')[2]);
     private classInfo: {} = {};
     private isPrivate: boolean = false; // 클래스 비공개여부
 
@@ -79,7 +72,6 @@ export default class EnrollClass extends Vue {
 
     public created() {
         this.visibleSettingMenus(0);
-        console.log(this.classID);
         this.getClassInfo();
     }
 

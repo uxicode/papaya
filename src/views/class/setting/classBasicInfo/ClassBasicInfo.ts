@@ -28,6 +28,7 @@ export default class ClassBasicInfo extends Vue {
 
     private openPopupStatus: boolean = false;
     private searchSchoolValue: string = '';
+    private classNameValue: string = '';
     private isLoading: boolean= false;
     private isManualClick: boolean=false;
     private manualInputField: string = '';
@@ -215,7 +216,7 @@ export default class ClassBasicInfo extends Vue {
     }
 
     /**
-     * 학교 이름 input  value 변경
+     * 학교 이름 input value 변경
      * @param val
      * @private
      */
@@ -223,7 +224,6 @@ export default class ClassBasicInfo extends Vue {
         //const schoolNameField=this.getSchoolNameInput('#schoolName');
         this.searchSchoolValue = val;
     }
-
 
     /**
      * 변경 내용 저장

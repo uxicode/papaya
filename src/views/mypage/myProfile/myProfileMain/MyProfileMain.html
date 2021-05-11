@@ -55,12 +55,12 @@
                     <div class="list-right" v-click-outside="closeListMenu">
                         <div class="list-popup">
                             <button type="button" class="list-popup-btn" @click="openModify('gender')">
-                                {{ myInfo.gender === '1' ? '남자' : '여자' }}
+                                {{ myInfo.gender == 1 ? '남자' : '여자' }}
                                 <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
                             </button>
                             <div class="list-popup-menu" :class="{'active': isModifyGender}">
-                                <button type="button" class="list-popup-item" value="0" @click="modifyGender($event, $event.target.value )">여자</button>
-                                <button type="button" class="list-popup-item" value="1" @click="modifyGender($event, $event.target.value )">남자</button>
+                                <button type="button" class="list-popup-item" value="0" @click="modifyGender($event, 0)">여자</button>
+                                <button type="button" class="list-popup-item" value="1" @click="modifyGender($event, 1)">남자</button>
                             </div>
                         </div>
                     </div>

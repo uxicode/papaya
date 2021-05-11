@@ -58,7 +58,7 @@ export default class ClassMemberManage extends Vue{
     private memberLevelIcon(level: number): string {
         switch (level) {
             case 1:
-                return 'manager';
+                return 'admin';
             case 2:
                 return 'staff';
             default:

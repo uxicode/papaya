@@ -18,21 +18,25 @@
                 <div class="activity-tit">
                     <p>멤버 {{ classMembers.length }}</p>
                 </div>
-                <div class="member-management-list scroll-body" style="height:540px;">
-                    <ul>
+                <div class="member-management-list classes-member-list scroll-body" style="margin-top:0;height:540px;">
+                    <ul class="member-list">
                         <li v-for="(item, idx) in classMembers"
                             :key="idx"
-                            class="member-item">
-                            <div class="member-type"
+                            class="list-item member-item">
+                            <div class="member-info"
                                  :class="memberLevelIcon(item.level)">
-                                <p class="member-name">{{ item.nickname }}</p>
-                                <p class="member-tit">{{ memberLevelTxt(item.level) }}</p>
+                                <p class="name">{{ item.nickname }}</p>
+                                <span class="position">{{ memberLevelTxt(item.level) }}</span>
                             </div>
-                            <a href="" class="member-more" @click.stop.prevent="listPopupToggle(idx)"><img :src="require('@/assets/images/more.svg')" alt=""></a>
-                            <div class="list-popup">
-                                <div class="list-popup-menu pos-right" style="transform:translate3d(87px, 0, 0);">
-                                    <button class="list-popup-item" @click="blockModalOpen(item.id)">멤버 차단</button>
-                                    <button class="list-popup-item" @click="banModalOpen(item.id)">강제 탈퇴</button>
+                            <div class="member-info-btn">
+                                <div class="list-popup">
+                                    <button type="button" class="list-popup-btn" @click.stop.prevent="listPopupToggle(idx)"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                                    <div class="list-popup-menu pos-right"
+                                         :class="{'active': isActive}"
+                                         style="transform:translate3d(42px, 0, 0);">
+                                        <button class="list-popup-item" @click="blockModalOpen(item.id)">멤버 차단</button>
+                                        <button class="list-popup-item" @click="banModalOpen(item.id)">강제 탈퇴</button>
+                                    </div>
                                 </div>
                             </div>
                         </li>
