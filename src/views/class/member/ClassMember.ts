@@ -255,6 +255,12 @@ export default class ClassMember extends Vue{
         listPopup[index].classList.toggle('active');
     }
 
+    private closeListMenu(): void {
+        console.log('click outside');
+        const listPopup = document.querySelectorAll('.list-popup-menu');
+        listPopup.forEach((item) => item.classList.remove('active'));
+    }
+
     /**
      * 멤버 프로필 상세 팝업 열면서 해당 멤버의 정보 불러온다.
      * @param userId

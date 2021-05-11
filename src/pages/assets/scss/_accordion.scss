@@ -1,0 +1,55 @@
+
+/* accordion menu */
+.collapse:not(.show) {display:none;}
+
+.panel-group {margin-bottom:0;}
+
+.panel{
+  margin-top: 8px;
+  margin-bottom: 0;
+  box-shadow: none;
+  border-bottom: 1px solid #f4f5f6;
+
+  &:first-child {margin-top: 0;}
+}
+
+.panel-heading{
+  padding:15px 20px;
+  background-color: #fff;
+  .bt-cnt{
+    position: relative;
+    display: block;
+    width: 100%;
+    line-height:18px;
+
+    .bt-icon {
+      position: absolute;
+      top:50%;
+      right: 0;
+      transform:translateY(-50%) rotate(-180deg);
+      transition: all .3s ease-in-out;
+    }
+
+    &.collapsed {
+      .bt-icon {
+        transform:translateY(-50%) rotate(0deg);
+        transition: all .3s ease-in-out;
+      }
+    }
+  }
+
+  .agr-txt{
+    float: right;
+    font-size: 12px;
+    color: #629f00;
+  }
+}
+
+.panel-body{
+  padding:20px;
+  color:#000;
+  border-top:1px solid #f4f5f6;
+}
+
+.panel-group .panel+.panel{margin-top:0;}
+

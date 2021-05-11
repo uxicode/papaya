@@ -13,10 +13,7 @@ import WithRender from './EnrollClass.html';
 interface IEnrollMemberInfo {
     user_id: number;
     nickname: string;
-    qna_list: Array<{
-        question: string;
-        answer: string;
-    }>;
+    qna_list: Array<{question: string, answer: string;}>;
 }
 
 interface ISideMenu{
@@ -57,11 +54,10 @@ export default class EnrollClass extends Vue {
     private inputNickname: string = '';
     private msg: string = '';
     private showMsg: boolean = false;
-    private isError: boolean = true;
+    private isError: boolean = false;
     private isApproval: boolean = false;
     private questionList: Array<Pick<IQuestionInfo, 'question'>> = [{question: ''},{question: ''},{question: ''}];
     private answerList: any = [{answer: ''}, {answer: ''}, {answer: ''},];
-    private qnaList: object[] = Object.assign(this.questionList, this.answerList);
     private enrollMemberInfo!: IEnrollMemberInfo;
 
     private sideMenuData: ISideMenu[]=[
@@ -178,17 +174,38 @@ export default class EnrollClass extends Vue {
     }
 
     /**
+     * 팝업 내 가입 신청 버튼 활성화 여부
+     * @private
+     */
+    private enrollBtnDisabled(): boolean {
+        if (this.inputNickname !== '' && this.answerList !== null) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
      * 닉네임과 가입 질문 답변 정보를 포함하여 가입 신청
      * @private
      */
     private enrollClassSubmit(): void {
         this.enrollMemberInfo = {
-            user_id: 92,
+            user_id: this.userInfo.id,
             nickname: this.inputNickname,
             qna_list: [
               {
                 question: this.questionList[0].question,
                 answer: this.answerList[0].answer
+              },
+              {
+                question: this.questionList[1].question,
+                answer: this.answerList[1].answer
+              },
+              {
+                question: this.questionList[2].question,
+                answer: this.answerList[2].answer
               },
             ],
         };

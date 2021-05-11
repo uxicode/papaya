@@ -1,0 +1,30 @@
+<div class="contents mypage">
+    <div class="contents-inner">
+        <div class="contents-group">
+            <section class="contents-left">
+                <div class="mypage-list">
+                    <ul>
+                        <li v-for="(item, index) in myPageListModel">
+                            <a href="" @click.prevent="gotoMyPageLink( index )" :class="{'active': index === activeNum }">
+                                {{ item.title }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="contents-right">
+                <div class="mypage-cnt">
+                    <div class="cnt-top">
+                        <div class="cnt-tit">{{ currentTitle() }}</div>
+                    </div>
+                    <transition name="fade" mode="out-in">
+                        <router-view></router-view>
+                    </transition>
+                </div>
+
+            </section>
+        </div>
+    </div>
+</div>
+

@@ -612,9 +612,9 @@ interface ICurriculumList {
         };
         course_list?: [
             {
-                startDay: Date | string;
-                createdAt: Date | string;
-                updatedAt: Date | string;
+                startDay: Date;
+                createdAt: Date;
+                updatedAt: Date;
                 id: number;
                 curriculum_id: number;
                 class_id: number;
@@ -630,7 +630,7 @@ interface ICurriculumList {
                         updatedAt: Date | string;
                         id: number;
                         user_id: number;
-                        member_id: null,
+                        member_id: null | number;
                         parent_id: number;
                         group_name: string;
                         fieldname: string;
@@ -642,16 +642,16 @@ interface ICurriculumList {
                         key: string;
                         acl: string;
                         contentType: string;
-                        contentDisposition: null,
+                        contentDisposition: null | number;
                         storageClass: string;
-                        serverSideEncryption: null,
-                        metadata: null,
+                        serverSideEncryption: null | number;
+                        metadata: null | number;
                         location: string;
                         etag: string;
-                        deletedYN: false
+                        deletedYN: boolean;
                     }
                 ];
-            },
+            }
         ]
     };
     message?: string;

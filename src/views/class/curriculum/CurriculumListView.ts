@@ -132,22 +132,51 @@ export default class CurriculumListView extends Vue {
             },
             course_list: [
                 {
-                    startDay: '2019-11-17',
-                    createdAt: '2019-11-17 10:00:00',
-                    updatedAt: '2019-11-17 10:00:00',
+                    startDay: new Date(Date.UTC(2021, 3, 30, )),
+                    createdAt: new Date(Date.UTC(2021, 3, 30, )),
+                    updatedAt: new Date(Date.UTC(2021, 3, 30, )),
                     id: 0,
                     curriculum_id: 0,
                     class_id: 0,
                     index: 0,
                     title: '',
                     contents: '',
-                    startTime: '10:00:00',
-                    endTime: '10:00:00',
+                    startTime: new Date(Date.UTC(2021, 3, 30,1,10,10 )),
+                    endTime: new Date(Date.UTC(2021, 3, 30,1,10,10 )),
                     deletedYN: false,
+                    attachment: [
+                        {
+                            createdAt: '2019-11-17 10:00:00',
+                            updatedAt: '2019-11-17 10:00:00',
+                            id: 0,
+                            user_id: 0,
+                            member_id: 0,
+                            parent_id: 0,
+                            group_name: '',
+                            fieldname: '',
+                            originalname: '',
+                            encoding: '',
+                            mimetype: '',
+                            size: 0,
+                            bucket: '',
+                            key: '',
+                            acl: '',
+                            contentType: '',
+                            contentDisposition: 0,
+                            storageClass: '',
+                            serverSideEncryption: 0,
+                            metadata: 0,
+                            location: '',
+                            etag: '',
+                            deletedYN: false,
+                        }
+                    ],
                 },
-            ]
+            ],
         }
     };
+
+    private attachmentList: any[] = [];
 
     private allCourseList: ICourseList={
         course: {
@@ -193,11 +222,6 @@ export default class CurriculumListView extends Vue {
         return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
     }
 
-    // get settingItemsModel(): Array<{ vo: string[], sItem: string }>{
-    //     return this.settingItems;
-    // }
-
-
     /**
      * 교육과정 리스트
      */
@@ -205,21 +229,6 @@ export default class CurriculumListView extends Vue {
         // this.settingItems=this.mItemByMakeEduList();
         this.getEduList();
     }
-
-    // public settingMenuClickHandler( mIdx: number, item: string ) {
-    //     console.log(mIdx, item);
-    //     this.settingItems[mIdx].sItem = item;
-    // }
-
-    // public getSelectedSettingMenuItem( idx: number ): string{
-    //     return this.settingItems[idx].sItem;
-    // }
-
-    // private mItemByMakeEduList(): any[] {
-    //     return this.makeCurriculumItems.map( ( item: IMakeEducation ) => {
-    //         return { vo: this.EduSettingsItems, sItem:'반복없음' };
-    //     });
-    // }
 
     get isOwner(): boolean{
         return (this.myClassHomeModel.owner_id === this.myClassHomeModel.me?.user_id);
@@ -463,16 +472,13 @@ export default class CurriculumListView extends Vue {
             });
     }
 
-    private getFullDay(date: Date): string{
-        return Utils.getFullDay( date );
-    }
-
     /**
      * 클래스 교육과정 정보 조회
      */
     get curriculumList(): ICurriculumList{
         return this.currList;
     }
+
 
     get cardIdNumber() {
         return this.cardId;
@@ -491,7 +497,7 @@ export default class CurriculumListView extends Vue {
     /**
      * 클래스 교육과정 개별코스 정보 조회
      */
-        get courseList(): ICourseList{
+    get courseList(): ICourseList{
         return this.allCourseList;
     }
 

@@ -134,7 +134,7 @@ export default class ClassSettingMain extends Vue{
     private guideTxt: string = '';
 
     /* 가입 질문 설정 관련 */
-    private maxQuestionCount: number = 3; // 최대 질문 갯수
+    private maxQuestion: number = 3; // 최대 질문 갯수
     private questionList: IQuestionInfo[] = [];
     private tempData: string = '';
     private questionId: number = 0;
@@ -237,6 +237,30 @@ export default class ClassSettingMain extends Vue{
               setTimeout(()=>{
                   console.log(this.onOffNoti);
               }, 250 );
+          });
+    }
+
+    /**
+     * 새 알림 / 새 댓글 / 일정 수신 여부 설정
+     * @param idx
+     * @param value
+     * @private
+     */
+    private notiOnOff(idx: number, value: number): void {
+        let info: object;
+        switch (idx) {
+            case 0:
+                info = {onoff_post_noti: value};
+            case 1:
+                info = {onoff_comment_noti: value};
+            case 2:
+                info = {onoff_schedule_noti: value};
+            default:
+                info = {};
+        }
+        MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, info)
+          .then(() => {
+            console.log(`${info} 설정 완료`);
           });
     }
 
