@@ -87,16 +87,19 @@
         </div>
 
         <div class="result-footer">
-            <div class="pagination">
+            <!--<div class="pagination">
+              <a href="" @click.prevent="onPrevPageClick" class="arrow" :class="{'active':pageCount>1}"><img :src="require('@/assets/images/arrow-left.svg')" alt=""></a>
                 <ul>
-                    <li class="arrow"><a href=""><img :src="require('@/assets/images/arrow-left.svg')" alt=""></a></li>
-                    <li class="num active"><a href="">1</a></li>
-                    <li class="num"><a href="">2</a></li>
-                    <li class="num"><a href="">3</a></li>
-                    <li class="num"><a href="">4</a></li>
-                    <li class="arrow active"><a href=""><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a></li>
+&lt;!&ndash;                    <li class="arrow"></li>&ndash;&gt;
+                    <li class="num"
+                        v-for="(item, index) in pageItems"
+                        :key="`paging-${index}`" :class="{'active':pageCount===item}">
+                      <a href="" @click.prevent="onPageNumClick( item )">{{ item }}</a>
+                    </li>
+&lt;!&ndash;                    <li class="arrow active"></li>&ndash;&gt;
                 </ul>
-            </div>
+              <a href="" @click.prevent="onNextPageClick" class="arrow"  :class="{'active':pageCount>0 && pageCount<totalPageCount}"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
+            </div>-->
         </div>
     </div>
 </div>

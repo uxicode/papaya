@@ -446,51 +446,6 @@ body {
     }
   }
 
-// pagination
-.pagination {
-  width:100%;
-  padding:14px 0;
-  text-align:center;
-
-  ul {
-    display:inline-block;
-    overflow: hidden;
-
-    li {
-      float:left;
-
-      a {
-        display:block;
-        padding:2px 0;
-        width:32px;
-        height:32px;
-        border-radius:50%;
-        line-height:32px;
-        text-align:center;
-      }
-
-      &.num {
-        &.active {
-          a{
-            background-color:#ff4d4d;
-            color:#fff;
-          }
-        }
-      }
-
-      &.arrow {
-        margin:0 10px;
-        opacity:0.2;
-        vertical-align: middle;
-
-        &.active {
-          opacity: 1;
-        }
-      }
-    }
-  }
-}
-
 
 .main-txt {
   padding:80px 0 230px 30px;

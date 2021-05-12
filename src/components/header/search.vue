@@ -168,7 +168,7 @@ export default class Search extends Vue {
   private SEARCHING!: ( chk: boolean )=>void;
 
   @SearchStatus.Action
-  private SEARCH_RESULT_ACTION!: ( keyword: string )=>Promise<any>;
+  private SEARCH_RESULT_ACTION!: ( payload: { keyword: string, page_no: number, count: number} )=>Promise<any>;
 
   get bestItemsModel() {
     return this.bestItems;
@@ -338,9 +338,9 @@ export default class Search extends Vue {
     const schKeyword = (keyword === '') ? this.searchValue : keyword;
     //item ==='' 상태이면 입력후 enter 키나 검색 버튼을 누른 상태 ~
     console.log('schKeyword=', schKeyword, this.searchValue , keyword);
-    this.SEARCH_RESULT_ACTION(schKeyword)
+    this.SEARCH_RESULT_ACTION({keyword:schKeyword, page_no:1, count:10})
         .then((data) => {
-          // console.log(data);
+          console.log(data);
           // console.log(this.$router.currentRoute); /////==='/search/result'
           // this.$router.go(this.$router.currentRoute);
           // , query: { timeStamp: `${new Date().getTime()}` } 처럼 query 값을 같이 주는 이유는 새로고침 후

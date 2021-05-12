@@ -1,10 +1,10 @@
+import {Vue, Component} from 'vue-property-decorator';
 import MyClassService from '@/api/service/MyClassService';
+import {namespace} from 'vuex-class';
 import {IPostList} from '@/views/model/my-class.model';
-import {Vue, Component, Prop} from 'vue-property-decorator';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import WithRender from './Bookmark.html';
-import {namespace} from 'vuex-class';
 
 const MyClass = namespace('MyClass');
 
