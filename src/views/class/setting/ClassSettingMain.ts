@@ -1,3 +1,4 @@
+import ClassMemberService from '@/api/service/ClassMemberService';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
@@ -232,12 +233,49 @@ export default class ClassSettingMain extends Vue{
      */
     private pushToggle(value: boolean): void {
         this.onOffNoti = !!value;
-        MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {onoff_push_noti: this.onOffNoti})
+        ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {onoff_push_noti: this.onOffNoti})
           .then(() => {
               setTimeout(()=>{
                   console.log(this.onOffNoti);
               }, 250 );
           });
+    }
+
+    private notiValue(idx: number): number {
+        let value = 0;
+        switch (idx) {
+            case 0:
+                value = this.memberInfo.onoff_post_noti;
+                break;
+            case 1:
+                value = this.memberInfo.onoff_comment_noti;
+                break;
+            case 2:
+                value = this.memberInfo.onoff_schedule_noti;
+                break;
+        }
+        return value;
+    }
+
+    private notiOnOffTxt(idx: number): string {
+        if (idx !== 2) { // 새 알림, 새 댓글
+            if (this.notiValue(idx) === 1) {
+                return '받기';
+            } else {
+                return '받지 않기';
+            }
+        } else { // 일정
+            switch (this.notiValue(idx)) {
+                case 3:
+                    return '10분 전 받기';
+                case 2:
+                    return '30분 전 받기';
+                case 1:
+                    return '1시간 전 받기';
+                default:
+                    return '받지 않기';
+            }
+        }
     }
 
     /**
@@ -251,14 +289,18 @@ export default class ClassSettingMain extends Vue{
         switch (idx) {
             case 0:
                 info = {onoff_post_noti: value};
+                break;
             case 1:
                 info = {onoff_comment_noti: value};
+                break;
             case 2:
                 info = {onoff_schedule_noti: value};
+                break;
             default:
                 info = {};
+                break;
         }
-        MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, info)
+        ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, info)
           .then(() => {
             console.log(`${info} 설정 완료`);
           });
@@ -389,7 +431,7 @@ export default class ClassSettingMain extends Vue{
         if (class_members.length >= 1 && me.level === 1) {
             this.isWithdrawDenied = true;
         } else {
-            MyClassService.withdrawClass(this.classID, this.myClassInfo.me.id)
+            ClassMemberService.deleteClassMember(this.classID, this.myClassInfo.me.id)
               .then(() => {
                   console.log('클래스 탈퇴 완료');
               });

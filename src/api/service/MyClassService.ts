@@ -4,9 +4,7 @@ import {
     IMyClassList,
     IPostList,
     IMakeClassInfo,
-    ClassEachInfo,
-    IClassMemberInfo,
-    IMakeEducation
+    ClassEachInfo
 } from '@/views/model/my-class.model';
 
 
@@ -55,7 +53,6 @@ class MyClassService {
     public getClassBookmark(classId: number, memberId: number): Promise<ClassEachInfo>{
         return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
-
 
     public getSearchSchool(name: string): Promise<any> {
         return request('get', `${SCHOOL_URL}/searchbyname/${name}`);
@@ -149,85 +146,6 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum`, {page_no:pageNum, count});
     }
 
-
-
-    /**
-     * 클래스 맴버 생성 - 클래스 가입 시키기
-     * @param classId
-     */
-    public addClassMembers(classId: number, data: object): Promise<any> {
-       /* "user_id": 250, - user_id 넘버 값
-          "nickname": "test-for클래스1",
-          "open_level_id": 1,
-          "open_level_mobileno": 1,
-          "open_level_email": 1*/
-        return request('post', `${CLASS_BASE_URL}/${classId}/members`, data);
-    }
-
-    /**
-     * 클래스 멤버 전체 조회
-     * @param classId
-     */
-    public getClassMembers(classId: number): Promise<any> {
-        return request('get', `${CLASS_BASE_URL}/${classId}/members`);
-    }
-    /**
-     * 클래스 멤버 정보 조회 및 수정
-     * @param classId
-     * @param memberId
-     */
-    public getClassMemberInfo(classId: number, memberId: number): Promise<IClassMemberInfo> {
-        return request('get', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
-    }
-
-    public setClassMemberInfo(classId: number, memberId: number, info: object): Promise<IClassMemberInfo> {
-        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`, info);
-    }
-
-    public withdrawClass(classId: number, memberId: number): Promise<any> {
-        return request('delete', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
-    }
-
-
-    /**
-     * 클래스 차단 멤버 전체 조회
-     * @param classId
-     */
-    public getBlockedClassMembers(classId: number): Promise<any> {
-        return request('get', `${CLASS_BASE_URL}/${classId}/members/blocked`);
-    }
-
-    /**
-     * 클래스 멤버 차단
-     * @param classId
-     * @param memberId
-     */
-    public blockClassMember(classId: number, memberId: number): Promise<any> {
-        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/block`);
-    }
-
-    /**
-     * 클래스 멤버 차단 해제
-     * @param classId
-     * @param memberId
-     */
-    public unblockClassMember(classId: number, memberId: number): Promise<any> {
-        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/unblock`);
-    }
-
-    /**
-     * 클래스 멤버 강제 탈퇴
-     * @param classId
-     * @param memberId
-     */
-    public banClassMember(classId: number, memberId: number): Promise<any> {
-        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/ban`);
-    }
-
-    public searchMembers( classId: number, searchWord: string): Promise<any> {
-        return request('get', `${CLASS_BASE_URL}/${classId}/members/search/${searchWord}`);
-    }
-
     /**
      * 클래스 가입 질문 전체 조회
      * @param classId
@@ -246,15 +164,6 @@ class MyClassService {
 
     public makeClassQuestion(classId: number, payload: {question: string}): Promise<any> {
         return request('post', `${CLASS_BASE_URL}/${classId}/question`, payload);
-    }
-
-    /**
-     * 클래스 멤버 답변 전체 조회
-     * @param classId
-     * @param memberId
-     */
-    public getMemberClassQnA(classId: number, memberId: number): Promise<any> {
-        return request('get', `${CLASS_BASE_URL}/${classId}/members/${memberId}/answer`);
     }
 
     /**
@@ -280,16 +189,6 @@ class MyClassService {
      */
     public searchTag(searchText: string): Promise<any> {
         return request('get', `tag/search/${searchText}`);
-    }
-
-    /**
-     * 클래스 멤버 닉네임 조회
-     * 중복확인시 사용
-     * @param classId
-     * @param nickname
-     */
-    public searchNickname(classId: number, nickname: string): Promise<any> {
-        return request('get', `${CLASS_BASE_URL}/${classId}/members/bynickname/${nickname}`);
     }
 
     /**

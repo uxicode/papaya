@@ -1,3 +1,4 @@
+import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
 import {IClassMemberInfo, IQnaInfo} from '@/views/model/my-class.model';
 import {Vue, Component, Prop} from 'vue-property-decorator';
@@ -43,7 +44,7 @@ export default class ClassJoinStatus extends Vue {
      * @private
      */
     private getApplyMembers(): void {
-        MyClassService.getClassMembers(this.classID)
+        ClassMemberService.getAllClassMembers(this.classID)
           .then((data) => {
               // 가입 대기 상태인 멤버의 리스트만 나와야하지만 현재 api에서 따로 조회가 안됨.
               // this.applyList = data.class_member_list.filter(
@@ -65,12 +66,12 @@ export default class ClassJoinStatus extends Vue {
     private openJoinDetail(id: number): void {
         this.isJoinDetail = true;
 
-        MyClassService.getClassMemberInfo(this.classID, id)
+        ClassMemberService.getClassMemberInfo(this.classID, id)
           .then((data) => {
               this.classMemberInfo = data;
           });
 
-        MyClassService.getMemberClassQnA(this.classID, id)
+        ClassMemberService.getMemberClassQnA(this.classID, id)
           .then((data) => {
             this.answerList = data.qnalist;
           });

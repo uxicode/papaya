@@ -1,3 +1,4 @@
+import ClassMemberService from '@/api/service/ClassMemberService';
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {CLASS_BASE_URL} from '@/api/base';
@@ -40,17 +41,10 @@ export default class EnrollClass extends Vue {
     @Auth.Getter
     private userInfo!: IUserMe;
 
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
-
-    //@MyClass.Getter
-    private classID: number = 744;
-
-    /* 동적으로 값을 받아와야 하는 변수들
-    (MyClassService.getClassInfoById 이용) */
+    private classID: number = Number(window.location.pathname.split('/')[2]);
     private classInfo: {} = {};
     private isPrivate: boolean = false; // 클래스 비공개여부
-
+    private isDisabled: boolean = true; // 가입 신청 버튼
     private inputNickname: string = '';
     private msg: string = '';
     private showMsg: boolean = false;
@@ -79,7 +73,6 @@ export default class EnrollClass extends Vue {
 
     public created() {
         this.visibleSettingMenus(0);
-        console.log(this.classID);
         this.getClassInfo();
     }
 
@@ -121,6 +114,7 @@ export default class EnrollClass extends Vue {
         MyClassService.getClassInfoById(this.classID)
           .then((data) => {
               this.classInfo = data.classinfo;
+              this.isPrivate = data.classinfo.is_private;
               console.log(this.classInfo);
           });
     }
@@ -159,7 +153,7 @@ export default class EnrollClass extends Vue {
      */
     private checkDuplicateNickname(nickname: string): void {
         this.showMsg = true;
-        MyClassService.searchNickname(this.classID, nickname)
+        ClassMemberService.searchNickname(this.classID, nickname)
           .then((data) => {
               console.log(data);
               this.isApproval = false;
@@ -170,20 +164,8 @@ export default class EnrollClass extends Vue {
               this.isError = false;
               this.isApproval = true;
               this.msg = '사용할 수 있는 닉네임입니다.';
+              this.isDisabled = false;
         });
-    }
-
-    /**
-     * 팝업 내 가입 신청 버튼 활성화 여부
-     * @private
-     */
-    private enrollBtnDisabled(): boolean {
-        if (this.inputNickname !== '' && this.answerList !== null) {
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 
     /**
@@ -209,7 +191,7 @@ export default class EnrollClass extends Vue {
               },
             ],
         };
-        MyClassService.addClassMembers(this.classID, this.enrollMemberInfo)
+        ClassMemberService.setClassMember(this.classID, this.enrollMemberInfo)
           .then((result) => {
             console.log(result);
         });

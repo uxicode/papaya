@@ -2,7 +2,7 @@
  <div>
    <nav id="gnb" class="pd-desc">
      <ul class="menu">
-       <li><router-link :to="{path:'/'}">홈</router-link></li>
+       <li><router-link :to="{path:'/'}" @click="closeListMenu">홈</router-link></li>
        <li><router-link :to="{path:'/class/notify'}">모든 알림</router-link></li>
        <li><router-link :to="{path:'/class/schedule'}">모든 일정</router-link></li>
        <li><a href="">자료실</a></li>
@@ -17,11 +17,10 @@
            <div class="list-popup-menu" :class="{'active': isActive}" >
              <router-link :to="{path:'/myProfile'}" class="list-popup-item" @click.native="closeListMenu">MY프로필</router-link>
              <router-link :to="{path:'/bookmark'}" class="list-popup-item" @click.native="closeListMenu">보관함</router-link>
-             <a href="" class="list-popup-item">활동내역</a>
              <div class="line"></div>
-             <router-link :to="{path:'/noticeBoard'}" class="list-popup-item">공지사항</router-link>
-             <router-link :to="{path:'/customerCenter'}" class="list-popup-item">고객센터</router-link>
-             <router-link :to="{path:'/termsOfService'}" class="list-popup-item">이용약관</router-link>
+             <router-link :to="{path:'/noticeBoard'}" class="list-popup-item" @click.native="closeListMenu">공지사항</router-link>
+             <router-link :to="{path:'/customerCenter'}" class="list-popup-item" @click.native="closeListMenu">고객센터</router-link>
+             <router-link :to="{path:'/termsOfService'}" class="list-popup-item" @click.native="closeListMenu">이용약관</router-link>
              <div class="line"></div>
              <a href="" class="list-popup-item" @click="isLogout">로그아웃</a>
            </div>

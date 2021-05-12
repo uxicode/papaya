@@ -21,14 +21,14 @@ export default class ClassAdminDelegate extends Vue{
     private totalMemberNum: number = 0;
 
     public created() {
-        this.getClassMembers();
+        this.getAllClassMembers();
     }
 
     /**
      * 운영자를 제외한 전체 멤버 리스트를 가져온다.
      * @private
      */
-    private getClassMembers(): void {
+    private getAllClassMembers(): void {
         MyClassService.getClassInfoById(this.classID)
           .then((data) => {
               // 가입 승인된 스탭 멤버와 일반 멤버만 불러온다.
