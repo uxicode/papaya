@@ -4,8 +4,9 @@ import {
     IMyClassList,
     IPostList,
     IMakeClassInfo,
+    ClassEachInfo,
     IClassMemberInfo,
-    ClassEachInfo
+    IMakeEducation
 } from '@/views/model/my-class.model';
 
 
@@ -194,7 +195,7 @@ class MyClassService {
      * 클래스 맴버 생성 - 클래스 가입 시키기
      * @param classId
      */
-    public addClassMembers(classId: number, data: any): Promise<any> {
+    public addClassMembers(classId: number, data: object): Promise<any> {
        /* "user_id": 250, - user_id 넘버 값
           "nickname": "test-for클래스1",
           "open_level_id": 1,
@@ -315,11 +316,28 @@ class MyClassService {
     }
 
     /**
+     * 클래스 교육과정 생성
+     * @param classId
+     */
+    public setEducationList(classId: number, curriculumItems: IMakeEducation): Promise<any>{
+        return request('post', `${CLASS_BASE_URL}/${classId}/curriculum`, curriculumItems );
+    }
+
+    /**
+     * 클래스 교육과정 삭제
+     * @param classId
+     */
+    public deleteEducationList(classId: number, curriculumId: number): Promise<any>{
+        return request('delete', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}` );
+    }
+
+
+    /**
      * 클래스 교육과정 정보 조회
      * @param classId
      * @param curriculumId
      */
-    public getEduCurList(classId: number, curriculumId: number): Promise<any>{
+    public getEduCurrList(classId: number, curriculumId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}` );
     }
 
@@ -333,6 +351,17 @@ class MyClassService {
     }
 
 
+    public getSearchResult( searchWord: string): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/search/all/${searchWord}`);
+    }
+
+    /**
+     * 클래스 교육과정 개별코스 생성
+     * @param classId
+     */
+    public setEduCourseList(classId: number, curriculumId: number): Promise<any>{
+        return request('post', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course` );
+    }
 }
 
 export default new MyClassService();

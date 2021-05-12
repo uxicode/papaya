@@ -676,22 +676,22 @@
         }
       }
     }
+  }
+}
 
-    .no-notify, .simple-notify {
-      position:relative;
-      height:600px;
-      border-radius: 5px;
-      background-color:#fff;
+.no-notify, .simple-notify {
+  position:relative;
+  height:600px;
+  border-radius: 5px;
+  background-color:#fff;
 
-      .no-data, .simple-data{
-        @include pos-abs($top:50%, $left:50%);
-        transform:translate(-50%, -50%);
-        text-align:center;
+  .no-data, .simple-data{
+    @include pos-abs($top:50%, $left:50%);
+    transform:translate(-50%, -50%);
+    text-align:center;
 
-        p {margin-top:20px; font-size:16px; color:#848499;}
-        span {margin-top:10px; color:#c9cad5;}
-      }
-    }
+    p {margin-top:20px; font-size:16px; color:#848499;}
+    span {margin-top:10px; color:#c9cad5;}
   }
 }
 
@@ -973,6 +973,9 @@
 
 .curriculum-add {
   @include pos-abs($right:-10%, $bottom:35%);
+  //position:fixed;
+  //right:17%;
+  //bottom:5%;
 
   &-btn {
     display:block;
