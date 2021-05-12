@@ -89,6 +89,7 @@ export default class ClassMemberManage extends Vue{
      */
     private listPopupToggle(idx: number): void {
         const listPopup = document.querySelectorAll('.member-item .list-popup-menu');
+        //listPopup.forEach((item) => item.classList.remove('active'));
         listPopup[idx].classList.toggle('active');
     }
 
@@ -136,7 +137,9 @@ export default class ClassMemberManage extends Vue{
           .then((data) => {
             console.log(data);
             this.memberNickname = data.nickname;
+            console.log(this.memberNickname);
             this.memberLevel = data.level;
+            console.log(this.memberLevel);
           });
     }
 

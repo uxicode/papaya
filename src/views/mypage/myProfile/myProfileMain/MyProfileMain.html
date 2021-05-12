@@ -146,7 +146,7 @@
             <!-- end: 이름 수정 팝업 -->
 
             <!-- start: 이메일 수정 팝업 -->
-            <modal v-else-if="isModifyEmailModal" size="540px" body-padding="0">
+            <modal v-else-if="isModifyEmailModal" size="540px" body-padding="0" @modalClose="isModifyEmailModal=false;">
                 <div slot="header">
                     <div class="popup-icon">
                         <img :src="require('@/assets/images/popup-icon-profile.svg')">
@@ -175,7 +175,7 @@
             <!-- end: 이메일 수정 팝업 -->
 
             <!-- start: 서비스 탈퇴-확인 팝업 -->
-            <modal v-else-if="isWithdrawModal" size="540px" body-padding="0">
+            <modal v-else-if="isWithdrawModal" size="540px" body-padding="0" @modalClose="isWithdrawModal=false">
                 <div slot="header">
                     <div class="popup-close">
                         <button class="close" @click="isWithdrawModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
@@ -197,7 +197,7 @@
             <!-- end: 서비스 탈퇴-확인 팝업 -->
 
             <!-- start: 서비스 탈퇴-완료 팝업 -->
-            <modal v-else-if="isWithdrawCompleteModal" size="540px" body-padding="0">
+            <modal v-else-if="isWithdrawCompleteModal" size="540px" body-padding="0" @modalClose="isWithdrawCompleteModal=false">
                 <div slot="header">
                     <div class="popup-close">
                         <button class="close" @click="gotoLogin"><img :src="require('@/assets/images/close.svg')" alt=""></button>
@@ -218,7 +218,7 @@
             <!-- end: 서비스 탈퇴-완료 팝업 -->
 
             <!-- start: 서비스 탈퇴-탈퇴 불가 팝업 -->
-            <modal v-else-if="isWithdrawDeniedModal" size="540px" body-padding="0">
+            <modal v-else-if="isWithdrawDeniedModal" size="540px" body-padding="0" @modalClose="isWithdrawDeniedModal=false">
                 <div slot="header">
                     <div class="popup-icon">
                         <img :src="require('@/assets/images/popup-icon-error.png')">

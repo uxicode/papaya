@@ -240,6 +240,43 @@ export default class ClassSettingMain extends Vue{
           });
     }
 
+    private notiValue(idx: number): number {
+        let value = 0;
+        switch (idx) {
+            case 0:
+                value = this.memberInfo.onoff_post_noti;
+                break;
+            case 1:
+                value = this.memberInfo.onoff_comment_noti;
+                break;
+            case 2:
+                value = this.memberInfo.onoff_schedule_noti;
+                break;
+        }
+        return value;
+    }
+
+    private notiOnOffTxt(idx: number): string {
+        if (idx !== 2) { // 새 알림, 새 댓글
+            if (this.notiValue(idx) === 1) {
+                return '받기';
+            } else {
+                return '받지 않기';
+            }
+        } else { // 일정
+            switch (this.notiValue(idx)) {
+                case 3:
+                    return '10분 전 받기';
+                case 2:
+                    return '30분 전 받기';
+                case 1:
+                    return '1시간 전 받기';
+                default:
+                    return '받지 않기';
+            }
+        }
+    }
+
     /**
      * 새 알림 / 새 댓글 / 일정 수신 여부 설정
      * @param idx
@@ -251,12 +288,16 @@ export default class ClassSettingMain extends Vue{
         switch (idx) {
             case 0:
                 info = {onoff_post_noti: value};
+                break;
             case 1:
                 info = {onoff_comment_noti: value};
+                break;
             case 2:
                 info = {onoff_schedule_noti: value};
+                break;
             default:
                 info = {};
+                break;
         }
         MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, info)
           .then(() => {
