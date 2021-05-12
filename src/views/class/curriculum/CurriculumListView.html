@@ -31,11 +31,13 @@
                             <!--                            <button class="list-popup-item active" value="1" @click>교육과정 삭제</button>-->
                             <!--                        </div>-->
                             <v-menu
+                                    v-model="item.chk=false"
                                     nudge-left="30px"
                                     origin="center top"
                                     transition="scale-transition"
                                     content-class="time-select-menu bg-white"
-                                    offset-y offset-x>
+                                    offset-y
+                                    offset-x>
                                 <template v-slot:activator="{ on, attrs }">
                                     <button type="button" class="list-popup-btn"
                                             v-bind="attrs"

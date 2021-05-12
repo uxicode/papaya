@@ -56,40 +56,6 @@ class MyClassService {
         return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
     }
 
-    /**
-     * 클래스 차단 멤버 전체 조회
-     * @param classId
-     */
-    public getBlockedClassMembers(classId: number): Promise<any> {
-        return request('get', `${CLASS_BASE_URL}/${classId}/members/blocked`);
-    }
-
-    /**
-     * 클래스 멤버 차단
-     * @param classId
-     * @param memberId
-     */
-    public blockClassMember(classId: number, memberId: number): Promise<any> {
-        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/block`);
-    }
-
-    /**
-     * 클래스 멤버 차단 해제
-     * @param classId
-     * @param memberId
-     */
-    public unblockClassMember(classId: number, memberId: number): Promise<any> {
-        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/unblock`);
-    }
-
-    /**
-     * 클래스 멤버 강제 탈퇴
-     * @param classId
-     * @param memberId
-     */
-    public banClassMember(classId: number, memberId: number): Promise<any> {
-        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/ban`);
-    }
 
     public getSearchSchool(name: string): Promise<any> {
         return request('get', `${SCHOOL_URL}/searchbyname/${name}`);
@@ -183,13 +149,7 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum`, {page_no:pageNum, count});
     }
 
-    /**
-     * 클래스 멤버 전체 조회
-     * @param classId
-     */
-    public getClassMembers(classId: number): Promise<any> {
-        return request('get', `${CLASS_BASE_URL}/${classId}/members`);
-    }
+
 
     /**
      * 클래스 맴버 생성 - 클래스 가입 시키기
@@ -205,6 +165,13 @@ class MyClassService {
     }
 
     /**
+     * 클래스 멤버 전체 조회
+     * @param classId
+     */
+    public getClassMembers(classId: number): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/members`);
+    }
+    /**
      * 클래스 멤버 정보 조회 및 수정
      * @param classId
      * @param memberId
@@ -219,6 +186,42 @@ class MyClassService {
 
     public withdrawClass(classId: number, memberId: number): Promise<any> {
         return request('delete', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
+    }
+
+
+    /**
+     * 클래스 차단 멤버 전체 조회
+     * @param classId
+     */
+    public getBlockedClassMembers(classId: number): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/members/blocked`);
+    }
+
+    /**
+     * 클래스 멤버 차단
+     * @param classId
+     * @param memberId
+     */
+    public blockClassMember(classId: number, memberId: number): Promise<any> {
+        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/block`);
+    }
+
+    /**
+     * 클래스 멤버 차단 해제
+     * @param classId
+     * @param memberId
+     */
+    public unblockClassMember(classId: number, memberId: number): Promise<any> {
+        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/unblock`);
+    }
+
+    /**
+     * 클래스 멤버 강제 탈퇴
+     * @param classId
+     * @param memberId
+     */
+    public banClassMember(classId: number, memberId: number): Promise<any> {
+        return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/ban`);
     }
 
     public searchMembers( classId: number, searchWord: string): Promise<any> {
@@ -351,17 +354,15 @@ class MyClassService {
     }
 
 
-    public getSearchResult( searchWord: string): Promise<any> {
-        return request('get', `${CLASS_BASE_URL}/search/all/${searchWord}`);
-    }
-
     /**
      * 클래스 교육과정 개별코스 생성
      * @param classId
+     * @param curriculumId
      */
     public setEduCourseList(classId: number, curriculumId: number): Promise<any>{
         return request('post', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course` );
     }
+
 }
 
 export default new MyClassService();

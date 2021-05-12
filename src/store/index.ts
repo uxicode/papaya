@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import AuthModule from '@/store/auth.module';
-import ClassModule from '@/store/class.module';
-import PageHistoryStatus from '@/store/PageHistoryStatus';
-import SearchModule from '@/store/search.module';
 import {SET_CLASS_ID, SET_MYCLASS_HOME_DATA} from '@/store/mutation-class-types';
 import {SIGNIN_BY_TOKEN} from '@/store/action-auth-types';
+import AuthModule from '@/store/auth.module';
+import ClassModule from '@/store/class.module';
+import SearchModule from '@/store/search.module';
+import PageHistoryStatus from '@/store/PageHistoryStatus';
 
 Vue.use(Vuex);
 
@@ -15,7 +15,7 @@ const store = new Vuex.Store({
     Auth: AuthModule,
     History: PageHistoryStatus,
     MyClass: ClassModule,
-    SearchStatus: SearchModule
+    SearchStatus: SearchModule,
   },
 });
 

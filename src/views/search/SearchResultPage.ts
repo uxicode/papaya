@@ -3,8 +3,10 @@ import {namespace} from 'vuex-class';
 import {ISearchModel} from '@/views/model/search.model';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 import RadioButton from '@/components/radio/RadioButton.vue';
+import Pagination from '@/components/pagination/pagination.vue';
 import WithRender from './SearchResultPage.html';
-import {SearchApiService} from '@/api/service/SearchApiService';
+import MyClassService from '@/api/service/MyClassService';
+import {CLASS_BASE_URL} from '@/api/base';
 
 const SearchStatus = namespace('SearchStatus');
 
@@ -12,12 +14,16 @@ const SearchStatus = namespace('SearchStatus');
 @WithRender
 @Component({
   components:{
-    RadioButton
+    RadioButton,
+    Pagination
   }
 })
 export default class SearchResultPage extends Vue {
 
-  // public isLoading: boolean= false;
+  private radioValue: string = 'all';
+  private currentPageNum: number=1;
+  private numOfPage: number=10;
+  private pageSize: number=5;
   private searchResults: any[]=[];
   private radioItems: any[] = [
     { idx:0, name:'전체', value:'all'},
@@ -25,13 +31,6 @@ export default class SearchResultPage extends Vue {
     { idx:2, name:'클래스', value:'class'},
     { idx:3, name:'태그', value:'tag'}
   ];
-  private radioValue: string = '';
-  private pageCount: number=1;
-  private pageItems: number[] = [];
-  private numOfPage: number=10;
-  private pageSize: number=5;
-  private totalPageCount: number=-1;
-
 
   @SearchStatus.Getter
   private keyword!: string;
@@ -41,6 +40,17 @@ export default class SearchResultPage extends Vue {
 
   @SearchStatus.Getter
   private searchResultData!: ISearchModel[];
+
+  @SearchStatus.Action
+  private SEARCH_RESULT_ACTION!: ( payload: { keyword: string, page_no: number, count: number} )=>Promise<any>;
+
+  get searchTotalModel(): number{
+    return this.searchTotal;
+  }
+
+  get currentTotal(): number{
+    return ( this.radioValue ==='all')? this.searchTotal : this.searchResults.length;
+  }
 
   get searchResultsModel(): any[]{
     if( this.radioValue ==='union'){
@@ -57,9 +67,25 @@ export default class SearchResultPage extends Vue {
     return this.searchResults;
   }
 
-  private getSearchResultList( payload: {page_no: number, count: number}) {
-    //SearchApiService.getSearchResult
 
+
+  private pageChange(num: number): void{
+    this.currentPageNum=num;
+    this.SEARCH_RESULT_ACTION({keyword:this.keyword, page_no:this.currentPageNum, count:this.numOfPage})
+      .then((data) => {
+        //로딩바 설정 해야 함.
+        console.log(this.searchResultsModel);
+        }).catch((error)=>{
+          console.log(error);
+        });
+  }
+
+  private prevPage(num: number): void{
+    this.pageChange(num);
+  }
+
+  private nextPage(num: number): void{
+    this.pageChange(num);
   }
 
   private getProfileImg(imgUrl: string | null | undefined ): string{
@@ -75,8 +101,11 @@ export default class SearchResultPage extends Vue {
   }
 
   private gotoLink(item: any): void {
-    this.$router.push( {path:'/class/enrollClass'} ).then(() => {
-      console.log(item.class.g_name, '으로 이동');
+
+    // const shortcutURL = (item.class.me !== null) ? `${CLASS_BASE_URL}/${item.class_id}` : `${CLASS_BASE_URL}/${item.class_id}/enrollClass`;
+    console.log( item.class_id )
+    this.$router.push( {path:`${CLASS_BASE_URL}/${item.class_id}`} ).then(() => {
+      console.log(item.class_id, '으로 이동');
     });
   }
 

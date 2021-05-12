@@ -3,8 +3,8 @@
     <a href="" @click.prevent="onPrevPageClick" class="arrow" :class="{'active':pageCount>1}"><img :src="require('@/assets/images/arrow-left.svg')" alt=""></a>
     <ul>
       <li class="num"
-          v-for="(item, index) in pageItems"
-          :key="`paging-${index}`" :class="{'active':pageCount===item}">
+          v-for="(item, index) in pageItemsModel"
+          :key="`paging-${item}`" :class="{'active':pageCount===item}">
         <a href="" @click.prevent="onPageNumClick( item )">{{ item }}</a>
       </li>
     </ul>
@@ -13,23 +13,49 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
 
 @Component
 export default class Pagination extends Vue{
 
+  @Prop(Number)
+  private total!: number;
+
+  @Prop(Number)
+  private numOfPage!: number;
+
+  @Prop(Number)
+  private pageSize!: number;
+
   private pageCount: number=1;
   private pageItems: number[] = [];
-  private numOfPage: number=10;
-  private pageSize: number=5;
+  // private numOfPage: number=10;
+  // private pageSize: number=5;
   private totalPageCount: number=-1;
 
-  public mounted() {
+  //Prop 로 가져온 값을 변화할때마다 체크하여 함수 등을 실행 하고자 할때는 watch 를 써야 한다. //( 자주 사용되어선 안된다 )
+  @Watch('total')
+  public onChangeTotal(value: number, oldValue: number) {
+    if (value !== oldValue) {
+      this.createPaging();
+    }
+  }
+
+  get pageItemsModel() {
+    return this.pageItems;
+  }
+
+  get pageTotal() {
+    return this.total;
+  }
+
+  public created() {
     this.createPaging();
   }
 
   private createPaging() {
-    this.totalPageCount = this.getTotalPageCount({total: 134, numOfPage: this.numOfPage});
+    console.log(this.total);
+    this.totalPageCount = this.getTotalPageCount({total: this.pageTotal, numOfPage: this.numOfPage});
     this.pageItems=[...this.getPageNum( {totalPageCount: this.totalPageCount, pageSize: this.pageSize, curPageNum:this.pageCount }) ];
     // console.log(this.pageItems);
   }
@@ -45,10 +71,6 @@ export default class Pagination extends Vue{
     return parseInt(`${total / numOfPage}`, 10)+reminderValue;
   }
 
-  private onPageNumClick(num: number) {
-    this.pageCount=num;
-    this.pageItems=[...this.getPageNum( {totalPageCount: this.totalPageCount, pageSize: this.pageSize, curPageNum:this.pageCount }) ];
-  }
 
   /**
    * 페이징 범위에 맞게 각 페이지 넘버 생성 배열 구하기
@@ -88,6 +110,13 @@ export default class Pagination extends Vue{
     };
   }
 
+  private onPageNumClick(num: number) {
+    this.pageCount=num;
+    this.pageItems=[...this.getPageNum( {totalPageCount: this.totalPageCount, pageSize: this.pageSize, curPageNum:this.pageCount }) ];
+    this.$emit('pageChange', this.pageCount );
+  }
+
+
   private onPrevPageClick() {
     if (this.pageCount <= 1) {
       this.pageCount=1;
@@ -96,6 +125,8 @@ export default class Pagination extends Vue{
     }
     this.pageItems=[...this.getPageNum( {totalPageCount: this.totalPageCount, pageSize: this.pageSize, curPageNum:this.pageCount }) ];
     // console.log(this.pageCount);
+
+    this.$emit('prev', this.pageCount );
   }
   private onNextPageClick() {
     this.pageCount++;
@@ -103,6 +134,8 @@ export default class Pagination extends Vue{
       this.pageCount= this.totalPageCount;
     }
     this.pageItems=[...this.getPageNum( {totalPageCount: this.totalPageCount, pageSize: this.pageSize, curPageNum:this.pageCount }) ];
+
+    this.$emit('next', this.pageCount );
   }
 
 }
