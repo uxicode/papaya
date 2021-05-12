@@ -77,6 +77,7 @@ export default class ClassBasicInfo extends Vue {
         MyClassService.getClassInfoById(this.classID)
           .then((data) => {
               this.classInfo = data.classinfo;
+              this.classNameValue = data.classinfo.name;
               console.log(this.classInfo);
           });
     }
@@ -231,10 +232,10 @@ export default class ClassBasicInfo extends Vue {
      */
     private changeInfoSave(): void {
         MyClassService.setClassInfoById(this.classID, {
-            g_name: this.searchResultValue, name: 'test1234', is_private: false
+            g_name: this.searchResultValue, name: this.classNameValue, is_private: false
         }).then(() => {
             console.log(`학교 이름: ${this.searchResultValue} /
-             클래스 이름: / 
+             클래스 이름: / ${this.classNameValue}
              공개 범위: /
              수정 완료`);
             this.goBack();

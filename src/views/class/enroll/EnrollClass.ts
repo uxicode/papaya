@@ -43,7 +43,7 @@ export default class EnrollClass extends Vue {
     private classID: number = Number(window.location.pathname.split('/')[2]);
     private classInfo: {} = {};
     private isPrivate: boolean = false; // 클래스 비공개여부
-
+    private isDisabled: boolean = true; // 가입 신청 버튼
     private inputNickname: string = '';
     private msg: string = '';
     private showMsg: boolean = false;
@@ -113,6 +113,7 @@ export default class EnrollClass extends Vue {
         MyClassService.getClassInfoById(this.classID)
           .then((data) => {
               this.classInfo = data.classinfo;
+              this.isPrivate = data.classinfo.is_private;
               console.log(this.classInfo);
           });
     }
@@ -162,20 +163,8 @@ export default class EnrollClass extends Vue {
               this.isError = false;
               this.isApproval = true;
               this.msg = '사용할 수 있는 닉네임입니다.';
+              this.isDisabled = false;
         });
-    }
-
-    /**
-     * 팝업 내 가입 신청 버튼 활성화 여부
-     * @private
-     */
-    private enrollBtnDisabled(): boolean {
-        if (this.inputNickname !== '' && this.answerList !== null) {
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 
     /**

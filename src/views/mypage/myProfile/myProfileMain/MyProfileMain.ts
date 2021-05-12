@@ -118,8 +118,8 @@ export default class MyProfileMain extends Vue {
     private dashedBirthdayModel(): any {
         if (this.myInfo.birthday !== null) {
             const yyyy = this.myInfo.birthday.substring(0,4);
-            const mm = this.myInfo.birthday.substring(5,6);
-            const dd = this.myInfo.birthday.substring(7,8);
+            const mm = this.myInfo.birthday.substring(4,6);
+            const dd = this.myInfo.birthday.substring(6,8);
             this.birthday = Utils.getDateDashFormat(yyyy,mm,dd);
         }
     }

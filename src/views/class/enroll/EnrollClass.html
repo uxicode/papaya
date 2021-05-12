@@ -37,7 +37,7 @@
             </section>
 
             <!-- 비공개 클래스일 경우 -->
-            <template v-if="true">
+            <template v-if="isPrivate">
                 <section class="contents-right">
                     <div class="classes-feed notification">
                         <div class="cnt-top">
@@ -63,9 +63,9 @@
             </template>
 
             <!-- 공개 클래스일 경우 -->
-<!--            <template v-else>-->
-<!--                <my-class-list-detail-view></my-class-list-detail-view>-->
-<!--            </template>-->
+            <template v-else>
+                <my-class-list-detail-view></my-class-list-detail-view>
+            </template>
         </div>
     </div>
 
@@ -124,7 +124,7 @@
 
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="navi" @btnClick="enrollClassSubmit">가입 신청</btn>
+                    <btn type="navi" :disabled="isDisabled" @btnClick="enrollClassSubmit">가입 신청</btn>
                 </div>
             </div>
         </modal>
