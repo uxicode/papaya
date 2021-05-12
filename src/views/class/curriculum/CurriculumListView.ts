@@ -69,6 +69,8 @@ export default class CurriculumListView extends Vue {
 
     private makeCourseList: any[] = [];
 
+    private attachFileList: any[] = [];
+
     /**
      * 클래스 교육과정 메인리스트
      */
@@ -132,9 +134,9 @@ export default class CurriculumListView extends Vue {
             },
             course_list: [
                 {
-                    startDay: new Date(Date.UTC(2021, 3, 30, )),
-                    createdAt: new Date(Date.UTC(2021, 3, 30, )),
-                    updatedAt: new Date(Date.UTC(2021, 3, 30, )),
+                    startDay: '2019-11-17',
+                    createdAt: '2019-11-17',
+                    updatedAt: '2019-11-17',
                     id: 0,
                     curriculum_id: 0,
                     class_id: 0,
@@ -176,21 +178,19 @@ export default class CurriculumListView extends Vue {
         }
     };
 
-    private attachmentList: any[] = [];
-
     private allCourseList: ICourseList={
         course: {
-            startDay:new Date(),
-            createdAt:new Date(),
-            updatedAt:new Date(),
+            startDay:'0',
+            createdAt:'0',
+            updatedAt:'0',
             id: 0,
             curriculum_id: 0,
             class_id: 0,
             index: 0,
             title: '',
             contents: '',
-            startTime:new Date(),
-            endTime:new Date(),
+            startTime:'0',
+            endTime:'0',
         }
     };
 
@@ -213,6 +213,7 @@ export default class CurriculumListView extends Vue {
     get currentCourseSettingItems(): string[]{
         return this.CourseSettingsItems;
     }
+
 
     get currentStartTimeModel(): string{
         return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
@@ -497,10 +498,6 @@ export default class CurriculumListView extends Vue {
     /**
      * 클래스 교육과정 개별코스 정보 조회
      */
-    get courseList(): ICourseList{
-        return this.allCourseList;
-    }
-
     get courseIdNumber() {
         return this.courseId;
     }

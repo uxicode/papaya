@@ -612,9 +612,9 @@ interface ICurriculumList {
         };
         course_list?: [
             {
-                startDay: Date;
-                createdAt: Date;
-                updatedAt: Date;
+                startDay: Date | string;
+                createdAt: Date | string;
+                updatedAt: Date | string;
                 id: number;
                 curriculum_id: number;
                 class_id: number;
@@ -660,17 +660,17 @@ interface ICurriculumList {
 
 interface ICourseList {
     course: {
-        startDay: Date;
-        createdAt: Date;
-        updatedAt: Date;
+        startDay: Date | string;
+        createdAt: Date | string;
+        updatedAt: Date | string;
         id: number;
         curriculum_id: number;
         class_id: number;
         index: number;
         title: string | undefined;
         contents: string;
-        startTime: Date;
-        endTime: Date;
+        startTime: Date | string;
+        endTime: Date | string;
     };
     message?: string;
 }
