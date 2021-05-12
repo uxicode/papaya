@@ -374,7 +374,8 @@
     display: inline-block;
     margin:0 10px;
     opacity:0.2;
-    vertical-align: middle;
+    vertical-align: top;
+    line-height: 32px;
 
     &.active {
       opacity: 1;

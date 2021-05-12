@@ -499,6 +499,24 @@ body {
   height:auto;
 }
 
+.comment-container{
+  position: relative;
+  width: 100%;
+  height: 330px;
+  padding: 60px 40px 40px;
+  background-color: #fff;
+  text-align: center;
+}
+.comment{
+  width:100%;
+  font-size: 16px;
+
+  &.none{
+    font-size: 16px;
+    color: #1d1d1d;
+  }
+}
+
 @import "./transition";
 @import "./layout";
 @import "./form";

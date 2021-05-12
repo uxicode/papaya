@@ -31,6 +31,7 @@ import {
     MODIFY_CLASS_INFO,
     MODIFY_QUESTION,
 } from '@/store/action-class-types';
+import store from '@/store';
 @Module({
     namespaced: true,
 })
@@ -232,7 +233,7 @@ export default class ClassModule extends VuexModule {
     @Action({rawError: true})
     public [MYCLASS_HOME]( id: string | number ): Promise<any>{
         this.context.commit(SET_CLASS_ID, id);
-
+        console.log( 'store.getters[Auth/userInfo]=', store.getters['Auth/userInfo'] );
         return MyClassService.getClassInfoById( id )
           .then( (data)=>{
               this.context.commit(SET_MYCLASS_HOME_DATA, data.classinfo);

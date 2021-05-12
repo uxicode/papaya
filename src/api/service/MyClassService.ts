@@ -4,7 +4,7 @@ import {
     IMyClassList,
     IPostList,
     IMakeClassInfo,
-    ClassEachInfo
+    ClassEachInfo, IMakeEducation
 } from '@/views/model/my-class.model';
 
 
@@ -194,7 +194,7 @@ class MyClassService {
     /**
      * 클래스 태그 추가
      * @param classId
-     * @param keyword
+     * @param payload
      */
     public addClassTag(classId: number, payload: {keyword: string}): Promise<any> {
         return request('post', `${CLASS_BASE_URL}/${classId}/tags`, payload);
@@ -220,6 +220,7 @@ class MyClassService {
     /**
      * 클래스 교육과정 생성
      * @param classId
+     * @param curriculumItems
      */
     public setEducationList(classId: number, curriculumItems: IMakeEducation): Promise<any>{
         return request('post', `${CLASS_BASE_URL}/${classId}/curriculum`, curriculumItems );
@@ -228,6 +229,7 @@ class MyClassService {
     /**
      * 클래스 교육과정 삭제
      * @param classId
+     * @param curriculumId
      */
     public deleteEducationList(classId: number, curriculumId: number): Promise<any>{
         return request('delete', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}` );

@@ -139,8 +139,10 @@ import {Log} from '@/decorators';
 import {CLASS_BASE_URL} from '@/api/base';
 import {SearchApiService} from '@/api/service/SearchApiService';
 import {Utils} from '@/utils/utils';
+import {MYCLASS_HOME} from '@/store/action-class-types';
 
 
+const MyClass = namespace('MyClass');
 const SearchStatus = namespace('SearchStatus');
 
 const SEARCH_TYPE={
@@ -162,6 +164,9 @@ export default class Search extends Vue {
   private searchValue: string = '';
   private searchItems: any[]=[];
   private searchType: string = 'home';
+
+  @MyClass.Action
+  private MYCLASS_HOME!: (id: string | number) => Promise<any>;
 
 
   @SearchStatus.Mutation
@@ -228,11 +233,22 @@ export default class Search extends Vue {
   private gotoLink( item: any ): void {
     console.log(item);
     this.searchType = SEARCH_TYPE.RESULT;
-    const shortcutURL = (item.class.me !== null) ? `${CLASS_BASE_URL}/${item.class_id}` : `${CLASS_BASE_URL}/${item.class_id}/enrollClass`;
 
-    this.$router.push({path:shortcutURL}).then(() => {
-      console.log(shortcutURL, '으로 이동');
-    });
+    // console.log('item.class.me=', item.class.me);
+
+    // const shortcutURL = (item.class.me !== null) ? `${CLASS_BASE_URL}/${item.class_id}` : `${CLASS_BASE_URL}/${item.class_id}/enrollClass`;
+
+    //클래스 멤버일때
+    if (item.class.me !== null) {
+      this.MYCLASS_HOME(item.class_id).then(()=>{
+        this.$router.push({path: `${CLASS_BASE_URL}/${item.class_id}`})
+            .then(( )=>{
+              console.log(this.classID, ':: 해당 클래스 홈 이동');
+            });
+      });
+    }else{
+      this.$router.push({path: `${CLASS_BASE_URL}/${item.class_id}/enrollClass`});
+    }
 
     this.SEARCHING(false);
 

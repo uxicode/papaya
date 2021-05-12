@@ -1,124 +1,94 @@
 <div class="contents">
-    <div class="contents-inner">
-        <div class="result-top">
-            <h2><strong> ‘{{keyword }}’</strong>에 대한 <strong class="fc-red">{{ searchTotal }}</strong>건의 검색결과</h2>
-            <div class="result-filter">
-                <div class="checkbox-group">
-                  <!--<div class="btn-radio">
-                      <input type="radio" name="radio1" id="allCheck" checked>
-                      <label for="allCheck">전체</label>
-                  </div>
-
-                 <divss="btn-radio">
-                      <input type="radio" name="radio1" id="radio1">
-                      <label for="radio1">소속기관</label>
-                  </div>
-
-                  <div class="btn-radio">
-                      <input type="radio" name="radio1" id="radio2">
-                      <label for="radio2">클래스</label>
-                  </div>
-
-                  <div class="btn-radio">
-                      <input type="radio" name="radio1" id="radio3">
-                      <label for="radio3">태그</label>
-                  </div>-->
-
-                  <radio-button v-for="(item, index) in radioItems"
-                                :btn-id="`chk${index}`"
-                                radio-name="radio"
-                                :btn-value="item.value"
-                                active-value="all"
-                                v-model="radioValue"
-                                @click="optionChange">{{ item.name }}</radio-button>
-                </div>
-            </div>
+  <div class="contents-inner">
+    <div class="result-top">
+      <h2><strong> ‘{{ keyword }}’</strong>에 대한 <strong class="fc-red">{{ searchTotal }}</strong>건의 검색결과</h2>
+      <div class="result-filter" v-if="isResultNone">
+        <div class="checkbox-group">
+          <radio-button v-for="(item, index) in radioItems"
+                        :btn-id="`chk${index}`"
+                        radio-name="radio"
+                        :btn-value="item.value"
+                        active-value="all"
+                        v-model="radioValue"
+                        @click="optionChange">{{ item.name }}
+          </radio-button>
         </div>
-
-        <div class="result-cnt">
-            <div class="search-classes" style="box-shadow: none;">
-                <div class="tb-cnt">
-                    <table class="tb tb-search">
-                        <colgroup>
-                            <col style="width:380px">
-                            <col style="width:180px">
-                            <col style="width:470px">
-                        </colgroup>
-                        <thead>
-                        <tr>
-                            <th><strong>클래스</strong></th>
-                            <th>운영자</th>
-                            <th>태그</th>
-                        </tr>
-                        </thead>
-                      <transition-group tag="tbody" name="slideY" @before-enter="beforeEnter" @after-enter="afterEnter">
-                        <tr v-for="( item, index ) in searchResultsModel" :key="`cell-${index}`" :data-index="index">
-                          <td>
-                            <a href="" @click.prevent="gotoLink( item )">
-                              <div class="tb-style">
-<!--                                <div class="tb-cell wd-30">{{ item.rank }}</div>-->
-                                <div class="tb-cell">
-                                  <img :src="getProfileImg(  item.image_url )" alt="" style="width:32px; height:32px;border-radius:50%;">
-                                </div>
-                                <div class="tb-cell pdl-10">
-                                  <span class="group-tit">{{ item.g_name }}</span>
-                                  <p class="class-tit">{{ item.name }}</p>
-                                </div>
-                              </div>
-                            </a>
-                          </td>
-                          <td>
-                            <p class="class-admin">{{ }}</p>
-                          </td>
-                          <td>
-                            <div class="class-tag">
-                              <a href="" @click.prevent="gotoLink( item )">
-                                <p>{{ getHashTag(item.class_tags) }}</p>
-                                <span class="search-more"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></span>
-                              </a>
-                            </div>
-                          </td>
-                        </tr>
-                      </transition-group>
-
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="result-footer">
-
-          <!-- :total="총개"
-                  :num-of-page="한페이지 당 리스트 개수 "
-                  :page-size="한페이지에 보여줄 페이징 개수"
-                  @pageChange="페이징 넘버 버튼 클릭시 이벤트 핸들러"
-                  @prev="이전 페이지 버튼 클릭시 이벤트 핸들러"
-                  @next="다음 페이지 버튼 클릭시 이벤트 핸들러"-->
-          <pagination
-                  :total.sync="currentTotal"
-                  :num-of-page="numOfPage"
-                  :page-size="pageSize"
-                  @pageChange="pageChange"
-                  @prev="prevPage"
-                  @next="nextPage"></pagination>
-
-            <!--<div class="pagination">
-              <a href="" @click.prevent="onPrevPageClick" class="arrow" :class="{'active':pageCount>1}"><img :src="require('@/assets/images/arrow-left.svg')" alt=""></a>
-                <ul>
-&lt;!&ndash;                    <li class="arrow"></li>&ndash;&gt;
-                    <li class="num"
-                        v-for="(item, index) in pageItems"
-                        :key="`paging-${index}`" :class="{'active':pageCount===item}">
-                      <a href="" @click.prevent="onPageNumClick( item )">{{ item }}</a>
-                    </li>
-&lt;!&ndash;                    <li class="arrow active"></li>&ndash;&gt;
-                </ul>
-              <a href="" @click.prevent="onNextPageClick" class="arrow"  :class="{'active':pageCount>0 && pageCount<totalPageCount}"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
-            </div>-->
-        </div>
+      </div>
     </div>
+
+    <div class="result-cnt">
+      <div class="search-classes" style="box-shadow: none;">
+        <div class="tb-cnt" v-if="isResultNone">
+          <table class="tb tb-search">
+            <colgroup>
+              <col style="width:380px">
+              <col style="width:180px">
+              <col style="width:470px">
+            </colgroup>
+            <thead>
+            <tr>
+              <th><strong>클래스</strong></th>
+              <th>운영자</th>
+              <th>태그</th>
+            </tr>
+            </thead>
+            <transition-group tag="tbody" name="slideY" @before-enter="beforeEnter" @after-enter="afterEnter">
+              <tr v-for="( item, index ) in searchResultsModel" :key="`cell-${index}`" :data-index="index">
+                <td>
+                  <a href="" @click.prevent="gotoLink( item )">
+                    <div class="tb-style">
+                      <!--                                <div class="tb-cell wd-30">{{ item.rank }}</div>-->
+                      <div class="tb-cell">
+                        <img :src="getProfileImg(  item.image_url )" alt="" style="width:32px; height:32px;border-radius:50%;">
+                      </div>
+                      <div class="tb-cell pdl-10">
+                        <span class="group-tit">{{ item.g_name }}</span>
+                        <p class="class-tit">{{ item.name }}</p>
+                      </div>
+                    </div>
+                  </a>
+                </td>
+                <td>
+                  <p class="class-admin">{{ }}</p>
+                </td>
+                <td>
+                  <div class="class-tag">
+                    <a href="" @click.prevent="gotoLink( item )">
+                      <p>{{ getHashTag(item.class_tags) }}</p>
+                      <span class="search-more"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></span>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </transition-group>
+
+          </table>
+        </div>
+        <div class="comment-container" v-else>
+          <p class="comment none">검색 결과가 없습니다.<br>클래스를 직접 만들어 보세요.</p>
+          <div class="mgt-30">
+            <btn @click.prevent="gotoMakeClassPage">클래스 만들기</btn>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="result-footer" v-if="isResultNone">
+
+      <!-- :total="총개"
+              :num-of-page="한페이지 당 리스트 개수 "
+              :page-size="한페이지에 보여줄 페이징 개수"
+              @pageChange="페이징 넘버 버튼 클릭시 이벤트 핸들러"
+              @prev="이전 페이지 버튼 클릭시 이벤트 핸들러"
+              @next="다음 페이지 버튼 클릭시 이벤트 핸들러"-->
+      <pagination
+              :total.sync="currentTotal"
+              :num-of-page="numOfPage"
+              :page-size="pageSize"
+              @pageChange="pageChange"
+              @prev="prevPage"
+              @next="nextPage"></pagination>
+    </div>
+  </div>
 </div>
-<!--
-    클래스 찾기 모음
-    4.2.3.1 / 4.2.3.2 / 4.2.3.3 / 4.2.3.4
--->

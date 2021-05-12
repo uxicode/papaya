@@ -1,13 +1,17 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import {CLASS_BASE_URL} from '@/api/base';
 import {ISearchModel} from '@/views/model/search.model';
+import {IUserMe} from '@/api/model/user.model';
+import MyClassService from '@/api/service/MyClassService';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import Pagination from '@/components/pagination/pagination.vue';
+import Btn from '@/components/button/Btn.vue';
 import WithRender from './SearchResultPage.html';
-import MyClassService from '@/api/service/MyClassService';
-import {CLASS_BASE_URL} from '@/api/base';
 
+const Auth = namespace('Auth');
+const MyClass = namespace('MyClass');
 const SearchStatus = namespace('SearchStatus');
 
 
@@ -15,10 +19,29 @@ const SearchStatus = namespace('SearchStatus');
 @Component({
   components:{
     RadioButton,
-    Pagination
+    Pagination,
+    Btn
   }
 })
 export default class SearchResultPage extends Vue {
+
+  @Auth.Getter
+  private userInfo!: IUserMe;
+
+  @SearchStatus.Getter
+  private keyword!: string;
+
+  @SearchStatus.Getter
+  private searchTotal!: number;
+
+  @SearchStatus.Getter
+  private searchResultData!: ISearchModel[];
+
+  @MyClass.Action
+  private MYCLASS_HOME!: (id: string | number) => Promise<any>;
+
+  @SearchStatus.Action
+  private SEARCH_RESULT_ACTION!: ( payload: { keyword: string, page_no: number, count: number} )=>Promise<any>;
 
   private radioValue: string = 'all';
   private currentPageNum: number=1;
@@ -32,20 +55,13 @@ export default class SearchResultPage extends Vue {
     { idx:3, name:'태그', value:'tag'}
   ];
 
-  @SearchStatus.Getter
-  private keyword!: string;
-
-  @SearchStatus.Getter
-  private searchTotal!: number;
-
-  @SearchStatus.Getter
-  private searchResultData!: ISearchModel[];
-
-  @SearchStatus.Action
-  private SEARCH_RESULT_ACTION!: ( payload: { keyword: string, page_no: number, count: number} )=>Promise<any>;
 
   get searchTotalModel(): number{
     return this.searchTotal;
+  }
+
+  get isResultNone(): boolean{
+    return this.searchTotal>0;
   }
 
   get currentTotal(): number{
@@ -100,12 +116,31 @@ export default class SearchResultPage extends Vue {
     return keywords.join(' ');
   }
 
-  private gotoLink(item: any): void {
+  private async myClassCheck( id: number ){
+    return await MyClassService.getMyInfoInThisClass( id );
+  }
 
-    // const shortcutURL = (item.class.me !== null) ? `${CLASS_BASE_URL}/${item.class_id}` : `${CLASS_BASE_URL}/${item.class_id}/enrollClass`;
-    console.log( item.class_id )
-    this.$router.push( {path:`${CLASS_BASE_URL}/${item.class_id}`} ).then(() => {
-      console.log(item.class_id, '으로 이동');
+  private gotoLink(item: any): void {
+    // console.log('item', item, this.userInfo );
+    const idx=( item.class_id!==null)? item.class_id : item.id;
+
+    this.myClassCheck(idx)
+      .then(( data )=>{
+        // console.log(data.result);
+        //이미 가입된 멤버일때
+        if( data.result!==null ){
+          //class home data 갱신시킴.
+         this.MYCLASS_HOME(idx).then(()=>{
+           //해당 클래스 홈으로 이동
+           this.$router.push({path: `${CLASS_BASE_URL}/${idx}`});
+         });
+        }else{
+          //가입 멤버가 아니기에 클래스 가입 페이지로 이동.
+          this.$router.push({path: `${CLASS_BASE_URL}/${idx}/enrollClass`});
+        }
+      }).catch((error)=>{
+        //오류 발생시 메인으로 이동시킴.
+         this.$router.push({path: '/'});
     });
   }
 
@@ -136,88 +171,8 @@ export default class SearchResultPage extends Vue {
     this.radioValue=value;
   }
 
-  private mounted() {
-    // this.createPaging();
+  private gotoMakeClassPage() {
+    this.$router.push({path: '/make-class'});
   }
-
-/*
-  private createPaging() {
-    this.totalPageCount = this.getTotalPageCount({total: 134, numOfPage: this.numOfPage});
-    this.pageItems=[...this.getPageNum( {totalPageCount: this.totalPageCount, pageSize: this.pageSize, curPageNum:this.pageCount }) ];
-    // console.log(this.pageItems);
-  }
-
-  /!**
-   * 총 페이지 카운트 구하기
-   * @param paging
-   * @private
-   *!/
-  private getTotalPageCount( paging: {total: number, numOfPage: number}): number {
-    const { total, numOfPage } = paging;
-    const reminderValue=( total%numOfPage === 0)? 0 : 1;
-    return parseInt(`${total / numOfPage}`, 10)+reminderValue;
-  }
-
-  private onPageNumClick(num: number) {
-    this.pageCount=num;
-    this.pageItems=[...this.getPageNum( {totalPageCount: this.totalPageCount, pageSize: this.pageSize, curPageNum:this.pageCount }) ];
-  }
-
-  /!**
-   * 페이징 범위에 맞게 각 페이지 넘버 생성 배열 구하기
-   * @param paging
-   * @private
-   *!/
-  private getPageNum(  paging: { totalPageCount: number, pageSize: number, curPageNum: number} ): number[] {
-    const { start, end }=this.getPageRange( paging );
-    const pageNumItems: number[] = [];
-    for (let i = start+1; i < end+1; i++) {
-      pageNumItems.push(i);
-    }
-    return pageNumItems;
-  }
-
-  /!**
-   * 페이징 범위 구하기
-   * @param paging
-   * @private
-   *!/
-  private getPageRange( paging: { totalPageCount: number, pageSize: number, curPageNum: number} ): {start: number, end: number}{
-    //total - 전체 개수
-    //numOfPage - 페이지 당 개수
-    //pageSize - 화면에 표시할 페이징 범위
-    // curPageNum - 현재 페이지
-    const { pageSize, curPageNum, totalPageCount} = paging;
-    const reminderValChk = (curPageNum % pageSize === 0) ? -1 : 0;
-    const curCountByPageSize: number = parseInt(`${curPageNum / pageSize}`, 10)+reminderValChk;
-
-    const startPage=curCountByPageSize*pageSize;
-    const endCalc= (curCountByPageSize + 1) * pageSize;
-    const endPage = ( endCalc >= totalPageCount) ? totalPageCount : (curCountByPageSize + 1) * pageSize;
-    // console.log('현재페이지 번호='+curPageNum, 'startPage=' + startPage, 'pageRange='+endPage, this.totalPageCount);
-    return {
-      start: startPage,
-      end: endPage
-    };
-  }
-
-  private onPrevPageClick() {
-    if (this.pageCount <= 1) {
-      this.pageCount=1;
-    }else{
-      this.pageCount--;
-    }
-    this.pageItems=[...this.getPageNum( {totalPageCount: this.totalPageCount, pageSize: this.pageSize, curPageNum:this.pageCount }) ];
-    // console.log(this.pageCount);
-  }
-  private onNextPageClick() {
-    this.pageCount++;
-    if (this.pageCount > this.totalPageCount) {
-      this.pageCount= this.totalPageCount;
-    }
-    this.pageItems=[...this.getPageNum( {totalPageCount: this.totalPageCount, pageSize: this.pageSize, curPageNum:this.pageCount }) ];
-  }*/
-
-
 
 }
