@@ -1,4 +1,5 @@
 import {IUserMe} from '@/api/model/user.model';
+import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
 import {IClassInfo, IClassMemberInfo} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
@@ -102,7 +103,7 @@ export default class ClassProfile extends Vue {
      */
     private checkDuplicateNickname(nickname: string): void {
         this.showMessage();
-        MyClassService.searchNickname(this.classID, nickname)
+        ClassMemberService.searchNickname(this.classID, nickname)
           .then((data) => {
               console.log(data);
               this.isApproval = false;
@@ -181,7 +182,7 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private modifyNickname(newNickname: string): void {
-        MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {nickname: newNickname})
+        ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {nickname: newNickname})
           .then(() => {
               this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.myClassInfo.me.id}).then(() => {
                   console.log('닉네임 변경 완료');
@@ -200,19 +201,19 @@ export default class ClassProfile extends Vue {
     private openLevelModify(data: string, level: number): void {
         switch (data) {
             case 'open_level_id':
-                MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {open_level_id: level})
+                ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {open_level_id: level})
                   .then(() => {
                     console.log('아이디 공개 여부 수정');
                   });
                 break;
             case 'open_level_mobileno':
-                MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {open_level_mobileno: level})
+                ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {open_level_mobileno: level})
                   .then(() => {
                       console.log('모바일 공개 여부 수정');
                   });
                 break;
             case 'open_level_email':
-                MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {open_level_email: level})
+                ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {open_level_email: level})
                   .then(() => {
                       console.log('이메일 공개 여부 수정');
                   });

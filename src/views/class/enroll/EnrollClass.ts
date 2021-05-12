@@ -1,3 +1,4 @@
+import ClassMemberService from '@/api/service/ClassMemberService';
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {CLASS_BASE_URL} from '@/api/base';
@@ -152,7 +153,7 @@ export default class EnrollClass extends Vue {
      */
     private checkDuplicateNickname(nickname: string): void {
         this.showMsg = true;
-        MyClassService.searchNickname(this.classID, nickname)
+        ClassMemberService.searchNickname(this.classID, nickname)
           .then((data) => {
               console.log(data);
               this.isApproval = false;
@@ -190,7 +191,7 @@ export default class EnrollClass extends Vue {
               },
             ],
         };
-        MyClassService.addClassMembers(this.classID, this.enrollMemberInfo)
+        ClassMemberService.setClassMember(this.classID, this.enrollMemberInfo)
           .then((result) => {
             console.log(result);
         });

@@ -1,3 +1,4 @@
+import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
 import { IClassMemberInfo } from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
@@ -35,15 +36,15 @@ export default class ClassMemberManage extends Vue{
     }
 
     public created() {
-        this.getClassMembers();
+        this.getAllClassMembers();
     }
 
     /**
      * 전체 클래스 멤버 가져오기
      * @private
      */
-    private getClassMembers(): void {
-        MyClassService.getClassMembers(this.classID)
+    private getAllClassMembers(): void {
+        ClassMemberService.getAllClassMembers(this.classID)
           .then((data) => {
             this.classMemberList = data.class_member_list;
             //console.log(this.classMemberList);
@@ -111,7 +112,7 @@ export default class ClassMemberManage extends Vue{
     private memberBlockSubmit(): void {
         this.isBlockModal = false;
         this.isBlockCompleteModal = true;
-        MyClassService.blockClassMember(this.classID, this.memberId)
+        ClassMemberService.setBlockClassMember(this.classID, this.memberId)
           .then(() => {
              console.log(`${this.memberId} 멤버 차단 완료`);
           });
@@ -133,7 +134,7 @@ export default class ClassMemberManage extends Vue{
      * @private
      */
     private getMemberInfo(): void {
-        MyClassService.getClassMemberInfo(this.classID, this.memberId)
+        ClassMemberService.getClassMemberInfo(this.classID, this.memberId)
           .then((data) => {
             console.log(data);
             this.memberNickname = data.nickname;

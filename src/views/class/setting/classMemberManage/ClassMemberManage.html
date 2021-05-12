@@ -31,11 +31,9 @@
                             <div class="member-info-btn">
                                 <div class="list-popup">
                                     <button type="button" class="list-popup-btn" @click="listPopupToggle(idx)"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                    <div class="list-popup-menu pos-right"
-                                         :class="{'active': isActive}"
-                                         style="transform:translate3d(42px, 0, 0);">
-                                        <button class="list-popup-item" @click="blockModalOpen(item.id)">멤버 차단</button>
-                                        <button class="list-popup-item" @click="banModalOpen(item.id)">강제 탈퇴</button>
+                                    <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0, 0);">
+                                        <button class="list-popup-item" @click="listPopupToggle(idx);blockModalOpen(item.id)">멤버 차단</button>
+                                        <button class="list-popup-item" @click="listPopupToggle(idx);banModalOpen(item.id)">강제 탈퇴</button>
                                     </div>
                                 </div>
                             </div>

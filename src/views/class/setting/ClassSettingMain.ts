@@ -1,3 +1,4 @@
+import ClassMemberService from '@/api/service/ClassMemberService';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
@@ -232,7 +233,7 @@ export default class ClassSettingMain extends Vue{
      */
     private pushToggle(value: boolean): void {
         this.onOffNoti = !!value;
-        MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {onoff_push_noti: this.onOffNoti})
+        ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {onoff_push_noti: this.onOffNoti})
           .then(() => {
               setTimeout(()=>{
                   console.log(this.onOffNoti);
@@ -299,7 +300,7 @@ export default class ClassSettingMain extends Vue{
                 info = {};
                 break;
         }
-        MyClassService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, info)
+        ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, info)
           .then(() => {
             console.log(`${info} 설정 완료`);
           });
@@ -430,7 +431,7 @@ export default class ClassSettingMain extends Vue{
         if (class_members.length >= 1 && me.level === 1) {
             this.isWithdrawDenied = true;
         } else {
-            MyClassService.withdrawClass(this.classID, this.myClassInfo.me.id)
+            ClassMemberService.deleteClassMember(this.classID, this.myClassInfo.me.id)
               .then(() => {
                   console.log('클래스 탈퇴 완료');
               });
