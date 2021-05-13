@@ -188,7 +188,7 @@ class MyClassService {
      * @param keyword
      * @param paging
      */
-    public searchTag(keyword: string, paging: {page_no: number, count: number}={page_no:1, count:10}): Promise<any> {
+    public searchTag(keyword: string, paging: {page_no: number, count: number}): Promise<any> {
         return request('get', `tag/search/${keyword}`, paging);
     }
 

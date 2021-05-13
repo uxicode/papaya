@@ -361,7 +361,7 @@ export default class Search extends Vue {
   }
 
   private gotoTagKeyword(keyword: string) {
-    console.log( 'keyword', keyword )
+    console.log( 'keyword', keyword );
     this.searchType = SEARCH_TYPE.RESULT;
     this.SEARCHING(false);
     this.getSearchResultData(keyword);

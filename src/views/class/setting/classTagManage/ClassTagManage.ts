@@ -64,9 +64,9 @@ export default class ClassTagManage extends Vue {
         return this.searchResults.length;
     }
 
-    // public created() {
-    //     this.getClassTags();
-    // }
+    public created() {
+        this.getClassTags();
+    }
 
 
     /**
@@ -167,7 +167,7 @@ export default class ClassTagManage extends Vue {
 
     private pageChange(num: number): void{
         this.currentPageNum=num;
-        this.TAG_SEARCH_RESULT_ACTION( {keyword: this.keyword, page_no:this.currentPageNum, count:this.numOfPage})
+        this.TAG_SEARCH_RESULT_ACTION({keyword: this.keyword, page_no:this.currentPageNum, count:this.numOfPage})
           .then((data) => {
               console.log(`${data} pageChange`);
           }).catch((error)=>{

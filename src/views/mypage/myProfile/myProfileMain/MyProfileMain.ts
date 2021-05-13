@@ -21,7 +21,7 @@ const Auth = namespace('Auth');
 
 export default class MyProfileMain extends Vue {
     @Auth.Getter
-    public readonly userInfo!: IUserMe;
+    public userInfo!: IUserMe;
 
     @Auth.Action
     public USER_ME_ACTION!: () => Promise<IUserMe>;
@@ -49,9 +49,9 @@ export default class MyProfileMain extends Vue {
     private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
 
 
-    public created() {
-        this.dashedBirthdayModel();
-    }
+    // public created() {
+    //
+    // }
 
     /**
      * 정보변경 modal 혹은 dropdown 열기
@@ -119,7 +119,7 @@ export default class MyProfileMain extends Vue {
     private dashedBirthdayModel(): any {
         if (this.myInfo.birthday !== null) {
             const yyyy = this.myInfo.birthday.substr(0,4);
-            const mm =  this.myInfo.birthday.substr(4,2);
+            const mm = this.myInfo.birthday.substr(4,2);
             const dd = this.myInfo.birthday.substr(6,2);
             this.birthday = Utils.getDateDashFormat(yyyy,mm,dd);
         }

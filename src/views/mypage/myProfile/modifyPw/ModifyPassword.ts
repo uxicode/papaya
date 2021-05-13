@@ -1,4 +1,4 @@
-import {Vue, Component, Prop} from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IUserMe} from '@/api/model/user.model';
 import UserService from '@/api/service/UserService';

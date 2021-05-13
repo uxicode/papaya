@@ -86,7 +86,7 @@ export default class SearchModule extends VuexModule {
   }
 
   @Action({rawError: true})
-  public [TAG_SEARCH_RESULT_ACTION](payload: { keyword: string, page_no: number, count: number}={keyword:'', page_no:1, count:10}): Promise<any>{
+  public [TAG_SEARCH_RESULT_ACTION](payload: { keyword: string, page_no: number, count: number}): Promise<any>{
 
     const {keyword, page_no, count} = payload;
 
