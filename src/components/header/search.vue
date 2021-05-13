@@ -40,8 +40,8 @@
         <div class="keyword">
           <div class="search-inner">
             <transition-group class="keyword-list clearfix" tag="ul" name="slideY" @before-enter="beforeEnterKeywords" @after-enter="afterEnter">
-              <li v-for="(recommandItem, index) in recommandItems" :key="`hashtag-${index}`" :data-index="index">
-                <a href="">{{ recommandItem.keyword }}</a></li>
+              <li v-for="(item, index) in recommandItems" :key="`hashtag-${index}`" :data-index="index">
+                <a href="#" @click.prevent="gotoTagKeyword( item.keyword )">{{ item.keyword }}</a></li>
             </transition-group>
             <!--<ul class="keyword-list clearfix">
                 <li v-for="recommandItem in recommandItems"><a href="">{{ recommandItem.keyword }}</a></li>
@@ -138,8 +138,6 @@ import {
 import {Log} from '@/decorators';
 import {CLASS_BASE_URL} from '@/api/base';
 import {SearchApiService} from '@/api/service/SearchApiService';
-import {Utils} from '@/utils/utils';
-import {MYCLASS_HOME} from '@/store/action-class-types';
 
 
 const MyClass = namespace('MyClass');
@@ -174,6 +172,9 @@ export default class Search extends Vue {
 
   @SearchStatus.Action
   private SEARCH_RESULT_ACTION!: ( payload: { keyword: string, page_no: number, count: number} )=>Promise<any>;
+
+  @SearchStatus.Action
+  private SEARCH_TAG_RESULT_ACTION!: (payload: { keyword: string, page_no: number, count: number } )=>Promise<any>;
 
   get bestItemsModel() {
     return this.bestItems;
@@ -210,7 +211,7 @@ export default class Search extends Vue {
   private getSearchHome() {
     SearchApiService.getSearchHome()
         .then( (data)=>{
-          // console.log(data);
+          console.log(data);
           this.bestItems=data.best_classlist;
           this.recommandItems=data.recommended_keywords;
 
@@ -243,7 +244,7 @@ export default class Search extends Vue {
       this.MYCLASS_HOME(item.class_id).then(()=>{
         this.$router.push({path: `${CLASS_BASE_URL}/${item.class_id}`})
             .then(( )=>{
-              console.log(this.classID, ':: 해당 클래스 홈 이동');
+              console.log(item.class_id, ':: 해당 클래스 홈 이동');
             });
       });
     }else{
@@ -253,6 +254,8 @@ export default class Search extends Vue {
     this.SEARCHING(false);
 
   }
+
+
 
   // 트랜지션을 시작할 때 인덱스 * 100 ms 만큼의 딜레이를 적용합니다.
   private beforeEnterBestItem(el: HTMLElement): void {
@@ -354,18 +357,25 @@ export default class Search extends Vue {
     const schKeyword = (keyword === '') ? this.searchValue : keyword;
     //item ==='' 상태이면 입력후 enter 키나 검색 버튼을 누른 상태 ~
     console.log('schKeyword=', schKeyword, this.searchValue , keyword);
-    this.SEARCH_RESULT_ACTION({keyword:schKeyword, page_no:1, count:10})
+    this.getSearchResultData(schKeyword);
+  }
+
+  private gotoTagKeyword(keyword: string) {
+    console.log( 'keyword', keyword )
+    this.searchType = SEARCH_TYPE.RESULT;
+    this.SEARCHING(false);
+    this.getSearchResultData(keyword);
+  }
+
+  private getSearchResultData( keyword: string ) {
+    this.SEARCH_RESULT_ACTION({keyword, page_no:1, count:10})
         .then((data) => {
           console.log(data);
-          // console.log(this.$router.currentRoute); /////==='/search/result'
-          // this.$router.go(this.$router.currentRoute);
           // , query: { timeStamp: `${new Date().getTime()}` } 처럼 query 값을 같이 주는 이유는 새로고침 후
           // 검색결과  router 주소값이 매번 /search/result 와 같이 똑같은 url 값으로 라우터 이동이 이루어지기 때문에
           //주소값을 매번 검색시 갱신해 줄 필요가 있다.
-
           this.$router.push({ path: '/search/result', query: { q: `${new Date().getTime()}` } }).then(() => {
             console.log(`SearchResultPage` + '으로 이동');
-            // Utils.getWindowReload();
           }).catch((error)=>{
             console.log(error);
           });

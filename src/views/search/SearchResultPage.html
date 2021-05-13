@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <div class="result-cnt">
+    <div class="result-cnt" style="margin-bottom:20px;">
       <div class="search-classes" style="box-shadow: none;">
         <div class="tb-cnt" v-if="isResultNone">
           <table class="tb tb-search">
@@ -37,7 +37,6 @@
                 <td>
                   <a href="" @click.prevent="gotoLink( item )">
                     <div class="tb-style">
-                      <!--                                <div class="tb-cell wd-30">{{ item.rank }}</div>-->
                       <div class="tb-cell">
                         <img :src="getProfileImg(  item.image_url )" alt="" style="width:32px; height:32px;border-radius:50%;">
                       </div>
@@ -67,7 +66,7 @@
         <div class="comment-container" v-else>
           <p class="comment none">검색 결과가 없습니다.<br>클래스를 직접 만들어 보세요.</p>
           <div class="mgt-30">
-            <btn @click.prevent="gotoMakeClassPage">클래스 만들기</btn>
+            <btn @btnClick="gotoMakeClassPage">클래스 만들기</btn>
           </div>
         </div>
 
