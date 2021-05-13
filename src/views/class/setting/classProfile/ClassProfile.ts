@@ -1,9 +1,8 @@
-import {IUserMe} from '@/api/model/user.model';
-import ClassMemberService from '@/api/service/ClassMemberService';
-import MyClassService from '@/api/service/MyClassService';
-import {IClassInfo, IClassMemberInfo} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import {IUserMe} from '@/api/model/user.model';
+import {IClassInfo, IClassMemberInfo} from '@/views/model/my-class.model';
+import ClassMemberService from '@/api/service/ClassMemberService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './ClassProfile.html';

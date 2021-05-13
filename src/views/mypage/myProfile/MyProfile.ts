@@ -1,7 +1,7 @@
+import {Vue, Component} from 'vue-property-decorator';
 import MyProfileMain from '@/views/mypage/myProfile/myProfileMain/MyProfileMain';
 import ModifyMobile from '@/views/mypage/myProfile/modifyMobile/ModifyMobile';
 import ModifyPassword from '@/views/mypage/myProfile/modifyPw/ModifyPassword';
-import {Vue, Component, Prop} from 'vue-property-decorator';
 import WithRender from './MyProfile.html';
 
 @WithRender

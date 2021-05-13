@@ -243,7 +243,7 @@ export default class Search extends Vue {
       this.MYCLASS_HOME(item.class_id).then(()=>{
         this.$router.push({path: `${CLASS_BASE_URL}/${item.class_id}`})
             .then(( )=>{
-              console.log(this.classID, ':: 해당 클래스 홈 이동');
+              console.log(item.class_id, ':: 해당 클래스 홈 이동');
             });
       });
     }else{

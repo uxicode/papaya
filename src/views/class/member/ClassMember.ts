@@ -1,14 +1,14 @@
+import {Vue, Component} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
+import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
 import UserService from '@/api/service/UserService';
-import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import {
     resetSearchInput,
     searchKeyEventObservable,
     searchUserKeyValueObservable
 } from '@/views/service/search/SearchService';
-import {Vue, Component} from 'vue-property-decorator';
-import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './ClassMember.html';

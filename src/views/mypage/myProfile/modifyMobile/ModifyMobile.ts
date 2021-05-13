@@ -1,7 +1,7 @@
-import {IUserMe} from '@/api/model/user.model';
-import UserService from '@/api/service/UserService';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import {IUserMe} from '@/api/model/user.model';
+import UserService from '@/api/service/UserService';
 import Btn from '@/components/button/Btn.vue';
 import TxtField from '@/components/form/txtField.vue';
 import WithRender from './ModifyMobile.html';

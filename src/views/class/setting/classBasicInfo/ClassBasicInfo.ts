@@ -1,12 +1,12 @@
-import MyClassService from '@/api/service/MyClassService';
+import {Vue, Component} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import {IClassInfo, ISearchSchool} from '@/views/model/my-class.model';
 import {
     resetSearchInput,
     searchKeyEventObservable,
     searchUserKeyValueObservable
 } from '@/views/service/search/SearchService';
-import {Vue, Component} from 'vue-property-decorator';
-import {namespace} from 'vuex-class';
+import MyClassService from '@/api/service/MyClassService';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import TxtField from '@/components/form/txtField.vue';

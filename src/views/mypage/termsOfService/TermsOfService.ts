@@ -1,9 +1,9 @@
-import {IUserMe} from '@/api/model/user.model';
 import {Vue, Component} from 'vue-property-decorator';
-import TermsService from '@/api/service/TermsService';
-import {ICheckData, ITermData} from '@/views/model/terms.model';
-import Btn from '@/components/button/Btn.vue';
 import {namespace} from 'vuex-class';
+import {IUserMe} from '@/api/model/user.model';
+import {ICheckData, ITermData} from '@/views/model/terms.model';
+import TermsService from '@/api/service/TermsService';
+import Btn from '@/components/button/Btn.vue';
 import WithRender from './TermsOfService.html';
 
 const Auth = namespace('Auth');
