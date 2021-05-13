@@ -1,10 +1,16 @@
 import MyClassService from '@/api/service/MyClassService';
 import {IClassTag} from '@/views/model/my-class.model';
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
-import {SEARCH_KEYWORD, SEARCHING, SEARCH_DATA_SAVED, SEARCH_TOTAL} from '@/store/mutation-search-types';
+import {
+  SEARCH_KEYWORD,
+  SEARCHING,
+  SEARCH_DATA_SAVED,
+  SEARCH_TOTAL,
+  SEARCHING_TYPE
+} from '@/store/mutation-search-types';
 import {SEARCH_RESULT_ACTION, SEARCHING_ACTION, TAG_SEARCH_RESULT_ACTION} from '@/store/action-search-types';
 import {SearchApiService} from '@/api/service/SearchApiService';
-import {ISearchModel} from '@/views/model/search.model';
+import {ISearchModel } from '@/views/model/search.model';
 
 
 @Module({
@@ -68,6 +74,7 @@ export default class SearchModule extends VuexModule {
         this.context.commit(SEARCH_KEYWORD, keyword );
         this.context.commit(SEARCH_DATA_SAVED, data.classlist );
         this.context.commit(SEARCH_TOTAL, data.total );
+        this.context.commit(SEARCHING_TYPE, false );
         // this.searchResults=data.best_classlist;
         // console.log(this.bestItems );
         return Promise.resolve(data);

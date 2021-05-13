@@ -69,6 +69,7 @@ export default class SearchResultPage extends Vue {
   }
 
   get searchResultsModel(): any[]{
+    console.log('get search model');
     if( this.radioValue ==='union'){
       this.searchResults=[...this.searchResultData.filter( (item: any )=> item.g_name.match( this.keyword )!==null ) ];
     }else if( this.radioValue ==='class'){
@@ -82,7 +83,6 @@ export default class SearchResultPage extends Vue {
     }
     return this.searchResults;
   }
-
 
 
   private pageChange(num: number): void{
@@ -172,7 +172,7 @@ export default class SearchResultPage extends Vue {
   }
 
   private gotoMakeClassPage() {
-    this.$router.push({path: '/make-class'});
+    this.$router.push({path: '/make-class/step1'});
   }
 
 }
