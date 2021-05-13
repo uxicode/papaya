@@ -1,4 +1,4 @@
-import {Vue, Component, Prop} from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
 import MyProfile from '@/views/mypage/myProfile/MyProfile';
 import Bookmark from '@/views/mypage/bookmark/Bookmark';
 import WithRender from './MyPage.html';
@@ -31,11 +31,6 @@ export default class MyPage extends Vue {
       title: '보관함',
       icon: require('@/assets/images/bookmark-outline.svg'),
       key:'bookmark',
-    },
-    {
-      title: '활동내역',
-      icon: require('@/assets/images/history.svg'),
-      key:'activity',
     },
   ];
 

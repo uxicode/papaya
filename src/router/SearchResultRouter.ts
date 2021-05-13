@@ -9,7 +9,7 @@ const SearchResultRouter = [
     name:'SearchResultPage',
     beforeEnter: getIsAuth,
     props: (route: Route) => ({ query: route.query.q }),
-    components: {default: () => import('@/views/class/search/SearchResultPage'), header: AppHeader, footer: AppFooter},
+    components: {default: () => import('@/views/search/SearchResultPage'), header: AppHeader, footer: AppFooter},
   }
 ];
 

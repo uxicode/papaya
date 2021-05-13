@@ -13,14 +13,14 @@ const MyClassSubRouter=[
   {path: 'setting/classStaffManage', name: 'classStaffManage', component: () => import('../views/class/setting/classStaffManage/ClassStaffManage')}, // 클래스 페이지-설정-스탭 관리 (W.4.5.7.9)
   {path: 'setting/classStaffAdd', name: 'classStaffAdd', component: () => import('../views/class/setting/classStaffManage/classStaffAdd/ClassStaffAdd')}, // 클래스 페이지-설정-스탭 관리-스탭 추가 (W.4.5.7.9.1)
   {path: 'setting/classAdminDelegate', name: 'classAdminDelegate', component: () => import('../views/class/setting/classAdminDelegate/ClassAdminDelegate')}, // 클래스 페이지-설정-운영자 위임 신청 (W4.5.7.10)
+  {path: 'fileBox', name: 'fileBox', beforeEnter: getIsAuth, components: {default: () => import('../views/class/fileBox/FileListView'), header: AppHeader, footer: AppFooter}, /* W.4.5.4*/},
   {
     path: 'curriculum',
     name:'curriculumPage',
     component: () => import('../views/class/curriculum/CurriculumPage'),
     children: [
-      {path: '', name: 'curriculumListView', component: () => import('../views/class/curriculum/CurriculumListView')}, // 클래스 페이지-교육과정 (W4.5.5)
+      {path: '', name: 'curriculumListView', component: () => import('../views/class/curriculum/CurriculumListView') }, // 클래스 페이지-교육과정 (W4.5.5)
     ]
   },
-  {path: 'fileBox', name: 'fileBox', beforeEnter: getIsAuth, components: {default: () => import('../views/class/fileBox/FileListView'), header: AppHeader, footer: AppFooter}, /* W.4.5.4*/}
 ];
 export {MyClassSubRouter};

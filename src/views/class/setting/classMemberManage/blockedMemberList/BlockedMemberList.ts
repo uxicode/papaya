@@ -1,3 +1,4 @@
+import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
@@ -35,7 +36,7 @@ export default class BlockedMemberList extends Vue {
      * @private
      */
     private getBlockedMembers(): void {
-        MyClassService.getBlockedClassMembers(this.classID)
+        ClassMemberService.getBlockedClassMembers(this.classID)
           .then((data) => {
               this.blockedMemberList = data.class_member_list;
               console.log(this.blockedMemberList);
@@ -58,7 +59,7 @@ export default class BlockedMemberList extends Vue {
      * @private
      */
     private getBlockedMemberInfo(id: number): void {
-        MyClassService.getClassMemberInfo(this.classID, id)
+        ClassMemberService.getClassMemberInfo(this.classID, id)
           .then((data) => {
               this.blockedMemberNickname = data.nickname;
               this.blockedMemberLevel = data.level;

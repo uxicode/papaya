@@ -139,8 +139,10 @@ import {Log} from '@/decorators';
 import {CLASS_BASE_URL} from '@/api/base';
 import {SearchApiService} from '@/api/service/SearchApiService';
 import {Utils} from '@/utils/utils';
+import {MYCLASS_HOME} from '@/store/action-class-types';
 
 
+const MyClass = namespace('MyClass');
 const SearchStatus = namespace('SearchStatus');
 
 const SEARCH_TYPE={
@@ -163,12 +165,18 @@ export default class Search extends Vue {
   private searchItems: any[]=[];
   private searchType: string = 'home';
 
+  @MyClass.Getter
+  private classID!: string | number;
+
+  @MyClass.Action
+  private MYCLASS_HOME!: (id: string | number) => Promise<any>;
+
 
   @SearchStatus.Mutation
   private SEARCHING!: ( chk: boolean )=>void;
 
   @SearchStatus.Action
-  private SEARCH_RESULT_ACTION!: ( keyword: string )=>Promise<any>;
+  private SEARCH_RESULT_ACTION!: ( payload: { keyword: string, page_no: number, count: number} )=>Promise<any>;
 
   get bestItemsModel() {
     return this.bestItems;
@@ -228,11 +236,22 @@ export default class Search extends Vue {
   private gotoLink( item: any ): void {
     console.log(item);
     this.searchType = SEARCH_TYPE.RESULT;
-    const shortcutURL = (item.class.me !== null) ? `${CLASS_BASE_URL}/${item.class_id}` : `${CLASS_BASE_URL}/${item.class_id}/enrollClass`;
 
-    this.$router.push({path:shortcutURL}).then(() => {
-      console.log(shortcutURL, '으로 이동');
-    });
+    // console.log('item.class.me=', item.class.me);
+
+    // const shortcutURL = (item.class.me !== null) ? `${CLASS_BASE_URL}/${item.class_id}` : `${CLASS_BASE_URL}/${item.class_id}/enrollClass`;
+
+    //클래스 멤버일때
+    if (item.class.me !== null) {
+      this.MYCLASS_HOME(item.class_id).then(()=>{
+        this.$router.push({path: `${CLASS_BASE_URL}/${item.class_id}`})
+            .then(( )=>{
+              console.log(this.classID, ':: 해당 클래스 홈 이동');
+            });
+      });
+    }else{
+      this.$router.push({path: `${CLASS_BASE_URL}/${item.class_id}/enrollClass`});
+    }
 
     this.SEARCHING(false);
 
@@ -338,9 +357,9 @@ export default class Search extends Vue {
     const schKeyword = (keyword === '') ? this.searchValue : keyword;
     //item ==='' 상태이면 입력후 enter 키나 검색 버튼을 누른 상태 ~
     console.log('schKeyword=', schKeyword, this.searchValue , keyword);
-    this.SEARCH_RESULT_ACTION(schKeyword)
+    this.SEARCH_RESULT_ACTION({keyword:schKeyword, page_no:1, count:10})
         .then((data) => {
-          // console.log(data);
+          console.log(data);
           // console.log(this.$router.currentRoute); /////==='/search/result'
           // this.$router.go(this.$router.currentRoute);
           // , query: { timeStamp: `${new Date().getTime()}` } 처럼 query 값을 같이 주는 이유는 새로고침 후

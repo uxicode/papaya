@@ -1,30 +1,32 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import {CLASS_BASE_URL} from '@/api/base';
 import {ISearchModel} from '@/views/model/search.model';
+import {IUserMe} from '@/api/model/user.model';
+import MyClassService from '@/api/service/MyClassService';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 import RadioButton from '@/components/radio/RadioButton.vue';
+import Pagination from '@/components/pagination/pagination.vue';
+import Btn from '@/components/button/Btn.vue';
 import WithRender from './SearchResultPage.html';
 
+const Auth = namespace('Auth');
+const MyClass = namespace('MyClass');
 const SearchStatus = namespace('SearchStatus');
 
 
 @WithRender
 @Component({
   components:{
-    RadioButton
+    RadioButton,
+    Pagination,
+    Btn
   }
 })
 export default class SearchResultPage extends Vue {
 
-  // public isLoading: boolean= false;
-  private searchResults: any[]=[];
-  private radioItems: any[] = [
-    { idx:0, name:'전체', value:'all'},
-    { idx:1, name:'소속기관', value:'union'},
-    { idx:2, name:'클래스', value:'class'},
-    { idx:3, name:'태그', value:'tag'}
-  ];
-  private radioValue: string = '';
+  @Auth.Getter
+  private userInfo!: IUserMe;
 
   @SearchStatus.Getter
   private keyword!: string;
@@ -34,6 +36,37 @@ export default class SearchResultPage extends Vue {
 
   @SearchStatus.Getter
   private searchResultData!: ISearchModel[];
+
+  @MyClass.Action
+  private MYCLASS_HOME!: (id: string | number) => Promise<any>;
+
+  @SearchStatus.Action
+  private SEARCH_RESULT_ACTION!: ( payload: { keyword: string, page_no: number, count: number} )=>Promise<any>;
+
+  private radioValue: string = 'all';
+  private currentPageNum: number=1;
+  private numOfPage: number=10;
+  private pageSize: number=5;
+  private searchResults: any[]=[];
+  private radioItems: any[] = [
+    { idx:0, name:'전체', value:'all'},
+    { idx:1, name:'소속기관', value:'union'},
+    { idx:2, name:'클래스', value:'class'},
+    { idx:3, name:'태그', value:'tag'}
+  ];
+
+
+  get searchTotalModel(): number{
+    return this.searchTotal;
+  }
+
+  get isResultNone(): boolean{
+    return this.searchTotal>0;
+  }
+
+  get currentTotal(): number{
+    return ( this.radioValue ==='all')? this.searchTotal : this.searchResults.length;
+  }
 
   get searchResultsModel(): any[]{
     if( this.radioValue ==='union'){
@@ -50,6 +83,27 @@ export default class SearchResultPage extends Vue {
     return this.searchResults;
   }
 
+
+
+  private pageChange(num: number): void{
+    this.currentPageNum=num;
+    this.SEARCH_RESULT_ACTION({keyword:this.keyword, page_no:this.currentPageNum, count:this.numOfPage})
+      .then((data) => {
+        //로딩바 설정 해야 함.
+        console.log(this.searchResultsModel);
+        }).catch((error)=>{
+          console.log(error);
+        });
+  }
+
+  private prevPage(num: number): void{
+    this.pageChange(num);
+  }
+
+  private nextPage(num: number): void{
+    this.pageChange(num);
+  }
+
   private getProfileImg(imgUrl: string | null | undefined ): string{
     return ImageSettingService.getProfileImg( imgUrl );
   }
@@ -62,9 +116,31 @@ export default class SearchResultPage extends Vue {
     return keywords.join(' ');
   }
 
+  private async myClassCheck( id: number ){
+    return await MyClassService.getMyInfoInThisClass( id );
+  }
+
   private gotoLink(item: any): void {
-    this.$router.push( {path:'/class/enrollClass'} ).then(() => {
-      console.log(item.class.g_name, '으로 이동');
+    // console.log('item', item, this.userInfo );
+    const idx=( item.class_id!==null)? item.class_id : item.id;
+
+    this.myClassCheck(idx)
+      .then(( data )=>{
+        // console.log(data.result);
+        //이미 가입된 멤버일때
+        if( data.result!==null ){
+          //class home data 갱신시킴.
+         this.MYCLASS_HOME(idx).then(()=>{
+           //해당 클래스 홈으로 이동
+           this.$router.push({path: `${CLASS_BASE_URL}/${idx}`});
+         });
+        }else{
+          //가입 멤버가 아니기에 클래스 가입 페이지로 이동.
+          this.$router.push({path: `${CLASS_BASE_URL}/${idx}/enrollClass`});
+        }
+      }).catch((error)=>{
+        //오류 발생시 메인으로 이동시킴.
+         this.$router.push({path: '/'});
     });
   }
 
@@ -91,10 +167,12 @@ export default class SearchResultPage extends Vue {
   }
 
   private optionChange( value: string, checked: boolean ): void{
-    console.log(value, checked);
+    // console.log(value, checked);
     this.radioValue=value;
   }
 
-
+  private gotoMakeClassPage() {
+    this.$router.push({path: '/make-class'});
+  }
 
 }

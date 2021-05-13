@@ -1,3 +1,4 @@
+import ClassMemberService from '@/api/service/ClassMemberService';
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 import {INullable} from '@/views/model/types';
 import {
@@ -30,6 +31,7 @@ import {
     MODIFY_CLASS_INFO,
     MODIFY_QUESTION,
 } from '@/store/action-class-types';
+import store from '@/store';
 @Module({
     namespaced: true,
 })
@@ -166,7 +168,7 @@ export default class ClassModule extends VuexModule {
     @Mutation
     public [CLASS_MEMBER_INFO](memberInfo: IClassMemberInfo[] ): void {
         this.memberInfo = memberInfo;
-        localStorage.setItem('memberInfo', JSON.stringify(this.memberInfo) );
+        //localStorage.setItem('memberInfo', JSON.stringify(this.memberInfo) );
     }
 
     /**
@@ -231,7 +233,7 @@ export default class ClassModule extends VuexModule {
     @Action({rawError: true})
     public [MYCLASS_HOME]( id: string | number ): Promise<any>{
         this.context.commit(SET_CLASS_ID, id);
-
+        console.log( 'store.getters[Auth/userInfo]=', store.getters['Auth/userInfo'] );
         return MyClassService.getClassInfoById( id )
           .then( (data)=>{
               this.context.commit(SET_MYCLASS_HOME_DATA, data.classinfo);
@@ -249,7 +251,7 @@ export default class ClassModule extends VuexModule {
     @Action({rawError: true})
     public [CLASS_MEMBER_INFO_ACTION](payload: { classId: number, memberId: number }): Promise<IClassMemberInfo[]>{
 
-        return MyClassService.getClassMemberInfo(payload.classId, payload.memberId)
+        return ClassMemberService.getClassMemberInfo(payload.classId, payload.memberId)
           .then((data) => {
               this.context.commit(SET_MEMBER_ID, payload.memberId);
               this.context.commit(CLASS_MEMBER_INFO, data);
@@ -266,7 +268,7 @@ export default class ClassModule extends VuexModule {
     public [MODIFY_CLASS_MEMBER_INFO](payload: {classId: number, memberId: number}, data: object): Promise<IClassMemberInfo[]>{
         //this.context.commit(SET_CLASS_ID, payload.classId);
 
-        return MyClassService.setClassMemberInfo(payload.classId, payload.memberId, data)
+        return ClassMemberService.setClassMemberInfo(payload.classId, payload.memberId, data)
           .then((info) => {
               this.context.commit(SET_MEMBER_ID, payload.memberId);
               this.context.commit(CLASS_MEMBER_INFO, info);

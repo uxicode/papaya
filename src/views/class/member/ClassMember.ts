@@ -1,3 +1,4 @@
+import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
 import UserService from '@/api/service/UserService';
 import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
@@ -95,7 +96,7 @@ export default class ClassMember extends Vue{
     ];
 
     public created() {
-        this.getClassMembers();
+        this.getAllClassMembers();
         this.getMyMemberLevel();
         //this.search();
     }
@@ -104,7 +105,7 @@ export default class ClassMember extends Vue{
      * 전체 멤버 리스트를 가져온다.
      * @private
      */
-    private getClassMembers(): void {
+    private getAllClassMembers(): void {
         MyClassService.getClassInfoById(this.classID)
           .then((data) => {
               // 가입 승인된 멤버만 불러온다.
@@ -132,7 +133,7 @@ export default class ClassMember extends Vue{
      * @private
      */
     private getMyMemberLevel(): void {
-        MyClassService.getClassMemberInfo(this.classID, this.classInfo.me.id)
+        ClassMemberService.getClassMemberInfo(this.classID, this.classInfo.me.id)
           .then((data) => {
             //console.log(data.member_info);
             this.myMemberLevel = data.level;
@@ -216,7 +217,7 @@ export default class ClassMember extends Vue{
 
             //사용자가 입력한 값 처리 Observable
             //obv$: Observable<any>, loadChk: ()=>void, promiseFunc: Promise<any>, isLoading: boolean
-            const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, { fn: MyClassService.searchMembers, args:[Number(this.classID)] }, this.isLoading );
+            const userInter$ = searchUserKeyValueObservable(keyup$, this.checkLoading, { fn: ClassMemberService.searchMembers, args:[Number(this.classID)] }, this.isLoading );
             userInter$.subscribe({
                 next:( searchData: any ) =>{
                     console.log(searchData);
@@ -290,7 +291,7 @@ export default class ClassMember extends Vue{
      * @private
      */
     private getMemberQna(memberId: number): void {
-        MyClassService.getMemberClassQnA(this.classID, memberId)
+        ClassMemberService.getMemberClassQnA(this.classID, memberId)
           .then((data) => {
               this.qnaList = data.qnalist;
           });
@@ -313,7 +314,7 @@ export default class ClassMember extends Vue{
     private memberBlockSubmit(): void {
         this.isBlockModal = false;
         this.isBlockCompleteModal = true;
-        MyClassService.blockClassMember(this.classID, this.memberId)
+        ClassMemberService.setBlockClassMember(this.classID, this.memberId)
           .then(() => {
               console.log(`${this.memberId} 멤버 차단 완료`);
           });

@@ -484,7 +484,12 @@ interface IMakeCourse {
     startDay: Date | string;
     startTime: Date | string;
     endTime: Date | string;
+    attachment: [];
 }
+
+// interface IMakeCourseFile {
+//
+// }
 
 interface IEducationList {
     total: number;

@@ -9,7 +9,7 @@ export class SearchApiService{
     return request('get', `${CLASS_BASE_URL}/search/home`);
   }
 
-  public static getSearchResult( searchWord: string, paging: {page_no: number, count: number}={page_no:0, count:10}): Promise<any> {
+  public static getSearchResult( searchWord: string, paging: {page_no: number, count: number}={page_no:1, count:10}): Promise<any> {
     return request('get', `${CLASS_BASE_URL}/search/all/${searchWord}`, paging );
   }
 }
