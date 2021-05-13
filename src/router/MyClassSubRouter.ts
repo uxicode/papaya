@@ -15,7 +15,7 @@ const MyClassSubRouter=[
   {path: 'setting/classAdminDelegate', name: 'classAdminDelegate', component: () => import('../views/class/setting/classAdminDelegate/ClassAdminDelegate')}, // 클래스 페이지-설정-운영자 위임 신청 (W4.5.7.10)
   {
     path: 'curriculum',
-    name:'curriculum',
+    name:'curriculumPage',
     component: () => import('../views/class/curriculum/CurriculumPage'),
     children: [
       {path: '', name: 'curriculumListView', component: () => import('../views/class/curriculum/CurriculumListView')}, // 클래스 페이지-교육과정 (W4.5.5)
