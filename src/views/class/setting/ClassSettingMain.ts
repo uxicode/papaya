@@ -114,7 +114,7 @@ export default class ClassSettingMain extends Vue{
             type: 'withdrawModal'
         }
     ];
-    private listGroup: object[] = [
+    private listGroup: any = [
         {
             tit: '클래스 관리',
             list: this.classManageList

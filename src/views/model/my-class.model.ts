@@ -675,6 +675,14 @@ interface ICourseList {
     message?: string;
 }
 
+interface IClassTag {
+    id: number;
+    class_id: number;
+    keyword: string;
+    updatedAt?: Date;
+    createdAt?: Date;
+}
+
 
 export {
     IMyClassList,
@@ -694,5 +702,6 @@ export {
     IMakeCourse,
     IEducationList,
     ICurriculumList,
-    ICourseList
+    ICourseList,
+    IClassTag
 };

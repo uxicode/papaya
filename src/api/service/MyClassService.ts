@@ -185,10 +185,11 @@ class MyClassService {
 
     /**
      * 태그 검색
-     * @param searchText
+     * @param keyword
+     * @param paging
      */
-    public searchTag(searchText: string): Promise<any> {
-        return request('get', `tag/search/${searchText}`);
+    public searchTag(keyword: string, paging: {page_no: number, count: number}={page_no:1, count:10}): Promise<any> {
+        return request('get', `tag/search/${keyword}`, paging);
     }
 
     /**

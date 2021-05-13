@@ -5,52 +5,63 @@ import {
     searchKeyEventObservable,
     searchUserKeyValueObservable
 } from '@/views/service/search/SearchService';
+import {IClassTag} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
+import Pagination from '@/components/pagination/pagination.vue';
 import WithRender from './ClassTagManage.html';
 
-interface ITagInfo {
-    id: number;
-    class_id: number;
-    keyword: string;
-    updatedAt?: Date;
-    createdAt?: Date;
-}
-
 const MyClass = namespace('MyClass');
+const SearchStatus = namespace('SearchStatus');
 
 @WithRender
 @Component({
     components: {
         TxtField,
         Btn,
-        Modal
+        Modal,
+        Pagination
     }
 })
 
 export default class ClassTagManage extends Vue {
-    private tagList: ITagInfo[] = [];
+    private tagList: IClassTag[] = [];
 
     private isClassTagSearch: boolean = false;
     private isLoading: boolean = false;
     private searchTagValue: string = '';
-    private searchResultItems: ITagInfo[] = [];
+    private searchResultItems: IClassTag[] = [];
+
+    /* 검색 결과 페이징 */
+    private numOfPage: number=10;
+    private pageSize: number=5;
+    private currentPageNum: number=1;
 
     @MyClass.Getter
     private classID!: number;
+
+    @SearchStatus.Action
+    private TAG_SEARCH_RESULT_ACTION!: ( payload: { keyword: string, page_no: number, count: number} )=>Promise<any>;
+
+    @SearchStatus.Getter
+    private keyword!: string;
 
     get searchResultValue(): string{
         return this.searchTagValue;
     }
 
-    get searchResults(): ITagInfo[] {
+    get searchResults(): IClassTag[] {
         return this.searchResultItems;
     }
 
     get loadingModel() {
         return this.isLoading;
+    }
+
+    get currentTotal(): number{
+        return this.searchResults.length;
     }
 
     // public created() {
@@ -152,6 +163,24 @@ export default class ClassTagManage extends Vue {
         this.closeTagSearchPopup();
         this.searchTagValue=name;
         this.addTag(this.searchTagValue);
+    }
+
+    private pageChange(num: number): void{
+        this.currentPageNum=num;
+        this.TAG_SEARCH_RESULT_ACTION( {keyword: this.keyword, page_no:this.currentPageNum, count:this.numOfPage})
+          .then((data) => {
+              console.log(`${data} pageChange`);
+          }).catch((error)=>{
+            console.log(error);
+        });
+    }
+
+    private prevPage(num: number): void{
+        this.pageChange(num);
+    }
+
+    private nextPage(num: number): void{
+        this.pageChange(num);
     }
 
     /**

@@ -55,7 +55,7 @@
                     <div class="list-right" v-click-outside="closeListMenu">
                         <div class="list-popup">
                             <button type="button" class="list-popup-btn" @click="openModify('gender')">
-                                {{ myInfo.gender == 1 ? '남자' : '여자' }}
+                                {{ myInfo.gender === 1 ? '남자' : '여자' }}
                                 <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
                             </button>
                             <div class="list-popup-menu" :class="{'active': isModifyGender}">
@@ -123,7 +123,7 @@
                         <img :src="require('@/assets/images/popup-icon-profile.svg')">
                     </div>
                     <div class="popup-close">
-                        <button class="close" @click="isModifyNameModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                        <button class="close" @click="isModifyNameModal=false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                     </div>
                 </div>
                 <div slot="body">
@@ -138,7 +138,7 @@
                 </div>
                 <div slot="footer">
                     <div class="btn-group rt">
-                        <btn type="outline" @btnClick="isModifyNameModal = false; tempData = myInfo.fullname">취소</btn>
+                        <btn type="outline" @btnClick="isModifyNameModal=false; tempData=myInfo.fullname">취소</btn>
                         <btn type="navi" @btnClick="modifyName(tempData);">변경하기</btn>
                     </div>
                 </div>

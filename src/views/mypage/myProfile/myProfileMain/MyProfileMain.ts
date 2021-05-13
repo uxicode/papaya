@@ -48,6 +48,7 @@ export default class MyProfileMain extends Vue {
     //private startDatePickerModel: string = new Date().toISOString().substr(0, 10);
     private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
 
+
     public created() {
         this.dashedBirthdayModel();
     }
@@ -57,7 +58,7 @@ export default class MyProfileMain extends Vue {
      * @param key
      * @private
      */
-    public openModify(key: string): void {
+    private openModify(key: string): void {
         switch(key) {
             case 'name':
                 this.isModifyNameModal = !this.isModifyNameModal;
@@ -79,7 +80,7 @@ export default class MyProfileMain extends Vue {
      * @param pageKey
      * @private
      */
-    public gotoLink(pageKey: string): void {
+    private gotoLink(pageKey: string): void {
         this.$router.push(`myProfile/${pageKey}`)
           .then(() => {
               console.log(`${pageKey}로 이동`);
@@ -118,7 +119,7 @@ export default class MyProfileMain extends Vue {
     private dashedBirthdayModel(): any {
         if (this.myInfo.birthday !== null) {
             const yyyy = this.myInfo.birthday.substr(0,4);
-            const mm = this.myInfo.birthday.substr(4,2);
+            const mm =  this.myInfo.birthday.substr(4,2);
             const dd = this.myInfo.birthday.substr(6,2);
             this.birthday = Utils.getDateDashFormat(yyyy,mm,dd);
         }

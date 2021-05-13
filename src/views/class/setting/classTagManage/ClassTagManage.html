@@ -91,6 +91,21 @@
                     </div>
                 </div>
             </div>
+            <div slot="footer">
+                <!-- :total="총개"
+              :num-of-page="한페이지 당 리스트 개수 "
+              :page-size="한페이지에 보여줄 페이징 개수"
+              @pageChange="페이징 넘버 버튼 클릭시 이벤트 핸들러"
+              @prev="이전 페이지 버튼 클릭시 이벤트 핸들러"
+              @next="다음 페이지 버튼 클릭시 이벤트 핸들러"-->
+                <pagination
+                        :total.sync="currentTotal"
+                        :num-of-page="numOfPage"
+                        :page-size="pageSize"
+                        @pageChange="pageChange"
+                        @prev="prevPage"
+                        @next="nextPage"></pagination>
+            </div>
         </modal>
     </transition>
     <!-- end: 공통 팝업 -->
