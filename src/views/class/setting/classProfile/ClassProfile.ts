@@ -144,7 +144,7 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private closeToggle(): void {
-        const listPopup = document.querySelectorAll('.basic-info .list-popup-menu');
+        const listPopup = document.querySelectorAll('.list-popup-menu');
         listPopup.forEach((item) => item.classList.remove('active'));
     }
 
@@ -220,6 +220,7 @@ export default class ClassProfile extends Vue {
             default:
                 return;
         }
+        this.closeToggle();
     }
 
     /**

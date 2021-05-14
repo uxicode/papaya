@@ -30,7 +30,7 @@
                                 <template v-slot:activator="{ on, attrs }">
                                     <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
                                     <v-text-field
-                                            v-model="birthday"
+                                            v-model="myInfo.birthday"
                                             v-bind="attrs"
                                             v-on="on"
                                             hide-details
@@ -42,10 +42,10 @@
                                     </v-text-field>
                                 </template>
                                 <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                                <v-date-picker v-model="birthday"
+                                <v-date-picker v-model="inputBirthday"
                                                no-title
                                                @input="startDatePickerChange"
-                                               @change="birthdayModify(birthday)"></v-date-picker>
+                                               @change="birthdayModify(inputBirthday)"></v-date-picker>
                             </v-menu>
                         </div>
                     </div>

@@ -44,8 +44,7 @@ export default class MyProfileMain extends Vue {
     private tempData: any = '';
 
     /* 생일 datepicker 관련 */
-    private birthday: string = '';
-    //private startDatePickerModel: string = new Date().toISOString().substr(0, 10);
+    private inputBirthday: string = '';
     private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
 
 
@@ -112,29 +111,19 @@ export default class MyProfileMain extends Vue {
         this.isModifyNameModal = !this.isModifyNameModal;
     }
 
-    /**
-     * 생일이 있으면 8자리 문자열로 되어 있는 생일을 '-' 가 있는 형태로 변환
-     * 없으면 공백
-     */
-    private dashedBirthdayModel(): any {
-        if (this.myInfo.birthday !== null) {
-            const yyyy = this.myInfo.birthday.substr(0,4);
-            const mm = this.myInfo.birthday.substr(4,2);
-            const dd = this.myInfo.birthday.substr(6,2);
-            this.birthday = Utils.getDateDashFormat(yyyy,mm,dd);
-        }
-    }
 
     /**
      * '-' 형태의 생일을 구분자 없는 문자열로 변환 후
      * 생일 변경 통신
      * @private
      */
-    private birthdayModify(birthday: string): any {
-        const newBirthday = Utils.dateDashFormatUndo(birthday).join('');
-        UserService.setUserInfo(this.userInfo.user_id, {birthday: newBirthday})
-          .then((data) => {
-              console.log(`${data.user_id} 생일 ${data.birthday} 로 변경 완료`);
+    private birthdayModify(newBirthday: string): any {
+        const unDashedBirthday = String(newBirthday.split('-').join(''));
+        UserService.setUserInfo(this.userInfo.user_id, {birthday: unDashedBirthday})
+          .then(() => {
+              this.USER_ME_ACTION().then( ( me: IUserMe)=>{
+                  console.log(me.birthday);
+              });
           });
     }
 
