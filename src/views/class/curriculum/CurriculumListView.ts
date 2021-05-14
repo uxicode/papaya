@@ -578,7 +578,7 @@ export default class CurriculumListView extends Vue {
         console.log(this.modifyCurriculumList);
     }
     private modifyConfirm( curriculumID: number): void {
-        MyClassService.setEducationListModify ( this.classID, curriculumID )
+        MyClassService.setEducationListModify ( this.classID, curriculumID, this.modifyCurriculumList )
             .then((data) => {
                 this.isModifyClass = false;
                 this.modifyCurriculumList = data;
