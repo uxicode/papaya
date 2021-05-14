@@ -150,7 +150,7 @@ export default class AuthModule extends VuexModule {
 
     return UserService.getUserMe()
       .then( ( data: any )=>{
-        console.log('UserMe=', data.user );
+        // console.log('UserMe=', data.user );
         this.context.commit(SET_MY_INFO, data.user );
         return Promise.resolve('signin status');
       });
@@ -176,7 +176,7 @@ export default class AuthModule extends VuexModule {
         // console.log(data.user, data.access_token);
         // mutation( type, payload, option ) 이렇게 매개변수가 지정되어 있다.
 
-        console.log(data.access_token, data.refresh_token);
+        // console.log(data.access_token, data.refresh_token);
 
         this.context.commit(GET_TOKEN, data.access_token );
         this.context.commit(GET_REFRESH_TOKEN, data.refresh_token );
@@ -238,7 +238,7 @@ export default class AuthModule extends VuexModule {
   public [AUTH_BY_MOBILE](payload: { userId: string, mobile: string }): Promise<any> {
     return AuthService.getAuthByMobileNum(payload.userId, payload.mobile)
       .then((data: any) => {
-        console.log('핸폰번호와 아이디로 인증=', data);
+        // console.log('핸폰번호와 아이디로 인증=', data);
         //{verification_key: "3091612168945547", message: "sms 로 인증번호 발송 성공"}
         this.context.commit(VERIFY_BY_MOBILE, {
           userId: payload.userId,

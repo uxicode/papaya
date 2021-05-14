@@ -350,6 +350,7 @@
   border-radius: 5px;
   box-shadow: 0 0 10px 0 rgba(15, 15, 21, 0.05);
   background-color: #ffffff;
+  .menu-list{padding-left:0;}
 
   .class-home-info {
     padding:40px 20px 28px;
@@ -634,6 +635,8 @@
       background-position:30px 30px;
 
       &.cal {background-image: url(../../assets/images/btn-round-cal.svg)}
+      &.edu {background-image: url(../../assets/images/btn-round-edu.svg)}
+      &.noti {background-image: url(../../assets/images/btn-round-noti.svg)}
     }
 
     .fd-foot {
@@ -704,10 +707,11 @@
     img {width:100%;}
 
     &:first-child {float:left;}
-    &:last-child {
+    &:last-child:not(:first-child){
       margin-top:10px;
 
       a {
+        /*
         &:after{
           content:' +3';
           position:absolute;
@@ -719,7 +723,7 @@
           font-size:24px;
           text-align:center;
         }
-
+        */
         &:before {
           content:'';
           position:absolute;
@@ -767,7 +771,7 @@
 }
 
 .schedule-list {
-  padding:14px 20px 14px 48px;
+  padding:14px 20px 14px 48px  !important;
   border-radius: 5px;
   border: solid 1px #c9cad5;
   background:url(../../assets/images/classmenu-plan-outline.svg) no-repeat left 23px top 14px / 18px 18px;

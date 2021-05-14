@@ -55,10 +55,12 @@ const definedRefreshToken= ()=>{
 };
 
 const mismatchAccess=( )=>{
-  alert('잘못된 접근입니다. 메인 페이지로 이동합니다.');
-  router.push('/').then(() => {
-    console.log('메인으로 이동');
-  });
+  if( store.getters['Auth/isAuth'] ){
+    alert('잘못된 접근입니다. 메인 페이지로 이동합니다.');
+    router.push('/').then(() => {
+      console.log('메인으로 이동');
+    });
+  }
 };
 
 /**

@@ -73,10 +73,10 @@ class MyClassService {
     /**
      * classId 값을 갖는 해당 클래스 일정 전체 조회
      * @param classId
-     * @param payload
+     * @param paging
      */
-    public async getAllScheduleByClassId(classId: string | number, payload: { page_no: number | null, count: number | null }={page_no:null, count:null} ): Promise<any>{
-        return await request('get', `${CLASS_BASE_URL}/${classId}/schedule`, payload );
+    public async getAllScheduleByClassId(classId: string | number, paging: {page_no: number, count: number}={page_no:1, count:10} ): Promise<any>{
+        return await request('get', `${CLASS_BASE_URL}/${classId}/schedule`, paging );
     }
 
     /**
@@ -136,14 +136,23 @@ class MyClassService {
         }*/
         return request('get', `${CLASS_BASE_URL}/${classId}/schedule/${scheduleId}`);
     }
-// tslint:disable-next-line:no-shadowed-variable
-    public getAllPostsByClassId(classId: string | number, pageNum: number, count: number = 5): Promise<any>{
-        return request('get', `${CLASS_BASE_URL}/${classId}/posts`, {page_no:pageNum, count});
+
+    /**
+     * 모든 알
+     * @param classId
+     * @param paging
+     */
+    public getAllPostsByClassId(classId: string | number,  paging: {page_no: number, count: number}={page_no:1, count:10}): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/posts`, paging);
     }
 
-    // tslint:disable-next-line:no-shadowed-variable
-    public getAllCurriculumByClassId(classId: string | number, pageNum: number, count: number = 5): Promise<any>{
-        return request('get', `${CLASS_BASE_URL}/${classId}/curriculum`, {page_no:pageNum, count});
+    /**
+     * 모든 커리큘럼
+     * @param classId
+     * @param paging
+     */
+    public getAllCurriculumByClassId(classId: string | number,  paging: {page_no: number, count: number}={page_no:1, count:10}): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/curriculum`, paging );
     }
 
     /**

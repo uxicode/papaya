@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <div class="result-cnt" style="margin-bottom:20px;">
+    <div class="result-cnt">
       <div class="search-classes" style="box-shadow: none;">
         <div class="tb-cnt" v-if="isResultNone">
           <table class="tb tb-search">
@@ -48,7 +48,7 @@
                   </a>
                 </td>
                 <td>
-                  <p class="class-admin">{{ }}</p>
+                  <p class="class-admin">{{ getOwnerName( index ) }}</p>
                 </td>
                 <td>
                   <div class="class-tag">
@@ -69,7 +69,6 @@
             <btn @btnClick="gotoMakeClassPage">클래스 만들기</btn>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -82,6 +81,7 @@
               @prev="이전 페이지 버튼 클릭시 이벤트 핸들러"
               @next="다음 페이지 버튼 클릭시 이벤트 핸들러"-->
       <pagination
+              :filter-type="this.radioValue"
               :total.sync="currentTotal"
               :num-of-page="numOfPage"
               :page-size="pageSize"

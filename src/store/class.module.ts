@@ -135,7 +135,7 @@ export default class ClassModule extends VuexModule {
     @Mutation
     public [SET_CLASS_ID]( id: number  ): void {
         this.classIdx=Number( id );
-        console.log('this.classIdx', this.classIdx );
+        // console.log('this.classIdx', this.classIdx );
         localStorage.setItem('classId', String( this.classIdx ) );
     }
 
@@ -217,7 +217,7 @@ export default class ClassModule extends VuexModule {
         // console.log(this.makeClassInfo);
         return MyClassService.setMakeClass( this.makeClassInfo )
           .then( (data: any)=>{
-              console.log(data.classinfo);
+              // console.log(data.classinfo);
               this.context.commit( CREATE_CLASS_LIST, this.makeClassInfo );
               return Promise.resolve(this.makeClassInfo);
           }).catch((error: any)=>{
@@ -233,7 +233,7 @@ export default class ClassModule extends VuexModule {
     @Action({rawError: true})
     public [MYCLASS_HOME]( id: string | number ): Promise<any>{
         this.context.commit(SET_CLASS_ID, id);
-        console.log( 'store.getters[Auth/userInfo]=', store.getters['Auth/userInfo'] );
+        // console.log( 'store.getters[Auth/userInfo]=', store.getters['Auth/userInfo'] );
         return MyClassService.getClassInfoById( id )
           .then( (data)=>{
               this.context.commit(SET_MYCLASS_HOME_DATA, data.classinfo);
