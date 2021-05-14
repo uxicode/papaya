@@ -487,9 +487,6 @@ interface IMakeCourse {
     attachment: [];
 }
 
-// interface IMakeCourseFile {
-//
-// }
 
 interface IEducationList {
     total: number;
@@ -680,6 +677,35 @@ interface ICourseList {
     message?: string;
 }
 
+interface IModifyCurriculum {
+    title: string;
+    goal: string;
+    updated_course_list?: [
+        {
+            id: number;
+            title: string;
+            startDay: Date | number;
+            startTime: Date | number;
+            endTime: Date | number;
+            contents: string;
+        }
+    ];
+    deleted_course_list?: [
+        {
+            id: number;
+        }
+    ];
+    added_course_list?: [
+        {
+            index: number;
+            title: string;
+            startDay: Date | number;
+            startTime: Date | number;
+            endTime: Date | number;
+            contents: string;
+        }
+    ];
+}
 
 export {
     IMyClassList,
@@ -699,5 +725,6 @@ export {
     IMakeCourse,
     IEducationList,
     ICurriculumList,
-    ICourseList
+    ICourseList,
+    IModifyCurriculum
 };

@@ -9,7 +9,8 @@ import {
     IMakeCourse,
     IEducationList,
     ICurriculumList,
-    ICourseList
+    ICourseList,
+    IModifyCurriculum
 } from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
 import MyClassService from '@/api/service/MyClassService';
@@ -45,6 +46,8 @@ export default class CurriculumListView extends Vue {
     private isClassCurrMore: boolean = false;
     private isClassCurrDetail: boolean = false;
     private isCreateError: boolean = false;
+    private isModifyClass: boolean = false;
+    private isModifyClassCourse: boolean = false;
 
     @MyClass.Getter
     private classID!: number;
@@ -76,6 +79,7 @@ export default class CurriculumListView extends Vue {
     private startTimeItem: string = '';
     private endTimeItem: string = '';
 
+    private test: any = {};
 
     /**
      * 클래스 교육과정 메인리스트
@@ -97,6 +101,12 @@ export default class CurriculumListView extends Vue {
         goal: '',
         course_list: [],
     };
+
+    private modifyCurriculumList: IModifyCurriculum= {
+        title: '',
+        goal: '',
+    };
+
 
     private makeCourseItems: IMakeCourse = {
         index: 1,
@@ -197,9 +207,11 @@ export default class CurriculumListView extends Vue {
         }
     };
 
+
     private currListNum: number = 10;
     private eduItems: Array< {title: string }>=[];
     // private settingItems: Array<{ vo: string[], sItem: string }> = [];
+
 
     get imgFileURLItemsModel(): string[] {
         return this.imgFileURLItems;
@@ -304,6 +316,14 @@ export default class CurriculumListView extends Vue {
         this.inputEventBind('#attachFileInput');
     }
 
+    private modifyImgFileInputFocus() {
+        this.inputEventBind('#imgFileInputModify');
+    }
+
+    private modifyFilesInputFocus(){
+        this.inputEventBind('#attachFileInputModify');
+    }
+
     /**
      * //input click event 발생시키기.
      * @param targetSelector
@@ -315,7 +335,6 @@ export default class CurriculumListView extends Vue {
         //input click event 발생시키기.
         imgFileInput.dispatchEvent( Utils.createMouseEvent('click') );
     }
-
 
     /**
      * 이미지 파일 -> 배열에 지정 / 미리보기 link( blob link) 배열 생성~
@@ -524,6 +543,8 @@ export default class CurriculumListView extends Vue {
         MyClassService.getEduCurrList(this.classID, cardId)
             .then((data) => {
                 this.currList = data;
+                this.modifyCurriculumList.title = data.title;
+                this.modifyCurriculumList.goal = data.text;
                 console.log(cardId);
                 console.log('getEduCurrList 함수 데이터', data);
             });
@@ -542,6 +563,26 @@ export default class CurriculumListView extends Vue {
             .then((data) => {
                 this.allCourseList = data;
                 console.log('getEduCourseList 함수 데이터', data);
+            });
+    }
+
+    /**
+     * 클래스 교육과정 수정
+     */
+    private modifyChangeTitle(event: any): void {
+        this.modifyCurriculumList.title = event.target.value;
+        console.log(this.modifyCurriculumList);
+    }
+    private modifyChangeText(event: any): void {
+        this.modifyCurriculumList.goal = event.target.value;
+        console.log(this.modifyCurriculumList);
+    }
+    private modifyConfirm( curriculumID: number): void {
+        MyClassService.setEducationListModify ( this.classID, curriculumID )
+            .then((data) => {
+                this.isModifyClass = false;
+                this.modifyCurriculumList = data;
+                console.log('교육과정 수정 성공');
             });
     }
 
@@ -587,6 +628,14 @@ export default class CurriculumListView extends Vue {
     private addCurriculumHandler(idx: number) {
         this.isCreateClass= true;
         this.setCourseList(10);
+    }
+
+    private modifyCurriculumHandler(idx: number) {
+        this.isModifyClass = true;
+        this.cardId = idx;
+        this.$nextTick(()=>{
+            this.getEduCurrList(this.cardId);
+        });
     }
 
 
