@@ -358,8 +358,12 @@
 
     .info-img {
       width:80px;
+      height:80px; //jbc
+      overflow:hidden;
       margin:0 auto;
       .circle{
+        width:80px;
+        height:80px;
         border-radius: 50%;//jbc
       }
       .img-change {
@@ -369,6 +373,7 @@
         width:32px;
       }
     }
+
 
     .info-txt {
       display:inline-block;
@@ -409,6 +414,7 @@
       }
     }
 
+    .info-img~.info-txt{display:block;margin-top:20px;}
     .class-bookmark {
       margin-top:20px;
     }

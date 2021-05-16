@@ -3,9 +3,11 @@ import {namespace} from 'vuex-class';
 import {getAllPromise} from '@/views/model/types';
 import MyClassService from '@/api/service/MyClassService';
 import WithRender from './MyClassListDetailView.html';
-import {Utils} from '@/utils/utils';
+import {NoticeScheduleModel} from '@/views/model/schedule.model';
+import AuthService from '@/api/service/AuthService';
 
 const MyClass = namespace('MyClass');
+
 
 @WithRender
 @Component
@@ -14,12 +16,20 @@ export default class MyClassListDetailView extends Vue{
   private pagingCount: number=1;
   private numOfPage: number=10;
   private mChk: boolean=false;
+  private isNoticeChk: boolean=false;
+
+
+  private noticeSchedule: NoticeScheduleModel[] = [];
 
 
   @MyClass.Getter
   private classID!: string | number;
 
   private allData: any[] = [];
+
+  get noticeScheduleModel(): any[]{
+    return this.noticeSchedule;
+  }
 
   get allDataModel(): any[]{
     return this.allData;
@@ -47,6 +57,9 @@ export default class MyClassListDetailView extends Vue{
 
       const max=this.getMax<number>([data[0].class_schedule_list.length, data[1].curriculum_list.length, data[2].post_list.length] );
       // console.log(max);
+      console.log(data[0].class_schedule_list );
+
+      this.noticeSchedule=data[0].class_schedule_list.filter((item: any) =>item.type===1 );
 
       const allData: any[] = [];
       for (let i = 0; i < max; i++) {
@@ -74,6 +87,18 @@ export default class MyClassListDetailView extends Vue{
     }).catch((error)=>{
       console.log('class more info error', error );
     });
+  }
+
+  private isOwner( ownerId: number, userId: number): boolean {
+    return (ownerId === userId);
+  }
+
+  private onNoticeMenuClick() {
+    this.isNoticeChk = !this.isNoticeChk;
+  }
+
+  private getNoticeMainTitle(): string {
+    return ( this.noticeSchedule[this.noticeSchedule.length-1])? this.noticeSchedule[this.noticeSchedule.length-1].title : '';
   }
 
 

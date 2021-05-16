@@ -219,6 +219,15 @@ class MyClassService {
     }
 
     /**
+     * 클래스 예약된 알림(게시글) 전체 조회
+     * @param classId
+     * @param payload
+     */
+    public getReservedPost(classId: number | string, payload: {page_no: number, count: number}={page_no:1, count:10}): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/posts/reserved`, payload);
+    }
+
+    /**
      * 클래스 교육과정
      * @param classId
      */
