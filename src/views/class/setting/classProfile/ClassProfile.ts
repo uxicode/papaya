@@ -129,26 +129,6 @@ export default class ClassProfile extends Vue {
     }
 
     /**
-     * 리스트 팝업 토글
-     * @param idx
-     * @private
-     */
-    private listPopupToggle(idx: number): void {
-        const listPopup = document.querySelectorAll('.basic-info .list-popup-menu');
-        // listPopup.forEach((item) => item.classList.remove('active'));
-        listPopup[idx].classList.toggle('active');
-    }
-
-    /**
-     * 토글 메뉴 바깥 영역 클릭시 메뉴 닫기
-     * @private
-     */
-    private closeToggle(): void {
-        const listPopup = document.querySelectorAll('.list-popup-menu');
-        listPopup.forEach((item) => item.classList.remove('active'));
-    }
-
-    /**
      * 변경할 정보를 임시로 담을 함수
      * @param event
      * @private
@@ -220,7 +200,6 @@ export default class ClassProfile extends Vue {
             default:
                 return;
         }
-        this.closeToggle();
     }
 
     /**

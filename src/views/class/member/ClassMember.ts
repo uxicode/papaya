@@ -241,28 +241,6 @@ export default class ClassMember extends Vue{
     }
 
     /**
-     * accordion 안에 있는 list-popup toggle
-     * 첫번째 인자는 accordion 의 인덱스, 두번째 인자는 해당 아코디언의 list-popup 인덱스
-     * @param idx
-     * @param index
-     * @private
-     */
-    private listPopupToggle(idx: number, index: number): void {
-        const accCnt = document.querySelectorAll('.accordion-cnt');
-        //console.log(accCnt.length);
-        const listPopup = accCnt[idx].querySelectorAll('.list-popup-menu');
-        //console.log(listPopupMenu.length);
-        //listPopup.forEach((item) => item.classList.remove('active'));
-        listPopup[index].classList.toggle('active');
-    }
-
-    private closeListMenu(): void {
-        console.log('click outside');
-        const listPopup = document.querySelectorAll('.list-popup-menu');
-        listPopup.forEach((item) => item.classList.remove('active'));
-    }
-
-    /**
      * 멤버 프로필 상세 팝업 열면서 해당 멤버의 정보 불러온다.
      * @param userId
      * @param level
