@@ -1,6 +1,7 @@
+import UserService from '@/api/service/UserService';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import { IClassMemberInfo } from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo, IQnaInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import ClassMemberService from '@/api/service/ClassMemberService';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -17,6 +18,8 @@ const MyClass = namespace('MyClass');
 })
 export default class ClassMemberManage extends Vue{
     private isActive: boolean = false;
+    private isDetailAccordion: boolean = false;
+    private isDetailPopup: boolean = false;
     private isBlockModal: boolean = false;
     private isBlockCompleteModal: boolean = false;
     private isBanModal: boolean = false;
@@ -25,17 +28,34 @@ export default class ClassMemberManage extends Vue{
     @MyClass.Getter
     private classID!: number;
 
+    @MyClass.Getter
+    private myClassHomeModel!: IClassInfo;
+
     private classMemberList: IClassMemberInfo[] = [];
     private memberId: number = 0;
     private memberNickname: string = '';
     private memberLevel: number = 0;
+    private myMemberLevel: number = 0; // 내 멤버 등급
+
+    /* 멤버정보 상세 팝업 */
+    private nickname: string = '';
+    private userIdNum: number = 0;
+    private mobileNo: number = 0;
+    private userId: string = '';
+    private email: string = '';
+    private qnaList: IQnaInfo[] = [];
 
     get classMembers(): IClassMemberInfo[] {
         return this.classMemberList;
     }
 
+    get classInfo(): any {
+        return this.myClassHomeModel;
+    }
+
     public created() {
         this.getAllClassMembers();
+        this.getMyMemberLevel();
     }
 
     /**
@@ -51,11 +71,25 @@ export default class ClassMemberManage extends Vue{
     }
 
     /**
+     * 권한별로 더보기 메뉴가 다르기 때문에
+     * 나의 멤버 등급을 가져온다.
+     * @private
+     */
+    private getMyMemberLevel(): void {
+        ClassMemberService.getClassMemberInfo(this.classID, this.classInfo.me.id)
+          .then((data) => {
+              //console.log(data.member_info);
+              this.myMemberLevel = data.level;
+              //console.log(this.myMemberLevel);
+          });
+    }
+
+    /**
      * 멤버 등급별 아이콘
      * @param level
      * @private
      */
-    private memberLevelIcon(level: number): string {
+    private memberLevelIcon = (level: number): string => {
         switch (level) {
             case 1:
                 return 'admin';
@@ -71,7 +105,7 @@ export default class ClassMemberManage extends Vue{
      * @param level
      * @private
      */
-    private memberLevelTxt(level: number): string {
+    private memberLevelTxt = (level: number): string => {
         switch (level) {
             case 1:
                 return '운영자';
@@ -80,6 +114,41 @@ export default class ClassMemberManage extends Vue{
             default:
                 return '일반 멤버';
         }
+    }
+
+    /**
+     * 멤버 프로필 상세 팝업 열면서 해당 멤버의 정보 불러온다.
+     * @param userId
+     * @param level
+     * @param nickname
+     * @param memberId
+     * @private
+     */
+    private detailPopupOpen(userId: number, level: number, nickname: string, memberId: number): void {
+        this.userIdNum = userId;
+        this.memberLevel = level;
+        this.nickname = nickname;
+        this.memberId = memberId;
+        this.isDetailPopup = true;
+        UserService.getUserInfo(userId)
+          .then((data) => {
+              this.mobileNo = data.user.mobile_no;
+              this.userId = data.user.user_id;
+              this.email = data.user.email;
+          });
+        this.getMemberQna(this.memberId);
+    }
+
+    /**
+     * 멤버 프로필 상세 팝업 내에 들어가는 질문 답변 가져오기
+     * @param memberId
+     * @private
+     */
+    private getMemberQna(memberId: number): void {
+        ClassMemberService.getMemberClassQnA(this.classID, memberId)
+          .then((data) => {
+              this.qnaList = data.qnalist;
+          });
     }
 
     /**

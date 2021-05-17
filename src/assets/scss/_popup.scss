@@ -1147,7 +1147,7 @@ $popupDepth: 10;
   display:block;
   padding:15px 0;
   font-weight:500;
-  color:#ff4d4d;
+  color:#ff4d4d !important; // customVuetify 때문에 important 필요 - ksj
 }
 
 

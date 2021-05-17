@@ -1,6 +1,6 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo, IQnaInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
 import UserService from '@/api/service/UserService';
@@ -63,7 +63,6 @@ export default class ClassMember extends Vue{
     private isInvitePopup: boolean = false;
     private isSnackbar: boolean = false;
     private isDetailPopup: boolean = false;
-    private isDetailMenu: boolean = false;
     private isDetailAccordion: boolean = true;
     private isBlockModal: boolean = false;
     private isBlockCompleteModal: boolean = false;
@@ -78,7 +77,7 @@ export default class ClassMember extends Vue{
     private userId: string = '';
     private email: string = '';
     private memberId: number = 0;
-    private qnaList: IQuestionInfo[] = [];
+    private qnaList: IQnaInfo[] = [];
     private isActive: boolean = false;
 
     /* 아코디언 리스트 관련(스탭 멤버, 일반 멤버) */
