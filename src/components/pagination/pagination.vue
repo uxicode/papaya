@@ -1,6 +1,8 @@
 <template>
   <div class="pagination">
-    <a href="" @click.prevent="onPrevPageClick" class="arrow" :class="{'active':pageCount>1}"><img :src="require('@/assets/images/arrow-left.svg')" alt=""></a>
+    <a href="" @click.prevent="onPrevPageClick" class="arrow" :class="{'active':pageCount>1}">
+      <img :src="require('@/assets/images/arrow-left.svg')" alt="">
+    </a>
     <ul>
       <li class="num"
           v-for="(item, index) in pageItemsModel"
@@ -8,7 +10,9 @@
         <a href="" @click.prevent="onPageNumClick( item )">{{ item }}</a>
       </li>
     </ul>
-    <a href="" @click.prevent="onNextPageClick" class="arrow"  :class="{'active':pageCount>0 && pageCount<totalPageCount}"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></a>
+    <a href="" @click.prevent="onNextPageClick" class="arrow" :class="{'active':pageCount>0 && pageCount<totalPageCount}">
+      <img :src="require('@/assets/images/arrow-right.svg')" alt="">
+    </a>
   </div>
 </template>
 
@@ -27,6 +31,9 @@ export default class Pagination extends Vue{
   @Prop(Number)
   private pageSize!: number;
 
+  @Prop(String)
+  private filterType!: string;
+
   private pageCount: number=1;
   private pageItems: number[] = [];
   // private numOfPage: number=10;
@@ -41,6 +48,7 @@ export default class Pagination extends Vue{
     }
   }
 
+
   get pageItemsModel() {
     return this.pageItems;
   }
@@ -54,7 +62,8 @@ export default class Pagination extends Vue{
   }
 
   private createPaging() {
-    console.log(this.total);
+    // console.log(this.total);
+    this.pageCount=1;
     this.totalPageCount = this.getTotalPageCount({total: this.pageTotal, numOfPage: this.numOfPage});
     this.pageItems=[...this.getPageNum( {totalPageCount: this.totalPageCount, pageSize: this.pageSize, curPageNum:this.pageCount }) ];
     // console.log(this.pageItems);

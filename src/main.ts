@@ -5,7 +5,6 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import store from './store';
-import {SIGNIN_BY_TOKEN} from '@/store/action-auth-types';
 import './filters/index';
 import './components/validation/validation';
 // import Rx from 'rxjs';

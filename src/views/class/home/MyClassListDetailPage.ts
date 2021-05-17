@@ -30,6 +30,11 @@ export default class MyClassListDetailPage extends Vue {
     return this.activeMenuNum;
   }
 
+  /**
+   * 인덱스 갱신
+   * @param idx
+   * @private
+   */
   private update(idx: number): void{
     this.activeMenuNum=idx;
     // console.log(this.activeMenuNum);

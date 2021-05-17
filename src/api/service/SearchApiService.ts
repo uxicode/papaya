@@ -9,7 +9,22 @@ export class SearchApiService{
     return request('get', `${CLASS_BASE_URL}/search/home`);
   }
 
-  public static getSearchResult( searchWord: string, paging: {page_no: number, count: number}={page_no:1, count:10}): Promise<any> {
-    return request('get', `${CLASS_BASE_URL}/search/all/${searchWord}`, paging );
+  /**
+   * 클래스 검색
+   * @param searchTxt
+   * @param paging
+   */
+  public static getSearchResult( searchTxt: string, paging: {page_no: number, count: number}={page_no:1, count:10}): Promise<any> {
+    return request('get', `${CLASS_BASE_URL}/search/all/${searchTxt}`, paging );
   }
+
+  /**
+   * 태그 및 키워드 검
+   * @param searchTxt
+   * @param paging
+   */
+  public static getTagSearchResult( searchTxt: string, paging: {page_no: number, count: number}={page_no:1, count:10} ): Promise<any> {
+    return request('get', `tag/search/${searchTxt}`, paging );
+  }
+
 }

@@ -113,7 +113,7 @@ export default class SideMenu extends Vue{
 
   private sideMenuData: ISideMenu[]=[
     {id:0, title: '클래스 홈', linkKey:'' },
-    {id:1, title: '알림', linkKey:'alert' },
+    {id:1, title: '알림', linkKey:'notify' },
     {id:2, title: '일정', linkKey:'schedule' },
     {id:3, title: '파일함', linkKey:'fileBox' },
     {id:4, title: '교육과정', linkKey:'curriculum' },

@@ -509,6 +509,7 @@ body {
 }
 .comment{
   width:100%;
+  padding-top:100px;
   font-size: 16px;
 
   &.none{
@@ -517,6 +518,7 @@ body {
   }
 }
 
+@import "./customVuetify";
 @import "./transition";
 @import "./layout";
 @import "./form";
@@ -530,6 +532,5 @@ body {
 @import "./mypage";
 @import "./skeleton";
 @import "./loadingbar";
-@import "./customVuetify";
 
 

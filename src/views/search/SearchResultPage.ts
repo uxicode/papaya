@@ -1,4 +1,4 @@
-import {Vue, Component} from 'vue-property-decorator';
+import {Vue, Component, Watch} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {CLASS_BASE_URL} from '@/api/base';
 import {ISearchModel} from '@/views/model/search.model';
@@ -9,6 +9,7 @@ import RadioButton from '@/components/radio/RadioButton.vue';
 import Pagination from '@/components/pagination/pagination.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './SearchResultPage.html';
+import {getAllPromise} from '@/views/model/types';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
@@ -48,6 +49,7 @@ export default class SearchResultPage extends Vue {
   private numOfPage: number=10;
   private pageSize: number=5;
   private searchResults: any[]=[];
+  private ownerItems: any[] = [];
   private radioItems: any[] = [
     { idx:0, name:'전체', value:'all'},
     { idx:1, name:'소속기관', value:'union'},
@@ -69,6 +71,22 @@ export default class SearchResultPage extends Vue {
   }
 
   get searchResultsModel(): any[]{
+    return this.searchResults;
+  }
+
+  public created() {
+    this.getResultList();
+  }
+
+  @Watch('searchResultData')
+  public changeData(value: any[], old: any[]) {
+    if (value !== old) {
+      // console.log('watch =' , value );
+      this.getResultList();
+    }
+  }
+
+  public getResultList() {
     if( this.radioValue ==='union'){
       this.searchResults=[...this.searchResultData.filter( (item: any )=> item.g_name.match( this.keyword )!==null ) ];
     }else if( this.radioValue ==='class'){
@@ -80,9 +98,45 @@ export default class SearchResultPage extends Vue {
     }else{
       this.searchResults = [...this.searchResultData];
     }
-    return this.searchResults;
+    this.getClassOwnerName(  this.searchResults )
+      .then( ( data: any )=>{
+        // console.log('owner 데이터 완료', data );
+        this.ownerItems=data.map((item: any) => {
+          return {
+            id: item.classinfo.id,
+            nickname:item.classinfo.owner.nickname
+          };
+        });
+      });
   }
 
+
+
+  private getOwnerName(index: number) {
+    return (this.ownerItems[index] !== undefined) ? this.ownerItems[index].nickname : '';
+  }
+
+
+  private async getClassOwnerName(items: any[]) {
+    const ownerPromiseItems = await this.getClassInfoBySearchResultClassId(items);
+    return await getAllPromise( ownerPromiseItems ).then(( info: any )=>{
+      // console.log('info=', info);
+      return Promise.resolve(info);
+    }).catch((error)=>{
+      console.log(error);
+      return Promise.reject('owner data find fail');
+    });
+  }
+
+
+  //class/:classId 조회가 안되는 --> 67, 70, 597, 598, 599, 600
+  private getClassInfoBySearchResultClassId( items: any[] ): any[] {
+    const promiseItems: any[] = [];
+    items.forEach( ( item: any ) => {
+      promiseItems.push( MyClassService.getClassInfoById( 724 ) );
+    });
+    return promiseItems;
+  }
 
 
   private pageChange(num: number): void{
@@ -169,10 +223,13 @@ export default class SearchResultPage extends Vue {
   private optionChange( value: string, checked: boolean ): void{
     // console.log(value, checked);
     this.radioValue=value;
+
+    this.pageChange(1);
+    this.getResultList();
   }
 
   private gotoMakeClassPage() {
-    this.$router.push({path: '/make-class'});
+    this.$router.push({path: '/make-class/step1'});
   }
 
 }
