@@ -221,8 +221,8 @@
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="outline">취소</btn>
-                    <btn type="navi">변경하기</btn>
+                    <btn type="outline" @btnClick="isStaffModifyPopup=false">취소</btn>
+                    <btn type="navi" @btnClick="">변경하기</btn>
                 </div>
             </div>
         </modal>
@@ -265,7 +265,7 @@
             <div slot="footer">
                 <div class="btn-group rt">
                     <btn type="outline" @btnClick="isChangePopup=false">취소</btn>
-                    <btn type="navi" @btnClick="submitAuthChange">전환하기</btn>
+                    <btn type="navi" @btnClick="submitLevelChange">전환하기</btn>
                 </div>
             </div>
         </modal>

@@ -123,6 +123,15 @@ class ClassMemberService {
   public deleteClassMemberByAdmin(classId: string | number, memberId: number): Promise<any> {
     return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/ban`);
   }
+
+  /**
+   * 클래스 멤버 권한조회
+   * @param classId
+   * @param memberId
+   */
+  public getClassAuth(classId: string | number, memberId: string | number): Promise<any> {
+    return request('get', `${CLASS_BASE_URL}/${classId}/members/${memberId}/auth`);
+  }
 }
 
 export default new ClassMemberService();

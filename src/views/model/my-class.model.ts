@@ -683,6 +683,11 @@ interface IClassTag {
     createdAt?: Date;
 }
 
+interface IClassAuth {
+    id?: number;
+    auth_type: number;
+    be_authorized: boolean;
+}
 
 export {
     IMyClassList,
@@ -703,5 +708,6 @@ export {
     IEducationList,
     ICurriculumList,
     ICourseList,
-    IClassTag
+    IClassTag,
+    IClassAuth
 };

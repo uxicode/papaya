@@ -60,7 +60,7 @@ export default class ClassStaffAdd extends Vue {
    * 스탭 멤버 -> 일반 멤버로 권한 수정 제출
    * @private
    */
-  private submitAuthChange(): void {
+  private submitLevelChange(): void {
     ClassMemberService.setClassMemberInfo(this.classID, this.memberId, {level: 2})
       .then((data) => {
         console.log(`${data.level} 로 수정완료`);

@@ -1,8 +1,10 @@
+import ClassMemberService from '@/api/service/ClassMemberService';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassMemberInfo} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
+import Btn from '@/components/button/Btn.vue';
 import WithRender from './ClassAdminDelegate.html';
 
 const MyClass = namespace('MyClass');
@@ -11,6 +13,7 @@ const MyClass = namespace('MyClass');
 @Component({
     components:{
         Modal,
+        Btn
     }
 })
 export default class ClassAdminDelegate extends Vue{
@@ -19,6 +22,11 @@ export default class ClassAdminDelegate extends Vue{
 
     private classMemberList: IClassMemberInfo[] = [];
     private totalMemberNum: number = 0;
+    private memberId: number = 0;
+    private nickname: string = '';
+    private level: number = 0;
+    private isChangePopup: boolean = false;
+    private isChangeCompletePopup: boolean = false;
 
     public created() {
         this.getAllClassMembers();
@@ -44,7 +52,7 @@ export default class ClassAdminDelegate extends Vue{
      * @param level
      * @private
      */
-    private memberLevelIcon(level: number): string {
+    private memberLevelIcon = (level: number): string => {
         switch (level) {
             case 1:
                 return 'admin';
@@ -60,7 +68,7 @@ export default class ClassAdminDelegate extends Vue{
      * @param level
      * @private
      */
-    private memberLevelTxt(level: number): string {
+    private memberLevelTxt = (level: number): string => {
         switch (level) {
             case 1:
                 return '운영자';
@@ -69,6 +77,32 @@ export default class ClassAdminDelegate extends Vue{
             default:
                 return '일반 멤버';
         }
+    }
+
+    /**
+     * 운영자 위임 신청 팝업 열기
+     * @param memberId
+     * @param nickname
+     * @private
+     */
+    private changePopupOpen(memberId: number, nickname: string, level: number): void {
+        this.isChangePopup = true;
+        this.memberId = memberId;
+        this.nickname = nickname;
+        this.level = level;
+    }
+
+    /**
+     * 운영자 위임 신청 제출
+     * @private
+     */
+    private submitLevelChange(): void {
+        this.isChangePopup = false;
+        // ClassMemberService.setClassMemberInfo(this.classID, this.memberId, {level: 1})
+        //   .then((data) => {
+        //       console.log(`${data.level} 로 수정완료`);
+        //   });
+        this.isChangeCompletePopup = true;
     }
 
     /**

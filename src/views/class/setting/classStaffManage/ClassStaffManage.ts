@@ -2,7 +2,7 @@ import ClassMemberService from '@/api/service/ClassMemberService';
 import UserService from '@/api/service/UserService';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {IClassMemberInfo, IQnaInfo} from '@/views/model/my-class.model';
+import {IClassAuth, IClassMemberInfo, IQnaInfo} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
@@ -45,6 +45,7 @@ export default class ClassStaffManage extends Vue {
     private email: string = '';
     private qnaList: IQnaInfo[] = [];
 
+    private authList: IClassAuth[] = [];
 
     public created() {
         this.getClassStaffs();
@@ -108,13 +109,41 @@ export default class ClassStaffManage extends Vue {
         this.isStaffModifyPopup = true;
         this.memberId = memberId;
         this.nickname = nickname;
+
+        ClassMemberService.getClassAuth(this.classID, this.memberId)
+          .then((data) => {
+              this.authList = data.authlist;
+              console.log(this.authList);
+          });
+    }
+
+
+    private submitAuthChange(): void {
+        ClassMemberService.setClassMemberInfo(this.classID, this.memberId, {
+            auth_list: [
+                {
+                    auth_type: 1,
+                    be_authorized: false
+                },
+                {
+                    auth_type: 2,
+                    be_authorized: true
+                },
+                {
+                    auth_type: 3,
+                    be_authorized: true
+                }
+            ]
+        }).then(() => {
+           console.log('수정 완료');
+        });
     }
 
     /**
-     * 스탭 멤버 -> 일반 멤버로 권한 수정 제출
+     * 스탭 멤버 -> 일반 멤버로 단계 수정 제출
      * @private
      */
-    private submitAuthChange(): void {
+    private submitLevelChange(): void {
         this.isChangePopup = false;
         ClassMemberService.setClassMemberInfo(this.classID, this.memberId, {level: 3})
           .then((data) => {
