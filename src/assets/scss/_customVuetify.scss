@@ -107,6 +107,7 @@
 }
 /* myProfile */
 .mypage-cnt {
-  .v-application p {margin-bottom: 0;}
   .v-text-field.v-text-field--solo .v-input__control {min-height: auto;}
 }
+.v-application p {margin-bottom: 0;}
+.v-application ul{padding-left:0;}

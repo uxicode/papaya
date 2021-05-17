@@ -37,7 +37,6 @@
                 <td>
                   <a href="" @click.prevent="gotoLink( item )">
                     <div class="tb-style">
-                      <!--                                <div class="tb-cell wd-30">{{ item.rank }}</div>-->
                       <div class="tb-cell">
                         <img :src="getProfileImg(  item.image_url )" alt="" style="width:32px; height:32px;border-radius:50%;">
                       </div>
@@ -49,7 +48,7 @@
                   </a>
                 </td>
                 <td>
-                  <p class="class-admin">{{ }}</p>
+                  <p class="class-admin">{{ getOwnerName( index ) }}</p>
                 </td>
                 <td>
                   <div class="class-tag">
@@ -67,10 +66,9 @@
         <div class="comment-container" v-else>
           <p class="comment none">검색 결과가 없습니다.<br>클래스를 직접 만들어 보세요.</p>
           <div class="mgt-30">
-            <btn @click.prevent="gotoMakeClassPage">클래스 만들기</btn>
+            <btn @btnClick="gotoMakeClassPage">클래스 만들기</btn>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -83,6 +81,7 @@
               @prev="이전 페이지 버튼 클릭시 이벤트 핸들러"
               @next="다음 페이지 버튼 클릭시 이벤트 핸들러"-->
       <pagination
+              :filter-type="this.radioValue"
               :total.sync="currentTotal"
               :num-of-page="numOfPage"
               :page-size="pageSize"

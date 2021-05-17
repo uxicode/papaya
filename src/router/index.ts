@@ -14,9 +14,9 @@ Vue.use(VueRouter);
 
 // @ts-ignore
 const routes: RouteConfig[] = [
-  ...MyClassRouter,
   ...LoginRouter,
   ...SignUpRouter,
+  ...MyClassRouter,
   ...MyPageRouter,
   ...SearchResultRouter,
   {
@@ -24,12 +24,6 @@ const routes: RouteConfig[] = [
     name: 'EnrollClass',
     beforeEnter: getIsAuth,
     components: {default: () => import('@/views/class/enroll/EnrollClass'), header: MyClassHeader, footer: AppFooter}, // W.4.4.1.1
-  },
-  {
-    path: '/fileBox',
-    name: 'fileBox',
-    beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/fileBox/FileListView'), header: AppHeader, footer: AppFooter}, // W.4.5.4
   },
   {
     path: '*',

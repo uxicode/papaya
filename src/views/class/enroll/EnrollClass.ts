@@ -39,7 +39,7 @@ export default class EnrollClass extends Vue {
   @Auth.Getter
   private userInfo!: IUserMe;
 
-  private classID: number = Number(window.location.pathname.split('/')[2]);
+  private classIdx: string | number = 0;
   private classInfo: {} = {};
   private isPrivate: boolean = false; // 클래스 비공개여부
   private isDisabled: boolean = true; // 가입 신청 버튼
@@ -70,6 +70,7 @@ export default class EnrollClass extends Vue {
   }
 
   public created() {
+    this.classIdx = Number( this.$route.params.classId );
     this.visibleSettingMenus(0);
     this.getClassInfo();
   }
@@ -90,7 +91,7 @@ export default class EnrollClass extends Vue {
   private sideMenuClickHandler(idx: number): void {
     this.$emit('sideClick', idx);
 
-    this.$router.push({path: CLASS_BASE_URL + '/' + this.classID + '/' + this.sideMenuData[idx].linkKey})
+    this.$router.push({path:`${CLASS_BASE_URL}/${this.classIdx}/${this.sideMenuData[idx].linkKey}`})
       .catch((error) => {
         console.log(error);
         //에러 난 경우 새로고침
@@ -104,11 +105,11 @@ export default class EnrollClass extends Vue {
    * @private
    */
   private getClassInfo(): void {
-    MyClassService.getClassInfoById(this.classID)
+    MyClassService.getClassInfoById(this.classIdx)
       .then((data) => {
         this.classInfo = data.classinfo;
         this.isPrivate = data.classinfo.is_private;
-        console.log(this.classInfo);
+        console.log('this.classInfo=', this.classInfo);
       });
   }
 
@@ -136,7 +137,7 @@ export default class EnrollClass extends Vue {
   private openEnrollClassModal(): void {
     this.isClassEnrollModal = true;
 
-    MyClassService.getClassQuestion(this.classID)
+    MyClassService.getClassQuestion(this.classIdx as number)
       .then((data) => {
         console.log(data);
         this.questionList = data.questionlist;
@@ -150,7 +151,7 @@ export default class EnrollClass extends Vue {
    */
   private checkDuplicateNickname(nickname: string): void {
     this.showMsg = true;
-    ClassMemberService.searchNickname(this.classID, nickname)
+    ClassMemberService.searchNickname(this.classIdx as number, nickname)
       .then((data) => {
         console.log(data);
         this.isApproval = false;
@@ -188,7 +189,7 @@ export default class EnrollClass extends Vue {
         },
       ],
     };
-    ClassMemberService.setClassMember(this.classID, this.enrollMemberInfo)
+    ClassMemberService.setClassMember(this.classIdx as number, this.enrollMemberInfo)
       .then((result) => {
         console.log(result);
       });

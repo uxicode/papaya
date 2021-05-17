@@ -26,4 +26,5 @@ interface ISearchModel {
   updatedAt:  Date;
 }
 
-export {ISearchModel};
+
+export {ISearchModel };

@@ -1,8 +1,14 @@
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
-import {SEARCH_KEYWORD, SEARCHING, SEARCH_DATA_SAVED, SEARCH_TOTAL} from '@/store/mutation-search-types';
-import {SEARCH_RESULT_ACTION, SEARCHING_ACTION} from '@/store/action-search-types';
+import {
+  SEARCH_KEYWORD,
+  SEARCHING,
+  SEARCH_DATA_SAVED,
+  SEARCH_TOTAL,
+  SEARCHING_TYPE
+} from '@/store/mutation-search-types';
+import {SEARCH_RESULT_ACTION, SEARCHING_ACTION } from '@/store/action-search-types';
 import {SearchApiService} from '@/api/service/SearchApiService';
-import {ISearchModel} from '@/views/model/search.model';
+import {ISearchModel } from '@/views/model/search.model';
 
 
 @Module({
@@ -22,6 +28,7 @@ export default class SearchModule extends VuexModule {
     return this.keywordItem;
   }
 
+
   get searchTotal(): number{
     return this.schTotal;
   }
@@ -29,6 +36,7 @@ export default class SearchModule extends VuexModule {
   get searchResultData(): ISearchModel[]{
     return this.schData;
   }
+
 
   @Mutation
   public [SEARCHING]( chk: boolean): void {
@@ -51,6 +59,7 @@ export default class SearchModule extends VuexModule {
     this.schData=data;
   }
 
+
   @Action
   public [SEARCHING_ACTION]( chk: boolean ): void {
     this.context.commit(SEARCHING, chk);
@@ -72,8 +81,7 @@ export default class SearchModule extends VuexModule {
       }).catch((error) => {
         return Promise.reject(error);
       });
-
-
   }
+
 
 }

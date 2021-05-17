@@ -28,6 +28,7 @@ const setAuthorization = (token: string) => {
  */
 axios.interceptors.request.use((config: AxiosRequestConfig) => {
   // Do something before request is sent
+  console.log('(localStorage.getItem='+localStorage.getItem('token'));
   config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
   return config;
 }, (error: any) => {
@@ -35,30 +36,31 @@ axios.interceptors.request.use((config: AxiosRequestConfig) => {
   return Promise.reject(error);
 });
 
-const definedRefreshToken= ()=>{
+const  definedRefreshToken=async ( error: any )=>{
   const { refresh_token }= localStorage;
   // alert('사용자 세션이 만료되었습니다. 다시 로그인 해주세요~');
-  if( store.getters['Auth/isAuth'] && refresh_token!==null ){
-    AuthService.sendRefreshToken( refresh_token ).then((data)=>{
-      console.log(data.access_token, data.refresh_token);
+  // console.log(error.config, error.config.retry);
+  //refresh_token
+  // console.log('store.getters.isAuth='+store.getters['Auth/isAuth'], 'refresh_token='+refresh_token);
+  if(error.config.retry===undefined){
+    console.log('refresh_token 구문 접근');
+    error.config.retry=true;
+    await AuthService.sendRefreshToken( refresh_token  ).then((data)=>{
+      // console.log('access_token='+data.access_token, 'refresh_token='+data.refresh_token);
       store.commit( `Auth/${GET_TOKEN}`, data.access_token );
       store.commit( `Auth/${GET_REFRESH_TOKEN}`, data.refresh_token );
-    }).catch((error)=>{
-      alert('사용자 세션이 만료되었습니다. 다시 로그인 해주세요~');
-      onUnauthorized();
     });
-  }else{
-    //토큰 및 리프레시 둘다 만료이기에 강제 로그아웃 시킨다.
-    alert('사용자 세션이 만료되었습니다. 다시 로그인 해주세요~');
-    onUnauthorized();
+    return axios(error.config);
   }
 };
 
 const mismatchAccess=( )=>{
-  alert('잘못된 접근입니다. 메인 페이지로 이동합니다.');
-  router.push('/').then(() => {
-    console.log('메인으로 이동');
-  });
+  if( store.getters['Auth/isAuth'] ){
+    alert('잘못된 접근입니다. 메인 페이지로 이동합니다.');
+    router.push('/').then(() => {
+      console.log('메인으로 이동');
+    });
+  }
 };
 
 /**
@@ -73,20 +75,13 @@ axios.interceptors.response.use((response: AxiosResponse) => {
   // let errorMsg: any = error;
   // console.log('error=', error);
   // console.log(':::status=', status);
-  switch (status){
-   case 401:
-     definedRefreshToken();
-     break;
-   case 404:
-     //errorMsg = `${error.status} 요청한 정보에 해당하지 않음`;
-     break;
-   case 400:
-     mismatchAccess();
-     break;
-   default :
-     mismatchAccess();
-     break;
- }
+  if (status === 401) {
+    definedRefreshToken( error );
+  }else if (status !== 404 || status === 400) {
+    mismatchAccess();
+  }else{
+    mismatchAccess();
+  }
 
   // Do something with response error
   return Promise.reject(error);
