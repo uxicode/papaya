@@ -495,7 +495,6 @@ interface IEducationList {
     message: string;
 }
 
-/*
 interface ICurriculumList {
     curriculum: {
         startAt: Date;
@@ -551,7 +550,7 @@ interface ICurriculumList {
             startTime: Date;
             endTime: Date;
             deletedYN: boolean;
-            attachment?: Array<{
+            attachment: Array<{
                 createdAt: Date;
                 updatedAt: Date;
                 id: number;
@@ -577,82 +576,6 @@ interface ICurriculumList {
                 deletedYN: boolean;
             }>;
         }>;
-    };
-    message?: string;
-}
-*/
-
-interface ICurriculumList {
-    curriculum: {
-        startAt: Date | string;
-        endAt: Date | string;
-        expiredAt: Date | string;
-        createdAt: Date | string;
-        updatedAt: Date | string;
-        id: number;
-        class_id: number;
-        board_id: null | number;
-        post_type: number;
-        type: number;
-        user_id: number;
-        user_member_id: number;
-        title: string;
-        text: string;
-        count: number;
-        param1: number;
-        deletedYN: boolean;
-        owner: {
-            id?: number;
-            class_id?: number;
-            user_id?: number;
-            nickname: string;
-            profile_image?: null | string;
-            level: number;
-            status?: number;
-        };
-        course_list?: [
-            {
-                startDay: Date | string;
-                createdAt: Date | string;
-                updatedAt: Date | string;
-                id: number;
-                curriculum_id: number;
-                class_id: number;
-                index: number;
-                title: string;
-                contents: string;
-                startTime: Date | string;
-                endTime: Date | string;
-                deletedYN: boolean;
-                attachment?: [
-                    {
-                        createdAt: Date | string;
-                        updatedAt: Date | string;
-                        id: number;
-                        user_id: number;
-                        member_id: null,
-                        parent_id: number;
-                        group_name: string;
-                        fieldname: string;
-                        originalname: string;
-                        encoding: string;
-                        mimetype: string;
-                        size: number;
-                        bucket: string;
-                        key: string;
-                        acl: string;
-                        contentType: string;
-                        contentDisposition: null,
-                        storageClass: string;
-                        serverSideEncryption: null,
-                        metadata: null,
-                        location: string;
-                        etag: string;
-                        deletedYN: false
-                    }
-                ];
-            },
-        ]
     };
     message?: string;
 }
