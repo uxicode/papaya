@@ -211,11 +211,11 @@ export default class Search extends Vue {
   private getSearchHome() {
     SearchApiService.getSearchHome()
         .then( (data)=>{
-          console.log(data);
+          // console.log(data);
           this.bestItems=data.best_classlist;
           this.recommandItems=data.recommended_keywords;
 
-          console.log(this.bestItems );
+          // console.log(this.bestItems );
         });
   }
 
@@ -287,6 +287,7 @@ export default class Search extends Vue {
     return speed * (delay % len) + 'ms';
   }
 
+
   private watchBySearchModel(val: string) {
     this.searchValue = val;
 
@@ -294,44 +295,45 @@ export default class Search extends Vue {
     if (this.searchType === SEARCH_TYPE.INPUT) {
       this.search();
     }
-
   }
 
 
-  private search(){
-    // this.searchSchoolValue=( value!=='' )? value : '';
-    console.log(this.searchValue);
-    this.searchItems=[];
+
+  /**
+   * 검색어와 매칭되는 키워드만 볼드 처리
+   * @param word
+   * @private
+   */
+  private search() {
+    this.searchItems = [];
 
     //$nextTick - 해당하는 엘리먼트가 화면에 렌더링이 되고 난 후
-    this.$nextTick( ()=>{
-
-      const searchClassInput= document.querySelector('#searchInput') as HTMLInputElement;
-      // console.log(searchSchool);
+    this.$nextTick(() => {
+      const searchClassInput = document.querySelector('#searchInput') as HTMLInputElement;
       searchClassInput.focus();
 
-      // console.log( searchSchool.value )
       //키가 눌렸을 때 체크 Observable
       // targetInputSelector: string
       const key$ = searchKeyEventObservable('#searchInput');
-
-      const userInter$ =searchUserKeyValueObservable( key$, this.changeLoaded, { fn: SearchApiService.getSearchResult, args: null}, this.isLoading);
+      const userInter$ = searchUserKeyValueObservable(key$, this.changeLoaded, {
+        fn: SearchApiService.getSearchResult,
+        args: null
+      }, this.isLoading);
       userInter$.subscribe({
-        next:( data: any ) =>{
+        next: (data: any) => {
           // console.log( data.classlist );
-          this.searchItems= data.classlist
-              .map( ( item: any )=> item )
-              .filter( (item: any )=> {
-                // console.log(item.g_name.match( this.searchValue ), item.name.match( this.searchValue ), this.searchValue );
-                return item.name.match( this.searchValue )!==null;
+          this.searchItems = data.classlist
+              .map((item: any) => item)
+              .filter((item: any) => {
+                return item.name.match(this.searchValue) !== null;
               });
         },
       });
 
       //검색어 없을 시 리셋 Observable
       //obv$: Observable<any>, reset: ()=>void
-      const reset$ = resetSearchInput( key$, ()=>{
-        this.isLoading=false;
+      const reset$ = resetSearchInput(key$, () => {
+        this.isLoading = false;
         this.searchItems = [];
       });
       reset$.subscribe();
@@ -350,23 +352,23 @@ export default class Search extends Vue {
     return [word.slice(0, startIndex), `<strong>${searchResultWord}</strong>`, word.slice(endIndex, word.length)].join('');
   }
 
-  private moveToSearchResult( keyword: string='' ): void {
-
-    this.searchType=SEARCH_TYPE.RESULT;
-    this.SEARCHING(false);
-    const schKeyword = (keyword === '') ? this.searchValue : keyword;
-    //item ==='' 상태이면 입력후 enter 키나 검색 버튼을 누른 상태 ~
-    console.log('schKeyword=', schKeyword, this.searchValue , keyword);
-    this.getSearchResultData(schKeyword);
-  }
-
+  /**
+   * 태그 검색
+   * @param keyword
+   * @private
+   */
   private gotoTagKeyword(keyword: string) {
-    console.log( 'keyword', keyword );
     this.searchType = SEARCH_TYPE.RESULT;
     this.SEARCHING(false);
     this.getSearchResultData(keyword);
   }
 
+
+  /**
+   *  키워드 검색 결과 api 통신 후 결과 페이지 이동
+   * @param keyword
+   * @private
+   */
   private getSearchResultData( keyword: string ) {
     this.SEARCH_RESULT_ACTION({keyword, page_no:1, count:10})
         .then((data) => {
@@ -383,9 +385,28 @@ export default class Search extends Vue {
   }
 
 
+
+  /**
+   *
+   * @param keyword
+   * @private
+   */
+  private moveToSearchResult( keyword: string='' ): void {
+    this.searchType=SEARCH_TYPE.RESULT;
+    this.SEARCHING(false);
+    const schKeyword = (keyword === '') ? this.searchValue : keyword;
+    this.getSearchResultData(schKeyword);
+  }
+
+  /**
+   *  isLoading change
+   * @private
+   */
   private changeLoaded(): void{
     this.isLoading=!this.isLoading;
   }
+
+
 
 
 }

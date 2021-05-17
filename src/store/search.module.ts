@@ -74,7 +74,6 @@ export default class SearchModule extends VuexModule {
         this.context.commit(SEARCH_KEYWORD, keyword );
         this.context.commit(SEARCH_DATA_SAVED, data.classlist );
         this.context.commit(SEARCH_TOTAL, data.total );
-        this.context.commit(SEARCHING_TYPE, false );
         // this.searchResults=data.best_classlist;
         // console.log(this.bestItems );
         return Promise.resolve(data);

@@ -50,7 +50,9 @@ interface IScheduleTotal{
   user_member_id: number;
 }
 
+type NoticeScheduleModel = Pick<IScheduleTotal, 'title' | 'text' | 'updatedAt' | 'owner' | 'user_id'>;
 export {
   ITimeModel,
-  IScheduleTotal
+  IScheduleTotal,
+  NoticeScheduleModel
 };

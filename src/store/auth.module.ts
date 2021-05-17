@@ -22,6 +22,8 @@ import {
   SIGNIN_BY_TOKEN,
   USER_ME_ACTION
 } from '@/store/action-auth-types';
+import store from '@/store/index';
+import router from '@/router';
 
 
 @Module({
@@ -108,6 +110,7 @@ export default class AuthModule extends VuexModule {
     if (token !== null) {
       this.token = token;
       AuthService.setAuthToken(this.token);
+      // localStorage.setItem('token', this.token);
       localStorage.setItem('token', this.token);
     }
   }
@@ -146,11 +149,32 @@ export default class AuthModule extends VuexModule {
   //localstorage 에 있는 token 값 존재 확인하여 데이터를
   @Action({rawError: true})
   public [SIGNIN_BY_TOKEN]( token: string ){
+
+    // console.log('store=', this.context.getters.isAuth );
+
     this.context.commit(GET_TOKEN, token);
+
+    /*if( store.getters['Auth/isAuth'] ){
+      this.context.commit(GET_TOKEN, token);
+    }else{
+      if (token !== null) {
+        const {refresh_token}=localStorage;
+        AuthService.sendRefreshToken( refresh_token ).then( (data)=>{
+          console.log('access_token='+data.access_token, 'refresh_token='+data.refresh_token);
+          store.commit( `Auth/${GET_TOKEN}`, data.access_token );
+          store.commit( `Auth/${GET_REFRESH_TOKEN}`, data.refresh_token );
+        }).catch((error)=>{
+          // alert('사용자 세션이 만료되었습니다. 다시 로그인 해주세요~');
+          router.push({path: '/login'});
+          console.log('사용자 세션이 만료되었습니다. 다시 로그인 해주세요~');
+        });
+      }
+    }*/
+
 
     return UserService.getUserMe()
       .then( ( data: any )=>{
-        console.log('UserMe=', data.user );
+        // console.log('UserMe=', data.user );
         this.context.commit(SET_MY_INFO, data.user );
         return Promise.resolve('signin status');
       });
@@ -176,7 +200,7 @@ export default class AuthModule extends VuexModule {
         // console.log(data.user, data.access_token);
         // mutation( type, payload, option ) 이렇게 매개변수가 지정되어 있다.
 
-        console.log(data.access_token, data.refresh_token);
+        // console.log(data.access_token, data.refresh_token);
 
         this.context.commit(GET_TOKEN, data.access_token );
         this.context.commit(GET_REFRESH_TOKEN, data.refresh_token );
@@ -238,7 +262,7 @@ export default class AuthModule extends VuexModule {
   public [AUTH_BY_MOBILE](payload: { userId: string, mobile: string }): Promise<any> {
     return AuthService.getAuthByMobileNum(payload.userId, payload.mobile)
       .then((data: any) => {
-        console.log('핸폰번호와 아이디로 인증=', data);
+        // console.log('핸폰번호와 아이디로 인증=', data);
         //{verification_key: "3091612168945547", message: "sms 로 인증번호 발송 성공"}
         this.context.commit(VERIFY_BY_MOBILE, {
           userId: payload.userId,
