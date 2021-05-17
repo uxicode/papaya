@@ -1,10 +1,13 @@
-<div class="mypage-cnt">
+
+  <div class="mypage-cnt">
     <div class="cnt-top">
-        <h2 class="cnt-tit">{{ currentTitle() }}</h2>
+      <h2 class="cnt-tit">{{ currentTitle() }}</h2>
     </div>
 
     <transition name="slide-out" mode="out-in">
-        <router-view @updatePage="updateTitle"></router-view>
+      <router-view @updatePage="updateTitle"></router-view>
     </transition>
 
-</div>
+  </div>
+
+

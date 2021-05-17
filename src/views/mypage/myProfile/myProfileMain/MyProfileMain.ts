@@ -28,6 +28,10 @@ export default class MyProfileMain extends Vue {
         return this.userInfo;
     }
 
+    get myBirthday() {
+        return (this.myInfo) ? this.myInfo.birthday : '';
+    }
+
     /* 팝업 및 페이지 변경 상태 값 */
     private isModifyNameModal: boolean = false;
     private isModifyGender: boolean = false;
@@ -44,10 +48,25 @@ export default class MyProfileMain extends Vue {
     private inputBirthday: string = '';
     private startDateMenu: boolean = false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
 
+    private getFullname(): string {
+        return (this.myInfo)? this.myInfo.fullname : '';
+    }
 
-    // public created() {
-    //
-    // }
+    private getGender(): string {
+        return (this.myInfo)? (this.myInfo.gender===1)? '남자' : '여자' : '';
+    }
+
+    private getUserId(): string {
+        return (this.myInfo)? this.myInfo.user_id: '';
+    }
+    private getMobile(): string {
+        return (this.myInfo)? this.myInfo.mobile_no : '';
+    }
+    private getEmail(): string {
+        return (this.myInfo)? this.myInfo.email : '';
+    }
+
+
 
     /**
      * 정보변경 modal 혹은 dropdown 열기

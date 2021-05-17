@@ -102,4 +102,5 @@ export default class MyClassListDetailView extends Vue{
   }
 
 
+
 }

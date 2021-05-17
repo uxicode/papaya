@@ -2,7 +2,34 @@
   <div class="classes-feed notification">
     <div class="cnt-top">
       <h2 class="cnt-tit">알림</h2>
-      <div class="cnt-top-btn"><button type="button" class="btn form-btn form-calendar"></button></div>
+      <div class="cnt-top-btn">
+        <!--<v-menu
+                     top  //absolute 위치로 상단 정렬
+                     nudge-bottom="40px" // 하단을 기준으로 추가 px 조절
+                     nudge-left="30px" // 좌측을 기준으로 추가 px 조절 수치가 클수록 왼쪽으로 배치된다.
+                     origin="center center"  // transform-origin
+                     v-model="timeMenu"  // value 값으로 노출
+                     :close-on-content-click // 값이 true -> 메뉴의 컨텐츠를 클릭하면 메뉴를 닫음
+                     :close-on-click  //값이 true -> 활성자의 바깥을 클릭하면 메뉴를 닫음
+                     transition="scale-transition" // 스케일 모션
+                     content-class="time-select-menu bg-white" // 해당 메뉴에 추가 클래스
+                     offset-y   // 메뉴 버튼을 중심으로 y 값으로 정렬 배치
+                     -->
+        <v-menu
+                origin="left top"
+                v-model="startDateMenu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="auto">
+          <template v-slot:activator="{ on, attrs }">
+            <button type="button" class="btn form-btn form-calendar" v-on="on"></button>
+          </template>
+          <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
+          <v-date-picker v-model="startDatePickerModel" no-title @input="startDatePickerChange"></v-date-picker>
+        </v-menu>
+
+      </div>
     </div>
     <div class="top-notify">
       <div class="accordion">
