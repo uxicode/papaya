@@ -225,8 +225,8 @@
 
             <div class="fd-inner">
               <ul class="img-list clearfix">
-                <li v-for="imgItem in item.list.attachment">
-                  <a href=""><img :src="imgItem.location" alt=""></a>
+                <li class="item-test" v-for="imgItem in item.list.attachment">
+                  <a href="" data-count="+3"><img :src="imgItem.location" alt=""></a>
                 </li>
               </ul>
             </div>
