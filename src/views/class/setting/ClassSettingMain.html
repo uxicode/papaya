@@ -14,7 +14,7 @@
                         <span class="position">{{ memberLevelTxt(myClassInfo.me.level) }}</span>
                     </div>
                     <div class="member-info-btn">
-                        <button type="button" class="btn only-ico-btn" @click="gotoLink('classProfile')"><img :src="require('@/assets/images/settings.svg')" alt=""></button>
+                        <button type="button" class="btn only-ico-btn" @click="gotoLink('classPromakeCurriculumItems')"><img :src="require('@/assets/images/settings.svg')" alt=""></button>
                     </div>
                 </li>
             </ul>
@@ -44,10 +44,18 @@
                     <div class="setting-btn">
                         <div class="member-info-btn">
                             <div class="list-popup">
-                                <button type="button" class="list-popup-btn" @click="item.active = !item.active"><span>받지 않기</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                <button type="button" class="list-popup-btn" @click="item.active = !item.active"><span>{{ notiOnOffTxt(idx) }}</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
                                 <div class="list-popup-menu pos-right" :class="{'active': item.active}" style="transform:translate3d(87px, 0, 0);">
-                                    <button class="list-popup-item" @click="notiOnOff(idx, 1)">받기</button>
-                                    <button class="list-popup-item" @click="notiOnOff(idx, 0)">받지 않기</button>
+                                    <template v-if="idx!==2">
+                                        <button class="list-popup-item" @click="notiOnOff(idx, 1)">받기</button>
+                                        <button class="list-popup-item" @click="notiOnOff(idx, 0)">받지 않기</button>
+                                    </template>
+                                    <template v-else>
+                                        <button class="list-popup-item" @click="notiOnOff(idx, 3)">10분 전 받기</button>
+                                        <button class="list-popup-item" @click="notiOnOff(idx, 2)">30분 전 받기</button>
+                                        <button class="list-popup-item" @click="notiOnOff(idx, 1)">1시간 전 받기</button>
+                                        <button class="list-popup-item" @click="notiOnOff(idx, 0)">받지 않기</button>
+                                    </template>
                                 </div>
                             </div>
                         </div>

@@ -23,14 +23,14 @@ export default class ClassStaffAdd extends Vue {
   private totalMemberNum: number = 0;
 
   public created() {
-    this.getClassMembers();
+    this.getAllClassMembers();
   }
 
   /**
    * 전체 일반 멤버 리스트를 가져온다.
    * @private
    */
-  private getClassMembers(): void {
+  private getAllClassMembers(): void {
     MyClassService.getClassInfoById(this.classID)
       .then((data) => {
         // 가입 승인된 일반 멤버만 불러온다.

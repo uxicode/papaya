@@ -6,7 +6,7 @@
     "strict": true,
     "jsx": "preserve",
     "importHelpers": true,
-    "moduleResolution": "node",
+    "moduleResolution": "node",  //import class from ~~ 에 관한 것이다. node 로 설정하면 node_modules 부터 검색하여 찾는다.
     "experimentalDecorators": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

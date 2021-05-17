@@ -37,13 +37,13 @@ export default class NoticeBoard extends Vue {
     }
 
     /**
-     * 공지사항 내용 토글
+     * 약관 내용 토글
      * @param idx
      * @private
      */
     private accordionToggle(idx: number): void {
-        const btn = document.querySelectorAll('.bt-cnt img');
-        btn[idx].classList.toggle('bt-icon');
+        const btn = document.querySelectorAll('.bt-cnt');
+        btn[idx].classList.toggle('collapsed');
         const accordion = document.querySelectorAll('.collapse');
         accordion[idx].classList.toggle('show');
     }
