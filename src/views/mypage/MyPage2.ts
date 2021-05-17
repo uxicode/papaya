@@ -1,4 +1,4 @@
-import {Vue, Component, Prop} from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
 import NoticeBoard from '@/views/mypage/noticeBoard/NoticeBoard';
 import CustomerCenter from '@/views/mypage/customerCenter/CustomerCenter';
 import TermsOfService from '@/views/mypage/termsOfService/TermsOfService';

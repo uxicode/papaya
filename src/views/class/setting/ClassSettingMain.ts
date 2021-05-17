@@ -1,8 +1,8 @@
-import ClassMemberService from '@/api/service/ClassMemberService';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
+import ClassMemberService from '@/api/service/ClassMemberService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './ClassSettingMain.html';
@@ -257,6 +257,11 @@ export default class ClassSettingMain extends Vue{
         return value;
     }
 
+    /**
+     * 알림 설정 현재 상태 텍스트
+     * @param idx
+     * @private
+     */
     private notiOnOffTxt(idx: number): string {
         if (idx !== 2) { // 새 알림, 새 댓글
             if (this.notiValue(idx) === 1) {
@@ -431,7 +436,7 @@ export default class ClassSettingMain extends Vue{
         if (class_members.length >= 1 && me.level === 1) {
             this.isWithdrawDenied = true;
         } else {
-            ClassMemberService.deleteClassMember(this.classID, this.myClassInfo.me.id)
+            ClassMemberService.deleteClassMemberByUser(this.classID, this.myClassInfo.me.id)
               .then(() => {
                   console.log('클래스 탈퇴 완료');
               });

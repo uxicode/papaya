@@ -1,9 +1,8 @@
-import {IUserMe} from '@/api/model/user.model';
-import ClassMemberService from '@/api/service/ClassMemberService';
-import MyClassService from '@/api/service/MyClassService';
-import {IClassInfo, IClassMemberInfo} from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import {IUserMe} from '@/api/model/user.model';
+import {IClassInfo, IClassMemberInfo} from '@/views/model/my-class.model';
+import ClassMemberService from '@/api/service/ClassMemberService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './ClassProfile.html';
@@ -127,26 +126,6 @@ export default class ClassProfile extends Vue {
         } else {
             return false;
         }
-    }
-
-    /**
-     * 리스트 팝업 토글
-     * @param idx
-     * @private
-     */
-    private listPopupToggle(idx: number): void {
-        const listPopup = document.querySelectorAll('.basic-info .list-popup-menu');
-        // listPopup.forEach((item) => item.classList.remove('active'));
-        listPopup[idx].classList.toggle('active');
-    }
-
-    /**
-     * 토글 메뉴 바깥 영역 클릭시 메뉴 닫기
-     * @private
-     */
-    private closeToggle(): void {
-        const listPopup = document.querySelectorAll('.basic-info .list-popup-menu');
-        listPopup.forEach((item) => item.classList.remove('active'));
     }
 
     /**

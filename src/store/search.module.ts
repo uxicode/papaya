@@ -1,3 +1,5 @@
+import MyClassService from '@/api/service/MyClassService';
+import {IClassTag} from '@/views/model/my-class.model';
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 import {
   SEARCH_KEYWORD,
@@ -6,7 +8,7 @@ import {
   SEARCH_TOTAL,
   SEARCHING_TYPE
 } from '@/store/mutation-search-types';
-import {SEARCH_RESULT_ACTION, SEARCHING_ACTION } from '@/store/action-search-types';
+import {SEARCH_RESULT_ACTION, SEARCHING_ACTION, TAG_SEARCH_RESULT_ACTION} from '@/store/action-search-types';
 import {SearchApiService} from '@/api/service/SearchApiService';
 import {ISearchModel } from '@/views/model/search.model';
 
@@ -18,7 +20,7 @@ export default class SearchModule extends VuexModule {
   public searchChk: boolean=false; //멤버 변수는 state 로 이용된다.
   public keywordItem: string = '';
   public schTotal: number = 0;
-  public schData: ISearchModel[] = [];
+  public schData: ISearchModel[] | IClassTag[] = [];
 
   get isSearchChk(): boolean {
     return this.searchChk;
@@ -28,15 +30,13 @@ export default class SearchModule extends VuexModule {
     return this.keywordItem;
   }
 
-
   get searchTotal(): number{
     return this.schTotal;
   }
 
-  get searchResultData(): ISearchModel[]{
+  get searchResultData(): ISearchModel[] | IClassTag[] {
     return this.schData;
   }
-
 
   @Mutation
   public [SEARCHING]( chk: boolean): void {
@@ -55,10 +55,9 @@ export default class SearchModule extends VuexModule {
   }
 
   @Mutation
-  public [SEARCH_DATA_SAVED]( data: ISearchModel[] ): void {
+  public [SEARCH_DATA_SAVED]( data: ISearchModel[] | IClassTag[] ): void {
     this.schData=data;
   }
-
 
   @Action
   public [SEARCHING_ACTION]( chk: boolean ): void {
@@ -81,7 +80,24 @@ export default class SearchModule extends VuexModule {
       }).catch((error) => {
         return Promise.reject(error);
       });
+
+
   }
 
+  @Action({rawError: true})
+  public [TAG_SEARCH_RESULT_ACTION](payload: { keyword: string, page_no: number, count: number}): Promise<any>{
+
+    const {keyword, page_no, count} = payload;
+
+    return MyClassService.searchTag(keyword, {page_no, count})
+      .then((data) => {
+        this.context.commit(SEARCH_KEYWORD, keyword);
+        this.context.commit(SEARCH_DATA_SAVED, data.tag_list);
+        this.context.commit(SEARCH_TOTAL, data.total);
+        return Promise.resolve(data);
+      }).catch((error) => {
+        return Promise.reject(error);
+      });
+  }
 
 }

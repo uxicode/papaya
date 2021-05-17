@@ -1,7 +1,6 @@
-import ClassMemberService from '@/api/service/ClassMemberService';
-import MyClassService from '@/api/service/MyClassService';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import ClassMemberService from '@/api/service/ClassMemberService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './BlockedMemberList.html';
