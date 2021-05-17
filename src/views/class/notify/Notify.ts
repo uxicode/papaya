@@ -24,6 +24,10 @@ export default class Notify extends Vue {
   private reservedTotal: number=0;
   private isAddPopupOpen: boolean=false;
 
+  //datepicker
+  private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
+  private startDateMenu: boolean=false;
+
   get noticeListItemsModel() {
     return this.noticeListItems;
   }
@@ -71,4 +75,14 @@ export default class Notify extends Vue {
   private onAddPost() {
     this.isAddPopupOpen=true;
   }
+
+  /**
+   * datepicker 닫기 참조
+   * @private
+   */
+  private startDatePickerChange( ) {
+    this.startDateMenu = false;
+    // console.log(this.startDatePickerModel);
+  }
+
 }

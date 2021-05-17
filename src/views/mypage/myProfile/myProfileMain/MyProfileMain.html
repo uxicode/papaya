@@ -1,5 +1,4 @@
-<v-app style="background-color:transparent;">
-    <div class="my-profile">
+ <div class="my-profile">
         <div class="my-profile-section">
             <p class="section-tit">내 정보</p>
 
@@ -7,7 +6,7 @@
                 <div class="list-item">
                     <p class="list-tit">이름</p>
                     <div class="list-right">
-                        <span>{{ myInfo.fullname }}</span>
+                        <span>{{ getFullname() }}</span>
                         <button type="button" class="list-btn" @click="openModify('name')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                     </div>
                 </div>
@@ -18,19 +17,19 @@
                             <!--<span class="date-area">{{ myInfo.birthday }}</span>-->
                             <!--<button type="button" class="btn form-btn form-calendar"></button>-->
                             <v-menu
-                                    nudge-top="65px"
-                                    nudge-right="-230px"
-                                    origin="top right"
+                                    nudge-left="30px"
+                                    origin="left top"
                                     ref="menu"
                                     v-model="startDateMenu"
                                     :close-on-content-click="false"
                                     transition="scale-transition"
+                                    offset-x
                                     offset-y
                                     min-width="auto">
                                 <template v-slot:activator="{ on, attrs }">
                                     <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
                                     <v-text-field
-                                            v-model="myInfo.birthday"
+                                            v-model="myBirthday"
                                             v-bind="attrs"
                                             v-on="on"
                                             hide-details
@@ -55,7 +54,7 @@
                     <div class="list-right" v-click-outside="closeListMenu">
                         <div class="list-popup">
                             <button type="button" class="list-popup-btn" @click="openModify('gender')">
-                                {{ myInfo.gender === 1 ? '남자' : '여자' }}
+                                {{ getGender() }}
                                 <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
                             </button>
                             <div class="list-popup-menu" :class="{'active': isModifyGender}">
@@ -75,20 +74,20 @@
                 <div class="list-item">
                     <p class="list-tit">아이디</p>
                     <div class="list-right">
-                        <span>{{ myInfo.user_id }}</span>
+                        <span>{{ getUserId() }}</span>
                     </div>
                 </div>
                 <div class="list-item">
                     <p class="list-tit">모바일 번호</p>
                     <div class="list-right">
-                        <span>{{ myInfo.mobile_no }}</span>
+                        <span>{{ getMobile()}}</span>
                         <button type="button" class="list-btn" @click="gotoLink('modifyMobile')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                     </div>
                 </div>
                 <div class="list-item">
                     <p class="list-tit">이메일 주소</p>
                     <div class="list-right">
-                        <span>{{ myInfo.email }}</span>
+                        <span>{{ getEmail() }}</span>
                         <button type="button" class="list-btn" @click="openModify('email')"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
                     </div>
                 </div>
@@ -242,4 +241,3 @@
             <!-- end: 서비스 탈퇴-탈퇴 불가 팝업 -->
         </transition>
     </div>
-</v-app>
