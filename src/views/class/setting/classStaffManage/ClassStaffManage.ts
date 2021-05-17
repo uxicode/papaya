@@ -45,7 +45,9 @@ export default class ClassStaffManage extends Vue {
     private email: string = '';
     private qnaList: IQnaInfo[] = [];
 
+    /* 권한 설정 관련 */
     private authList: IClassAuth[] = [];
+    private authTypeList: string[] = ['알림 관리', '일정 관리', '교육과정 관리'];
 
     public created() {
         this.getClassStaffs();
@@ -117,26 +119,17 @@ export default class ClassStaffManage extends Vue {
           });
     }
 
-
+    /**
+     * 권한 설정 변경 내용 저장
+     * @private
+     */
     private submitAuthChange(): void {
         ClassMemberService.setClassMemberInfo(this.classID, this.memberId, {
-            auth_list: [
-                {
-                    auth_type: 1,
-                    be_authorized: false
-                },
-                {
-                    auth_type: 2,
-                    be_authorized: true
-                },
-                {
-                    auth_type: 3,
-                    be_authorized: true
-                }
-            ]
+            auth_list: this.authList
         }).then(() => {
            console.log('수정 완료');
         });
+        this.isStaffModifyPopup = false;
     }
 
     /**
