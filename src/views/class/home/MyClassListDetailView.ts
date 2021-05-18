@@ -5,6 +5,9 @@ import MyClassService from '@/api/service/MyClassService';
 import WithRender from './MyClassListDetailView.html';
 import {NoticeScheduleModel} from '@/views/model/schedule.model';
 import AuthService from '@/api/service/AuthService';
+import {IAttachFileModel} from '@/views/model/post.model';
+import {PostService} from '@/api/service/PostService';
+import {ScheduleService} from '@/api/service/ScheduleService';
 
 const MyClass = namespace('MyClass');
 
@@ -20,6 +23,7 @@ export default class MyClassListDetailView extends Vue{
 
 
   private noticeSchedule: NoticeScheduleModel[] = [];
+  private isPageLoaded: boolean=false;
 
 
   @MyClass.Getter
@@ -36,7 +40,11 @@ export default class MyClassListDetailView extends Vue{
   }
 
   public created(): void{
-    this.getClassList();
+    this.getClassList().then(
+      ()=>{
+        this.isPageLoaded=true;
+      }
+    );
   }
 
   public getMax<T>( items: T[] ): T{
@@ -48,16 +56,17 @@ export default class MyClassListDetailView extends Vue{
   //{total_count: 0, post_listcount: 0, post_list: Array(0)}
   //{ total: 0, class_schedule_list: Array(0)}
   // {page_item_count: 5, total: 0, curriculum_list: [], item_count: 0}
-  private getClassList(): void{
-    getAllPromise([
-      MyClassService.getAllScheduleByClassId( this.classID, { page_no: 1, count:10} ),
+  private async getClassList(){
+    await getAllPromise([
+      ScheduleService.getAllScheduleByClassId( this.classID, { page_no: 1, count:10} ),
       MyClassService.getAllCurriculumByClassId( this.classID, { page_no: 1, count:10} ),
-      MyClassService.getAllPostsByClassId( this.classID, { page_no: 1, count:10}),
+      PostService.getAllPostsByClassId( this.classID, { page_no: 1, count:10}),
     ]).then( ( data: any )=>{
 
       const max=this.getMax<number>([data[0].class_schedule_list.length, data[1].curriculum_list.length, data[2].post_list.length] );
       // console.log(max);
       console.log(data[0].class_schedule_list );
+
 
       this.noticeSchedule=data[0].class_schedule_list.filter((item: any) =>item.type===1 );
 
@@ -99,6 +108,24 @@ export default class MyClassListDetailView extends Vue{
 
   private getNoticeMainTitle(): string {
     return ( this.noticeSchedule[this.noticeSchedule.length-1])? this.noticeSchedule[this.noticeSchedule.length-1].title : '';
+  }
+
+  private getImgFileDataSort(fileData: IAttachFileModel[] ) {
+    return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg');
+  }
+
+  private getFileDataSort(fileData: IAttachFileModel[] ) {
+    return fileData.filter( (item: IAttachFileModel) => item.contentType !== 'image/png' && item.contentType !== 'image/jpg' && item.contentType !== 'image/jpeg' && item.contentType !== 'image/gif');
+  }
+
+  private isVote(item: Date) {
+    if (item === null) {
+      return true;
+    }
+    const finishTime = new Date(item).getTime();
+    const currentTime = new Date().getTime();
+
+    return (finishTime > currentTime);
   }
 
 

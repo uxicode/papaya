@@ -156,7 +156,7 @@ interface IFeedList {
     comment: number;
 }
 //보관함
-interface IPostList {
+interface IKeepPostList {
     startAt: string;
     endAt: string;
     expiredAt: string;
@@ -691,7 +691,7 @@ export {
     IFeedList,
     IClassInfo,
     ClassEachInfo,
-    IPostList,
+    IKeepPostList,
     ISearchSchool,
     IMakeClassInfo,
     IMakeClassInfoBase,

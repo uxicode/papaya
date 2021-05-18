@@ -3,17 +3,15 @@ import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 import {INullable} from '@/views/model/types';
 import {
     IMyClassList,
-    IPostList,
     IMakeClassInfo,
     IMakeClassInfoBase,
     IClassInfo,
-    IClassMemberInfo,
-    IQuestionInfo
+    IClassMemberInfo, IKeepPostList,
 } from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import {
     MYCLASS_LIST,
-    POST_LIST,
+    KEEP_POST_LIST,
     CREATE_CLASS_LIST,
     SET_CLASS_ID,
     SET_MYCLASS_HOME_DATA,
@@ -23,22 +21,20 @@ import {
 } from '@/store/mutation-class-types';
 import {
     MYCLASS_LIST_ACTION,
-    POST_LIST_ACTION,
+    KEEP_POST_LIST_ACTION,
     MAKE_CLASS,
     MYCLASS_HOME,
     CLASS_MEMBER_INFO_ACTION,
     MODIFY_CLASS_MEMBER_INFO,
-    MODIFY_CLASS_INFO,
-    MODIFY_QUESTION,
 } from '@/store/action-class-types';
-import store from '@/store';
+import {PostService} from '@/api/service/PostService';
 @Module({
     namespaced: true,
 })
 export default class ClassModule extends VuexModule {
     /* State */
     private classData: IMyClassList[]=[];
-    private postData: IPostList[]=[];
+    private keepPostItems: IKeepPostList[]=[];
     private memberInfo: IClassMemberInfo[] = [];
     private count: number = 0;
     private classIdx: number = -1;
@@ -154,8 +150,8 @@ export default class ClassModule extends VuexModule {
     }
 
     @Mutation
-    public [POST_LIST](postData: IPostList[] ): void {
-        this.postData =postData;
+    public [KEEP_POST_LIST](postData: IKeepPostList[] ): void {
+        this.keepPostItems =postData;
         // localStorage.setItem('postData', JSON.stringify(this.postData) );
         // this.count++;
     }
@@ -181,7 +177,7 @@ export default class ClassModule extends VuexModule {
         // localStorage.removeItem('classData');
         localStorage.removeItem('classId');
         this.classData=[];
-        this.postData=[];
+        this.keepPostItems=[];
         this.classIdx=-1;
     }
 
@@ -199,10 +195,10 @@ export default class ClassModule extends VuexModule {
     }
 
     @Action({rawError: true})
-    public [POST_LIST_ACTION](): Promise<INullable<IPostList[]>> {
-        return MyClassService.getMyKeepPosts()
+    public [KEEP_POST_LIST_ACTION](): Promise<INullable<IKeepPostList[]>> {
+        return PostService.getMyKeepPosts()
             .then((data: any) => {
-                this.context.commit(POST_LIST, data.post_list);
+                this.context.commit(KEEP_POST_LIST, data.post_list);
                 return Promise.resolve(data.post_list);
             }).catch((error: any) => {
                 console.log(error);

@@ -71,6 +71,7 @@ interface IPostModel{
       vote_id: number,
     }>
   };
+  isBookmark: boolean;
 }
 /*acl: "public-read"
 bucket: "papaya-storage/class/post"

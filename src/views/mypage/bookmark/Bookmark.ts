@@ -1,6 +1,6 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {IPostList} from '@/views/model/my-class.model';
+import {IKeepPostList} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -19,13 +19,13 @@ const MyClass = namespace('MyClass');
 export default class Bookmark extends Vue {
     private isPostsResetModal: boolean = false;
     private tabIndex: number = 0;
-    private postItems: IPostList[]=[];
+    private postItems: IKeepPostList[]=[];
     private myMemberLevel: number = 0;
 
     @MyClass.Action
-    private POST_LIST_ACTION!: ()=> Promise<IPostList[]>;
+    private KEEP_POST_LIST_ACTION!: ()=> Promise<IKeepPostList[]>;
 
-    get myPostLists(): IPostList[] {
+    get myPostLists(): IKeepPostList[] {
         return this.postItems;
     }
 
@@ -38,7 +38,7 @@ export default class Bookmark extends Vue {
      * @public
      */
     public getMyPosts(): void {
-        this.POST_LIST_ACTION().then((data: IPostList[]) => {
+        this.KEEP_POST_LIST_ACTION().then((data: IKeepPostList[]) => {
             this.postItems = data;
             //console.log(this.postItems);
         });

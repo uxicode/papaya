@@ -13,6 +13,7 @@ import Btn from '@/components/button/Btn.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import WithRender from './ScheduleView.html';
+import {ScheduleService} from '@/api/service/ScheduleService';
 
 
 const MyClass = namespace('MyClass');
@@ -231,7 +232,7 @@ export default class ScheduleView extends Vue{
 
     private async getScheduleList(): Promise<void>{
         // console.log(this.classID === Number( this.$route.params.classId ) );
-        await MyClassService.getAllScheduleByClassId( this.classID )
+        await ScheduleService.getAllScheduleByClassId( this.classID )
           .then((data)=>{
               // console.log( 'getAllScheduleByClassId=', data.class_schedule_list );
               this.scheduleLists=data.class_schedule_list;
@@ -558,17 +559,6 @@ export default class ScheduleView extends Vue{
     }
 
     /**
-     * textarea height 값 텍스트 라인 수에 맞추어 계산
-     * @param value
-     * @private
-     */
-    private autoResizeTextArea( value: string ): number{
-        const numOfLine: number = (value.match(/\n/g) || []).length;
-        // min-height + lines x line-height
-        return 20 + numOfLine* 20;
-    }
-
-    /**
      *  새일정 등록 > textarea 에 글 입력시
      * @param value
      * @private
@@ -576,7 +566,7 @@ export default class ScheduleView extends Vue{
     private scheduleDetailAreaInputHandler(value: any) {
         this.scheduleData.body=value;
         const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLInputElement;
-        scheduleDetailAreaTxt.style.height = String( this.autoResizeTextArea(this.scheduleData.body) + 'px');
+        scheduleDetailAreaTxt.style.height = String( Utils.autoResizeTextArea(this.scheduleData.body) + 'px');
     }
 
     /**

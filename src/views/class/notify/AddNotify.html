@@ -1,0 +1,91 @@
+<!-- start: 공통 팝업 / 파일명 : W.4.5.2.2 (알림 - 새 알림 작성-fit) -->
+<transition name="modal">
+  <modal v-if="isOpen" size="600px" body-padding="0" @modalClose="popupChange( false )">
+    <div slot="header">
+      <!-- header custom coding-->
+      <p class="popup-header-tit">새 알림 작성</p>
+      <div class="popup-close">
+        <button class="close" @click="popupChange( false )"><img :src="require('@/assets/images/close.svg')" alt="">
+        </button>
+      </div>
+    </div>
+    <div slot="body">
+      <!-- body custom coding-->
+      <div class="popup-form">
+        <div class="scroll-body" style="height:50vh">
+          <div class="popup-form-top">
+            <div class="form-item post-classes selected"> <!-- class 선택 시 form-item에 selected 추가됨 -->
+              <p>
+                <span class="icon"><img :src="getProfileImg(myClassHomeModel.image_url)" class="icon-img" alt=""></span>
+                <span class="gr-name">{{ myClassHomeModel.g_name }}</span>
+                <strong class="cls-name">{{ myClassHomeModel.name }}</strong>
+              </p>
+            </div>
+            <div class="form-item">
+              <!--              <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">
+              v-model="scheduleData.title" @input="addScheduleTitleChange"-->
+              <txt-field add-class="popup-type" placeholder="제목을 20자 이내로 작성해 주세요." v-model="postData.title" @input="addPostTitleChange"></txt-field>
+            </div>
+          </div>
+          <div class="popup-form-cnt">
+            <div class="form-item post-cnt" style="max-height:300px;height:auto;overflow-y:auto;overflow-x:hidden;margin:0;">
+              <!-- start: 일정 상세 내용 입력창 -->
+              <textarea
+                      style="margin: 0 40px;"
+                      ref="scheduleDetailAreaTxt"
+                      v-model="postData.text"
+                      class="form-textarea auto-resize"
+                      placeholder="일정 내용을 작성해 주세요."
+                      @input="postDetailAreaInputHandler( $event.target.value )"></textarea>
+              <!-- end: 일정 상세 내용 입력창 -->
+            </div>
+          </div>
+          <div class="popup-form-btm">
+            <!-- start: 첨부 이미지 파일 미리보기 -->
+            <image-preview :file-items="imgFileURLItemsModel"
+                           @remove="removeImgPreviewItems"
+                           @loaded="imageLoadedCheck"
+                           @removeAll="removeAllPreview"></image-preview>
+            <!-- end: 첨부 이미지 파일 미리보기 -->
+
+            <!-- start: 첨부 파일 리스트 -->
+            <file-preview :file-items="attachFileItems"
+                          @removeFile="removeAttachFileItem"
+                          @removeAttachFileAll="removeAllAttachFile"></file-preview>
+            <!-- end: 첨부 파일 리스트 -->
+          </div>
+        </div>
+
+        <div class="form-add-btn">
+          <ul class="clearfix">
+            <li>
+              <a href="#" class="info-img" @click.prevent="addImgFileInputFocus">
+                <img :src="require('@/assets/images/image.svg')" alt="">
+                <input class="input-file" type="file" name="files" id="imgFileInput" accept="image/*" multiple @change="addFileToImage( $event.target.files )" hidden />
+              </a>
+
+            </li>
+            <li>
+              <a href="#" @click.prevent="addFilesInputFocus">
+                <img :src="require('@/assets/images/file.svg')" alt="">
+                <input class="input-file" type="file" name="files" id="attachFileInput" accept=".pdf, .xls, .xlsx, .ppt, .pptx, .doc, .docx" multiple @change="addAttachFileTo( $event.target.files )" hidden />
+              </a>
+            </li>
+            <li><a href=""><img :src="require('@/assets/images/vote.svg')" alt=""></a></li>
+            <li><a href=""><img :src="require('@/assets/images/link.svg')" alt=""></a></li>
+            <li><a href=""><img :src="require('@/assets/images/time-outline.svg')" alt=""></a></li>
+          </ul>
+          <div class="form-temp-save"><a href="" class="txt-btn">임시저장</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div slot="footer">
+      <div class="btn-group rt">
+        <button type="button" class="btn primary navi" disabled>등록</button>
+      </div>
+    </div>
+
+  </modal>
+</transition>
+<!-- end: 공통 팝업 -->
