@@ -229,6 +229,15 @@ class MyClassService {
     }
 
     /**
+     * 게시글 정보 조회
+     * @param classId
+     * @param postId
+     */
+    public getPostsById(classId: number | string, postId: number): Promise<any> {
+        return request('get', `${CLASS_BASE_URL}/${classId}/posts/${postId}`);
+    }
+
+    /**
      * 클래스 교육과정
      * @param classId
      */

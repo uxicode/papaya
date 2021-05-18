@@ -1050,7 +1050,7 @@
           background-position: left center;
 
         .name {font-weight:500;}
-        .position {
+        .position, .size {
           font-size:12px;
           color:#57576d;
         }
@@ -1060,6 +1060,7 @@
           &.member {background-image:url(../../assets/images/btn-round-member.svg);}
 
           &.pdf-file {background-image:url(../../assets/images/icn-32-file-pdf.svg);}
+          &.jpg-file {background-image:url(../../assets/images/icn-32-file-jpg.svg);}
           &.unknown-file {background-image:url(../../assets/images/icn-32-file-unknown.svg);}
         }
 

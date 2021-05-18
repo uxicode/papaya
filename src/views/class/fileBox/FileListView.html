@@ -6,7 +6,7 @@
 
         <div class="classes-file-list">
             <div class="list-group">
-                <p class="list-tit file-info bd-btm">총 <span class="num">{{ allData.length }}</span>개 / <span>15.9</span> MB</p>
+                <p class="list-tit file-info bd-btm">총 <span class="num">{{ allData.length }}</span>개 / <span>{{ getFileSize(totalFileSize) }}</span></p>
                 <div class="scroll-body file" style="height: 565px;">
                     <ul class="file-group mgt-0 mgb-0" style="background-color: #fff; height: inherit;">
                         <li v-for="(item, idx) in allData"
@@ -17,7 +17,7 @@
                                     <div class="file-info"
                                          :class="getMimeType(item.mimetype)">
                                         <p class="name">{{ item.originalname }}</p>
-                                        <span class="position">{{ getFileSize(item.size) }} MB</span>
+                                        <span class="size">{{ getFileSize(item.size) }}</span>
                                     </div>
                                 </div>
                                 <div class="tb-cell">
@@ -39,10 +39,10 @@
                                                     <v-list-item @click="openFileByNewTab(item.location)">
                                                         <v-list-item-title>파일 열기</v-list-item-title>
                                                     </v-list-item>
-                                                    <v-list-item @click="">
+                                                    <v-list-item @click="downloadFile(item.location)">
                                                         <v-list-item-title>파일 다운로드</v-list-item-title>
                                                     </v-list-item>
-                                                    <v-list-item @click="">
+                                                    <v-list-item @click="openParentContentPopup(item.mimetype, item.parent_id)">
                                                         <v-list-item-title>파일이 첨부된 글로 이동</v-list-item-title>
                                                     </v-list-item>
                                                 </v-list>
@@ -59,4 +59,99 @@
 
         </div>
     </div>
+
+    <!-- start: 파일 첨부된 글 내용 팝업 -->
+    <transition name="modal">
+        <modal v-if="isParentPopup" size="600px" body-padding="0" @modalClose="isParentPopup=false;">
+            <div slot="header">
+                <div class="popup-close">
+                    <button class="close" @click="isParentPopup=false;"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <div class="popup-cnt">
+                    <div class="feed-item">
+                        <div class="fd-head">
+                            <h3 class="fd-tit">{{  }}</h3>
+                            <div class="fd-writer type2">
+                                <p class="writer">
+                                    <span class="name manager">{{ }}</span>
+                                    <span class="time">{{  }}</span>
+                                    <span class="noti">일반</span>
+                                </p>
+                            </div>
+                            <div class="fd-btn">
+                                <button type="button" class="btn only-ico-btn sm bookmark active"></button>
+                                <div class="list-popup">
+                                    <v-menu
+                                            min-width="200px"
+                                            :close-on-click="true">
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <button
+                                                    type="button"
+                                                    class="list-popup-btn"
+                                                    v-bind="attrs"
+                                                    v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
+                                            </button>
+                                        </template>
+                                        <v-list>
+                                            <v-list-item @click="">
+                                                <v-list-item-title>일정 수정</v-list-item-title>
+                                            </v-list-item>
+                                            <v-list-item @click="">
+                                                <v-list-item-title>공지로 등록</v-list-item-title>
+                                            </v-list-item>
+                                            <v-list-item @click="">
+                                                <v-list-item-title>일정 보관</v-list-item-title>
+                                            </v-list-item>
+                                            <v-list-item @click="">
+                                                <v-list-item-title>일정 삭제</v-list-item-title>
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-menu>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fd-cnt">
+                            <p class="fd-txt">{{  }}</p>
+
+                            <div class="fd-inner">
+
+                                <!-- start: attach 에 이미지파일이 있는 경우 -->
+                                <template v-if="mimeType.includes('image')">
+                                    <ul class="img-list clearfix">
+                                        <li><a href=""><img :src="''" alt="이미지"></a></li>
+                                    </ul>
+                                </template>
+                                <!-- end: attach 에 이미지파일이 있는 경우 -->
+
+                                <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+                                <template v-else>
+                                    <p class="fd-inner-txt">첨부 파일 {{  }}</p>
+                                    <ul class="file-list clearfix">
+                                        <li><a href="">{{ }}</a></li>
+                                    </ul>
+                                </template>
+                                <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+
+                            </div>
+                        </div>
+
+                        <div class="fd-foot clearfix">
+                            <span class="fd-viewer">124명 읽음</span>
+                            <span class="fd-comment">댓글 12</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div slot="footer">
+                <!-- footer custom coding-->
+                <div class="btn-group rt">
+                    <btn type="navi" @btnClick="isParentPopup=false;">닫기</btn>
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 파일 첨부된 글 내용 팝업 -->
+
 </section>

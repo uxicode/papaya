@@ -20,6 +20,9 @@ export default class FileBox extends Vue {
     private classID!: string | number;
 
     private allData: any[] = [];
+    private totalFileSize: number = 0;
+    private isParentPopup: boolean = false;
+    private mimeType: string = '';
 
     public created() {
         this.getAllClassAttachmentData();
@@ -35,25 +38,38 @@ export default class FileBox extends Vue {
           MyClassService.getAllScheduleByClassId(this.classID, {page_no: 1, count: 100}),
           MyClassService.getAllCurriculumByClassId(this.classID, {page_no: 1, count: 100}),
         ]).then((data: any) => {
+          // console.log(data[0].post_list);
+          // console.log(data[1].class_schedule_list);
+          // console.log(data[2].curriculum_list);
+
           const postData = data[0].post_list.filter((item: any) => item.attachment.length !== 0)
             .map((item: any) => item.attachment).flat();
           const scheduleData = data[1].class_schedule_list.filter((item: any) => item.attachment.length !== 0)
             .map((item: any) => item.attachment).flat();
           const curriculumData = data[2].curriculum_list.reduce(
-            (item: any) => item.course_list.filter(
-              () => item.attachment.length !== 0
-            ))
+            (item: any) => item.course_list.filter(() => item.attachment.length !== 0))
             .map((item: any) => item.attachment).flat();
           this.allData = [...postData, ...scheduleData, ...curriculumData];
           console.log(this.allData);
+
+          this.totalFileSize = this.allData.map((item) => item.size).reduce((acc, cur) => acc + cur);
         });
-    }
+  }
 
   /**
    * 파일 크기를 MB 단위로 표현 (소숫점이하 첫번째 자리까지)
+   * 1MB 이하는 KB 단위로
    * @param size
    */
-  private getFileSize = (size: number): number => Math.round((size / 1024) * 10) / 10;
+  private getFileSize = (size: number): string => {
+    const mb = 1024 * 1024;
+    const kb = 1024;
+    if (size > mb) {
+      return `${Math.round((size / mb) * 10) / 10} MB`;
+    } else {
+      return `${Math.round((size / kb) * 10) / 10} KB`;
+    }
+  }
 
   /**
    * 파일 형식에 따른 아이콘 클래스 바인딩
@@ -62,6 +78,8 @@ export default class FileBox extends Vue {
   private getMimeType = (mimetype: string): string => {
     if (mimetype.includes('pdf')) {
       return 'pdf-file';
+    } else if (mimetype.includes('jpg') || mimetype.includes('jpeg')) {
+      return 'jpg-file';
     } else {
       return 'unknown-file';
     }
@@ -74,4 +92,28 @@ export default class FileBox extends Vue {
   private openFileByNewTab = (location: string): void => {
     window.open(location);
   }
+
+  /**
+   * 파일 다운로드
+   * @param location
+   * @private
+   */
+  private downloadFile = (location: string): void => {
+    const link = document.createElement('a');
+    link.href = location;
+    link.click();
+    link.remove();
+  }
+
+  private openParentContentPopup(mimetype: string, parentId: number): void {
+    this.mimeType = mimetype;
+    MyClassService.getPostsById(this.classID, parentId)
+      .then((data: any) => {
+        console.log(data);
+      }).catch((error: any) => {
+        console.log(error);
+    });
+    this.isParentPopup = true;
+  }
+
 }
