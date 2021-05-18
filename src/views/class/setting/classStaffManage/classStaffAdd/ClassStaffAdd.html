@@ -29,7 +29,7 @@
                                 <p class="member-name">{{ item.nickname }}</p>
                                 <p class="member-tit">일반 멤버</p>
                             </div>
-                            <a href="#" class="member-more" @click.stop.prevent="changePopupOpen(item.id, item.nickname)">스탭 추가하기</a>
+                            <a href="#" class="member-more" @click.stop.prevent="staffModifyPopupOpen(item.id, item.nickname)">스탭 추가하기</a>
                         </li>
                     </ul>
                 </div>
@@ -64,30 +64,12 @@
                                     </p>
                                 </div>
                                 <ul class="auth-list">
-                                    <li>
-                                        <p class="auth-tit">알림 관리</p>
+                                    <li v-for="(item, idx) in authList" :key="idx">
+                                        <p class="auth-tit">{{ authTypeList[idx] }}</p>
                                         <div class="auth-btn">
                                             <div class="form-switcher">
-                                                <input type="checkbox" id="authNotice" checked>
-                                                <label for="authNotice"></label>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <p class="auth-tit">일정 관리</p>
-                                        <div class="auth-btn">
-                                            <div class="form-switcher">
-                                                <input type="checkbox" id="authSchedule" checked>
-                                                <label for="authSchedule"></label>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <p class="auth-tit">교육과정 관리</p>
-                                        <div class="auth-btn">
-                                            <div class="form-switcher">
-                                                <input type="checkbox" id="authEdu" checked>
-                                                <label for="authEdu"></label>
+                                                <input type="checkbox" :id="`auth_type${item.auth_type}`" v-model="item.be_authorized">
+                                                <label :for="`auth_type${item.auth_type}`"></label>
                                             </div>
                                         </div>
                                     </li>
