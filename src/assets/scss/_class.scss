@@ -767,7 +767,7 @@
         }
 
         &.pseudo-del{
-          &:after, &:before{content: none;}
+          &:before{content: none;}
         }
 
       }
