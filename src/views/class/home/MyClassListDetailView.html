@@ -244,7 +244,10 @@
               <!-- start: attach 에 이미지파일이 있는 경우 -->
               <template v-if="getImgFileDataSort(item.list.attachment).length>0">
                 <ul class="img-list clearfix">
-                  <li v-for="imgItem in getImgFileDataSort(item.list.attachment)"><a href=""><img :src="imgItem.location" alt=""></a></li>
+                  <li class="img-item" v-for="( imgItem, imgIndex ) in getImgFileDataSort(item.list.attachment)"
+                      :key="`img-${imgIndex}`" >
+                    <a :href="imgItem.location" :data-count="getImgFileDataSort(item.list.attachment).length"><img :src="imgItem.location" alt=""></a>
+                  </li>
                 </ul>
               </template>
               <!-- end: attach 에 이미지파일이 있는 경우 -->
@@ -272,13 +275,21 @@
               </template>
               <!-- end:  투표가 있는 경우 -->
 
-              <!--<ul class="img-list clearfix">
-                <li v-for="imgItem in item.list.attachment">
-                  <a href=""><img :src="imgItem.location" alt=""></a>
+              <!-- grid guide
+              <ul class="img-list clearfix">
+                <li class="img-item" v-for="imgItem in item.list.attachment">
+                  <a href="" data-count="+3"><img :src="imgItem.location" alt=""></a>
                 </li>
-              </ul>-->
+              </ul>
+              -->
+
             </div>
           </div>
+
+
+
+
+
           <!--<div class="fd-foot clearfix">
             <span class="fd-viewer">124명 읽음</span>
             <span class="fd-comment">댓글 12</span>
