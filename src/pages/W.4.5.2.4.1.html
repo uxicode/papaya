@@ -1,42 +1,134 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-	<title></title>
-	<meta content="" property="og:title" />
-	<meta content="" property="og:url" />
-	<meta content="" property="og:description" />
-	<meta content="" property="og:image" />
-	<meta content="website" property="og:type" />
-	<meta content="" property="og:site_name" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+    <title></title>
+    <meta content="" property="og:title"/>
+    <meta content="" property="og:url"/>
+    <meta content="" property="og:description"/>
+    <meta content="" property="og:image"/>
+    <meta content="website" property="og:type"/>
+    <meta content="" property="og:site_name"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="./assets/css/common.css" />
-	<link rel="stylesheet" type="text/css" href="./assets/css/pages.css" />
+    <link rel="stylesheet" type="text/css" href="./assets/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="./assets/css/pages.css"/>
+
 </head>
 
 <body>
 <div class="popup photo-viewer">
-	<div class="viewer-inner">
-		<div class="viewer-close">
-			<button class="close"><img src="assets/images/close-white.svg" alt=""></button>
-		</div>
-		<ul class="viewer-list">
-			<li class="viewer-item active"><img src="assets/images/pic.png" alt=""></li>
-			<li class="viewer-item"><img src="assets/images/pic2.png" alt=""></li>
-			<li class="viewer-item"><img src="assets/images/pic3.png" alt=""></li>
-		</ul>
+    <div class="viewer-inner">
+        <div class="viewer-close">
+            <button class="close"><img src="assets/images/close-white.svg" alt=""></button>
+        </div>
+        <ul class="viewer-list" id="viewerList">
+            <li class="viewer-item active"><img src="assets/images/pic.png" alt=""></li>
+            <li class="viewer-item"><img src="assets/images/pic2.png" alt=""></li>
+            <li class="viewer-item"><img src="assets/images/pic3.png" alt=""></li>
 
-		<div class="viewer-control">
-			<a href="" class="control prev"><img src="assets/images/left-white.svg" alt=""></a>
-			<a href="" class="control next"><img src="assets/images/right-white.svg" alt=""></a>
-		</div>
+<!--            <li class="viewer-item" style="width: 200px; height: 200px; background-color: lightskyblue"></li>-->
+<!--            <li class="viewer-item"  style="width: 100px; height: 250px; background-color: pink"></li>-->
+<!--            <li class="viewer-item"  style="width: 150px; height: 300px; background-color: yellowgreen"></li>-->
+        </ul>
 
-		<div class="viewer-page">
-			<span class="current-page">1</span> / <span class="all-page">5</span>
-		</div>
-	</div>
+        <div class="viewer-control">
+            <a href="#" class="control prev" id="prev"><img src="assets/images/left-white.svg" alt=""></a>
+            <a href="#" class="control next" id="next"><img src="assets/images/right-white.svg" alt=""></a>
+        </div>
+
+        <div class="viewer-page">
+            <span class="current-page">1</span> / <span class="all-page">3</span>
+        </div>
+
+    </div>
 </div>
+
+<script type="text/javascript">
+
+//test1
+    // $(document).ready(function(){
+    //     let num=1;
+    //
+    //     $('.next').on('click',function(){
+    //         $('.viewer-list').prepend($('li:last'));
+    //         num++;
+    //         if(num>3) num=1;
+    //         $('.current-page').text(num);
+    //
+    //
+    //     })
+    //     $('.prev').on('click',function(){
+    //         $('.viewer-list').append($('li:first'));
+    //         num--;
+    //         if(num<1) num=3;
+    //         $('.current-page').text(num);
+    //     })
+    // })
+
+
+
+    //test2
+    // var prevBtn = document.getElementById("prev");
+    // var nextBtn = document.getElementById("next");
+    // var menuNum = 0;
+    //
+    // function prevBtn() {
+    //     menuNum--
+    //     if (menuNum < 0) {
+    //         menuNum = 2;
+    //     }
+    // }
+    //
+    // function nextBtn() {
+    //     menuNum++
+    //     if (menuNum > 2) {
+    //         menuNum = 0;
+    //     }
+    // }
+    //
+    // prevBtn.addEventListener("click", function () {
+    //     prevBtn();
+    // })
+    //
+    // nextBtn.addEventListener("click", function () {
+    //     nextBtn();
+    // });
+
+
+
+
+    //test3
+        var li = document.querySelectorAll(".viewer-list li");
+        for (var i = 0, length = li.length; i < length; i++) {
+            li[i].onclick = function () {
+                var b = document.querySelector(".viewer-list li.active");
+                if (b) b.classList.remove("active");
+                this.parentNode.classList.add('active');
+            };
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
 </body>
+
+
 </html>
