@@ -317,6 +317,23 @@ class Utils{
     return fixH + numOfLine* fixH;
   }
 
+  /**
+   * undefined 인지 체크
+   * @param value
+   */
+  public static isUndefined( value: any ) {
+    return typeof value === 'undefined';
+  }
+
+  /**
+   * empty 인지 체크
+   * @param value
+   */
+  public static isEmpty( value: any ) {
+    return Utils.isUndefined(value) || value === '' || value === null || value !== value;
+  }
+
+
 
 
 

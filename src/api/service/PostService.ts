@@ -40,6 +40,10 @@ export class PostService{
     return request('get', `${CLASS_BASE_URL}/${classId}/posts`, paging);
   }
 
+  public static setAddPost(classId: string | number, formData: FormData) {
+    return request('post', `${CLASS_BASE_URL}/${classId}/posts`, formData );
+  }
+
 
   /**
    * 내가 가입한 클래스 알림글 북마크한 글조회

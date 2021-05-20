@@ -147,26 +147,30 @@ export default class Notify extends Vue {
   }
 
 
-  private onKeepPostClick(idx: number, keepPostItems: any[]) {
+  private onKeepPostClick(idx: number ) {
     const findIdx=this.postListItems.findIndex((ele) => ele.id === idx);
     // console.log( findIdx );
     const targetPost=this.postListItems[findIdx];
-    let { isBookmark, user_keep_class_posts } = targetPost;
+    let { isBookmark } = targetPost;
+    const { user_keep_class_posts } = targetPost;
 
     if( isBookmark ){
-      PostService.deleteKeepPost(user_keep_class_posts[0].id)
-        .then((data)=>{
-          isBookmark=!isBookmark;
-          user_keep_class_posts.length=0;
-          this.postListItems.splice(findIdx, 1, {...targetPost, isBookmark, user_keep_class_posts} );
-        });
+      if( Array.isArray(user_keep_class_posts) && user_keep_class_posts.length>0){
+        PostService.deleteKeepPost(user_keep_class_posts[0].id)
+          .then((postData)=>{
+            isBookmark=!isBookmark;
+            user_keep_class_posts.length=0;
+            this.postListItems.splice(findIdx, 1, {...targetPost, isBookmark, user_keep_class_posts} );
+          });
+      }
+
     }else{
       //북마크 되어 있는 상태
       PostService.setKeepPost({ class_id:Number( this.classID ), post_id: idx })
-        .then((data)=>{
-          console.log(data);
+        .then((postData: any )=>{
+          // console.log(data);
           isBookmark=!isBookmark;
-          user_keep_class_posts.push(data.data);
+          user_keep_class_posts.push( postData.data );
           this.postListItems.splice(findIdx, 1, {...targetPost, isBookmark, user_keep_class_posts} );
         });
     }

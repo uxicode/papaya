@@ -106,7 +106,7 @@
             </p>
           </div>
           <div class="fd-btn">
-            <button type="button" class="btn only-ico-btn sm bookmark" :class="{'active': item.isBookmark }" @click="onKeepPostClick(item.id, item.user_keep_class_posts)"></button>
+            <button type="button" class="btn only-ico-btn sm bookmark" :class="{'active': item.isBookmark }" @click="onKeepPostClick(item.id)"></button>
             <div class="list-popup">
               <v-menu
                       min-width="200px"

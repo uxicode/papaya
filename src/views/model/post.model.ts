@@ -38,7 +38,13 @@ interface IPostModel{
   type: number;
   updatedAt: Date;
   user_id: number;
-  user_keep_class_posts: [];
+  user_keep_class_posts: Array<{
+    createdAt: Date,
+    id: number,
+    post_id: number,
+    user_id: number,
+    class_id: number
+  }>;
   user_member_id: number;
   vote: {
     anonymous_mode: boolean, // 익명 모드
@@ -122,4 +128,10 @@ interface IAttachFileModel{
   user_id: number;
 }
 
-export {IPostModel, IAttachFileModel};
+interface ICreatePost{
+  type?: number;
+  title: string;
+  text: string;
+}
+export {IPostModel, IAttachFileModel, ICreatePost};
+

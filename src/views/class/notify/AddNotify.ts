@@ -1,14 +1,16 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
-import WithRender from './AddNotify.html';
-import {IClassInfo} from '@/views/model/my-class.model';
 import {namespace} from 'vuex-class';
-import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
-import Modal from '@/components/modal/modal.vue';
-import ImagePreview from '@/components/preview/imagePreview.vue';
-import FilePreview from '@/components/preview/filePreview.vue';
+import {IClassInfo} from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
+import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
+import Modal from '@/components/modal/modal.vue';
+import FilePreview from '@/components/preview/filePreview.vue';
+import ImagePreview from '@/components/preview/imagePreview.vue';
+import WithRender from './AddNotify.html';
+import {ICreatePost} from '@/views/model/post.model';
+import {PostService} from '@/api/service/PostService';
 
 const MyClass = namespace('MyClass');
 
@@ -64,7 +66,7 @@ export default class AddNotify extends Vue{
     ]
   };
 
-  private postData: { type: number, title: string, text: string} = {type: 0, title: '', text: ''};
+  private postData: ICreatePost = { title: '', text: ''};
 
   private imgFileURLItems: string[] = [];
   private imgFileDatas: any[] = [];
@@ -77,6 +79,10 @@ export default class AddNotify extends Vue{
 
   get attachFileItemsModel(): any[] {
     return this.attachFileItems;
+  }
+
+  get isSubmitValidate(): boolean{
+    return (this.postData.title !== '' && this.postData.text !== '');
   }
 
   private getProfileImg(imgUrl: string | null | undefined ): string{
@@ -169,14 +175,34 @@ export default class AddNotify extends Vue{
    */
   private submitAddPost(): void{
     //시나리오 --> 등록 버튼 클릭 > 이미지 추가한 배열값 formdata에 입력 > 전송 >전송 성공후> filesAllClear 호출 > 팝업 닫기
+
     this.setImageFormData();
     this.setAttachFileFormData();
+    this.setPostDataToFormData();
+  }
 
-    //전송이 완료 되었다는 전제하에 아래 구문 수행
-    setTimeout(() => {
-      this.$emit('submit', false);
-      this.imgFilesAllClear();
-    }, 500);
+  private onAddPostSubmit() {
+    this.submitAddPost();
+  }
+
+  private setPostDataToFormData() {
+    if( !this.isSubmitValidate ){return;}
+
+    if (Utils.isUndefined(this.formData)) {
+      this.formData = new FormData();
+    }
+
+    const temp = JSON.stringify( {...this.postData} );
+    this.formData.append('data', temp );
+    // this.formData.append('data', this.postData );
+
+    PostService.setAddPost(this.classID, this.formData )
+      .then((data)=>{
+        console.log(data);
+        this.$emit('submit', false);
+
+        this.imgFilesAllClear();
+      });
 
   }
 
@@ -189,24 +215,34 @@ export default class AddNotify extends Vue{
 
     if( !this.imgFileDatas.length ){ return; }
 
-    if (this.formData === undefined) {
+    if (Utils.isUndefined(this.formData)) {
       this.formData= new FormData();
     }
     // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-    this.appendFormData(this.imgFileDatas, 'files');
+    this.formDataAppendToFile(this.imgFileDatas, 'files');
   }
 
+  /**
+   * 첨부 파일이 저장된 배열을 전송할 formdata 에 값 대입.
+   * @private
+   */
   private setAttachFileFormData() {
     if( !this.attachFileItems.length ){ return; }
 
-    if (this.formData === undefined) {
+    if (Utils.isUndefined(this.formData)) {
       this.formData= new FormData();
     }
     // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-    this.appendFormData(this.attachFileItems, 'files'  );
+    this.formDataAppendToFile(this.attachFileItems, 'files'  );
   }
 
-  private appendFormData( targetLists: File[], appendName: string | string[] ) {
+  /**
+   * formdata 에 append 하여 formdata ( 딕셔너리 목록 ) 추가하기.
+   * @param targetLists
+   * @param appendName
+   * @private
+   */
+  private formDataAppendToFile( targetLists: File[], appendName: string | string[] ) {
     targetLists.forEach(( item: File, index: number )=>{
       // console.log(item, item.name);
       // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
@@ -294,9 +330,12 @@ export default class AddNotify extends Vue{
   private imgFilesAllClear() {
     this.imgFileURLItems = [];
     this.imgFileDatas=[];
+    this.postData={ title: '', text: ''};
     this.formData.delete('files');
     this.imageLoadedCount=0;
   }
+
+
 
 
 

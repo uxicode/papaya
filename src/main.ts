@@ -5,11 +5,11 @@ import Vue from 'vue';
 import App from './App';
 import router from './router';
 import store from './store';
+import vuetify from '@/plugins/vuetify';
 import './filters/index';
 import './components/validation/validation';
 // import Rx from 'rxjs';
 // import VueRx from 'vue-rx';
-import vuetify from '@/plugins/vuetify';
 
 /*//공통 이벤트에 대한 후크를 사용하여 서비스 작업자 등록을 단순화한다.*/
 import './registerServiceWorker';
