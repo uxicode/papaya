@@ -713,7 +713,7 @@
   li {
     position:relative;
     img {width:100%; object-fit: fill}
-    &.item-test:nth-child(1){
+    &.img-item:nth-child(1){
       grid-row-start: 1;
       grid-row-end: 3;
       grid-column-start: 1;
@@ -725,7 +725,7 @@
         }
       }
     }
-    &.item-test:nth-child(2){
+    &.img-item:nth-child(2){
       margin-bottom: 10px;
       a{
         img {
@@ -735,7 +735,7 @@
       }
     }
 
-    &.item-test:nth-child(3){
+    &.img-item:nth-child(3){
       a{
         img {
           width: 236px;

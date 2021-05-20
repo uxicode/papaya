@@ -28,7 +28,7 @@ const setAuthorization = (token: string) => {
  */
 axios.interceptors.request.use((config: AxiosRequestConfig) => {
   // Do something before request is sent
-  console.log('(localStorage.getItem='+localStorage.getItem('token'));
+  // console.log('(localStorage.getItem='+localStorage.getItem('token'));
   config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
   return config;
 }, (error: any) => {
@@ -71,16 +71,18 @@ axios.interceptors.response.use((response: AxiosResponse) => {
   return response;
 }, (error: any) => {
 
-  const {status} = error.response;
+  const {status, data} = error.response;
   // let errorMsg: any = error;
   // console.log('error=', error);
   // console.log(':::status=', status);
   if (status === 401) {
     definedRefreshToken( error );
-  }else if (status !== 404 || status === 400) {
+  }else if (status === 400) {
     mismatchAccess();
   }else{
-    mismatchAccess();
+    if( data.message !=='클래스에 해당 닉네임의 사용자 정보가 없습니다.'){
+      mismatchAccess();
+    }
   }
 
   // Do something with response error

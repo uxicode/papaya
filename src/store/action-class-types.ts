@@ -1,6 +1,6 @@
 export const MYCLASS_LIST_ACTION: string = 'MYCLASS_LIST_ACTION';
 export const MODIFY_MYCLASS_LIST_ACTION: string = 'MODIFY_MYCLASS_LIST_ACTION';
-export const POST_LIST_ACTION: string = 'POST_LIST_ACTION';
+export const KEEP_POST_LIST_ACTION: string = 'POST_LIST_ACTION';
 export const MAKE_CLASS: string = 'MAKE_CLASS';
 export const MYCLASS_HOME: string = 'MYCLASS_HOME';
 export const CLASS_MEMBER_INFO_ACTION: string = 'CLASS_MEMBER_INFO_ACTION';

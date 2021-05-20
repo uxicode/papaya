@@ -1,16 +1,19 @@
-import {Vue, Component} from 'vue-property-decorator';
+import {Component, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IAttachFileModel, IPostModel} from '@/views/model/post.model';
-import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
+import AddNotify from '@/views/class/notify/AddNotify';
 import WithRender from './Notify.html';
+import {PostService} from '@/api/service/PostService';
+import {getAllPromise} from '@/views/model/types';
 
 const MyClass = namespace('MyClass');
 
 @WithRender
 @Component({
   components:{
-    Modal
+    Modal,
+    AddNotify
   }
 })
 export default class Notify extends Vue {
@@ -19,43 +22,91 @@ export default class Notify extends Vue {
   @MyClass.Getter
   private classID!: string | number;
 
-  private noticeListItems: IPostModel[] = [];
+  private postListItems: IPostModel[] = [];
   private reservedItems: any[] = [];
   private reservedTotal: number=0;
   private isAddPopupOpen: boolean=false;
+  private commentsTotalItems: any[] = [];
 
-  get noticeListItemsModel() {
-    return this.noticeListItems;
+  private isPageLoaded: boolean=false;
+
+  //datepicker
+  private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
+  private startDateMenu: boolean=false;
+
+  get postListItemsModel() {
+    return this.postListItems;
   }
 
   public created() {
-    this.getList();
+    this.getList().then(
+      ()=>{
+        this.isPageLoaded=true;
+      }
+    );
   }
 
-  private getList() {
-    MyClassService.getAllPostsByClassId( this.classID, { page_no: 1, count:10})
-      .then( (data)=>{
+  private async getList() {
+    //알림 가져오기
+    await PostService.getAllPostsByClassId(this.classID, {page_no: 1, count: 100})
+      .then((data) => {
         // console.log(data);
-        this.noticeListItems=data.post_list;
+        this.postListItems = data.post_list;
+        // console.log('noticeListItems=',this.postListItems);
+        this.postListItems.forEach((item, index ) => {
+          let {isBookmark}=item;
+          if( item.user_keep_class_posts.length > 0){
+            isBookmark=!isBookmark;
+            this.postListItems.splice(index, 1, {...item, isBookmark} );
+          }
+        });
       });
-    MyClassService.getReservedPost( this.classID, {page_no:1, count:100})
+
+    //예약된 알림 가져오기.
+    await PostService.getReservedPost( this.classID, {page_no:1, count:100})
       .then((data)=>{
-        console.log(data);
         this.reservedTotal=data.total_count;
         this.reservedItems=data.post_list;
       });
+
+    //댓글 총 개수 가져옴
+    await getAllPromise( this.getAllCommentsPromiseResult())
+      .then((data) => {
+        // console.log(data);
+        const comments=data.map(( item)=>{
+          return {
+            id: item.post_id,
+            total : item.total
+          };
+        });
+        this.commentsTotalItems = [...comments];
+      });
+
+  }
+
+  /**
+   * 댓글 총 개수 api 배열에 담아 두기.
+   * @private
+   */
+  private getAllCommentsPromiseResult() {
+    // const commentTotalItems: Array<{ total: any; postId: number, id: number; }> = [];
+    const totalPromise: Array<Promise<any>> = [];
+    this.postListItems.forEach((item: IPostModel) => {
+      totalPromise.push( PostService.getCommentsByPostId(item.id) );
+    });
+    return totalPromise;
   }
 
   private isOwner( ownerId: number, userId: number): boolean {
     return (ownerId === userId);
   }
 
-  private imgFileDataSort( fileData: IAttachFileModel[] ) {
-    return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg');
+  private getImgFileDataSort(fileData: IAttachFileModel[] ) {
+    return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg');
   }
 
-  private fileDataSort( fileData: IAttachFileModel[] ) {
-    return fileData.filter( (item: IAttachFileModel) => item.contentType !== 'image/png' && item.contentType !== 'image/jpg');
+  private getFileDataSort(fileData: IAttachFileModel[] ) {
+    return fileData.filter( (item: IAttachFileModel) => item.contentType !== 'image/png' && item.contentType !== 'image/jpg' && item.contentType !== 'image/jpeg' && item.contentType !== 'image/gif');
   }
 
   private isVote(item: Date) {
@@ -68,7 +119,62 @@ export default class Notify extends Vue {
     return (finishTime > currentTime);
   }
 
-  private onAddPost() {
+
+  private getCommentTotal(idx: number) {
+    const findItem=this.commentsTotalItems.find((ele) => ele.id === idx);
+    return (findItem)? findItem.total : 0;
+  }
+
+  /**
+   * datepicker 닫기 참조
+   * @private
+   */
+  private startDatePickerChange( ) {
+    this.startDateMenu = false;
+    // console.log(this.startDatePickerModel);
+  }
+
+  private onAddPostPopupOpen() {
     this.isAddPopupOpen=true;
   }
+
+  private onAddPostPopupStatus(value: boolean) {
+    this.isAddPopupOpen=value;
+  }
+
+  private onAddPost(value: boolean) {
+    this.isAddPopupOpen=value;
+  }
+
+
+  private onKeepPostClick(idx: number ) {
+    const findIdx=this.postListItems.findIndex((ele) => ele.id === idx);
+    // console.log( findIdx );
+    const targetPost=this.postListItems[findIdx];
+    let { isBookmark } = targetPost;
+    const { user_keep_class_posts } = targetPost;
+
+    if( isBookmark ){
+      if( Array.isArray(user_keep_class_posts) && user_keep_class_posts.length>0){
+        PostService.deleteKeepPost(user_keep_class_posts[0].id)
+          .then((postData)=>{
+            isBookmark=!isBookmark;
+            user_keep_class_posts.length=0;
+            this.postListItems.splice(findIdx, 1, {...targetPost, isBookmark, user_keep_class_posts} );
+          });
+      }
+
+    }else{
+      //북마크 되어 있는 상태
+      PostService.setKeepPost({ class_id:Number( this.classID ), post_id: idx })
+        .then((postData: any )=>{
+          // console.log(data);
+          isBookmark=!isBookmark;
+          user_keep_class_posts.push( postData.data );
+          this.postListItems.splice(findIdx, 1, {...targetPost, isBookmark, user_keep_class_posts} );
+        });
+    }
+
+  }
+
 }

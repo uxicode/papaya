@@ -28,7 +28,7 @@ const routes: RouteConfig[] = [
   {
     path: '*',
     name: 'notfound',
-    component: () => import('../views/NotFound.vue'),
+    component: () => import('@/views/NotFound.vue'),
   },
 ];
 
