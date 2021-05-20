@@ -25,19 +25,19 @@
         <div class="viewer-close">
             <button class="close"><img src="assets/images/close-white.svg" alt=""></button>
         </div>
-        <ul class="viewer-list" id="viewerList">
-            <li class="viewer-item active"><img src="assets/images/pic.png" alt=""></li>
-            <li class="viewer-item"><img src="assets/images/pic2.png" alt=""></li>
-            <li class="viewer-item"><img src="assets/images/pic3.png" alt=""></li>
+        <ul class="viewer-list" id="viewList">
+            <!--            <li class="viewer-item active"><img src="assets/images/pic.png" alt=""></li>-->
+            <!--            <li class="viewer-item"><img src="assets/images/pic2.png" alt=""></li>-->
+            <!--            <li class="viewer-item"><img src="assets/images/pic3.png" alt=""></li>-->
 
-<!--            <li class="viewer-item" style="width: 200px; height: 200px; background-color: lightskyblue"></li>-->
-<!--            <li class="viewer-item"  style="width: 100px; height: 250px; background-color: pink"></li>-->
-<!--            <li class="viewer-item"  style="width: 150px; height: 300px; background-color: yellowgreen"></li>-->
+            <li class="viewer-item" style="width: 200px; height: 200px; background-color: lightskyblue"></li>
+            <li class="viewer-item" style="width: 100px; height: 250px; background-color: pink"></li>
+            <li class="viewer-item" style="width: 150px; height: 300px; background-color: yellowgreen"></li>
         </ul>
 
         <div class="viewer-control">
-            <a href="#" class="control prev" id="prev"><img src="assets/images/left-white.svg" alt=""></a>
-            <a href="#" class="control next" id="next"><img src="assets/images/right-white.svg" alt=""></a>
+            <a href="#" class="control prev" id="prevBtn"><img src="assets/images/left-white.svg" alt=""></a>
+            <a href="#" class="control next" id="nextBtn"><img src="assets/images/right-white.svg" alt=""></a>
         </div>
 
         <div class="viewer-page">
@@ -49,26 +49,26 @@
 
 <script type="text/javascript">
 
-//test1
-    // $(document).ready(function(){
-    //     let num=1;
+    //test1
+    //     $(document).ready(function(){
+    //         let num=1;
     //
-    //     $('.next').on('click',function(){
-    //         $('.viewer-list').prepend($('li:last'));
-    //         num++;
-    //         if(num>3) num=1;
-    //         $('.current-page').text(num);
+    //         $('.next').on('click',function(){
+    //             $('.viewer-list').prepend($('li:last'));
+    //             num++;
+    //             if(num>3) num=1;
+    //             $('.current-page').text(num);
     //
     //
+    //         })
+    //         $('.prev').on('click',function(){
+    //             $('.viewer-list').append($('li:first'));
+    //             num--;
+    //             if(num<1) num=3;
+    //             $('.current-page').text(num);
+    //         })
     //     })
-    //     $('.prev').on('click',function(){
-    //         $('.viewer-list').append($('li:first'));
-    //         num--;
-    //         if(num<1) num=3;
-    //         $('.current-page').text(num);
-    //     })
-    // })
-
+    //
 
 
     //test2
@@ -99,22 +99,44 @@
     // });
 
 
-
-
     //test3
-        var li = document.querySelectorAll(".viewer-list li");
+    var test = (function ($) {
+        var li = document.querySelectorAll(".viewer-list .viewer-item");
+        var pageCount = 1;
+        // var prevBtn=$('#prevBtn');
+        // var nextBtn=$('#nextBtn');
+
+        var prevBtn=$('.viewer-control.prev');
+        var nextBtn=$('.viewer-control.next');
+
+
         for (var i = 0, length = li.length; i < length; i++) {
-            li[i].onclick = function () {
-                var b = document.querySelector(".viewer-list li.active");
-                if (b) b.classList.remove("active");
-                this.parentNode.classList.add('active');
-            };
+            // li[i].onclick = function () {
+            //     var b = document.querySelector(".viewer-list li.active");
+            //     if (b) b.classList.remove("active");
+            //     this.classList.add('active');
+            // };
         }
 
 
 
 
 
+        prevBtn.onClick = function (e) {
+            pageCount--;
+            if(pageCount<1) pageCount=3;
+            var b = document.querySelector(".viewer-list li.active");
+            if (b) b.classList.remove("active");
+            this.classList.add('active');
+        };
+
+
+
+
+        nextBtn.onClick = function (e) {
+            pageCount++;
+            if(pageCount>3) pageCount=1;
+        };
 
 
 
@@ -123,6 +145,81 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+        //다음 스텝으로 이동~
+        /* 전역 변수로 이동 시킴
+        var nextBtn=$('.btn.circle.next');
+        var prevBtn=$('.btn.circle.prev');
+            */
+
+
+
+        nextBtn.hide();
+        prevBtn.hide();
+        sellingBtn.hide();
+
+//20200522 시세조회 결과 팝업
+        var inquiryEle = $('.popup-container');
+
+        nextBtn.on('click', function (e) {
+
+            if (selectedValue !== -1) {
+                //스텝을 다하였다면 여기서 끝낸다.
+                if (stepper.length - 1 === stepCount) {
+                    // historyList.append(selectedValue);
+                    that.updateHistory({value: selectedValue, count: stepCount, isNext: true});
+
+                    inquiryEle.show();
+
+                    // console.log( 'total=', that.getHistoryList() );
+                    //20191217 추가 - 조회 결과 후 인자로 넘어온 함수 실행.
+                    that.updateFuncByResult();
+
+                    clearTitle();//타이틀 지우기
+                    clearBreadCrumb(); //브레드크럼 지우기
+                    clearButtonList();//컨텐츠 리스트 지우기
+
+                    nextBtn.hide();
+                    prevBtn.hide();
+                    sellingBtn.show();
+                    // console.log( stepper.length , stepCount, selectedValue )
+                } else {
+                    stepCount = counter(true, stepper.length, stepCount);
+                    listStepper(stepCount, true);
+                    prevBtn.show();
+                }
+
+            }
+            //20200522 페이지 카운트 초기화
+            pageCount = 0;
+        });
+
+        prevBtn.on('click', function (e) {
+            //20200522 페이지 카운트 초기화
+            pageCount = 0;
+            stepCount = counter(false, stepper.length, stepCount);
+            listStepper(stepCount, false);
+
+            if (stepCount === 0 && selectedValue === -1) {
+                prevBtn.hide();
+                nextBtn.hide();
+                sellingBtn.show();
+            } else {
+                sellingBtn.hide();
+            }
+        });
+
+        return test;
+    }(jQuery));
 
 
 </script>

@@ -1225,12 +1225,13 @@ $popupDepth: 10;
 
 .viewer-list {
   .viewer-item {
-    display:none;
+    //display:none;
     @include pos-abs($left:50%, $top:50%);
     transform:translate(-50%, -50%);
 
     &.active{
       display:block;
+      border: 10px solid yellow;
     }
   }
 }
