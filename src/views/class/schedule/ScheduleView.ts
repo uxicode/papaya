@@ -575,6 +575,7 @@ export default class ScheduleView extends Vue{
      */
     private addImgFileInputFocus() {
         this.inputEventBind('#imgFileInput');
+        console.log(this.imgFileURLItemsModel);
     }
 
     private addFilesInputFocus(){
