@@ -250,8 +250,8 @@ class MyClassService {
      * @param curriculumId
      * @param curriculumItems
      */
-    public setEducationListModify(classId: number, curriculumId: number, curriculumItems: IModifyCurriculum): Promise<any>{
-        return request('put', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}`, curriculumItems );
+    public setEducationListModify(classId: number, curriculumId: number, curriculumItem: any): Promise<any>{
+        return request('put', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}`, curriculumItem );
     }
 
     /**

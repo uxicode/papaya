@@ -680,32 +680,19 @@ interface ICourseList {
 interface IModifyCurriculum {
     title: string;
     goal: string;
-    updated_course_list?: [
+    course_list?: [
         {
             id: number;
-            title: string;
-            startDay: Date | number;
-            startTime: Date | number;
-            endTime: Date | number;
-            contents: string;
-        }
-    ];
-    deleted_course_list?: [
-        {
-            id: number;
-        }
-    ];
-    added_course_list?: [
-        {
             index: number;
             title: string;
-            startDay: Date | number;
-            startTime: Date | number;
-            endTime: Date | number;
+            startDay: Date | string;
+            startTime: Date | string;
+            endTime: Date | string;
             contents: string;
         }
     ];
 }
+
 
 export {
     IMyClassList,
@@ -726,5 +713,5 @@ export {
     IEducationList,
     ICurriculumList,
     ICourseList,
-    IModifyCurriculum
+    IModifyCurriculum,
 };

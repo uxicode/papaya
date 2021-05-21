@@ -10,7 +10,7 @@ import {
     IEducationList,
     ICurriculumList,
     ICourseList,
-    IModifyCurriculum
+    IModifyCurriculum,
 } from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
 import MyClassService from '@/api/service/MyClassService';
@@ -94,8 +94,11 @@ export default class CurriculumListView extends Vue {
     private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
     private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
 
+    private dataContainer: any = {
+        files:{},
+        data:{}
+    };
 
-    // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
     private makeCurriculumItems: IMakeEducation={
         title: '',
         goal: '',
@@ -104,7 +107,7 @@ export default class CurriculumListView extends Vue {
 
     private modifyCurriculumList: IModifyCurriculum= {
         title: '',
-        goal: '',
+        goal: ''
     };
 
 
@@ -117,7 +120,6 @@ export default class CurriculumListView extends Vue {
         contents: '',
         attachment: [],
     };
-
 
     // private testCourse: Array<Pick<IMakeEducation, 'course_list'>> = [];
 
@@ -457,7 +459,9 @@ export default class CurriculumListView extends Vue {
      */
     private makeCurriculumSubmit(): void{
         // console.log(this.classID, this.makeCurriculumItems);
-        MyClassService.setEducationList( this.classID, this.makeCurriculumItems )
+        this.dataContainer.data = this.makeCurriculumItems;
+        console.log(this.dataContainer);
+        MyClassService.setEducationList( this.classID, this.dataContainer )
             .then((data) => {
                 console.log( '교육과정 생성 성공', data );
                 this.isCreateClass = false;
@@ -543,8 +547,6 @@ export default class CurriculumListView extends Vue {
         MyClassService.getEduCurrList(this.classID, cardId)
             .then((data) => {
                 this.currList = data;
-                this.modifyCurriculumList.title = data.title;
-                this.modifyCurriculumList.goal = data.text;
                 console.log(cardId);
                 console.log('getEduCurrList 함수 데이터', data);
             });
@@ -577,14 +579,16 @@ export default class CurriculumListView extends Vue {
         this.modifyCurriculumList.goal = event.target.value;
         console.log(this.modifyCurriculumList);
     }
-    private modifyConfirm( curriculumID: number): void {
+    private modifyConfirm( curriculumID: number ): void {
         MyClassService.setEducationListModify ( this.classID, curriculumID, this.modifyCurriculumList )
             .then((data) => {
-                this.isModifyClass = false;
                 this.modifyCurriculumList = data;
-                console.log('교육과정 수정 성공');
+                console.log('교육과정 수정 성공', data);
             });
+
+        this.isModifyClass = false;
     }
+
 
 
     private getProfileImg( imgUrl: string | null | undefined ): string{
@@ -633,6 +637,16 @@ export default class CurriculumListView extends Vue {
     private modifyCurriculumHandler(idx: number) {
         this.isModifyClass = true;
         this.cardId = idx;
+        this.$nextTick(()=>{
+            this.getEduCurrList(this.cardId);
+        });
+    }
+
+    private modifyCourseHandler(curriculumIdx: number, courseIdx: number) {
+        this.isModifyClassCourse = true;
+        this.cardId = curriculumIdx;
+        this.courseId = courseIdx;
+        console.log(this.courseId);
         this.$nextTick(()=>{
             this.getEduCurrList(this.cardId);
         });
