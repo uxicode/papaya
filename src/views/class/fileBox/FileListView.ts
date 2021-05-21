@@ -23,6 +23,15 @@ export default class FileBox extends Vue {
     private totalFileSize: number = 0;
     private isParentPopup: boolean = false;
     private mimeType: string = '';
+    private postContent: any = {};
+
+    get content() {
+      return this.postContent;
+    }
+
+    get attachments() {
+      return this.allData;
+    }
 
     public created() {
         this.getAllClassAttachmentData();
@@ -40,16 +49,22 @@ export default class FileBox extends Vue {
         ]).then((data: any) => {
           // console.log(data[0].post_list);
           // console.log(data[1].class_schedule_list);
-          // console.log(data[2].curriculum_list);
+          console.log(data[2].curriculum_list);
 
           const postData = data[0].post_list.filter((item: any) => item.attachment.length !== 0)
             .map((item: any) => item.attachment).flat();
+          postData.forEach((item: any) => item.post_type = 0);
+
           const scheduleData = data[1].class_schedule_list.filter((item: any) => item.attachment.length !== 0)
             .map((item: any) => item.attachment).flat();
-          const curriculumData = data[2].curriculum_list.reduce(
-            (item: any) => item.course_list.filter(() => item.attachment.length !== 0))
-            .map((item: any) => item.attachment).flat();
-          this.allData = [...postData, ...scheduleData, ...curriculumData];
+          scheduleData.forEach((item: any) => item.post_type = 1);
+
+          // const curriculumData = data[2].curriculum_list.map(
+          //   (item: any) => item.course_list.filter((item: any) => item.attachment.length !== 0))
+          //   .map((item: any) => item.attachment).flat();
+          // curriculumData.forEach((item: any) => item.post_type = 2);
+
+          this.allData = [...postData, ...scheduleData, ];
           console.log(this.allData);
 
           this.totalFileSize = this.allData.map((item) => item.size).reduce((acc, cur) => acc + cur);
@@ -105,15 +120,54 @@ export default class FileBox extends Vue {
     link.remove();
   }
 
-  private openParentContentPopup(mimetype: string, parentId: number): void {
+  private openParentContentPopup(postType: number, mimetype: string, parentId: number): void {
     this.mimeType = mimetype;
-    MyClassService.getPostsById(this.classID, parentId)
-      .then((data: any) => {
-        console.log(data);
-      }).catch((error: any) => {
-        console.log(error);
-    });
+    switch (postType) {
+      case 0:
+        MyClassService.getPostsById(this.classID, parentId)
+          .then((data) => {
+            console.log(data);
+            this.postContent = data.post;
+          }).catch((error: any) => {
+          console.log(error);
+        });
+        break;
+
+      case 1:
+        MyClassService.getScheduleById(this.classID, parentId)
+          .then((data) => {
+            console.log(data);
+            this.postContent = data.schedule;
+          });
+        break;
+
+      case 2:
+        MyClassService.getEduCourseList(this.classID, 0, parentId)
+          .then((data) => {
+            console.log(data);
+          });
+        break;
+
+      default:
+        break;
+    }
+
     this.isParentPopup = true;
   }
 
+  /**
+   * 멤버 등급에 따른 아이콘 클래스 바인딩
+   * @param level
+   * @private
+   */
+  private memberLevelIcon = (level: number): string => {
+    switch (level) {
+      case 1:
+        return 'manager';
+      case 2:
+        return 'staff';
+      default:
+        return 'member';
+    }
+  }
 }

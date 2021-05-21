@@ -84,7 +84,7 @@ class MyClassService {
      * @param classId
      * @param scheduleId
      */
-    public getScheduleById(classId: number, scheduleId: number): Promise<any> {
+    public getScheduleById(classId: string | number, scheduleId: number): Promise<any> {
         //test - classId - 592 / scheduleId - 564 - 조회시 아래와 같은 데이터
         /*{
             "schedule": {
@@ -278,7 +278,7 @@ class MyClassService {
      * @param classId
      * @param curriculumId
      */
-    public getEduCourseList(classId: number, curriculumId: number, courseId: number): Promise<any>{
+    public getEduCourseList(classId: string | number, curriculumId: number, courseId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course/${courseId}` );
     }
 

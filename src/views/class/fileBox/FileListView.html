@@ -6,10 +6,10 @@
 
         <div class="classes-file-list">
             <div class="list-group">
-                <p class="list-tit file-info bd-btm">총 <span class="num">{{ allData.length }}</span>개 / <span>{{ getFileSize(totalFileSize) }}</span></p>
+                <p class="list-tit file-info bd-btm">총 <span class="num">{{ attachments.length }}</span>개 / <span>{{ getFileSize(totalFileSize) }}</span></p>
                 <div class="scroll-body file" style="height: 565px;">
                     <ul class="file-group mgt-0 mgb-0" style="background-color: #fff; height: inherit;">
-                        <li v-for="(item, idx) in allData"
+                        <li v-for="(item, idx) in attachments"
                             :key="idx"
                             class="list-item bd-btm">
                             <div class="tb-style full">
@@ -42,7 +42,7 @@
                                                     <v-list-item @click="downloadFile(item.location)">
                                                         <v-list-item-title>파일 다운로드</v-list-item-title>
                                                     </v-list-item>
-                                                    <v-list-item @click="openParentContentPopup(item.mimetype, item.parent_id)">
+                                                    <v-list-item @click="openParentContentPopup(item.post_type, item.mimetype, item.parent_id)">
                                                         <v-list-item-title>파일이 첨부된 글로 이동</v-list-item-title>
                                                     </v-list-item>
                                                 </v-list>
@@ -72,12 +72,12 @@
                 <div class="popup-cnt">
                     <div class="feed-item">
                         <div class="fd-head">
-                            <h3 class="fd-tit">{{  }}</h3>
+                            <h3 class="fd-tit">{{ content.title }}</h3>
                             <div class="fd-writer type2">
                                 <p class="writer">
-                                    <span class="name manager">{{ }}</span>
-                                    <span class="time">{{  }}</span>
-                                    <span class="noti">일반</span>
+                                    <span class="name" :class="memberLevelIcon(content.owner.level)">{{ content.owner.nickname }}</span>
+                                    <span class="time">{{ content.createdAt }}</span>
+                                    <span class="noti">{{ content.type===0? '일반' : '공지' }}</span>
                                 </p>
                             </div>
                             <div class="fd-btn">
@@ -113,21 +113,23 @@
                             </div>
                         </div>
                         <div class="fd-cnt">
-                            <p class="fd-txt">{{  }}</p>
+                            <p class="fd-txt">{{ content.text }}</p>
 
                             <div class="fd-inner">
 
                                 <!-- start: attach 에 이미지파일이 있는 경우 -->
                                 <template v-if="mimeType.includes('image')">
                                     <ul class="img-list clearfix">
-                                        <li><a href=""><img :src="''" alt="이미지"></a></li>
+                                        <li v-for="(item, idx) in content.attachment" :key="idx">
+                                            <a href=""><img :src="item.location" alt=""></a>
+                                        </li>
                                     </ul>
                                 </template>
                                 <!-- end: attach 에 이미지파일이 있는 경우 -->
 
                                 <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
                                 <template v-else>
-                                    <p class="fd-inner-txt">첨부 파일 {{  }}</p>
+                                    <p class="fd-inner-txt">첨부 파일 {{ content.attachment.length }}</p>
                                     <ul class="file-list clearfix">
                                         <li><a href="">{{ }}</a></li>
                                     </ul>
