@@ -8,7 +8,7 @@ import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
-import {ICreatePost} from '@/views/model/post.model';
+import {ICreatePost, IVoteModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
 import AddVotePopup from '@/views/class/notify/AddVotePopup';
 import WithRender from './AddNotifyPopup.html';
@@ -41,30 +41,21 @@ export default class AddNotifyPopup extends Vue{
   private isOpenAddVotePopup: boolean=false;
   private imageLoadedCount: number=0;
   private alarmAt: Date=new Date();
-  private vote: {
-    type: number,
-    title: string,
-    multi_choice: number,
-    anonymous_mode: number,
-    open_progress_level: number,
-    open_result_level: number,
-    vote_choice_list: Array<{
-      text: string,
-      index: number
-    }>
-  } = {
-    type: 0,
-    title: '',
-    multi_choice: 0,
-    anonymous_mode: 0,
-    open_progress_level: 0,
-    open_result_level: 0,
-    vote_choice_list: [
-      {
-        text: '',
-        index: 0
-      }
-    ]
+  private vote: IVoteModel= {
+    vote:{
+      type: 0,
+      title: '',
+      multi_choice: 0,
+      anonymous_mode: 0,
+      open_progress_level: 0,
+      open_result_level: 0,
+      vote_choice_list: [
+        {
+          text: '',
+          index: 0
+        }
+      ]
+    }
   };
 
   private postData: ICreatePost = { title: '', text: ''};
@@ -350,6 +341,10 @@ export default class AddNotifyPopup extends Vue{
   private addVote() {
     this.isOpenAddVotePopup=true;
     console.log(this.isOpenAddVotePopup);
+  }
+
+  private onAddVoteClose( value: boolean ) {
+    this.isOpenAddVotePopup=value;
   }
 
 
