@@ -25,6 +25,8 @@ export default class FileBox extends Vue {
     private mimeType: string = '';
     private postContent: any = {};
     private postOwner: any = {};
+    private postType: number = 0;
+    private fileCount: number = 0;
 
     get content() {
       return this.postContent;
@@ -50,23 +52,25 @@ export default class FileBox extends Vue {
         ]).then((data: any) => {
           // console.log(data[0].post_list);
           // console.log(data[1].class_schedule_list);
-          console.log(data[2].curriculum_list);
+          // console.log(data[2].curriculum_list);
 
           const postData = data[0].post_list.filter((item: any) => item.attachment.length !== 0)
-              .map((item: any) => item.attachment).flat();
-          postData.forEach((item: any) => item.post_type = 0);
+            .map((item: any) => item.attachment).flat();
+          postData.map((item: any) => item.post_type = 0);
 
           const scheduleData = data[1].class_schedule_list.filter((item: any) => item.attachment.length !== 0)
-              .map((item: any) => item.attachment).flat();
-          scheduleData.forEach((item: any) => item.post_type = 1);
+            .map((item: any) => item.attachment).flat();
+          scheduleData.map((item: any) => item.post_type = 1);
 
+          /* 교육과정의 경우 첨부파일이 course_list 안에 들어있으며,
+          첨부파일 내용에 curriculum_id 가 없어서 팝업 오픈시 통신하기 위해 키를 추가해준다. */
           const courseListData = data[2].curriculum_list.filter((item: any) => item.course_list.length !== 0)
-              .map((item: any) => item.course_list).flat().filter((item: any) => item.attachment.length !== 0);
+            .map((item: any) => item.course_list).flat().filter((item: any) => item.attachment.length !== 0);
           const curriculumData = courseListData.map((item: any) => item.attachment).flat();
           const curriculumIdList = courseListData.map((item: any) => item.curriculum_id);
-          curriculumData.forEach((item: any) => item.post_type = 2);
-          curriculumData.forEach((item: any, idx: number) => item.curriculum_id = curriculumIdList[idx]);
-          console.log(curriculumData);
+          curriculumData.map((item: any) => item.post_type = 2);
+          curriculumData.map((item: any, idx: number) => item.curriculum_id = curriculumIdList[idx]);
+          // console.log(curriculumData);
 
           this.allData = [...postData, ...scheduleData, ...curriculumData];
           console.log(this.allData);
@@ -124,43 +128,50 @@ export default class FileBox extends Vue {
     link.remove();
   }
 
-    /**
-     * 파일이 첨부된 글로 이동 (팝업)
-     * @param postType
-     * @param mimetype
-     * @param parentId
-     * @private
-     */
-  private openParentContentPopup(postType: number, mimetype: string, parentId: number): void {
+  /**
+   * 해당 파일이 첨부된 글로 이동 (팝업 내용 주입)
+   * @param postType
+   * @param mimetype
+   * @param parentId
+   * @param curriculumId
+   * @private
+   */
+  private openParentContentPopup(postType: number, mimetype: string, parentId: number, curriculumId?: number): void {
     this.mimeType = mimetype;
+    this.postType = postType;
     switch (postType) {
       case 0:
         MyClassService.getPostsById(this.classID, parentId)
           .then((data) => {
-            console.log(data);
+            // console.log(data);
             this.postContent = data.post;
             this.postOwner = data.post.owner;
-          }).catch((error: any) => {
-          console.log(error);
-        });
+            this.fileCount = data.post.attachment.length;
+          });
         break;
 
       case 1:
         MyClassService.getScheduleById(this.classID, parentId)
           .then((data) => {
-            console.log(data);
+            // console.log(data);
             this.postContent = data.schedule;
             this.postOwner = data.schedule.owner;
+            this.fileCount = data.schedule.attachment.length;
           });
         break;
 
-      // case 2:
-      //   MyClassService.getEduCurrList(this.classID, 0)
-      //     .then((data) => {
-      //       console.log(data);
-      //       this.postContent = data.curriculum;
-      //     });
-      //   break;
+      case 2:
+        if (curriculumId != null) {
+          MyClassService.getEduCurrList(this.classID, curriculumId)
+            .then((data) => {
+              // console.log(data);
+              this.postContent = data.curriculum;
+              this.postOwner = data.curriculum.owner;
+              this.fileCount = data.curriculum.course_list.reduce(
+                  (prev: any, next: any) => prev.attachment.length + next.attachment.length);
+            });
+        }
+        break;
 
       default:
         break;
@@ -184,4 +195,5 @@ export default class FileBox extends Vue {
         return 'member';
     }
   }
+
 }

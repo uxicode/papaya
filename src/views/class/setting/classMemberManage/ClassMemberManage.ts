@@ -1,7 +1,7 @@
-import UserService from '@/api/service/UserService';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {IClassInfo, IClassMemberInfo, IQnaInfo, IQuestionInfo} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo, IQnaInfo} from '@/views/model/my-class.model';
+import UserService from '@/api/service/UserService';
 import ClassMemberService from '@/api/service/ClassMemberService';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';

@@ -42,9 +42,14 @@
                                                     <v-list-item @click="downloadFile(item.location)">
                                                         <v-list-item-title>파일 다운로드</v-list-item-title>
                                                     </v-list-item>
-                                                    <v-list-item @click="openParentContentPopup(item.post_type, item.mimetype, item.parent_id)">
+                                                    <!-- start: 교육과정은 parent_id 와 curriculum_id 도 필요하므로 별도로 렌더링 -->
+                                                    <v-list-item v-if="item.post_type!==2" @click="openParentContentPopup(item.post_type, item.mimetype, item.parent_id)">
                                                         <v-list-item-title>파일이 첨부된 글로 이동</v-list-item-title>
                                                     </v-list-item>
+                                                    <v-list-item v-else @click="openParentContentPopup(item.post_type, item.mimetype, item.parent_id, item.curriculum_id)">
+                                                        <v-list-item-title>파일이 첨부된 글로 이동</v-list-item-title>
+                                                    </v-list-item>
+                                                    <!-- end: 교육과정은 parent_id 와 curriculum_id 도 필요하므로 별도로 렌더링 -->
                                                 </v-list>
                                             </v-menu>
                                         </div>
@@ -114,29 +119,54 @@
                         </div>
                         <div class="fd-cnt">
                             <p class="fd-txt">{{ content.text }}</p>
+                            <template v-if="postType!==2">
+                                <div class="fd-inner">
+                                    <!-- start: attach 에 이미지파일이 있는 경우 -->
+                                    <template v-if="mimeType.includes('image')">
+                                        <ul class="img-list clearfix">
+                                            <li v-for="item in content.attachment"><a href=""><img :src="item.location" alt=""></a></li>
+                                        </ul>
+                                    </template>
+                                    <!-- end: attach 에 이미지파일이 있는 경우 -->
 
-                            <div class="fd-inner">
+                                    <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+                                    <template v-else>
+                                        <p class="fd-inner-txt">첨부 파일 {{ fileCount }}</p>
+                                        <ul class="file-list clearfix">
+                                            <li v-for="item in content.attachment"><a :href="item.location">{{ item.originalname }}</a></li>
+                                        </ul>
+                                    </template>
+                                    <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+                                </div>
+                            </template>
 
-                                <!-- start: attach 에 이미지파일이 있는 경우 -->
-                                <template v-if="mimeType.includes('image')">
-                                    <ul class="img-list clearfix">
-                                        <li v-for="(item, idx) in content.attachment" :key="idx">
-                                            <a href=""><img :src="item.location" alt=""></a>
-                                        </li>
-                                    </ul>
-                                </template>
-                                <!-- end: attach 에 이미지파일이 있는 경우 -->
+                            <!-- start: 교육과정은 schema 구조가 다르므로 별도로 렌더링 -->
+                            <template v-else>
+                                <div class="fd-inner">
+                                    <!-- start: attach 에 이미지파일이 있는 경우 -->
+                                    <template v-if="mimeType.includes('image')">
+                                        <ul class="img-list clearfix">
+                                            <li v-for="item in content.course_list">
+                                                <a v-for="file in item.attachment" href=""><img :src="file.location" alt=""></a>
+                                            </li>
+                                        </ul>
+                                    </template>
+                                    <!-- end: attach 에 이미지파일이 있는 경우 -->
 
-                                <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
-                                <template v-else>
-                                    <p class="fd-inner-txt">첨부 파일 {{ content.attachment.length }}</p>
-                                    <ul class="file-list clearfix">
-                                        <li v-for="item in content.attachment"><a :href="item.location">{{ item.originalname }}</a></li>
-                                    </ul>
-                                </template>
-                                <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+                                    <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+                                    <template v-else>
+                                        <p class="fd-inner-txt">첨부 파일 {{ fileCount }}</p>
+                                        <ul class="file-list clearfix">
+                                            <li v-for="item in content.course_list">
+                                                <a v-for="file in item.attachment" :href="file.location">{{ file.originalname }}</a>
+                                            </li>
+                                        </ul>
+                                    </template>
+                                    <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+                                </div>
+                            </template>
+                            <!-- end: 교육과정은 schema 구조가 다르므로 별도로 렌더링 -->
 
-                            </div>
                         </div>
 
                         <div class="fd-foot clearfix">
