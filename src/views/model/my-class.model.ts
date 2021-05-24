@@ -630,7 +630,7 @@ interface ICurriculumList {
                         updatedAt: Date | string;
                         id: number;
                         user_id: number;
-                        member_id: null | number;
+                        member_id: null,
                         parent_id: number;
                         group_name: string;
                         fieldname: string;
@@ -642,16 +642,16 @@ interface ICurriculumList {
                         key: string;
                         acl: string;
                         contentType: string;
-                        contentDisposition: null | number;
+                        contentDisposition: null,
                         storageClass: string;
-                        serverSideEncryption: null | number;
-                        metadata: null | number;
+                        serverSideEncryption: null,
+                        metadata: null,
                         location: string;
                         etag: string;
-                        deletedYN: boolean;
+                        deletedYN: false
                     }
                 ];
-            }
+            },
         ]
     };
     message?: string;
@@ -660,17 +660,17 @@ interface ICurriculumList {
 
 interface ICourseList {
     course: {
-        startDay: Date | string;
-        createdAt: Date | string;
-        updatedAt: Date | string;
+        startDay: Date;
+        createdAt: Date;
+        updatedAt: Date;
         id: number;
         curriculum_id: number;
         class_id: number;
         index: number;
         title: string | undefined;
         contents: string;
-        startTime: Date | string;
-        endTime: Date | string;
+        startTime: Date;
+        endTime: Date;
     };
     message?: string;
 }
@@ -712,6 +712,11 @@ interface IClassTag {
     createdAt?: Date;
 }
 
+interface IClassAuth {
+    id?: number;
+    auth_type: number;
+    be_authorized: boolean;
+}
 
 export {
     IMyClassList,
@@ -733,5 +738,6 @@ export {
     ICurriculumList,
     ICourseList,
     IModifyCurriculum,
-    IClassTag
+    IClassTag,
+    IClassAuth
 };

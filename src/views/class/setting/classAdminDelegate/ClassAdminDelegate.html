@@ -20,11 +20,12 @@
                         <li v-for="(item, idx) in classMemberList"
                             :key="idx"
                             class="member-item">
-                            <div class="member-type" :class="memberLevelIcon(item.level)">
-                                <p class="member-name">{{ item.nickname }}</p>
-                                <p class="member-tit">{{ memberLevelTxt(item.level) }}</p>
-                            </div>
-                            <a href="#" class="member-more" @click.stop.prevent><img :src="require('@/assets/images/more.svg')" alt=""></a>
+                            <a href="" @click.stop.prevent="changePopupOpen(item.id, item.nickname, item.level)">
+                                <div class="member-type" :class="memberLevelIcon(item.level)">
+                                    <p class="member-name">{{ item.nickname }}</p>
+                                    <p class="member-tit">{{ memberLevelTxt(item.level) }}</p>
+                                </div>
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -32,4 +33,43 @@
         </div>
         <!--// popup-body -->
     </div>
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.10.1 (클래스 페이지-설정-운영자 위임 신청-확인) -->
+    <transition name="modal">
+        <modal v-if="isChangePopup" size="540px" body-padding="0" @modalClose="isChangePopup=false">
+            <div slot="header">
+                <div class="popup-icon change"></div>
+                <div class="popup-close">
+                    <button class="close" @click="isChangePopup=false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">선택한 멤버에게 운영자 위임 신청을 하시겠습니까?</h2>
+                </div>
+                <div class="member-activity">
+                    <div class="member-management-list bd-none">
+                        <ul>
+                            <li class="member-item bd-none">
+                                <div class="member-type" :class="memberLevelIcon(level)">
+                                    <p class="member-name">{{ nickname }}</p>
+                                    <p class="member-tit">
+                                        <span>{{ memberLevelTxt(level) }}</span>
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="outline" @btnClick="isChangePopup=false">취소</btn>
+                    <btn type="navi" @btnClick="submitLevelChange">위임 신청</btn>
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
+
 </section>

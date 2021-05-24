@@ -15,12 +15,12 @@
              <!--           <img :src="replaceUserMenuImg()? require('@/assets/images/mypage-white.svg' ) : require('@/assets/images/mypage.svg' )" alt="" />-->
            </button>
            <div class="list-popup-menu" :class="{'active': isActive}" >
-             <router-link :to="{path:'/myProfile'}" class="list-popup-item" @click.native="closeListMenu">MY프로필</router-link>
-             <router-link :to="{path:'/bookmark'}" class="list-popup-item" @click.native="closeListMenu">보관함</router-link>
+             <router-link :to="{path:'/myProfile'}" class="list-popup-item" @click.native="leftMenuActive(0)">MY프로필</router-link>
+             <router-link :to="{path:'/bookmark'}" class="list-popup-item" @click.native="leftMenuActive(1)">보관함</router-link>
              <div class="line"></div>
-             <router-link :to="{path:'/noticeBoard'}" class="list-popup-item" @click.native="closeListMenu">공지사항</router-link>
-             <router-link :to="{path:'/customerCenter'}" class="list-popup-item" @click.native="closeListMenu">고객센터</router-link>
-             <router-link :to="{path:'/termsOfService'}" class="list-popup-item" @click.native="closeListMenu">이용약관</router-link>
+             <router-link :to="{path:'/noticeBoard'}" class="list-popup-item" @click.native="leftMenuActive(0)">공지사항</router-link>
+             <router-link :to="{path:'/customerCenter'}" class="list-popup-item" @click.native="leftMenuActive(1)">고객센터</router-link>
+             <router-link :to="{path:'/termsOfService'}" class="list-popup-item" @click.native="leftMenuActive(2)">이용약관</router-link>
              <div class="line"></div>
              <a href="" class="list-popup-item" @click="isLogout">로그아웃</a>
            </div>
@@ -57,7 +57,7 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {SEARCHING} from '@/store/mutation-search-types';
-
+import EventBus from '@/store/EventBus';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
@@ -109,6 +109,16 @@ nk :to="{path:'/class/schedule'}">모든 일정</route
    */
   private closeListMenu(): void {
     this.isActive = false;
+  }
+
+  /**
+   * EventBus를 이용한 마이페이지 좌측 메뉴 활성화 값 전달
+   * @param idx
+   * @private
+   */
+  private leftMenuActive(idx: number): void {
+    this.closeListMenu();
+    EventBus.$emit('activeLeftMenu', idx);
   }
 
   private onSearch(): void {

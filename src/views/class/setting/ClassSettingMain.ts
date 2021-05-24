@@ -9,11 +9,6 @@ import WithRender from './ClassSettingMain.html';
 
 const MyClass = namespace('MyClass');
 
-interface INotiMenu {
-    title: string;
-    active: boolean;
-}
-
 interface ISettingMenu {
     title: string;
     type: string;
@@ -56,20 +51,7 @@ export default class ClassSettingMain extends Vue{
 
     private onOffNoti: boolean = true;
 
-    private classNotifyList: INotiMenu[] = [
-        {
-            title: '새 알림',
-            active: false
-        },
-        {
-            title: '새 댓글',
-            active: false
-        },
-        {
-            title: '일정',
-            active: false
-        },
-    ];
+    private classNotifyList: string[] = ['새 알림', '새 댓글', '일정'];
 
     /* 클래스 관리 / 멤버 관리 / 기타 리스트 타이틀 및 링크 */
     private classManageList: ISettingMenu[] = [
@@ -189,7 +171,7 @@ export default class ClassSettingMain extends Vue{
      * @param level
      * @private
      */
-    private memberLevelIcon(level: number): string {
+    private memberLevelIcon = (level: number): string => {
         switch (level) {
             case 1:
                 return 'admin';
@@ -205,7 +187,7 @@ export default class ClassSettingMain extends Vue{
      * @param level
      * @private
      */
-    private memberLevelTxt(level: number): string {
+    private memberLevelTxt = (level: number): string => {
         switch (level) {
             case 1:
                 return '운영자';
@@ -241,8 +223,14 @@ export default class ClassSettingMain extends Vue{
           });
     }
 
-    private notiValue(idx: number): number {
-        let value = 0;
+    /**
+     * 알림 설정 현재 상태 텍스트
+     * @param idx
+     * @private
+     */
+    private notiOnOffTxt(idx: number): string {
+        let stateTxt: string = '';
+        let value: number = 0;
         switch (idx) {
             case 0:
                 value = this.memberInfo.onoff_post_noti;
@@ -254,33 +242,32 @@ export default class ClassSettingMain extends Vue{
                 value = this.memberInfo.onoff_schedule_noti;
                 break;
         }
-        return value;
-    }
-
-    /**
-     * 알림 설정 현재 상태 텍스트
-     * @param idx
-     * @private
-     */
-    private notiOnOffTxt(idx: number): string {
         if (idx !== 2) { // 새 알림, 새 댓글
-            if (this.notiValue(idx) === 1) {
-                return '받기';
+            if (value === 1) {
+                stateTxt = '받기';
             } else {
-                return '받지 않기';
+                stateTxt = '받지 않기';
             }
         } else { // 일정
-            switch (this.notiValue(idx)) {
+            switch (value) {
                 case 3:
-                    return '10분 전 받기';
+                    stateTxt = '10분 전 받기';
+                    break;
                 case 2:
-                    return '30분 전 받기';
+                    stateTxt = '30분 전 받기';
+                    break;
                 case 1:
-                    return '1시간 전 받기';
+                    stateTxt = '1시간 전 받기';
+                    break;
+                case 0:
+                    stateTxt = '받지 않기';
+                    break;
                 default:
-                    return '받지 않기';
+                    stateTxt = '';
+                    break;
             }
         }
+        return stateTxt;
     }
 
     /**
@@ -290,7 +277,7 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private notiOnOff(idx: number, value: number): void {
-        let info: object;
+        let info = {};
         switch (idx) {
             case 0:
                 info = {onoff_post_noti: value};
@@ -306,9 +293,10 @@ export default class ClassSettingMain extends Vue{
                 break;
         }
         ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, info)
-          .then(() => {
-            console.log(`${info} 설정 완료`);
+          .then((data) => {
+            console.log(data);
           });
+        this.notiOnOffTxt(idx);
     }
 
     /**
