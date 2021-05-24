@@ -705,21 +705,44 @@
 }
 
 .img-list {
+  overflow: hidden;
+  height: 320px;
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   li {
     position:relative;
-    width:49%;
-    float: right;
+    img {width:100%; object-fit: fill}
+    &.img-item:nth-child(1){
+      grid-row-start: 1;
+      grid-row-end: 3;
+      grid-column-start: 1;
+      grid-column-end: 3;
+      a{
+        img {
+          width: 238px;
+          height: 320px;
+        }
+      }
+    }
+    &.img-item:nth-child(2){
+      margin-bottom: 10px;
+      a{
+        img {
+          width: 236px;
+          height: 150px;
+        }
+      }
+    }
 
-    img {width:100%;}
-
-    &:first-child {float:left;}
-    &:last-child:not(:first-child){
-      margin-top:10px;
-
-      a {
-        /*
+    &.img-item:nth-child(3){
+      a{
+        img {
+          width: 236px;
+          height: 160px;
+        }
         &:after{
-          content:' +3';
+          content:attr(data-count);
           position:absolute;
           display:block;
           top:50%;
@@ -729,7 +752,6 @@
           font-size:24px;
           text-align:center;
         }
-        */
         &:before {
           content:'';
           position:absolute;
@@ -746,7 +768,25 @@
       }
     }
   }
+  .img-item:nth-child(3) .pseudo-del:before{content: none;}
 }
+
+
+/* 이미지가 총 1개인 경우 중앙 정렬 */
+.img-list li:first-child:nth-last-child(1){
+  grid-row-start: auto;
+  grid-row-end: auto;
+  grid-column-start: auto;
+  grid-column-end: 3;
+}
+/* 이미지가 총 2개인 경우 세로 사이즈 320px 고정 */
+.img-list li:first-child:nth-last-child(2) ~ li a img {
+  height:320px;
+}
+
+
+
+
 
 .file-list {
   li {
@@ -977,6 +1017,7 @@
 
     .en-count {
       font-weight:500;
+      margin-bottom:0;
     }
   }
 }

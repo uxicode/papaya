@@ -28,7 +28,7 @@ const setAuthorization = (token: string) => {
  */
 axios.interceptors.request.use((config: AxiosRequestConfig) => {
   // Do something before request is sent
-  console.log('(localStorage.getItem='+localStorage.getItem('token'));
+  // console.log('(localStorage.getItem='+localStorage.getItem('token'));
   config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
   return config;
 }, (error: any) => {

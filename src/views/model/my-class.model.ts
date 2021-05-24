@@ -156,7 +156,7 @@ interface IFeedList {
     comment: number;
 }
 //보관함
-interface IPostList {
+interface IKeepPostList {
     startAt: string;
     endAt: string;
     expiredAt: string;
@@ -675,6 +675,35 @@ interface ICourseList {
     message?: string;
 }
 
+interface IModifyCurriculum {
+    title: string;
+    goal: string;
+    updated_course_list?: [
+        {
+            id: number;
+            title: string;
+            startDay: Date | number;
+            startTime: Date | number;
+            endTime: Date | number;
+            contents: string;
+        }
+    ];
+    deleted_course_list?: [
+        {
+            id: number;
+        }
+    ];
+    added_course_list?: [
+        {
+            index: number;
+            title: string;
+            startDay: Date | number;
+            startTime: Date | number;
+            endTime: Date | number;
+            contents: string;
+        }
+    ];
+}
 interface IClassTag {
     id: number;
     class_id: number;
@@ -696,7 +725,7 @@ export {
     IFeedList,
     IClassInfo,
     ClassEachInfo,
-    IPostList,
+    IKeepPostList,
     ISearchSchool,
     IMakeClassInfo,
     IMakeClassInfoBase,
@@ -708,6 +737,7 @@ export {
     IEducationList,
     ICurriculumList,
     ICourseList,
+    IModifyCurriculum,
     IClassTag,
     IClassAuth
 };
