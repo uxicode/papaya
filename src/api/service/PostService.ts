@@ -13,6 +13,15 @@ export class PostService{
   }
 
   /**
+   * 게시글 개별 정보 조회
+   * @param classId
+   * @param postId
+   */
+  public static getPostsById(classId: number | string, postId: number): Promise<any> {
+    return request('get', `${CLASS_BASE_URL}/${classId}/posts/${postId}`);
+  }
+
+  /**
    * 하나의 알림에 댓글 전체 조회.
    * @param postId
    */
