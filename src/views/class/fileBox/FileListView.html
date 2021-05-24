@@ -70,12 +70,12 @@
             </div>
             <div slot="body">
                 <div class="popup-cnt">
-                    <div class="feed-item">
+                    <div class="feed-item" style="border:none">
                         <div class="fd-head">
                             <h3 class="fd-tit">{{ content.title }}</h3>
                             <div class="fd-writer type2">
                                 <p class="writer">
-                                    <span class="name" :class="memberLevelIcon(content.owner.level)">{{ content.owner.nickname }}</span>
+                                    <span class="name" :class="memberLevelIcon(postOwner.level)">{{ postOwner.nickname }}</span>
                                     <span class="time">{{ content.createdAt }}</span>
                                     <span class="noti">{{ content.type===0? '일반' : '공지' }}</span>
                                 </p>
@@ -131,7 +131,7 @@
                                 <template v-else>
                                     <p class="fd-inner-txt">첨부 파일 {{ content.attachment.length }}</p>
                                     <ul class="file-list clearfix">
-                                        <li><a href="">{{ }}</a></li>
+                                        <li v-for="item in content.attachment"><a :href="item.location">{{ item.originalname }}</a></li>
                                     </ul>
                                 </template>
                                 <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->

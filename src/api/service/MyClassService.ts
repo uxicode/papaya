@@ -269,7 +269,7 @@ class MyClassService {
      * @param classId
      * @param curriculumId
      */
-    public getEduCurrList(classId: number, curriculumId: number): Promise<any>{
+    public getEduCurrList(classId: string | number, curriculumId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}` );
     }
 

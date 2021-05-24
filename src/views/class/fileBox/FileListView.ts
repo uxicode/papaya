@@ -24,6 +24,7 @@ export default class FileBox extends Vue {
     private isParentPopup: boolean = false;
     private mimeType: string = '';
     private postContent: any = {};
+    private postOwner: any = {};
 
     get content() {
       return this.postContent;
@@ -52,19 +53,22 @@ export default class FileBox extends Vue {
           console.log(data[2].curriculum_list);
 
           const postData = data[0].post_list.filter((item: any) => item.attachment.length !== 0)
-            .map((item: any) => item.attachment).flat();
+              .map((item: any) => item.attachment).flat();
           postData.forEach((item: any) => item.post_type = 0);
 
           const scheduleData = data[1].class_schedule_list.filter((item: any) => item.attachment.length !== 0)
-            .map((item: any) => item.attachment).flat();
+              .map((item: any) => item.attachment).flat();
           scheduleData.forEach((item: any) => item.post_type = 1);
 
-          // const curriculumData = data[2].curriculum_list.map(
-          //   (item: any) => item.course_list.filter((item: any) => item.attachment.length !== 0))
-          //   .map((item: any) => item.attachment).flat();
-          // curriculumData.forEach((item: any) => item.post_type = 2);
+          const courseListData = data[2].curriculum_list.filter((item: any) => item.course_list.length !== 0)
+              .map((item: any) => item.course_list).flat().filter((item: any) => item.attachment.length !== 0);
+          const curriculumData = courseListData.map((item: any) => item.attachment).flat();
+          const curriculumIdList = courseListData.map((item: any) => item.curriculum_id);
+          curriculumData.forEach((item: any) => item.post_type = 2);
+          curriculumData.forEach((item: any, idx: number) => item.curriculum_id = curriculumIdList[idx]);
+          console.log(curriculumData);
 
-          this.allData = [...postData, ...scheduleData, ];
+          this.allData = [...postData, ...scheduleData, ...curriculumData];
           console.log(this.allData);
 
           this.totalFileSize = this.allData.map((item) => item.size).reduce((acc, cur) => acc + cur);
@@ -120,6 +124,13 @@ export default class FileBox extends Vue {
     link.remove();
   }
 
+    /**
+     * 파일이 첨부된 글로 이동 (팝업)
+     * @param postType
+     * @param mimetype
+     * @param parentId
+     * @private
+     */
   private openParentContentPopup(postType: number, mimetype: string, parentId: number): void {
     this.mimeType = mimetype;
     switch (postType) {
@@ -128,6 +139,7 @@ export default class FileBox extends Vue {
           .then((data) => {
             console.log(data);
             this.postContent = data.post;
+            this.postOwner = data.post.owner;
           }).catch((error: any) => {
           console.log(error);
         });
@@ -138,15 +150,17 @@ export default class FileBox extends Vue {
           .then((data) => {
             console.log(data);
             this.postContent = data.schedule;
+            this.postOwner = data.schedule.owner;
           });
         break;
 
-      case 2:
-        MyClassService.getEduCourseList(this.classID, 0, parentId)
-          .then((data) => {
-            console.log(data);
-          });
-        break;
+      // case 2:
+      //   MyClassService.getEduCurrList(this.classID, 0)
+      //     .then((data) => {
+      //       console.log(data);
+      //       this.postContent = data.curriculum;
+      //     });
+      //   break;
 
       default:
         break;
