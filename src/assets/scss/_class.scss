@@ -765,14 +765,10 @@
           text-align:center;
           background-color:rgba(0,0,0,0.5);
         }
-
-        &.pseudo-del{
-          &:before{content: none;}
-        }
-
       }
     }
   }
+  .img-item:nth-child(3) .pseudo-del:before{content: none;}
 }
 
 
@@ -1021,6 +1017,7 @@
 
     .en-count {
       font-weight:500;
+      margin-bottom:0;
     }
   }
 }

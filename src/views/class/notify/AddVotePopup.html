@@ -1,0 +1,204 @@
+<!-- start: 공통 팝업 / 파일명 : W.4.5.2.2 (알림 - 새 알림 작성-fit) -->
+<transition name="modal">
+  <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2.3.1 (알림 - 새 알림 작성-투표 - tab:텍스트) -->
+  <modal v-if="isOpen"  size="540px" body-padding="0" @modalClose="popupChange( false )">
+    <div slot="header">
+      <!-- header custom coding-->
+      <div class="popup-icon vote"></div>
+      <div class="popup-close">
+        <button class="close" @click="popupChange( false )"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+      </div>
+    </div>
+    <div slot="body">
+      <!-- body custom coding-->
+      <div class="popup-cnt pdb-desc" style="padding-bottom:0;">
+        <h2 class="popup-tit">투표 만들기</h2>
+        <div class="form-item">
+<!--          <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">-->
+          <txt-field add-class="popup-type"
+                     placeholder="제목을 50자 이내로 작성해 주세요."
+                     v-model="voteData.vote.title"></txt-field>
+        </div>
+      </div>
+
+      <div class="popup-form">
+        <div class="scroll-body" style="height:50vh">
+          <div class="popup-form-cnt">
+            <!-- start: create vote list -->
+            <div class="form-create-list">
+              <div class="create-item">
+                <div class="create-item-cnt">
+                  <div class="form-type" style="padding:15px 0;">
+                    <div class="checkbox-group">
+                      <!--<div class="btn-radio">
+                        <input type="radio" name="type" id="text" checked>
+                        <label for="text">텍스트</label>
+                      </div>
+                      <div class="btn-radio">
+                        <input type="radio" name="type" id="date">
+                        <label for="date">날짜</label>
+                      </div>-->
+
+                      <radio-button btn-id="chk1"
+                                    radio-name="radio"
+                                    btn-value="0"
+                                    active-value="0"
+                                    v-model="voteData.vote.type"
+                                    @click="optionChange">텍스트</radio-button>
+                      <radio-button btn-id="chk2"
+                                    radio-name="radio"
+                                    btn-value="1"
+                                    v-model="voteData.vote.type"
+                                    @click="optionChange">날짜</radio-button>
+                    </div>
+                  </div>
+                  <!--<draggable v-model="myArray" group="people" @start="drag=true" @end="drag=false">-->
+                  <draggable class="create-link-list"
+                             v-model="voteData.vote.vote_choice_list"
+                             :move="checkMove"
+                             v-bind="dragOptions"
+                             @start="dragging = true"
+                             @end="dragging = false"
+                             style="min-height:20px;">
+                    <div class="create-form list-type active" v-for="( ele, index ) in voteData.vote.vote_choice_list" :key="`ele-${index}`">
+                      <span class="num">{{ index }}</span>
+                      <div class="form-group inline">
+                        <input type="text" class="form-control popup-type sm" v-model="ele.text" style="width: 345px;">
+                        <button type="button" class="btn only-ico-btn form-delete active" ><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                      </div>
+                      <div class="create-sub-btn">
+                        <!-- 이미지 추가는 나중에~ <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>-->
+                        <a href="javascript:void(0);" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
+                      </div>
+                    </div>
+
+                    <div class="create-add-list"  slot="footer">
+                      <a href="" class="bd-none" @click.prevent.stop="addVoteList( voteData.vote.vote_choice_list.length )">
+                        <img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span>
+                      </a>
+                    </div>
+                  </draggable>
+                </div>
+              </div>
+            </div>
+            <!-- start: create vote list -->
+
+            <!-- start: create vote-type list -->
+            <div class="form-create-list">
+              <div class="create-item">
+                <div class="create-item-cnt">
+                  <ul class="create-link-list">
+                    <li>
+                      <p class="form-txt">익명 투표</p>
+                      <div class="create-sub-btn">
+                        <div class="form-switcher">
+                          <input type="checkbox" id="toggle1" v-model="anonymousChk"  @change="anonymousVoteChange(  $event.target.checked )">
+                          <label for="toggle1"></label>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li>
+                      <p class="form-txt">복수 선택 허용</p>
+                      <div class="create-sub-btn">
+                        <div class="form-switcher">
+                          <input type="checkbox" id="toggle2"  v-model="multiChoiceChk"  @change="multiChoiceVoteChange(  $event.target.checked )">
+                          <label for="toggle2"></label>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li>
+                      <p class="form-txt">종료일시 설정</p>
+                      <div class="create-sub-btn">
+                        <div class="form-group date">
+                          <v-menu
+                                  bottom
+                                  right
+                                  v-model="endDateMenu"
+                                  :close-on-content-click="false"
+                                  transition="scale-transition"
+                                  offset-y
+                                  offset-x
+                                  min-width="auto">
+                            <template v-slot:activator="{ on, attrs }">
+                              <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
+                              <v-text-field
+                                      v-model="voteData.vote.finishAt"
+                                      v-bind="attrs"
+                                      v-on="on"
+                                      hide-details
+                                      solo
+                                      flat>
+                                <template v-slot:append>
+                                  <button type="button" class="btn form-btn form-calendar" v-on="on"></button>
+                                </template>
+                              </v-text-field>
+                            </template>
+                            <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
+                            <v-date-picker v-model="voteData.vote.finishAt" no-title @input="endDatePickerChange"></v-date-picker>
+                          </v-menu>
+                          <!--<input type="text" class="form-control no-date" size="7" value="날짜 없음">
+                          <span class="date-area placeholder">종료일시 없음</span>
+                          <button type="button" class="btn form-btn form-calendar"></button>-->
+                        </div>
+                      </div>
+                    </li>
+
+                    <li>
+                      <p class="form-txt">투표 현황 공개</p>
+                      <div class="create-sub-btn">
+                        <div class="list-popup">
+                          <v-menu
+                                  bottom
+                                  right
+                                  min-width="200px"
+                                  offset-x>
+                            <template v-slot:activator="{ on, attrs }">
+                              <button
+                                      type="button"
+                                      class="list-popup-btn"
+                                      v-bind="attrs"
+                                      v-on="on">
+                                <span>{{ openResultLevel }}</span> <img :src="require('@/assets/images/arrow-right.svg')" alt="">
+                              </button>
+                            </template>
+                            <v-list>
+                              <v-list-item
+                                      v-for="(item, index) in openResultLevelItems"
+                                      :key="index"
+                                      @click="voteData.vote.open_result_level=item.id;openResultLevel=item.txt;">
+                                <v-list-item-title>{{ item.txt }}</v-list-item-title>
+                              </v-list-item>
+                            </v-list>
+                          </v-menu>
+                          <!--<button type="button" class="list-popup-btn"><span>운영자에게만 공개</span> <img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
+                          <div class="list-popup-menu pos-right" style="transform:translate3d(145px, -125px, 0);">
+                            <a href="" class="list-popup-item">전체 공개</a>
+                            <a href="" class="list-popup-item">운영자와 스탭에게만 공개</a>
+                            <a href="" class="list-popup-item">운영자에게만 공개</a>
+                          </div>-->
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <!-- start: create vote list -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div slot="footer">
+      <div class="btn-group rt">
+        <button type="button" class="btn primary navi">완료</button>
+      </div>
+    </div>
+
+  </modal>
+  <!-- end: 공통 팝업 -->
+</transition>
+<!-- end: 공통 팝업 -->

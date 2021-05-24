@@ -8,9 +8,10 @@ import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
-import WithRender from './AddNotify.html';
-import {ICreatePost} from '@/views/model/post.model';
+import {ICreatePost, IVoteModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
+import AddVotePopup from '@/views/class/notify/AddVotePopup';
+import WithRender from './AddNotifyPopup.html';
 
 const MyClass = namespace('MyClass');
 
@@ -22,15 +23,14 @@ const MyClass = namespace('MyClass');
     Btn,
     Modal,
     ImagePreview,
-    FilePreview
+    FilePreview,
+    AddVotePopup
   }
 })
-export default class AddNotify extends Vue{
-
+export default class AddNotifyPopup extends Vue{
 
   @Prop(Boolean)
   private isOpen!: boolean;
-
 
   @MyClass.Getter
   private classID!: string | number;
@@ -38,35 +38,32 @@ export default class AddNotify extends Vue{
   @MyClass.Getter
   private myClassHomeModel!: IClassInfo;
 
+  private isOpenAddVotePopup: boolean=false;
   private imageLoadedCount: number=0;
   private alarmAt: Date=new Date();
-  private vote: {
-    type: number,
-    title: string,
-    multi_choice: number,
-    anonymous_mode: number,
-    open_progress_level: number,
-    open_result_level: number,
-    vote_choice_list: Array<{
-      text: string,
-      index: number
-    }>
-  } = {
-    type: 0,
-    title: '',
-    multi_choice: 0,
-    anonymous_mode: 0,
-    open_progress_level: 0,
-    open_result_level: 0,
-    vote_choice_list: [
-      {
-        text: '',
-        index: 0
-      }
-    ]
+  private vote: IVoteModel= {
+    vote:{
+      type: 0,
+      title: '',
+      multi_choice: 0,
+      anonymous_mode: 0,
+      open_progress_level: 0,
+      open_result_level: 0,
+      vote_choice_list: [
+        {
+          text: '',
+          index: 0
+        }
+      ]
+    }
   };
 
   private postData: ICreatePost = { title: '', text: ''};
+  /*parent_id: post_id,
+     type: link.type ? link.type : 0,
+     title: link.title,*/
+  private linkData: {type: number,  title: string}={ type:0, title: ''}
+  private linkDetailData: Array<{ index: number, url: string; }> = [];
 
   private imgFileURLItems: string[] = [];
   private imgFileDatas: any[] = [];
@@ -192,7 +189,8 @@ export default class AddNotify extends Vue{
       this.formData = new FormData();
     }
 
-    const temp = JSON.stringify( {...this.postData} );
+
+    const temp = JSON.stringify( {...this.postData } );
     this.formData.append('data', temp );
     // this.formData.append('data', this.postData );
 
@@ -204,6 +202,11 @@ export default class AddNotify extends Vue{
         this.imgFilesAllClear();
       });
 
+  }
+
+  private setPostAddLink() {
+    //var link = data.link;
+    //var link_item_list = data.link_item_list;
   }
 
 
@@ -333,6 +336,15 @@ export default class AddNotify extends Vue{
     this.postData={ title: '', text: ''};
     this.formData.delete('files');
     this.imageLoadedCount=0;
+  }
+
+  private addVote() {
+    this.isOpenAddVotePopup=true;
+    console.log(this.isOpenAddVotePopup);
+  }
+
+  private onAddVoteClose( value: boolean ) {
+    this.isOpenAddVotePopup=value;
   }
 
 

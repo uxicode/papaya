@@ -163,6 +163,9 @@ export default class Search extends Vue {
   private searchItems: any[]=[];
   private searchType: string = 'home';
 
+  @MyClass.Getter
+  private classID!: string | number;
+
   @MyClass.Action
   private MYCLASS_HOME!: (id: string | number) => Promise<any>;
 

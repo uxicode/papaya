@@ -3,8 +3,7 @@ import {CLASS_BASE_URL, SCHOOL_URL} from '@/api/base';
 import {
     IMyClassList,
     IMakeClassInfo,
-    ClassEachInfo,
-    IMakeEducation
+    ClassEachInfo, IMakeEducation, IModifyCurriculum,
 } from '@/views/model/my-class.model';
 
 
@@ -140,6 +139,16 @@ class MyClassService {
     }
 
     /**
+     * 클래스 교육과정 수정
+     * @param classId
+     * @param curriculumId
+     * @param curriculumItems
+     */
+    public setEducationListModify(classId: number, curriculumId: number, curriculumItems: IModifyCurriculum): Promise<any>{
+        return request('put', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}`, curriculumItems );
+    }
+
+    /**
      * 클래스 교육과정 삭제
      * @param classId
      * @param curriculumId
@@ -154,7 +163,7 @@ class MyClassService {
      * @param classId
      * @param curriculumId
      */
-    public getEduCurList(classId: number, curriculumId: number): Promise<any>{
+    public getEduCurrList(classId: number, curriculumId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}` );
     }
 
@@ -162,6 +171,7 @@ class MyClassService {
      * 클래스 교육과정 개별코스 정보 조회
      * @param classId
      * @param curriculumId
+     * @param courseId
      */
     public getEduCourseList(classId: number, curriculumId: number, courseId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course/${courseId}` );

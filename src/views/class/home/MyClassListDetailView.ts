@@ -110,8 +110,20 @@ export default class MyClassListDetailView extends Vue{
     return ( this.noticeSchedule[this.noticeSchedule.length-1])? this.noticeSchedule[this.noticeSchedule.length-1].title : '';
   }
 
+  private getImgTotalNum(  items: IAttachFileModel[]  ) {
+    return (items && this.getImgFileDataSort(items).length <=3);
+  }
+
+  private getImgFileLen( items: IAttachFileModel[] ): number{
+    return (items) ? this.getImgFileDataSort( items ).length : 0;
+  }
+
+  private getImgFileMoreCheck(  items: IAttachFileModel[] ) {
+    return (items)? ( this.getImgFileDataSort( items ).length>3 )? `+${this.getImgFileDataSort( items ).length - 3}` : '' : 0;
+  }
+
   private getImgFileDataSort(fileData: IAttachFileModel[] ) {
-    return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg');
+    return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg' || item.contentType === 'image/gif');
   }
 
   private getFileDataSort(fileData: IAttachFileModel[] ) {

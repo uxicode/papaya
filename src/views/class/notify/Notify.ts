@@ -2,7 +2,7 @@ import {Component, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IAttachFileModel, IPostModel} from '@/views/model/post.model';
 import Modal from '@/components/modal/modal.vue';
-import AddNotify from '@/views/class/notify/AddNotify';
+import AddNotifyPopup from '@/views/class/notify/AddNotifyPopup';
 import WithRender from './Notify.html';
 import {PostService} from '@/api/service/PostService';
 import {getAllPromise} from '@/views/model/types';
@@ -13,7 +13,7 @@ const MyClass = namespace('MyClass');
 @Component({
   components:{
     Modal,
-    AddNotify
+    AddNotifyPopup
   }
 })
 export default class Notify extends Vue {
@@ -52,7 +52,7 @@ export default class Notify extends Vue {
       .then((data) => {
         // console.log(data);
         this.postListItems = data.post_list;
-        // console.log('noticeListItems=',this.postListItems);
+        console.log('noticeListItems=',this.postListItems);
         this.postListItems.forEach((item, index ) => {
           let {isBookmark}=item;
           if( item.user_keep_class_posts.length > 0){
@@ -101,8 +101,20 @@ export default class Notify extends Vue {
     return (ownerId === userId);
   }
 
+  private getImgFileLen( items: IAttachFileModel[] ): number{
+    return (items) ? this.getImgFileDataSort( items ).length : 0;
+  }
+
+  private getImgTotalNum(  items: IAttachFileModel[]  ) {
+    return (items && this.getImgFileDataSort(items).length <= 3);
+  }
+
+  private getImgFileMoreCheck(  items: IAttachFileModel[] ) {
+    return (items)? ( this.getImgFileDataSort( items ).length>3 )? `+${this.getImgFileDataSort( items ).length - 3}` : '' : 0;
+  }
+
   private getImgFileDataSort(fileData: IAttachFileModel[] ) {
-    return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg');
+    return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg' || item.contentType === 'image/gif');
   }
 
   private getFileDataSort(fileData: IAttachFileModel[] ) {

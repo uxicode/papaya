@@ -6,9 +6,11 @@ import Btn from '@/components/button/Btn.vue';
 import {
     IClassInfo,
     IMakeEducation,
+    IMakeCourse,
     IEducationList,
     ICurriculumList,
-    ICourseList
+    ICourseList,
+    IModifyCurriculum
 } from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
 import MyClassService from '@/api/service/MyClassService';
@@ -44,6 +46,8 @@ export default class CurriculumListView extends Vue {
     private isClassCurrMore: boolean = false;
     private isClassCurrDetail: boolean = false;
     private isCreateError: boolean = false;
+    private isModifyClass: boolean = false;
+    private isModifyClassCourse: boolean = false;
 
     @MyClass.Getter
     private classID!: number;
@@ -53,21 +57,29 @@ export default class CurriculumListView extends Vue {
     private cardId: number = 0;
     private courseId: number = 0;
 
+
     private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
     private EduSettingsModel: string = '교육과정 수정';
 
     private CourseSettingsItems: string[] = ['수업 내용 수정', '수업 삭제'];
     private CourseSettingsModel: string = '수업 내용 수정';
 
-    private imgFileURLItems: string[] = [];
-    private imgFileDatas: any[] = [];
+    private makeCourseAttach: any = [];
 
-    private attachFileItems: any[] = [];
+    private imgFileURLItems: string[] = [];
+    private imgFileDatas: any = [];
+
+    private attachFileItems: any = [];
     private formData!: FormData;
     private imageLoadedCount: number=0;
     private isPopup: boolean=false;
 
-    private makeCourseList: any[] = [];
+
+    private startDateItem: string = '';
+    private startTimeItem: string = '';
+    private endTimeItem: string = '';
+
+    private test: any = {};
 
     /**
      * 클래스 교육과정 메인리스트
@@ -79,30 +91,33 @@ export default class CurriculumListView extends Vue {
     private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
     private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
 
-    private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
     private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
+    private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
 
 
     // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
     private makeCurriculumItems: IMakeEducation={
         title: '',
         goal: '',
-        course_list: []
+        course_list: [],
     };
 
-    private makeCourseItems: {
-        title: string,
-        startDay: Date | string,
-        startTime: Date | string,
-        endTime: Date | string,
-        contents: string,
-    } = {
+    private modifyCurriculumList: IModifyCurriculum= {
         title: '',
-        startDay:'2019-11-17',
-        startTime:'10:00:00',
-        endTime:'10:00:00',
-        contents: ''
+        goal: '',
     };
+
+
+    private makeCourseItems: IMakeCourse = {
+        index: 1,
+        title: '',
+        startDay: this.startDatePickerModel,
+        startTime: this.currentStartTimeModel,
+        endTime: this.currentEndTimeModel,
+        contents: '',
+        attachment: [],
+    };
+
 
     // private testCourse: Array<Pick<IMakeEducation, 'course_list'>> = [];
 
@@ -133,41 +148,70 @@ export default class CurriculumListView extends Vue {
             course_list: [
                 {
                     startDay: '2019-11-17',
-                    createdAt: '2019-11-17 10:00:00',
-                    updatedAt: '2019-11-17 10:00:00',
+                    createdAt: '2019-11-17',
+                    updatedAt: '2019-11-17',
                     id: 0,
                     curriculum_id: 0,
                     class_id: 0,
                     index: 0,
                     title: '',
                     contents: '',
-                    startTime: '10:00:00',
-                    endTime: '10:00:00',
+                    startTime: '2019-11-17',
+                    endTime: '2019-11-17',
                     deletedYN: false,
+                    attachment: [
+                        {
+                            createdAt: '2019-11-17 10:00:00',
+                            updatedAt: '2019-11-17 10:00:00',
+                            id: 0,
+                            user_id: 0,
+                            member_id: 0,
+                            parent_id: 0,
+                            group_name: '',
+                            fieldname: '',
+                            originalname: '',
+                            encoding: '',
+                            mimetype: '',
+                            size: 0,
+                            bucket: '',
+                            key: '',
+                            acl: '',
+                            contentType: '',
+                            contentDisposition: 0,
+                            storageClass: '',
+                            serverSideEncryption: 0,
+                            metadata: 0,
+                            location: '',
+                            etag: '',
+                            deletedYN: false,
+                        }
+                    ],
                 },
-            ]
+            ],
         }
     };
 
     private allCourseList: ICourseList={
         course: {
-            startDay:new Date(),
-            createdAt:new Date(),
-            updatedAt:new Date(),
+            startDay:'0',
+            createdAt:'0',
+            updatedAt:'0',
             id: 0,
             curriculum_id: 0,
             class_id: 0,
             index: 0,
             title: '',
             contents: '',
-            startTime:new Date(),
-            endTime:new Date(),
+            startTime:'0',
+            endTime:'0',
         }
     };
+
 
     private currListNum: number = 10;
     private eduItems: Array< {title: string }>=[];
     // private settingItems: Array<{ vo: string[], sItem: string }> = [];
+
 
     get imgFileURLItemsModel(): string[] {
         return this.imgFileURLItems;
@@ -185,18 +229,16 @@ export default class CurriculumListView extends Vue {
         return this.CourseSettingsItems;
     }
 
+
     get currentStartTimeModel(): string{
-        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
+        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute}분`;
+        this.makeCourseItems.startTime = this.startTimeItem;
     }
 
     get currentEndTimeModel(): string{
-        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
+        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute}분`;
+        this.makeCourseItems.endTime = this.endTimeItem;
     }
-
-    // get settingItemsModel(): Array<{ vo: string[], sItem: string }>{
-    //     return this.settingItems;
-    // }
-
 
     /**
      * 교육과정 리스트
@@ -205,21 +247,6 @@ export default class CurriculumListView extends Vue {
         // this.settingItems=this.mItemByMakeEduList();
         this.getEduList();
     }
-
-    // public settingMenuClickHandler( mIdx: number, item: string ) {
-    //     console.log(mIdx, item);
-    //     this.settingItems[mIdx].sItem = item;
-    // }
-
-    // public getSelectedSettingMenuItem( idx: number ): string{
-    //     return this.settingItems[idx].sItem;
-    // }
-
-    // private mItemByMakeEduList(): any[] {
-    //     return this.makeCurriculumItems.map( ( item: IMakeEducation ) => {
-    //         return { vo: this.EduSettingsItems, sItem:'반복없음' };
-    //     });
-    // }
 
     get isOwner(): boolean{
         return (this.myClassHomeModel.owner_id === this.myClassHomeModel.me?.user_id);
@@ -255,10 +282,10 @@ export default class CurriculumListView extends Vue {
             this.makeCurriculumItems.course_list.push({
                 index: i,
                 title: (i+1)+'회차수업',
-                startDay: '2021-11-15',
-                startTime: '10:00:00',
-                endTime: '11:00:00',
-                contents: '수업내용 100자이내로 설명.'
+                startDay: '',
+                startTime: '',
+                endTime: '',
+                contents: ''
             });
         }
         /*{
@@ -270,11 +297,6 @@ export default class CurriculumListView extends Vue {
             "contents": "수업내용 100자이내로 설명."
         }*/
         console.log(this.makeCurriculumItems);
-    }
-
-
-    private makeCourseSubmit(): void{
-        this.isClassCurr = false;
     }
 
     private countCourseNum(num: number): void{
@@ -294,6 +316,14 @@ export default class CurriculumListView extends Vue {
         this.inputEventBind('#attachFileInput');
     }
 
+    private modifyImgFileInputFocus() {
+        this.inputEventBind('#imgFileInputModify');
+    }
+
+    private modifyFilesInputFocus(){
+        this.inputEventBind('#attachFileInputModify');
+    }
+
     /**
      * //input click event 발생시키기.
      * @param targetSelector
@@ -305,7 +335,6 @@ export default class CurriculumListView extends Vue {
         //input click event 발생시키기.
         imgFileInput.dispatchEvent( Utils.createMouseEvent('click') );
     }
-
 
     /**
      * 이미지 파일 -> 배열에 지정 / 미리보기 link( blob link) 배열 생성~
@@ -435,6 +464,41 @@ export default class CurriculumListView extends Vue {
             });
     }
 
+    /**
+     * 시작일시 - datepicker 일자 선택시
+     * @private
+     */
+    private startDatePickerChange() {
+        this.startDateMenu = false;
+        this.startDateItem = this.startDatePickerModel;
+        this.makeCourseItems.startDay = this.startDateItem;
+    }
+
+    private startTimeChange() {
+        this.startTimeItem = this.currentStartTimeModel;
+        this.makeCourseItems.startTime = this.startTimeItem;
+    }
+
+    private endTimeChange() {
+        this.endTimeItem = this.currentEndTimeModel;
+        this.makeCourseItems.endTime = this.endTimeItem;
+    }
+
+
+    private makeCourseSubmit( num: number ): void{
+        this.isClassCurr = false;
+
+        this.makeCourseAttach = this.attachFileItems.concat(this.imgFileDatas);
+
+        this.makeCourseItems.attachment = this.makeCourseAttach;
+        this.makeCurriculumItems.course_list[num] = this.makeCourseItems;
+
+        console.log(this.makeCurriculumItems);
+        // MyClassService.setEducationList( this.classID, this.makeCurriculumItems )
+        //     .then(() => {
+        //         console.log('교육과정 코스 생성 성공!');
+        //     });
+    }
 
 
     /**
@@ -463,13 +527,13 @@ export default class CurriculumListView extends Vue {
             });
     }
 
-
     /**
      * 클래스 교육과정 정보 조회
      */
     get curriculumList(): ICurriculumList{
         return this.currList;
     }
+
 
     get cardIdNumber() {
         return this.cardId;
@@ -479,6 +543,8 @@ export default class CurriculumListView extends Vue {
         MyClassService.getEduCurrList(this.classID, cardId)
             .then((data) => {
                 this.currList = data;
+                this.modifyCurriculumList.title = data.title;
+                this.modifyCurriculumList.goal = data.text;
                 console.log(cardId);
                 console.log('getEduCurrList 함수 데이터', data);
             });
@@ -488,10 +554,6 @@ export default class CurriculumListView extends Vue {
     /**
      * 클래스 교육과정 개별코스 정보 조회
      */
-        get courseList(): ICourseList{
-        return this.allCourseList;
-    }
-
     get courseIdNumber() {
         return this.courseId;
     }
@@ -501,6 +563,26 @@ export default class CurriculumListView extends Vue {
             .then((data) => {
                 this.allCourseList = data;
                 console.log('getEduCourseList 함수 데이터', data);
+            });
+    }
+
+    /**
+     * 클래스 교육과정 수정
+     */
+    private modifyChangeTitle(event: any): void {
+        this.modifyCurriculumList.title = event.target.value;
+        console.log(this.modifyCurriculumList);
+    }
+    private modifyChangeText(event: any): void {
+        this.modifyCurriculumList.goal = event.target.value;
+        console.log(this.modifyCurriculumList);
+    }
+    private modifyConfirm( curriculumID: number): void {
+        MyClassService.setEducationListModify ( this.classID, curriculumID, this.modifyCurriculumList )
+            .then((data) => {
+                this.isModifyClass = false;
+                this.modifyCurriculumList = data;
+                console.log('교육과정 수정 성공');
             });
     }
 
@@ -535,6 +617,7 @@ export default class CurriculumListView extends Vue {
 
     private curriculumClickHandler( idx: number ) {
         this.isClassCurr = true;
+        this.countCourseNumber = idx;
     }
 
     private curriculumDetailClickHandler( idx: number ) {
@@ -545,6 +628,14 @@ export default class CurriculumListView extends Vue {
     private addCurriculumHandler(idx: number) {
         this.isCreateClass= true;
         this.setCourseList(10);
+    }
+
+    private modifyCurriculumHandler(idx: number) {
+        this.isModifyClass = true;
+        this.cardId = idx;
+        this.$nextTick(()=>{
+            this.getEduCurrList(this.cardId);
+        });
     }
 
 
