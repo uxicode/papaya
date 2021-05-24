@@ -171,7 +171,7 @@ export default class ClassSettingMain extends Vue{
      * @param level
      * @private
      */
-    private memberLevelIcon = (level: number): string => {
+    private memberLevelIcon(level: number): string {
         switch (level) {
             case 1:
                 return 'admin';
@@ -187,7 +187,7 @@ export default class ClassSettingMain extends Vue{
      * @param level
      * @private
      */
-    private memberLevelTxt = (level: number): string => {
+    private memberLevelTxt(level: number): string {
         switch (level) {
             case 1:
                 return '운영자';
@@ -199,8 +199,9 @@ export default class ClassSettingMain extends Vue{
     }
 
     /**
-     * input을 이용해 변경할 정보를 임시로 담을 함수
+     * input 을 이용해 변경할 정보를 임시로 담을 함수
      * @param event
+     * @param id
      * @private
      */
     private valueChange(event: any, id: number): void {
@@ -210,13 +211,14 @@ export default class ClassSettingMain extends Vue{
 
     /**
      * 푸시 알림 설정
-     * @param item
      * @private
+     * @param value
      */
     private pushToggle(value: boolean): void {
-        this.onOffNoti = !!value;
+        this.onOffNoti = !value;
         ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {onoff_push_noti: this.onOffNoti})
-          .then(() => {
+          .then((data) => {
+              console.log(data);
               setTimeout(()=>{
                   console.log(this.onOffNoti);
               }, 250 );
@@ -339,9 +341,8 @@ export default class ClassSettingMain extends Vue{
 
     /**
      * 클래스 가입 질문 수정
-     * @param id
-     * @param newQuestion
      * @private
+     * @param question
      */
     private setJoinQuestion(question: string): void {
         MyClassService.setClassQuestion(this.classID, this.questionId, {new_question: question})

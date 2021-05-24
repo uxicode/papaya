@@ -86,7 +86,7 @@ export default class FileBox extends Vue {
    * 1MB 이하는 KB 단위로
    * @param size
    */
-  private getFileSize = (size: number): string => {
+  private getFileSize(size: number): string {
     const mb = 1024 * 1024;
     const kb = 1024;
     if (size > mb) {
@@ -100,7 +100,7 @@ export default class FileBox extends Vue {
    * 파일 형식에 따른 아이콘 클래스 바인딩
    * @param mimetype
    */
-  private getMimeType = (mimetype: string): string => {
+  private getMimeType(mimetype: string): string {
     if (mimetype.includes('pdf')) {
       return 'pdf-file';
     } else if (mimetype.includes('jpg') || mimetype.includes('jpeg')) {
@@ -114,7 +114,7 @@ export default class FileBox extends Vue {
    * 파일 새 탭에서 열기
    * @param location
    */
-  private openFileByNewTab = (location: string): void => {
+  private openFileByNewTab(location: string): void {
     window.open(location);
   }
 
@@ -123,7 +123,7 @@ export default class FileBox extends Vue {
    * @param location
    * @private
    */
-  private downloadFile = (location: string): void => {
+  private downloadFile(location: string): void {
     const link = document.createElement('a');
     link.href = location;
     link.click();
@@ -188,7 +188,7 @@ export default class FileBox extends Vue {
    * @param level
    * @private
    */
-  private memberLevelIcon = (level: number): string => {
+  private memberLevelIcon(level: number): string {
     switch (level) {
       case 1:
         return 'manager';

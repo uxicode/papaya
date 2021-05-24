@@ -89,7 +89,7 @@ export default class ClassMemberManage extends Vue{
      * @param level
      * @private
      */
-    private memberLevelIcon = (level: number): string => {
+    private memberLevelIcon(level: number): string {
         switch (level) {
             case 1:
                 return 'admin';
@@ -105,7 +105,7 @@ export default class ClassMemberManage extends Vue{
      * @param level
      * @private
      */
-    private memberLevelTxt = (level: number): string => {
+    private memberLevelTxt(level: number): string {
         switch (level) {
             case 1:
                 return '운영자';
