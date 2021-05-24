@@ -33,29 +33,28 @@ export default class AddVotePopup extends Vue{
   private dragEnabled: boolean=true;
   private dragging: boolean= false;
   private voteData: IVoteModel= {
-    vote:{
-      type: 0,
-      title: '',
-      multi_choice: 0,
-      anonymous_mode: 0,
-      open_progress_level: 0,
-      open_result_level: 0,
-      finishAt: new Date().toISOString().substr(0, 10),
-      vote_choice_list: [
-        {
-          text: '제주도 여행',
-          index: 1
-        },
-        {
-          text: '',
-          index: 2
-        },
-        {
-          text: '',
-          index: 3
-        }
-      ]
-    }
+    parent_id:0,
+    type: 0,
+    title: '',
+    multi_choice: 0,
+    anonymous_mode: 0,
+    open_progress_level: 0,
+    open_result_level: 0,
+    finishAt: new Date().toISOString().substr(0, 10),
+    vote_choice_list: [
+      {
+        text: '제주도 여행',
+        index: 1
+      },
+      {
+        text: '',
+        index: 2
+      },
+      {
+        text: '',
+        index: 3
+      }
+    ]
   };
   private openResultLevel: string = '전체공개';
   private openResultLevelItems = [
@@ -65,6 +64,7 @@ export default class AddVotePopup extends Vue{
     ];
   private anonymousChk: boolean=false;
   private multiChoiceChk: boolean=false;
+  private endDateMenuChk: boolean=false;
   private endDateMenu: boolean=false;
 
   get dragOptions() {
@@ -77,7 +77,7 @@ export default class AddVotePopup extends Vue{
   }
 
   private addVoteList(idx: number) {
-    this.voteData.vote.vote_choice_list.push({
+    this.voteData.vote_choice_list.push({
       text: '',
       index: ++idx
     });
@@ -88,25 +88,34 @@ export default class AddVotePopup extends Vue{
   }
 
   private optionChange(value: number ): void {
-    this.voteData.vote.type=value;
+    this.voteData.type=value;
   }
 
   private checkMove(e: MoveEvent<any> ) {
-    window.console.log("Future index: " + e.draggedContext.futureIndex);
+    window.console.log('Future index: ' + e.draggedContext.futureIndex);
   }
 
   private anonymousVoteChange(value: string | boolean) {
     this.anonymousChk=!!value;
-    this.voteData.vote.anonymous_mode=( this.anonymousChk )? 1 : 0;
+    this.voteData.anonymous_mode=( this.anonymousChk )? 1 : 0;
   }
 
   private multiChoiceVoteChange(value: string | boolean) {
     this.multiChoiceChk=!!value;
-    this.voteData.vote.multi_choice=( this.multiChoiceChk )? 1 : 0;
+    this.voteData.multi_choice=( this.multiChoiceChk )? 1 : 0;
   }
 
   private endDatePickerChange() {
     this.endDateMenu=false;
+  }
+
+  private endDateVoteChange(value: string | boolean) {
+    this.endDateMenuChk=!!value;
+    this.voteData.finishAt=( this.endDateMenuChk )? new Date().toISOString().substr(0, 10) : null;
+  }
+
+  private onVoteSubmit() {
+    this.$emit('submit', this.voteData);
   }
 
 }

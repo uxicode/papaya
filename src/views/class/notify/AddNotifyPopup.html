@@ -94,6 +94,6 @@
     </modal>
   </transition>
 
-  <add-vote-popup :is-open="isOpenAddVotePopup" @close="onAddVoteClose"></add-vote-popup>
+  <add-vote-popup :is-open="isOpenAddVotePopup" @close="onAddVoteClose" @submit="onAddVote"></add-vote-popup>
 </div>
 <!-- end: 공통 팝업 -->

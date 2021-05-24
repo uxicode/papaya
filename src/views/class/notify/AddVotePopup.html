@@ -17,7 +17,7 @@
 <!--          <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">-->
           <txt-field add-class="popup-type"
                      placeholder="제목을 50자 이내로 작성해 주세요."
-                     v-model="voteData.vote.title"></txt-field>
+                     v-model="voteData.title"></txt-field>
         </div>
       </div>
 
@@ -43,24 +43,24 @@
                                     radio-name="radio"
                                     btn-value="0"
                                     active-value="0"
-                                    v-model="voteData.vote.type"
+                                    v-model="voteData.type"
                                     @click="optionChange">텍스트</radio-button>
                       <radio-button btn-id="chk2"
                                     radio-name="radio"
                                     btn-value="1"
-                                    v-model="voteData.vote.type"
+                                    v-model="voteData.type"
                                     @click="optionChange">날짜</radio-button>
                     </div>
                   </div>
                   <!--<draggable v-model="myArray" group="people" @start="drag=true" @end="drag=false">-->
                   <draggable class="create-link-list"
-                             v-model="voteData.vote.vote_choice_list"
+                             v-model="voteData.vote_choice_list"
                              :move="checkMove"
                              v-bind="dragOptions"
                              @start="dragging = true"
                              @end="dragging = false"
                              style="min-height:20px;">
-                    <div class="create-form list-type active" v-for="( ele, index ) in voteData.vote.vote_choice_list" :key="`ele-${index}`">
+                    <div class="create-form list-type active" v-for="( ele, index ) in voteData.vote_choice_list" :key="`ele-${index}`">
                       <span class="num">{{ index }}</span>
                       <div class="form-group inline">
                         <input type="text" class="form-control popup-type sm" v-model="ele.text" style="width: 390px;">
@@ -73,7 +73,7 @@
                     </div>
 
                     <div class="create-add-list"  slot="footer">
-                      <a href="" class="bd-none" @click.prevent.stop="addVoteList( voteData.vote.vote_choice_list.length )">
+                      <a href="" class="bd-none" @click.prevent.stop="addVoteList( voteData.vote_choice_list.length )">
                         <img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span>
                       </a>
                     </div>
@@ -111,37 +111,47 @@
                     <li>
                       <p class="form-txt">종료일시 설정</p>
                       <div class="create-sub-btn">
-                        <div class="form-group date">
-                          <v-menu
-                                  bottom
-                                  right
-                                  v-model="endDateMenu"
-                                  :close-on-content-click="false"
-                                  transition="scale-transition"
-                                  offset-y
-                                  offset-x
-                                  min-width="auto">
-                            <template v-slot:activator="{ on, attrs }">
-                              <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
-                              <v-text-field
-                                      v-model="voteData.vote.finishAt"
-                                      v-bind="attrs"
-                                      v-on="on"
-                                      hide-details
-                                      solo
-                                      flat>
-                                <template v-slot:append>
-                                  <button type="button" class="btn form-btn form-calendar" v-on="on"></button>
-                                </template>
-                              </v-text-field>
-                            </template>
-                            <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                            <v-date-picker v-model="voteData.vote.finishAt" no-title @input="endDatePickerChange"></v-date-picker>
-                          </v-menu>
-                          <!--<input type="text" class="form-control no-date" size="7" value="날짜 없음">
-                          <span class="date-area placeholder">종료일시 없음</span>
-                          <button type="button" class="btn form-btn form-calendar"></button>-->
+
+                        <div class="form-switcher" style="display:inline-block;vertical-align: middle;">
+                          <input type="checkbox" id="toggle3"  v-model="endDateMenuChk"  @change="endDateVoteChange(  $event.target.checked )">
+                          <label for="toggle3"></label>
                         </div>
+                        <template v-if="!endDateMenuChk">종료일시없음</template>
+                        <template v-else>
+                          <div class="form-group date">
+                            <v-menu
+                                    bottom
+                                    right
+                                    v-model="endDateMenu"
+                                    :close-on-content-click="false"
+                                    transition="scale-transition"
+                                    offset-y
+                                    offset-x
+                                    min-width="110px">
+                              <template v-slot:activator="{ on, attrs }">
+                                <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
+                                <v-text-field
+                                        v-model="voteData.finishAt"
+                                        v-bind="attrs"
+                                        v-on="on"
+                                        hide-details
+                                        solo
+                                        flat>
+                                  <template v-slot:append>
+                                    <button type="button" class="btn form-btn form-calendar" v-on="on"></button>
+                                  </template>
+                                </v-text-field>
+                              </template>
+                              <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
+                              <v-date-picker v-model="voteData.finishAt" no-title @input="endDatePickerChange"></v-date-picker>
+                            </v-menu>
+                            <!--<input type="text" class="form-control no-date" size="7" value="날짜 없음">
+                            <span class="date-area placeholder">종료일시 없음</span>
+                            <button type="button" class="btn form-btn form-calendar"></button>-->
+                          </div>
+                        </template>
+
+
                       </div>
                     </li>
 
@@ -167,7 +177,7 @@
                               <v-list-item
                                       v-for="(item, index) in openResultLevelItems"
                                       :key="index"
-                                      @click="voteData.vote.open_result_level=item.id;openResultLevel=item.txt;">
+                                      @click="voteData.open_result_level=item.id;openResultLevel=item.txt;">
                                 <v-list-item-title>{{ item.txt }}</v-list-item-title>
                               </v-list-item>
                             </v-list>
@@ -194,7 +204,7 @@
 
     <div slot="footer">
       <div class="btn-group rt">
-        <button type="button" class="btn primary navi">완료</button>
+        <button type="button" class="btn primary navi" @click="onVoteSubmit">완료</button>
       </div>
     </div>
 

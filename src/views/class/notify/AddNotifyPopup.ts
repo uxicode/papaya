@@ -41,28 +41,13 @@ export default class AddNotifyPopup extends Vue{
   private isOpenAddVotePopup: boolean=false;
   private imageLoadedCount: number=0;
   private alarmAt: Date=new Date();
-  private vote: IVoteModel= {
-    vote:{
-      type: 0,
-      title: '',
-      multi_choice: 0,
-      anonymous_mode: 0,
-      open_progress_level: 0,
-      open_result_level: 0,
-      vote_choice_list: [
-        {
-          text: '',
-          index: 0
-        }
-      ]
-    }
-  };
+  private voteData!: IVoteModel;
 
   private postData: ICreatePost = { title: '', text: ''};
   /*parent_id: post_id,
      type: link.type ? link.type : 0,
      title: link.title,*/
-  private linkData: {type: number,  title: string}={ type:0, title: ''}
+  private linkData: { type: number, title: string; } = {type: 0, title: ''};
   private linkDetailData: Array<{ index: number, url: string; }> = [];
 
   private imgFileURLItems: string[] = [];
@@ -89,6 +74,8 @@ export default class AddNotifyPopup extends Vue{
   private popupChange( value: boolean ) {
     this.$emit('change', value);
   }
+
+
 
 
   /**
@@ -189,19 +176,22 @@ export default class AddNotifyPopup extends Vue{
       this.formData = new FormData();
     }
 
-
-    const temp = JSON.stringify( {...this.postData } );
+    const temp = JSON.stringify( {...this.postData} );
     this.formData.append('data', temp );
-    // this.formData.append('data', this.postData );
+    console.log(this.voteData, temp);
 
     PostService.setAddPost(this.classID, this.formData )
       .then((data)=>{
-        console.log(data);
+        console.log(data.post.id);
         this.$emit('submit', false);
-
+        let { parent_id } = this.voteData;
+        parent_id=data.post.id;
+        PostService.setAddVote(this.classID, {...this.voteData, parent_id})
+          .then((data: any)=>{
+            console.log(data);
+          });
         this.imgFilesAllClear();
       });
-
   }
 
   private setPostAddLink() {
@@ -347,7 +337,11 @@ export default class AddNotifyPopup extends Vue{
     this.isOpenAddVotePopup=value;
   }
 
-
+  private onAddVote( voteData: IVoteModel) {
+    this.voteData = voteData;
+    this.isOpenAddVotePopup=false;
+    console.log(voteData);
+  }
 
 
 
