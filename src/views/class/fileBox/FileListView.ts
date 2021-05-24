@@ -143,7 +143,7 @@ export default class FileBox extends Vue {
     this.postType = postType;
     switch (postType) {
       case 0:
-        PostService.getPosts(this.classID, parentId)
+        PostService.getPostsById(this.classID, parentId)
           .then((data: any) => {
             // console.log(data);
             this.postContent = data.post;
