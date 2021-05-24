@@ -167,8 +167,9 @@ export default class FileBox extends Vue {
               // console.log(data);
               this.postContent = data.curriculum;
               this.postOwner = data.curriculum.owner;
-              this.fileCount = data.curriculum.course_list.reduce(
-                  (prev: any, next: any) => prev.attachment.length + next.attachment.length);
+              // 교육과정은 course 별로 attachment 가 개별적으로 있기 때문에 parent_id (course_id) 가 일치하는 첨부파일의 길이를 받는다.
+              this.fileCount = Number(data.curriculum.course_list.filter((item: any) => item.id === parentId)
+                  .map((item: any) => item.attachment.length));
             });
         }
         break;
