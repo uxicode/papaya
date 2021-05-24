@@ -252,7 +252,7 @@ export default class AddNotifyPopup extends Vue{
       if( Array.isArray(appendName) ){
         this.formData.append( appendName[index], item, item.name );
       }else{
-        this.formData.append(appendName, item, item.name );
+        this.formData.append(appendName, item, `${index}_${item.name}` );
       }
     });
   }
