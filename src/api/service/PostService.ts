@@ -8,7 +8,7 @@ export class PostService{
    * @param classId
    * @param payload
    */
-  public static getPosts(classId: number, payload: {page_no: number, count: number}): Promise<any>{
+  public static getPosts(classId: number, payload: {page_no: number, count: number} ): Promise<any>{
     return request('get', `${CLASS_BASE_URL}/${classId}/posts`, payload );
   }
 

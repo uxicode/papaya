@@ -5,6 +5,8 @@ import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './FileListView.html';
+import {PostService} from '@/api/service/PostService';
+import {ScheduleService} from '@/api/service/ScheduleService';
 
 const MyClass = namespace('MyClass');
 
@@ -17,7 +19,7 @@ const MyClass = namespace('MyClass');
 })
 export default class FileBox extends Vue {
     @MyClass.Getter
-    private classID!: string | number;
+    private classID!: number;
 
     private allData: any[] = [];
     private totalFileSize: number = 0;
@@ -46,8 +48,8 @@ export default class FileBox extends Vue {
    */
   private getAllClassAttachmentData(): void {
         getAllPromise([
-          MyClassService.getAllPostsByClassId(this.classID, {page_no: 1, count: 100}),
-          MyClassService.getAllScheduleByClassId(this.classID, {page_no: 1, count: 100}),
+          PostService.getAllPostsByClassId(this.classID, {page_no: 1, count: 100}),
+          ScheduleService.getAllScheduleByClassId(this.classID, {page_no: 1, count: 100}),
           MyClassService.getAllCurriculumByClassId(this.classID, {page_no: 1, count: 100}),
         ]).then((data: any) => {
           // console.log(data[0].post_list);
@@ -141,8 +143,8 @@ export default class FileBox extends Vue {
     this.postType = postType;
     switch (postType) {
       case 0:
-        MyClassService.getPostsById(this.classID, parentId)
-          .then((data) => {
+        PostService.getPosts(this.classID, parentId)
+          .then((data: any) => {
             // console.log(data);
             this.postContent = data.post;
             this.postOwner = data.post.owner;
@@ -151,7 +153,7 @@ export default class FileBox extends Vue {
         break;
 
       case 1:
-        MyClassService.getScheduleById(this.classID, parentId)
+        ScheduleService.getScheduleById(this.classID, parentId)
           .then((data) => {
             // console.log(data);
             this.postContent = data.schedule;
