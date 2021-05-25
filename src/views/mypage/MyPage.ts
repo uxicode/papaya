@@ -1,4 +1,5 @@
 import {Vue, Component} from 'vue-property-decorator';
+import EventBus from '@/store/EventBus';
 import MyProfile from '@/views/mypage/myProfile/MyProfile';
 import Bookmark from '@/views/mypage/bookmark/Bookmark';
 import WithRender from './MyPage.html';
@@ -36,6 +37,31 @@ export default class MyPage extends Vue {
 
   get myPageListModel(): IPageListMenu[] {
     return this.myPageList;
+  }
+
+  public created() {
+    this.initializeLeftMenu();
+  }
+
+  /**
+   * 좌측 메뉴 활성화
+   * activeNum의 초기값으로 인해 라우트 경로 값을 받고, 이후에는 header에서 전달받은 EventBus를 통해 변경
+   * @private
+   */
+  private initializeLeftMenu(): void {
+    switch (this.$route.path) {
+      case '/myProfile':
+        this.activeNum = 0;
+        break;
+      case '/bookmark':
+        this.activeNum = 1;
+        break;
+      default:
+        break;
+    }
+    EventBus.$on('activeLeftMenu', (idx: number) => {
+      this.activeNum = idx;
+    });
   }
 
   private gotoMyPageLink( idx: number ): void {
