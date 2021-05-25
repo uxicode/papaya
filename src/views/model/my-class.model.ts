@@ -478,6 +478,15 @@ interface IMakeEducation {
     }>;
 }
 
+interface IMakeCourse {
+    title: string;
+    contents: string;
+    index: number;
+    startDay: Date | string;
+    startTime: Date | string;
+    endTime: Date | string;
+}
+
 interface IEducationList {
     total: number;
     page_no: null | number;
@@ -622,7 +631,7 @@ interface ICurriculumList {
                         updatedAt: Date | string;
                         id: number;
                         user_id: number;
-                        member_id: null | number;
+                        member_id: null | number,
                         parent_id: number;
                         group_name: string;
                         fieldname: string;
@@ -691,6 +700,11 @@ interface IClassTag {
     createdAt?: Date;
 }
 
+interface IClassAuth {
+    id?: number;
+    auth_type: number;
+    be_authorized: boolean;
+}
 
 export {
     IMyClassList,
@@ -710,5 +724,7 @@ export {
     IEducationList,
     ICurriculumList,
     ICourseList,
-    IClassTag
+    IModifyCurriculum,
+    IClassTag,
+    IClassAuth
 };

@@ -129,15 +129,6 @@ export default class ClassProfile extends Vue {
     }
 
     /**
-     * 변경할 정보를 임시로 담을 함수
-     * @param event
-     * @private
-     */
-    private valueChange(event: any): void {
-        this.tempData = event.target.value;
-    }
-
-    /**
      * 닉네임 변경 팝업 열기
      * @private
      */
@@ -178,28 +169,24 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private openLevelModify(data: string, level: number): void {
+        let info = {};
         switch (data) {
             case 'open_level_id':
-                ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {open_level_id: level})
-                  .then(() => {
-                    console.log('아이디 공개 여부 수정');
-                  });
+                info = {open_level_id: level};
                 break;
             case 'open_level_mobileno':
-                ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {open_level_mobileno: level})
-                  .then(() => {
-                      console.log('모바일 공개 여부 수정');
-                  });
+                info = {open_level_mobileno: level};
                 break;
             case 'open_level_email':
-                ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {open_level_email: level})
-                  .then(() => {
-                      console.log('이메일 공개 여부 수정');
-                  });
+                info = {open_level_email: level};
                 break;
             default:
-                return;
+                break;
         }
+        ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, info)
+          .then(() => {
+              console.log(`${info} 수정 완료`);
+          });
     }
 
     /**
@@ -207,7 +194,7 @@ export default class ClassProfile extends Vue {
      * @param level
      * @private
      */
-    private openLevelTxt(level: number): string {
+    private openLevelTxt = (level: number): string => {
         switch (level) {
             case 0:
                 return '비공개';

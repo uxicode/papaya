@@ -150,9 +150,16 @@
           <div class="fd-inner">
 
             <!-- start: attach 에 이미지파일이 있는 경우 -->
-            <template v-if="getImgFileDataSort(item.attachment).length>0">
+            <template v-if="getImgFileLen(item.attachment)>0">
               <ul class="img-list clearfix">
-                <li v-for="imgItem in getImgFileDataSort(item.attachment)"><a href=""><img :src="imgItem.location" alt=""></a></li>
+                <li class="img-item" v-for="( imgItem, imgIndex ) in getImgFileDataSort(item.attachment)"
+                    :key="`img-${imgIndex}`" >
+                  <a :href="imgItem.location"
+                     :data-count="getImgFileMoreCheck(item.attachment)"
+                     :class="{'pseudo-del': getImgTotalNum(item.attachment) }">
+                    <img :src="imgItem.location" alt="">
+                  </a>
+                </li>
               </ul>
             </template>
             <!-- end: attach 에 이미지파일이 있는 경우 -->
@@ -365,5 +372,5 @@
     </div>
   </div >
 
-   <add-notify :is-open="isAddPopupOpen" @change="onAddPostPopupStatus" @submit="onAddPost"></add-notify>
+   <add-notify-popup :is-open="isAddPopupOpen" @change="onAddPostPopupStatus" @submit="onAddPost"></add-notify-popup>
 </section>

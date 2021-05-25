@@ -18,7 +18,7 @@
                 <div class="activity-tit">
                     <p>멤버 {{ classMembers.length }}</p>
                 </div>
-                <div class="member-management-list classes-member-list" style="margin-top:0;">
+                <div class="member-management-list classes-member-list scroll-body" style="margin-top:0;height:546px">
                     <ul class="member-list">
                         <li v-for="(item, idx) in classMembers"
                             :key="idx"
@@ -43,6 +43,9 @@
                                             </button>
                                         </template>
                                         <v-list>
+                                            <v-list-item @click="detailPopupOpen(item.user_id, item.level, item.nickname, item.id)">
+                                                <v-list-item-title>멤버 정보</v-list-item-title>
+                                            </v-list-item>
                                             <v-list-item @click="blockModalOpen(item.id)">
                                                 <v-list-item-title>멤버 차단</v-list-item-title>
                                             </v-list-item>
@@ -60,6 +63,101 @@
         </div>
         <!--// popup-body -->
     </div>
+
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.6.1 (멤버정보 - 상세) -->
+    <transition name="modal">
+        <modal v-if="isDetailPopup" size="540px" body-padding="0" @modalClose="isDetailPopup=false;">
+            <div slot="header">
+                <!-- header custom coding-->
+                <div class="popup-icon profile"></div>
+                <div class="popup-close">
+                    <button class="close" @click="isDetailPopup = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-cnt">
+                    <h2 class="popup-tit pdb-0">멤버 프로필 상세</h2>
+                </div>
+                <div class="member-profile">
+                    <div class="profile-inner">
+                        <div class="profile-info"
+                             :class="memberLevelIcon(memberLevel)">
+                            <p>{{ nickname }}</p>
+                            <span>{{ memberLevelTxt(memberLevel) }}</span>
+                        </div>
+                        <div v-if="myMemberLevel===1" class="profile-btn">
+                            <div class="list-popup">
+                                <v-menu
+                                        min-width="200px"
+                                        :close-on-click="true">
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <button
+                                                type="button"
+                                                class="list-popup-btn"
+                                                v-bind="attrs"
+                                                v-on="on">
+                                            <img :src="require('@/assets/images/more.svg')" alt="">
+                                        </button>
+                                    </template>
+                                    <v-list>
+                                        <v-list-item @click="blockModalOpen(memberId)">
+                                            <v-list-item-title>멤버 차단</v-list-item-title>
+                                        </v-list-item>
+                                        <v-list-item @click="banModalOpen(memberId)">
+                                            <v-list-item-title>멤버 강제 탈퇴</v-list-item-title>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-menu>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="profile-list">
+                        <li class="list-item">
+                            <p class="list-tit">모바일 번호</p>
+                            <div class="basic-info">
+                                <p>{{ mobileNo }}</p>
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <p class="list-tit">아이디</p>
+                            <div class="basic-info">
+                                <p>{{ userId }}</p>
+                            </div>
+                        </li>
+                        <li class="list-item">
+                            <p class="list-tit">이메일 주소</p>
+                            <div class="basic-info">
+                                <p>{{ email }}</p>
+                            </div>
+                        </li>
+                        <li v-if="myMemberLevel===1" class="list-item">
+                            <p class="list-tit">가입 질문 응답</p>
+                            <div class="basic-info">
+                                <div class="accordion-tit">
+                                    <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
+                                    <button class="accordion-btn" :class="{'active': isDetailAccordion}" @click="isDetailAccordion = !isDetailAccordion"></button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <!-- class="active" 일 경우 open -->
+                    <div v-if="myMemberLevel===1" class="accordion-cnt" :class="{'active': isDetailAccordion}">
+                        <ul class="profile-qna">
+                            <li v-for="(item, idx) in qnaList" :key="idx">
+                                <p class="question">{{ idx+1 }}. {{ item.question }}</p>
+                                <p class="answer">{{ item.answer }}</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- //accordion 3-->
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.8.1.1 (멤버 활동 관리-차단-확인) -->
     <transition name="modal">

@@ -242,11 +242,15 @@
             <div class="fd-inner">
 
               <!-- start: attach 에 이미지파일이 있는 경우 -->
-              <template v-if="getImgFileDataSort(item.list.attachment).length>0">
+              <template v-if="getImgFileLen(item.list.attachment)>0">
                 <ul class="img-list clearfix">
                   <li class="img-item" v-for="( imgItem, imgIndex ) in getImgFileDataSort(item.list.attachment)"
                       :key="`img-${imgIndex}`" >
-                    <a :href="imgItem.location" :data-count="getImgFileDataSort(item.list.attachment).length"><img :src="imgItem.location" alt=""></a>
+                    <a :href="imgItem.location"
+                       :data-count="getImgFileMoreCheck(item.list.attachment)"
+                       :class="{'pseudo-del': getImgTotalNum(item.list.attachment) }">
+                      <img :src="imgItem.location" alt="">
+                    </a>
                   </li>
                 </ul>
               </template>

@@ -48,7 +48,7 @@
     padding:0;
   }
   &.date, &.time{
-    .v-text-field input{text-align:right;width:125px;}
+    .v-text-field input{text-align:right;width:90px;}
   }
 }
 
@@ -129,3 +129,6 @@
   background-color: #1d1d4c!important;
   border-color: transparent !important;
 }
+
+/* 닉네임 중복 확인 */
+.v-application .error {background-color: transparent !important;}

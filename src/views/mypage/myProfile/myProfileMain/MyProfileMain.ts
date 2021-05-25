@@ -2,9 +2,7 @@ import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IUserMe} from '@/api/model/user.model';
 import UserService from '@/api/service/UserService';
-import {Utils} from '@/utils/utils';
 import Btn from '@/components/button/Btn.vue';
-import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
 import WithRender from './MyProfileMain.html';
 
@@ -15,16 +13,15 @@ const Auth = namespace('Auth');
     components:{
         Btn,
         Modal,
-        TxtField,
     },
 })
 
 export default class MyProfileMain extends Vue {
     @Auth.Getter
-    public userInfo!: IUserMe;
+    private userInfo!: IUserMe;
 
     @Auth.Action
-    public USER_ME_ACTION!: () => Promise<IUserMe>;
+    private USER_ME_ACTION!: () => Promise<IUserMe>;
 
     get myInfo() {
         // console.log( 'this.userInfo=', this.userInfo );
@@ -49,7 +46,7 @@ export default class MyProfileMain extends Vue {
 
     /* 생일 datepicker 관련 */
     private inputBirthday: string = '';
-    private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
+    private startDateMenu: boolean = false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
 
     private getFullname(): string {
         return (this.myInfo)? this.myInfo.fullname : '';
@@ -130,7 +127,6 @@ export default class MyProfileMain extends Vue {
         this.isModifyNameModal = !this.isModifyNameModal;
     }
 
-
     /**
      * '-' 형태의 생일을 구분자 없는 문자열로 변환 후
      * 생일 변경 통신
@@ -178,7 +174,6 @@ export default class MyProfileMain extends Vue {
      * @private
      */
     private closeListMenu(): void {
-        console.log('click outside');
         const listPopup = document.querySelectorAll('.list-popup-menu');
         listPopup.forEach((item) => item.classList.remove('active'));
     }

@@ -308,24 +308,29 @@ $popupDepth: 10;
           position:relative;
           padding:15px 0;
           border-bottom:1px solid #f4f5f6;
+        }
+        .create-form {
+          overflow: hidden;
+          &.list-type{
+            position:relative;
+            padding:15px 0;
+            border-bottom:1px solid #f4f5f6;
+            background-color:#fff;
+          }
+          .num {
+            width:20px;
+            float:left;
+            margin-right:10px;
+            vertical-align: middle;
+            color: rgba(55,55,73,0.2);
+          }
 
-          .create-form {
-            overflow: hidden;
-            .num {
-              width:20px;
-              float:left;
-              margin-right:10px;
-              vertical-align: middle;
-              color: rgba(55,55,73,0.2);
-            }
+          &.active {
+            .num {color:#57576d;}
+          }
 
-            &.active {
-              .num {color:#57576d;}
-            }
-
-            .form-group {
-              float:left;
-            }
+          .form-group {
+            float:left;
           }
         }
       }
@@ -1147,7 +1152,7 @@ $popupDepth: 10;
   display:block;
   padding:15px 0;
   font-weight:500;
-  color:#ff4d4d;
+  color:#ff4d4d !important; // customVuetify 때문에 important 필요 - ksj
 }
 
 
@@ -1267,4 +1272,16 @@ $popupDepth: 10;
 .modal-leave-active .popup-dialog {
   transform: translate(-50%, -50%) scale(0.3);
   transition: all 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+//draggable 관련
+.ghost {
+  opacity: 0.7;
+  background: #c8ebfb;
+}
+.flip-list-move {
+  transition: transform 0.5s;
+}
+.no-move {
+  transition: transform 0s;
 }
