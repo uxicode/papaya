@@ -627,29 +627,29 @@ interface ICurriculumList {
                 deletedYN: boolean;
                 attachment?: [
                     {
-                        createdAt: Date | string;
-                        updatedAt: Date | string;
-                        id: number;
-                        user_id: number;
-                        member_id: null | number,
-                        parent_id: number;
-                        group_name: string;
-                        fieldname: string;
-                        originalname: string;
-                        encoding: string;
-                        mimetype: string;
-                        size: number;
-                        bucket: string;
-                        key: string;
                         acl: string;
-                        contentType: string;
-                        contentDisposition: null | number;
-                        storageClass: string;
-                        serverSideEncryption: null | number;
-                        metadata: null | number;
-                        location: string;
-                        etag: string;
+                        bucket:  string;
+                        contentDisposition:  string | null;
+                        contentType:  string;
+                        createdAt: Date;
                         deletedYN: boolean;
+                        encoding: string;
+                        etag: string;
+                        fieldname:  string;
+                        group_name:  string;
+                        id: number;
+                        key:  string;
+                        location:  string;
+                        member_id: number | null;
+                        metadata:  string;
+                        mimetype:  string;
+                        originalname: string;
+                        parent_id: number;
+                        serverSideEncryption:  string | null;
+                        size: number;
+                        storageClass:  string;
+                        updatedAt: Date;
+                        user_id: number;
                     }
                 ];
             }

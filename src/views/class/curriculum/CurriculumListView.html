@@ -185,8 +185,8 @@
                             <div class="form-item">
                                 <txt-field id="courseTitle"
                                            add-class="popup-type"
-                                           placeholder="수업 제목을 20자 이내로 작성해 주세요."
                                            v-model="makeCurriculumItems.course_list[countCourseNumber].title"
+                                           placeholder="수업 제목을 20자 이내로 작성해 주세요."
                                            rules="required"
                                            valid-name="수업제목">
                                 </txt-field>
@@ -390,7 +390,7 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <button type="button" class="btn navi" @click="makeCourseSubmit(countCourseNumber)">완료</button>
+                    <button type="button" class="btn navi" @click="makeCourseSubmit">완료</button>
                 </div>
             </div>
         </modal>
@@ -467,8 +467,8 @@
                                                 <span>{{ item.startTime }}</span>
                                             </div>
                                             <div class="subject-sub">
-                                                <span>이미지 2</span>
-                                                <span v-show="item.attachment.length > 0">파일 {{ item.attachment.length }}</span>
+                                                <span v-if="getImgFileLen(curriculumList.curriculum.course_list[index].attachment)>0">이미지 {{ getImgFileLen(curriculumList.curriculum.course_list[index].attachment) }}</span>
+                                                <span v-if="getFileDataSort(curriculumList.curriculum.course_list[index].attachment).length>0">파일 {{ getFileDataSort(curriculumList.curriculum.course_list[index].attachment).length }}</span>
                                             </div>
                                         </a>
                                     </div>
@@ -517,20 +517,29 @@
                         </p>
 
                         <div class="fd-inner">
-                            <ul class="img-list pdl-0 clearfix">
-                                <li><a href=""><img :src="require('@/assets/images/pic.png')" alt=""></a></li>
-                                <li><a href=""><img :src="require('@/assets/images/pic2.png')" alt=""></a></li>
-                                <li><a href=""><img :src="require('@/assets/images/pic3.png')" alt=""></a></li>
-                            </ul>
-                        </div>
+                            <!-- start: attach 에 이미지파일이 있는 경우 -->
+                            <template v-if="getImgFileLen(curriculumList.curriculum.course_list[countCourseNumber].attachment)>0">
+                                <ul class="img-list clearfix">
+                                    <li class="img-item" v-for="( imgItem, imgIndex ) in getImgFileDataSort(curriculumList.curriculum.course_list[countCourseNumber].attachment)"
+                                        :key="`img-${imgIndex}`" >
+                                        <a :href="imgItem.location"
+                                           :data-count="getImgFileMoreCheck(curriculumList.curriculum.course_list[countCourseNumber].attachment)"
+                                           :class="{'pseudo-del': getImgTotalNum(curriculumList.curriculum.course_list[countCourseNumber].attachment) }">
+                                            <img :src="imgItem.location" alt="">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </template>
+                            <!-- end: attach 에 이미지파일이 있는 경우 -->
 
-                        <div class="fd-inner" v-show="curriculumList.curriculum.course_list[countCourseNumber].attachment.length>0">
-                            <p class="fd-inner-txt">첨부 파일 3</p>
-                            <ul class="file-list pdl-0 clearfix">
-                                <li v-for="(item, index) in curriculumList.curriculum.course_list[countCourseNumber].attachment" :key="index">
-                                    <a href="">{{ item.originalname }}</a>
-                                </li>
-                            </ul>
+                            <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+                            <template v-if="getFileDataSort(curriculumList.curriculum.course_list[countCourseNumber].attachment).length>0">
+                                <p class="fd-inner-txt">첨부 파일 {{ getFileDataSort(curriculumList.curriculum.course_list[countCourseNumber].attachment).length }}</p>
+                                <ul class="file-list clearfix">
+                                    <li v-for="fileItem in getFileDataSort(curriculumList.curriculum.course_list[countCourseNumber].attachment)"><a :href="fileItem.location">{{fileItem.originalname }}</a></li>
+                                </ul>
+                            </template>
+                            <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
                         </div>
                     </div>
                 </div>
