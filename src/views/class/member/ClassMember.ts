@@ -1,14 +1,14 @@
+import {Vue, Component} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
+import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
 import UserService from '@/api/service/UserService';
-import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import {
     resetSearchInput,
     searchKeyEventObservable,
     searchUserKeyValueObservable
 } from '@/views/service/search/SearchService';
-import {Vue, Component} from 'vue-property-decorator';
-import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './ClassMember.html';
@@ -238,28 +238,6 @@ export default class ClassMember extends Vue{
             });
             reset$.subscribe();
         });
-    }
-
-    /**
-     * accordion 안에 있는 list-popup toggle
-     * 첫번째 인자는 accordion 의 인덱스, 두번째 인자는 해당 아코디언의 list-popup 인덱스
-     * @param idx
-     * @param index
-     * @private
-     */
-    private listPopupToggle(idx: number, index: number): void {
-        const accCnt = document.querySelectorAll('.accordion-cnt');
-        //console.log(accCnt.length);
-        const listPopup = accCnt[idx].querySelectorAll('.list-popup-menu');
-        //console.log(listPopupMenu.length);
-        //listPopup.forEach((item) => item.classList.remove('active'));
-        listPopup[index].classList.toggle('active');
-    }
-
-    private closeListMenu(): void {
-        console.log('click outside');
-        const listPopup = document.querySelectorAll('.list-popup-menu');
-        listPopup.forEach((item) => item.classList.remove('active'));
     }
 
     /**

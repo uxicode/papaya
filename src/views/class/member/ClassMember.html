@@ -35,10 +35,24 @@
                         </div>
                         <div class="member-info-btn">
                             <div class="list-popup">
-                                <button type="button" class="list-popup-btn" @click="isAdminToggle = !isAdminToggle"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                <div class="list-popup-menu pos-right" :class="{'active': isAdminToggle}" style="transform:translate3d(42px,0,0);">
-                                    <button type="button" class="list-popup-item" @click="detailPopupOpen(item.user_id, item.level, item.nickname, item.id)">멤버정보</button>
-                                </div>
+                                <v-menu
+                                        min-width="200px"
+                                        :close-on-click="true">
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <button
+                                                type="button"
+                                                class="list-popup-btn"
+                                                v-bind="attrs"
+                                                v-on="on">
+                                            <img :src="require('@/assets/images/more.svg')" alt="">
+                                        </button>
+                                    </template>
+                                    <v-list>
+                                        <v-list-item @click="detailPopupOpen(item.user_id, item.level, item.nickname, item.id)">
+                                            <v-list-item-title>멤버 정보</v-list-item-title>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-menu>
                             </div>
                         </div>
                     </li>
@@ -60,12 +74,30 @@
                                 </div>
                                 <div class="member-info-btn">
                                     <div class="list-popup">
-                                        <button type="button" class="list-popup-btn" @click="listPopupToggle(idx, index)"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                        <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0,0);">
-                                            <button type="button" class="list-popup-item" @click="detailPopupOpen(data.user_id, data.level, data.nickname, data.id)">멤버정보</button>
-                                            <button v-if="myMemberLevel===1" type="button" class="list-popup-item" @click="blockModalOpen(data.id)">멤버 차단</button>
-                                            <button v-if="myMemberLevel===1" type="button" class="list-popup-item" @click="banModalOpen(data.id)">멤버 강제 탈퇴</button>
-                                        </div>
+                                        <v-menu
+                                                min-width="200px"
+                                                :close-on-click="true">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <button
+                                                        type="button"
+                                                        class="list-popup-btn"
+                                                        v-bind="attrs"
+                                                        v-on="on">
+                                                    <img :src="require('@/assets/images/more.svg')" alt="">
+                                                </button>
+                                            </template>
+                                            <v-list>
+                                                <v-list-item @click="detailPopupOpen(data.user_id, data.level, data.nickname, data.id)">
+                                                    <v-list-item-title>멤버 정보</v-list-item-title>
+                                                </v-list-item>
+                                                <v-list-item v-if="myMemberLevel===1" @click="blockModalOpen(data.id)">
+                                                    <v-list-item-title>멤버 차단</v-list-item-title>
+                                                </v-list-item>
+                                                <v-list-item v-if="myMemberLevel===1" @click="banModalOpen(data.id)">
+                                                    <v-list-item-title>멤버 강제 탈퇴</v-list-item-title>
+                                                </v-list-item>
+                                            </v-list>
+                                        </v-menu>
                                     </div>
                                 </div>
                             </li>
@@ -163,11 +195,27 @@
                         </div>
                         <div v-if="myMemberLevel===1" class="profile-btn">
                             <div class="list-popup">
-                                <button type="button" class="list-popup-btn" @click="isDetailMenu = !isDetailMenu"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                <div class="list-popup-menu pos-right" :class="{'active': isDetailMenu}" style="transform:translate3d(42px, 0, 0);">
-                                    <button class="list-popup-item" @click="blockModalOpen(memberId)">멤버 차단</button>
-                                    <button class="list-popup-item" @click="banModalOpen(memberId)">강제 탈퇴</button>
-                                </div>
+                                <v-menu
+                                        min-width="200px"
+                                        :close-on-click="true">
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <button
+                                                type="button"
+                                                class="list-popup-btn"
+                                                v-bind="attrs"
+                                                v-on="on">
+                                            <img :src="require('@/assets/images/more.svg')" alt="">
+                                        </button>
+                                    </template>
+                                    <v-list>
+                                        <v-list-item @click="blockModalOpen(memberId)">
+                                            <v-list-item-title>멤버 차단</v-list-item-title>
+                                        </v-list-item>
+                                        <v-list-item @click="banModalOpen(memberId)">
+                                            <v-list-item-title>멤버 강제 탈퇴</v-list-item-title>
+                                        </v-list-item>
+                                    </v-list>
+                                </v-menu>
                             </div>
                         </div>
                     </div>

@@ -9,7 +9,7 @@ class ClassMemberService {
    * @param memberId
    * @param payload
    */
-  public setClassMemberAnswer(classId: number, memberId: number, payload: {question: string, answer: string}): Promise<any> {
+  public setClassMemberAnswer(classId: string | number, memberId: number, payload: {question: string, answer: string}): Promise<any> {
     return request('post', `${CLASS_BASE_URL}/${classId}/members/${memberId}/answer`, payload);
   }
   /**
@@ -17,7 +17,7 @@ class ClassMemberService {
    * @param classId
    * @param memberId
    */
-  public getMemberClassQnA(classId: number, memberId: number): Promise<any> {
+  public getMemberClassQnA(classId: string | number, memberId: number): Promise<any> {
     return request('get', `${CLASS_BASE_URL}/${classId}/members/${memberId}/answer`);
   }
 
@@ -25,7 +25,7 @@ class ClassMemberService {
    * 클래스 맴버 생성 - 클래스 가입 시키기
    * @param classId
    */
-  public setClassMember(classId: number, data: any): Promise<any> {
+  public setClassMember(classId: string | number, data: any): Promise<any> {
     /* "user_id": 250, - user_id 넘버 값
        "nickname": "test-for클래스1",
        "open_level_id": 1,
@@ -38,7 +38,7 @@ class ClassMemberService {
    * 클래스 멤버 전체 조회
    * @param classId
    */
-  public getAllClassMembers(classId: number): Promise<any> {
+  public getAllClassMembers(classId: string | number): Promise<any> {
     return request('get', `${CLASS_BASE_URL}/${classId}/members`);
   }
 
@@ -46,7 +46,7 @@ class ClassMemberService {
    * 클래스 차단 멤버 전체 조회
    * @param classId
    */
-  public getBlockedClassMembers(classId: number): Promise<any> {
+  public getBlockedClassMembers(classId: string | number): Promise<any> {
     return request('get', `${CLASS_BASE_URL}/${classId}/members/blocked`);
   }
 
@@ -55,7 +55,7 @@ class ClassMemberService {
    * @param classId
    * @param searchWord
    */
-  public searchMembers( classId: number, searchWord: string): Promise<any> {
+  public searchMembers( classId: string | number, searchWord: string): Promise<any> {
     return request('get', `${CLASS_BASE_URL}/${classId}/members/search/${searchWord}`);
   }
 
@@ -64,7 +64,7 @@ class ClassMemberService {
    * @param classId
    * @param memberId
    */
-  public getClassMemberInfo(classId: number, memberId: number): Promise<IClassMemberInfo> {
+  public getClassMemberInfo(classId: string | number, memberId: number): Promise<IClassMemberInfo> {
     return request('get', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
   }
 
@@ -73,7 +73,7 @@ class ClassMemberService {
    * @param classId
    * @param memberId
    */
-  public deleteClassMember(classId: number, memberId: number): Promise<any> {
+  public deleteClassMemberByUser(classId: string | number, memberId: number): Promise<any> {
     return request('delete', `${CLASS_BASE_URL}/${classId}/members/${memberId}`);
   }
 
@@ -83,7 +83,7 @@ class ClassMemberService {
    * @param memberId
    * @param info
    */
-  public setClassMemberInfo(classId: number, memberId: number, info: object): Promise<IClassMemberInfo> {
+  public setClassMemberInfo(classId: string | number, memberId: number, info: object): Promise<IClassMemberInfo> {
     return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`, info);
   }
 
@@ -93,7 +93,7 @@ class ClassMemberService {
    * @param classId
    * @param nickname
    */
-  public searchNickname(classId: number, nickname: string): Promise<any> {
+  public searchNickname(classId: string | number, nickname: string): Promise<any> {
     return request('get', `${CLASS_BASE_URL}/${classId}/members/bynickname/${nickname}`);
   }
 
@@ -102,7 +102,7 @@ class ClassMemberService {
    * @param classId
    * @param memberId
    */
-  public setBlockClassMember(classId: number, memberId: number): Promise<any> {
+  public setBlockClassMember(classId: string | number, memberId: number): Promise<any> {
     return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/block`);
   }
 
@@ -111,7 +111,7 @@ class ClassMemberService {
    * @param classId
    * @param memberId
    */
-  public unsetBlockClassMember(classId: number, memberId: number): Promise<any> {
+  public setUnBlockClassMember(classId: string | number, memberId: number): Promise<any> {
     return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/unblock`);
   }
 
@@ -120,7 +120,7 @@ class ClassMemberService {
    * @param classId
    * @param memberId
    */
-  public banClassMember(classId: number, memberId: number): Promise<any> {
+  public deleteClassMemberByAdmin(classId: string | number, memberId: number): Promise<any> {
     return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}/ban`);
   }
 }

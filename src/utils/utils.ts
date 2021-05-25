@@ -305,6 +305,35 @@ class Utils{
       return res.reverse();
   }
 
+  /**
+   *  textarea height 값 텍스트 라인 수에 맞추어 계산
+   * @param value
+   * @param fixH
+   * @private
+   */
+  public static autoResizeTextArea( value: string, fixH: number=20 ): number{
+    const numOfLine: number = (value.match(/\n/g) || []).length;
+    // min-height + lines x line-height
+    return fixH + numOfLine* fixH;
+  }
+
+  /**
+   * undefined 인지 체크
+   * @param value
+   */
+  public static isUndefined( value: any ) {
+    return typeof value === 'undefined';
+  }
+
+  /**
+   * empty 인지 체크
+   * @param value
+   */
+  public static isEmpty( value: any ) {
+    return Utils.isUndefined(value) || value === '' || value === null || value !== value;
+  }
+
+
 
 
 

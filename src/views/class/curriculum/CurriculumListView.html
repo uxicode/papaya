@@ -155,7 +155,7 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <button type="button" class="btn navi" @click="makeCurriculumSubmit">등록</button>
+                    <button type="button" class="btn navi" @click="onAddPostSubmit">등록</button>
                 </div>
             </div>
         </modal>
@@ -186,7 +186,7 @@
                                 <txt-field id="courseTitle"
                                            add-class="popup-type"
                                            placeholder="수업 제목을 20자 이내로 작성해 주세요."
-                                           v-model="makeCourseItems.title"
+                                           v-model="makeCurriculumItems.course_list[countCourseNumber].title"
                                            rules="required"
                                            valid-name="수업제목">
                                 </txt-field>
@@ -293,7 +293,7 @@
 
                             </div>
                         </div>
-                        <div class="form-item">
+                            <div class="form-item">
                             <p>수업 종료 시간</p>
                             <div class="form-box">
                                 <!--<div class="form-group time">-->
@@ -341,23 +341,29 @@
 
                             </div>
                         </div>
-                        <div class="form-item post-cnt" style="height:120px;">
-                            <textarea class="form-textarea" v-model="makeCourseItems.contents" placeholder="수업 내용을 100자 이내로 작성해 주세요."></textarea>
+                            <div class="form-item post-cnt" style="height:120px;">
+                                <!-- start: 일정 상세 내용 입력창 -->
+                                <textarea
+                                        ref="courseDetailAreaTxt"
+                                        class="form-textarea auto-resize"
+                                        placeholder="일정 내용을 작성해 주세요."
+                                        v-model="makeCurriculumItems.course_list[countCourseNumber].contents"></textarea>
+                                <!-- end: 일정 상세 내용 입력창 -->
+                            </div>
+
+                            <!-- start: 첨부 이미지 파일 미리보기 -->
+                            <image-preview :file-items="imgFileURLItemsModel"
+                                           @remove="removeImgPreviewItems"
+                                           @loaded="imageLoadedCheck"
+                                           @removeAll="removeAllPreview"></image-preview>
+                            <!-- end: 첨부 이미지 파일 미리보기 -->
+
+                            <!-- start: 첨부 파일 리스트 -->
+                            <file-preview :file-items="attachFileItems"
+                                          @removeFile="removeAttachFileItem"
+                                          @removeAttachFileAll="removeAllAttachFile"></file-preview>
+                            <!-- end: 첨부 파일 리스트 -->
                         </div>
-
-                        <!-- start: 첨부 이미지 파일 미리보기 -->
-                        <image-preview :file-items="imgFileURLItemsModel"
-                                       @remove="removeImgPreviewItems"
-                                       @loaded="imageLoadedCheck"
-                                       @removeAll="removeAllPreview"></image-preview>
-                        <!-- end: 첨부 이미지 파일 미리보기 -->
-
-                        <!-- start: 첨부 파일 리스트 -->
-                        <file-preview :file-items="attachFileItems"
-                                      @removeFile="removeAttachFileItem"
-                                      @removeAttachFileAll="removeAllAttachFile"></file-preview>
-                        <!-- end: 첨부 파일 리스트 -->
-                    </div>
                     </div>
                     <div class="popup-form-btm">
                         <div class="form-add-btn">
@@ -452,7 +458,7 @@
                         <div class="fd-inner">
                             <div class="curriculum-list">
                                 <div v-for="(item, index) in curriculumList.curriculum.course_list" :key="index" class="curriculum-item">
-                                    <span class="turn">{{ item.index }} 회차</span>
+                                    <span class="turn">{{ item.index + 1 }} 회차</span>
                                     <div class="curriculum-info">
                                         <a href="#" @click="curriculumDetailClickHandler( index )">
                                             <p class="subject-tit mgb-0">{{ item.title }}</p>
@@ -607,7 +613,7 @@
                                 <p class="add-curr-tit">수업 회차</p>
                                 <div class="form-box">
                                     <div class="form-group">
-                                        <input type="number" class="form-control" v-model="curriculumList.curriculum.course_list.length" @input="setCourseList($event.target.value)">
+                                        <input type="number" class="form-control" v-model="curriculumList.curriculum.course_list" @input="setCourseList($event.target.value)">
                                     </div>
                                 </div>
                             </div>
@@ -624,7 +630,6 @@
                                             <v-menu
                                                     nudge-left="30px"
                                                     origin="center top"
-                                                    v-model="courseListNumModel[index]"
                                                     transition="scale-transition"
                                                     content-class="time-select-menu bg-white"
                                                     offset-y offset-x>

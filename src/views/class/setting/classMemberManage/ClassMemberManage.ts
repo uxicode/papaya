@@ -1,8 +1,7 @@
-import ClassMemberService from '@/api/service/ClassMemberService';
-import MyClassService from '@/api/service/MyClassService';
-import { IClassMemberInfo } from '@/views/model/my-class.model';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import { IClassMemberInfo } from '@/views/model/my-class.model';
+import ClassMemberService from '@/api/service/ClassMemberService';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import WithRender from './ClassMemberManage.html';
@@ -81,17 +80,6 @@ export default class ClassMemberManage extends Vue{
             default:
                 return '일반 멤버';
         }
-    }
-
-    /**
-     * 리스트 팝업 토글
-     * @param idx
-     * @private
-     */
-    private listPopupToggle(idx: number): void {
-        const listPopup = document.querySelectorAll('.member-item .list-popup-menu');
-        //listPopup.forEach((item) => item.classList.remove('active'));
-        listPopup[idx].classList.toggle('active');
     }
 
     /**

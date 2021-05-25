@@ -30,11 +30,27 @@
                             </div>
                             <div class="member-info-btn">
                                 <div class="list-popup">
-                                    <button type="button" class="list-popup-btn" @click="listPopupToggle(idx)"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                                    <div class="list-popup-menu pos-right" style="transform:translate3d(42px, 0, 0);">
-                                        <button class="list-popup-item" @click="listPopupToggle(idx);blockModalOpen(item.id)">멤버 차단</button>
-                                        <button class="list-popup-item" @click="listPopupToggle(idx);banModalOpen(item.id)">강제 탈퇴</button>
-                                    </div>
+                                    <v-menu
+                                            min-width="200px"
+                                            :close-on-click="true">
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <button
+                                                    type="button"
+                                                    class="list-popup-btn"
+                                                    v-bind="attrs"
+                                                    v-on="on">
+                                                <img :src="require('@/assets/images/more.svg')" alt="">
+                                            </button>
+                                        </template>
+                                        <v-list>
+                                            <v-list-item @click="blockModalOpen(item.id)">
+                                                <v-list-item-title>멤버 차단</v-list-item-title>
+                                            </v-list-item>
+                                            <v-list-item @click="banModalOpen(item.id)">
+                                                <v-list-item-title>강제 탈퇴</v-list-item-title>
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-menu>
                                 </div>
                             </div>
                         </li>

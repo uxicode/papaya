@@ -1,8 +1,8 @@
-import {Utils} from '@/utils/utils';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IUserMe} from '@/api/model/user.model';
 import UserService from '@/api/service/UserService';
+import {Utils} from '@/utils/utils';
 import Btn from '@/components/button/Btn.vue';
 import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -21,7 +21,7 @@ const Auth = namespace('Auth');
 
 export default class MyProfileMain extends Vue {
     @Auth.Getter
-    public readonly userInfo!: IUserMe;
+    public userInfo!: IUserMe;
 
     @Auth.Action
     public USER_ME_ACTION!: () => Promise<IUserMe>;
@@ -29,6 +29,10 @@ export default class MyProfileMain extends Vue {
     get myInfo() {
         // console.log( 'this.userInfo=', this.userInfo );
         return this.userInfo;
+    }
+
+    get myBirthday() {
+        return (this.myInfo) ? this.myInfo.birthday : '';
     }
 
     /* 팝업 및 페이지 변경 상태 값 */
@@ -44,20 +48,35 @@ export default class MyProfileMain extends Vue {
     private tempData: any = '';
 
     /* 생일 datepicker 관련 */
-    private birthday: string = '';
-    //private startDatePickerModel: string = new Date().toISOString().substr(0, 10);
+    private inputBirthday: string = '';
     private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
 
-    public created() {
-        this.dashedBirthdayModel();
+    private getFullname(): string {
+        return (this.myInfo)? this.myInfo.fullname : '';
     }
+
+    private getGender(): string {
+        return (this.myInfo)? (this.myInfo.gender===1)? '남자' : '여자' : '';
+    }
+
+    private getUserId(): string {
+        return (this.myInfo)? this.myInfo.user_id: '';
+    }
+    private getMobile(): string {
+        return (this.myInfo)? this.myInfo.mobile_no : '';
+    }
+    private getEmail(): string {
+        return (this.myInfo)? this.myInfo.email : '';
+    }
+
+
 
     /**
      * 정보변경 modal 혹은 dropdown 열기
      * @param key
      * @private
      */
-    public openModify(key: string): void {
+    private openModify(key: string): void {
         switch(key) {
             case 'name':
                 this.isModifyNameModal = !this.isModifyNameModal;
@@ -79,7 +98,7 @@ export default class MyProfileMain extends Vue {
      * @param pageKey
      * @private
      */
-    public gotoLink(pageKey: string): void {
+    private gotoLink(pageKey: string): void {
         this.$router.push(`myProfile/${pageKey}`)
           .then(() => {
               console.log(`${pageKey}로 이동`);
@@ -111,29 +130,19 @@ export default class MyProfileMain extends Vue {
         this.isModifyNameModal = !this.isModifyNameModal;
     }
 
-    /**
-     * 생일이 있으면 8자리 문자열로 되어 있는 생일을 '-' 가 있는 형태로 변환
-     * 없으면 공백
-     */
-    private dashedBirthdayModel(): any {
-        if (this.myInfo.birthday !== null) {
-            const yyyy = this.myInfo.birthday.substr(0,4);
-            const mm = this.myInfo.birthday.substr(4,2);
-            const dd = this.myInfo.birthday.substr(6,2);
-            this.birthday = Utils.getDateDashFormat(yyyy,mm,dd);
-        }
-    }
 
     /**
      * '-' 형태의 생일을 구분자 없는 문자열로 변환 후
      * 생일 변경 통신
      * @private
      */
-    private birthdayModify(birthday: string): any {
-        const newBirthday = Utils.dateDashFormatUndo(birthday).join('');
-        UserService.setUserInfo(this.userInfo.user_id, {birthday: newBirthday})
-          .then((data) => {
-              console.log(`${data.user_id} 생일 ${data.birthday} 로 변경 완료`);
+    private birthdayModify(newBirthday: string): any {
+        const unDashedBirthday = String(newBirthday.split('-').join(''));
+        UserService.setUserInfo(this.userInfo.user_id, {birthday: unDashedBirthday})
+          .then(() => {
+              this.USER_ME_ACTION().then( ( me: IUserMe)=>{
+                  console.log(me.birthday);
+              });
           });
     }
 

@@ -1,5 +1,5 @@
 <section class="contents-right">
-  <div class="classes-feed home">
+  <div class="classes-feed home" v-if="isPageLoaded">
     <h2 class="cnt-tit mgb-30">클래스 홈</h2>
 
     <div class="top-notify" v-if="this.noticeSchedule.length>0">
@@ -141,6 +141,22 @@
               <ul class="schedule-list">
                 <li><a href="">{{ item.list.startAt }} - {{ item.list.endAt }}</a></li>
               </ul>
+
+              <!-- start: attach 에 이미지파일이 있는 경우 -->
+              <template v-if="getImgFileDataSort(item.list.attachment).length>0">
+                <ul class="img-list clearfix">
+                  <li v-for="imgItem in getImgFileDataSort(item.list.attachment)"><a href=""><img :src="imgItem.location" alt=""></a></li>
+                </ul>
+              </template>
+              <!-- end: attach 에 이미지파일이 있는 경우 -->
+
+              <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+              <template v-if="getFileDataSort(item.list.attachment).length>0">
+                <p class="fd-inner-txt">첨부 파일 {{ getFileDataSort(item.list.attachment).length }}</p>
+                <ul class="file-list clearfix">
+                  <li v-for="fileItem in getFileDataSort(item.list.attachment)"><a :href="fileItem.location">{{fileItem.originalname }}</a></li>
+                </ul>
+              </template>
             </div>
           </div>
         </div>
@@ -224,13 +240,56 @@
             <p class="fd-txt">{{ item.list.text }}</p>
 
             <div class="fd-inner">
+
+              <!-- start: attach 에 이미지파일이 있는 경우 -->
+              <template v-if="getImgFileDataSort(item.list.attachment).length>0">
+                <ul class="img-list clearfix">
+                  <li class="img-item" v-for="( imgItem, imgIndex ) in getImgFileDataSort(item.list.attachment)"
+                      :key="`img-${imgIndex}`" >
+                    <a :href="imgItem.location" :data-count="getImgFileDataSort(item.list.attachment).length"><img :src="imgItem.location" alt=""></a>
+                  </li>
+                </ul>
+              </template>
+              <!-- end: attach 에 이미지파일이 있는 경우 -->
+
+              <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+              <template v-if="getFileDataSort(item.list.attachment).length>0">
+                <p class="fd-inner-txt">첨부 파일 {{ getFileDataSort(item.list.attachment).length }}</p>
+                <ul class="file-list clearfix">
+                  <li v-for="fileItem in getFileDataSort(item.list.attachment)"><a :href="fileItem.location">{{fileItem.originalname }}</a></li>
+                </ul>
+              </template>
+              <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+
+              <!-- start:  투표가 있는 경우 -->
+              <template v-if="item.list.vote!==null">
+                <p class="fd-inner-txt fc-red">{{ isVote(item.list.vote.finishAt)? '투표 중' : '투표마감'}}</p>
+                <div class="vote-area">
+                  <p class="vote-tit">{{ item.list.vote.title }}</p>
+                  <ul class="vote-option clearfix">
+                    <li>{{ (item.list.vote.multi_choice)? '복수선택' : '단일선택'}}</li>
+                    <li>{{ (item.list.vote.anonymous_mode)? '익명투표' : '공개투표' }}</li>
+                    <li>{{ (item.list.vote.finishAt)? item.list.vote.finishAt+' 마감': '종료일자없음'}} </li>
+                  </ul>
+                </div>
+              </template>
+              <!-- end:  투표가 있는 경우 -->
+
+              <!-- grid guide
               <ul class="img-list clearfix">
-                <li v-for="imgItem in item.list.attachment">
-                  <a href=""><img :src="imgItem.location" alt=""></a>
+                <li class="img-item" v-for="imgItem in item.list.attachment">
+                  <a href="" data-count="+3"><img :src="imgItem.location" alt=""></a>
                 </li>
               </ul>
+              -->
+
             </div>
           </div>
+
+
+
+
+
           <!--<div class="fd-foot clearfix">
             <span class="fd-viewer">124명 읽음</span>
             <span class="fd-comment">댓글 12</span>

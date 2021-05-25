@@ -273,6 +273,9 @@ export default class Search extends Vue {
   // 트랜지션을 시작할 때 인덱스 * 100 ms 만큼의 딜레이를 적용합니다.
   private beforeEnterKeywords(el: HTMLElement): void {
     if(el.dataset.index !=='0'){
+      // el.classList.add('skeleton-inner');
+      // console.log(this.startNum, this.endNum);
+      // this.isLoading=true;
       el.style.transitionDelay = this.delayTime(120, String( el.dataset.index ), this.recommandItems.length);
     }
   }
@@ -372,7 +375,7 @@ export default class Search extends Vue {
   private getSearchResultData( keyword: string ) {
     this.SEARCH_RESULT_ACTION({keyword, page_no:1, count:10})
         .then((data) => {
-          // console.log(data);
+          console.log(data);
           // , query: { timeStamp: `${new Date().getTime()}` } 처럼 query 값을 같이 주는 이유는 새로고침 후
           // 검색결과  router 주소값이 매번 /search/result 와 같이 똑같은 url 값으로 라우터 이동이 이루어지기 때문에
           //주소값을 매번 검색시 갱신해 줄 필요가 있다.

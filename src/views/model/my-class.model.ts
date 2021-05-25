@@ -156,7 +156,7 @@ interface IFeedList {
     comment: number;
 }
 //보관함
-interface IPostList {
+interface IKeepPostList {
     startAt: string;
     endAt: string;
     expiredAt: string;
@@ -467,26 +467,16 @@ interface IQnaInfo {
 interface IMakeEducation {
     title: string;
     goal: string;
-    course_list: Array<{
-        index: number;
-        title: string;
-        startDay: Date | string;
-        startTime: Date | string;
-        endTime: Date | string;
-        contents: string;
+    course_list?: Array<{
+        index?: number;
+        id?: number;
+        startDay?: Date | string;
+        startTime?: Date | string;
+        endTime?: Date | string;
+        title?: string;
+        contents?: string;
     }>;
 }
-
-interface IMakeCourse {
-    title: string;
-    contents: string;
-    index: number;
-    startDay: Date | string;
-    startTime: Date | string;
-    endTime: Date | string;
-    attachment: [];
-}
-
 
 interface IEducationList {
     total: number;
@@ -553,7 +543,7 @@ interface ICurriculumList {
             startTime: Date;
             endTime: Date;
             deletedYN: boolean;
-            attachment?: Array<{
+            attachment: Array<{
                 createdAt: Date;
                 updatedAt: Date;
                 id: number;
@@ -693,6 +683,14 @@ interface IModifyCurriculum {
     ];
 }
 
+interface IClassTag {
+    id: number;
+    class_id: number;
+    keyword: string;
+    updatedAt?: Date;
+    createdAt?: Date;
+}
+
 
 export {
     IMyClassList,
@@ -701,7 +699,7 @@ export {
     IFeedList,
     IClassInfo,
     ClassEachInfo,
-    IPostList,
+    IKeepPostList,
     ISearchSchool,
     IMakeClassInfo,
     IMakeClassInfoBase,
@@ -709,9 +707,8 @@ export {
     IQuestionInfo,
     IQnaInfo,
     IMakeEducation,
-    IMakeCourse,
     IEducationList,
     ICurriculumList,
     ICourseList,
-    IModifyCurriculum,
+    IClassTag
 };

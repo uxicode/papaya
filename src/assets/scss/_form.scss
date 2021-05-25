@@ -80,7 +80,11 @@ select {
     }
   }
 
-  &.error {border-color:#ff4d4d;}
+  &.error {border-color:#ff4d4d !important;}
+  &.popup-type.error{
+    background-color:transparent!important;
+    border-color:transparent!important;
+  }
   &.approval {border-color:#629f00;}
 }
 
@@ -95,7 +99,10 @@ select {
     @include pos-vertical($right:0);
     color:#848499;
   }
-  &.error {color:#ff4d4d;}
+
+  &.error {
+    color: #ff4d4d;
+  }
   &.approval {color:#629f00;}
 
   /* form-control focus시 활성화 */

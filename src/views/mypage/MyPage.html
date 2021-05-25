@@ -1,23 +1,27 @@
 <div class="contents mypage">
+  <v-app style="background-color:transparent">
     <div class="contents-inner">
-        <div class="contents-group">
-            <section class="contents-left">
-                <div class="mypage-list">
-                    <ul>
-                      <li v-for="(item, index) in myPageListModel">
-                        <a href="" @click.prevent="gotoMyPageLink( index )" :class="{'active': index === activeNum }">
-                            <img :src="item.icon" alt=""> {{ item.title }}
-                        </a>
-                      </li>
-                    </ul>
-                </div>
-            </section>
+      <div class="contents-group">
+        <section class="contents-left">
+          <div class="mypage-list">
+            <ul>
+              <li v-for="(item, index) in myPageListModel">
+                <a href="" @click.prevent="gotoMyPageLink( index )" :class="{'active': index === activeNum }">
+                  <img :src="item.icon" alt=""> {{ item.title }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </section>
 
-            <section class="contents-right">
-                <transition name="fade" mode="out-in">
-                    <router-view></router-view>
-                </transition>
-            </section>
-        </div>
+        <section class="contents-right">
+          <transition name="fade" mode="out-in">
+            <router-view></router-view>
+          </transition>
+        </section>
+      </div>
     </div>
+  </v-app>
 </div>
+
+
