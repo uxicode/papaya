@@ -53,7 +53,7 @@ export default class MyProfileMain extends Vue {
     }
 
     private getGender(): string {
-        return (this.myInfo)? (this.myInfo.gender===1)? '남자' : '여자' : '';
+        return (this.myInfo)? ((this.myInfo.gender===1)? '남자' : '여자') : '';
     }
 
     private getUserId(): string {
@@ -157,16 +157,16 @@ export default class MyProfileMain extends Vue {
      * @param newGender
      * @private
      */
-    private modifyGender( event: Event, newGender: number ): void {
+    private modifyGender(newGender: number): void {
         // console.log('target=', event.target+':::'+event.target.value);
         UserService.setUserInfo(this.userInfo.user_id, {gender: newGender})
-            .then(()=>{
+            .then(() => {
                 // console.log(data);
                 this.USER_ME_ACTION().then( ( me: IUserMe)=>{
                     console.log(me.gender);
                 });
             });
-        this.isModifyGender = !this.isModifyGender;
+        this.isModifyGender = false;
     }
 
     /**

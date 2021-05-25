@@ -75,6 +75,11 @@ export default class EnrollClass extends Vue {
     this.getClassInfo();
   }
 
+  public updated() {
+    this.classIdx = Number( this.$route.params.classId );
+    this.getClassInfo();
+  }
+
   /**
    * 비공개 클래스는 첫번째 메뉴만 활성화
    * @param idx

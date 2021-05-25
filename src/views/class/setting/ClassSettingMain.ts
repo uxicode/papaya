@@ -49,7 +49,11 @@ export default class ClassSettingMain extends Vue{
     private isWithdraw: boolean = false;
     private isWithdrawDenied: boolean = false;
 
-    private onOffNoti: boolean = true;
+    /* 클래스 알림 설정 */
+    private onOffNoti: boolean | number = true;
+    private onOffPostNoti: boolean | number = true;
+    private onOffCommentNoti: boolean | number = true;
+    private onOffScheduleNoti: number = 0;
 
     private classNotifyList: string[] = ['새 알림', '새 댓글', '일정'];
 
@@ -148,8 +152,12 @@ export default class ClassSettingMain extends Vue{
      */
     private getMyClassMemberInfo(): void {
         this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.myClassInfo.me.id})
-          .then((data) => {
+          .then((data: any) => {
               this.classMemberInfo = data;
+              this.onOffNoti = data.member_info.onoff_push_noti;
+              this.onOffPostNoti = data.member_info.onoff_post_noti;
+              this.onOffCommentNoti = data.member_info.onoff_comment_noti;
+              this.onOffScheduleNoti = data.member_info.onoff_schedule_noti;
               console.log(this.classMemberInfo);
           });
     }
@@ -215,7 +223,7 @@ export default class ClassSettingMain extends Vue{
      * @param value
      */
     private pushToggle(value: boolean): void {
-        this.onOffNoti = !value;
+        this.onOffNoti = value;
         ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {onoff_push_noti: this.onOffNoti})
           .then((data) => {
               console.log(data);
@@ -232,20 +240,20 @@ export default class ClassSettingMain extends Vue{
      */
     private notiOnOffTxt(idx: number): string {
         let stateTxt: string = '';
-        let value: number = 0;
+        let value: boolean | number = 0;
         switch (idx) {
             case 0:
-                value = this.memberInfo.onoff_post_noti;
+                value = this.onOffPostNoti;
                 break;
             case 1:
-                value = this.memberInfo.onoff_comment_noti;
+                value = this.onOffCommentNoti;
                 break;
             case 2:
-                value = this.memberInfo.onoff_schedule_noti;
+                value = this.onOffScheduleNoti;
                 break;
         }
         if (idx !== 2) { // 새 알림, 새 댓글
-            if (value === 1) {
+            if (value === (1 || true)) {
                 stateTxt = '받기';
             } else {
                 stateTxt = '받지 않기';
@@ -278,7 +286,7 @@ export default class ClassSettingMain extends Vue{
      * @param value
      * @private
      */
-    private notiOnOff(idx: number, value: number): void {
+    private notiOnOff(idx: number, value: boolean | number): void {
         let info = {};
         switch (idx) {
             case 0:
@@ -298,7 +306,6 @@ export default class ClassSettingMain extends Vue{
           .then((data) => {
             console.log(data);
           });
-        this.notiOnOffTxt(idx);
     }
 
     /**
