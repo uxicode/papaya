@@ -50,6 +50,7 @@ export default class ImagePreview extends Vue{
   @Emit()
   private removeThumb( idx: number ) {
     this.$emit('remove', idx);
+    this.imgPreviewMove(true);
   }
 
   @Emit()
@@ -85,9 +86,8 @@ export default class ImagePreview extends Vue{
 
     const photoList=document.querySelector('.add-photo-list') as HTMLElement;
 
-    // console.log('this.fileItems.length=', this.fileItems?.length);
-
     if(this.fileItems){
+      console.log('this.fileItems.length=', this.fileItems?.length);
       const itemLen=this.fileItems.length;
       const rectInfo=photoList.getClientRects();
       // console.log('rectInfo=', rectInfo[0].width);
@@ -105,6 +105,7 @@ export default class ImagePreview extends Vue{
       // console.log('this.moveX=', this.moveX, this.moveCount );
     }
   }
+
 
 
   private getTitle() {

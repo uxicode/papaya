@@ -49,12 +49,11 @@
               <!-- start: 첨부 이미지 파일 미리보기 -->
               <image-preview :file-items="imgFileURLItemsModel"
                              @remove="removeImgPreviewItems"
-                             @loaded="imageLoadedCheck"
                              @removeAll="removeAllPreview"></image-preview>
               <!-- end: 첨부 이미지 파일 미리보기 -->
 
               <!-- start: 첨부 파일 리스트 -->
-              <file-preview :file-items="attachFileItems"
+              <file-preview :file-items="attachFileItemsModel"
                             @removeFile="removeAttachFileItem"
                             @removeAttachFileAll="removeAllAttachFile"></file-preview>
               <!-- end: 첨부 파일 리스트 -->
