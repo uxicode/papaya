@@ -1,4 +1,4 @@
-import {Vue, Component} from 'vue-property-decorator';
+import {Vue, Component, Watch} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
@@ -54,8 +54,8 @@ export default class ClassSettingMain extends Vue{
     private onOffPostNoti: boolean | number = true;
     private onOffCommentNoti: boolean | number = true;
     private onOffScheduleNoti: number = 0;
-
     private classNotifyList: string[] = ['새 알림', '새 댓글', '일정'];
+    private notiStateList: string[] = ['', '', ''];
 
     /* 클래스 관리 / 멤버 관리 / 기타 리스트 타이틀 및 링크 */
     private classManageList: ISettingMenu[] = [
@@ -154,10 +154,16 @@ export default class ClassSettingMain extends Vue{
         this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.myClassInfo.me.id})
           .then((data: any) => {
               this.classMemberInfo = data;
+
+              /* 클래스 알림 설정 초기값 삽입 */
               this.onOffNoti = data.member_info.onoff_push_noti;
               this.onOffPostNoti = data.member_info.onoff_post_noti;
               this.onOffCommentNoti = data.member_info.onoff_comment_noti;
               this.onOffScheduleNoti = data.member_info.onoff_schedule_noti;
+              for (let i = 0; i < this.notiStateList.length; i++) {
+                  this.notiOnOffTxt(i);
+              }
+
               console.log(this.classMemberInfo);
           });
     }
@@ -238,7 +244,7 @@ export default class ClassSettingMain extends Vue{
      * @param idx
      * @private
      */
-    private notiOnOffTxt(idx: number): string {
+    private notiOnOffTxt(idx: number): void {
         let stateTxt: string = '';
         let value: boolean | number = 0;
         switch (idx) {
@@ -252,7 +258,8 @@ export default class ClassSettingMain extends Vue{
                 value = this.onOffScheduleNoti;
                 break;
         }
-        if (idx !== 2) { // 새 알림, 새 댓글
+        // 새 알림, 새 댓글
+        if (idx !== 2) {
             if (value === (1 || true)) {
                 stateTxt = '받기';
             } else {
@@ -260,13 +267,13 @@ export default class ClassSettingMain extends Vue{
             }
         } else { // 일정
             switch (value) {
-                case 3:
+                case 10:
                     stateTxt = '10분 전 받기';
                     break;
-                case 2:
+                case 30:
                     stateTxt = '30분 전 받기';
                     break;
-                case 1:
+                case 60:
                     stateTxt = '1시간 전 받기';
                     break;
                 case 0:
@@ -277,7 +284,7 @@ export default class ClassSettingMain extends Vue{
                     break;
             }
         }
-        return stateTxt;
+        this.notiStateList[idx] = stateTxt;
     }
 
     /**
@@ -309,6 +316,24 @@ export default class ClassSettingMain extends Vue{
     }
 
     /**
+     * 가입 안내 문구 설정 팝업 열기
+     * @private
+     */
+    private openGuideTxtPopup(): void {
+        this.guideTxt = this.info.description;
+        this.isGuideTxt = true;
+    }
+
+    /**
+     * 가입 안내 문구 설정 팝업 닫기
+     * @private
+     */
+    private closeGuideTxtPopup(): void {
+        this.guideTxt = this.info.description;
+        this.isGuideTxt = false;
+    }
+
+    /**
      * 가입 안내 문구 수정
      * @param text
      * @private
@@ -327,9 +352,8 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private textCount(text: string): void {
-        this.guideTxt = text;
         this.remainLength = this.maxLength - this.guideTxt.length;
-        this.guideTxt = (this.remainLength < 0) ? this.guideTxt.substring(0, 100) : this.guideTxt;
+        this.guideTxt = (this.remainLength <= 0) ? this.guideTxt.substring(0, 100) : this.guideTxt;
         this.remainLength = (this.remainLength < 0) ? 0 : this.remainLength;
     }
 
@@ -408,7 +432,7 @@ export default class ClassSettingMain extends Vue{
     private openModal(key: string): void {
         switch(key) {
             case 'guideTxtModal':
-                this.isGuideTxt = true;
+                this.openGuideTxtPopup();
                 break;
             case 'joinQnaSettingModal':
                 this.isJoinQnaSetting = true;

@@ -39,7 +39,7 @@ export default class EnrollClass extends Vue {
   @Auth.Getter
   private userInfo!: IUserMe;
 
-  private classIdx: string | number = 0;
+  private classIdx: number = 0;
   private classInfo: {} = {};
   private isPrivate: boolean = false; // 클래스 비공개여부
   private isDisabled: boolean = true; // 가입 신청 버튼
@@ -75,10 +75,10 @@ export default class EnrollClass extends Vue {
     this.getClassInfo();
   }
 
-  public updated() {
-    this.classIdx = Number( this.$route.params.classId );
-    this.getClassInfo();
-  }
+  // public updated() {
+  //   this.classIdx = Number( this.$route.params.classId );
+  //   this.getClassInfo();
+  // }
 
   /**
    * 비공개 클래스는 첫번째 메뉴만 활성화
