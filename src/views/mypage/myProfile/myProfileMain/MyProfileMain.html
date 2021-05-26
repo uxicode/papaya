@@ -14,8 +14,6 @@
                     <p class="list-tit">생일</p>
                     <div class="list-right">
                         <div class="form-group date" style="float:left">
-                            <!--<span class="date-area">{{ myInfo.birthday }}</span>-->
-                            <!--<button type="button" class="btn form-btn form-calendar"></button>-->
                             <v-menu
                                     nudge-left="30px"
                                     origin="left top"
@@ -119,7 +117,7 @@
             <modal v-if="isModifyNameModal" size="540px" body-padding="0" @modalClose="isModifyNameModal=false;">
                 <div slot="header">
                     <div class="popup-icon">
-                        <img :src="require('@/assets/images/popup-icon-profile.svg')">
+                        <img :src="require('@/assets/images/popup-icon-profile.svg')" alt="">
                     </div>
                     <div class="popup-close">
                         <button class="close" @click="isModifyNameModal=false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
@@ -148,7 +146,7 @@
             <modal v-else-if="isModifyEmailModal" size="540px" body-padding="0" @modalClose="isModifyEmailModal=false;">
                 <div slot="header">
                     <div class="popup-icon">
-                        <img :src="require('@/assets/images/popup-icon-profile.svg')">
+                        <img :src="require('@/assets/images/popup-icon-profile.svg')" alt="">
                     </div>
                     <div class="popup-close">
                         <button class="close" @click="isModifyEmailModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
@@ -196,7 +194,7 @@
             <!-- end: 서비스 탈퇴-확인 팝업 -->
 
             <!-- start: 서비스 탈퇴-완료 팝업 -->
-            <modal v-else-if="isWithdrawCompleteModal" size="540px" body-padding="0" @modalClose="isWithdrawCompleteModal=false">
+            <modal v-else-if="isWithdrawCompleteModal" size="540px" body-padding="0" @modalClose="gotoLogin">
                 <div slot="header">
                     <div class="popup-close">
                         <button class="close" @click="gotoLogin"><img :src="require('@/assets/images/close.svg')" alt=""></button>
@@ -220,7 +218,7 @@
             <modal v-else-if="isWithdrawDeniedModal" size="540px" body-padding="0" @modalClose="isWithdrawDeniedModal=false">
                 <div slot="header">
                     <div class="popup-icon">
-                        <img :src="require('@/assets/images/popup-icon-error.png')">
+                        <img :src="require('@/assets/images/popup-icon-error.png')" alt="">
                     </div>
                     <div class="popup-close">
                         <button class="close" @click="isWithdrawDeniedModal = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>

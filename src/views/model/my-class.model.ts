@@ -467,13 +467,14 @@ interface IQnaInfo {
 interface IMakeEducation {
     title: string;
     goal: string;
-    course_list: Array<{
-        index: number;
-        title: string;
-        startDay: Date | string;
-        startTime: Date | string;
-        endTime: Date | string;
-        contents: string;
+    course_list?: Array<{
+        index?: number;
+        id?: number;
+        startDay?: Date | string;
+        startTime?: Date | string;
+        endTime?: Date | string;
+        title?: string;
+        contents?: string;
     }>;
 }
 
@@ -551,7 +552,7 @@ interface ICurriculumList {
             startTime: Date;
             endTime: Date;
             deletedYN: boolean;
-            attachment?: Array<{
+            attachment: Array<{
                 createdAt: Date;
                 updatedAt: Date;
                 id: number;
@@ -630,7 +631,7 @@ interface ICurriculumList {
                         updatedAt: Date | string;
                         id: number;
                         user_id: number;
-                        member_id: null | number;
+                        member_id: null | number,
                         parent_id: number;
                         group_name: string;
                         fieldname: string;
@@ -678,32 +679,19 @@ interface ICourseList {
 interface IModifyCurriculum {
     title: string;
     goal: string;
-    updated_course_list?: [
+    course_list?: [
         {
             id: number;
-            title: string;
-            startDay: Date | number;
-            startTime: Date | number;
-            endTime: Date | number;
-            contents: string;
-        }
-    ];
-    deleted_course_list?: [
-        {
-            id: number;
-        }
-    ];
-    added_course_list?: [
-        {
             index: number;
             title: string;
-            startDay: Date | number;
-            startTime: Date | number;
-            endTime: Date | number;
+            startDay: Date | string;
+            startTime: Date | string;
+            endTime: Date | string;
             contents: string;
         }
     ];
 }
+
 interface IClassTag {
     id: number;
     class_id: number;
@@ -712,6 +700,11 @@ interface IClassTag {
     createdAt?: Date;
 }
 
+interface IClassAuth {
+    id?: number;
+    auth_type: number;
+    be_authorized: boolean;
+}
 
 export {
     IMyClassList,
@@ -728,10 +721,10 @@ export {
     IQuestionInfo,
     IQnaInfo,
     IMakeEducation,
-    IMakeCourse,
     IEducationList,
     ICurriculumList,
     ICourseList,
     IModifyCurriculum,
-    IClassTag
+    IClassTag,
+    IClassAuth
 };
