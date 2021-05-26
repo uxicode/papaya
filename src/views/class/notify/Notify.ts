@@ -2,6 +2,7 @@ import {Component, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IAttachFileModel, IPostModel} from '@/views/model/post.model';
 import Modal from '@/components/modal/modal.vue';
+import NotifyDetailPopup from '@/views/class/notify/NotifyDetailPopup';
 import AddNotifyPopup from '@/views/class/notify/AddNotifyPopup';
 import WithRender from './Notify.html';
 import {PostService} from '@/api/service/PostService';
@@ -13,11 +14,11 @@ const MyClass = namespace('MyClass');
 @Component({
   components:{
     Modal,
+    NotifyDetailPopup,
     AddNotifyPopup
   }
 })
 export default class Notify extends Vue {
-
 
   @MyClass.Getter
   private classID!: string | number;
@@ -25,6 +26,7 @@ export default class Notify extends Vue {
   private postListItems: IPostModel[] = [];
   private reservedItems: any[] = [];
   private reservedTotal: number=0;
+  private isDetailPopupOpen: boolean=false;
   private isAddPopupOpen: boolean=false;
   private commentsTotalItems: any[] = [];
 
@@ -144,6 +146,15 @@ export default class Notify extends Vue {
   private startDatePickerChange( ) {
     this.startDateMenu = false;
     // console.log(this.startDatePickerModel);
+  }
+
+  private onDetailPostPopupOpen(postId: number) {
+    this.isDetailPopupOpen=true;
+
+  }
+
+  private onDetailPostPopupStatus(value: boolean) {
+    this.isDetailPopupOpen=value;
   }
 
   private onAddPostPopupOpen() {
