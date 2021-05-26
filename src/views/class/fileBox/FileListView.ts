@@ -164,7 +164,7 @@ export default class FileBox extends Vue {
 
       case 2:
         if (curriculumId != null) {
-          MyClassService.getEduCurrList(this.classID, curriculumId)
+          MyClassService.getEduCurList(this.classID, curriculumId)
             .then((data) => {
               // console.log(data);
               this.postContent = data.curriculum;

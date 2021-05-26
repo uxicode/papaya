@@ -6,17 +6,16 @@ import Btn from '@/components/button/Btn.vue';
 import {
     IClassInfo,
     IMakeEducation,
-    IMakeCourse,
     IEducationList,
     ICurriculumList,
     ICourseList,
-    IModifyCurriculum
 } from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
 import MyClassService from '@/api/service/MyClassService';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import WithRender from './CurriculumListView.html';
+import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 
 
 const MyClass = namespace('MyClass');
@@ -40,6 +39,13 @@ interface ITimeModel{
     }
 })
 export default class CurriculumListView extends Vue {
+
+    @MyClass.Getter
+    private classID!: number;
+
+    @MyClass.Getter
+    private myClassHomeModel!: IClassInfo;
+
     /* Modal 오픈 상태값 */
     private isCreateClass: boolean = false;
     private isClassCurr: boolean = false;
@@ -48,9 +54,6 @@ export default class CurriculumListView extends Vue {
     private isCreateError: boolean = false;
     private isModifyClass: boolean = false;
     private isModifyClassCourse: boolean = false;
-
-    @MyClass.Getter
-    private classID!: number;
 
     private countCourseNumber: number = 0;
 
@@ -66,11 +69,6 @@ export default class CurriculumListView extends Vue {
 
     private makeCourseAttach: any = [];
 
-    private imgFileURLItems: string[] = [];
-    private imgFileDatas: any = [];
-
-    private attachFileItems: any = [];
-    private formData!: FormData;
     private imageLoadedCount: number=0;
     private isPopup: boolean=false;
 
@@ -79,13 +77,11 @@ export default class CurriculumListView extends Vue {
     private startTimeItem: string = '';
     private endTimeItem: string = '';
 
-    private test: any = {};
-
     /**
      * 클래스 교육과정 메인리스트
      */
 
-        //datepicker
+    //datepicker
     private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
     private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
     private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
@@ -95,27 +91,38 @@ export default class CurriculumListView extends Vue {
     private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
 
 
-    // 날짜 시간 지정 - new Date(year, month, day, hours, minutes, seconds, milliseconds)
     private makeCurriculumItems: IMakeEducation={
         title: '',
         goal: '',
-        course_list: [],
+        course_list: [
+            {
+                index: 0,
+                id: 0,
+                startDay: this.startDatePickerModel,
+                startTime: this.currentStartTimeModel,
+                endTime: this.currentEndTimeModel,
+                title: '',
+                contents: ''
+            }
+        ]
     };
 
-    private modifyCurriculumList: IModifyCurriculum= {
+    private makeCourseItems: {
+        index: number,
+        id: number,
+        title: string,
+        contents: string,
+        startDay: Date | string,
+        startTime: Date | string,
+        endTime: Date | string
+    } = {
+        index: 0,
+        id: 0,
         title: '',
-        goal: '',
-    };
-
-
-    private makeCourseItems: IMakeCourse = {
-        index: 1,
-        title: '',
+        contents: '',
         startDay: this.startDatePickerModel,
         startTime: this.currentStartTimeModel,
         endTime: this.currentEndTimeModel,
-        contents: '',
-        attachment: [],
     };
 
 
@@ -212,14 +219,31 @@ export default class CurriculumListView extends Vue {
     private eduItems: Array< {title: string }>=[];
     // private settingItems: Array<{ vo: string[], sItem: string }> = [];
 
+    private imgFileURLItems: string[] = [];
+    private imgFileDatas: any[] = [];
+    private attachFileItems: any[] = [];
+    private formData!: FormData;
+
+    public created(){
+        // this.settingItems=this.mItemByMakeEduList();
+        this.getEduList();
+    }
 
     get imgFileURLItemsModel(): string[] {
         return this.imgFileURLItems;
     }
 
+    get attachFileItemsModel(): any[] {
+        return this.attachFileItems;
+    }
 
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
+    get isSubmitValidate(): boolean{
+        return (this.makeCurriculumItems.title !== '' && this.makeCurriculumItems.goal !== '');
+    }
+
+    private getProfileImg(imgUrl: string | null | undefined ): string{
+        return ImageSettingService.getProfileImg( imgUrl );
+    }
 
     get currentSettingItems(): string[]{
         return this.EduSettingsItems;
@@ -243,10 +267,6 @@ export default class CurriculumListView extends Vue {
     /**
      * 교육과정 리스트
      */
-    public created(){
-        // this.settingItems=this.mItemByMakeEduList();
-        this.getEduList();
-    }
 
     get isOwner(): boolean{
         return (this.myClassHomeModel.owner_id === this.myClassHomeModel.me?.user_id);
@@ -259,7 +279,6 @@ export default class CurriculumListView extends Vue {
         this.eduItems.length = 10;
         return this.eduItems;
     }
-
 
     private setCourseList( num: number ): void{
         if( this.currListNum >= 0 ){
@@ -277,26 +296,17 @@ export default class CurriculumListView extends Vue {
 
         this.makeCurriculumItems.course_list = [];
 
-
         for (let i = 0; i < num; i++) {
             this.makeCurriculumItems.course_list.push({
-                index: i,
-                title: (i+1)+'회차수업',
-                startDay: '',
-                startTime: '',
-                endTime: '',
-                contents: ''
+                index:i,
+                id: i,
+                title:'',
+                startDay:'2021-05-21',
+                startTime:'10:00:00',
+                endTime:'11:00:00',
+                contents:''
             });
         }
-        /*{
-            "index": 1,
-            "title": "1회차수업",
-            "startDay": "2019-11-15",
-            "startTime": "10:00:00",
-            "endTime": "11:00:00",
-            "contents": "수업내용 100자이내로 설명."
-        }*/
-        console.log(this.makeCurriculumItems);
     }
 
     private countCourseNum(num: number): void{
@@ -316,14 +326,6 @@ export default class CurriculumListView extends Vue {
         this.inputEventBind('#attachFileInput');
     }
 
-    private modifyImgFileInputFocus() {
-        this.inputEventBind('#imgFileInputModify');
-    }
-
-    private modifyFilesInputFocus(){
-        this.inputEventBind('#attachFileInputModify');
-    }
-
     /**
      * //input click event 발생시키기.
      * @param targetSelector
@@ -336,6 +338,7 @@ export default class CurriculumListView extends Vue {
         imgFileInput.dispatchEvent( Utils.createMouseEvent('click') );
     }
 
+
     /**
      * 이미지 파일 -> 배열에 지정 / 미리보기 link( blob link) 배열 생성~
      * @param data
@@ -343,11 +346,15 @@ export default class CurriculumListView extends Vue {
      */
     private setImgFilePreviewSave(data: FileList ): void {
         // console.log(data);
-        for (const file of data) {
-            // console.log(data,  item, Utils.getFileType(item) );
-            this.imgFileDatas.push(file);
-            this.imgFileURLItems.push( URL.createObjectURL( file ) );
+        // tslint:disable-next-line:prefer-for-of
+        for (let i = 0; i < data.length; i++) {
+            this.imgFileDatas.push(data[i]);
+            this.imgFileURLItems.push(URL.createObjectURL(data[i]));
         }
+        /*data.forEach( ( item: File ) => {
+            // console.log(data,  item, Utils.getFileType(item) );
+
+        }); */
     }
 
     private setAttachFileSave(data: FileList ): void {
@@ -356,6 +363,40 @@ export default class CurriculumListView extends Vue {
             // console.log(data,  item, Utils.getFileType(item) );
             this.attachFileItems.push(file);
         }
+    }
+    /**
+     * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
+     * @private
+     */
+    private submitAddPost(): void{
+        //시나리오 --> 등록 버튼 클릭 > 이미지 추가한 배열값 formdata에 입력 > 전송 >전송 성공후> filesAllClear 호출 > 팝업 닫기
+
+        // this.setImageFormData();
+        // this.setAttachFileFormData();
+        this.setPostDataToFormData();
+    }
+
+    private onAddPostSubmit() {
+        this.submitAddPost();
+    }
+
+    private setPostDataToFormData() {
+        if( !this.isSubmitValidate ){return;}
+
+        if (Utils.isUndefined(this.formData)) {
+            this.formData = new FormData();
+        }
+
+        const temp = JSON.stringify( {...this.makeCurriculumItems} );
+        this.formData.append('data', temp );
+
+        MyClassService.setEducationList( this.classID, this.formData )
+            .then((data) => {
+                console.log( '교육과정 생성 성공', data );
+                this.$emit('submit', false);
+
+                this.imgFilesAllClear();
+            });
     }
 
     /**
@@ -366,36 +407,50 @@ export default class CurriculumListView extends Vue {
 
         if( !this.imgFileDatas.length ){ return; }
 
-        if (this.formData === undefined) {
+        if (Utils.isUndefined(this.formData)) {
             this.formData= new FormData();
         }
         // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-        this.appendFormData(this.imgFileDatas, 'files');
+        this.formDataAppendToFile(this.imgFileDatas, 'files');
+
+        console.log(`이미지 테스트`, this.imgFileDatas);
     }
 
+    /**
+     * 첨부 파일이 저장된 배열을 전송할 formdata 에 값 대입.
+     * @private
+     */
     private setAttachFileFormData() {
         if( !this.attachFileItems.length ){ return; }
 
-        if (this.formData === undefined) {
+        if (Utils.isUndefined(this.formData)) {
             this.formData= new FormData();
         }
         // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-        this.appendFormData(this.attachFileItems, 'files');
+        this.formDataAppendToFile(this.attachFileItems, 'files'  );
     }
 
-    private appendFormData( targetLists: File[], appendName: string | string[] ) {
+    /**
+     * formdata 에 append 하여 formdata ( 딕셔너리 목록 ) 추가하기.
+     * @param targetLists
+     * @param appendName
+     * @private
+     */
+    private formDataAppendToFile( targetLists: File[], appendName: string | string[] ) {
         targetLists.forEach(( item: File, index: number )=>{
             // console.log(item, item.name);
             // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
             if( Array.isArray(appendName) ){
-                this.formData.append( appendName[index], item, item.name );
+                this.formData.append( appendName[index], item, `${index}_${item.name}` );
             }else{
-                this.formData.append(appendName, item, item.name );
+                this.formData.append(appendName, item, `${index}_${item.name}` );
             }
         });
     }
     //모델에 이미지 파일 추가
-    private async addFileToImage( files: FileList ){
+    private addFileToImage( files: FileList ){
+
+
         //전달되는 파일없을시 여기서 종료.
         if( !files.length ){ return; }
 
@@ -403,10 +458,6 @@ export default class CurriculumListView extends Vue {
         //file type input
         const imgFileInput =document.querySelector('#imgFileInput') as HTMLInputElement;
         imgFileInput.value = '';
-
-        // await this.setRevokeObjectURL().then( ()=>{
-        //
-        // });
     }
 
     //모델에 이미지 파일 추가
@@ -421,6 +472,17 @@ export default class CurriculumListView extends Vue {
     }
 
     /**
+     * 추가된 이미지 파일 제거하기
+     * @param idx
+     * @private
+     */
+    private removeImgPreviewItems(idx: number): void{
+        const blobURLs=this.imgFileURLItems.splice(idx, 1);
+        this.removeBlobURL( blobURLs ); // blob url 제거
+        this.imgFileDatas.splice(idx, 1);
+        //console.log( this.formData.getAll('files')  );
+    }
+    /**
      * // blob url 폐기시키고 가비지 컬렉터 대상화시킴
      * - 확인하는 방법은 현재 이미지에 적용된 src 주소값을 복사해서 현재 브라우저에 주소를 붙여 실행해 보면 된다. 이미지가 보이면 url 이 폐기되지 않은 것이다.
      * @private
@@ -430,39 +492,58 @@ export default class CurriculumListView extends Vue {
     }
 
     /**
-     * 이미지가 로드 되었는지 체크
+     * 추가된 이미지 파일 모두 지우기
      * @private
      */
-    private setRevokeObjectURL(): Promise<string>{
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if (this.imageLoadedCount === this.imgFileURLItems.length) {
-                    return resolve('loaded');
-                } else {
-                    return reject('wait');
-                }
-            }, 500);
-        });
+    private removeAllPreview(): void {
+        this.imgFileURLItems = [];
+        this.imgFileDatas=[];
+        this.imageLoadedCount=0;
     }
+
+    private removeAllAttachFile(): void {
+        this.attachFileItems = [];
+    }
+
+    private removeAttachFileItem(idx: number): void{
+        this.attachFileItems.splice(idx, 1);
+        //console.log( this.formData.getAll('files')  );
+    }
+
     //이미지 로드 완료 카운트
     private imageLoadedCheck(): void{
         this.imageLoadedCount++;
         console.log(this.imageLoadedCount);
     }
-
-
-
-    /**
-     * 클래스 교육과정 생성
-     */
-    private makeCurriculumSubmit(): void{
-        // console.log(this.classID, this.makeCurriculumItems);
-        MyClassService.setEducationList( this.classID, this.makeCurriculumItems )
-            .then((data) => {
-                console.log( '교육과정 생성 성공', data );
-                this.isCreateClass = false;
-            });
+    private attachFilesAllClear() {
+        this.attachFileItems = [];
+        this.formData.delete('files');
+        // this.imageLoadedCount=0;
     }
+
+    private imgFilesAllClear() {
+        this.imgFileURLItems = [];
+        this.imgFileDatas=[];
+        this.makeCurriculumItems={
+            title: '',
+            goal: '',
+            course_list: [
+                {
+                    index: 0,
+                    id: 0,
+                    startDay: this.startDatePickerModel,
+                    startTime: this.currentStartTimeModel,
+                    endTime: this.currentEndTimeModel,
+                    title: '',
+                    contents: ''
+                }
+            ]
+        };
+        this.formData.delete('files');
+        this.imageLoadedCount=0;
+    }
+
+
 
     /**
      * 시작일시 - datepicker 일자 선택시
@@ -484,21 +565,12 @@ export default class CurriculumListView extends Vue {
         this.makeCourseItems.endTime = this.endTimeItem;
     }
 
-
-    private makeCourseSubmit( num: number ): void{
+    private makeCourseSubmit(): void{
         this.isClassCurr = false;
 
-        this.makeCourseAttach = this.attachFileItems.concat(this.imgFileDatas);
-
-        this.makeCourseItems.attachment = this.makeCourseAttach;
-        this.makeCurriculumItems.course_list[num] = this.makeCourseItems;
-
-        console.log(this.makeCurriculumItems);
-        // MyClassService.setEducationList( this.classID, this.makeCurriculumItems )
-        //     .then(() => {
-        //         console.log('교육과정 코스 생성 성공!');
-        //     });
+        console.log(this.makeCurriculumItems.course_list);
     }
+
 
 
     /**
@@ -540,11 +612,9 @@ export default class CurriculumListView extends Vue {
     }
 
     private getEduCurrList(cardId: number): void {
-        MyClassService.getEduCurrList(this.classID, cardId)
+        MyClassService.getEduCurList(this.classID, cardId)
             .then((data) => {
                 this.currList = data;
-                this.modifyCurriculumList.title = data.title;
-                this.modifyCurriculumList.goal = data.text;
                 console.log(cardId);
                 console.log('getEduCurrList 함수 데이터', data);
             });
@@ -566,46 +636,8 @@ export default class CurriculumListView extends Vue {
             });
     }
 
-    /**
-     * 클래스 교육과정 수정
-     */
-    private modifyChangeTitle(event: any): void {
-        this.modifyCurriculumList.title = event.target.value;
-        console.log(this.modifyCurriculumList);
-    }
-    private modifyChangeText(event: any): void {
-        this.modifyCurriculumList.goal = event.target.value;
-        console.log(this.modifyCurriculumList);
-    }
-    private modifyConfirm( curriculumID: number): void {
-        MyClassService.setEducationListModify ( this.classID, curriculumID, this.modifyCurriculumList )
-            .then((data) => {
-                this.isModifyClass = false;
-                this.modifyCurriculumList = data;
-                console.log('교육과정 수정 성공');
-            });
-    }
 
 
-    private getProfileImg( imgUrl: string | null | undefined ): string{
-        const randomImgItems = [
-            'image-a.jpg',
-            'image-b.jpg',
-            'image-c.jpg',
-            'image-d.jpg',
-            'image-e.jpg'
-        ];
-        let img: string= '';
-        if( imgUrl === null || imgUrl === undefined){
-            img=randomImgItems[ Utils.getRandomNum(0, 5) ];
-        }else if( !isNaN( parseInt(imgUrl, 10) ) ){
-            img=randomImgItems[ parseInt(imgUrl, 10) ];
-        }else{
-            img=imgUrl;
-        }
-
-        return ( imgUrl !== null && imgUrl !== undefined )? img : require( `@/assets/images/${img}` );
-    }
 
     private cardClickHandler( idx: number ) {
         this.isClassCurrMore = true;
@@ -638,6 +670,16 @@ export default class CurriculumListView extends Vue {
         });
     }
 
+    private modifyCourseHandler(curriculumIdx: number, courseIdx: number) {
+        this.isModifyClassCourse = true;
+        this.cardId = curriculumIdx;
+        this.courseId = courseIdx;
+        console.log(this.courseId);
+        this.$nextTick(()=>{
+            this.getEduCurrList(this.cardId);
+        });
+    }
+
 
     /**
      * 멤버 등급별 아이콘
@@ -665,49 +707,6 @@ export default class CurriculumListView extends Vue {
         return (title)? title: '';
     }
 
-    /**
-     * 추가된 이미지 파일 제거하기
-     * @param idx
-     * @private
-     */
-    private removeImgPreviewItems(idx: number): void{
-        const blobURLs=this.imgFileURLItems.splice(idx, 1);
-        this.removeBlobURL( blobURLs ); // blob url 제거
-        this.imgFileDatas.splice(idx, 1);
-        //console.log( this.formData.getAll('files')  );
-    }
-
-    private removeAttachFileItem(idx: number): void{
-        this.attachFileItems.splice(idx, 1);
-        //console.log( this.formData.getAll('files')  );
-    }
-
-
-    /**
-     * 추가된 이미지 파일 모두 지우기
-     * @private
-     */
-    private removeAllPreview(): void {
-        this.imgFileURLItems = [];
-        this.imgFileDatas=[];
-        this.imageLoadedCount=0;
-    }
-    private removeAllAttachFile(): void {
-        this.attachFileItems = [];
-    }
-
-    private imgFilesAllClear() {
-        this.imgFileURLItems = [];
-        this.imgFileDatas=[];
-        this.formData.delete('files');
-        this.imageLoadedCount=0;
-    }
-
-    private attachFilesAllClear() {
-        this.attachFileItems = [];
-        this.formData.delete('files');
-        // this.imageLoadedCount=0;
-    }
 }
 
 

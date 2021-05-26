@@ -152,7 +152,7 @@ class MyClassService {
      * @param classId
      * @param curriculumItems
      */
-    public setEducationList(classId: number, curriculumItems: IMakeEducation): Promise<any>{
+    public setEducationList(classId: number, curriculumItems: any): Promise<any>{
         return request('post', `${CLASS_BASE_URL}/${classId}/curriculum`, curriculumItems );
     }
 
@@ -162,8 +162,8 @@ class MyClassService {
      * @param curriculumId
      * @param curriculumItems
      */
-    public setEducationListModify(classId: number, curriculumId: number, curriculumItems: IModifyCurriculum): Promise<any>{
-        return request('put', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}`, curriculumItems );
+    public setEducationListModify(classId: number, curriculumId: number, curriculumItem: any): Promise<any>{
+        return request('put', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}`, curriculumItem );
     }
 
     /**
@@ -181,7 +181,7 @@ class MyClassService {
      * @param classId
      * @param curriculumId
      */
-    public getEduCurrList(classId: number | string, curriculumId: number): Promise<any>{
+    public getEduCurList(classId: number, curriculumId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}` );
     }
 

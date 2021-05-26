@@ -467,13 +467,14 @@ interface IQnaInfo {
 interface IMakeEducation {
     title: string;
     goal: string;
-    course_list: Array<{
-        index: number;
-        title: string;
-        startDay: Date | string;
-        startTime: Date | string;
-        endTime: Date | string;
-        contents: string;
+    course_list?: Array<{
+        index?: number;
+        id?: number;
+        startDay?: Date | string;
+        startTime?: Date | string;
+        endTime?: Date | string;
+        title?: string;
+        contents?: string;
     }>;
 }
 
@@ -551,7 +552,7 @@ interface ICurriculumList {
             startTime: Date;
             endTime: Date;
             deletedYN: boolean;
-            attachment?: Array<{
+            attachment: Array<{
                 createdAt: Date;
                 updatedAt: Date;
                 id: number;
@@ -630,7 +631,7 @@ interface ICurriculumList {
                         updatedAt: Date | string;
                         id: number;
                         user_id: number;
-                        member_id: null,
+                        member_id: null | number,
                         parent_id: number;
                         group_name: string;
                         fieldname: string;
@@ -642,16 +643,16 @@ interface ICurriculumList {
                         key: string;
                         acl: string;
                         contentType: string;
-                        contentDisposition: null,
+                        contentDisposition: null | number;
                         storageClass: string;
-                        serverSideEncryption: null,
-                        metadata: null,
+                        serverSideEncryption: null | number;
+                        metadata: null | number;
                         location: string;
                         etag: string;
-                        deletedYN: false
+                        deletedYN: boolean;
                     }
                 ];
-            },
+            }
         ]
     };
     message?: string;
@@ -660,17 +661,17 @@ interface ICurriculumList {
 
 interface ICourseList {
     course: {
-        startDay: Date;
-        createdAt: Date;
-        updatedAt: Date;
+        startDay: Date | string;
+        createdAt: Date | string;
+        updatedAt: Date | string;
         id: number;
         curriculum_id: number;
         class_id: number;
         index: number;
         title: string | undefined;
         contents: string;
-        startTime: Date;
-        endTime: Date;
+        startTime: Date | string;
+        endTime: Date | string;
     };
     message?: string;
 }
@@ -678,32 +679,19 @@ interface ICourseList {
 interface IModifyCurriculum {
     title: string;
     goal: string;
-    updated_course_list?: [
+    course_list?: [
         {
             id: number;
-            title: string;
-            startDay: Date | number;
-            startTime: Date | number;
-            endTime: Date | number;
-            contents: string;
-        }
-    ];
-    deleted_course_list?: [
-        {
-            id: number;
-        }
-    ];
-    added_course_list?: [
-        {
             index: number;
             title: string;
-            startDay: Date | number;
-            startTime: Date | number;
-            endTime: Date | number;
+            startDay: Date | string;
+            startTime: Date | string;
+            endTime: Date | string;
             contents: string;
         }
     ];
 }
+
 interface IClassTag {
     id: number;
     class_id: number;
@@ -733,7 +721,6 @@ export {
     IQuestionInfo,
     IQnaInfo,
     IMakeEducation,
-    IMakeCourse,
     IEducationList,
     ICurriculumList,
     ICourseList,

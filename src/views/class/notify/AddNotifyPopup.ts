@@ -11,10 +11,11 @@ import ImagePreview from '@/components/preview/imagePreview.vue';
 import {ICreatePost, IVoteModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
 import AddVotePopup from '@/views/class/notify/AddVotePopup';
+import {ImageFileService} from '@/views/service/preview/ImageFileService';
 import WithRender from './AddNotifyPopup.html';
+import {AttachFileService} from '@/views/service/preview/AttachFileService';
 
 const MyClass = namespace('MyClass');
-
 
 @WithRender
 @Component({
@@ -41,46 +42,30 @@ export default class AddNotifyPopup extends Vue{
   private isOpenAddVotePopup: boolean=false;
   private imageLoadedCount: number=0;
   private alarmAt: Date=new Date();
-  private vote: IVoteModel= {
-    vote:{
-      type: 0,
-      title: '',
-      multi_choice: 0,
-      anonymous_mode: 0,
-      open_progress_level: 0,
-      open_result_level: 0,
-      vote_choice_list: [
-        {
-          text: '',
-          index: 0
-        }
-      ]
-    }
-  };
+  private voteData!: IVoteModel;
 
   private postData: ICreatePost = { title: '', text: ''};
-  /*parent_id: post_id,
-     type: link.type ? link.type : 0,
-     title: link.title,*/
-  private linkData: {type: number,  title: string}={ type:0, title: ''}
-  private linkDetailData: Array<{ index: number, url: string; }> = [];
 
   private imgFileURLItems: string[] = [];
   private imgFileDatas: any[] = [];
   private attachFileItems: any[] = [];
-  private formData!: FormData;
+  private formData: FormData=new FormData();
+  private imgFileService: ImageFileService=new ImageFileService();
+  private attachFileService: AttachFileService=new AttachFileService();
+
 
   get imgFileURLItemsModel(): string[] {
-    return this.imgFileURLItems;
+    return this.imgFileService.getImgURLItems();
   }
 
   get attachFileItemsModel(): any[] {
-    return this.attachFileItems;
+    return this.attachFileService.getItems();
   }
 
   get isSubmitValidate(): boolean{
     return (this.postData.title !== '' && this.postData.text !== '');
   }
+
 
   private getProfileImg(imgUrl: string | null | undefined ): string{
     return ImageSettingService.getProfileImg( imgUrl );
@@ -133,38 +118,57 @@ export default class AddNotifyPopup extends Vue{
    */
   private inputEventBind( targetSelector: string ) {
     //파일 input 에 클릭 이벤트 붙이기~
-    const imgFileInput =document.querySelector( targetSelector ) as HTMLInputElement;
+    const imgFileInput = document.querySelector(targetSelector) as HTMLInputElement;
     //input click event 발생시키기.
-    imgFileInput.dispatchEvent( Utils.createMouseEvent('click') );
+    imgFileInput.dispatchEvent(Utils.createMouseEvent('click'));
   }
 
-
+  //start : 이미지 preview  및 이미지 등록 ================================================
+  //모델에 이미지 파일 추가
+  private addFileToImage( files: FileList ){
+    this.imgFileService.load(files, '#imgFileInput');
+  }
   /**
-   * 이미지 파일 -> 배열에 지정 / 미리보기 link( blob link) 배열 생성~
-   * @param data
+   * 추가된 이미지 미리보기 파일 제거하기
+   * @param idx
    * @private
    */
-  private setImgFilePreviewSave(data: FileList ): void {
-    // console.log(data);
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < data.length; i++) {
-      this.imgFileDatas.push(data[i]);
-      this.imgFileURLItems.push(URL.createObjectURL(data[i]));
-    }
-    /*data.forEach( ( item: File ) => {
-        // console.log(data,  item, Utils.getFileType(item) );
-
-    }); */
+  private removeImgPreviewItems(idx: number): void{
+    this.imgFileService.remove(idx);
   }
-
-  private setAttachFileSave(data: FileList ): void {
-    // console.log(data);
-    for (const file of data) {
-      // console.log(data,  item, Utils.getFileType(item) );
-      this.attachFileItems.push(file);
-    }
+  /**
+   * 추가된 이미지 파일 모두 지우기
+   * @private
+   */
+  private removeAllPreview(): void {
+    this.imgFileService.removeAll();
   }
+  /**
+   * post 등록을 완료후 formdata 및 배열에 지정되어 있던 데이터들 비우기..
+   * @private
+   */
+  private imgFilesAllClear() {
+    this.imgFileService.removeAll();
+    this.formData.delete('files');
+  }
+  //end : 이미지 preview  및 이미지 등록 ================================================
 
+  //start : 파일 첨부 미리보기 및 파일 업로드 ================================================
+  //모델에 이미지 파일 추가
+  private addAttachFileTo( files: FileList ){
+    this.attachFileService.load(files, '#attachFileInput');
+  }
+  private removeAllAttachFile(): void {
+    this.attachFileService.removeAll();
+  }
+  private removeAttachFileItem(idx: number): void{
+    this.attachFileService.remove(idx);
+  }
+  private attachFilesAllClear() {
+    this.attachFileService.removeAll();
+    this.formData.delete('files');
+  }
+  //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
 
   /**
    * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
@@ -173,8 +177,10 @@ export default class AddNotifyPopup extends Vue{
   private submitAddPost(): void{
     //시나리오 --> 등록 버튼 클릭 > 이미지 추가한 배열값 formdata에 입력 > 전송 >전송 성공후> filesAllClear 호출 > 팝업 닫기
 
-    this.setImageFormData();
-    this.setAttachFileFormData();
+    // this.setImageFormData();
+    this.imgFileService.save( this.formData );
+    // this.setAttachFileFormData();
+    this.attachFileService.save(this.formData);
     this.setPostDataToFormData();
   }
 
@@ -185,158 +191,32 @@ export default class AddNotifyPopup extends Vue{
   private setPostDataToFormData() {
     if( !this.isSubmitValidate ){return;}
 
-    if (Utils.isUndefined(this.formData)) {
-      this.formData = new FormData();
-    }
-
-
-    const temp = JSON.stringify( {...this.postData } );
+    const temp = JSON.stringify( {...this.postData} );
     this.formData.append('data', temp );
-    // this.formData.append('data', this.postData );
+    console.log(this.voteData, temp);
 
     PostService.setAddPost(this.classID, this.formData )
       .then((data)=>{
-        console.log(data);
+        console.log(data.post.id);
         this.$emit('submit', false);
 
+        if (this.voteData) {
+          let { parent_id } = this.voteData;
+          parent_id=data.post.id;
+          PostService.setAddVote(this.classID, {...this.voteData, parent_id})
+            .then(( voteData: any)=>{
+              console.log(voteData);
+            });
+        }
+
         this.imgFilesAllClear();
+        this.attachFilesAllClear();
+        this.postData={ title: '', text: ''};
       });
-
-  }
-
-  private setPostAddLink() {
-    //var link = data.link;
-    //var link_item_list = data.link_item_list;
   }
 
 
-  /**
-   * 이미지 파일이 저장된 배열을 전송할 formdata 에 값 대입.
-   * @private
-   */
-  private setImageFormData() {
 
-    if( !this.imgFileDatas.length ){ return; }
-
-    if (Utils.isUndefined(this.formData)) {
-      this.formData= new FormData();
-    }
-    // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-    this.formDataAppendToFile(this.imgFileDatas, 'files');
-  }
-
-  /**
-   * 첨부 파일이 저장된 배열을 전송할 formdata 에 값 대입.
-   * @private
-   */
-  private setAttachFileFormData() {
-    if( !this.attachFileItems.length ){ return; }
-
-    if (Utils.isUndefined(this.formData)) {
-      this.formData= new FormData();
-    }
-    // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-    this.formDataAppendToFile(this.attachFileItems, 'files'  );
-  }
-
-  /**
-   * formdata 에 append 하여 formdata ( 딕셔너리 목록 ) 추가하기.
-   * @param targetLists
-   * @param appendName
-   * @private
-   */
-  private formDataAppendToFile( targetLists: File[], appendName: string | string[] ) {
-    targetLists.forEach(( item: File, index: number )=>{
-      // console.log(item, item.name);
-      // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-      if( Array.isArray(appendName) ){
-        this.formData.append( appendName[index], item, item.name );
-      }else{
-        this.formData.append(appendName, item, `${index}_${item.name}` );
-      }
-    });
-  }
-  //모델에 이미지 파일 추가
-  private addFileToImage( files: FileList ){
-
-
-    //전달되는 파일없을시 여기서 종료.
-    if( !files.length ){ return; }
-
-    this.setImgFilePreviewSave(files);
-    //file type input
-    const imgFileInput =document.querySelector('#imgFileInput') as HTMLInputElement;
-    imgFileInput.value = '';
-  }
-
-  //모델에 이미지 파일 추가
-  private async addAttachFileTo( files: FileList ){
-    //전달되는 파일없을시 여기서 종료.
-    if( !files.length ){ return; }
-
-    this.setAttachFileSave(files);
-    //file type input
-    const attachFileInput =document.querySelector('#attachFileInput') as HTMLInputElement;
-    attachFileInput.value = '';
-  }
-
-  /**
-   * 추가된 이미지 파일 제거하기
-   * @param idx
-   * @private
-   */
-  private removeImgPreviewItems(idx: number): void{
-    const blobURLs=this.imgFileURLItems.splice(idx, 1);
-    this.removeBlobURL( blobURLs ); // blob url 제거
-    this.imgFileDatas.splice(idx, 1);
-    //console.log( this.formData.getAll('files')  );
-  }
-  /**
-   * // blob url 폐기시키고 가비지 컬렉터 대상화시킴
-   * - 확인하는 방법은 현재 이미지에 적용된 src 주소값을 복사해서 현재 브라우저에 주소를 붙여 실행해 보면 된다. 이미지가 보이면 url 이 폐기되지 않은 것이다.
-   * @private
-   */
-  private removeBlobURL( items: string[] ) {
-    items.forEach((item) => URL.revokeObjectURL(item));
-  }
-
-  /**
-   * 추가된 이미지 파일 모두 지우기
-   * @private
-   */
-  private removeAllPreview(): void {
-    this.imgFileURLItems = [];
-    this.imgFileDatas=[];
-    this.imageLoadedCount=0;
-  }
-
-  private removeAllAttachFile(): void {
-    this.attachFileItems = [];
-  }
-
-  private removeAttachFileItem(idx: number): void{
-    this.attachFileItems.splice(idx, 1);
-    //console.log( this.formData.getAll('files')  );
-  }
-
-  //이미지 로드 완료 카운트
-  private imageLoadedCheck(): void{
-    this.imageLoadedCount++;
-    console.log(this.imageLoadedCount);
-  }
-  private attachFilesAllClear() {
-    this.attachFileItems = [];
-    this.formData.delete('files');
-    // this.imageLoadedCount=0;
-  }
-
-  private imgFilesAllClear() {
-    this.imgFileURLItems = [];
-    this.imgFileDatas=[];
-    this.postData={ title: '', text: ''};
-    this.formData.delete('files');
-    this.imageLoadedCount=0;
-  }
 
   private addVote() {
     this.isOpenAddVotePopup=true;
@@ -347,7 +227,11 @@ export default class AddNotifyPopup extends Vue{
     this.isOpenAddVotePopup=value;
   }
 
-
+  private onAddVote( voteData: IVoteModel) {
+    this.voteData = voteData;
+    this.isOpenAddVotePopup=false;
+    console.log(voteData);
+  }
 
 
 
