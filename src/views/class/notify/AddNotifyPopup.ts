@@ -2,18 +2,20 @@ import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
+import {ICreatePost, ILinkModel, IVoteModel} from '@/views/model/post.model';
+import {PostService} from '@/api/service/PostService';
+import AddVotePopup from '@/views/class/notify/AddVotePopup';
+import AddLinkPopup from '@/views/class/notify/AddLinkPopup';
+import {ImageFileService} from '@/views/service/preview/ImageFileService';
+import {AttachFileService} from '@/views/service/preview/AttachFileService';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
-import {ICreatePost, IVoteModel} from '@/views/model/post.model';
-import {PostService} from '@/api/service/PostService';
-import AddVotePopup from '@/views/class/notify/AddVotePopup';
-import {ImageFileService} from '@/views/service/preview/ImageFileService';
+import LinkPreview from '@/components/preview/linkPreview.vue';
 import WithRender from './AddNotifyPopup.html';
-import {AttachFileService} from '@/views/service/preview/AttachFileService';
 
 const MyClass = namespace('MyClass');
 
@@ -25,7 +27,9 @@ const MyClass = namespace('MyClass');
     Modal,
     ImagePreview,
     FilePreview,
-    AddVotePopup
+    AddVotePopup,
+    AddLinkPopup,
+    LinkPreview
   }
 })
 export default class AddNotifyPopup extends Vue{
@@ -40,15 +44,23 @@ export default class AddNotifyPopup extends Vue{
   private myClassHomeModel!: IClassInfo;
 
   private isOpenAddVotePopup: boolean=false;
+  private isOpenAddLinkPopup: boolean=false;
   private imageLoadedCount: number=0;
   private alarmAt: Date=new Date();
   private voteData!: IVoteModel;
 
   private postData: ICreatePost = { title: '', text: ''};
 
-  private imgFileURLItems: string[] = [];
-  private imgFileDatas: any[] = [];
-  private attachFileItems: any[] = [];
+  // private imgFileURLItems: string[] = [];
+  // private imgFileDatas: any[] = [];
+  // private attachFileItems: any[] = [];
+  private linkData: ILinkModel={
+    link: {
+      title: '',
+    },
+    link_item_list: []
+  };
+
   private formData: FormData=new FormData();
   private imgFileService: ImageFileService=new ImageFileService();
   private attachFileService: AttachFileService=new AttachFileService();
@@ -64,6 +76,14 @@ export default class AddNotifyPopup extends Vue{
 
   get isSubmitValidate(): boolean{
     return (this.postData.title !== '' && this.postData.text !== '');
+  }
+
+  get linkListItems(): any{
+    return this.linkData.link_item_list;
+  }
+
+  get linkTitle(): string{
+    return this.linkData.link.title;
   }
 
 
@@ -184,6 +204,8 @@ export default class AddNotifyPopup extends Vue{
     this.setPostDataToFormData();
   }
 
+
+
   private onAddPostSubmit() {
     this.submitAddPost();
   }
@@ -191,14 +213,17 @@ export default class AddNotifyPopup extends Vue{
   private setPostDataToFormData() {
     if( !this.isSubmitValidate ){return;}
 
-    const temp = JSON.stringify( {...this.postData} );
+
+    const temp = JSON.stringify( {...this.postData } );
     this.formData.append('data', temp );
     console.log(this.voteData, temp);
+
 
     PostService.setAddPost(this.classID, this.formData )
       .then((data)=>{
         console.log(data.post.id);
         this.$emit('submit', false);
+
 
         if (this.voteData) {
           let { parent_id } = this.voteData;
@@ -216,12 +241,11 @@ export default class AddNotifyPopup extends Vue{
   }
 
 
-
-
   private addVote() {
     this.isOpenAddVotePopup=true;
     console.log(this.isOpenAddVotePopup);
   }
+
 
   private onAddVoteClose( value: boolean ) {
     this.isOpenAddVotePopup=value;
@@ -232,6 +256,28 @@ export default class AddNotifyPopup extends Vue{
     this.isOpenAddVotePopup=false;
     console.log(voteData);
   }
+
+  private addLink() {
+    this.isOpenAddLinkPopup=true;
+  }
+
+  private modifyLink() {
+    this.isOpenAddLinkPopup=true;
+  }
+
+  private removeLinkItem(idx: number) {
+    this.linkData.link_item_list.splice(idx, 1);
+  }
+
+  private onAddLinkClose( value: boolean ) {
+    this.isOpenAddLinkPopup=value;
+  }
+
+  private onAddLink(linkData: ILinkModel) {
+    this.isOpenAddLinkPopup=false;
+    this.linkData = linkData;
+  }
+
 
 
 

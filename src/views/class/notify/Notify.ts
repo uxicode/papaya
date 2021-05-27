@@ -3,9 +3,9 @@ import {namespace} from 'vuex-class';
 import {IAttachFileModel, IPostModel} from '@/views/model/post.model';
 import Modal from '@/components/modal/modal.vue';
 import AddNotifyPopup from '@/views/class/notify/AddNotifyPopup';
-import WithRender from './Notify.html';
 import {PostService} from '@/api/service/PostService';
 import {getAllPromise} from '@/views/model/types';
+import WithRender from './Notify.html';
 
 const MyClass = namespace('MyClass');
 

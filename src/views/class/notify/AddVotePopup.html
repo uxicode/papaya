@@ -29,16 +29,8 @@
               <div class="create-item">
                 <div class="create-item-cnt">
                   <div class="form-type" style="padding:15px 0;">
+                    <!-- start:  텍스트 혹은 날짜 선택 -->
                     <div class="checkbox-group">
-                      <!--<div class="btn-radio">
-                        <input type="radio" name="type" id="text" checked>
-                        <label for="text">텍스트</label>
-                      </div>
-                      <div class="btn-radio">
-                        <input type="radio" name="type" id="date">
-                        <label for="date">날짜</label>
-                      </div>-->
-
                       <radio-button btn-id="chk1"
                                     radio-name="radio"
                                     btn-value="0"
@@ -51,8 +43,13 @@
                                     v-model="voteData.type"
                                     @click="optionChange">날짜</radio-button>
                     </div>
+                    <!-- end:  텍스트 혹은 날짜 선택 -->
+
                   </div>
-                  <!--<draggable v-model="myArray" group="people" @start="drag=true" @end="drag=false">-->
+                  <!-- 리스트 드래그
+                  <draggable v-model="myArray" group="people" @start="drag=true" @end="drag=false">
+                  -->
+                  <!-- start: 텍스트 타입 리스트 (드래그앤드랍으로 이동) -->
                   <draggable class="create-link-list"
                              v-model="voteData.vote_choice_list"
                              :move="checkMove"
@@ -61,10 +58,10 @@
                              @end="dragging = false"
                              style="min-height:20px;">
                     <div class="create-form list-type active" v-for="( ele, index ) in voteData.vote_choice_list" :key="`ele-${index}`">
-                      <span class="num">{{ index }}</span>
+                      <span class="num">{{ index+1 }}</span>
                       <div class="form-group inline">
-                        <input type="text" class="form-control popup-type sm" v-model="ele.text" style="width: 390px;">
-                        <button type="button" class="btn only-ico-btn form-delete active" ><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                        <input type="text" class="form-control popup-type sm" placeholder="항목을 입력해 주세요." v-model="ele.text" style="width: 390px;">
+                        <button type="button" class="btn only-ico-btn form-delete active" @click="clearTxtField(index)"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                       </div>
                       <div class="create-sub-btn">
                         <!-- 이미지 추가는 나중에~ <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>-->
@@ -78,6 +75,9 @@
                       </a>
                     </div>
                   </draggable>
+                  <!-- end: 텍스트 타입 리스트 (드래그앤드랍으로 이동) -->
+
+
                 </div>
               </div>
             </div>

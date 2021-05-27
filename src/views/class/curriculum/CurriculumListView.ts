@@ -465,7 +465,6 @@ export default class CurriculumListView extends Vue {
     //모델에 이미지 파일 추가
     private addFileToImage( files: FileList ){
 
-
         //전달되는 파일없을시 여기서 종료.
         if( !files.length ){ return; }
 
@@ -593,6 +592,7 @@ export default class CurriculumListView extends Vue {
         MyClassService.deleteEducationList ( this.classID, curriculumID )
             .then(() => {
                 console.log('교육과정 삭제 성공');
+                alert('선택하신 교육과정이 삭제 되었습니다.');
             });
     }
 
@@ -626,9 +626,9 @@ export default class CurriculumListView extends Vue {
     private getEduCurrList(cardId: number): void {
         MyClassService.getEduCurList(this.classID, cardId)
             .then((data) => {
-                this.currList = data;
                 console.log(cardId);
                 console.log('getEduCurrList 함수 데이터', data);
+                this.currList = data;
             });
     }
 
@@ -638,6 +638,10 @@ export default class CurriculumListView extends Vue {
      */
     get courseIdNumber() {
         return this.courseId;
+    }
+
+    private getCountCourseNumber(): number{
+        return this.countCourseNumber;
     }
 
     private getEduCourseList(): void {
@@ -698,16 +702,20 @@ export default class CurriculumListView extends Vue {
      * @private
      */
     private memberLevelIcon(level: number): string {
+        let levelIcon: string = '';
         switch (level) {
             case 1:
-                return 'manager';
+                levelIcon='manager';
+                break;
             case 2:
-                return 'staff';
+                levelIcon='staff';
+                break;
             default:
-                return 'member';
+                levelIcon='member';
+                break;
         }
-
-        console.log('test' , level);
+        // console.log('test' , level);
+        return levelIcon;
     }
 
     private getCurrItemTitleById( title: string): string {
@@ -717,6 +725,8 @@ export default class CurriculumListView extends Vue {
     private getCurrCourseItemTitleById( title: string ): string {
         return (title)? title: '';
     }
+
+
 
 }
 

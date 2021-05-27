@@ -29,6 +29,7 @@
                                     transition="scale-transition"
                                     content-class="time-select-menu bg-white"
                                     :attach="`#list-popup-${index}`"
+                                    :close-on-content-click="false"
                                     min-width="130px"
                                     offset-y offset-x>
                                 <template v-slot:activator="{ on, attrs }">
@@ -53,7 +54,7 @@
         </div>
     </div>
 
-    <div class="simple-notify" v-show="allEducationList.total==0">
+    <div class="simple-notify" v-show="allEducationList.total===0">
         <div class="no-data">
             <img :src="require('@/assets/images/icn-80-notice-nodata.svg')" alt="">
             <p>등록된 교육과정이 없습니다.</p>

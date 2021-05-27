@@ -149,5 +149,15 @@ interface IVoteModel{
     image_url?: string;
   }>;
 }
-export {IPostModel, IAttachFileModel, ICreatePost, IVoteModel};
+
+interface ILinkModel{
+  link: {
+    title: string;
+  };
+  link_item_list: Array<{
+    index: number,
+    url: string
+  }>;
+}
+export {IPostModel, IAttachFileModel, ICreatePost, IVoteModel, ILinkModel};
 

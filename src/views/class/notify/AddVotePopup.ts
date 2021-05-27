@@ -30,6 +30,7 @@ export default class AddVotePopup extends Vue{
 
   @MyClass.Getter
   private classID!: string | number;
+
   private dragEnabled: boolean=true;
   private dragging: boolean= false;
   private voteData: IVoteModel= {
@@ -93,6 +94,10 @@ export default class AddVotePopup extends Vue{
 
   private checkMove(e: MoveEvent<any> ) {
     window.console.log('Future index: ' + e.draggedContext.futureIndex);
+  }
+
+  private clearTxtField(idx: number) {
+    this.voteData.vote_choice_list[idx].text = '';
   }
 
   private anonymousVoteChange(value: string | boolean) {

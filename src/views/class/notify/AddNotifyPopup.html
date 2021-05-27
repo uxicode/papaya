@@ -57,6 +57,13 @@
                             @removeFile="removeAttachFileItem"
                             @removeAttachFileAll="removeAllAttachFile"></file-preview>
               <!-- end: 첨부 파일 리스트 -->
+
+              <!-- start: 링크 리스트 -->
+              <link-preview :link-items="linkListItems"
+                            :title="linkTitle"
+                            @remove="removeLinkItem"
+                            @modify="modifyLink"></link-preview>
+              <!-- end: 링크 리스트 -->
             </div>
           </div>
 
@@ -76,7 +83,7 @@
                 </a>
               </li>
               <li><a href="" @click.prevent="addVote"><img :src="require('@/assets/images/vote.svg')" alt=""></a></li>
-              <li><a href=""><img :src="require('@/assets/images/link.svg')" alt=""></a></li>
+              <li><a href="" @click.prevent="addLink"><img :src="require('@/assets/images/link.svg')" alt=""></a></li>
               <li><a href=""><img :src="require('@/assets/images/time-outline.svg')" alt=""></a></li>
             </ul>
             <!--          <div class="form-temp-save"><a href="" class="txt-btn">임시저장</a></div>-->
@@ -94,5 +101,6 @@
   </transition>
 
   <add-vote-popup :is-open="isOpenAddVotePopup" @close="onAddVoteClose" @submit="onAddVote"></add-vote-popup>
+  <add-link-popup :is-open="isOpenAddLinkPopup" @close="onAddLinkClose" @submit="onAddLink"></add-link-popup>
 </div>
 <!-- end: 공통 팝업 -->
