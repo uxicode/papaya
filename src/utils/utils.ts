@@ -321,7 +321,7 @@ class Utils{
    * undefined 인지 체크
    * @param value
    */
-  public static isUndefined( value: any ) {
+  public static isUndefined( value: any ): boolean {
     return typeof value === 'undefined';
   }
 
@@ -329,7 +329,7 @@ class Utils{
    * empty 인지 체크
    * @param value
    */
-  public static isEmpty( value: any ) {
+  public static isEmpty( value: any ): boolean {
     return Utils.isUndefined(value) || value === '' || value === null || value !== value;
   }
 

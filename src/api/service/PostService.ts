@@ -54,6 +54,7 @@ export class PostService{
     return request('post', `${CLASS_BASE_URL}/${classId}/posts`, formData );
   }
 
+
   public static setAddVote(classId: string | number, payload: IVoteModel ): Promise<any>{
     return request('post', '/vote', payload );
   }
