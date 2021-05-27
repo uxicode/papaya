@@ -478,15 +478,6 @@ interface IMakeEducation {
     }>;
 }
 
-interface IMakeCourse {
-    title: string;
-    contents: string;
-    index: number;
-    startDay: Date | string;
-    startTime: Date | string;
-    endTime: Date | string;
-}
-
 interface IEducationList {
     total: number;
     page_no: null | number;

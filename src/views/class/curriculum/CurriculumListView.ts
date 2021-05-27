@@ -8,7 +8,7 @@ import {
     IMakeEducation,
     IEducationList,
     ICurriculumList,
-    ICourseList,
+    ICourseList, IMyClassList,
 } from '@/views/model/my-class.model';
 import {IAttachFileModel} from '@/views/model/post.model';
 import {Utils} from '@/utils/utils';
@@ -258,7 +258,7 @@ export default class CurriculumListView extends Vue {
 
     get currentEndTimeModel(): string{
         return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute}분`;
-        this.makeCourseItems.endTime = this.endTimeItem;
+        // this.makeCourseItems.endTime = this.endTimeItem;
     }
 
     /**
@@ -317,7 +317,7 @@ export default class CurriculumListView extends Vue {
             this.makeCurriculumItems.course_list.push({
                 index: i,
                 id: i,
-                title: i+'회차 수업',
+                title: '',
                 startDay:'2021-05-21',
                 startTime:'10:00:00',
                 endTime:'11:00:00',
@@ -330,7 +330,6 @@ export default class CurriculumListView extends Vue {
     private countCourseNum(num: number): void{
         this.countCourseNumber = num;
     }
-
 
     /**
      * 이미지등록 아이콘 클릭시 > input type=file 에 클릭 이벤트 발생시킴.
@@ -384,7 +383,7 @@ export default class CurriculumListView extends Vue {
     }
 
     /**
-     * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
+     * 교육과정 > 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
      * @private
      */
     private submitAddPost(): void{
@@ -579,13 +578,12 @@ export default class CurriculumListView extends Vue {
         this.makeCourseItems.endTime = this.endTimeItem;
     }
 
-    private makeCourseSubmit(): void{
+    private makeCourseSubmit(courseIdx: number): void{
         this.isClassCurr = false;
         this.setImageFormData();
         this.setAttachFileFormData();
         this.removeAllPreview();
     }
-
 
 
     /**
@@ -619,7 +617,6 @@ export default class CurriculumListView extends Vue {
      */
     get curriculumList(): ICurriculumList{
         return this.currList;
-        console.log(this.currList.curriculum)
     }
 
     get cardIdNumber() {
