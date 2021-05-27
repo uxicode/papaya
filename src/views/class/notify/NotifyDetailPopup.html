@@ -66,8 +66,6 @@
                         <div class="fd-inner">
                             <ul class="img-list clearfix">
                                 <li><a href=""><img :src="require('@/assets/images/pic.png')" alt=""></a></li>
-                                <li><a href=""><img :src="require('@/assets/images/pic2.png')" alt=""></a></li>
-                                <li><a href=""><img :src="require('@/assets/images/pic3.png')" alt=""></a></li>
                             </ul>
                         </div>
 
@@ -122,8 +120,6 @@
 
                             <ul class="file-list clearfix">
                                 <li><a href="">6학년 2학기 수학 II 3단원 .pdf</a></li>
-                                <li><a href="">수학 II 3단원 정리 .hwp</a></li>
-                                <li><a href="">수학 I 개념 정리.pdf</a></li>
                             </ul>
                         </div>
                     </div>
@@ -134,23 +130,20 @@
                         <p>댓글 {{ commentData.length }}</p>
                     </div>
                     <div class="comment-cnt" >
-                        <div v-for="comment in commentData"
-                             class="comment pdt-0">
+                        <div v-for="item in commentData" class="comment pdt-0">
                             <div class="main-comment">
-                                <p class="comment-writer">{{ comment.owner.nickname }} <span class="wr-time">15분 전</span></p>
-                                <p class="comment-txt">{{ comment.comment }}</p>
+                                <p class="comment-writer">{{ item.owner.nickname }} <span class="wr-time">{{ updatedDiffDate(item.createdAt) }}</span></p>
+                                <p class="comment-txt">{{ item.comment }}</p>
 
                                 <div class="reply-state">
-                                    <a href="" class="txt-btn">답글 12</a>
+                                    <a href="" class="txt-btn">답글 {{ replyData.length }}</a>
                                     <a href="" class="txt-btn">답글달기</a>
                                 </div>
                             </div>
 
-                            <div class="reply">
-                                <p class="comment-writer">김동현 <span class="wr-time">15분 전</span></p>
-                                <p class="comment-txt">
-                                    댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
-                                </p>
+                            <div v-for="reply in replyData" class="reply">
+                                <p class="comment-writer">{{ reply.owner.nickname }} <span class="wr-time">{{ updatedDiffDate(reply.createdAt) }}</span></p>
+                                <p class="comment-txt">{{ reply.comment }}</p>
                             </div>
 
                         </div>
