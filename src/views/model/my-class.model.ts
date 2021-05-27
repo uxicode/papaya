@@ -616,33 +616,7 @@ interface ICurriculumList {
                 startTime: Date | string;
                 endTime: Date | string;
                 deletedYN: boolean;
-                attachment?: [
-                    {
-                        acl: string;
-                        bucket:  string;
-                        contentDisposition:  string | null;
-                        contentType:  string;
-                        createdAt: Date;
-                        deletedYN: boolean;
-                        encoding: string;
-                        etag: string;
-                        fieldname:  string;
-                        group_name:  string;
-                        id: number;
-                        key:  string;
-                        location:  string;
-                        member_id: number | null;
-                        metadata:  string;
-                        mimetype:  string;
-                        originalname: string;
-                        parent_id: number;
-                        serverSideEncryption:  string | null;
-                        size: number;
-                        storageClass:  string;
-                        updatedAt: Date;
-                        user_id: number;
-                    }
-                ];
+                attachment?: [];
             }
         ]
     };

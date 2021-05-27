@@ -257,7 +257,7 @@
                                         <v-menu
                                                 nudge-left="30px"
                                                 origin="center top"
-                                                v-model="makeCurriculumItems.course_list[countCourseNumber].startTime"
+                                                v-model="startTimeMenu"
                                                 :close-on-content-click="false"
                                                 transition="scale-transition"
                                                 content-class="time-select-menu bg-white"
@@ -274,6 +274,7 @@
                                                 </v-text-field>
                                             </template>
                                             <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
+
                                             <v-select v-model="startTimeSelectModel.apm" @input="startTimeChange()" :items="['오전', '오후'] " placeholder="오전" hide-details solo flat style="display:inline-block;width:70px;">
                                                 <template v-slot:selection="{item, index}">
                                                     <span style="font-size:14px;">{{item}}</span>
@@ -464,8 +465,9 @@
                                         <a href="#" @click="curriculumDetailClickHandler( index )">
                                             <p class="subject-tit mgb-0">{{ item.title===''? index+1+'회차수업'  : item.title }}</p>
                                             <div class="subject-schedule">
-                                                <span>{{ item.startDay }}</span>
-                                                <span>{{ item.startTime }}</span>
+                                                <span v-show="item.startDay!=='Invalid date'">{{ item.startDay }}</span>
+                                                <span v-show="item.startTime!==null">{{ item.startTime }}</span>
+                                                <span v-show="item.endTime!==null">{{ item.endTime }}</span>
                                             </div>
                                             <div class="subject-sub">
                                                 <span v-if="getImgFileLen(curriculumList.curriculum.course_list[index].attachment)>0">이미지 {{ getImgFileLen(curriculumList.curriculum.course_list[index].attachment) }}</span>
@@ -504,8 +506,9 @@
                     <div class="popup-form-top">
                         <div class="form-item pd-desc">
                             <ul class="feed-info period clearfix">
-                                <li>{{ curriculumList.curriculum.course_list[countCourseNumber].startDay }}</li>
-                                <li>{{ curriculumList.curriculum.course_list[countCourseNumber].startTime }}</li>
+                                <li v-show="curriculumList.curriculum.course_list[countCourseNumber].startDay!=='Invalid date'">{{ curriculumList.curriculum.course_list[countCourseNumber].startDay }}</li>
+                                <li v-show="curriculumList.curriculum.course_list[countCourseNumber].startTime!==null">{{ curriculumList.curriculum.course_list[countCourseNumber].startTime }}</li>
+                                <li v-show="curriculumList.curriculum.course_list[countCourseNumber].endTime!==null">{{ curriculumList.curriculum.course_list[countCourseNumber].endTime }}</li>
                             </ul>
                         </div>
                     </div>

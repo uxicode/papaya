@@ -15,8 +15,8 @@ import {Utils} from '@/utils/utils';
 import MyClassService from '@/api/service/MyClassService';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
-import WithRender from './CurriculumListView.html';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
+import WithRender from './CurriculumListView.html';
 
 const MyClass = namespace('MyClass');
 
@@ -109,9 +109,9 @@ export default class CurriculumListView extends Vue {
             {
                 index: 0,
                 id: 0,
-                startDay: this.startDatePickerModel,
-                startTime: this.currentStartTimeModel,
-                endTime: this.currentEndTimeModel,
+                startDay: '',
+                startTime: '',
+                endTime: '',
                 title: '',
                 contents: ''
             }
@@ -132,8 +132,8 @@ export default class CurriculumListView extends Vue {
         title: '',
         contents: '',
         startDay: this.startDatePickerModel,
-        startTime: this.currentStartTimeModel,
-        endTime: this.currentEndTimeModel,
+        startTime: '10:00:00',
+        endTime: '11:00:00'
     };
 
 
@@ -177,33 +177,7 @@ export default class CurriculumListView extends Vue {
                     startTime: '2019-11-17',
                     endTime: '2019-11-17',
                     deletedYN: false,
-                    attachment: [
-                        {
-                            acl: '',
-                            bucket:  '',
-                            contentDisposition:  '',
-                            contentType:  '',
-                            createdAt: new Date(),
-                            deletedYN: false,
-                            encoding: '',
-                            etag: '',
-                            fieldname:  '',
-                            group_name:  '',
-                            id: 0,
-                            key:  '',
-                            location:  '',
-                            member_id: 0,
-                            metadata:  '',
-                            mimetype:  '',
-                            originalname: '',
-                            parent_id: 0,
-                            serverSideEncryption:  '',
-                            size: 0,
-                            storageClass:  '',
-                            updatedAt: new Date(),
-                            user_id: 0,
-                        }
-                    ],
+                    attachment: [],
                 },
             ],
         }
@@ -253,12 +227,28 @@ export default class CurriculumListView extends Vue {
 
     get currentStartTimeModel(): string{
         return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute}분`;
-        this.makeCourseItems.startTime = this.startTimeItem;
+    }
+
+    get selectStartTimeModel(): string{
+        const time = Number(this.startTimeSelectModel.hour)+12;
+        if( this.startTimeSelectModel.apm === '오후' ){
+            return `${time}:${this.startTimeSelectModel.minute}:00`;
+        }else {
+            return `${this.startTimeSelectModel.hour}:${this.startTimeSelectModel.minute}:00`;
+        }
     }
 
     get currentEndTimeModel(): string{
         return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute}분`;
-        // this.makeCourseItems.endTime = this.endTimeItem;
+    }
+
+    get selectEndTimeModel(): string{
+        const time = Number(this.endTimeSelectModel.hour)+12;
+        if( this.endTimeSelectModel.apm === '오후' ){
+            return `${time}:${this.endTimeSelectModel.minute}:00`;
+        }else {
+            return `${this.endTimeSelectModel.hour}:${this.endTimeSelectModel.minute}:00`;
+        }
     }
 
     /**
@@ -318,10 +308,10 @@ export default class CurriculumListView extends Vue {
                 index: i,
                 id: i,
                 title: '',
-                startDay:'2021-05-21',
-                startTime:'10:00:00',
-                endTime:'11:00:00',
-                contents:''
+                startDay: '',
+                startTime: '',
+                endTime: '',
+                contents: ''
             });
         }
     }
@@ -405,7 +395,6 @@ export default class CurriculumListView extends Vue {
             this.formData = new FormData();
         }
 
-
         const temp = JSON.stringify( {...this.makeCurriculumItems} );
         this.formData.append('data', temp );
         
@@ -414,6 +403,7 @@ export default class CurriculumListView extends Vue {
                 console.log( '교육과정 생성 성공', data );
                 this.$emit('submit', false);
                 this.imgFilesAllClear();
+                this.attachFilesAllClear();
             });
     }
 
@@ -545,9 +535,9 @@ export default class CurriculumListView extends Vue {
                 {
                     index: 0,
                     id: 0,
-                    startDay: this.startDatePickerModel,
-                    startTime: this.currentStartTimeModel,
-                    endTime: this.currentEndTimeModel,
+                    startDay: '',
+                    startTime: '',
+                    endTime: '',
                     title: '',
                     contents: ''
                 }
@@ -568,22 +558,27 @@ export default class CurriculumListView extends Vue {
     }
 
     private startTimeChange() {
-        this.startTimeItem = this.currentStartTimeModel;
+        this.startTimeItem = this.selectStartTimeModel;
         this.makeCourseItems.startTime = this.startTimeItem;
+
     }
 
     private endTimeChange() {
-        this.endTimeItem = this.currentEndTimeModel;
+        this.endTimeItem = this.selectEndTimeModel;
         this.makeCourseItems.endTime = this.endTimeItem;
     }
 
     private makeCourseSubmit(courseIdx: number): void{
         this.isClassCurr = false;
+
+        this.getCourseItemStartTime(courseIdx);
+        this.getCourseItemEndTime(courseIdx);
+
         this.setImageFormData();
         this.setAttachFileFormData();
         this.removeAllPreview();
+        this.removeAllAttachFile();
     }
-
 
     /**
      * 클래스 교육과정 삭제
@@ -726,6 +721,13 @@ export default class CurriculumListView extends Vue {
         return (title)? title: '';
     }
 
+    private getCourseItemStartTime(idx: number): string{
+        return (this.makeCurriculumItems.course_list)? this.makeCurriculumItems.course_list[idx].startTime=this.selectStartTimeModel : '' ;
+    }
+
+    private getCourseItemEndTime(idx: number): string{
+        return (this.makeCurriculumItems.course_list)? this.makeCurriculumItems.course_list[idx].endTime=this.selectEndTimeModel : '' ;
+    }
 
 
 }
