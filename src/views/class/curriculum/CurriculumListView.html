@@ -590,7 +590,7 @@
                 <!-- header custom coding-->
                 <p class="popup-header-tit mgb-0">교육과정 수정</p>
                 <div class="popup-close">
-                    <button class="close" @click="isCreateClass = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    <button class="close" @click="isModifyClass = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
             <div slot="body">
@@ -610,13 +610,16 @@
                                 id="curriculumModifyTitle"
                                 class="form-control popup-type"
                                 v-model="curriculumList.curriculum.title"
-                                @input="modifyChangeTitle($event)"
+                                @input="modifyCurriculumChangeTitle($event.target.value)"
                             >
                         </div>
                     </div>
                     <div class="popup-form-cnt">
                         <div class="form-item post-cnt" style="height:154px;">
-                            <textarea class="form-textarea" :value="curriculumList.curriculum.text" @input="modifyChangeText($event)"></textarea>
+                            <textarea
+                                    class="form-textarea"
+                                    v-model="curriculumList.curriculum.text"
+                                    @input="modifyChangeText($event.target.value)"></textarea>
                         </div>
 
                         <div class="add-curriculum bd-top">
@@ -626,14 +629,14 @@
                                 <p class="add-curr-tit">수업 회차</p>
                                 <div class="form-box">
                                     <div class="form-group">
-                                        <input type="number" class="form-control" v-model="curriculumList.curriculum.course_list" @input="setCourseList($event.target.value)">
+                                        <input type="number" class="form-control" :value="modifyClassItems.course_list.length" @input="modifyCourseListItems($event.target.value)">
                                     </div>
                                 </div>
                             </div>
                             <div class="scroll-body" style="height:124px;">
-                                <div v-for="(item, index) in curriculumList.curriculum.course_list" class="add-curr-item" :key="`currListNum-${index}`">
+                                <div v-for="(item, index) in modifyClassItems.course_list" class="add-curr-item" :key="`currListNum-${index}`">
 
-                                    <a href="#" class="add-curr-tit" @click.prevent="">
+                                    <a href="#" class="add-curr-tit" @click.prevent="modifyCourseHandler(item.id, index)">
                                         <span class="curr-num">{{ index+1 }} 회차</span>
                                         <span>{{ item.title }}</span>
                                     </a>
@@ -653,7 +656,7 @@
                                                 </template>
                                                 <v-list>
                                                     <v-list-item>
-                                                        <v-list-item-title class="lt" @click="modifyCourseHandler( item.curriculum_id, item.id )">교육과정 수정</v-list-item-title>
+                                                        <v-list-item-title class="lt" @click="modifyCourseHandler( item.id, index )">교육과정 수정</v-list-item-title>
                                                     </v-list-item>
                                                     <v-list-item>
                                                         <v-list-item-title class="lt" @click="">교육과정 삭제</v-list-item-title>
@@ -686,7 +689,7 @@
                 <!-- header custom coding-->
                 <div class="popup-icon edu"></div>
                 <div class="popup-close">
-                    <button class="close" @click="isClassCurr = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    <button class="close" @click="isModifyClassCourse = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
             <div slot="body">
@@ -700,7 +703,12 @@
                     <div class="scroll-body" style="max-height:432px;">
                         <div class="popup-form-top">
                             <div class="form-item">
-                                <input type="text" id="courseModifyTitle" class="form-control popup-type">
+                                <input
+                                        type="text"
+                                        id="courseModifyTitle"
+                                        class="form-control popup-type"
+                                        v-model="curriculumList.curriculum.course_list[countCourseNumber].title"
+                                        @input="modifyCourseChangeTitle($event.target.value, countCourseNumber)">
                             </div>
                         </div>
                         <div class="popup-form-cnt">
@@ -738,7 +746,7 @@
                                             <template v-slot:activator="{ on, attrs }">
                                                 <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
                                                 <v-text-field
-                                                        v-model="startDatePickerModel"
+                                                        v-model="modifyClassItems.course_list[countCourseNumber].startDay"
                                                         v-bind="attrs"
                                                         v-on="on"
                                                         hide-details
@@ -751,7 +759,7 @@
                                                 </v-text-field>
                                             </template>
                                             <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                                            <v-date-picker v-model="startDatePickerModel" :id="`date-${currListNum}`" no-title @input="startDatePickerChange(countCourseNumber)"></v-date-picker>
+                                            <v-date-picker v-model="modifyClassItems.course_list[countCourseNumber].startDay" :id="`date-${currListNum}`" no-title @input="startDatePickerChange(countCourseNumber)"></v-date-picker>
                                         </v-menu>
                                     </div>
                                 </div>
@@ -774,7 +782,7 @@
                                                 offset-y>
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-text-field
-                                                        v-model="currentStartTimeModel"
+                                                        v-model="modifyClassItems.course_list[countCourseNumber].startTime"
                                                         v-bind="attrs"
                                                         v-on="on"
                                                         hide-details solo flat>
@@ -784,17 +792,17 @@
                                                 </v-text-field>
                                             </template>
                                             <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
-                                            <v-select v-model="startTimeSelectModel.apm" @input="startTimeChange()" :items="['오전', '오후'] " placeholder="오전" hide-details solo flat style="display:inline-block;width:70px;">
+                                            <v-select v-model="startTimeSelectModel.apm" @input="modifyCourseChangeStartTime(countCourseNumber)" :items="['오전', '오후'] " placeholder="오전" hide-details solo flat style="display:inline-block;width:70px;">
                                                 <template v-slot:selection="{item, index}">
                                                     <span style="font-size:14px;">{{item}}</span>
                                                 </template>
                                             </v-select>
-                                            <v-select v-model="startTimeSelectModel.hour" @input="startTimeChange()" :items="[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] " placeholder="12 시" hide-details solo flat style="display:inline-block;width:70px;">
+                                            <v-select v-model="startTimeSelectModel.hour" @input="modifyCourseChangeStartTime(countCourseNumber)" :items="[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] " placeholder="12 시" hide-details solo flat style="display:inline-block;width:70px;">
                                                 <template v-slot:selection="{item, index}">
                                                     <span style="font-size:14px;">{{item}}시</span>
                                                 </template>
                                             </v-select>
-                                            <v-select v-model="startTimeSelectModel.minute" @input="startTimeChange()" :items="[ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00'] " placeholder="00 분" hide-details solo flat style="display:inline-block;width:70px">
+                                            <v-select v-model="startTimeSelectModel.minute" @input="modifyCourseChangeStartTime(countCourseNumber)" :items="[ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00'] " placeholder="00 분" hide-details solo flat style="display:inline-block;width:70px">
                                                 <template v-slot:selection="{item, index}">
                                                     <span style="font-size:14px;">{{item}}분</span>
                                                 </template>
@@ -822,7 +830,7 @@
                                                 offset-y>
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-text-field
-                                                        v-model="currentEndTimeModel"
+                                                        v-model="modifyClassItems.course_list[countCourseNumber].endTime"
                                                         v-bind="attrs"
                                                         v-on="on"
                                                         hide-details solo flat>
@@ -832,17 +840,17 @@
                                                 </v-text-field>
                                             </template>
                                             <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
-                                            <v-select v-model="endTimeSelectModel.apm" @input="endTimeChange()" :items="['오전', '오후'] " placeholder="오전" hide-details solo flat style="display:inline-block;width:70px;">
+                                            <v-select v-model="endTimeSelectModel.apm" @input="getModifyCourseEndTime(countCourseNumber)" :items="['오전', '오후'] " placeholder="오전" hide-details solo flat style="display:inline-block;width:70px;">
                                                 <template v-slot:selection="{item, index}">
                                                     <span style="font-size:14px;">{{ item }}</span>
                                                 </template>
                                             </v-select>
-                                            <v-select v-model="endTimeSelectModel.hour" @input="endTimeChange()" :items="[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] " placeholder="12 시" hide-details solo flat style="display:inline-block;width:70px;">
+                                            <v-select v-model="endTimeSelectModel.hour" @input="getModifyCourseEndTime(countCourseNumber)" :items="[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] " placeholder="12 시" hide-details solo flat style="display:inline-block;width:70px;">
                                                 <template v-slot:selection="{item, index}">
                                                     <span style="font-size:14px;">{{ item }}시</span>
                                                 </template>
                                             </v-select>
-                                            <v-select v-model="endTimeSelectModel.minute" @input="endTimeChange()" :items="[ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00'] " placeholder="00 분" hide-details solo flat style="display:inline-block;width:70px">
+                                            <v-select v-model="endTimeSelectModel.minute" @input="getModifyCourseEndTime(countCourseNumber)" :items="[ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00'] " placeholder="00 분" hide-details solo flat style="display:inline-block;width:70px">
                                                 <template v-slot:selection="{item, index}">
                                                     <span style="font-size:14px;">{{ item }}분</span>
                                                 </template>
@@ -853,7 +861,9 @@
                                 </div>
                             </div>
                             <div class="form-item post-cnt" style="height:120px;">
-                                <textarea class="form-textarea"></textarea>
+                                <textarea class="form-textarea"
+                                          v-model="curriculumList.curriculum.course_list[countCourseNumber].contents"
+                                          @input="modifyCourseChangeText($event.target.value, countCourseNumber)"></textarea>
                             </div>
 
                             <!-- start: 첨부 이미지 파일 미리보기 -->
@@ -876,14 +886,27 @@
                                 <li>
                                     <a href="#" class="info-img" @click.prevent="modifyImgFileInputFocus">
                                         <img :src="require('@/assets/images/image.svg')" alt="">
-                                        <input class="input-file" type="file" name="files" id="imgFileInputModify" accept="image/*" multiple @change="addFileToImage( $event.target.files )" hidden />
+                                        <input class="input-file"
+                                               type="file" name="files"
+                                               id="imgFileInputModify"
+                                               accept="image/*"
+                                               multiple
+                                               @change="modifyFileToImage( $event.target.files )"
+                                               hidden />
                                     </a>
 
                                 </li>
                                 <li>
                                     <a href="#" @click.prevent="modifyFilesInputFocus">
                                         <img :src="require('@/assets/images/file.svg')" alt="">
-                                        <input class="input-file" type="file" name="files" id="attachFileInputModify" accept=".pdf, .xls, .xlsx, .ppt, .pptx, .doc, .docx" multiple @change="addAttachFileTo( $event.target.files )" hidden />
+                                        <input class="input-file"
+                                               type="file"
+                                               name="files"
+                                               id="attachFileInputModify"
+                                               accept=".pdf, .xls, .xlsx, .ppt, .pptx, .doc, .docx"
+                                               multiple
+                                               @change="modifyAttachFileTo( $event.target.files )"
+                                               hidden />
                                     </a>
                                 </li>
                             </ul>
@@ -895,7 +918,7 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <button type="button" class="btn navi">수정</button>
+                    <button type="button" class="btn navi" @click="modifyCourseConfirm(countCourseNumber)">수정</button>
                 </div>
             </div>
         </modal>

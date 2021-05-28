@@ -644,17 +644,15 @@ interface ICourseList {
 interface IModifyCurriculum {
     title: string;
     goal: string;
-    course_list?: [
-        {
-            id: number;
-            index: number;
-            title: string;
-            startDay: Date | string;
-            startTime: Date | string;
-            endTime: Date | string;
-            contents: string;
-        }
-    ];
+    course_list?: Array<{
+        id: number;
+        index: number;
+        title: string;
+        startDay: Date | string;
+        startTime: Date | string;
+        endTime: Date | string;
+        contents: string;
+    }>;
 }
 
 interface IClassTag {
