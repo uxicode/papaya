@@ -41,7 +41,7 @@
         </div>
       </div>
     </div>
-    <div class="fd-cnt">
+    <div class="fd-cnt" @click="onDetailPostPopupOpen(item.id)">
       <p class="fd-txt">{{ item.text }}</p>
 
       <div class="fd-inner">
@@ -100,7 +100,6 @@
           </div>
         </template>
         <!-- end: 링크가 있는 경우 -->
-
       </div>
     </div>
 

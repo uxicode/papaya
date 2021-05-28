@@ -101,6 +101,11 @@ export default class NotificationListView extends Vue {
     return (findItem)? findItem.total : 0;
   }
 
+  private onDetailPostPopupOpen(id: number) {
+    console.log(id);
+    this.$emit('detailView', id );
+  }
+
 
 
  /* private onAddPostPopupOpen() {

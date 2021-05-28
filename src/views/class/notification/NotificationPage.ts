@@ -58,6 +58,10 @@ export default class NotificationPage extends Vue {
     return this.commentsTotalItems;
   }
 
+  get detailPostIdModel() {
+    return this.detailPostId;
+  }
+
   public created() {
     this.getList().then(
       ()=>{
