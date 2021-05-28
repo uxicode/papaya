@@ -4,6 +4,7 @@ import Modal from '@/components/modal/modal.vue';
 import AddNotifyPopup from '@/views/class/notification/AddNotifyPopup';
 import {IAttachFileModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
+import NotifyDetailPopup from '@/views/class/notification/NotifyDetailPopup';
 import WithRender from './NotificationListView.html';
 
 const MyClass = namespace('MyClass');
@@ -12,6 +13,7 @@ const MyClass = namespace('MyClass');
 @Component({
   components:{
     Modal,
+    NotifyDetailPopup,
     AddNotifyPopup
   }
 })
@@ -24,6 +26,11 @@ export default class NotificationListView extends Vue {
 
   @MyClass.Getter
   private classID!: string | number;
+
+  private reservedItems: any[] = [];
+  private reservedTotal: number=0;
+  private isDetailPopupOpen: boolean=false;
+  private detailPostId: number=997; // 동적으로 변경 안되는 상태
 
   private isAddPopupOpen: boolean=false;
 
@@ -93,6 +100,36 @@ export default class NotificationListView extends Vue {
   private getCommentTotal(idx: number) {
     const findItem=this.commentsTotalItems.find((ele) => ele.id === idx);
     return (findItem)? findItem.total : 0;
+  }
+
+  /**
+   * datepicker 닫기 참조
+   * @private
+   */
+  private startDatePickerChange( ) {
+    this.startDateMenu = false;
+    // console.log(this.startDatePickerModel);
+  }
+
+  private onDetailPostPopupOpen(id: number) {
+    this.detailPostId = id; // update postId
+    this.isDetailPopupOpen=true;
+  }
+
+  private onDetailPostPopupStatus(value: boolean) {
+    this.isDetailPopupOpen=value;
+  }
+
+  private onAddPostPopupOpen() {
+    this.isAddPopupOpen=true;
+  }
+
+  private onAddPostPopupStatus(value: boolean) {
+    this.isAddPopupOpen=value;
+  }
+
+  private onAddPost(value: boolean) {
+    this.isAddPopupOpen=value;
   }
 
 }

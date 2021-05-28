@@ -1,4 +1,4 @@
-import {Vue, Component} from 'vue-property-decorator';
+import {Vue, Component, Watch} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
@@ -49,9 +49,13 @@ export default class ClassSettingMain extends Vue{
     private isWithdraw: boolean = false;
     private isWithdrawDenied: boolean = false;
 
-    private onOffNoti: boolean = true;
-
+    /* 클래스 알림 설정 */
+    private onOffNoti: boolean | number = true;
+    private onOffPostNoti: boolean | number = true;
+    private onOffCommentNoti: boolean | number = true;
+    private onOffScheduleNoti: number = 0;
     private classNotifyList: string[] = ['새 알림', '새 댓글', '일정'];
+    private notiStateList: string[] = ['', '', ''];
 
     /* 클래스 관리 / 멤버 관리 / 기타 리스트 타이틀 및 링크 */
     private classManageList: ISettingMenu[] = [
@@ -148,8 +152,18 @@ export default class ClassSettingMain extends Vue{
      */
     private getMyClassMemberInfo(): void {
         this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.myClassInfo.me.id})
-          .then((data) => {
+          .then((data: any) => {
               this.classMemberInfo = data;
+
+              /* 클래스 알림 설정 초기값 삽입 */
+              this.onOffNoti = data.member_info.onoff_push_noti;
+              this.onOffPostNoti = data.member_info.onoff_post_noti;
+              this.onOffCommentNoti = data.member_info.onoff_comment_noti;
+              this.onOffScheduleNoti = data.member_info.onoff_schedule_noti;
+              for (let i = 0; i < this.notiStateList.length; i++) {
+                  this.notiOnOffTxt(i);
+              }
+
               console.log(this.classMemberInfo);
           });
     }
@@ -171,7 +185,7 @@ export default class ClassSettingMain extends Vue{
      * @param level
      * @private
      */
-    private memberLevelIcon = (level: number): string => {
+    private memberLevelIcon(level: number): string {
         switch (level) {
             case 1:
                 return 'admin';
@@ -187,7 +201,7 @@ export default class ClassSettingMain extends Vue{
      * @param level
      * @private
      */
-    private memberLevelTxt = (level: number): string => {
+    private memberLevelTxt(level: number): string {
         switch (level) {
             case 1:
                 return '운영자';
@@ -199,8 +213,9 @@ export default class ClassSettingMain extends Vue{
     }
 
     /**
-     * input을 이용해 변경할 정보를 임시로 담을 함수
+     * input 을 이용해 변경할 정보를 임시로 담을 함수
      * @param event
+     * @param id
      * @private
      */
     private valueChange(event: any, id: number): void {
@@ -210,13 +225,14 @@ export default class ClassSettingMain extends Vue{
 
     /**
      * 푸시 알림 설정
-     * @param item
      * @private
+     * @param value
      */
     private pushToggle(value: boolean): void {
-        this.onOffNoti = !!value;
+        this.onOffNoti = value;
         ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {onoff_push_noti: this.onOffNoti})
-          .then(() => {
+          .then((data) => {
+              console.log(data);
               setTimeout(()=>{
                   console.log(this.onOffNoti);
               }, 250 );
@@ -228,35 +244,36 @@ export default class ClassSettingMain extends Vue{
      * @param idx
      * @private
      */
-    private notiOnOffTxt(idx: number): string {
+    private notiOnOffTxt(idx: number): void {
         let stateTxt: string = '';
-        let value: number = 0;
+        let value: boolean | number = 0;
         switch (idx) {
             case 0:
-                value = this.memberInfo.onoff_post_noti;
+                value = this.onOffPostNoti;
                 break;
             case 1:
-                value = this.memberInfo.onoff_comment_noti;
+                value = this.onOffCommentNoti;
                 break;
             case 2:
-                value = this.memberInfo.onoff_schedule_noti;
+                value = this.onOffScheduleNoti;
                 break;
         }
-        if (idx !== 2) { // 새 알림, 새 댓글
-            if (value === 1) {
+        // 새 알림, 새 댓글
+        if (idx !== 2) {
+            if (value === (1 || true)) {
                 stateTxt = '받기';
             } else {
                 stateTxt = '받지 않기';
             }
         } else { // 일정
             switch (value) {
-                case 3:
+                case 10:
                     stateTxt = '10분 전 받기';
                     break;
-                case 2:
+                case 30:
                     stateTxt = '30분 전 받기';
                     break;
-                case 1:
+                case 60:
                     stateTxt = '1시간 전 받기';
                     break;
                 case 0:
@@ -267,7 +284,7 @@ export default class ClassSettingMain extends Vue{
                     break;
             }
         }
-        return stateTxt;
+        this.notiStateList[idx] = stateTxt;
     }
 
     /**
@@ -276,7 +293,7 @@ export default class ClassSettingMain extends Vue{
      * @param value
      * @private
      */
-    private notiOnOff(idx: number, value: number): void {
+    private notiOnOff(idx: number, value: boolean | number): void {
         let info = {};
         switch (idx) {
             case 0:
@@ -296,7 +313,24 @@ export default class ClassSettingMain extends Vue{
           .then((data) => {
             console.log(data);
           });
-        this.notiOnOffTxt(idx);
+    }
+
+    /**
+     * 가입 안내 문구 설정 팝업 열기
+     * @private
+     */
+    private openGuideTxtPopup(): void {
+        this.guideTxt = this.info.description;
+        this.isGuideTxt = true;
+    }
+
+    /**
+     * 가입 안내 문구 설정 팝업 닫기
+     * @private
+     */
+    private closeGuideTxtPopup(): void {
+        this.guideTxt = this.info.description;
+        this.isGuideTxt = false;
     }
 
     /**
@@ -318,9 +352,8 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private textCount(text: string): void {
-        this.guideTxt = text;
         this.remainLength = this.maxLength - this.guideTxt.length;
-        this.guideTxt = (this.remainLength < 0) ? this.guideTxt.substring(0, 100) : this.guideTxt;
+        this.guideTxt = (this.remainLength <= 0) ? this.guideTxt.substring(0, 100) : this.guideTxt;
         this.remainLength = (this.remainLength < 0) ? 0 : this.remainLength;
     }
 
@@ -339,9 +372,8 @@ export default class ClassSettingMain extends Vue{
 
     /**
      * 클래스 가입 질문 수정
-     * @param id
-     * @param newQuestion
      * @private
+     * @param question
      */
     private setJoinQuestion(question: string): void {
         MyClassService.setClassQuestion(this.classID, this.questionId, {new_question: question})
@@ -400,7 +432,7 @@ export default class ClassSettingMain extends Vue{
     private openModal(key: string): void {
         switch(key) {
             case 'guideTxtModal':
-                this.isGuideTxt = true;
+                this.openGuideTxtPopup();
                 break;
             case 'joinQnaSettingModal':
                 this.isJoinQnaSetting = true;

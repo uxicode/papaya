@@ -35,11 +35,11 @@
                         </div>
                     </div>
                 </li>
-                <!-- sub-list-item 에 클래스명 disabled추가 시 비활성화 -->
+                <!-- sub-list-item 에 클래스명 disabled 추가 시 비활성화 -->
                 <li v-for="(item, idx) in classNotifyList"
                     :key="idx"
                     class="list-item sub-list-item"
-                    :class="{'disabled': memberInfo.onoff_push_noti === 0}">
+                    :class="{'disabled': onOffNoti === 0}">
                     <p class="list-tit">{{ item }}</p>
                     <div class="setting-btn">
                         <div class="member-info-btn">
@@ -53,7 +53,7 @@
                                                 class="list-popup-btn"
                                                 v-bind="attrs"
                                                 v-on="on">
-                                            <span>{{ notiOnOffTxt(idx) }}</span>
+                                            <span>{{ notiStateList[idx] }}</span>
                                             <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
                                         </button>
                                     </template>
@@ -66,13 +66,13 @@
                                         </v-list-item>
                                     </v-list>
                                     <v-list v-else>
-                                        <v-list-item @click="notiOnOff(idx, 3)">
+                                        <v-list-item @click="notiOnOff(idx, 10)">
                                             <v-list-item-title>10분 전 받기</v-list-item-title>
                                         </v-list-item>
-                                        <v-list-item @click="notiOnOff(idx, 2)">
+                                        <v-list-item @click="notiOnOff(idx, 30)">
                                             <v-list-item-title>30분 전 받기</v-list-item-title>
                                         </v-list-item>
-                                        <v-list-item @click="notiOnOff(idx, 1)">
+                                        <v-list-item @click="notiOnOff(idx, 60)">
                                             <v-list-item-title>1시간 전 받기</v-list-item-title>
                                         </v-list-item>
                                         <v-list-item @click="notiOnOff(idx, 0)">
@@ -107,11 +107,11 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.5 (클래스 가입 안내 문구 설정) -->
     <transition name="modal">
-        <modal v-if="isGuideTxt" size="600px" body-padding="0" @modalClose="isGuideTxt=false;">
+        <modal v-if="isGuideTxt" size="600px" body-padding="0" @modalClose="closeGuideTxtPopup">
             <div slot="header">
                 <p class="popup-header-tit">가입 안내 문구 설정</p>
                 <div class="popup-close">
-                    <button class="close" @click="isGuideTxt = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    <button class="close" @click="closeGuideTxtPopup"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
             <div slot="body">
@@ -122,16 +122,16 @@
                         <label for="guideTxt">가입 안내 문구</label>
                         <textarea class="form-textarea mgt-10"
                                   id="guideTxt"
-                                  @keyup="textCount(info.description)"
-                                  v-model="info.description"
+                                  @keyup="textCount(guideTxt)"
+                                  v-model="guideTxt"
                                   placeholder="text"></textarea>
-                        <small class="form-message count">{{String(info.description).length}}/{{maxLength}}</small>
+                        <small class="form-message count">{{(guideTxt === null) ? 0 : guideTxt.length}}/{{maxLength}}</small>
                     </div>
                 </div>
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isGuideTxt = false;">취소</btn>
+                    <btn type="outline" @btnClick="closeGuideTxtPopup">취소</btn>
                     <btn type="navi" @btnClick="guideTxtModify(guideTxt)">저장</btn>
                 </div>
             </div>

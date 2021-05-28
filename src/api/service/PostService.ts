@@ -30,6 +30,14 @@ export class PostService{
     return request('get', `/comment/type/post/${postId}`);
   }
 
+  /**
+   * 하나의 댓글에 달린 답글 전체 조회
+   * @param commentId
+   */
+  public static getReplysByCommentId(commentId: number): Promise<any> {
+    return request('get', `comment-reply/on/${commentId}`);
+  }
+
 
   /**
    * 클래스 예약된 알림(게시글) 전체 조회
@@ -42,7 +50,7 @@ export class PostService{
 
 
   /**
-   * 모든 알
+   * 모든 알림
    * @param classId
    * @param paging
    */
