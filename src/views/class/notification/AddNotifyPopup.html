@@ -15,7 +15,7 @@
         <div class="popup-form">
           <div class="scroll-body" style="height:50vh">
             <div class="popup-form-top">
-              <div class="form-item post-classes selected"> <!-- class 선택 시 form-item에 selected 추가됨 -->
+              <div class="form-item post-classes selected"> <!-- class 선택 시 form-item 에 selected 추가됨 -->
                 <p>
                   <span class="icon"><img :src="getProfileImg(myClassHomeModel.image_url)" class="icon-img" alt=""></span>
                   <span class="gr-name">{{ myClassHomeModel.g_name }}</span>
@@ -48,9 +48,35 @@
             <div class="popup-form-btm">
               <!-- start: 첨부 이미지 파일 미리보기 -->
               <image-preview :file-items="imgFileURLItemsModel"
-                             @remove="removeImgPreviewItems"
-                             @removeAll="removeAllPreview"></image-preview>
+                             @remove="onRemoveImgPreviewItems"
+                             @removeAll="onRemoveAllPreview"></image-preview>
               <!-- end: 첨부 이미지 파일 미리보기 -->
+
+              <!-- start: add-vote list -->
+              <!--<div class="form-add-list">
+                <div class="add-item">
+                  <div class="add-item-top">
+                    <p class="add-item-tit">투표</p>
+                    <div class="add-item-btn">
+                      <a href="" class="txt-btn">수정</a>
+                      <a href="" class="txt-btn">삭제</a>
+                    </div>
+                  </div>
+
+                  <div class="add-item-cnt">
+                    <div class="add-vote">
+                      <p class="add-vote-tit">수학여행 장소 투표</p>
+                      <ul class="add-vote-type clearfix">
+                        <li>복수선택</li>
+                        <li>익명투표</li>
+                        <li>2020.3.12 오후 3시 마감</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>-->
+              <vote-preview :vote-items="voteItemModel" @remove="onRemoveVote" @modify="onModifyVote"></vote-preview>
+              <!-- end: add-vote list -->
 
               <!-- start: 첨부 파일 리스트 -->
               <file-preview :file-items="attachFileItemsModel"

@@ -3,9 +3,8 @@ import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
 import {ICreatePost, ILinkModel, IVoteModel} from '@/views/model/post.model';
-import {PostService} from '@/api/service/PostService';
-import AddVotePopup from '@/views/class/notify/AddVotePopup';
-import AddLinkPopup from '@/views/class/notify/AddLinkPopup';
+import AddVotePopup from '@/views/class/notification/AddVotePopup';
+import AddLinkPopup from '@/views/class/notification/AddLinkPopup';
 import {ImageFileService} from '@/views/service/preview/ImageFileService';
 import {AttachFileService} from '@/views/service/preview/AttachFileService';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
@@ -15,9 +14,11 @@ import Modal from '@/components/modal/modal.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import LinkPreview from '@/components/preview/linkPreview.vue';
+import VotePreview from '@/components/preview/votePreview.vue';
 import WithRender from './AddNotifyPopup.html';
 
 const MyClass = namespace('MyClass');
+const Post = namespace('Post');
 
 @WithRender
 @Component({
@@ -29,7 +30,8 @@ const MyClass = namespace('MyClass');
     FilePreview,
     AddVotePopup,
     AddLinkPopup,
-    LinkPreview
+    LinkPreview,
+    VotePreview
   }
 })
 export default class AddNotifyPopup extends Vue{
@@ -43,11 +45,34 @@ export default class AddNotifyPopup extends Vue{
   @MyClass.Getter
   private myClassHomeModel!: IClassInfo;
 
+  @Post.Action
+  private ADD_POST!: ( payload: {
+    classId: number,
+    formData: FormData,
+    voteData: IVoteModel
+  })=>Promise<any>;
+
+
   private isOpenAddVotePopup: boolean=false;
   private isOpenAddLinkPopup: boolean=false;
   private imageLoadedCount: number=0;
   private alarmAt: Date=new Date();
-  private voteData!: IVoteModel;
+  private voteData: IVoteModel={
+    parent_id:0,
+    type: 0,
+    title: '',
+    multi_choice: 0,
+    anonymous_mode: 0,
+    open_progress_level: 0,
+    open_result_level: 0,
+    finishAt: new Date().toISOString().substr(0, 10),
+    vote_choice_list: [
+      {
+        text: '',
+        index: 1
+      }
+    ]
+  };
 
   private postData: ICreatePost = { title: '', text: ''};
 
@@ -80,6 +105,10 @@ export default class AddNotifyPopup extends Vue{
 
   get linkListItems(): any{
     return this.linkData.link_item_list;
+  }
+
+  get voteItemModel() {
+    return this.voteData;
   }
 
   get linkTitle(): string{
@@ -153,14 +182,14 @@ export default class AddNotifyPopup extends Vue{
    * @param idx
    * @private
    */
-  private removeImgPreviewItems(idx: number): void{
+  private onRemoveImgPreviewItems(idx: number): void{
     this.imgFileService.remove(idx);
   }
   /**
    * 추가된 이미지 파일 모두 지우기
    * @private
    */
-  private removeAllPreview(): void {
+  private onRemoveAllPreview(): void {
     this.imgFileService.removeAll();
   }
   /**
@@ -210,16 +239,29 @@ export default class AddNotifyPopup extends Vue{
     this.submitAddPost();
   }
 
+  private getValidLink(): boolean{
+    const validURLRegx = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+    const invalidLinkItems = this.linkData.link_item_list.filter( (item: {index: number, url: string} ) => validURLRegx.test(item.url) );
+    return invalidLinkItems.length > 0;
+  }
+
   private setPostDataToFormData() {
     if( !this.isSubmitValidate ){return;}
 
+    const mergeData = (this.getValidLink())? {...this.postData, ...this.linkData} : {...this.postData};
 
-    const temp = JSON.stringify( {...this.postData } );
+    const temp = JSON.stringify( mergeData );
     this.formData.append('data', temp );
     console.log(this.voteData, temp);
 
-
-    PostService.setAddPost(this.classID, this.formData )
+    this.ADD_POST({classId: Number( this.classID ), formData: this.formData, voteData: this.voteData})
+      .then((data) => {
+        this.imgFilesAllClear();
+        this.attachFilesAllClear();
+        this.postData={ title: '', text: ''};
+        this.$emit('submit', false);
+      });
+    /*PostService.setAddPost(this.classID, this.formData )
       .then((data)=>{
         console.log(data.post.id);
         this.$emit('submit', false);
@@ -237,7 +279,7 @@ export default class AddNotifyPopup extends Vue{
         this.imgFilesAllClear();
         this.attachFilesAllClear();
         this.postData={ title: '', text: ''};
-      });
+      });*/
   }
 
 
@@ -276,6 +318,29 @@ export default class AddNotifyPopup extends Vue{
   private onAddLink(linkData: ILinkModel) {
     this.isOpenAddLinkPopup=false;
     this.linkData = linkData;
+  }
+
+  private onRemoveVote() {
+    this.voteData={
+      parent_id:0,
+      type: 0,
+      title: '',
+      multi_choice: 0,
+      anonymous_mode: 0,
+      open_progress_level: 0,
+      open_result_level: 0,
+      finishAt: new Date().toISOString().substr(0, 10),
+      vote_choice_list: [
+        {
+          text: '',
+          index: 1
+        }
+      ]
+    };
+  }
+
+  private onModifyVote() {
+    this.isOpenAddVotePopup=true;
   }
 
 

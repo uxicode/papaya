@@ -129,6 +129,9 @@
   background-color: #1d1d4c!important;
   border-color: transparent !important;
 }
-
+.v-text-field.v-text-field--solo .v-input__control{
+  min-height:0 ;
+  input{ max-height: 0;}
+}
 /* 닉네임 중복 확인 */
 .v-application .error {background-color: transparent !important;}

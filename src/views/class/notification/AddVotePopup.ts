@@ -8,7 +8,7 @@ import RadioButton from '@/components/radio/RadioButton.vue';
 import Modal from '@/components/modal/modal.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
-import WithRender from '@/views/class/notify/AddVotePopup.html';
+import WithRender from '@/views/class/notification/AddVotePopup.html';
 
 const MyClass = namespace('MyClass');
 
@@ -35,7 +35,7 @@ export default class AddVotePopup extends Vue{
   private dragging: boolean= false;
   private voteData: IVoteModel= {
     parent_id:0,
-    type: 0,
+    type: '0',
     title: '',
     multi_choice: 0,
     anonymous_mode: 0,
@@ -63,10 +63,22 @@ export default class AddVotePopup extends Vue{
     {id:1, txt:'운영자와 스텝에게만 공개'},
     {id:2, txt:'운영자에게만 공개'},
     ];
+  private dateModelItem: Array<{ date: string }> = [
+    {date: new Date().toISOString().substr(0, 10)},
+    {date:''},
+    {date:''},
+  ];
+
   private anonymousChk: boolean=false;
   private multiChoiceChk: boolean=false;
   private endDateMenuChk: boolean=false;
   private endDateMenu: boolean=false;
+
+  get isValidation(): boolean{
+    const validItems=this.voteData.vote_choice_list.filter((item) => item.text !== '');
+    const validDateItems=this.dateModelItem.filter((item) => item.date !== '');
+    return this.voteData.title!=='' && ( validItems.length>=2 || validDateItems.length>=2);
+  }
 
   get dragOptions() {
     return {
@@ -77,7 +89,38 @@ export default class AddVotePopup extends Vue{
     };
   }
 
+  private resetVoteList() {
+    this.voteData.vote_choice_list=[
+      {
+        text: '제주도 여행',
+        index: 1
+      },
+      {
+        text: '',
+        index: 2
+      },
+      {
+        text: '',
+        index: 3
+      }
+    ];
+
+  }
+
   private addVoteList(idx: number) {
+    this.updateVoteList(idx);
+  }
+
+  private addVoteDateList(idx: number) {
+    this.updateVoteList(idx);
+    this.dateModelItem.push({date: new Date().toISOString().substr(0, 10)});
+    this.dateModelItem.forEach((item, index)=>{
+      this.voteData.vote_choice_list[index].text=item.date;
+    });
+
+  }
+
+  private updateVoteList(idx: number) {
     this.voteData.vote_choice_list.push({
       text: '',
       index: ++idx
@@ -89,6 +132,7 @@ export default class AddVotePopup extends Vue{
   }
 
   private optionChange(value: number ): void {
+    this.resetVoteList();
     this.voteData.type=value;
   }
 
@@ -122,5 +166,7 @@ export default class AddVotePopup extends Vue{
   private onVoteSubmit() {
     this.$emit('submit', this.voteData);
   }
+
+
 
 }

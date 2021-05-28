@@ -6,7 +6,6 @@ interface IPostModel{
   endAt: Date | null;
   expiredAt:  Date;
   id: number;
-  link: number | null;
   owner: {
     class_id: number,
     createdAt: Date,
@@ -136,7 +135,7 @@ interface ICreatePost{
 
 interface IVoteModel{
   parent_id: number;
-  type: number;
+  type: number | string;
   title: string;
   multi_choice: number;  //복수선택
   anonymous_mode: number;   //익명
@@ -159,5 +158,24 @@ interface ILinkModel{
     url: string
   }>;
 }
-export {IPostModel, IAttachFileModel, ICreatePost, IVoteModel, ILinkModel};
+
+interface IPostInLinkModel{
+  link: {
+    createdAt: Date | null,
+    id: number,
+    parent_id: number,
+    title: string,
+    type: 0
+    updatedAt: Date | null,
+    link_items: Array<{
+      createdAt: Date | null,
+      id:  number,
+      index: number,
+      link_id:  number,
+      updatedAt: Date | null,
+      url: string,
+    }>
+  };
+}
+export {IPostModel, IAttachFileModel, ICreatePost, IVoteModel, ILinkModel, IPostInLinkModel};
 

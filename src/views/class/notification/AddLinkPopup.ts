@@ -4,7 +4,7 @@ import draggable, {MoveEvent} from 'vuedraggable';
 import {ILinkModel} from '@/views/model/post.model';
 import Modal from '@/components/modal/modal.vue';
 import TxtField from '@/components/form/txtField.vue';
-import WithRender from '@/views/class/notify/AddLinkPopup.html';
+import WithRender from '@/views/class/notification/AddLinkPopup.html';
 
 const MyClass = namespace('MyClass');
 
@@ -59,7 +59,6 @@ export default class AddLinkPopup extends Vue {
   private checkMove(e: MoveEvent<any> ) {
     window.console.log('Future index: ' + e.draggedContext.futureIndex);
   }
-
 
   private addLinkList(idx: number) {
     this.linkData.link_item_list.push({

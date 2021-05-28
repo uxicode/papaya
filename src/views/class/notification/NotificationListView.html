@@ -1,0 +1,116 @@
+<div>
+  <div class="feed-item" v-for="(item, index) in postListItems" :key="`notice-${index}`">
+    <div class="fd-head">
+      <h3 class="fd-tit">{{ item.title }}</h3>
+      <div class="fd-writer type2">
+        <p class="writer">
+          <span class="name" :class="{'manager':isOwner( item.owner.user_id, item.user_id)}">{{ item.owner.nickname }}</span>
+          <span class="time">{{ item.updatedAt }}</span>
+          <span class="noti">{{ item.type===0? '일반' : '공지' }}</span>
+        </p>
+      </div>
+      <div class="fd-btn">
+        <button type="button" class="btn only-ico-btn sm bookmark" :class="{'active': item.isBookmark }" @click="onKeepPostClick(item.id)"></button>
+        <div class="list-popup">
+          <v-menu
+                  min-width="200px"
+                  :close-on-click="true">
+            <template v-slot:activator="{ on, attrs }">
+              <button v-if="isOwner( item.owner.user_id, item.user_id)"
+                      type="button"
+                      class="list-popup-btn"
+                      v-bind="attrs"
+                      v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
+              </button>
+            </template>
+            <v-list>
+              <v-list-item @click="">
+                <v-list-item-title>일정 수정</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="">
+                <v-list-item-title>공지로 등록</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="">
+                <v-list-item-title>일정 보관</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="">
+                <v-list-item-title>일정 삭제</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
+      </div>
+    </div>
+    <div class="fd-cnt">
+      <p class="fd-txt">{{ item.text }}</p>
+
+      <div class="fd-inner">
+
+        <!-- start: attach 에 이미지파일이 있는 경우 -->
+        <template v-if="getImgFileLen(item.attachment)>0">
+          <ul class="img-list clearfix">
+            <li class="img-item" v-for="( imgItem, imgIndex ) in getImgFileDataSort(item.attachment)"
+                :key="`img-${imgIndex}`" >
+              <a :href="imgItem.location"
+                 :data-count="getImgFileMoreCheck(item.attachment)"
+                 :class="{'pseudo-del': getImgTotalNum(item.attachment) }"  target="_blank">
+                <img :src="imgItem.location" alt="">
+              </a>
+            </li>
+          </ul>
+        </template>
+        <!-- end: attach 에 이미지파일이 있는 경우 -->
+
+        <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+        <template v-if="getFileDataSort(item.attachment).length>0">
+          <p class="fd-inner-txt">첨부 파일 {{ getFileDataSort(item.attachment).length }}</p>
+          <ul class="file-list clearfix">
+            <li v-for="fileItem in getFileDataSort(item.attachment)">
+              <a :href="fileItem.location" target="_blank">{{fileItem.originalname }}</a>
+            </li>
+          </ul>
+        </template>
+        <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+
+        <!-- start:  투표가 있는 경우 -->
+        <template v-if="item.vote!==null">
+          <p class="fd-inner-txt fc-red">{{ isVote(item.vote.finishAt)? '투표 중' : '투표마감'}}</p>
+          <div class="vote-area">
+            <p class="vote-tit">{{ item.vote.title }}</p>
+            <ul class="vote-option clearfix">
+              <li>{{ (item.vote.multi_choice)? '복수선택' : '단일선택'}}</li>
+              <li>{{ (item.vote.anonymous_mode)? '익명투표' : '공개투표' }}</li>
+              <li>{{ (item.vote.finishAt)? item.vote.finishAt+' 마감': '종료일자없음'}} </li>
+            </ul>
+          </div>
+        </template>
+        <!-- end:  투표가 있는 경우 -->
+
+        <!-- start: 링크가 있는 경우 -->
+        <template v-if="item.link!==null">
+          <p class="fd-inner-txt">{{ item.link.title }} 관련 링크 {{item.link.link_items.length}}</p>
+
+          <div class="link-area"  v-for="(linkItem, index) in item.link.link_items" :key="`link-${index}`">
+            <!--                <div class="link-thumb"><img :src="require('@/assets/images/pic4.png')" alt=""></div>-->
+            <div class="link-cnt">
+              <a :href="linkItem.url" class="link-tit" target="_blank">{{ linkItem.url }}</a>
+              <!--                  <p class="link-txt">자연사랑 어린이 미술대회는 지난 2016년부터 개최해 온 전통 있는 미술대회 입니다. 아이들에게 환경보호…</p>-->
+              <!--                  <p class="link-source"><img :src="require('@/assets/images/pic9.png')" class="link-logo" alt="">https://m.blog.naver.com/ccedulab/221457750462214577504622145775046</p>-->
+            </div>
+          </div>
+        </template>
+        <!-- end: 링크가 있는 경우 -->
+
+      </div>
+    </div>
+
+    <div class="fd-foot clearfix">
+      <span class="fd-viewer">{{ item.count }}명 읽음</span>
+      <span class="fd-comment">댓글 {{ getCommentTotal( item.id ) }}</span>
+    </div>
+  </div>
+
+  <div class="noti-add">
+    <a href="" class="classes-add-btn" @click.prevent="onAddPostPopupOpen"></a>
+  </div>
+</div>

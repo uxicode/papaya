@@ -9,3 +9,6 @@ export const SET_MEMBER_ID: string = 'SET_MEMBER_ID';
 export const SET_MEMBER_LEVEL: string = 'SET_MEMBER_LEVEL';
 export const CLASS_MEMBER_INFO: string = 'CLASS_MEMBER_INFO';
 export const SET_ACTIVE_NUM: string = 'SET_ACTIVE_NUM';
+export const SET_OPEN_ADD_POST: string = 'SET_OPEN_ADD_POST';
+export const SET_POST_LIST: string = 'SET_POST_LIST';
+export const SET_POST_IN_BOOKMARK: string = 'SET_POST_IN_BOOKMARK';
