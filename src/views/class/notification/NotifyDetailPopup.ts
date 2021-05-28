@@ -35,7 +35,7 @@ export default class NotifyDetailPopup extends Vue {
     private commentData!: any;
     private replyData!: any;
 
-    public created() {
+    public mounted() {
         this.getPost();
         this.getComments();
         this.getReplys();
@@ -64,7 +64,7 @@ export default class NotifyDetailPopup extends Vue {
     private getPost(): void {
         PostService.getPostsById(this.classID, this.postId)
             .then((data) => {
-               // console.log(data);
+               console.log(data);
                this.postData = data.post;
             });
     }
@@ -103,5 +103,10 @@ export default class NotifyDetailPopup extends Vue {
     private popupChange( value: boolean ) {
         this.$emit('change', value);
     }
+    private onDetailPostPopupOpen(id: number) {
+        console.log(id);
+        this.$emit('detailView', id );
+    }
+
 
 }

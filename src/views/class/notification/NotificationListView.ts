@@ -4,6 +4,7 @@ import Modal from '@/components/modal/modal.vue';
 import AddNotifyPopup from '@/views/class/notification/AddNotifyPopup';
 import {IAttachFileModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
+import NotifyDetailPopup from '@/views/class/notification/NotifyDetailPopup';
 
 import WithRender from './NotificationListView.html';
 
@@ -13,7 +14,8 @@ const MyClass = namespace('MyClass');
 @Component({
   components:{
     Modal,
-    AddNotifyPopup
+    AddNotifyPopup,
+    NotifyDetailPopup
   }
 })
 export default class NotificationListView extends Vue {
@@ -32,6 +34,13 @@ export default class NotificationListView extends Vue {
 
 
   private isAddPopupOpen: boolean=false;
+
+  private isDetailPopupOpen: boolean=false;
+  private detailPostId: number=997; // 동적으로 변경 안되는 상태
+
+  get detailPostIdModel() {
+    return this.detailPostId;
+  }
 
   private isOwner( ownerId: number, userId: number): boolean {
     return (ownerId === userId);
@@ -101,11 +110,14 @@ export default class NotificationListView extends Vue {
     return (findItem)? findItem.total : 0;
   }
 
-  private onDetailPostPopupOpen(id: number) {
-    console.log(id);
-    this.$emit('detailView', id );
+  private onDetailPostOpen(id: number) {
+    this.isDetailPopupOpen=true;
+    this.detailPostId = id; // update postId
   }
 
+  private onDetailPostPopupStatus(value: boolean) {
+    this.isDetailPopupOpen=value;
+  }
 
 
  /* private onAddPostPopupOpen() {
