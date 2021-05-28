@@ -6,8 +6,8 @@ import AddNotifyPopup from '@/views/class/notification/AddNotifyPopup';
 import {PostService} from '@/api/service/PostService';
 import {getAllPromise} from '@/views/model/types';
 import NotificationListView from '@/views/class/notification/NotificationListView';
+import NotifyDetailPopup from '@/views/class/notification/NotifyDetailPopup';
 import WithRender from './NotificationPage.html';
-import {GET_POST_LIST_ACTION} from '@/store/action-class-types';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -18,6 +18,7 @@ const Post = namespace('Post');
     Modal,
     AddNotifyPopup,
     NotificationListView,
+    NotifyDetailPopup
   }
 })
 export default class NotificationPage extends Vue {
@@ -45,6 +46,14 @@ export default class NotificationPage extends Vue {
   private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
   private startDateMenu: boolean=false;
 
+
+  private isDetailPopupOpen: boolean=false;
+  private detailPostId: number=997; // 동적으로 변경 안되는 상태
+
+
+  get detailPostIdModel() {
+    return this.detailPostId;
+  }
 
   get postListItemsModel() {
     return this.postListItems;
@@ -140,6 +149,14 @@ export default class NotificationPage extends Vue {
     this.isAddPopupOpen=true;
   }
 
+  private onDetailPostOpen(id: number) {
+    console.log(id);
+    this.isDetailPopupOpen=true;
+    this.detailPostId = id; // update postId
+  }
 
+  private onDetailPostPopupStatus(value: boolean) {
+    this.isDetailPopupOpen=value;
+  }
 
 }

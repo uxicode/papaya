@@ -96,7 +96,8 @@
 
     <notification-list-view v-if="postListItemsModel.length>0"
             :post-list-items="postListItemsModel"
-            :comments-total-items="commentsTotalItemsModel" ></notification-list-view>
+            :comments-total-items="commentsTotalItemsModel"
+            @click:detailPost="onDetailPostOpen"></notification-list-view>
 
     <!-- 등록된 알림 없음 -->
     <div class="no-notify" v-else>
@@ -115,5 +116,6 @@
     </div>
   </div >
 
+  <notify-detail-popup :is-open="isDetailPopupOpen" :post-id="detailPostIdModel" @change="onDetailPostPopupStatus"></notify-detail-popup>
    <add-notify-popup :is-open="isAddPopupOpen" @change="onAddPostPopupStatus" @submit="onAddPost"></add-notify-popup>
 </section>

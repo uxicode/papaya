@@ -130,7 +130,7 @@
                         <p>댓글 {{ commentData.length }}</p>
                     </div>
                     <div class="comment-cnt" >
-                        <div v-for="item in commentData" class="comment pdt-0">
+                        <div v-for="(item, idx ) in commentData" class="comment pdt-0" :key="`comment-${idx}`">
                             <div class="main-comment">
                                 <p class="comment-writer">{{ item.owner.nickname }} <span class="wr-time">{{ updatedDiffDate(item.createdAt) }}</span></p>
                                 <p class="comment-txt">{{ item.comment }}</p>
@@ -141,9 +141,9 @@
                                 </div>
                             </div>
 
-                            <div v-for="reply in replyData" class="reply">
-                                <p class="comment-writer">{{ reply.owner.nickname }} <span class="wr-time">{{ updatedDiffDate(reply.createdAt) }}</span></p>
-                                <p class="comment-txt">{{ reply.comment }}</p>
+                            <div v-for="( replyItem, jdx) in replyData[idx].comment_list" class="reply">
+                                <p class="comment-writer">{{ replyItem.owner.nickname }} <span class="wr-time">{{ updatedDiffDate(replyItem.createdAt) }}</span></p>
+                                <p class="comment-txt">{{ replyItem.comment }}</p>
                             </div>
 
                         </div>

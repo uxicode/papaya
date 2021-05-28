@@ -7,6 +7,7 @@ import {Utils} from '@/utils/utils';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import WithRender from './NotifyDetailPopup.html';
+import {getAllPromise} from '@/views/model/types';
 
 const MyClass = namespace('MyClass');
 
@@ -35,10 +36,10 @@ export default class NotifyDetailPopup extends Vue {
     private commentData!: any;
     private replyData!: any;
 
-    public mounted() {
-        this.getPost();
-        this.getComments();
-        this.getReplys();
+    public async created() {
+        await this.getPost();
+        await this.getComments();
+        // await this.getReplys();
     }
 
     public calcDate(dateValue: Date): number[] {
@@ -64,7 +65,7 @@ export default class NotifyDetailPopup extends Vue {
     private getPost(): void {
         PostService.getPostsById(this.classID, this.postId)
             .then((data) => {
-               console.log(data);
+               // console.log(data);
                this.postData = data.post;
             });
     }
@@ -76,8 +77,20 @@ export default class NotifyDetailPopup extends Vue {
     private getComments(): void {
         PostService.getCommentsByPostId(this.postId)
             .then((data) => {
-                console.log(data);
+                // console.log(data);
                 this.commentData = data.comment_list;
+                const replyIdItems=this.commentData.map((item: any)=>{
+                    return PostService.getReplysByCommentId( item.id );
+                });
+
+                console.log(replyIdItems);
+
+                getAllPromise( replyIdItems )
+                  .then(( replyData: any[] )=>{
+                      // console.log(replyData);
+                      this.replyData = replyData;
+                });
+
             });
     }
 
