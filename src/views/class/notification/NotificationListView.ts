@@ -4,7 +4,10 @@ import Modal from '@/components/modal/modal.vue';
 import AddNotifyPopup from '@/views/class/notification/AddNotifyPopup';
 import {IAttachFileModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
-
+import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
+import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
+import ListInVotePreview from '@/components/preview/ListInVotePreview.vue';
+import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
 import WithRender from './NotificationListView.html';
 
 const MyClass = namespace('MyClass');
@@ -14,6 +17,10 @@ const MyClass = namespace('MyClass');
   components:{
     Modal,
     AddNotifyPopup,
+    ListInImgPreview,
+    ListInFilePreview,
+    ListInVotePreview,
+    ListInLinkPreview
   }
 })
 export default class NotificationListView extends Vue {
@@ -63,37 +70,6 @@ export default class NotificationListView extends Vue {
           this.postListItems.splice(findIdx, 1, {...targetPost, isBookmark, user_keep_class_posts} );
         });
     }
-  }
-
-
-  private getImgFileLen( items: IAttachFileModel[] ): number{
-    return (items) ? this.getImgFileDataSort( items ).length : 0;
-  }
-
-  private getImgTotalNum(  items: IAttachFileModel[]  ) {
-    return (items && this.getImgFileDataSort(items).length <= 3);
-  }
-
-  private getImgFileMoreCheck(  items: IAttachFileModel[] ) {
-    return (items)? ( this.getImgFileDataSort( items ).length>3 )? `+${this.getImgFileDataSort( items ).length - 3}` : '' : 0;
-  }
-
-  private getImgFileDataSort(fileData: IAttachFileModel[] ) {
-    return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg' || item.contentType === 'image/gif');
-  }
-
-  private getFileDataSort(fileData: IAttachFileModel[] ) {
-    return fileData.filter( (item: IAttachFileModel) => item.contentType !== 'image/png' && item.contentType !== 'image/jpg' && item.contentType !== 'image/jpeg' && item.contentType !== 'image/gif');
-  }
-
-  private isVote(item: Date) {
-    if (item === null) {
-      return true;
-    }
-    const finishTime = new Date(item).getTime();
-    const currentTime = new Date().getTime();
-
-    return (finishTime > currentTime);
   }
 
   private getCommentTotal(idx: number) {

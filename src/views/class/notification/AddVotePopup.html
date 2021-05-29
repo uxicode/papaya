@@ -85,8 +85,8 @@
                                v-model="voteData.vote_choice_list"
                                :move="checkMove"
                                v-bind="dragOptions"
-                               @start="dragging = true"
-                               @end="dragging = false"
+                               @start="onDragStart"
+                               @end="onDragEnd"
                                style="min-height:20px;">
                       <div class="create-form list-type active" v-for="( ele, index ) in voteData.vote_choice_list" :key="`ele-${index}`">
                         <span class="num">{{ index+1 }}</span>
@@ -122,7 +122,7 @@
                       </div>
 
                       <div class="create-add-list"  slot="footer">
-                        <a href="" class="bd-none" @click.prevent.stop="addVoteDateList( voteData.vote_choice_list.length )">
+                        <a href="" class="bd-none" @click.prevent.stop="addVoteDateList( voteData.vote_choice_list.length-1 )">
                           <img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span>
                         </a>
                       </div>

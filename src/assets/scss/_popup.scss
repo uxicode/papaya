@@ -531,14 +531,14 @@ $popupDepth: 10;
   // start: link
   .add-link {
     position:relative;
-    padding:20px;
+    padding:10px 20px;  //jbc
     border:1px solid #c9cad5;
     border-radius:5px;
   }
-
+  .add-file-delete{display: inline-block;vertical-align: top}
   .add-link-cnt {
-    width:calc(100% - 180px);
-
+    width:calc(100% - 50px); //jbc
+    vertical-align: top;
     .add-link-tit {
       font-weight:500;
     }

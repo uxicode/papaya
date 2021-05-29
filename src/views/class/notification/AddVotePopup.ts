@@ -140,6 +140,18 @@ export default class AddVotePopup extends Vue{
     window.console.log('Future index: ' + e.draggedContext.futureIndex);
   }
 
+  private onDragStart() {
+    this.dragging = true;
+  }
+
+  private onDragEnd() {
+    this.dragging = false;
+    this.voteData.vote_choice_list.forEach((item, idx) => {
+      item.index = idx;
+    });
+    // console.log(this.linkData.link_item_list);
+  }
+
   private clearTxtField(idx: number) {
     this.voteData.vote_choice_list[idx].text = '';
   }

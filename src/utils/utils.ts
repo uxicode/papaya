@@ -372,6 +372,15 @@ class Utils{
     return Utils.isUndefined(value) || value === '' || value === null || value !== value;
   }
 
+  /**
+   * 유효한 url 체크 - true 면 유효한 url
+   * @param targetTxt: string
+   */
+  public static getIsValidLink( targetTxt: string ): boolean {
+    const regx = /((((https?)?:\/\/)|(www\.)?|www\.))([a-z0-9.]+)(\.[a-z]{2,4})(\.[a-z]{1,2})?([^?\s]+(\?((\w+)(=[^&\s]+)?&?)+)?)?/g;
+    return targetTxt.search(regx) !== -1;
+  }
+
 
 
 

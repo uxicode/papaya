@@ -29,23 +29,30 @@
                 <draggable class="create-link-list"
                            v-model="linkData.link_item_list"
                            :move="checkMove"
-                           v-bind="dragOptions"
-                           @start="dragging = true"
-                           @end="dragging = false"
+                           :disabled="!dragEnabled"
+                           ghost-class="ghost"
+                           @start="onDragStart"
+                           @end="onDragEnd"
+                           handle=".handle"
                            style="min-height:20px;">
                   <div class="create-form list-type active"  v-for="( ele, index ) in linkData.link_item_list" :key="`ele-${index}`">
                     <span class="num">{{ index+1 }}</span>
                     <div class="form-group inline">
-                      <input type="text" class="form-control popup-type sm" placeholder="항목을 입력해 주세요." v-model="ele.url" style="width: 390px;">
+                      <input type="text"
+                             class="form-control popup-type sm link-input"
+                             placeholder="항목을 입력해 주세요."
+                             v-model="ele.url"
+                             :data-index="`${index}`"
+                             style="width: 390px;">
                       <button type="button" class="btn only-ico-btn form-delete active" @click="clearTxtField(index)"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                     </div>
                     <div class="create-sub-btn">
-                      <a href="" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
+                      <a href="" class="drag-btn handle"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
                     </div>
                   </div>
 
                   <div class="create-add-list">
-                    <a href=""  @click.prevent.stop="addLinkList( linkData.link_item_list.length )">
+                    <a href=""  @click.prevent.stop="addLinkList( linkData.link_item_list.length-1 )">
                       <img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span>
                     </a>
                   </div>
