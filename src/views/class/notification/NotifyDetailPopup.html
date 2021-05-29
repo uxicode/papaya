@@ -141,7 +141,7 @@
                                 </div>
                             </div>
 
-                            <div v-for="( replyItem, jdx) in replyData[idx].comment_list" class="reply">
+                            <div v-for="( replyItem, jdx) in replyData[idx].comment_list" class="reply" :key="`reply-${jdx}`">
                                 <p class="comment-writer">{{ replyItem.owner.nickname }} <span class="wr-time">{{ updatedDiffDate(replyItem.createdAt) }}</span></p>
                                 <p class="comment-txt">{{ replyItem.comment }}</p>
                             </div>

@@ -239,6 +239,45 @@ class Utils{
     return hours>12? String( '오후 '+( hours-12) ) : hours;
   }
 
+  /**
+   * 오늘을 기준으로 언제 업데이트 했는지 알아내기- 시/분 만 계산  ( 일주일 전까지만 체크 )
+   * @param dateValue
+   */
+  public static calcDate(dateValue: Date): number[] {
+    const today = Date.now();
+    const updateDate = new Date(dateValue);
+    const updateDateTime=updateDate.getTime();
+    const calcDate=today - updateDateTime;
+    const msOfDay = 24*60*60*1000;
+    const msOfHour = 60*60*1000;
+    const msOfMin = 60*1000;
+    // console.log(new Date(dateValue));
+    //, new Date(dateValue), calcDate/ 1000 / 60 / 60 / 24/365
+
+    const calcDay: number = Math.floor( calcDate / msOfDay );
+    const calcHour: number =( calcDay>7 )? Math.floor( calcDate / msOfHour ) : Math.floor((calcDate%msOfDay) / msOfHour );
+    const calcMin: number =( calcDay>7 )? Math.floor( calcDate / msOfMin ) : Math.floor((calcDate %msOfHour) /msOfMin );
+
+    // const calcMonth = Math.floor( calcDate / (msOfDay * 30) );
+    // const calcYear = Math.floor( calcDate / (msOfDay * 30 * 12));
+    // calcYear=(calcYear>0)? new Date(dateValue).getFullYear() : 0;
+    // calcMonth=(calcMonth>12)? calcMonth-12 : calcMonth;
+    // console.log(today, '일수 차이=', calcDay );
+    return [ calcDay,  calcHour, calcMin ];
+  }
+
+  /**
+   * 오늘을 기준으로 언제 업데이트 했는지 알아내기-( 일주일 전까지만 체크 )
+   * 업데이트 한지 일주일이 넘는다면 년-월-일/ 표시 그렇지 않다면 시/분 표시
+   * @param dateValue
+   * @private
+   */
+  public static updatedDiffDate( dateValue: Date ): string{
+    const resultDate=Utils.calcDate(dateValue);
+    // console.log( resultDate[0], resultDate[1], resultDate[1]);
+    return ( resultDate[0]>7 )? Utils.getTodayParseFormat( new Date(dateValue) ) : resultDate[1]+'시 '+resultDate[2]+'분 전';
+  }
+
   public static getRandomNum( min: number, max: number ): number {
     return Math.floor(Math.random()*(max-min+1)) + min;
   }
