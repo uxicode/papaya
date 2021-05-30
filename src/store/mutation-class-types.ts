@@ -12,3 +12,5 @@ export const SET_ACTIVE_NUM: string = 'SET_ACTIVE_NUM';
 export const SET_OPEN_ADD_POST: string = 'SET_OPEN_ADD_POST';
 export const SET_POST_LIST: string = 'SET_POST_LIST';
 export const SET_POST_IN_BOOKMARK: string = 'SET_POST_IN_BOOKMARK';
+export const SET_RESERVED_LIST: string = 'SET_RESERVED_LIST';
+export const SET_RESERVED_TOTAL: string = 'SET_RESERVED_TOTAL';

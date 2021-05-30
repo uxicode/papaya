@@ -41,88 +41,30 @@
     <div class="fd-cnt" @click="onDetailPostOpen(item.id)">
       <p class="fd-txt">{{ item.text }}</p>
 
-      <div class="fd-inner">
+      <!-- start: attach 에 이미지파일이 있는 경우 -->
+      <list-in-img-preview :file-items="item.attachment" location="location"></list-in-img-preview>
+      <!-- end: attach 에 이미지파일이 있는 경우 -->
 
-        <!-- start: attach 에 이미지파일이 있는 경우 -->
-        <list-in-img-preview :file-items="item.attachment" location="location"></list-in-img-preview>
-        <!-- end: attach 에 이미지파일이 있는 경우 -->
 
-        <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
-        <list-in-file-preview :file-items="item.attachment" name="originalname" location="location"></list-in-file-preview>
-        <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+      <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+      <list-in-file-preview :file-items="item.attachment" name="originalname" location="location"></list-in-file-preview>
+      <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
 
-        <!-- start:  투표가 있는 경우 -->
-        <list-in-vote-preview
-                :file-items="item.vote"
-                title="title"
-                choice="multi_choice"
-                finish-at="finishAt"
-                mode="anonymous_mode"></list-in-vote-preview>
-        <!-- end:  투표가 있는 경우 -->
+      <!-- start:  투표가 있는 경우 -->
+      <list-in-vote-preview
+              :file-items="item.vote"
+              title="title"
+              choice="multi_choice"
+              finish-at="finishAt"
+              mode="anonymous_mode"></list-in-vote-preview>
+      <!-- end:  투표가 있는 경우 -->
 
-        <!-- start: 링크가 있는 경우-->
-        <list-in-link-preview
-                :file-items="item.link"
-                title="title"
-                url="url" children="link_items"></list-in-link-preview>
-        <!-- end: 링크가 있는 경우 -->
-
-        <!-- start: attach 에 이미지파일이 있는 경우 -->
-       <!-- <template v-if="getImgFileLen(item.attachment)>0">
-          <ul class="img-list clearfix">
-            <li class="img-item" v-for="( imgItem, imgIndex ) in getImgFileDataSort(item.attachment)"
-                :key="`img-${imgIndex}`" >
-              <a :href="imgItem.location"
-                 :data-count="getImgFileMoreCheck(item.attachment)"
-                 :class="{'pseudo-del': getImgTotalNum(item.attachment) }"  target="_blank">
-                <img :src="imgItem.location" alt="">
-              </a>
-            </li>
-          </ul>
-        </template>-->
-        <!-- end: attach 에 이미지파일이 있는 경우 -->
-
-        <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
-        <!--<template v-if="getFileDataSort(item.attachment).length>0">
-          <p class="fd-inner-txt">첨부 파일 {{ getFileDataSort(item.attachment).length }}</p>
-          <ul class="file-list clearfix">
-            <li v-for="fileItem in getFileDataSort(item.attachment)">
-              <a :href="fileItem.location" target="_blank">{{fileItem.originalname }}</a>
-            </li>
-          </ul>
-        </template>-->
-        <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
-
-        <!-- start:  투표가 있는 경우 -->
-        <!--<template v-if="item.vote!==null">
-          <p class="fd-inner-txt fc-red">{{ isVote(item.vote.finishAt)? '투표 중' : '투표마감'}}</p>
-          <div class="vote-area">
-            <p class="vote-tit">{{ item.vote.title }}</p>
-            <ul class="vote-option clearfix">
-              <li>{{ (item.vote.multi_choice)? '복수선택' : '단일선택'}}</li>
-              <li>{{ (item.vote.anonymous_mode)? '익명투표' : '공개투표' }}</li>
-              <li>{{ (item.vote.finishAt)? item.vote.finishAt+' 마감': '종료일자없음'}} </li>
-            </ul>
-          </div>
-        </template>-->
-        <!-- end:  투표가 있는 경우 -->
-
-        <!-- start: 링크가 있는 경우 -->
-        <!--<template v-if="item.link!==null">
-          <p class="fd-inner-txt">{{ item.link.title }} 관련 링크 {{item.link.link_items.length}}</p>
-
-          <div class="link-area"  v-for="(linkItem, index) in item.link.link_items" :key="`link-${index}`">
-            &lt;!&ndash;                <div class="link-thumb"><img :src="require('@/assets/images/pic4.png')" alt=""></div>&ndash;&gt;
-            <div class="link-cnt">
-              <a :href="linkItem.url" class="link-tit" target="_blank">{{ linkItem.url }}</a>
-              &lt;!&ndash;                  <p class="link-txt">자연사랑 어린이 미술대회는 지난 2016년부터 개최해 온 전통 있는 미술대회 입니다. 아이들에게 환경보호…</p>&ndash;&gt;
-              &lt;!&ndash;                  <p class="link-source"><img :src="require('@/assets/images/pic9.png')" class="link-logo" alt="">https://m.blog.naver.com/ccedulab/221457750462214577504622145775046</p>&ndash;&gt;
-            </div>
-          </div>
-        </template>-->
-
-        <!-- end: 링크가 있는 경우 -->
-      </div>
+      <!-- start: 링크가 있는 경우-->
+      <list-in-link-preview
+              :file-items="item.link"
+              title="title"
+              url="url" children="link_items"></list-in-link-preview>
+      <!-- end: 링크가 있는 경우 -->
     </div>
 
     <div class="fd-foot clearfix">

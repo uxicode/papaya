@@ -23,19 +23,27 @@ const Post = namespace('Post');
 })
 export default class NotificationPage extends Vue {
 
-
   @MyClass.Getter
   private classID!: string | number;
 
   @Post.Getter
   private postListItems!: IPostModel[] & IPostInLinkModel[];
 
+  @Post.Getter
+  private reservedItems!: IPostModel[] & IPostInLinkModel[];
+
+  @Post.Getter
+  private reservedTotalItem!: number;
+
   @Post.Action
   private GET_POST_LIST_ACTION!: (  payload: { classId: number, paging: {page_no: number, count: number } }) => Promise<IPostModel[] & IPostInLinkModel[]>;
 
+  @Post.Action
+  private GET_RESERVED_LIST!: (classId: number) => Promise<any>;
+
 
   // private postListItems: IPostModel[] & IPostInLinkModel[]= [];
-  private reservedItems: any[] = [];
+  // private reservedItems: any[] = [];
   private reservedTotal: number=0;
   private isAddPopupOpen: boolean=false;
   private commentsTotalItems: any[] = [];
@@ -48,7 +56,14 @@ export default class NotificationPage extends Vue {
 
 
   private isDetailPopupOpen: boolean=false;
-  private detailPostId: number=997; // 동적으로 변경 안되는 상태
+  private detailPostId: number=-1; // 동적으로 변경 안되는 상태
+
+  private isReservedChk: boolean=false;
+
+
+  get reservedChk(): boolean {
+    return this.isReservedChk;
+  }
 
 
   get detailPostIdModel() {
@@ -62,8 +77,6 @@ export default class NotificationPage extends Vue {
   get commentsTotalItemsModel() {
     return this.commentsTotalItems;
   }
-
-
 
   public created() {
     this.getList().then(
@@ -88,17 +101,17 @@ export default class NotificationPage extends Vue {
            }
          });
        });*/
-    await this.GET_POST_LIST_ACTION({classId: Number( this.classID ), paging:{page_no:1, count:100} })
-      .then(( data: IPostModel[] & IPostInLinkModel[]) => {
-        // console.log(data);
-      });
+    await this.GET_POST_LIST_ACTION({classId: Number( this.classID ), paging:{page_no:1, count:100} });
 
     //예약된 알림 가져오기.
-    await PostService.getReservedPost( this.classID, {page_no:1, count:100})
+    /*await PostService.getReservedPost( this.classID, {page_no:1, count:100})
       .then((data)=>{
         this.reservedTotal=data.total_count;
         this.reservedItems=data.post_list;
-      });
+      });*/
+
+    await this.GET_RESERVED_LIST(Number(this.classID));
+
 
     //댓글 총 개수 가져옴
     await getAllPromise( this.getAllCommentsPromiseResult())
@@ -115,6 +128,10 @@ export default class NotificationPage extends Vue {
 
   }
 
+
+  private isOwner( ownerId: number, userId: number): boolean {
+    return (ownerId === userId);
+  }
   /**
    * 댓글 총 개수 api 배열에 담아 두기.
    * @private
@@ -149,14 +166,26 @@ export default class NotificationPage extends Vue {
     this.isAddPopupOpen=true;
   }
 
-  private onDetailPostOpen(id: number) {
+  private async onDetailPostOpen(id: number) {
     console.log(id);
-    this.isDetailPopupOpen=true;
+
     this.detailPostId = id; // update postId
+
+    setTimeout(() => {
+      this.isDetailPopupOpen=true;
+    }, 500);
+
+
+    // console.log('detailPostId=', this.detailPostId);
   }
 
   private onDetailPostPopupStatus(value: boolean) {
     this.isDetailPopupOpen=value;
   }
+
+  private onReservedMenuDownUp() {
+    this.isReservedChk=!this.isReservedChk;
+  }
+
 
 }

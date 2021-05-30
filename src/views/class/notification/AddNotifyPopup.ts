@@ -271,16 +271,15 @@ export default class AddNotifyPopup extends Vue{
     //formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.
     const temp = JSON.stringify( mergeData );
     this.formData.append('data', temp );
-    console.log(this.voteData, temp);
 
     // voteData 는 알림의 id 값을 알아야 하기에 먼저 알림을 생성/등록>완료 후 해당 알림의 id 을 가져와서 voteData 를 생성한다.
     this.ADD_POST({classId: Number(this.classID), formData: this.formData}).then((data) => {
       // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
-      this.imgFilesAllClear();
-      this.attachFilesAllClear();
-      this.postData = {title: '', text: ''};
-      this.voteDataClear();
-      this.$emit('submit', false);
+      this.imgFilesAllClear(); //이미지 데이터 비우기
+      this.attachFilesAllClear();//파일 데이터 비우기
+      this.postData = {title: '', text: ''}; //post 데이터 비우기
+      this.voteDataClear(); //투표 데이터 비우기
+      this.$emit('submit', false); //post 등록 팝업 닫기 알림~
     });
   }
 

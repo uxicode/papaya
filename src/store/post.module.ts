@@ -1,8 +1,14 @@
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
-import {SET_OPEN_ADD_POST, SET_POST_LIST, SET_POST_IN_BOOKMARK} from '@/store/mutation-class-types';
+import {
+  SET_OPEN_ADD_POST,
+  SET_POST_IN_BOOKMARK,
+  SET_RESERVED_LIST,
+  SET_RESERVED_TOTAL
+} from '@/store/mutation-class-types';
 import {
   GET_POST_LIST_ACTION,
-  ADD_POST
+  ADD_POST,
+  GET_RESERVED_LIST
 } from '@/store/action-class-types';
 import {IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
@@ -14,6 +20,9 @@ export default class PostModule extends VuexModule {
 
   private openAddPopup: boolean= false;
   private postListData: IPostModel[] & IPostInLinkModel[]= [];
+  private reservedTotal: number=0;
+  private reservedData: IPostModel[] & IPostInLinkModel[]= [];
+
 
   /* Getters */
   get isOpenAddPopup(): boolean{
@@ -22,6 +31,14 @@ export default class PostModule extends VuexModule {
 
   get postListItems(): IPostModel[] & IPostInLinkModel[] {
     return this.postListData;
+  }
+
+  get reservedItems(): IPostModel[] & IPostInLinkModel[]{
+    return this.reservedData;
+  }
+
+  get reservedTotalItem(): number{
+    return this.reservedTotal;
   }
 
   @Mutation
@@ -43,6 +60,16 @@ export default class PostModule extends VuexModule {
         this.postListData.splice(index, 1, {...item, isBookmark} );
       }
     });
+  }
+
+  @Mutation
+  public [SET_RESERVED_LIST](items: any[]){
+    this.reservedData=items;
+  }
+
+  @Mutation
+  public [SET_RESERVED_TOTAL]( total: number ){
+    this.reservedTotal=total;
   }
 
   @Action
@@ -92,7 +119,26 @@ export default class PostModule extends VuexModule {
         // this.imgFilesAllClear();
         // this.attachFilesAllClear();
         // this.postData={ title: '', text: ''};
+      }).catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
       });
   }
 
+
+  @Action
+  public [GET_RESERVED_LIST]( classId: number ) {
+    PostService.getReservedPost( classId )
+      .then((data)=>{
+
+        console.log(data);
+        this.context.commit(SET_RESERVED_TOTAL, data.post_listcount);
+        this.context.commit(SET_RESERVED_LIST, data.post_list);
+
+        return Promise.resolve(this.reservedData);
+      }).catch((error) => {
+      console.log(error);
+      return Promise.reject(error);
+    });
+  }
 }

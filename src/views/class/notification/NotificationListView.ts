@@ -33,12 +33,6 @@ export default class NotificationListView extends Vue {
   @MyClass.Getter
   private classID!: string | number;
 
-  private reservedItems: any[] = [];
-  private reservedTotal: number=0;
-
-
-
-  private isAddPopupOpen: boolean=false;
 
   private isOwner( ownerId: number, userId: number): boolean {
     return (ownerId === userId);
@@ -80,6 +74,7 @@ export default class NotificationListView extends Vue {
   private onDetailPostOpen(id: number) {
     this.$emit('click:detailPost', id);
   }
+
 
 
  /* private onAddPostPopupOpen() {

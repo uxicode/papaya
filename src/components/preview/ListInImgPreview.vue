@@ -1,14 +1,17 @@
 <template>
-  <ul class="img-list clearfix" v-if="getImgFileLen(fileItems)>0">
-    <li class="img-item" v-for="( imgItem, imgIndex ) in getImgFileDataSort(fileItems)"
-        :key="`img-${imgIndex}`" >
-      <a :href="imgItem[location]"
-         :data-count="getImgFileMoreCheck(fileItems)"
-         :class="{'pseudo-del': getImgTotalNum(fileItems) }">
-        <img :src="imgItem[location]" alt="">
-      </a>
-    </li>
-  </ul>
+  <div class="fd-inner"  v-if="getImgFileLen(fileItems)>0">
+    <ul class="img-list clearfix">
+      <li class="img-item" v-for="( imgItem, imgIndex ) in getImgFileDataSort(fileItems)"
+          :key="`img-${imgIndex}`" >
+        <a :href="imgItem[location]"
+           :data-count="getImgFileMoreCheck(fileItems)"
+           :class="{'pseudo-del': getImgTotalNum(fileItems) }">
+          <img :src="imgItem[location]" alt="">
+        </a>
+      </li>
+    </ul>
+  </div>
+
 </template>
 
 <script lang="ts">

@@ -1,12 +1,12 @@
-<template v-if="getFileDataSort(fileItems).length>0">
-<div>
-  <p class="fd-inner-txt">첨부 파일 {{ getFileDataSort(fileItems).length }}</p>
-  <ul class="file-list clearfix">
-    <li v-for="( fileItem, index ) in getFileDataSort(fileItems)" :key="`file-${index}`">
-      <a :href="fileItem[location]">{{fileItem[name] }}</a>
-    </li>
-  </ul>
-</div>
+<template>
+  <div class="fd-inner" v-if="getFileDataSort(fileItems).length>0">
+    <p class="fd-inner-txt">첨부 파일 {{ getFileDataSort(fileItems).length }}</p>
+    <ul class="file-list clearfix">
+      <li v-for="( fileItem, index ) in getFileDataSort(fileItems)" :key="`file-${index}`">
+        <a :href="fileItem[location]">{{ fileItem[name] }}</a>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script lang="ts">

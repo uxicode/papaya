@@ -1,15 +1,15 @@
 <template>
-<div v-if="fileItems!==null">
-  <p class="fd-inner-txt fc-red">{{ isVote(fileItems[finishAt])? '투표 중' : '투표마감'}}</p>
-  <div class="vote-area">
-    <p class="vote-tit">{{ fileItems[title] }}</p>
-    <ul class="vote-option clearfix">
-      <li>{{ (fileItems[choice])? '복수선택' : '단일선택'}}</li>
-      <li>{{ (fileItems[mode])? '익명투표' : '공개투표' }}</li>
-      <li>{{ (fileItems[finishAt])? fileItems[finishAt]+' 마감': '종료일자없음'}} </li>
-    </ul>
+  <div class="fd-inner" v-if="fileItems!==null">
+    <p class="fd-inner-txt fc-red">{{ isVote(fileItems[finishAt]) ? '투표 중' : '투표마감' }}</p>
+    <div class="vote-area">
+      <p class="vote-tit">{{ fileItems[title] }}</p>
+      <ul class="vote-option clearfix">
+        <li>{{ (fileItems[choice]) ? '복수선택' : '단일선택' }}</li>
+        <li>{{ (fileItems[mode]) ? '익명투표' : '공개투표' }}</li>
+        <li>{{ (fileItems[finishAt]) ? fileItems[finishAt] + ' 마감' : '종료일자없음' }}</li>
+      </ul>
+    </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">

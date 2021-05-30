@@ -1,12 +1,12 @@
-import {Vue, Component, Prop} from 'vue-property-decorator';
+import {Vue, Component, Prop, Watch} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
-import {IPostModel} from '@/views/model/post.model';
-import {PostService} from '@/api/service/PostService';
+import {IPostInLinkModel, IPostModel} from '@/views/model/post.model';
 import {Utils} from '@/utils/utils';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import WithRender from './NotifyDetailPopup.html';
+import {PostService} from '@/api/service/PostService';
 import {getAllPromise} from '@/views/model/types';
 
 const MyClass = namespace('MyClass');
@@ -23,6 +23,8 @@ export default class NotifyDetailPopup extends Vue {
     @Prop(Boolean)
     private isOpen!: boolean;
 
+
+
     @Prop(Number)
     private postId!: number;
 
@@ -32,93 +34,118 @@ export default class NotifyDetailPopup extends Vue {
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
-    private postData!: IPostModel;
-    private commentData!: any;
-    private replyData!: any;
+    private postDetailData!: IPostModel & IPostInLinkModel;
+    private commentItems: Array<{comment_list: []} > = [];
+    private replyItems!: any;
+    private isLoaded: boolean=false;
 
-    public async created() {
-        await this.getPost();
-        await this.getComments();
-        // await this.getReplys();
+    get commentItemsModel() {
+        return this.commentItems;
     }
 
-    public calcDate(dateValue: Date): number[] {
-        const today = Date.now();
-        const updateDate = new Date(dateValue);
-        const updateDateTime=updateDate.getTime();
-        const calcDate=today - updateDateTime;
-        const msOfDay = 24*60*60*1000;
-        const msOfHour = 60*60*1000;
-        const msOfMin = 60*1000;
-
-        const calcDay: number = Math.floor( calcDate / msOfDay );
-        const calcHour: number =( calcDay>7 )? Math.floor( calcDate / msOfHour ) : Math.floor((calcDate%msOfDay) / msOfHour );
-        const calcMin: number =( calcDay>7 )? Math.floor( calcDate / msOfMin ) : Math.floor((calcDate %msOfHour) /msOfMin );
-
-        return [ calcDay,  calcHour, calcMin ];
+    get replyItemsModel() {
+        return this.replyItems;
     }
+
+
+    get postDetailModel():  IPostModel & IPostInLinkModel{
+        return this.postDetailData;
+    }
+    set postDetailModel( value:  IPostModel & IPostInLinkModel){
+        this.postDetailData=value;
+    }
+
+
+    get getTitle(): string{
+        if(this.postDetailModel===undefined){
+            return '';
+        }else{
+            return this.postDetailModel.title;
+        }
+    }
+
+    get getDate(): string{
+        if(this.postDetailModel===undefined){
+            return '';
+        }else{
+            return this.postDetailModel.createdAt as string;
+        }
+    }
+
+    get getCount(): number{
+        if(this.postDetailModel===undefined){
+            return 0;
+        }else{
+            return this.postDetailModel.count as number;
+        }
+    }
+
+    get getDetailInfo(): string{
+        if(this.postDetailModel===undefined){
+            return '';
+        }else{
+            return this.postDetailModel.text as string;
+        }
+    }
+
+    @Watch('postId')
+    public changeData() {
+        this.getDetailPost(this.postId);
+        this.getComments(this.postId);
+        console.log(this.postDetailModel, this.postId);
+    }
+
+    private updatedDiffDate( dateValue: Date ): string{
+        return Utils.updatedDiffDate(dateValue);
+    }
+
+    private popupChange( value: boolean ) {
+        this.$emit('change', value);
+        this.isLoaded=false;
+    }
+    private onDetailPostPopupOpen(id: number) {
+        console.log(id);
+        this.$emit('detailView', id );
+    }
+
 
     /**
      * 알림 정보 가져오기
      * @private
      */
-    private getPost(): void {
-        PostService.getPostsById(this.classID, this.postId)
-            .then((data) => {
-               // console.log(data);
-               this.postData = data.post;
-            });
+    private getDetailPost( postId: number ): void {
+        PostService.getPostsById(this.classID, postId )
+          .then((data) => {
+              this.postDetailData = data.post;
+              // console.log( this.postDetailData);
+          });
     }
 
     /**
      * 댓글 정보 가져오기
      * @private
      */
-    private getComments(): void {
-        PostService.getCommentsByPostId(this.postId)
-            .then((data) => {
-                // console.log(data);
-                this.commentData = data.comment_list;
-                const replyIdItems=this.commentData.map((item: any)=>{
-                    return PostService.getReplysByCommentId( item.id );
+    private getComments(postId: number): void {
+        PostService.getCommentsByPostId(postId)
+          .then((data) => {
+              // console.log(data);
+              this.commentItems = data.comment_list;
+              //대댓글 정보 가져오기 - commentItems 에 맞는 대댓정보를 가져오기 위해 2차 반복문을 실행.
+              const replyIdItems=this.commentItems.map((item: any)=>{
+                  return PostService.getReplysByCommentId( item.id );
+              });
+              // console.log(replyIdItems);
+              getAllPromise( replyIdItems )
+                .then(( replyData: any[] )=>{
+                    // console.log(replyData);
+                    this.replyItems = replyData;
+
+                    setTimeout(() => {
+                        this.isLoaded=true;
+                    }, 1000);
+
                 });
-
-                console.log(replyIdItems);
-
-                getAllPromise( replyIdItems )
-                  .then(( replyData: any[] )=>{
-                      // console.log(replyData);
-                      this.replyData = replyData;
-                });
-
-            });
-    }
-
-    /**
-     * 대댓글 정보 가져오기
-     * @private
-     */
-    private getReplys(): void {
-        // commentId 를 각각 다르게 해서 2차원 배열로 가져와야 함.
-        PostService.getReplysByCommentId(79)
-            .then((data) => {
-               console.log(data);
-               this.replyData = data.comment_list;
-            });
-    }
-
-    private updatedDiffDate( dateValue: Date ): string{
-        const resultDate=this.calcDate(dateValue);
-        // console.log( resultDate[0], resultDate[1], resultDate[1]);
-        return ( resultDate[0]>7 )? Utils.getTodayParseFormat( new Date(dateValue) ) : resultDate[1]+'시간 '+resultDate[2]+'분 전';
-    }
-
-    private popupChange( value: boolean ) {
-        this.$emit('change', value);
-    }
-    private onDetailPostPopupOpen(id: number) {
-        console.log(id);
-        this.$emit('detailView', id );
+          });
     }
 
 

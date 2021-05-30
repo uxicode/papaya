@@ -1,7 +1,7 @@
 import {request} from '@/api/service/AxiosService';
 import {CLASS_BASE_URL, USER_BASE_URL} from '@/api/base';
 import {IKeepPostList} from '@/views/model/my-class.model';
-import {IVoteModel} from '@/views/model/post.model';
+import {IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
 
 export class PostService{
   /**
@@ -44,8 +44,8 @@ export class PostService{
    * @param classId
    * @param payload
    */
-  public static getReservedPost(classId: number | string, payload: {page_no: number, count: number}={page_no:1, count:10}): Promise<any>{
-    return request('get', `${CLASS_BASE_URL}/${classId}/posts/reserved`, payload);
+  public static getReservedPost(classId: number | string, payload: {page_no: number, count: number}={page_no:1, count:1000} ): Promise<any>{
+    return  request('get', `${CLASS_BASE_URL}/${classId}/posts/reserved`, payload);
   }
 
 

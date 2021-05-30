@@ -35,57 +35,45 @@
       <div class="accordion">
         <!-- accordion 1-->
         <div class="accordion-tit">
-          <a href="javascript:void(0);" class="accordion-btn active" data-toggle="collapse" data-target="#accordion1">
+          <a href="javascript:void(0);" class="accordion-btn active" @click.prevent="onReservedMenuDownUp">
             <span class="icon"><img :src="require('@/assets/images/time-outline.svg')" class="icon-img" alt=""></span>
-            <span class="mgl-4">{{ reservedTotal }}개의 예약 알림이 있습니다.</span>
+            <span class="mgl-4">{{ reservedTotalItem }}개의 예약 알림이 있습니다.</span>
           </a>
         </div>
 
-        <div class="accordion-cnt active" id="accordion1" v-if="reservedTotal>0">
-          <div class="notify-feed" v-for="item in reservedItems">
+        <div class="accordion-cnt" id="accordion1" :class="{'active':reservedChk}" v-if="reservedTotalItem>0" >
+          <div class="notify-feed" v-for="(item, index) in reservedItems" :key="`reserve-${index}`">
             <h3 class="fd-tit">{{ item.title }}</h3>
-            <p class="fd-schedule">오후 11시에 등록 예정</p>
+            <p class="fd-schedule">{{item.startAt}}에 등록 예정</p>
             <div class="fd-btn">
               <div class="list-popup">
-                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                <!--<button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
                 <div class="list-popup-menu pos-right active"  style="transform:translate3d(35px, 0, 0);">
                   <a href="" class="list-popup-item">알림 수정</a>
                   <a href="" class="list-popup-item">공지로 등록</a>
                   <a href="" class="list-popup-item">알림 보관</a>
                   <a href="" class="list-popup-item">알림 삭제</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="notify-feed">
-            <h3 class="fd-tit">2학기 전학년 전과목 평가계획안</h3>
-            <p class="fd-schedule">내일 오후 2시 50분에 등록 예정</p>
-            <div class="fd-btn">
-              <div class="list-popup">
-                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                <div class="list-popup-menu pos-right"  style="transform:translate3d(35px, 0, 0);">
-                  <a href="" class="list-popup-item">알림 수정</a>
-                  <a href="" class="list-popup-item">공지로 등록</a>
-                  <a href="" class="list-popup-item">알림 보관</a>
-                  <a href="" class="list-popup-item">알림 삭제</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="notify-feed">
-            <h3 class="fd-tit">파파야 초등학교 기간제교사 채용 공고</h3>
-            <p class="fd-schedule">2020. 4. 21 오전 11시 30분에 등록 예정</p>
-            <div class="fd-btn">
-              <div class="list-popup">
-                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                <div class="list-popup-menu pos-right"  style="transform:translate3d(35px, 0, 0);">
-                  <a href="" class="list-popup-item">알림 수정</a>
-                  <a href="" class="list-popup-item">공지로 등록</a>
-                  <a href="" class="list-popup-item">알림 보관</a>
-                  <a href="" class="list-popup-item">알림 삭제</a>
-                </div>
+                </div>-->
+                <v-menu
+                        min-width="200px"
+                        :close-on-click="true">
+                  <template v-slot:activator="{ on, attrs }">
+                    <button v-if="isOwner( item.owner.user_id, item.user_id)"
+                            type="button"
+                            class="list-popup-btn"
+                            v-bind="attrs"
+                            v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
+                    </button>
+                  </template>
+                  <v-list>
+                    <v-list-item @click="">
+                      <v-list-item-title>알림 수정</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="">
+                      <v-list-item-title>알림 삭제</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </div>
             </div>
           </div>
@@ -94,10 +82,13 @@
       </div>
     </div>
 
+    <!-- start: 리스트 뷰 -->
     <notification-list-view v-if="postListItemsModel.length>0"
-            :post-list-items="postListItemsModel"
-            :comments-total-items="commentsTotalItemsModel"
-            @click:detailPost="onDetailPostOpen"></notification-list-view>
+                            :post-list-items="postListItemsModel"
+                            :comments-total-items="commentsTotalItemsModel"
+                            @click:detailPost="onDetailPostOpen"></notification-list-view>
+    <!-- end: 리스트 뷰 -->
+
 
     <!-- 등록된 알림 없음 -->
     <div class="no-notify" v-else>
@@ -115,7 +106,19 @@
       <a href="" class="classes-add-btn" @click.prevent="onAddPostPopupOpen"></a>
     </div>
   </div >
+<!--  <keep-alive>
+    <component :is="'NotifyDetailPopup'"
+               :is-open="isDetailPopupOpen"
+               :detail-item="postDetailModel"
+               :comment-items="commentItemsModel"
+               :reply-items="replyItemsModel"
+               @change="onDetailPostPopupStatus"></component>
+  </keep-alive>-->
 
-  <notify-detail-popup :is-open="isDetailPopupOpen" :post-id="detailPostIdModel" @change="onDetailPostPopupStatus"></notify-detail-popup>
+   <notify-detail-popup
+          :is-open="isDetailPopupOpen"
+          :post-id="detailPostId"
+          @change="onDetailPostPopupStatus"></notify-detail-popup>
+
    <add-notify-popup :is-open="isAddPopupOpen" @change="onAddPostPopupStatus" @submit="onAddPost"></add-notify-popup>
 </section>
