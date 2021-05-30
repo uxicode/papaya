@@ -220,21 +220,37 @@ class Utils{
     return yyyy+'-'+( mm<10 ? '0'+mm : mm )+'-'+( dd<10 ? '0'+dd : dd );
   }
 
+  /**
+   * 오늘 날짜 --> 요일로 표기.
+   * @param date
+   */
   public static dayToString( date: Date ): string{
     const dayNum: string[] = ['일', '월', '화', '수', '목', '금', '토'];
     return dayNum[date.getDay()]+'요일';
   }
 
+  /**
+   * 년 월 일 표시
+   * @param date
+   */
   public static getFullDay(date: Date): string{
     return Utils.getTodayParseFormat(date)+' '+Utils.dayToString( date )+' '+Utils.getFullTimes( date );
   }
 
+  /**
+   * 24시간 표시 - 시/분
+   * @param date
+   */
   public static getFullTimes( date: Date ): string{
     const hours=Utils.hoursConvertToApm( date.getHours() );
     const minutes =date.getMinutes();
     return hours + '시 ' + minutes + '분';
   }
 
+  /**
+   * 오전 오후 표시해 주는 시간.
+   * @param hours
+   */
   public static hoursConvertToApm( hours: number ): string | number{
     return hours>12? String( '오후 '+( hours-12) ) : hours;
   }
@@ -278,10 +294,18 @@ class Utils{
     return ( resultDate[0]>7 )? Utils.getTodayParseFormat( new Date(dateValue) ) : resultDate[1]+'시 '+resultDate[2]+'분 전';
   }
 
+  /**
+   * 주어진 범위내에 랜덤 수 얻기.
+   * @param min
+   * @param max
+   */
   public static getRandomNum( min: number, max: number ): number {
     return Math.floor(Math.random()*(max-min+1)) + min;
   }
 
+  /**
+   * 브라우저 리로
+   */
   public static getWindowReload(): void{
     window.location.reload();
   }
@@ -298,6 +322,10 @@ class Utils{
     });
   }
 
+  /**
+   * 파일 타입 체크 - resultByBytes 체크 값 수정 필요.
+   * @param file
+   */
   public static getFileType(file: File) {
     let fileVerifiedType: any = '';
     const slice = file.slice(0, 4);
@@ -327,6 +355,10 @@ class Utils{
     return fileVerifiedType;
   }
 
+  /**
+   * 배열 평탄화
+   * @param items
+   */
   public static getFlatten( items: any[] ): any[]{
       const stack = [...items];
       const res = [];

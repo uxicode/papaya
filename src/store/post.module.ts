@@ -33,8 +33,11 @@ export default class PostModule extends VuexModule {
   public [SET_POST_IN_BOOKMARK](  items: IPostModel[] & IPostInLinkModel[] ): void{
     this.postListData=items;
     //
+    this.postListData.reverse();
+
     this.postListData.forEach(( item: any, index: number ) => {
       let {isBookmark}=item;
+      //
       if( item.user_keep_class_posts.length > 0){
         isBookmark=!isBookmark;
         this.postListData.splice(index, 1, {...item, isBookmark} );
@@ -48,9 +51,10 @@ export default class PostModule extends VuexModule {
       .then((data) => {
         // console.log(data);
         // this.postListItems = data.post_list;
-        console.log('noticeListItems=',this.postListData);
+        console.log('noticeListItems=', this.postListData);
 
         this.context.commit(SET_POST_IN_BOOKMARK, data.post_list);
+
         return Promise.resolve(this.postListData);
       })
       .catch((error) => {
@@ -60,19 +64,30 @@ export default class PostModule extends VuexModule {
   }
 
   @Action
-  public [ADD_POST]( payload: { classId: number, formData: FormData, voteData: IVoteModel }): Promise<any> {
+  public [ADD_POST]( payload: { classId: number, formData: FormData  }): Promise<any> {
     return PostService.setAddPost( payload.classId, payload.formData )
-      .then(( data)=>{
-        console.log( data.post.id);
+      .then(( data )=>{
+        console.log( data );
+        let addPostData=data.post;
+        if( addPostData.user_keep_class_posts.length > 0){
+          let isBookmark: boolean=false;
+          isBookmark=!isBookmark;
+          addPostData = {...addPostData, ...{isBookmark}};
+        }
+        this.postListData.unshift(addPostData);
+
         // this.$emit('submit', false);
-        if ( payload.voteData ) {
+        // voteData 는 알림의 id 값을 알아야 하기에 먼저 알림을 생성/등록>완료 후 해당 알림의 id 을 가져와서 voteData 를 생성한다.
+        /*if ( payload.voteData ) {
           let { parent_id } = payload.voteData;
           parent_id=data.post.id;
           PostService.setAddVote(payload.classId, {...payload.voteData, parent_id})
             .then(( voteData: any)=>{
               console.log(voteData);
+
+             /!* *!/
             });
-        }
+        }*/
 
         // this.imgFilesAllClear();
         // this.attachFilesAllClear();

@@ -1,0 +1,146 @@
+<!-- start: 공통 팝업 / 파일명 : W.4.5.2.2.5 (알림 - 새 알림 작성-알림예약설정 / 4,5,2,2,5,1) -->
+<transition name="modal">
+  <modal v-if="isOpen" size="540px" body-padding="0" @modalClose="popupChange( false )">
+    <div slot="header">
+      <!-- header custom coding-->
+      <div class="popup-icon time"></div>
+      <div class="popup-close">
+        <button class="close" @click="popupChange( false )"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+      </div>
+    </div>
+    <div slot="body">
+      <!-- body custom coding-->
+      <div class="popup-cnt pdb-desc">
+        <h2 class="popup-tit">알림 예약 설정</h2>
+      </div>
+
+      <div class="popup-form">
+        <div class="popup-form-cnt">
+          <!-- start: create notice list -->
+          <div class="form-create-list">
+            <div class="create-item">
+              <div class="create-item-cnt">
+                <ul class="create-notice-list">
+                  <li>
+                    <p class="form-txt">예약일시 설정</p>
+                    <div class="create-sub-btn">
+                      <div class="form-switcher">
+                        <input type="checkbox"
+                               id="reservedSwitcher"
+                               v-model="reservationTimeChk"
+                               @change="onReservationChange(  $event.target.checked )">
+                        <label for="reservedSwitcher"></label>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <!--<div class="form-group date">
+                      <input type="text" class="form-control" size="10" value="2020. 2. 28">
+                      <span class="date-area placeholder">2020. 2. 28</span>
+                    </div>
+                    <div class="create-sub-btn">
+                      <button type="button" class="btn form-btn form-calendar"></button>
+                    </div>-->
+
+                    <div class="form-box">
+                      <div class="form-group date" style="float:left;">
+                        <!--
+                     <v-menu
+                               top  //absolute 위치로 상단 정렬
+                               nudge-bottom="40px" // 하단을 기준으로 추가 px 조절
+                               nudge-left="30px" // 좌측을 기준으로 추가 px 조절 수치가 클수록 왼쪽으로 배치된다.
+                               origin="center center"  // transform-origin
+                               v-model="timeMenu"  // value 값으로 노출
+                               :close-on-content-click // 값이 true -> 메뉴의 컨텐츠를 클릭하면 메뉴를 닫음
+                               :close-on-click  //값이 true -> 활성자의 바깥을 클릭하면 메뉴를 닫음
+                               transition="scale-transition" // 스케일 모션
+                               content-class="time-select-menu bg-white" // 해당 메뉴에 추가 클래스
+                               offset-y   // 메뉴 버튼을 중심으로 y 값으로 정렬 배치
+                     -->
+                        <v-menu
+                                :disabled="!reservationTimeChk"
+                                v-model="dateMenu"
+                                :close-on-content-click="false"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="auto">
+                          <template v-slot:activator="{ on, attrs }">
+                            <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
+                            <v-text-field
+                                    v-model="datePickerModel"
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    :disabled="!reservationTimeChk"
+                                    hide-details
+                                    solo
+                                    flat>
+                              <template v-slot:append>
+                                <button type="button" class="btn form-btn form-calendar" v-on="on"  :disabled="!reservationTimeChk"></button>
+                              </template>
+                            </v-text-field>
+                          </template>
+                          <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
+                          <v-date-picker v-model="datePickerModel" no-title @input="datePickerChange"></v-date-picker>
+                        </v-menu>
+                      </div>
+
+                      <div class="form-group time" style="float:left;margin-left:0;">
+                        <v-menu
+                                :disabled="!reservationTimeChk"
+                                nudge-left="30px"
+                                origin="center top"
+                                v-model="timeMenu"
+                                :close-on-content-click="false"
+                                transition="scale-transition"
+                                content-class="time-select-menu bg-white"
+                                offset-y>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                                    v-model="currentTimeModel"
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    :disabled="!reservationTimeChk"
+                                    hide-details solo flat>
+                              <template v-slot:append>
+                                <button type="button" class="btn form-btn form-time" v-on="on" :disabled="!reservationTimeChk"></button>
+                              </template>
+                            </v-text-field>
+                          </template>
+                          <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
+                          <v-select v-model="timeSelectModel.apm" :items="referTimeItems.apm" placeholder="오전" hide-details solo flat style="display:inline-block;width:70px;" @input="addStartApmSchedule">
+                            <template v-slot:selection="{item, index}">
+                              <span style="font-size:14px;">{{ item }}</span>
+                            </template>
+                          </v-select>
+                          <v-select v-model="timeSelectModel.hour" :items="referTimeItems.hour" placeholder="12 시" hide-details solo flat style="display:inline-block;width:70px;" @input="addStartApmSchedule">
+                            <template v-slot:selection="{item, index}">
+                              <span style="font-size:14px;">{{ item }}시</span>
+                            </template>
+                          </v-select>
+                          <v-select v-model="timeSelectModel.minute" :items="referTimeItems.minute" placeholder="00 분" hide-details solo flat style="display:inline-block;width:70px"  @input="addStartApmSchedule">
+                            <template v-slot:selection="{item, index}">
+                              <span style="font-size:14px;">{{ item }}분</span>
+                            </template>
+                          </v-select>
+                        </v-menu>
+                      </div>
+
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- start: create notice list -->
+        </div>
+      </div>
+    </div>
+    <div slot="footer">
+      <div class="btn-group rt">
+        <button type="button" class="btn primary navi" @click="onReservationSubmit" :disabled="!isValidation">완료</button>
+      </div>
+    </div>
+
+  </modal>
+</transition>
+<!-- end: 공통 팝업 -->

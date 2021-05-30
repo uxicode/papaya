@@ -34,14 +34,16 @@ export default class AddVotePopup extends Vue{
   private dragEnabled: boolean=true;
   private dragging: boolean= false;
   private voteData: IVoteModel= {
-    parent_id:0,
-    type: '0',
-    title: '',
-    multi_choice: 0,
-    anonymous_mode: 0,
-    open_progress_level: 0,
-    open_result_level: 0,
-    finishAt: new Date().toISOString().substr(0, 10),
+    vote: {
+      parent_id:0,
+      type: '0',
+      title: '',
+      multi_choice: 0,
+      anonymous_mode: 0,
+      open_progress_level: 0,
+      open_result_level: 0,
+      finishAt: new Date().toISOString().substr(0, 10),
+    },
     vote_choice_list: [
       {
         text: '제주도 여행',
@@ -77,7 +79,7 @@ export default class AddVotePopup extends Vue{
   get isValidation(): boolean{
     const validItems=this.voteData.vote_choice_list.filter((item) => item.text !== '');
     const validDateItems=this.dateModelItem.filter((item) => item.date !== '');
-    return this.voteData.title!=='' && ( validItems.length>=2 || validDateItems.length>=2);
+    return this.voteData.vote.title!=='' && ( validItems.length>=2 || validDateItems.length>=2);
   }
 
   get dragOptions() {
@@ -133,7 +135,7 @@ export default class AddVotePopup extends Vue{
 
   private optionChange(value: number ): void {
     this.resetVoteList();
-    this.voteData.type=value;
+    this.voteData.vote.type=value;
   }
 
   private checkMove(e: MoveEvent<any> ) {
@@ -158,12 +160,12 @@ export default class AddVotePopup extends Vue{
 
   private anonymousVoteChange(value: string | boolean) {
     this.anonymousChk=!!value;
-    this.voteData.anonymous_mode=( this.anonymousChk )? 1 : 0;
+    this.voteData.vote.anonymous_mode=( this.anonymousChk )? 1 : 0;
   }
 
   private multiChoiceVoteChange(value: string | boolean) {
     this.multiChoiceChk=!!value;
-    this.voteData.multi_choice=( this.multiChoiceChk )? 1 : 0;
+    this.voteData.vote.multi_choice=( this.multiChoiceChk )? 1 : 0;
   }
 
   private endDatePickerChange() {
@@ -172,7 +174,7 @@ export default class AddVotePopup extends Vue{
 
   private endDateVoteChange(value: string | boolean) {
     this.endDateMenuChk=!!value;
-    this.voteData.finishAt=( this.endDateMenuChk )? new Date().toISOString().substr(0, 10) : null;
+    this.voteData.vote.finishAt=( this.endDateMenuChk )? new Date().toISOString().substr(0, 10) : null;
   }
 
   private onVoteSubmit() {

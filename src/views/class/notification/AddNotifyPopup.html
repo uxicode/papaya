@@ -52,31 +52,9 @@
                              @removeAll="onRemoveAllPreview"></image-preview>
               <!-- end: 첨부 이미지 파일 미리보기 -->
 
-              <!-- start: add-vote list -->
-              <!--<div class="form-add-list">
-                <div class="add-item">
-                  <div class="add-item-top">
-                    <p class="add-item-tit">투표</p>
-                    <div class="add-item-btn">
-                      <a href="" class="txt-btn">수정</a>
-                      <a href="" class="txt-btn">삭제</a>
-                    </div>
-                  </div>
-
-                  <div class="add-item-cnt">
-                    <div class="add-vote">
-                      <p class="add-vote-tit">수학여행 장소 투표</p>
-                      <ul class="add-vote-type clearfix">
-                        <li>복수선택</li>
-                        <li>익명투표</li>
-                        <li>2020.3.12 오후 3시 마감</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>-->
-              <vote-preview :vote-items="voteItemModel" @remove="onRemoveVote" @modify="onModifyVote"></vote-preview>
-              <!-- end: add-vote list -->
+              <!-- start: 투표 첨부 미리보기 -->
+              <vote-preview :vote-items="voteItemModel" @remove="voteDataClear" @modify="onModifyVote"></vote-preview>
+              <!-- end: 투표 첨부 미리보기 -->
 
               <!-- start: 첨부 파일 리스트 -->
               <file-preview :file-items="attachFileItemsModel"
@@ -100,7 +78,6 @@
                   <img :src="require('@/assets/images/image.svg')" alt="">
                   <input class="input-file" type="file" name="files" id="imgFileInput" accept="image/*" multiple @change="addFileToImage( $event.target.files )" hidden />
                 </a>
-
               </li>
               <li>
                 <a href="#" @click.prevent="addFilesInputFocus">
@@ -108,9 +85,9 @@
                   <input class="input-file" type="file" name="files" id="attachFileInput" accept=".pdf, .xls, .xlsx, .ppt, .pptx, .doc, .docx" multiple @change="addAttachFileTo( $event.target.files )" hidden />
                 </a>
               </li>
-              <li><a href="" @click.prevent="addVote"><img :src="require('@/assets/images/vote.svg')" alt=""></a></li>
-              <li><a href="" @click.prevent="addLink"><img :src="require('@/assets/images/link.svg')" alt=""></a></li>
-              <li><a href=""><img :src="require('@/assets/images/time-outline.svg')" alt=""></a></li>
+              <li><a href="" @click.prevent="addVotePopupOpen"><img :src="require('@/assets/images/vote.svg')" alt=""></a></li>
+              <li><a href="" @click.prevent="addLinkPopupOpen"><img :src="require('@/assets/images/link.svg')" alt=""></a></li>
+              <li><a href="" @click.prevent="addReservationPopupOpen"><img :src="require('@/assets/images/time-outline.svg')" alt=""></a></li>
             </ul>
             <!--          <div class="form-temp-save"><a href="" class="txt-btn">임시저장</a></div>-->
           </div>
@@ -126,7 +103,9 @@
     </modal>
   </transition>
 
-  <add-vote-popup :is-open="isOpenAddVotePopup" @close="onAddVoteClose" @submit="onAddVote"></add-vote-popup>
-  <add-link-popup :is-open="isOpenAddLinkPopup" @close="onAddLinkClose" @submit="onAddLink"></add-link-popup>
+
+  <add-vote-popup :is-open="isOpenAddVotePopup" @close="onVotePopupClose" @submit="onAddVote"></add-vote-popup>
+  <add-link-popup :is-open="isOpenAddLinkPopup" @close="onLinkPopupClose" @submit="onAddLink"></add-link-popup>
+  <add-reservation-popup :is-open="isOpenAddReservation" @close="onReservationPopupClose" @submit="onAddReservation"></add-reservation-popup>
 </div>
 <!-- end: 공통 팝업 -->

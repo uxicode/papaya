@@ -44,15 +44,15 @@ export default class AddLinkPopup extends Vue {
     return (this.linkData.link.title !== '' && validLinkItems.length >= 1);
   }
 
-  public async getValidLinkItems(){
-    // const validURLRegx =/^(http\:\/\/)?((\w+)[.])+(asia|biz|cc|cn|com|de|eu|in|info|jobs|jp|kr|mobi|mx|name|net|nz|org|travel|tv|tw|uk|us)(\/(\w*))*$/i;
-    const validURLRegx = /((((https?)?:\/\/)|(www\.)?|www\.))([a-z0-9.]+)(\.[a-z]{2,4})(\.[a-z]{1,2})?([^?\s]+(\?((\w+)(=[^&\s]+)?&?)+)?)?/g;
-    //유효한 url 만 찾기
-    const validLinkItems = await this.linkData.link_item_list.filter( (item: {index: number, url: string}) => item.url.search(validURLRegx)!==-1 );
-
-    console.log(validLinkItems);
-
-    return ( validLinkItems.length>0 )? validLinkItems : -1;
+  public getValidLinkItems(): Array<{ index: number, url: string }>{
+    const invalidLinkItems: Array<{ index: number, url: string }> = [];
+    this.linkData.link_item_list.forEach( (item: { index: number, url: string } )=>{
+      //유효하지 않은 url 찾기
+      if( item.url!=='' && !Utils.getIsValidLink(item.url)  ){
+        invalidLinkItems.push(item);
+      }
+    });
+    return invalidLinkItems;
   }
 
   private resetLinkData() {
@@ -95,32 +95,22 @@ export default class AddLinkPopup extends Vue {
   }
 
   private onAddLinkSubmit() {
-    const invalidLinkItems: any[] = [];
-    this.linkData.link_item_list.forEach((item, idx)=>{
-      //유효하지 않은 url 찾기
-      if( item.url!=='' && !Utils.getIsValidLink(item.url)  ){
-        invalidLinkItems.push(item);
-      }
-    });
-
     const inputItems: NodeListOf<Element> = document.querySelectorAll('.form-control.link-input');
+    //inputItems 은 유사배열 객체이기에 아래처럼 배열로 변환해 준다.
     const inputItemsToArray: any[]= Array.prototype.slice.call(inputItems);
-
     const eles = [];
-
     //유효하지 않은 링크가 있을때
-    if( invalidLinkItems.length>0 ){
+    if( this.getValidLinkItems().length>0 ){
       // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < invalidLinkItems.length; i++) {
+      for (let i = 0; i < this.getValidLinkItems().length; i++) {
         // tslint:disable-next-line:prefer-for-of
         for (let j = 0; j< inputItemsToArray.length;j++) {
           const itemIdx = Number( inputItemsToArray[j].getAttribute('data-index') );
-          if (itemIdx === invalidLinkItems[i].index) {
+          if (itemIdx === this.getValidLinkItems()[i].index) {
             eles.push(inputItemsToArray[j]);
           }
         }
       }
-
       eles.forEach((item)=>{
         this.gotoErrorElement( item);
       });

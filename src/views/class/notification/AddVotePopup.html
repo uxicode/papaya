@@ -17,7 +17,7 @@
 <!--          <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">-->
           <txt-field add-class="popup-type"
                      placeholder="제목을 50자 이내로 작성해 주세요."
-                     v-model="voteData.title"></txt-field>
+                     v-model="voteData.vote.title"></txt-field>
         </div>
       </div>
 
@@ -34,14 +34,14 @@
                       <radio-button btn-id="chk1"
                                     radio-name="radio"
                                     btn-value="0"
-                                    :active-value="voteData.type"
-                                    v-model="voteData.type"
+                                    :active-value="voteData.vote.type"
+                                    v-model="voteData.vote.type"
                                     @click="optionChange">텍스트</radio-button>
                       <radio-button btn-id="chk2"
                                     radio-name="radio"
                                     btn-value="1"
-                                    :active-value="voteData.type"
-                                    v-model="voteData.type"
+                                    :active-value="voteData.vote.type"
+                                    v-model="voteData.vote.type"
                                     @click="optionChange">날짜</radio-button>
                     </div>
                     <!-- end:  텍스트 혹은 날짜 선택 -->
@@ -51,7 +51,7 @@
                   <draggable v-model="myArray" group="people" @start="drag=true" @end="drag=false">
                   -->
                   <!-- start: 텍스트 타입 리스트 (드래그앤드랍으로 이동) -->
-                  <template v-if="voteData.type==='0'">
+                  <template v-if="voteData.vote.type==='0'">
                     <draggable class="create-link-list"
                                v-model="voteData.vote_choice_list"
                                :move="checkMove"
@@ -182,7 +182,7 @@
                               <template v-slot:activator="{ on, attrs }">
                                 <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
                                 <v-text-field
-                                        v-model="voteData.finishAt"
+                                        v-model="voteData.vote.finishAt"
                                         v-bind="attrs"
                                         v-on="on"
                                         hide-details
@@ -194,7 +194,7 @@
                                 </v-text-field>
                               </template>
                               <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                              <v-date-picker v-model="voteData.finishAt" no-title @input="endDatePickerChange"></v-date-picker>
+                              <v-date-picker v-model="voteData.vote.finishAt" no-title @input="endDatePickerChange"></v-date-picker>
                             </v-menu>
                             <!--<input type="text" class="form-control no-date" size="7" value="날짜 없음">
                             <span class="date-area placeholder">종료일시 없음</span>
@@ -226,7 +226,7 @@
                               <v-list-item
                                       v-for="(item, index) in openResultLevelItems"
                                       :key="index"
-                                      @click="voteData.open_result_level=item.id;openResultLevel=item.txt;">
+                                      @click="voteData.vote.open_result_level=item.id;openResultLevel=item.txt;">
                                 <v-list-item-title>{{ item.txt }}</v-list-item-title>
                               </v-list-item>
                             </v-list>
