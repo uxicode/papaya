@@ -3,11 +3,10 @@ $border-bt: 1px solid #f4f5f6;
 $mb: 210px;
 $main-red: #ff4d4d;
 
-$total:500;
+$total:52;
 
 @for $i from 0 through $total {
   $unit: if($i == 0,  !important, px !important);
-
 
   .mgt-#{$i} {
     margin-top:  #{$i}#{$unit};
