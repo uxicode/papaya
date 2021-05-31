@@ -4,10 +4,10 @@
         <template v-if="postDetailModel!==undefined">
           <div slot="header">
             <!-- header custom coding-->
-            <p class="popup-header-tit">{{ getTitle }}</p>
+            <p class="popup-header-tit">{{ postDetailModel.title }}</p>
             <ul class="feed-info clearfix">
-              <li>{{ getDate }}</li>
-              <li>{{ getCount }}명 읽음</li>
+              <li>{{ postDetailModel.createdAt }}</li>
+              <li>{{ postDetailModel.count }}명 읽음</li>
             </ul>
 
             <div class="popup-btn">
@@ -64,11 +64,13 @@
                 <div class="fd-cnt">
                   <p class="fd-txt">{{ getDetailInfo }}</p>
 
-                  <div class="fd-inner">
-                    <ul class="img-list clearfix">
-                      <li><a href=""><img :src="require('@/assets/images/pic.png')" alt=""></a></li>
-                    </ul>
-                  </div>
+                  <!-- start: attach 에 이미지파일이 있는 경우 -->
+                  <list-in-img-preview :file-items="postDetailModel.attachment" location="location"></list-in-img-preview>
+                  <!-- end: attach 에 이미지파일이 있는 경우 -->
+
+                  <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+                  <list-in-file-preview :file-items="postDetailModel.attachment" name="originalname" location="location"></list-in-file-preview>
+                  <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
 
                   <div class="fd-inner">
                     <p class="fd-inner-txt fc-red">투표 중 <span class="vote-count"><span class="count-num">0</span>/233명 응답</span></p>
@@ -149,11 +151,14 @@
 
                   </div>
                 </div>
-                <div class="comment-btm">
-                  <button type="button" class="btn only-ico-btn"><img :src="require('@/assets/images/image.svg')" alt=""></button>
-                  <input type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;">
-                  <a href="" class="txt-btn disabled">등록</a>
-                </div>
+
+              </div>
+            </div>
+            <div slot="footer">
+              <div class="comment-btm">
+                <button type="button" class="btn only-ico-btn"><img :src="require('@/assets/images/image.svg')" alt=""></button>
+                <input type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;">
+                <a href="" class="txt-btn disabled">등록</a>
               </div>
             </div>
           </div>
@@ -323,5 +328,7 @@
 
     </modal>
     <!-- end: 공통 팝업 -->
+
+
 
 </transition>

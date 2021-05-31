@@ -30,7 +30,7 @@
               <v-list-item @click="">
                 <v-list-item-title>공지로 등록/등록 해제</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="">
+              <v-list-item @click="onDeleteByPostId( item.id )">
                 <v-list-item-title>알림 삭제</v-list-item-title>
               </v-list-item>
             </v-list>
@@ -72,6 +72,7 @@
       <span class="fd-comment">댓글 {{ getCommentTotal( item.id ) }}</span>
     </div>
   </div>
+
 
  <!-- <div class="noti-add">
     <a href="" class="classes-add-btn" @click.prevent="onAddPostPopupOpen"></a>

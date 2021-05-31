@@ -10,3 +10,4 @@ export const MODIFY_QUESTION: string = 'MODIFY_QUESTION';
 export const GET_POST_LIST_ACTION: string = 'GET_POST_LIST_ACTION';
 export const ADD_POST: string = 'ADD_POST';
 export const GET_RESERVED_LIST: string = 'GET_RESERVED_LIST';
+export const DELETE_POST: string = 'DELETE_POST';

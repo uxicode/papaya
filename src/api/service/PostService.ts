@@ -67,6 +67,11 @@ export class PostService{
     return request('post', '/vote', payload );
   }
 
+  public static deletePostById(classId: string | number, postId: number): Promise<any> {
+    ///class/{class_id}/posts/{post_id}
+    return request('delete', `${CLASS_BASE_URL}/${classId}/posts/${postId}`);
+  }
+
 
   /**
    * 내가 가입한 클래스 알림글 북마크한 글조회
