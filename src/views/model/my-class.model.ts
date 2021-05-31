@@ -623,24 +623,6 @@ interface ICurriculumList {
     message?: string;
 }
 
-
-interface ICourseList {
-    course: {
-        startDay: Date | string;
-        createdAt: Date | string;
-        updatedAt: Date | string;
-        id: number;
-        curriculum_id: number;
-        class_id: number;
-        index: number;
-        title: string | undefined;
-        contents: string;
-        startTime: Date | string;
-        endTime: Date | string;
-    };
-    message?: string;
-}
-
 interface IModifyCurriculum {
     title: string;
     goal: string;
@@ -686,7 +668,6 @@ export {
     IMakeEducation,
     IEducationList,
     ICurriculumList,
-    ICourseList,
     IModifyCurriculum,
     IClassTag,
     IClassAuth

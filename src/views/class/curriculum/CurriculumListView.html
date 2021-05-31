@@ -24,25 +24,22 @@
                     <div class="fd-btn">
                         <div class="list-popup">
                             <v-menu
-                                    nudge-left="30px"
-                                    origin="center top"
-                                    transition="scale-transition"
-                                    content-class="time-select-menu bg-white"
-                                    :attach="`#list-popup-${index}`"
-                                    :close-on-content-click="false"
-                                    min-width="130px"
-                                    offset-y offset-x>
+                                    min-width="160px"
+                                    :close-on-click="true">
                                 <template v-slot:activator="{ on, attrs }">
-                                    <button type="button" class="list-popup-btn"
-                                            v-bind="attrs" :id="`list-popup-${index}`"
-                                            v-on="on"><img :src="require('@/assets/images/more.svg')" class="sm" alt=""></button>
+                                    <button v-if="isOwner( item.owner.user_id, item.user_id)"
+                                            type="button"
+                                            class="list-popup-btn"
+                                            v-bind="attrs"
+                                            v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
+                                    </button>
                                 </template>
                                 <v-list>
-                                    <v-list-item>
-                                        <v-list-item-title class="lt" @click="modifyCurriculumHandler( item.id )">교육과정 수정</v-list-item-title>
+                                    <v-list-item @click="modifyCurriculumHandler( item.id )">
+                                        <v-list-item-title class="lt">교육과정 수정</v-list-item-title>
                                     </v-list-item>
-                                    <v-list-item>
-                                        <v-list-item-title class="lt" @click="deleteCurriculum( item.id )">교육과정 삭제</v-list-item-title>
+                                    <v-list-item @click="deleteCurriculum( item.id )">
+                                        <v-list-item-title class="lt">교육과정 삭제</v-list-item-title>
                                     </v-list-item>
                                 </v-list>
                             </v-menu>
@@ -609,7 +606,7 @@
                                 type="text"
                                 id="curriculumModifyTitle"
                                 class="form-control popup-type"
-                                v-model="curriculumList.curriculum.title"
+                                v-model="modifyDataItemsModel.title"
                                 @input="modifyCurriculumChangeTitle($event.target.value)"
                             >
                         </div>
@@ -618,7 +615,7 @@
                         <div class="form-item post-cnt" style="height:154px;">
                             <textarea
                                     class="form-textarea"
-                                    v-model="curriculumList.curriculum.text"
+                                    v-model="modifyDataItemsModel.goal"
                                     @input="modifyChangeText($event.target.value)"></textarea>
                         </div>
 
@@ -629,12 +626,12 @@
                                 <p class="add-curr-tit">수업 회차</p>
                                 <div class="form-box">
                                     <div class="form-group">
-                                        <input type="number" class="form-control" :value="modifyClassItems.course_list.length" @input="modifyCourseListItems($event.target.value)">
+                                        <input type="number" class="form-control" :value="modifyDataItemsModel.course_list.length" @input="modifyCourseListItems($event.target.value)">
                                     </div>
                                 </div>
                             </div>
                             <div class="scroll-body" style="height:124px;">
-                                <div v-for="(item, index) in modifyClassItems.course_list" class="add-curr-item" :key="`currListNum-${index}`">
+                                <div v-for="(item, index) in modifyDataItemsModel.course_list" class="add-curr-item" :key="`currListNum-${index}`">
 
                                     <a href="#" class="add-curr-tit" @click.prevent="modifyCourseHandler(item.id, index)">
                                         <span class="curr-num">{{ index+1 }} 회차</span>
@@ -707,7 +704,7 @@
                                         type="text"
                                         id="courseModifyTitle"
                                         class="form-control popup-type"
-                                        v-model="curriculumList.curriculum.course_list[countCourseNumber].title"
+                                        v-model="modifyCourseDataItems.title"
                                         @input="modifyCourseChangeTitle($event.target.value, countCourseNumber)">
                             </div>
                         </div>
@@ -746,7 +743,7 @@
                                             <template v-slot:activator="{ on, attrs }">
                                                 <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
                                                 <v-text-field
-                                                        v-model="modifyClassItems.course_list[countCourseNumber].startDay"
+                                                        v-model="modifyCourseDataItems.startDay"
                                                         v-bind="attrs"
                                                         v-on="on"
                                                         hide-details
@@ -759,7 +756,7 @@
                                                 </v-text-field>
                                             </template>
                                             <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                                            <v-date-picker v-model="modifyClassItems.course_list[countCourseNumber].startDay" :id="`date-${currListNum}`" no-title @input="startDatePickerChange(countCourseNumber)"></v-date-picker>
+                                            <v-date-picker v-model="modifyCourseDataItems.startDay" :id="`date-${currListNum}`" no-title @input="startDatePickerChange(countCourseNumber)"></v-date-picker>
                                         </v-menu>
                                     </div>
                                 </div>
@@ -782,7 +779,7 @@
                                                 offset-y>
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-text-field
-                                                        v-model="modifyClassItems.course_list[countCourseNumber].startTime"
+                                                        v-model="modifyCourseDataItems.startTime"
                                                         v-bind="attrs"
                                                         v-on="on"
                                                         hide-details solo flat>
@@ -830,7 +827,7 @@
                                                 offset-y>
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-text-field
-                                                        v-model="modifyClassItems.course_list[countCourseNumber].endTime"
+                                                        v-model="modifyCourseDataItems.endTime"
                                                         v-bind="attrs"
                                                         v-on="on"
                                                         hide-details solo flat>
@@ -862,7 +859,7 @@
                             </div>
                             <div class="form-item post-cnt" style="height:120px;">
                                 <textarea class="form-textarea"
-                                          v-model="curriculumList.curriculum.course_list[countCourseNumber].contents"
+                                          v-model="modifyCourseDataItems.contents"
                                           @input="modifyCourseChangeText($event.target.value, countCourseNumber)"></textarea>
                             </div>
 
@@ -892,7 +889,7 @@
                                                accept="image/*"
                                                multiple
                                                @change="modifyFileToImage( $event.target.files )"
-                                               hidden />
+                                                hidden />
                                     </a>
 
                                 </li>

@@ -8,7 +8,6 @@ import {
     IMakeEducation,
     IEducationList,
     ICurriculumList,
-    ICourseList, IMyClassList,
     IModifyCurriculum,
 } from '@/views/model/my-class.model';
 import {IAttachFileModel} from '@/views/model/post.model';
@@ -78,8 +77,7 @@ export default class CurriculumListView extends Vue {
     private imgFileDatas: any[] = [];
     private attachFileItems: any[] = [];
     private formData!: FormData;
-
-    private modifyAddCourseList: any[] = [];
+    private modifyCourseDataItems: any = {};
 
     get imgFileURLItemsModel(): string[] {
         return this.imgFileURLItems;
@@ -87,6 +85,10 @@ export default class CurriculumListView extends Vue {
 
     get attachFileItemsModel(): any[] {
         return this.attachFileItems;
+    }
+
+    get modifyDataItemsModel(): any {
+        return this.modifyClassItems;
     }
 
     /**
@@ -123,6 +125,7 @@ export default class CurriculumListView extends Vue {
     // private testCourse: Array<Pick<IMakeEducation, 'course_list'>> = [];
 
     private allEduList: IEducationList[]= [];
+
     private currList: ICurriculumList={
         curriculum: {
             startAt: '2019-11-17 10:00:00',
@@ -165,7 +168,6 @@ export default class CurriculumListView extends Vue {
             ],
         }
     };
-
 
     private currListNum: number = 10;
     private eduItems: Array< {title: string }>=[];
@@ -389,7 +391,7 @@ export default class CurriculumListView extends Vue {
 
         const temp = JSON.stringify( {...this.makeCurriculumItems} );
         this.formData.append('data', temp );
-        
+
         MyClassService.setEducationList( this.classID, this.formData )
             .then((data)=>{
                 console.log( '교육과정 생성 성공', data );
@@ -677,14 +679,7 @@ export default class CurriculumListView extends Vue {
     }
 
     private modifyCourseConfirm(courseIdx: number): void{
-        this.isClassCurr = false;
-
-        this.setImageFormData();
-        this.setAttachFileFormData();
-        this.removeAllPreview();
-        this.removeAllAttachFile();
-
-        console.log(this.imgFileDatas);
+        this.isModifyClassCourse = false;
     }
 
     private modifyConfirm(cardId: number){
@@ -730,6 +725,7 @@ export default class CurriculumListView extends Vue {
     private modifyCurriculumHandler(curriculumIdx: number) {
         this.isModifyClass = true;
         this.cardId = curriculumIdx;
+
         this.$nextTick(()=>{
             this.getModifyEduCurList(this.cardId);
         });
@@ -739,6 +735,9 @@ export default class CurriculumListView extends Vue {
         this.isModifyClassCourse = true;
         this.courseId = courseIdx;
         this.countCourseNumber = idx;
+
+        this.modifyCourseDataItems = this.modifyDataItemsModel.course_list[idx];
+        console.log(`첨부파일`,this.modifyCourseDataItems.attachment);
     }
 
 
