@@ -1,11 +1,12 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
-import {IPostModel} from '@/views/model/post.model';
+import {IAttachFileModel, IPostModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
 import {Utils} from '@/utils/utils';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
+import PhotoViewer from '@/views/class/notify/PhotoViewer';
 import WithRender from './NotifyDetailPopup.html';
 
 const MyClass = namespace('MyClass');
@@ -15,6 +16,7 @@ const MyClass = namespace('MyClass');
     components:{
         Btn,
         Modal,
+        PhotoViewer
     }
 })
 export default class NotifyDetailPopup extends Vue {
@@ -34,6 +36,7 @@ export default class NotifyDetailPopup extends Vue {
     private postData!: IPostModel;
     private commentData!: any;
     private replyData!: any;
+    private isPhotoViewer: boolean = false;
 
     public created() {
         this.getPost();
@@ -69,6 +72,26 @@ export default class NotifyDetailPopup extends Vue {
             });
     }
 
+    private getImgFileLen( items: IAttachFileModel[] ): number{
+        return (items) ? this.getImgFileDataSort( items ).length : 0;
+    }
+
+    private getImgTotalNum(  items: IAttachFileModel[]  ) {
+        return (items && this.getImgFileDataSort(items).length <= 3);
+    }
+
+    private getImgFileMoreCheck(  items: IAttachFileModel[] ) {
+        return (items)? ( this.getImgFileDataSort( items ).length>3 )? `+${this.getImgFileDataSort( items ).length - 3}` : '' : 0;
+    }
+
+    private getImgFileDataSort(fileData: IAttachFileModel[] ) {
+        return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg' || item.contentType === 'image/gif');
+    }
+
+    private getFileDataSort(fileData: IAttachFileModel[] ) {
+        return fileData.filter( (item: IAttachFileModel) => item.contentType !== 'image/png' && item.contentType !== 'image/jpg' && item.contentType !== 'image/jpeg' && item.contentType !== 'image/gif');
+    }
+
     /**
      * 댓글 정보 가져오기
      * @private
@@ -100,8 +123,17 @@ export default class NotifyDetailPopup extends Vue {
         return ( resultDate[0]>7 )? Utils.getTodayParseFormat( new Date(dateValue) ) : resultDate[1]+'시간 '+resultDate[2]+'분 전';
     }
 
+    private openPhotoViewer(): void {
+        this.isPhotoViewer = true;
+    }
+
+    private onPhotoViewerStatus(value: boolean) {
+        this.isPhotoViewer = value;
+    }
+
     private popupChange( value: boolean ) {
         this.$emit('change', value);
+        this.isPhotoViewer = false;
     }
 
 }

@@ -27,7 +27,7 @@ export default class Notify extends Vue {
   private reservedItems: any[] = [];
   private reservedTotal: number=0;
   private isDetailPopupOpen: boolean=false;
-  private detailPostId: number=997; // 동적으로 변경 안되는 상태
+  private detailPostId: number=987; // 동적으로 변경 안되는 상태
   private isAddPopupOpen: boolean=false;
   private commentsTotalItems: any[] = [];
 
