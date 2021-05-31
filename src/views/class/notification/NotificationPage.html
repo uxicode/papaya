@@ -69,7 +69,7 @@
                     <v-list-item @click="">
                       <v-list-item-title>알림 수정</v-list-item-title>
                     </v-list-item>
-                    <v-list-item @click="">
+                    <v-list-item @click="onDeleteByPostId( item.id )">
                       <v-list-item-title>알림 삭제</v-list-item-title>
                     </v-list-item>
                   </v-list>
@@ -121,4 +121,7 @@
           @change="onDetailPostPopupStatus"></notify-detail-popup>
 
    <add-notify-popup :is-open="isAddPopupOpen" @change="onAddPostPopupStatus" @submit="onAddPost"></add-notify-popup>
+
+
+<!--  <div class="lds-ripple" v-if="isLoading"><div></div><div></div></div>-->
 </section>

@@ -8,7 +8,8 @@ import {
 import {
   GET_POST_LIST_ACTION,
   ADD_POST,
-  GET_RESERVED_LIST
+  GET_RESERVED_LIST,
+  DELETE_POST
 } from '@/store/action-class-types';
 import {IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
@@ -124,6 +125,20 @@ export default class PostModule extends VuexModule {
         return Promise.reject(error);
       });
   }
+
+  @Action
+  public [DELETE_POST](payload: { classId: string | number, postId: number }): Promise<any>{
+    return PostService.deletePostById( payload.classId, payload.postId )
+      .then((data)=>{
+        const findIdx=this.postListItems.findIndex((item) => item.id === payload.postId);
+        this.postListItems.splice(findIdx, 1);
+      }).catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
+      });
+  }
+
+
 
 
   @Action

@@ -9,8 +9,10 @@ import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import ListInVotePreview from '@/components/preview/ListInVotePreview.vue';
 import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
 import WithRender from './NotificationListView.html';
+import {DELETE_POST} from '@/store/action-class-types';
 
 const MyClass = namespace('MyClass');
+const Post = namespace('Post');
 
 @WithRender
 @Component({
@@ -33,6 +35,9 @@ export default class NotificationListView extends Vue {
   @MyClass.Getter
   private classID!: string | number;
 
+  @Post.Action
+  private DELETE_POST!: (payload: { classId: string | number, postId: number })=>Promise<any>;
+
 
   private isOwner( ownerId: number, userId: number): boolean {
     return (ownerId === userId);
@@ -46,8 +51,8 @@ export default class NotificationListView extends Vue {
     const { user_keep_class_posts } = targetPost;
 
     if( isBookmark ){
-      if( Array.isArray(user_keep_class_posts) && user_keep_class_posts.length>0){
-        PostService.deleteKeepPost(user_keep_class_posts[0].id)
+      if( user_keep_class_posts!==undefined && Array.isArray(user_keep_class_posts) && user_keep_class_posts.length>0){
+        PostService.deleteKeepPost( user_keep_class_posts[0].id)
           .then((postData)=>{
             isBookmark=!isBookmark;
             user_keep_class_posts.length=0;
@@ -67,6 +72,9 @@ export default class NotificationListView extends Vue {
   }
 
   private getCommentTotal(idx: number) {
+    if (this.commentsTotalItems === undefined) { return 0; }
+    // console.log(this.commentsTotalItems);
+
     const findItem=this.commentsTotalItems.find((ele) => ele.id === idx);
     return (findItem)? findItem.total : 0;
   }
@@ -75,6 +83,13 @@ export default class NotificationListView extends Vue {
     this.$emit('click:detailPost', id);
   }
 
+  private onDeleteByPostId(postIdx: number) {
+    this.DELETE_POST( {classId:Number(this.classID), postId:postIdx})
+      .then((data)=>{
+        console.log(data);
+        alert('요청하신 알림을 삭제 하였습니다.');
+      });
+  }
 
 
  /* private onAddPostPopupOpen() {

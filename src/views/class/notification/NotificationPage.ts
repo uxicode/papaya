@@ -41,6 +41,9 @@ export default class NotificationPage extends Vue {
   @Post.Action
   private GET_RESERVED_LIST!: (classId: number) => Promise<any>;
 
+  @Post.Action
+  private DELETE_POST!: (payload: { classId: string | number, postId: number })=>Promise<any>;
+
 
   // private postListItems: IPostModel[] & IPostInLinkModel[]= [];
   // private reservedItems: any[] = [];
@@ -59,6 +62,8 @@ export default class NotificationPage extends Vue {
   private detailPostId: number=-1; // 동적으로 변경 안되는 상태
 
   private isReservedChk: boolean=false;
+
+  private isLoading: boolean=false;
 
 
   get reservedChk(): boolean {
@@ -168,15 +173,13 @@ export default class NotificationPage extends Vue {
 
   private async onDetailPostOpen(id: number) {
     console.log(id);
-
+    this.isLoading=true;
     this.detailPostId = id; // update postId
 
     setTimeout(() => {
+      this.isLoading=false;
       this.isDetailPopupOpen=true;
     }, 500);
-
-
-    // console.log('detailPostId=', this.detailPostId);
   }
 
   private onDetailPostPopupStatus(value: boolean) {
@@ -185,6 +188,13 @@ export default class NotificationPage extends Vue {
 
   private onReservedMenuDownUp() {
     this.isReservedChk=!this.isReservedChk;
+  }
+
+  private onDeleteByPostId(postIdx: number) {
+    this.DELETE_POST( {classId: this.classID, postId: postIdx})
+      .then((data)=>{
+        alert('예약된 알림이 제거 되었습니다.');
+      });
   }
 
 

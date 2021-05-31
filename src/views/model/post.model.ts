@@ -1,6 +1,4 @@
 interface IPostModel{
-  // tslint:disable-next-line:ban-types
-  [key: string]: number | string | Date | any[] | object | boolean;
   attachment: [];
   class_id: number;
   count: number;
@@ -165,18 +163,18 @@ interface ILinkModel{
 
 interface IPostInLinkModel{
   link: {
-    createdAt: Date | null,
+    createdAt: Date | string | null,
     id: number,
     parent_id: number,
     title: string,
     type: 0
-    updatedAt: Date | null,
+    updatedAt: Date | string |null,
     link_items: Array<{
-      createdAt: Date | null,
+      createdAt: Date | string |null,
       id:  number,
       index: number,
       link_id:  number,
-      updatedAt: Date | null,
+      updatedAt: Date | string |null,
       url: string,
     }>
   };
