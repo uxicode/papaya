@@ -8,7 +8,7 @@ import RadioButton from '@/components/radio/RadioButton.vue';
 import Modal from '@/components/modal/modal.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
-import WithRender from '@/views/class/notify/AddVotePopup.html';
+import WithRender from '@/views/class/notification/AddVotePopup.html';
 
 const MyClass = namespace('MyClass');
 
@@ -30,17 +30,20 @@ export default class AddVotePopup extends Vue{
 
   @MyClass.Getter
   private classID!: string | number;
+
   private dragEnabled: boolean=true;
   private dragging: boolean= false;
   private voteData: IVoteModel= {
-    parent_id:0,
-    type: 0,
-    title: '',
-    multi_choice: 0,
-    anonymous_mode: 0,
-    open_progress_level: 0,
-    open_result_level: 0,
-    finishAt: new Date().toISOString().substr(0, 10),
+    vote: {
+      parent_id:0,
+      type: '0',
+      title: '',
+      multi_choice: 0,
+      anonymous_mode: 0,
+      open_progress_level: 0,
+      open_result_level: 0,
+      finishAt: new Date().toISOString().substr(0, 10),
+    },
     vote_choice_list: [
       {
         text: '제주도 여행',
@@ -62,10 +65,22 @@ export default class AddVotePopup extends Vue{
     {id:1, txt:'운영자와 스텝에게만 공개'},
     {id:2, txt:'운영자에게만 공개'},
     ];
+  private dateModelItem: Array<{ date: string }> = [
+    {date: new Date().toISOString().substr(0, 10)},
+    {date:''},
+    {date:''},
+  ];
+
   private anonymousChk: boolean=false;
   private multiChoiceChk: boolean=false;
   private endDateMenuChk: boolean=false;
   private endDateMenu: boolean=false;
+
+  get isValidation(): boolean{
+    const validItems=this.voteData.vote_choice_list.filter((item) => item.text !== '');
+    const validDateItems=this.dateModelItem.filter((item) => item.date !== '');
+    return this.voteData.vote.title!=='' && ( validItems.length>=2 || validDateItems.length>=2);
+  }
 
   get dragOptions() {
     return {
@@ -76,7 +91,38 @@ export default class AddVotePopup extends Vue{
     };
   }
 
+  private resetVoteList() {
+    this.voteData.vote_choice_list=[
+      {
+        text: '제주도 여행',
+        index: 1
+      },
+      {
+        text: '',
+        index: 2
+      },
+      {
+        text: '',
+        index: 3
+      }
+    ];
+
+  }
+
   private addVoteList(idx: number) {
+    this.updateVoteList(idx);
+  }
+
+  private addVoteDateList(idx: number) {
+    this.updateVoteList(idx);
+    this.dateModelItem.push({date: new Date().toISOString().substr(0, 10)});
+    this.dateModelItem.forEach((item, index)=>{
+      this.voteData.vote_choice_list[index].text=item.date;
+    });
+
+  }
+
+  private updateVoteList(idx: number) {
     this.voteData.vote_choice_list.push({
       text: '',
       index: ++idx
@@ -88,21 +134,38 @@ export default class AddVotePopup extends Vue{
   }
 
   private optionChange(value: number ): void {
-    this.voteData.type=value;
+    this.resetVoteList();
+    this.voteData.vote.type=value;
   }
 
   private checkMove(e: MoveEvent<any> ) {
     window.console.log('Future index: ' + e.draggedContext.futureIndex);
   }
 
+  private onDragStart() {
+    this.dragging = true;
+  }
+
+  private onDragEnd() {
+    this.dragging = false;
+    this.voteData.vote_choice_list.forEach((item, idx) => {
+      item.index = idx;
+    });
+    // console.log(this.linkData.link_item_list);
+  }
+
+  private clearTxtField(idx: number) {
+    this.voteData.vote_choice_list[idx].text = '';
+  }
+
   private anonymousVoteChange(value: string | boolean) {
     this.anonymousChk=!!value;
-    this.voteData.anonymous_mode=( this.anonymousChk )? 1 : 0;
+    this.voteData.vote.anonymous_mode=( this.anonymousChk )? 1 : 0;
   }
 
   private multiChoiceVoteChange(value: string | boolean) {
     this.multiChoiceChk=!!value;
-    this.voteData.multi_choice=( this.multiChoiceChk )? 1 : 0;
+    this.voteData.vote.multi_choice=( this.multiChoiceChk )? 1 : 0;
   }
 
   private endDatePickerChange() {
@@ -111,11 +174,13 @@ export default class AddVotePopup extends Vue{
 
   private endDateVoteChange(value: string | boolean) {
     this.endDateMenuChk=!!value;
-    this.voteData.finishAt=( this.endDateMenuChk )? new Date().toISOString().substr(0, 10) : null;
+    this.voteData.vote.finishAt=( this.endDateMenuChk )? new Date().toISOString().substr(0, 10) : null;
   }
 
   private onVoteSubmit() {
     this.$emit('submit', this.voteData);
   }
+
+
 
 }

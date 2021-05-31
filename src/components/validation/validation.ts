@@ -78,13 +78,20 @@ extend('word', (value: string ) => {
   return '한글/특수문자 불가능. 영문, 숫자만 기입 가능';
 });
 
-
 extend('pwd', (value: string ) => {
   const userPWRegx =Utils.getPwdRegx(5, 16);
   if ( userPWRegx.test( value ) ) {
     return true;
   }
   return '16자 이하 / 특수문자 가능 / 영문, 숫자 혼합 필수';
+});
+
+extend('url', (value: string ) => {
+  const urlRegx = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+  if ( urlRegx.test( value ) ) {
+    return true;
+  }
+  return '올바른 링크가 아닙니다.';
 });
 
 /*

@@ -1,0 +1,80 @@
+<div>
+  <div class="feed-item" v-for="(item, index) in postListItems" :key="`notice-${index}`">
+    <div class="fd-head">
+      <h3 class="fd-tit">{{ item.title }}</h3>
+      <div class="fd-writer type2">
+        <p class="writer">
+          <span class="name" :class="{'manager':isOwner( item.owner.user_id, item.user_id)}">{{ item.owner.nickname }}</span>
+          <span class="time">{{ item.updatedAt }}</span>
+          <span class="noti">{{ item.type===0? '일반' : '공지' }}</span>
+        </p>
+      </div>
+      <div class="fd-btn">
+        <button type="button" class="btn only-ico-btn sm bookmark" :class="{'active': item.isBookmark }" @click="onKeepPostClick(item.id)"></button>
+        <div class="list-popup">
+          <v-menu
+                  min-width="200px"
+                  :close-on-click="true">
+            <template v-slot:activator="{ on, attrs }">
+              <button v-if="isOwner( item.owner.user_id, item.user_id)"
+                      type="button"
+                      class="list-popup-btn"
+                      v-bind="attrs"
+                      v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
+              </button>
+            </template>
+            <v-list>
+              <v-list-item @click="">
+                <v-list-item-title>알림 수정</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="">
+                <v-list-item-title>공지로 등록/등록 해제</v-list-item-title>
+              </v-list-item>
+              <v-list-item @click="onDeleteByPostId( item.id )">
+                <v-list-item-title>알림 삭제</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
+      </div>
+    </div>
+    <div class="fd-cnt" @click="onDetailPostOpen(item.id)">
+      <p class="fd-txt">{{ item.text }}</p>
+
+      <!-- start: attach 에 이미지파일이 있는 경우 -->
+      <list-in-img-preview :file-items="item.attachment" location="location"></list-in-img-preview>
+      <!-- end: attach 에 이미지파일이 있는 경우 -->
+
+
+      <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+      <list-in-file-preview :file-items="item.attachment" name="originalname" location="location"></list-in-file-preview>
+      <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+
+      <!-- start:  투표가 있는 경우 -->
+      <list-in-vote-preview
+              :file-items="item.vote"
+              title="title"
+              choice="multi_choice"
+              finish-at="finishAt"
+              mode="anonymous_mode"></list-in-vote-preview>
+      <!-- end:  투표가 있는 경우 -->
+
+      <!-- start: 링크가 있는 경우-->
+      <list-in-link-preview
+              :file-items="item.link"
+              title="title"
+              url="url" children="link_items"></list-in-link-preview>
+      <!-- end: 링크가 있는 경우 -->
+    </div>
+
+    <div class="fd-foot clearfix">
+      <span class="fd-viewer">{{ item.count }}명 읽음</span>
+      <span class="fd-comment">댓글 {{ getCommentTotal( item.id ) }}</span>
+    </div>
+  </div>
+
+
+ <!-- <div class="noti-add">
+    <a href="" class="classes-add-btn" @click.prevent="onAddPostPopupOpen"></a>
+  </div>-->
+</div>

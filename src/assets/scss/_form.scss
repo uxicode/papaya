@@ -83,7 +83,8 @@ select {
   &.error {border-color:#ff4d4d !important;}
   &.popup-type.error{
     background-color:transparent!important;
-    border-color:transparent!important;
+    //border-color:transparent!important;
+    border: 1px solid #ff4d4d !important;
   }
   &.approval {border-color:#629f00;}
 }

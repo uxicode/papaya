@@ -1,15 +1,15 @@
 <template>
   <!-- start: add-link list -->
-  <div class="form-add-list">
+  <div class="form-add-list" v-if="fileItems.length>0">
     <div class="add-item">
-      <div class="add-item-top" v-if="fileItems.length>0">
+      <div class="add-item-top">
         <p class="add-item-tit">{{ getTitle() }}</p>
         <div class="add-item-btn">
           <a href="" class="txt-btn" @click.prevent="removeAll">전체삭제</a>
         </div>
       </div>
 
-      <div class="add-item-cnt pdt-desc"  style="padding:0" v-show="fileItems.length>0">
+      <div class="add-item-cnt pdt-desc"  style="padding:0" >
         <div class="add-file">
           <ul class="add-file-list" style="padding:0;">
             <li v-for="(item, index) in fileItems" :key="`file-${index}`">

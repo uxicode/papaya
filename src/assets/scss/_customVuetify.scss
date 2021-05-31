@@ -125,10 +125,17 @@
   background-color: #ff4d4d!important;
   border-color:transparent!important;
 }
-.v-application  .btn.navi{
+.v-application .btn.navi{
   background-color: #1d1d4c!important;
   border-color: transparent !important;
 }
-
+.v-text-field.v-text-field--solo .v-input__control{
+  min-height:42px;
+  input{ max-height: 0;}
+}
+.v-text-field.disabled{
+  opacity: 0.5;
+  cursor: default;
+}
 /* 닉네임 중복 확인 */
 .v-application .error {background-color: transparent !important;}

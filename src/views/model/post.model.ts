@@ -2,17 +2,16 @@ interface IPostModel{
   attachment: [];
   class_id: number;
   count: number;
-  createdAt: Date;
-  endAt: Date | null;
-  expiredAt:  Date;
+  createdAt: Date | string;
+  endAt: Date | string;
+  expiredAt:  Date | string;
   id: number;
-  link: number | null;
   owner: {
     class_id: number,
-    createdAt: Date,
+    createdAt: Date | string,
     id: number,
     is_bookmarked: number,
-    joinedAt: Date,
+    joinedAt: Date | string,
     level: number,
     nickname: string,
     onoff_comment_noti:  number,
@@ -26,20 +25,20 @@ interface IPostModel{
     schedule_color:  number,
     schedule_noti_intime:  number,
     status:  number,
-    updatedAt: Date,
+    updatedAt: Date | string,
     user_id:  number,
     visited: number,
   };
   param1: number;
   post_type: number;
-  startAt:  Date;
+  startAt:  Date | string;
   text: string;
   title: string;
   type: number;
-  updatedAt: Date;
+  updatedAt: Date | string;
   user_id: number;
   user_keep_class_posts: Array<{
-    createdAt: Date,
+    createdAt: Date | string;
     id: number,
     post_id: number,
     user_id: number,
@@ -48,8 +47,8 @@ interface IPostModel{
   user_member_id: number;
   vote: {
     anonymous_mode: boolean, // 익명 모드
-    createdAt: Date, //"2020-03-19 10:45:40"
-    finishAt: Date | null,
+    createdAt: Date | string, //"2020-03-19 10:45:40"
+    finishAt: Date | string,
     id: number,
     multi_choice: boolean,
     open_progress_level: number,
@@ -57,21 +56,21 @@ interface IPostModel{
     parent_id: number,
     title: string,
     type: number,
-    updatedAt: Date,
+    updatedAt: Date | string,
     vote_choices: Array<{
-      createdAt: Date,
+      createdAt: Date | string,
       id: number,
       image_url: string | null,
       index: number,
       text: string,
-      updatedAt: Date,
+      updatedAt: Date | string,
       user_choices: Array<{
         choice_id: number,
-        createdAt: Date,
+        createdAt: Date | string,
         deletedYN: boolean,
         id: number,
         member_id: number,
-        updatedAt: Date,
+        updatedAt: Date | string,
         vote_id: number,
       }>,
       vote_id: number,
@@ -135,19 +134,50 @@ interface ICreatePost{
 }
 
 interface IVoteModel{
-  parent_id: number;
-  type: number;
-  title: string;
-  multi_choice: number;  //복수선택
-  anonymous_mode: number;   //익명
-  open_progress_level: number;
-  open_result_level: number;  //투명현황공개 0-전체, 1-운영자/스텝, 2-운영자
-  finishAt?: Date | string | null;
+  vote: {
+    parent_id: number;
+    type: number | string;
+    title: string;
+    multi_choice: number;  //복수선택
+    anonymous_mode: number;   //익명
+    open_progress_level: number;
+    open_result_level: number;  //투명현황공개 0-전체, 1-운영자/스텝, 2-운영자
+    finishAt?: Date | string | null;
+  };
   vote_choice_list: Array<{
     text: string;
     index: number;
     image_url?: string;
   }>;
 }
-export {IPostModel, IAttachFileModel, ICreatePost, IVoteModel};
+
+interface ILinkModel{
+  link: {
+    title: string;
+  };
+  link_item_list: Array<{
+    index: number,
+    url: string
+  }>;
+}
+
+interface IPostInLinkModel{
+  link: {
+    createdAt: Date | string | null,
+    id: number,
+    parent_id: number,
+    title: string,
+    type: 0
+    updatedAt: Date | string |null,
+    link_items: Array<{
+      createdAt: Date | string |null,
+      id:  number,
+      index: number,
+      link_id:  number,
+      updatedAt: Date | string |null,
+      url: string,
+    }>
+  };
+}
+export {IPostModel, IAttachFileModel, ICreatePost, IVoteModel, ILinkModel, IPostInLinkModel};
 

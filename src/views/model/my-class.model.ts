@@ -478,15 +478,6 @@ interface IMakeEducation {
     }>;
 }
 
-interface IMakeCourse {
-    title: string;
-    contents: string;
-    index: number;
-    startDay: Date | string;
-    startTime: Date | string;
-    endTime: Date | string;
-}
-
 interface IEducationList {
     total: number;
     page_no: null | number;
@@ -625,33 +616,7 @@ interface ICurriculumList {
                 startTime: Date | string;
                 endTime: Date | string;
                 deletedYN: boolean;
-                attachment?: [
-                    {
-                        createdAt: Date | string;
-                        updatedAt: Date | string;
-                        id: number;
-                        user_id: number;
-                        member_id: null | number,
-                        parent_id: number;
-                        group_name: string;
-                        fieldname: string;
-                        originalname: string;
-                        encoding: string;
-                        mimetype: string;
-                        size: number;
-                        bucket: string;
-                        key: string;
-                        acl: string;
-                        contentType: string;
-                        contentDisposition: null | number;
-                        storageClass: string;
-                        serverSideEncryption: null | number;
-                        metadata: null | number;
-                        location: string;
-                        etag: string;
-                        deletedYN: boolean;
-                    }
-                ];
+                attachment?: [];
             }
         ]
     };
@@ -679,17 +644,15 @@ interface ICourseList {
 interface IModifyCurriculum {
     title: string;
     goal: string;
-    course_list?: [
-        {
-            id: number;
-            index: number;
-            title: string;
-            startDay: Date | string;
-            startTime: Date | string;
-            endTime: Date | string;
-            contents: string;
-        }
-    ];
+    course_list?: Array<{
+        id: number;
+        index: number;
+        title: string;
+        startDay: Date | string;
+        startTime: Date | string;
+        endTime: Date | string;
+        contents: string;
+    }>;
 }
 
 interface IClassTag {

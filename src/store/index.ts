@@ -6,6 +6,7 @@ import AuthModule from '@/store/auth.module';
 import ClassModule from '@/store/class.module';
 import SearchModule from '@/store/search.module';
 import PageHistoryStatus from '@/store/PageHistoryStatus';
+import PostModule from '@/store/post.module';
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ const store = new Vuex.Store({
     History: PageHistoryStatus,
     MyClass: ClassModule,
     SearchStatus: SearchModule,
+    Post: PostModule,
   },
 });
 
