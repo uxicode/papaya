@@ -39,8 +39,6 @@ export default class NotificationListView extends Vue {
   private DELETE_POST!: (payload: { classId: string | number, postId: number })=>Promise<any>;
 
 
-
-
   private isOwner( ownerId: number, userId: number): boolean {
     return (ownerId === userId);
   }
@@ -89,6 +87,7 @@ export default class NotificationListView extends Vue {
     this.DELETE_POST( {classId:Number(this.classID), postId:postIdx})
       .then((data)=>{
         console.log(data);
+        alert('요청하신 알림을 삭제 하였습니다.');
       });
   }
 
