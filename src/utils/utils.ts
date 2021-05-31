@@ -220,29 +220,92 @@ class Utils{
     return yyyy+'-'+( mm<10 ? '0'+mm : mm )+'-'+( dd<10 ? '0'+dd : dd );
   }
 
+  /**
+   * 오늘 날짜 --> 요일로 표기.
+   * @param date
+   */
   public static dayToString( date: Date ): string{
     const dayNum: string[] = ['일', '월', '화', '수', '목', '금', '토'];
     return dayNum[date.getDay()]+'요일';
   }
 
+  /**
+   * 년 월 일 표시
+   * @param date
+   */
   public static getFullDay(date: Date): string{
     return Utils.getTodayParseFormat(date)+' '+Utils.dayToString( date )+' '+Utils.getFullTimes( date );
   }
 
+  /**
+   * 24시간 표시 - 시/분
+   * @param date
+   */
   public static getFullTimes( date: Date ): string{
     const hours=Utils.hoursConvertToApm( date.getHours() );
     const minutes =date.getMinutes();
     return hours + '시 ' + minutes + '분';
   }
 
+  /**
+   * 오전 오후 표시해 주는 시간.
+   * @param hours
+   */
   public static hoursConvertToApm( hours: number ): string | number{
     return hours>12? String( '오후 '+( hours-12) ) : hours;
   }
 
+  /**
+   * 오늘을 기준으로 언제 업데이트 했는지 알아내기- 시/분 만 계산  ( 일주일 전까지만 체크 )
+   * @param dateValue
+   */
+  public static calcDate(dateValue: Date): number[] {
+    const today = Date.now();
+    const updateDate = new Date(dateValue);
+    const updateDateTime=updateDate.getTime();
+    const calcDate=today - updateDateTime;
+    const msOfDay = 24*60*60*1000;
+    const msOfHour = 60*60*1000;
+    const msOfMin = 60*1000;
+    // console.log(new Date(dateValue));
+    //, new Date(dateValue), calcDate/ 1000 / 60 / 60 / 24/365
+
+    const calcDay: number = Math.floor( calcDate / msOfDay );
+    const calcHour: number =( calcDay>7 )? Math.floor( calcDate / msOfHour ) : Math.floor((calcDate%msOfDay) / msOfHour );
+    const calcMin: number =( calcDay>7 )? Math.floor( calcDate / msOfMin ) : Math.floor((calcDate %msOfHour) /msOfMin );
+
+    // const calcMonth = Math.floor( calcDate / (msOfDay * 30) );
+    // const calcYear = Math.floor( calcDate / (msOfDay * 30 * 12));
+    // calcYear=(calcYear>0)? new Date(dateValue).getFullYear() : 0;
+    // calcMonth=(calcMonth>12)? calcMonth-12 : calcMonth;
+    // console.log(today, '일수 차이=', calcDay );
+    return [ calcDay,  calcHour, calcMin ];
+  }
+
+  /**
+   * 오늘을 기준으로 언제 업데이트 했는지 알아내기-( 일주일 전까지만 체크 )
+   * 업데이트 한지 일주일이 넘는다면 년-월-일/ 표시 그렇지 않다면 시/분 표시
+   * @param dateValue
+   * @private
+   */
+  public static updatedDiffDate( dateValue: Date ): string{
+    const resultDate=Utils.calcDate(dateValue);
+    // console.log( resultDate[0], resultDate[1], resultDate[1]);
+    return ( resultDate[0]>7 )? Utils.getTodayParseFormat( new Date(dateValue) ) : resultDate[1]+'시 '+resultDate[2]+'분 전';
+  }
+
+  /**
+   * 주어진 범위내에 랜덤 수 얻기.
+   * @param min
+   * @param max
+   */
   public static getRandomNum( min: number, max: number ): number {
     return Math.floor(Math.random()*(max-min+1)) + min;
   }
 
+  /**
+   * 브라우저 리로
+   */
   public static getWindowReload(): void{
     window.location.reload();
   }
@@ -259,6 +322,10 @@ class Utils{
     });
   }
 
+  /**
+   * 파일 타입 체크 - resultByBytes 체크 값 수정 필요.
+   * @param file
+   */
   public static getFileType(file: File) {
     let fileVerifiedType: any = '';
     const slice = file.slice(0, 4);
@@ -288,6 +355,10 @@ class Utils{
     return fileVerifiedType;
   }
 
+  /**
+   * 배열 평탄화
+   * @param items
+   */
   public static getFlatten( items: any[] ): any[]{
       const stack = [...items];
       const res = [];
@@ -321,7 +392,7 @@ class Utils{
    * undefined 인지 체크
    * @param value
    */
-  public static isUndefined( value: any ) {
+  public static isUndefined( value: any ): boolean {
     return typeof value === 'undefined';
   }
 
@@ -329,8 +400,17 @@ class Utils{
    * empty 인지 체크
    * @param value
    */
-  public static isEmpty( value: any ) {
+  public static isEmpty( value: any ): boolean {
     return Utils.isUndefined(value) || value === '' || value === null || value !== value;
+  }
+
+  /**
+   * 유효한 url 체크 - true 면 유효한 url
+   * @param targetTxt: string
+   */
+  public static getIsValidLink( targetTxt: string ): boolean {
+    const regx = /((((https?)?:\/\/)|(www\.)?|www\.))([a-z0-9.]+)(\.[a-z]{2,4})(\.[a-z]{1,2})?([^?\s]+(\?((\w+)(=[^&\s]+)?&?)+)?)?/g;
+    return targetTxt.search(regx) !== -1;
   }
 
 

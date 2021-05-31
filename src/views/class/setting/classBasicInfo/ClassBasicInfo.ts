@@ -33,6 +33,7 @@ export default class ClassBasicInfo extends Vue {
     private isManualClick: boolean=false;
     private manualInputField: string = '';
     private searchResultItems: ISearchSchool[]=[];
+    private isPrivate: boolean = false;
 
     @MyClass.Getter
     private classID!: number;
@@ -45,7 +46,7 @@ export default class ClassBasicInfo extends Vue {
         return this.searchResultItems;
     }
 
-    get info() {
+    get info(): any {
         return this.classInfo;
     }
 
@@ -78,6 +79,7 @@ export default class ClassBasicInfo extends Vue {
           .then((data) => {
               this.classInfo = data.classinfo;
               this.classNameValue = data.classinfo.name;
+              this.isPrivate = data.classinfo.is_private;
               console.log(this.classInfo);
           });
     }
@@ -231,15 +233,25 @@ export default class ClassBasicInfo extends Vue {
      * @private
      */
     private changeInfoSave(): void {
-        MyClassService.setClassInfoById(this.classID, {
-            g_name: this.searchResultValue, name: this.classNameValue, is_private: false
-        }).then(() => {
-            console.log(`학교 이름: ${this.searchResultValue} /
-             클래스 이름: / ${this.classNameValue}
-             공개 범위: /
-             수정 완료`);
-            this.goBack();
-        });
+        // 학교 이름을 검색결과 중에서 선택하거나 직접입력으로 입력하지 않았을때는 수정되지 않도록 한다.
+        if (this.searchResultValue === '') {
+            MyClassService.setClassInfoById(this.classID, {
+                name: this.classNameValue,
+                is_private: this.isPrivate
+            }).then((data) => {
+                console.log(`클래스 이름 : ${data.name} / 공개 여부 : ${data.is_private} 로 수정완료`);
+                this.goBack();
+            });
+        } else {
+            MyClassService.setClassInfoById(this.classID, {
+                g_name: this.searchResultValue,
+                name: this.classNameValue,
+                is_private: this.isPrivate
+            }).then((data) => {
+                console.log(`학교 이름 : ${data.g_name} / 클래스 이름 : ${data.name} / 공개 여부 : ${data.is_private} 로 수정완료`);
+                this.goBack();
+            });
+        }
     }
 
     private goBack(): void {

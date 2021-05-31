@@ -18,7 +18,7 @@ const MyClassRouter=[
     components: {default: () => import('@/views/class/home/MyClassListDetailPage'), header: MyClassHeader, footer: AppFooter},
     children: [
       {path: '', name: 'myClassListDetailView', component: () => import('../views/class/home/MyClassListDetailView')}, //가입리스트 중 하나 클릭시-> 클래스 홈( 상세 )
-      {path: 'notify', name: 'NotifyView', component: () => import('../views/class/notify/Notify')},  // 상세 -> 클래스 멤버
+      {path: 'notification', name: 'NotificationView', component: () => import('../views/class/notification/NotificationPage')},  // 상세 -> 클래스 멤버
       {path: 'schedule', name: 'scheduleView', component: () => import('../views/class/schedule/ScheduleView')}, //상세 -> 클래스 일정
       {path: 'member', name: 'classMember', component: () => import('../views/class/member/ClassMember')},  // 상세 -> 클래스 멤버
       ...MyClassSubRouter

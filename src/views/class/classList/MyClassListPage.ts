@@ -180,7 +180,7 @@ export default class MyClassListPage extends Vue {
     // console.log(begin, end);
     //end 가 classItem 개수보다 많을 때 여기서 종료
 
-    console.log(this.totalCount, this.startNum, this.endNum);
+    // console.log(this.totalCount, this.startNum, this.endNum);
     if( end>this.totalCount ){
       this.endNum=this.totalCount;
       return;
@@ -241,7 +241,7 @@ export default class MyClassListPage extends Vue {
       begin=this.pageCount*this.numOfPage-1;
       end = (this.pageCount*this.numOfPage)+this.numOfPage-2;
     }
-    console.log('begin=', begin, 'end=', end);
+    // console.log('begin=', begin, 'end=', end);
 
     return {
       begin,
@@ -310,7 +310,7 @@ export default class MyClassListPage extends Vue {
         nickname: payload.nickname,
         is_bookmarked: payload.bookmarkValue
       }).then((data: ClassEachInfo) => {
-      console.log(data);
+      // console.log(data);
        /*
        * {
           "is_bookmarked": true,
@@ -347,7 +347,7 @@ export default class MyClassListPage extends Vue {
        this.MYCLASS_HOME(id).then((data)=>{
          this.$router.push({path: `${CLASS_BASE_URL}/${id}`})
            .then(( )=>{
-             console.log(this.classID, ':: 해당 클래스 홈 이동');
+             // console.log(this.classID, ':: 해당 클래스 홈 이동');
              // console.log('MYCLASS_HOME 호출후 this.classID = ', this.classID, localStorage.getItem('classId'), this.classIdModel );
            });
        });

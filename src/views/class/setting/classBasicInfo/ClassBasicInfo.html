@@ -33,11 +33,11 @@
                             <span class="label">공개 범위 <button type="button" class="tip-info"><img :src="require('@/assets/images/info.svg')" class="icon-img" alt=""></button></span>
                             <div class="checkbox-group">
                                 <div class="btn-radio">
-                                    <input type="radio" name="privacy" id="closedClass" :checked="info.is_private === true">
+                                    <input v-model="isPrivate" type="radio" name="privacy" id="closedClass" value="true">
                                     <label for="closedClass">비공개 클래스</label>
                                 </div>
                                 <div class="btn-radio">
-                                    <input type="radio" name="privacy" id="openedClass" :checked="info.is_private === false">
+                                    <input v-model="isPrivate" type="radio" name="privacy" id="openedClass" value="false">
                                     <label for="openedClass">오픈 클래스</label>
                                 </div>
                             </div>

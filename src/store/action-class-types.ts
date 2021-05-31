@@ -7,3 +7,6 @@ export const CLASS_MEMBER_INFO_ACTION: string = 'CLASS_MEMBER_INFO_ACTION';
 export const MODIFY_CLASS_MEMBER_INFO: string = 'MODIFY_CLASS_MEMBER_INFO';
 export const MODIFY_CLASS_INFO: string = 'MODIFY_CLASS_INFO';
 export const MODIFY_QUESTION: string = 'MODIFY_QUESTION';
+export const GET_POST_LIST_ACTION: string = 'GET_POST_LIST_ACTION';
+export const ADD_POST: string = 'ADD_POST';
+export const GET_RESERVED_LIST: string = 'GET_RESERVED_LIST';

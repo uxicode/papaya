@@ -48,7 +48,6 @@ export default class Pagination extends Vue{
     }
   }
 
-
   get pageItemsModel() {
     return this.pageItems;
   }

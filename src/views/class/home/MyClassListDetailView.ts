@@ -1,29 +1,39 @@
-import {Vue, Component} from 'vue-property-decorator';
+import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {getAllPromise} from '@/views/model/types';
 import MyClassService from '@/api/service/MyClassService';
-import WithRender from './MyClassListDetailView.html';
 import {NoticeScheduleModel} from '@/views/model/schedule.model';
-import AuthService from '@/api/service/AuthService';
-import {IAttachFileModel} from '@/views/model/post.model';
+import {IAttachFileModel, IPostModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
 import {ScheduleService} from '@/api/service/ScheduleService';
+import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
+import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
+import ListInVotePreview from '@/components/preview/ListInVotePreview.vue';
+import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
+import WithRender from './MyClassListDetailView.html';
+
 
 const MyClass = namespace('MyClass');
 
-
 @WithRender
-@Component
+@Component({
+  components:{
+    ListInImgPreview,
+    ListInFilePreview,
+    ListInVotePreview,
+    ListInLinkPreview
+  }
+})
 export default class MyClassListDetailView extends Vue{
 
   private pagingCount: number=1;
+
   private numOfPage: number=10;
   private mChk: boolean=false;
   private isNoticeChk: boolean=false;
-
-
-  private noticeSchedule: NoticeScheduleModel[] = [];
   private isPageLoaded: boolean=false;
+  private noticeSchedule: NoticeScheduleModel[] = [];
+  private  commentsTotalItems: any[]=[];
 
 
   @MyClass.Getter
@@ -37,6 +47,10 @@ export default class MyClassListDetailView extends Vue{
 
   get allDataModel(): any[]{
     return this.allData;
+  }
+
+  get commentsTotalItemsModel() {
+    return this.commentsTotalItems;
   }
 
   public created(): void{
@@ -98,6 +112,7 @@ export default class MyClassListDetailView extends Vue{
     });
   }
 
+
   private isOwner( ownerId: number, userId: number): boolean {
     return (ownerId === userId);
   }
@@ -110,35 +125,6 @@ export default class MyClassListDetailView extends Vue{
     return ( this.noticeSchedule[this.noticeSchedule.length-1])? this.noticeSchedule[this.noticeSchedule.length-1].title : '';
   }
 
-  private getImgTotalNum(  items: IAttachFileModel[]  ) {
-    return (items && this.getImgFileDataSort(items).length <=3);
-  }
-
-  private getImgFileLen( items: IAttachFileModel[] ): number{
-    return (items) ? this.getImgFileDataSort( items ).length : 0;
-  }
-
-  private getImgFileMoreCheck(  items: IAttachFileModel[] ) {
-    return (items)? ( this.getImgFileDataSort( items ).length>3 )? `+${this.getImgFileDataSort( items ).length - 3}` : '' : 0;
-  }
-
-  private getImgFileDataSort(fileData: IAttachFileModel[] ) {
-    return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg' || item.contentType === 'image/gif');
-  }
-
-  private getFileDataSort(fileData: IAttachFileModel[] ) {
-    return fileData.filter( (item: IAttachFileModel) => item.contentType !== 'image/png' && item.contentType !== 'image/jpg' && item.contentType !== 'image/jpeg' && item.contentType !== 'image/gif');
-  }
-
-  private isVote(item: Date) {
-    if (item === null) {
-      return true;
-    }
-    const finishTime = new Date(item).getTime();
-    const currentTime = new Date().getTime();
-
-    return (finishTime > currentTime);
-  }
 
 
 

@@ -91,6 +91,7 @@
     </div>
     <template v-for="i in allDataModel.length" v-else>
       <template v-for="item in allDataModel[i-1]" >
+        <!-- start: 일정 -->
         <div class="feed-item cal" v-if="item.name==='schedule'">
           <div class="fd-head">
             <h3 class="fd-tit">{{ item.list.title }}</h3>
@@ -103,7 +104,6 @@
             </div>
             <div class="fd-btn">
               <div class="list-popup">
-
                 <v-menu
                         min-width="200px"
                         :close-on-click="true">
@@ -143,24 +143,19 @@
               </ul>
 
               <!-- start: attach 에 이미지파일이 있는 경우 -->
-              <template v-if="getImgFileDataSort(item.list.attachment).length>0">
-                <ul class="img-list clearfix">
-                  <li v-for="imgItem in getImgFileDataSort(item.list.attachment)"><a href=""><img :src="imgItem.location" alt=""></a></li>
-                </ul>
-              </template>
+              <list-in-img-preview :file-items="item.list.attachment" location="location"></list-in-img-preview>
               <!-- end: attach 에 이미지파일이 있는 경우 -->
 
               <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
-              <template v-if="getFileDataSort(item.list.attachment).length>0">
-                <p class="fd-inner-txt">첨부 파일 {{ getFileDataSort(item.list.attachment).length }}</p>
-                <ul class="file-list clearfix">
-                  <li v-for="fileItem in getFileDataSort(item.list.attachment)"><a :href="fileItem.location">{{fileItem.originalname }}</a></li>
-                </ul>
-              </template>
+              <list-in-file-preview :file-items="item.list.attachment" name="originalname" location="location"></list-in-file-preview>
+              <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+
             </div>
           </div>
         </div>
+        <!-- end: 일정 -->
 
+        <!-- start: 교육과정 -->
         <div class="feed-item edu" v-if="item.name==='curriculum'">
           <div class="fd-head">
             <h3 class="fd-tit">{{ item.list.title }}</h3>
@@ -173,8 +168,8 @@
             <div class="fd-btn">
               <div class="list-popup">
                 <v-menu  v-if="isOwner( item.list.owner.user_id, item.list.user_id)"
-                        min-width="200px"
-                        :close-on-click="true">
+                         min-width="200px"
+                         :close-on-click="true">
                   <template v-slot:activator="{ on, attrs }">
                     <button type="button"
                             class="list-popup-btn"
@@ -199,7 +194,9 @@
             <p class="fd-txt">총 {{ item.list.course_list.length }}회의 수업이 있습니다.</p>
           </div>
         </div>
+        <!-- end: 교육과정 -->
 
+        <!-- start: 알림 -->
         <div class="feed-item noti" v-if="item.name==='post'">
           <div class="fd-head">
             <h3 class="fd-tit">{{ item.list.title }}</h3>
@@ -212,8 +209,8 @@
             <div class="fd-btn">
               <div class="list-popup">
                 <v-menu  v-if="isOwner( item.list.owner.user_id, item.list.user_id)"
-                        min-width="200px"
-                        :close-on-click="true">
+                         min-width="200px"
+                         :close-on-click="true">
                   <template v-slot:activator="{ on, attrs }">
                     <button type="button"
                             class="list-popup-btn"
@@ -242,63 +239,40 @@
             <div class="fd-inner">
 
               <!-- start: attach 에 이미지파일이 있는 경우 -->
-              <template v-if="getImgFileLen(item.list.attachment)>0">
-                <ul class="img-list clearfix">
-                  <li class="img-item" v-for="( imgItem, imgIndex ) in getImgFileDataSort(item.list.attachment)"
-                      :key="`img-${imgIndex}`" >
-                    <a :href="imgItem.location"
-                       :data-count="getImgFileMoreCheck(item.list.attachment)"
-                       :class="{'pseudo-del': getImgTotalNum(item.list.attachment) }">
-                      <img :src="imgItem.location" alt="">
-                    </a>
-                  </li>
-                </ul>
-              </template>
+              <list-in-img-preview :file-items="item.list.attachment" location="location"></list-in-img-preview>
               <!-- end: attach 에 이미지파일이 있는 경우 -->
 
               <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
-              <template v-if="getFileDataSort(item.list.attachment).length>0">
-                <p class="fd-inner-txt">첨부 파일 {{ getFileDataSort(item.list.attachment).length }}</p>
-                <ul class="file-list clearfix">
-                  <li v-for="fileItem in getFileDataSort(item.list.attachment)"><a :href="fileItem.location">{{fileItem.originalname }}</a></li>
-                </ul>
-              </template>
+              <list-in-file-preview :file-items="item.list.attachment" name="originalname" location="location"></list-in-file-preview>
               <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
 
               <!-- start:  투표가 있는 경우 -->
-              <template v-if="item.list.vote!==null">
-                <p class="fd-inner-txt fc-red">{{ isVote(item.list.vote.finishAt)? '투표 중' : '투표마감'}}</p>
-                <div class="vote-area">
-                  <p class="vote-tit">{{ item.list.vote.title }}</p>
-                  <ul class="vote-option clearfix">
-                    <li>{{ (item.list.vote.multi_choice)? '복수선택' : '단일선택'}}</li>
-                    <li>{{ (item.list.vote.anonymous_mode)? '익명투표' : '공개투표' }}</li>
-                    <li>{{ (item.list.vote.finishAt)? item.list.vote.finishAt+' 마감': '종료일자없음'}} </li>
-                  </ul>
-                </div>
-              </template>
+              <list-in-vote-preview
+                      :file-items="item.list.vote"
+                      title="title"
+                      choice="multi_choice"
+                      finish-at="finishAt"
+                      mode="anonymous_mode"></list-in-vote-preview>
               <!-- end:  투표가 있는 경우 -->
 
-              <!-- grid guide
-              <ul class="img-list clearfix">
-                <li class="img-item" v-for="imgItem in item.list.attachment">
-                  <a href="" data-count="+3"><img :src="imgItem.location" alt=""></a>
-                </li>
-              </ul>
-              -->
+              <!-- start: 링크가 있는 경우-->
+              <list-in-link-preview
+                      :file-items="item.list.link"
+                      title="title"
+                      url="url" children="link_items"></list-in-link-preview>
+              <!-- end: 링크가 있는 경우 -->
 
             </div>
           </div>
-
-
-
-
 
           <!--<div class="fd-foot clearfix">
             <span class="fd-viewer">124명 읽음</span>
             <span class="fd-comment">댓글 12</span>
           </div>-->
         </div>
+        <!-- end: 알림 -->
+
+
       </template>
     </template>
 

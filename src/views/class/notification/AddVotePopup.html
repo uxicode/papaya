@@ -17,7 +17,7 @@
 <!--          <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">-->
           <txt-field add-class="popup-type"
                      placeholder="제목을 50자 이내로 작성해 주세요."
-                     v-model="voteData.title"></txt-field>
+                     v-model="voteData.vote.title"></txt-field>
         </div>
       </div>
 
@@ -29,55 +29,106 @@
               <div class="create-item">
                 <div class="create-item-cnt">
                   <div class="form-type" style="padding:15px 0;">
+                    <!-- start:  텍스트 혹은 날짜 선택 -->
                     <div class="checkbox-group">
-                      <!--<div class="btn-radio">
-                        <input type="radio" name="type" id="text" checked>
-                        <label for="text">텍스트</label>
-                      </div>
-                      <div class="btn-radio">
-                        <input type="radio" name="type" id="date">
-                        <label for="date">날짜</label>
-                      </div>-->
-
                       <radio-button btn-id="chk1"
                                     radio-name="radio"
                                     btn-value="0"
-                                    active-value="0"
-                                    v-model="voteData.type"
+                                    :active-value="voteData.vote.type"
+                                    v-model="voteData.vote.type"
                                     @click="optionChange">텍스트</radio-button>
                       <radio-button btn-id="chk2"
                                     radio-name="radio"
                                     btn-value="1"
-                                    v-model="voteData.type"
+                                    :active-value="voteData.vote.type"
+                                    v-model="voteData.vote.type"
                                     @click="optionChange">날짜</radio-button>
                     </div>
-                  </div>
-                  <!--<draggable v-model="myArray" group="people" @start="drag=true" @end="drag=false">-->
-                  <draggable class="create-link-list"
-                             v-model="voteData.vote_choice_list"
-                             :move="checkMove"
-                             v-bind="dragOptions"
-                             @start="dragging = true"
-                             @end="dragging = false"
-                             style="min-height:20px;">
-                    <div class="create-form list-type active" v-for="( ele, index ) in voteData.vote_choice_list" :key="`ele-${index}`">
-                      <span class="num">{{ index }}</span>
-                      <div class="form-group inline">
-                        <input type="text" class="form-control popup-type sm" v-model="ele.text" style="width: 390px;">
-                        <button type="button" class="btn only-ico-btn form-delete active" ><img :src="require('@/assets/images/delete.svg')" alt=""></button>
-                      </div>
-                      <div class="create-sub-btn">
-                        <!-- 이미지 추가는 나중에~ <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>-->
-                        <a href="javascript:void(0);" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
-                      </div>
-                    </div>
+                    <!-- end:  텍스트 혹은 날짜 선택 -->
 
-                    <div class="create-add-list"  slot="footer">
-                      <a href="" class="bd-none" @click.prevent.stop="addVoteList( voteData.vote_choice_list.length )">
-                        <img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span>
-                      </a>
-                    </div>
-                  </draggable>
+                  </div>
+                  <!-- 리스트 드래그
+                  <draggable v-model="myArray" group="people" @start="drag=true" @end="drag=false">
+                  -->
+                  <!-- start: 텍스트 타입 리스트 (드래그앤드랍으로 이동) -->
+                  <template v-if="voteData.vote.type==='0'">
+                    <draggable class="create-link-list"
+                               v-model="voteData.vote_choice_list"
+                               :move="checkMove"
+                               v-bind="dragOptions"
+                               @start="dragging = true"
+                               @end="dragging = false"
+                               style="min-height:20px;">
+                      <div class="create-form list-type active" v-for="( ele, index ) in voteData.vote_choice_list" :key="`ele-${index}`">
+                        <span class="num">{{ index+1 }}</span>
+                        <div class="form-group inline">
+                          <input type="text" class="form-control popup-type sm" placeholder="항목을 입력해 주세요." v-model="ele.text" style="width: 390px;">
+                          <button type="button" class="btn only-ico-btn form-delete active" @click="clearTxtField(index)"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                        </div>
+                        <div class="create-sub-btn">
+                          <!-- 이미지 추가는 나중에~ <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>-->
+                          <a href="javascript:void(0);" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
+                        </div>
+                      </div>
+
+                      <div class="create-add-list"  slot="footer">
+                        <a href="" class="bd-none" @click.prevent.stop="addVoteList( voteData.vote_choice_list.length )">
+                          <img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span>
+                        </a>
+                      </div>
+                    </draggable>
+                  </template>
+                  <!-- end: 텍스트 타입 리스트 (드래그앤드랍으로 이동) -->
+
+                  <template v-else>
+                    <draggable class="create-link-list"
+                               v-model="voteData.vote_choice_list"
+                               :move="checkMove"
+                               v-bind="dragOptions"
+                               @start="onDragStart"
+                               @end="onDragEnd"
+                               style="min-height:20px;">
+                      <div class="create-form list-type active" v-for="( ele, index ) in voteData.vote_choice_list" :key="`ele-${index}`">
+                        <span class="num">{{ index+1 }}</span>
+                        <div class="form-group date">
+<!--                          <input type="text" class="form-control" v-model="ele.text" placeholder="날짜를 선택해 주세요.">-->
+<!--                          <button type="button" class="btn form-btn form-calendar" @click="clearTxtField(index)"></button>-->
+<!--                          <span class="date-area ft-desc">날짜를 선택해 주세요.</span>-->
+                          <v-menu
+                                  transition="scale-transition"
+                                  offset-y
+                                  min-width="auto">
+                            <template v-slot:activator="{ on, attrs }">
+                              <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
+                              <button type="button" class="btn form-btn form-calendar" v-on="on" @click="clearTxtField(index)"></button>
+                              <v-text-field
+                                      class="d-inline-block"
+                                      v-model="dateModelItem[index].date"
+                                      v-bind="attrs"
+                                      v-on="on"
+                                      hide-details
+                                      solo
+                                      flat>
+                              </v-text-field>
+                            </template>
+                            <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
+                            <v-date-picker v-model="dateModelItem[index].date" no-title ></v-date-picker>
+                          </v-menu>
+                        </div>
+                        <div class="create-sub-btn">
+                          <!-- 이미지 추가는 나중에~ <a href="" class="add-img-btn"><img :src="require('@/assets/images/image.svg')" alt=""></a>-->
+                          <a href="javascript:void(0);" class="drag-btn"><img :src="require('@/assets/images/drag.svg')" alt=""></a>
+                        </div>
+                      </div>
+
+                      <div class="create-add-list"  slot="footer">
+                        <a href="" class="bd-none" @click.prevent.stop="addVoteDateList( voteData.vote_choice_list.length-1 )">
+                          <img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span>
+                        </a>
+                      </div>
+                    </draggable>
+                  </template>
+
                 </div>
               </div>
             </div>
@@ -131,7 +182,7 @@
                               <template v-slot:activator="{ on, attrs }">
                                 <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
                                 <v-text-field
-                                        v-model="voteData.finishAt"
+                                        v-model="voteData.vote.finishAt"
                                         v-bind="attrs"
                                         v-on="on"
                                         hide-details
@@ -143,15 +194,13 @@
                                 </v-text-field>
                               </template>
                               <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                              <v-date-picker v-model="voteData.finishAt" no-title @input="endDatePickerChange"></v-date-picker>
+                              <v-date-picker v-model="voteData.vote.finishAt" no-title @input="endDatePickerChange"></v-date-picker>
                             </v-menu>
                             <!--<input type="text" class="form-control no-date" size="7" value="날짜 없음">
                             <span class="date-area placeholder">종료일시 없음</span>
                             <button type="button" class="btn form-btn form-calendar"></button>-->
                           </div>
                         </template>
-
-
                       </div>
                     </li>
 
@@ -177,7 +226,7 @@
                               <v-list-item
                                       v-for="(item, index) in openResultLevelItems"
                                       :key="index"
-                                      @click="voteData.open_result_level=item.id;openResultLevel=item.txt;">
+                                      @click="voteData.vote.open_result_level=item.id;openResultLevel=item.txt;">
                                 <v-list-item-title>{{ item.txt }}</v-list-item-title>
                               </v-list-item>
                             </v-list>
@@ -204,7 +253,7 @@
 
     <div slot="footer">
       <div class="btn-group rt">
-        <button type="button" class="btn primary navi" @click="onVoteSubmit">완료</button>
+        <button type="button" class="btn primary navi" @click="onVoteSubmit" :disabled="!isValidation">완료</button>
       </div>
     </div>
 

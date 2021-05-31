@@ -1,8 +1,8 @@
 
 interface ITimeModel{
   apm: string;
-  hour: string;
-  minute: string;
+  hour: string | number;
+  minute: string | number;
 }
 
 interface IScheduleTotal{

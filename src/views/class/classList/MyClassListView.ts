@@ -75,36 +75,14 @@ export default class MyClassListView extends Vue{
     el.classList.remove('skeleton-inner');
   }
 
-  public calcDate(dateValue: Date): number[] {
-    const today = Date.now();
-    const updateDate = new Date(dateValue);
-    const updateDateTime=updateDate.getTime();
-    const calcDate=today - updateDateTime;
-    const msOfDay = 24*60*60*1000;
-    const msOfHour = 60*60*1000;
-    const msOfMin = 60*1000;
-    // console.log(new Date(dateValue));
-    //, new Date(dateValue), calcDate/ 1000 / 60 / 60 / 24/365
-
-    const calcDay: number = Math.floor( calcDate / msOfDay );
-    const calcHour: number =( calcDay>7 )? Math.floor( calcDate / msOfHour ) : Math.floor((calcDate%msOfDay) / msOfHour );
-    const calcMin: number =( calcDay>7 )? Math.floor( calcDate / msOfMin ) : Math.floor((calcDate %msOfHour) /msOfMin );
-
-    // const calcMonth = Math.floor( calcDate / (msOfDay * 30) );
-    // const calcYear = Math.floor( calcDate / (msOfDay * 30 * 12));
-    // calcYear=(calcYear>0)? new Date(dateValue).getFullYear() : 0;
-    // calcMonth=(calcMonth>12)? calcMonth-12 : calcMonth;
-    // console.log(today, '일수 차이=', calcDay );
-    return [ calcDay,  calcHour, calcMin ];
-  }
   private updatedDiffDate( dateValue: Date ): string{
-    const resultDate=this.calcDate(dateValue);
+    // const resultDate=Utils.calcDate(dateValue);
     // console.log( resultDate[0], resultDate[1], resultDate[1]);
-    return ( resultDate[0]>7 )? Utils.getTodayParseFormat( new Date(dateValue) ) : resultDate[1]+'시 '+resultDate[2]+'분 전';
+    return Utils.updatedDiffDate(dateValue);
   }
 
   private isPostUpdate( dateValue: Date ) {
-    const resultDate=this.calcDate(dateValue);
+    const resultDate=Utils.calcDate(dateValue);
     return ( resultDate[0] <=7 );
   }
 
@@ -175,7 +153,7 @@ export default class MyClassListView extends Vue{
    */
   private gotoCreateClassPage(): void{
     this.$router.push('/make-class/step1').then(()=>{
-      console.log('step1');
+      // console.log('step1');
     });
   }
 
