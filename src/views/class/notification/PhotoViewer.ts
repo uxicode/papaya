@@ -1,5 +1,6 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {IAttachFileModel} from '@/views/model/post.model';
+import {Utils} from '@/utils/utils';
 import WithRender from './PhotoViewer.html';
 
 @Component
@@ -35,4 +36,15 @@ export default class PhotoViewer extends Vue {
         this.$emit('change', false);
     }
 
+    private checkSize(): void {
+        const currentImg = document.querySelector('.viewer-item.active img');
+        const width = currentImg?.clientWidth;
+        const height = currentImg?.clientHeight;
+        console.log(`current width = ${width} / current height = ${height}`);
+        console.log(`current window width = ${Utils.getWindowWidth()} / current window height = ${Utils.getWindowHeight()}`);
+
+        const control = document.querySelector('.control');
+        // @ts-ignore
+        control.setAttribute('style', '');
+    }
 }

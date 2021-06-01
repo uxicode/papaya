@@ -1728,6 +1728,7 @@
 
   .viewer-control {
     .control {
+      width: calc(50vw - 400px); // 전체에서 팝업 가로 길이 (600px) 와 padding (100px*2)를 뺀 길이 - ksj
       &.prev {
         @include pos-vertical($left:0);
       }

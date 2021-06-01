@@ -4,12 +4,12 @@
             <button class="close" @click="closePhotoViewer"><img :src="require('@/assets/images/close-white.svg')" alt=""></button>
         </div>
         <ul class="viewer-list">
-            <li class="viewer-item active"><img :src="imgData[activeNum].location" alt="" style="width:540px"></li>
+            <li class="viewer-item active"><img :src="imgData[activeNum].location" alt="" style="width:540px" @click="checkSize"></li>
         </ul>
 
         <div class="viewer-control">
-            <a href="" class="control prev" @click.prevent="showPrevImage"><img :src="require('@/assets/images/left-white.svg')" alt=""></a>
-            <a href="" class="control next" @click.prevent="showNextImage"><img :src="require('@/assets/images/right-white.svg')" alt=""></a>
+            <a href="" class="control prev" @click.prevent="showPrevImage"><img :src="require('@/assets/images/left-white.svg')" alt="" class="float-lt"></a>
+            <a href="" class="control next" @click.prevent="showNextImage"><img :src="require('@/assets/images/right-white.svg')" alt="" class="float-rt"></a>
         </div>
 
         <div class="viewer-page">
