@@ -606,6 +606,7 @@ export default class CurriculumListView extends Vue {
             .then(() => {
                 console.log('교육과정 삭제 성공');
                 alert('선택하신 교육과정이 삭제 되었습니다.');
+
             });
     }
 
