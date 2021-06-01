@@ -27,7 +27,7 @@
               <v-list-item @click="">
                 <v-list-item-title>알림 수정</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="">
+              <v-list-item @click="onPostTypeChange( item.id )">
                 <v-list-item-title>공지로 등록/등록 해제</v-list-item-title>
               </v-list-item>
               <v-list-item @click="onDeleteByPostId( item.id )">

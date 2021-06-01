@@ -60,8 +60,10 @@ export default class AddReservationPopup extends Vue {
     // const date=new Date( this.datePickerModel );
     const hour = (this.timeSelectModel.apm === '오후') ? Number(this.timeSelectModel.hour) + 12 : Number(this.timeSelectModel.hour);
     const minute= Number( this.timeSelectModel.minute );
-    this.alarmData.alarmAt = `${this.datePickerModel} ${hour}:${minute}`;
-    console.log(this.alarmData.alarmAt);
+
+    //예약 알림 설정 토글이 true 인경우에만...
+    this.alarmData.alarmAt =(this.reservationTimeChk)? `${this.datePickerModel} ${hour}:${minute}` : '';
+    // console.log(this.reservationTimeChk, this.alarmData.alarmAt);
     this.$emit('submit', this.alarmData);
   }
 

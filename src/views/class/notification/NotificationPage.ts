@@ -93,30 +93,10 @@ export default class NotificationPage extends Vue {
 
   private async getList() {
     //알림 가져오기
-    /* await PostService.getAllPostsByClassId(this.classID, {page_no: 1, count: 100})
-       .then((data) => {
-         // console.log(data);
-         this.postListItems = data.post_list;
-         console.log('noticeListItems=',this.postListItems);
-         this.postListItems.forEach((item, index ) => {
-           let {isBookmark}=item;
-           if( item.user_keep_class_posts.length > 0){
-             isBookmark=!isBookmark;
-             this.postListItems.splice(index, 1, {...item, isBookmark} );
-           }
-         });
-       });*/
     await this.GET_POST_LIST_ACTION({classId: Number( this.classID ), paging:{page_no:1, count:100} });
 
     //예약된 알림 가져오기.
-    /*await PostService.getReservedPost( this.classID, {page_no:1, count:100})
-      .then((data)=>{
-        this.reservedTotal=data.total_count;
-        this.reservedItems=data.post_list;
-      });*/
-
     await this.GET_RESERVED_LIST(Number(this.classID));
-
 
     //댓글 총 개수 가져옴
     await getAllPromise( this.getAllCommentsPromiseResult())
@@ -190,11 +170,12 @@ export default class NotificationPage extends Vue {
     this.isReservedChk=!this.isReservedChk;
   }
 
-  private onDeleteByPostId(postIdx: number) {
-    this.DELETE_POST( {classId: this.classID, postId: postIdx})
+  private async onDeleteReservedByPostId(postIdx: number) {
+    await this.DELETE_POST( {classId: this.classID, postId: postIdx})
       .then((data)=>{
         alert('예약된 알림이 제거 되었습니다.');
       });
+    await this.GET_RESERVED_LIST(Number(this.classID));
   }
 
 
