@@ -1,5 +1,6 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {IAttachFileModel} from '@/views/model/post.model';
+import {Utils} from '@/utils/utils';
 import WithRender from './PhotoViewer.html';
 
 @Component
@@ -13,6 +14,10 @@ export default class PhotoViewer extends Vue {
     private imgData!: IAttachFileModel[];
 
     private activeNum: number = 0;
+
+    public created() {
+        // window.addEventListener('resize', this.resizeViewerControl);
+    }
 
     private showPrevImage(): void {
         if (this.activeNum === 0) {
@@ -33,6 +38,19 @@ export default class PhotoViewer extends Vue {
     private closePhotoViewer(): void {
         //this.isPhotoViewer = false;
         this.$emit('change', false);
+    }
+
+    private resizeViewerControl(): void {
+        const currentImg = document.querySelector('.viewer-item.active img');
+        const imgWidth = 540;
+        const windowWidth = Utils.getWindowWidth();
+        const windowHeight = Utils.getWindowHeight();
+        console.log(`current window width = ${windowWidth} / current window height = ${windowHeight}`);
+
+        const control = document.querySelectorAll('.control');
+        const controlWidth = (windowWidth - imgWidth - 160) / 2;
+        // @ts-ignore
+        control.forEach((item) => item.setAttribute('style', `width:${controlWidth}px`));
     }
 
 }

@@ -298,7 +298,7 @@ export default class NotifyDetailPopup extends Vue {
 
     private openPhotoViewer(): void {
         const attachment = this.postDetailModel.attachment;
-        if (this.getImgFileDataSort(attachment).length > 0) {
+        if (this.getImgFileDataSort(attachment).length > 3) {
             this.isPhotoViewer = true;
         }
     }
