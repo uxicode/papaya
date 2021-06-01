@@ -103,10 +103,7 @@ export default class SideMenu extends Vue{
   private myClassHomeModel!: IClassInfo;
 
   @MyClass.Getter
-  private activeSideMenuNum!: number;
-
-  @MyClass.Getter
-  private activeNumModel!: number;
+  private sideNumModel!: number;
 
   @MyClass.Action
   private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
@@ -130,11 +127,11 @@ export default class SideMenu extends Vue{
   }
 
   public created(){
+    // console.log( '사이드 메뉴 시작점...')
     //화면 새로고침시에
     if (performance.navigation.type === 1) {
       this.sideMenuClickHandler(0);
     }
-
     /*window.onpageshow = function(event) {
       if ( event.persisted || (window.performance && window.performance.navigation.type === 1)) {
         // Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우
