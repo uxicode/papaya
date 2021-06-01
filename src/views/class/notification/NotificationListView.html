@@ -27,7 +27,7 @@
               <v-list-item @click="">
                 <v-list-item-title>알림 수정</v-list-item-title>
               </v-list-item>
-              <v-list-item @click="">
+              <v-list-item @click="onPostTypeChange( item.id )">
                 <v-list-item-title>공지로 등록/등록 해제</v-list-item-title>
               </v-list-item>
               <v-list-item @click="onDeleteByPostId( item.id )">
@@ -41,10 +41,11 @@
     <div class="fd-cnt" @click="onDetailPostOpen(item.id)">
       <p class="fd-txt">{{ item.text }}</p>
 
-      <!-- start: attach 에 이미지파일이 있는 경우 -->
-      <list-in-img-preview :file-items="item.attachment" location="location"></list-in-img-preview>
-      <!-- end: attach 에 이미지파일이 있는 경우 -->
-
+        <a href="" @click.prevent="onDetailPostOpen(item.id)">
+            <!-- start: attach 에 이미지파일이 있는 경우 -->
+            <list-in-img-preview :file-items="item.attachment" location="location"></list-in-img-preview>
+            <!-- end: attach 에 이미지파일이 있는 경우 -->
+        </a>
 
       <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
       <list-in-file-preview :file-items="item.attachment" name="originalname" location="location"></list-in-file-preview>

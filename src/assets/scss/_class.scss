@@ -458,6 +458,7 @@
 
 
 .fd-cnt {
+  cursor: pointer;
   .fd-txt {
     line-height:1.57;
     color:#57576d;
@@ -1728,11 +1729,20 @@
 
   .viewer-control {
     .control {
+      // 20210601 ksj
+      width: calc((100vw - 700px) / 2);
+      height: 30vh;
       &.prev {
         @include pos-vertical($left:0);
+        img {
+          @include pos-vertical($left:0); // 20210601 ksj
+        }
       }
       &.next {
         @include pos-vertical($right:0);
+        img {
+          @include pos-vertical($right:0); // 20210601 ksj
+        }
       }
     }
   }

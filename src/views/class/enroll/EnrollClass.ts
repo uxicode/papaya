@@ -70,6 +70,7 @@ export default class EnrollClass extends Vue {
   }
 
   public created() {
+    console.log(' this.$route.params.classId=', this.$route.params.classId);
     this.classIdx = Number( this.$route.params.classId );
     this.visibleSettingMenus(0);
     this.getClassInfo();

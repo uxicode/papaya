@@ -1,7 +1,7 @@
 import {Vue, Component, Prop, Watch} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
-import {IPostInLinkModel, IPostModel} from '@/views/model/post.model';
+import {IAttachFileModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
 import {Utils} from '@/utils/utils';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -9,6 +9,7 @@ import {PostService} from '@/api/service/PostService';
 import {getAllPromise} from '@/views/model/types';
 import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
 import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
+import PhotoViewer from '@/views/class/notification/PhotoViewer';
 import WithRender from './NotifyDetailPopup.html';
 
 const MyClass = namespace('MyClass');
@@ -19,7 +20,8 @@ const MyClass = namespace('MyClass');
         Btn,
         Modal,
         ListInImgPreview,
-        ListInFilePreview
+        ListInFilePreview,
+        PhotoViewer
     }
 })
 export default class NotifyDetailPopup extends Vue {
@@ -105,6 +107,7 @@ export default class NotifyDetailPopup extends Vue {
     private commentItems: Array<{comment_list: []} > = [];
     private replyItems!: any;
     private isLoaded: boolean=false;
+    private isPhotoViewer: boolean = false;
 
     get commentItemsModel() {
         return this.commentItems;
@@ -244,6 +247,7 @@ export default class NotifyDetailPopup extends Vue {
         this.isLoaded=false;
         this.reset();
     }
+
     private onDetailPostPopupOpen(id: number) {
         console.log(id);
         this.$emit('detailView', id );
@@ -288,5 +292,19 @@ export default class NotifyDetailPopup extends Vue {
           });
     }
 
+    private getImgFileDataSort(fileData: IAttachFileModel[] ) {
+        return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg' || item.contentType === 'image/gif');
+    }
+
+    private openPhotoViewer(): void {
+        const attachment = this.postDetailModel.attachment;
+        if (this.getImgFileDataSort(attachment).length > 3) {
+            this.isPhotoViewer = true;
+        }
+    }
+
+    private onPhotoViewerStatus(value: boolean) {
+        this.isPhotoViewer = value;
+    }
 
 }

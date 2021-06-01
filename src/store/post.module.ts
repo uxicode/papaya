@@ -9,7 +9,8 @@ import {
   GET_POST_LIST_ACTION,
   ADD_POST,
   GET_RESERVED_LIST,
-  DELETE_POST
+  DELETE_POST,
+  POST_TYPE_CHANGE
 } from '@/store/action-class-types';
 import {IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
@@ -132,6 +133,24 @@ export default class PostModule extends VuexModule {
       .then((data)=>{
         const findIdx=this.postListItems.findIndex((item) => item.id === payload.postId);
         this.postListItems.splice(findIdx, 1);
+        return Promise.resolve(data);
+      }).catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
+      });
+  }
+
+  @Action
+  public [POST_TYPE_CHANGE](payload: { classId: string | number, postId: number }): Promise<any>{
+    const findIdx=this.postListItems.findIndex((item) => item.id === payload.postId);
+    const targetItem = this.postListItems[findIdx];
+    let { type }=targetItem;
+    const { title, text }=targetItem;
+    type=( type===0 )? 1 : 0;
+    return PostService.setPostById( payload.classId, payload.postId, {type, title, text} )
+      .then( (data)=>{
+        this.postListItems.splice(findIdx, 1, {...targetItem, type, title, text});
+        return Promise.resolve(data);
       }).catch((error) => {
         console.log(error);
         return Promise.reject(error);
@@ -139,14 +158,12 @@ export default class PostModule extends VuexModule {
   }
 
 
-
-
   @Action
   public [GET_RESERVED_LIST]( classId: number ) {
     PostService.getReservedPost( classId )
       .then((data)=>{
 
-        console.log(data);
+        // console.log(data);
         this.context.commit(SET_RESERVED_TOTAL, data.post_listcount);
         this.context.commit(SET_RESERVED_LIST, data.post_list);
 
@@ -156,4 +173,5 @@ export default class PostModule extends VuexModule {
       return Promise.reject(error);
     });
   }
+
 }

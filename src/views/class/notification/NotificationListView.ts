@@ -9,7 +9,6 @@ import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import ListInVotePreview from '@/components/preview/ListInVotePreview.vue';
 import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
 import WithRender from './NotificationListView.html';
-import {DELETE_POST} from '@/store/action-class-types';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -38,8 +37,8 @@ export default class NotificationListView extends Vue {
   @Post.Action
   private DELETE_POST!: (payload: { classId: string | number, postId: number })=>Promise<any>;
 
-
-
+  @Post.Action
+  private POST_TYPE_CHANGE!: (payload: { classId: string | number, postId: number })=>Promise<any>;
 
   private isOwner( ownerId: number, userId: number): boolean {
     return (ownerId === userId);
@@ -89,9 +88,18 @@ export default class NotificationListView extends Vue {
     this.DELETE_POST( {classId:Number(this.classID), postId:postIdx})
       .then((data)=>{
         console.log(data);
+        alert('요청하신 알림을 삭제 하였습니다.');
       });
   }
 
+  private onPostTypeChange( postIdx: number) {
+    this.POST_TYPE_CHANGE({classId: this.classID, postId: postIdx})
+      .then((data)=>{
+        console.log(data);
+        const type=( data.type===0 )? '일반' : '공지';
+        alert(`${type} 게시물로 변경 되었습니다.`);
+      });
+  }
 
  /* private onAddPostPopupOpen() {
     this.isAddPopupOpen=true;

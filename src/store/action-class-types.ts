@@ -11,3 +11,4 @@ export const GET_POST_LIST_ACTION: string = 'GET_POST_LIST_ACTION';
 export const ADD_POST: string = 'ADD_POST';
 export const GET_RESERVED_LIST: string = 'GET_RESERVED_LIST';
 export const DELETE_POST: string = 'DELETE_POST';
+export const POST_TYPE_CHANGE: string = 'POST_TYPE_CHANGE';

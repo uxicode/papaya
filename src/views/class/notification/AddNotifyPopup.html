@@ -46,6 +46,22 @@
               </div>
             </div>
             <div class="popup-form-btm">
+
+              <!--<div class="form-add-list" v-if="this.alarmData.alarmAt!==''">
+                <div class="add-item">
+                  <div class="add-item-top">
+                    <p class="add-item-tit">예약 알림</p>
+                    <div class="add-item-btn">
+                      <a href="" class="txt-btn" @click.prevent="">수정</a>
+                      <a href="" class="txt-btn" @click.prevent="">삭제</a>
+                    </div>
+                  </div>
+
+                  <div class="add-item-cnt" style="padding:10px 0;">예약 설정된 일시 : <strong class="badge">{{ this.alarmData.alarmAt}}</strong></div>
+                </div>
+              </div>-->
+              <alarm-preview :alarm-item="alarmData.alarmAt" @remove="removeAlarmItem" @modify="modifyAlarm"></alarm-preview>
+
               <!-- start: 첨부 이미지 파일 미리보기 -->
               <image-preview :file-items="imgFileURLItemsModel"
                              @remove="onRemoveImgPreviewItems"
