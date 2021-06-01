@@ -10,7 +10,7 @@
                     <p class="fd-tit">{{ item.title }}</p>
                     <div class="fd-writer type2">
                         <p class="writer mgb-0">
-                            <span class="name" :class="memberLevelIcon(item.owner.level)">{{ item.owner.nickname }}</span>
+                            <span class="name" :class="{'manager':isOwner( item.owner.user_id, item.user_id)}">{{ item.owner.nickname }}</span>
                         </p>
                     </div>
                 </div>
@@ -444,8 +444,7 @@
                                 <span class="gr-name">{{myClassHomeModel.g_name}}</span>
                                 <strong class="cls-name">{{myClassHomeModel.name}}</strong>
                             </p>
-
-                            <p class="post-writer mgb-0" :class="memberLevelIcon(curriculumList.curriculum.owner.level)">{{ curriculumList.curriculum.owner.nickname }}</p>
+                            <p class="post-writer mgb-0" :class="{'manager':isOwner(curriculumList.curriculum.owner.user_id, curriculumList.curriculum.user_id)}">{{ curriculumList.curriculum.owner.nickname }}</p>
                         </div>
                     </div>
                 </div>
@@ -519,27 +518,16 @@
 
                         <div class="fd-inner">
                             <!-- start: attach 에 이미지파일이 있는 경우 -->
-                            <template v-if="getImgFileLen(curriculumList.curriculum.course_list[countCourseNumber].attachment)>0">
-                                <ul class="img-list clearfix">
-                                    <li class="img-item" v-for="( imgItem, imgIndex ) in getImgFileDataSort(curriculumList.curriculum.course_list[countCourseNumber].attachment)"
-                                        :key="`img-${imgIndex}`" >
-                                        <a :href="imgItem.location"
-                                           :data-count="getImgFileMoreCheck(curriculumList.curriculum.course_list[countCourseNumber].attachment)"
-                                           :class="{'pseudo-del': getImgTotalNum(curriculumList.curriculum.course_list[countCourseNumber].attachment) }">
-                                            <img :src="imgItem.location" alt="">
-                                        </a>
-                                    </li>
-                                </ul>
-                            </template>
+                            <list-in-img-preview
+                                    :file-items="curriculumList.curriculum.course_list[countCourseNumber].attachment"
+                                    location="location"></list-in-img-preview>
                             <!-- end: attach 에 이미지파일이 있는 경우 -->
 
                             <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
-                            <template v-if="getFileDataSort(curriculumList.curriculum.course_list[countCourseNumber].attachment).length>0">
-                                <p class="fd-inner-txt">첨부 파일 {{ getFileDataSort(curriculumList.curriculum.course_list[countCourseNumber].attachment).length }}</p>
-                                <ul class="file-list clearfix">
-                                    <li v-for="fileItem in getFileDataSort(curriculumList.curriculum.course_list[countCourseNumber].attachment)"><a :href="fileItem.location">{{fileItem.originalname }}</a></li>
-                                </ul>
-                            </template>
+                            <list-in-file-preview
+                                    :file-items="curriculumList.curriculum.course_list[countCourseNumber].attachment"
+                                    name="originalname"
+                                    location="location"></list-in-file-preview>
                             <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
                         </div>
                     </div>

@@ -13,6 +13,8 @@ import {
 import {IAttachFileModel} from '@/views/model/post.model';
 import {Utils} from '@/utils/utils';
 import MyClassService from '@/api/service/MyClassService';
+import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
+import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
@@ -35,7 +37,9 @@ interface ITimeModel{
         Modal,
         Btn,
         ImagePreview,
-        FilePreview
+        FilePreview,
+        ListInImgPreview,
+        ListInFilePreview,
     }
 })
 export default class CurriculumListView extends Vue {
@@ -606,7 +610,6 @@ export default class CurriculumListView extends Vue {
             .then(() => {
                 console.log('교육과정 삭제 성공');
                 alert('선택하신 교육과정이 삭제 되었습니다.');
-
             });
     }
 
@@ -681,6 +684,11 @@ export default class CurriculumListView extends Vue {
 
     private modifyCourseConfirm(courseIdx: number): void{
         this.isModifyClassCourse = false;
+
+        this.setImageFormData();
+        this.setAttachFileFormData();
+        this.removeAllPreview();
+        this.removeAllAttachFile();
     }
 
     private modifyConfirm(cardId: number){
@@ -738,31 +746,10 @@ export default class CurriculumListView extends Vue {
         this.countCourseNumber = idx;
 
         this.modifyCourseDataItems = this.modifyDataItemsModel.course_list[idx];
-        console.log(`첨부파일`,this.modifyCourseDataItems.attachment);
+        console.log(this.modifyCourseDataItems.attachment);
     }
 
 
-    /**
-     * 멤버 등급별 아이콘
-     * @param level
-     * @private
-     */
-    private memberLevelIcon(level: number): string {
-        let levelIcon: string = '';
-        switch (level) {
-            case 1:
-                levelIcon='manager';
-                break;
-            case 2:
-                levelIcon='staff';
-                break;
-            default:
-                levelIcon='member';
-                break;
-        }
-        // console.log('test' , level);
-        return levelIcon;
-    }
 
     private getCurrItemTitleById( title: string): string {
         return (title)? title : '';
