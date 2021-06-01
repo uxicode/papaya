@@ -15,7 +15,7 @@
                 <div class="activity-tit">
                     <p>차단된 멤버 {{ blockedMemberList.length }}</p>
                 </div>
-                <div class="member-management-list scroll-body" style="height:540px;">
+                <div v-if="blockedMemberList.length>0" class="member-management-list scroll-body" style="height:540px;">
                     <ul>
                         <li v-for="(item, idx) in blockedMemberList"
                             :key="idx"
@@ -25,6 +25,12 @@
                             <button type="button" class="member-more clear" @click="unblockModalOpen(item.id)">차단 해제하기</button>
                         </li>
                     </ul>
+                </div>
+                <!-- 차단 멤버 없음 -->
+                <div v-else class="no-notify" style="height:540px;">
+                    <div class="no-data">
+                        <p>차단된 멤버가 없습니다.</p>
+                    </div>
                 </div>
             </div>
         </div>

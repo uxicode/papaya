@@ -15,54 +15,58 @@
                 <div class="activity-tit">
                     <p>스탭 {{ totalStaffNum }}</p>
                 </div>
-                <div style="height:586px;">
-                    <div class="member-management-list classes-member-list" style="max-height:536px;">
-                        <ul class="member-list" style="margin: 0">
-                            <li v-for="(item, idx) in classStaffList"
-                                :key="idx"
-                                class="list-item member-item">
-                                <div class="member-type staff">
-                                    <p class="member-name">{{ item.nickname }}</p>
-                                    <p class="member-tit">스탭 멤버</p>
+                <div v-if="totalStaffNum" class="member-management-list classes-member-list" style="max-height:536px;">
+                    <ul class="member-list" style="margin: 0">
+                        <li v-for="(item, idx) in classStaffList"
+                            :key="idx"
+                            class="list-item member-item">
+                            <div class="member-type staff">
+                                <p class="member-name">{{ item.nickname }}</p>
+                                <p class="member-tit">스탭 멤버</p>
+                            </div>
+                            <div class="member-info-btn">
+                                <div class="list-popup">
+                                    <v-menu
+                                            min-width="200px"
+                                            :close-on-click="true">
+                                        <template v-slot:activator="{ on, attrs }">
+                                            <button
+                                                    type="button"
+                                                    class="list-popup-btn"
+                                                    v-bind="attrs"
+                                                    v-on="on">
+                                                <img :src="require('@/assets/images/more.svg')" alt="">
+                                            </button>
+                                        </template>
+                                        <v-list>
+                                            <v-list-item @click="detailPopupOpen(item.user_id, item.nickname, item.id)">
+                                                <v-list-item-title>멤버 정보</v-list-item-title>
+                                            </v-list-item>
+                                            <v-list-item @click="staffModifyPopupOpen(item.id, item.nickname)">
+                                                <v-list-item-title>스탭 권한 설정 변경</v-list-item-title>
+                                            </v-list-item>
+                                            <v-list-item @click="blockModalOpen(item.id, item.nickname)">
+                                                <v-list-item-title>멤버 차단</v-list-item-title>
+                                            </v-list-item>
+                                            <v-list-item @click="banModalOpen(item.id, item.nickname)">
+                                                <v-list-item-title>멤버 강제 탈퇴</v-list-item-title>
+                                            </v-list-item>
+                                        </v-list>
+                                    </v-menu>
                                 </div>
-                                <div class="member-info-btn">
-                                    <div class="list-popup">
-                                        <v-menu
-                                                min-width="200px"
-                                                :close-on-click="true">
-                                            <template v-slot:activator="{ on, attrs }">
-                                                <button
-                                                        type="button"
-                                                        class="list-popup-btn"
-                                                        v-bind="attrs"
-                                                        v-on="on">
-                                                    <img :src="require('@/assets/images/more.svg')" alt="">
-                                                </button>
-                                            </template>
-                                            <v-list>
-                                                <v-list-item @click="detailPopupOpen(item.user_id, item.nickname, item.id)">
-                                                    <v-list-item-title>멤버 정보</v-list-item-title>
-                                                </v-list-item>
-                                                <v-list-item @click="staffModifyPopupOpen(item.id, item.nickname)">
-                                                    <v-list-item-title>스탭 권한 설정 변경</v-list-item-title>
-                                                </v-list-item>
-                                                <v-list-item @click="blockModalOpen(item.id, item.nickname)">
-                                                    <v-list-item-title>멤버 차단</v-list-item-title>
-                                                </v-list-item>
-                                                <v-list-item @click="banModalOpen(item.id, item.nickname)">
-                                                    <v-list-item-title>멤버 강제 탈퇴</v-list-item-title>
-                                                </v-list-item>
-                                            </v-list>
-                                        </v-menu>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 스탭 없음 -->
+                <div v-else class="no-notify" style="height:486px;">
+                    <div class="no-data">
+                        <p>스탭이 없습니다.</p>
                     </div>
+                </div>
 
-                    <div class="add-staff">
-                        <a href="#" class="txt-btn" @click.stop.prevent="gotoAddStaff"><img :src="require('@/assets/images/add.svg')" alt="">스탭 추가</a>
-                    </div>
+                <div class="add-staff mgt-0">
+                    <a href="#" class="txt-btn" @click.stop.prevent="gotoAddStaff"><img :src="require('@/assets/images/add.svg')" alt="">스탭 추가</a>
                 </div>
             </div>
         </div>

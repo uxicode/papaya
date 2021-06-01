@@ -112,9 +112,9 @@
                                 </div>
                             </div>
                             <ul class="enroll-qna">
-                                <li v-for="(item, idx) in questionList">
-                                    <p>{{ idx+1 }}. {{ item.question }}</p>
-                                    <textarea v-model="answerList[idx].answer" class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
+                                <li v-for="(item, idx) in qnaList">
+                                    <p>{{ Number(idx)+1 }}. {{ item.question }}</p>
+                                    <textarea v-model="item.answer" class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
                                 </li>
                             </ul>
                         </div>

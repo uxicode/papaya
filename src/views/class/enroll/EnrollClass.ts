@@ -3,7 +3,7 @@ import {namespace} from 'vuex-class';
 import {CLASS_BASE_URL} from '@/api/base';
 import {Utils} from '@/utils/utils';
 import {IUserMe} from '@/api/model/user.model';
-import { IQuestionInfo} from '@/views/model/my-class.model';
+import {IQnaInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
@@ -48,8 +48,9 @@ export default class EnrollClass extends Vue {
   private showMsg: boolean = false;
   private isError: boolean = false;
   private isApproval: boolean = false;
-  private questionList: Array<Pick<IQuestionInfo, 'question'>> = [{question: ''}, {question: ''}, {question: ''}];
-  private answerList: any[] = [{answer: ''}, {answer: ''}, {answer: ''}];
+  private questionList!: Array<Pick<IQuestionInfo, 'question'>>;
+  private answerList!: Array<Pick<IQnaInfo, 'answer'>>;
+  private qnaList: any[] = [];
   private enrollMemberInfo!: IEnrollMemberInfo;
 
   private sideMenuData: ISideMenu[] = [
@@ -141,11 +142,12 @@ export default class EnrollClass extends Vue {
    */
   private openEnrollClassModal(): void {
     this.isClassEnrollModal = true;
-
     MyClassService.getClassQuestion(this.classIdx as number)
       .then((data) => {
         console.log(data);
-        this.questionList = data.questionlist;
+        this.questionList = (data.questionlist.length > 0) ? data.questionlist : [];
+        this.qnaList = Object.assign({} ,this.questionList, this.answerList);
+        console.log(this.qnaList);
       });
   }
 
@@ -179,20 +181,7 @@ export default class EnrollClass extends Vue {
     this.enrollMemberInfo = {
       user_id: this.userInfo.id,
       nickname: this.inputNickname,
-      qna_list: [
-        {
-          question: this.questionList[0].question,
-          answer: this.answerList[0].answer
-        },
-        {
-          question: this.questionList[1].question,
-          answer: this.answerList[1].answer
-        },
-        {
-          question: this.questionList[2].question,
-          answer: this.answerList[2].answer
-        },
-      ],
+      qna_list: this.qnaList,
     };
     ClassMemberService.setClassMember(this.classIdx as number, this.enrollMemberInfo)
       .then((result) => {

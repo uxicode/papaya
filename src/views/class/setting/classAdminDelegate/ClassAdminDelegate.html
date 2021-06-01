@@ -15,7 +15,7 @@
                 <div class="activity-tit">
                     <p>멤버 {{ totalMemberNum }}</p>
                 </div>
-                <div class="member-management-list scroll-body" style="height:540px;">
+                <div v-if="totalMemberNum>0" class="member-management-list scroll-body" style="height:540px;">
                     <ul>
                         <li v-for="(item, idx) in classMemberList"
                             :key="idx"
@@ -28,6 +28,12 @@
                             </a>
                         </li>
                     </ul>
+                </div>
+                <!-- 멤버 없음 -->
+                <div v-else class="no-notify" style="height:540px;">
+                    <div class="no-data">
+                        <p>멤버가 없습니다.</p>
+                    </div>
                 </div>
             </div>
         </div>

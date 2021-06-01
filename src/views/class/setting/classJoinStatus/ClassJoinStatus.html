@@ -15,7 +15,7 @@
                 <p class="popup-txt">가입 신청자 대기 리스트입니다.</p>
             </div>
 
-            <div class="apply-list scroll-body" style="height:580px;">
+            <div v-if="applyMembers.length>0" class="apply-list scroll-body" style="height:580px;">
                 <ul>
                     <li v-for="(item, idx) in applyMembers"
                         :key="idx"
@@ -25,6 +25,12 @@
                         <button class="apply-more" @click="openJoinDetail(item.id)"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
                     </li>
                 </ul>
+            </div>
+            <!-- 가입 신청자 없음 -->
+            <div v-else class="no-notify" style="height:540px">
+                <div class="no-data">
+                    <p>가입 신청자가 없습니다.</p>
+                </div>
             </div>
         </div>
         <!--// popup-body -->
