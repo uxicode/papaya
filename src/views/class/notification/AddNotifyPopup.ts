@@ -16,7 +16,7 @@ import FilePreview from '@/components/preview/filePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import LinkPreview from '@/components/preview/linkPreview.vue';
 import VotePreview from '@/components/preview/votePreview.vue';
-
+import AlarmPreview from '@/components/preview/alarmPreview.vue';
 import WithRender from './AddNotifyPopup.html';
 
 const MyClass = namespace('MyClass');
@@ -35,6 +35,7 @@ const Post = namespace('Post');
     AddReservationPopup,
     LinkPreview,
     VotePreview,
+    AlarmPreview
   }
 })
 export default class AddNotifyPopup extends Vue{
@@ -51,13 +52,16 @@ export default class AddNotifyPopup extends Vue{
   @Post.Action
   private ADD_POST!: (payload: { classId: number; formData: FormData })=>Promise<any>;
 
+  @Post.Action
+  private GET_RESERVED_LIST!: (classId: number) => Promise<any>;
+
 
   private isOpenAddVotePopup: boolean=false;
   private isOpenAddLinkPopup: boolean=false;
   private isOpenAddReservation: boolean=false;
 
   private alarmData: { alarmAt: string }={
-    alarmAt: '2019-12-25 10:10:10'
+    alarmAt: ''
   };
   private voteData: IVoteModel={
     vote:{
@@ -273,13 +277,22 @@ export default class AddNotifyPopup extends Vue{
     this.formData.append('data', temp );
 
     // voteData 는 알림의 id 값을 알아야 하기에 먼저 알림을 생성/등록>완료 후 해당 알림의 id 을 가져와서 voteData 를 생성한다.
-    this.ADD_POST({classId: Number(this.classID), formData: this.formData}).then((data) => {
-      // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
-      this.imgFilesAllClear(); //이미지 데이터 비우기
-      this.attachFilesAllClear();//파일 데이터 비우기
-      this.postData = {title: '', text: ''}; //post 데이터 비우기
-      this.voteDataClear(); //투표 데이터 비우기
-      this.$emit('submit', false); //post 등록 팝업 닫기 알림~
+    this.ADD_POST({classId: Number(this.classID), formData: this.formData})
+      .then((data) => {
+        if (this.alarmData.alarmAt !== '') {
+          //예약된 알림 가져오기.
+          this.GET_RESERVED_LIST(Number(this.classID))
+            .then((alarmData) => {
+              console.log(alarmData);
+              this.alarmData.alarmAt = '';
+            });
+        }
+        // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
+        this.imgFilesAllClear(); //이미지 데이터 비우기
+        this.attachFilesAllClear();//파일 데이터 비우기
+        this.postData = {title: '', text: ''}; //post 데이터 비우기
+        this.voteDataClear(); //투표 데이터 비우기
+        this.$emit('submit', false); //post 등록 팝업 닫기 알림~
     });
   }
 
@@ -353,4 +366,14 @@ export default class AddNotifyPopup extends Vue{
   }
   //end : 예약 알림 이벤트 핸들러 ================================================
 
+
+  //start : 예약 알림 미리보기 ================================================
+  private removeAlarmItem() {
+    this.alarmData.alarmAt = '';
+  }
+
+  private modifyAlarm() {
+    this.isOpenAddReservation=true;
+  }
+  //end : 예약 알림 미리보기 ================================================
 }

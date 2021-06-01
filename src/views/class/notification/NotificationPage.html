@@ -47,13 +47,6 @@
             <p class="fd-schedule">{{item.startAt}}에 등록 예정</p>
             <div class="fd-btn">
               <div class="list-popup">
-                <!--<button type="button" class="list-popup-btn"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                <div class="list-popup-menu pos-right active"  style="transform:translate3d(35px, 0, 0);">
-                  <a href="" class="list-popup-item">알림 수정</a>
-                  <a href="" class="list-popup-item">공지로 등록</a>
-                  <a href="" class="list-popup-item">알림 보관</a>
-                  <a href="" class="list-popup-item">알림 삭제</a>
-                </div>-->
                 <v-menu
                         min-width="200px"
                         :close-on-click="true">
@@ -69,7 +62,7 @@
                     <v-list-item @click="">
                       <v-list-item-title>알림 수정</v-list-item-title>
                     </v-list-item>
-                    <v-list-item @click="onDeleteByPostId( item.id )">
+                    <v-list-item @click="onDeleteReservedByPostId( item.id )">
                       <v-list-item-title>알림 삭제</v-list-item-title>
                     </v-list-item>
                   </v-list>

@@ -3,7 +3,7 @@
     <p class="fd-inner-txt">첨부 파일 {{ getFileDataSort(fileItems).length }}</p>
     <ul class="file-list clearfix">
       <li v-for="( fileItem, index ) in getFileDataSort(fileItems)" :key="`file-${index}`">
-        <a :href="fileItem[location]">{{ fileItem[name] }}</a>
+        <a :href="fileItem[location]" target="_blank">{{ fileItem[name] }}</a>
       </li>
     </ul>
   </div>

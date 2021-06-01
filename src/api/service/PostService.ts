@@ -67,6 +67,11 @@ export class PostService{
     return request('post', '/vote', payload );
   }
 
+  ///class/{class_id}/posts/{post_id}
+  public static setPostById( classId: string | number, postId: number, payload: {type: number, title: string, text: string}): Promise<any>{
+    return request('put', `${CLASS_BASE_URL}/${classId}/posts/${postId}`, payload);
+  }
+
   public static deletePostById(classId: string | number, postId: number): Promise<any> {
     ///class/{class_id}/posts/{post_id}
     return request('delete', `${CLASS_BASE_URL}/${classId}/posts/${postId}`);

@@ -518,6 +518,15 @@ body {
   }
 }
 
+.badge {
+  display: inline-block;
+  min-width: 10px;
+  padding: 3px 8px;
+  font-size: 12px;
+  color: #fff;
+  border-radius: 2px;
+  background-color: #fb0a0a;
+}
 @import "./customVuetify";
 @import "./transition";
 @import "./layout";

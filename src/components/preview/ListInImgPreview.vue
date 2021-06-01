@@ -5,7 +5,8 @@
           :key="`img-${imgIndex}`" >
         <a :href="imgItem[location]"
            :data-count="getImgFileMoreCheck(fileItems)"
-           :class="{'pseudo-del': getImgTotalNum(fileItems) }">
+           :class="{'pseudo-del': getImgTotalNum(fileItems) }"
+           target="_blank">
           <img :src="imgItem[location]" alt="">
         </a>
       </li>
