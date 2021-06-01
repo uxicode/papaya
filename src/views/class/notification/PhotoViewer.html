@@ -4,7 +4,7 @@
             <button class="close" @click="closePhotoViewer"><img :src="require('@/assets/images/close-white.svg')" alt=""></button>
         </div>
         <ul class="viewer-list">
-            <li class="viewer-item active"><img :src="imgData[activeNum].location" alt="" style="width:540px" @click="checkSize"></li>
+            <li class="viewer-item active"><img :src="imgData[activeNum].location" alt="" style="width:540px;max-height:calc(100vh - 140px)"></li>
         </ul>
 
         <div class="viewer-control">

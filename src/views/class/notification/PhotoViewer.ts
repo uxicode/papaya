@@ -15,6 +15,10 @@ export default class PhotoViewer extends Vue {
 
     private activeNum: number = 0;
 
+    public created() {
+        // window.addEventListener('resize', this.resizeViewerControl);
+    }
+
     private showPrevImage(): void {
         if (this.activeNum === 0) {
             this.activeNum = this.imgData.length-1; // 현재 첫번째 이미지일 경우 마지막 이미지 노출
@@ -36,15 +40,17 @@ export default class PhotoViewer extends Vue {
         this.$emit('change', false);
     }
 
-    private checkSize(): void {
+    private resizeViewerControl(): void {
         const currentImg = document.querySelector('.viewer-item.active img');
-        const width = currentImg?.clientWidth;
-        const height = currentImg?.clientHeight;
-        console.log(`current width = ${width} / current height = ${height}`);
-        console.log(`current window width = ${Utils.getWindowWidth()} / current window height = ${Utils.getWindowHeight()}`);
+        const imgWidth = 540;
+        const windowWidth = Utils.getWindowWidth();
+        const windowHeight = Utils.getWindowHeight();
+        console.log(`current window width = ${windowWidth} / current window height = ${windowHeight}`);
 
-        const control = document.querySelector('.control');
+        const control = document.querySelectorAll('.control');
+        const controlWidth = (windowWidth - imgWidth - 160) / 2;
         // @ts-ignore
-        control.setAttribute('style', '');
+        control.forEach((item) => item.setAttribute('style', `width:${controlWidth}px`));
     }
+
 }
