@@ -144,6 +144,9 @@ export default class ClassProfile extends Vue {
     private closeNicknameModal(): void {
         this.isNicknameModify = false;
         this.tempData = '';
+        this.isApproval = false;
+        this.isError = false;
+        this.msg = '';
     }
 
     /**

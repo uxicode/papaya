@@ -1,4 +1,4 @@
-import {Vue, Component, Watch} from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
@@ -23,7 +23,7 @@ interface ISettingMenu {
 })
 export default class ClassSettingMain extends Vue{
     private classMemberInfo: IClassMemberInfo[] = [];
-    private classInfo: IClassInfo[] = [];
+    private classInfo!: IClassInfo;
 
     @MyClass.Getter
     private classID!: number;
@@ -454,6 +454,7 @@ export default class ClassSettingMain extends Vue{
 
         // 클래스에 멤버가 있으며 나의 멤버 등급이 운영자일 경우 탈퇴 불가
         if (class_members.length >= 1 && me.level === 1) {
+            this.isWithdraw = false;
             this.isWithdrawDenied = true;
         } else {
             ClassMemberService.deleteClassMemberByUser(this.classID, this.myClassInfo.me.id)

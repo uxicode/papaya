@@ -22,6 +22,9 @@ export default class ClassStaffManage extends Vue {
     @MyClass.Getter
     private classID!: number;
 
+    @MyClass.Getter
+    private memberID!: number;
+
     private classStaffList: IClassMemberInfo[] = [];
     private totalStaffNum: number = 0;
 

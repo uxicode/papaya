@@ -23,6 +23,8 @@ export default class ClassAdminDelegate extends Vue{
     private classMemberList: IClassMemberInfo[] = [];
     private totalMemberNum: number = 0;
     private memberId: number = 0;
+    private memberInfo!: IClassMemberInfo;
+    private myMemberId: number = 0;
     private nickname: string = '';
     private level: number = 0;
     private isChangePopup: boolean = false;
@@ -39,6 +41,8 @@ export default class ClassAdminDelegate extends Vue{
     private getAllClassMembers(): void {
         MyClassService.getClassInfoById(this.classID)
           .then((data) => {
+              this.myMemberId = data.classinfo.me.id;
+              console.log(data.classinfo);
               // 가입 승인된 스탭 멤버와 일반 멤버만 불러온다.
               this.classMemberList = data.classinfo.class_members.filter(
                 (item: IClassMemberInfo) => (item.status === 1 && item.level !== 1));
@@ -98,10 +102,26 @@ export default class ClassAdminDelegate extends Vue{
      */
     private submitLevelChange(): void {
         this.isChangePopup = false;
-        // ClassMemberService.setClassMemberInfo(this.classID, this.memberId, {level: 1})
-        //   .then((data) => {
-        //       console.log(`${data.level} 로 수정완료`);
-        //   });
+        // 위임할 멤버의 레벨을 운영자(1)로 변경
+        ClassMemberService.setClassMemberInfo(this.classID, this.memberId, {level: 1})
+          .then((data) => {
+              console.log(`${data.nickname} : ${data.level} 로 위임완료`);
+          });
+        // 나의 레벨을 스탭(2)로 변경
+        ClassMemberService.setClassMemberInfo(this.classID, this.myMemberId, {level: 2})
+            .then((data) => {
+                console.log(`내 정보 - ${data.nickname} : ${data.level} 로 변경완료`);
+            });
+        // 운영자를 변경할 멤버의 정보를 객체에 담는다
+        ClassMemberService.getClassMemberInfo(this.classID, this.memberId)
+            .then((data: any) => {
+                this.memberInfo = data.member_info;
+                // 운영자 정보 변경
+                MyClassService.setClassInfoById(this.classID, {owner: this.memberInfo})
+                    .then((msg) => {
+                        console.log(msg);
+                    });
+            });
         this.isChangeCompletePopup = true;
     }
 

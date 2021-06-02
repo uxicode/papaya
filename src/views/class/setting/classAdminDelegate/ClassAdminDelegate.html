@@ -78,4 +78,28 @@
     </transition>
     <!-- end: 공통 팝업 -->
 
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.10.2 (클래스 페이지-설정-운영자 위임 신청-확인-완료) -->
+    <transition name="modal">
+        <modal v-if="isChangeCompletePopup" size="540px" body-padding="0" @modalClose="isChangeCompletePopup=false">
+            <div slot="header">
+                <div class="popup-icon change"></div>
+                <div class="popup-close">
+                    <button class="close" @click="isChangeCompletePopup=false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">운영자 위임 신청이 완료되었습니다.</h2>
+                    <p class="popup-txt">선택한 멤버가 운영자 위임 신청 승인 시 운영자가 교체되어 기존 운영자는 일반 멤버로 전환됩니다.</p>
+                </div>
+            </div>
+            <div slot="footer">
+                <div class="btn-group rt">
+                    <btn type="navi" @btnClick="isChangeCompletePopup=false">확인</btn>
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
+
 </section>
