@@ -18,6 +18,7 @@ import {
     REMOVE_CLASS_DATA,
     CLASS_MEMBER_INFO,
     SET_MEMBER_ID,
+    UPDATE_SIDE_NUM
 } from '@/store/mutation-class-types';
 import {
     MYCLASS_LIST_ACTION,
@@ -117,7 +118,17 @@ export default class ClassModule extends VuexModule {
         return this.myClassHomeData;
     }
 
+    get sideNumModel(): number {
+        return this.sideMenuNum;
+    }
+
     /* Mutations */
+    @Mutation
+    public [UPDATE_SIDE_NUM](num: number): void{
+        this.sideMenuNum=num;
+    }
+
+
     @Mutation
     public [SET_MYCLASS_HOME_DATA]( info: IClassInfo ): void{
         this.myClassHomeData=info;
@@ -183,7 +194,7 @@ export default class ClassModule extends VuexModule {
 
     /* Actions */
     @Action({rawError: true})
-    public [MYCLASS_LIST_ACTION](): Promise<INullable<IMyClassList[]>> {
+    public [MYCLASS_LIST_ACTION](): Promise<IMyClassList[]> {
         return MyClassService.getAllMyClass()
             .then((data: any) => {
                 this.context.commit(MYCLASS_LIST, data.myclass_list);
@@ -195,7 +206,7 @@ export default class ClassModule extends VuexModule {
     }
 
     @Action({rawError: true})
-    public [KEEP_POST_LIST_ACTION](): Promise<INullable<IKeepPostList[]>> {
+    public [KEEP_POST_LIST_ACTION](): Promise<IKeepPostList[]> {
         return PostService.getMyKeepPosts()
             .then((data: any) => {
                 this.context.commit(KEEP_POST_LIST, data.post_list);

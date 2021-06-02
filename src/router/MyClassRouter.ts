@@ -13,9 +13,9 @@ const MyClassRouter=[
   },
   {
     path: '/class/:classId',
-    // name: 'myClassListDetailPage',
+    name: 'myClassListDetailPage',
     beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/home/MyClassListDetailPage'), header: MyClassHeader, footer: AppFooter},
+    components: { default: () => import('@/views/class/home/MyClassListDetailPage'), header: MyClassHeader, footer: AppFooter},
     children: [
       {path: '', name: 'myClassListDetailView', component: () => import('../views/class/home/MyClassListDetailView')}, //가입리스트 중 하나 클릭시-> 클래스 홈( 상세 )
       {path: 'notification', name: 'NotificationView', component: () => import('../views/class/notification/NotificationPage')},  // 상세 -> 클래스 멤버
