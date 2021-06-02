@@ -14,7 +14,8 @@ import {
   DELETE_POST_ACTION,
   POST_TYPE_CHANGE_ACTION,
   GET_POST_DETAIL_ACTION,
-  GET_COMMENTS_ACTION
+  GET_COMMENTS_ACTION,
+  SELECT_VOTE_ACTION,
 } from '@/store/action-class-types';
 import {IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
@@ -333,6 +334,19 @@ export default class PostModule extends VuexModule {
             // this.replyData = replyData;
             this.context.commit(SET_REPLY, replyData);
           });
+      });
+  }
+
+  /**
+   * 멤버가 투표 선택~( 현재 선택한 데이터가 어디에도 표시 되지 않고 있음) 
+   * @param payload
+   */
+  @Action
+  public [SELECT_VOTE_ACTION](payload: {voteId: number, memberId: number, vote_choice_ids: number[] }){
+    const {vote_choice_ids}=payload;
+    return PostService.setUserVoteSelect( payload.voteId, payload.memberId, {vote_choice_ids} )
+      .then((data)=>{
+        //
       });
   }
 

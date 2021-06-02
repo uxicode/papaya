@@ -10,7 +10,6 @@ import ListInVotePreview from '@/components/preview/ListInVotePreview.vue';
 import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
 import WithRender from './NotificationListView.html';
 import NotifyDetailPopup from '@/views/class/notification/NotifyDetailPopup';
-import {GET_COMMENTS_ACTION, GET_POST_DETAIL_ACTION} from '@/store/action-class-types';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -63,6 +62,11 @@ export default class NotificationListView extends Vue {
     return (ownerId === userId);
   }
 
+  /**
+   * 북마크 toggle 이벤트 핸들러
+   * @param idx
+   * @private
+   */
   private onKeepPostClick(idx: number ) {
     const findIdx=this.postListItems.findIndex((ele) => ele.id === idx);
     // console.log( findIdx );
@@ -91,29 +95,38 @@ export default class NotificationListView extends Vue {
     }
   }
 
+  /**
+   * 덧글 총개수
+   * @param idx
+   * @private
+   */
   private getCommentTotal(idx: number) {
     if (this.commentsTotalItems === undefined) { return 0; }
     // console.log(this.commentsTotalItems);
-
     const findItem=this.commentsTotalItems.find((ele) => ele.id === idx);
     return (findItem)? findItem.total : 0;
   }
 
+  /**
+   * 알림 상세 화면 띄우기
+   * @param id
+   * @private
+   */
   private async onDetailPostOpen(id: number) {
     // this.$emit('click:detailPost', id);
-
-
     this.detailPostId = id; // update postId
-
     await this.GET_POST_DETAIL_ACTION({classId: Number(this.classID), postId: this.detailPostId});
     await this.GET_COMMENTS_ACTION(this.detailPostId)
       .then((data)=>{
-        // this.isLoading=true;
         this.isDetailPopupOpen=true;
       });
-
   }
 
+  /**
+   * 알림 삭제
+   * @param postIdx
+   * @private
+   */
   private onDeleteByPostId(postIdx: number) {
     this.DELETE_POST_ACTION( {classId:Number(this.classID), postId:postIdx})
       .then((data)=>{
@@ -122,6 +135,11 @@ export default class NotificationListView extends Vue {
       });
   }
 
+  /**
+   * 알림 타입 변경 - 일반 or 공지
+   * @param postIdx
+   * @private
+   */
   private onPostTypeChange( postIdx: number) {
     this.POST_TYPE_CHANGE_ACTION({classId: this.classID, postId: postIdx})
       .then((data)=>{
@@ -131,23 +149,9 @@ export default class NotificationListView extends Vue {
       });
   }
 
-
-
   private onDetailPostPopupStatus(value: boolean) {
     this.isDetailPopupOpen=value;
   }
 
-
-  /* private onAddPostPopupOpen() {
-     this.isAddPopupOpen=true;
-   }
-
-   private onAddPostPopupStatus(value: boolean) {
-     this.isAddPopupOpen=value;
-   }
-
-   private onAddPost(value: boolean) {
-     this.isAddPopupOpen=value;
-   }*/
 
 }

@@ -99,19 +99,10 @@
       <a href="" class="classes-add-btn" @click.prevent="onAddPostPopupOpen"></a>
     </div>
   </div >
-<!--  <keep-alive>
-    <component :is="'NotifyDetailPopup'"
-               :is-open="isDetailPopupOpen"
-               :detail-item="postDetailModel"
-               :comment-items="commentItemsModel"
-               :reply-items="replyItemsModel"
-               @change="onDetailPostPopupStatus"></component>
-  </keep-alive>-->
 
-
-
-   <add-notify-popup :is-open="isAddPopupOpen" @change="onAddPostPopupStatus" @submit="onAddPost"></add-notify-popup>
-
+  <!-- start: 알림 신규 생성 -->
+  <add-notify-popup :is-open="isAddPopupOpen" @change="onAddPostPopupStatus" @submit="onAddPost"></add-notify-popup>
+  <!-- end: 알림 신규 생성 -->
 
 <!--  <div class="lds-ripple" v-if="isLoading"><div></div><div></div></div>-->
 </section>

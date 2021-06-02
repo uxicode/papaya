@@ -55,7 +55,6 @@ export default class NotificationPage extends Vue {
   //datepicker
   private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
   private startDateMenu: boolean=false;
-
   private isReservedChk: boolean=false;
 
 
@@ -140,23 +139,15 @@ export default class NotificationPage extends Vue {
     this.isAddPopupOpen=true;
   }
 
-  /*private async onDetailPostOpen(id: number) {
-    console.log(id);
-    this.isLoading=true;
-    this.detailPostId = id; // update postId
-
-    setTimeout(() => {
-      this.isLoading=false;
-      this.isDetailPopupOpen=true;
-    }, 500);
-  }*/
-
-
-
   private onReservedMenuDownUp() {
     this.isReservedChk=!this.isReservedChk;
   }
 
+  /**
+   * 예약 알림 제거
+   * @param postIdx
+   * @private
+   */
   private async onDeleteReservedByPostId(postIdx: number) {
     await this.DELETE_POST_ACTION( {classId: this.classID, postId: postIdx})
       .then((data)=>{
