@@ -24,10 +24,22 @@ export default class MyClassListDetailPage extends Vue {
   @Auth.Getter
   private userInfo!: IUserMe;
 
-  private activeMenuNum: number= 0;
+  @MyClass.Getter
+  private sideNumModel!: number;
+
+  @MyClass.Mutation
+  private UPDATE_SIDE_NUM!: (num: number)=>void;
 
   get activeMenuNumModel(): number {
-    return this.activeMenuNum;
+    return this.sideNumModel;
+  }
+  set activeMenuNumModel( value: number) {
+    this.UPDATE_SIDE_NUM(value);
+  }
+
+  public created() {
+    this.activeMenuNumModel=0;
+    console.log('클래스 홈 컨테이너 클래스 = ', this.activeMenuNumModel);
   }
 
   /**
@@ -36,7 +48,7 @@ export default class MyClassListDetailPage extends Vue {
    * @private
    */
   private update(idx: number): void{
-    this.activeMenuNum=idx;
+    this.activeMenuNumModel=idx;
     // console.log(this.activeMenuNum);
   }
 

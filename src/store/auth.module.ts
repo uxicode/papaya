@@ -22,9 +22,6 @@ import {
   SIGNIN_BY_TOKEN,
   USER_ME_ACTION
 } from '@/store/action-auth-types';
-import store from '@/store/index';
-import router from '@/router';
-
 
 @Module({
   namespaced: true,
