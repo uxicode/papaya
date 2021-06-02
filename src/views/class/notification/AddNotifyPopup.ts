@@ -50,10 +50,10 @@ export default class AddNotifyPopup extends Vue{
   private myClassHomeModel!: IClassInfo;
 
   @Post.Action
-  private ADD_POST!: (payload: { classId: number; formData: FormData })=>Promise<any>;
+  private ADD_POST_ACTION!: (payload: { classId: number; formData: FormData })=>Promise<any>;
 
   @Post.Action
-  private GET_RESERVED_LIST!: (classId: number) => Promise<any>;
+  private GET_RESERVED_LIST_ACTION!: (classId: number) => Promise<any>;
 
 
   private isOpenAddVotePopup: boolean=false;
@@ -277,11 +277,11 @@ export default class AddNotifyPopup extends Vue{
     this.formData.append('data', temp );
 
     // voteData 는 알림의 id 값을 알아야 하기에 먼저 알림을 생성/등록>완료 후 해당 알림의 id 을 가져와서 voteData 를 생성한다.
-    this.ADD_POST({classId: Number(this.classID), formData: this.formData})
+    this.ADD_POST_ACTION({classId: Number(this.classID), formData: this.formData})
       .then((data) => {
         if (this.alarmData.alarmAt !== '') {
           //예약된 알림 가져오기.
-          this.GET_RESERVED_LIST(Number(this.classID))
+          this.GET_RESERVED_LIST_ACTION(Number(this.classID))
             .then((alarmData) => {
               console.log(alarmData);
               this.alarmData.alarmAt = '';

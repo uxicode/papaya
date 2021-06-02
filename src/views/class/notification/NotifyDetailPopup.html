@@ -1,7 +1,7 @@
 <div>
     <transition name="modal">
         <!-- start: 공통 팝업 / 파일명 : W.4.5.2.4 (알림 상세) -->
-        <modal v-if="isOpen && isLoaded" size="600px" body-padding="0" @modalClose="popupChange(false)">
+        <modal v-if="isOpen" size="600px" body-padding="0" @modalClose="popupChange(false)">
             <template v-if="postDetailModel!==undefined">
                 <div slot="header">
                     <!-- header custom coding-->
@@ -63,7 +63,7 @@
 
                         <div class="popup-feed-detail pdb-40">
                             <div class="fd-cnt">
-                                <p class="fd-txt">{{ getDetailInfo }}</p>
+                                <p class="fd-txt">{{ postDetailModel.text }}</p>
 
                                 <a href="" @click.prevent="openPhotoViewer">
                                     <!-- start: attach 에 이미지파일이 있는 경우 -->
@@ -109,7 +109,14 @@
                                     </div>
                                 </div>
 
-                                <div class="fd-inner">
+                                <!-- start: 링크가 있는 경우-->
+                              <list-in-link-preview
+                                      :file-items="postDetailModel.link"
+                                      title="title"
+                                      url="url" children="link_items"></list-in-link-preview>
+                                <!-- end: 링크가 있는 경우 -->
+
+                                <!--<div class="fd-inner">
                                     <p class="fd-inner-txt">미술대회 관련 링크 1</p>
 
                                     <div class="link-area">
@@ -120,7 +127,7 @@
                                             <p class="link-source"><img :src="require('@/assets/images/pic9.png')" class="link-logo" alt="">https://m.blog.naver.com/ccedulab/221457750462214577504622145775046</p>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
 
                                 <div class="fd-inner">
                                     <p class="fd-inner-txt">첨부 파일 3</p>
@@ -148,10 +155,13 @@
                                         </div>
                                     </div>
 
-                                    <div v-for="( replyItem, jdx) in replyItemsModel[idx].comment_list" class="reply" :key="`reply-${jdx}`">
-                                        <p class="comment-writer">{{ replyItem.owner.nickname }} <span class="wr-time">{{ updatedDiffDate(replyItem.createdAt) }}</span></p>
-                                        <p class="comment-txt">{{ replyItem.comment }}</p>
-                                    </div>
+                                   <template v-if="replyItemsModel[idx]!==undefined">
+                                     <div v-for="( replyItem, jdx) in replyItemsModel[idx].comment_list" class="reply" :key="`reply-${jdx}`">
+                                       <p class="comment-writer">{{ replyItem.owner.nickname }} <span class="wr-time">{{ updatedDiffDate(replyItem.createdAt) }}</span></p>
+                                       <p class="comment-txt">{{ replyItem.comment }}</p>
+                                     </div>
+                                   </template>
+
 
                                 </div>
                             </div>
@@ -173,5 +183,5 @@
 
     </transition>
 
-    <photo-viewer v-if="isPhotoViewer" :is-photo-viewer="isPhotoViewer" :img-data="getImgFileDataSort(postDetailData.attachment)" @change="onPhotoViewerStatus"></photo-viewer>
+    <photo-viewer v-if="isPhotoViewer" :is-photo-viewer="isPhotoViewer" :img-data="getImgFileDataSort(postDetailModel.attachment)" @change="onPhotoViewerStatus"></photo-viewer>
 </div>
