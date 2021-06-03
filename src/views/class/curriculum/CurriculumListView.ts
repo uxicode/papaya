@@ -9,9 +9,7 @@ import {
     IClassInfo,
     IEducationList,
     ICurriculumList,
-    IModifyCurriculum,
 } from '@/views/model/my-class.model';
-import {Utils} from '@/utils/utils';
 import MyClassService from '@/api/service/MyClassService';
 import WithRender from './CurriculumListView.html';
 
@@ -32,11 +30,17 @@ export default class CurriculumListView extends Vue {
     @Prop(Boolean)
     private isOpen!: boolean;
 
+    @Prop(Array)
+    private readonly curriculumListItems!: ICurriculumList;
+
     @MyClass.Getter
     private classID!: number;
 
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
+
+    @MyClass.Action
+    private GET_CURRICULUM_DETAIL_ACTION!: ( payload: { classId: number, curriculumId: number }) =>Promise<any>;
 
     /* Modal 오픈 상태값 */
     private isDetailPopupOpen: boolean=false;
@@ -45,8 +49,6 @@ export default class CurriculumListView extends Vue {
     private isCreateError: boolean = false;
 
     private isAddPopupOpen: boolean=false;
-
-
 
     private imgFileURLItems: string[] = [];
 
@@ -65,22 +67,6 @@ export default class CurriculumListView extends Vue {
         // this.settingItems=this.mItemByMakeEduList();
         this.getEduList();
     }
-
-    private onDetailCurriculumOpen(id: number) {
-        console.log(id);
-        this.detailCurriculumId = id;
-        this.isDetailPopupOpen=true;
-        // console.log(this.curriculumDetailData);
-    }
-
-    private onDetailCurriculumPopupStatus(value: boolean) {
-        this.isDetailPopupOpen=value;
-    }
-
-
-    /**
-     * 교육과정 리스트
-     */
 
     private isOwner( ownerId: number, userId: number): boolean {
         return (ownerId === userId);
@@ -114,28 +100,6 @@ export default class CurriculumListView extends Vue {
             });
     }
 
-    /**
-     * 클래스 교육과정 정보 조회
-     */
-    // get curriculumList(): ICurriculumList{
-    //     return this.curriculumDetailData;
-    // }
-
-
-    /**
-     * 클래스 교육과정 수정
-     */
-
-    // private getModifyEduCurList(cardId: number): void {
-    //     MyClassService.getEduCurList(this.classID, cardId)
-    //         .then((data) => {
-    //             this.curriculumDetailData = data;
-    //             this.modifyClassItems.course_list = this.curriculumList.curriculum.course_list;
-    //             this.modifyClassItems.title = this.curriculumList.curriculum.title;
-    //             this.modifyClassItems.goal = this.curriculumList.curriculum.text;
-    //         });
-    // }
-
 
     private onAddCurriculumPopupStatus(value: boolean) {
         this.isAddPopupOpen=value;
@@ -149,17 +113,17 @@ export default class CurriculumListView extends Vue {
         this.isAddPopupOpen=true;
     }
 
+    private onDetailCurriculumPopupStatus(value: boolean) {
+        this.isDetailPopupOpen=value;
+    }
 
-    // private modifyCurriculumHandler(curriculumIdx: number) {
-    //     this.isModifyClass = true;
-    //     this.cardId = curriculumIdx;
-    //
-    //     this.$nextTick(()=>{
-    //         this.getModifyEduCurList(this.cardId);
-    //     });
-    // }
-
-
+    private async onDetailCurriculumOpen(id: number) {
+        this.detailCurriculumId = id; // update postId
+        await this.GET_CURRICULUM_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.detailCurriculumId})
+            .then((data)=>{
+                this.isDetailPopupOpen=true;
+            });
+    }
 
 
 }

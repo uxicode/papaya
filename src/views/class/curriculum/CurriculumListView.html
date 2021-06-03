@@ -62,13 +62,6 @@
         <a href="" class="curriculum-add-btn" @click.prevent="onAddCurriculumPopupOpen"></a>
     </div>
 
-    <add-curriculum-popup :is-open="isAddPopupOpen" @change="onAddCurriculumPopupStatus" @submit="onAddCurriculum"></add-curriculum-popup>
-
-    <curriculum-detail-popup :is-open="isDetailPopupOpen"
-                             :post-id="detailCurriculumId"
-                             @change="onDetailCurriculumPopupStatus"></curriculum-detail-popup>
-
-
     <!-- start: 공통 팝업 / (수업 회차 50 초과 입력시 안내 팝업) -->
     <transition name="modal">
         <modal v-if="isCreateError" size="540px" body-padding="0" @modalClose="isClassCurr=false">
@@ -97,4 +90,14 @@
         </modal>
     </transition>
     <!-- end: 공통 팝업 -->
+
+
+    <add-curriculum-popup
+            :is-open="isAddPopupOpen"
+            @change="onAddCurriculumPopupStatus"
+            @submit="onAddCurriculum"></add-curriculum-popup>
+
+    <curriculum-detail-popup
+            :is-open="isDetailPopupOpen"
+            @change="onDetailCurriculumPopupStatus"></curriculum-detail-popup>
 </div>

@@ -6,7 +6,7 @@ import {
     IMakeClassInfo,
     IMakeClassInfoBase,
     IClassInfo,
-    IClassMemberInfo, IKeepPostList,
+    IClassMemberInfo, IKeepPostList, ICurriculumList, ICourseData,
 } from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import {
@@ -18,7 +18,9 @@ import {
     REMOVE_CLASS_DATA,
     CLASS_MEMBER_INFO,
     SET_MEMBER_ID,
-    UPDATE_SIDE_NUM
+    UPDATE_SIDE_NUM,
+    SET_CURRICULUM_DETAIL,
+    SET_COURSE_DETAIL
 } from '@/store/mutation-class-types';
 import {
     MYCLASS_LIST_ACTION,
@@ -27,8 +29,11 @@ import {
     MYCLASS_HOME,
     CLASS_MEMBER_INFO_ACTION,
     MODIFY_CLASS_MEMBER_INFO,
+    GET_CURRICULUM_DETAIL_ACTION,
+    GET_COURSE_DETAIL_ACTION
 } from '@/store/action-class-types';
 import {PostService} from '@/api/service/PostService';
+
 @Module({
     namespaced: true,
 })
@@ -89,6 +94,65 @@ export default class ClassModule extends VuexModule {
             visited: 0
         }
     };
+    private curriculumDetailData: ICurriculumList={
+        curriculum: {
+            startAt: '2019-11-17 10:00:00',
+            endAt: '2019-11-17 10:00:00',
+            expiredAt: '2019-11-17 10:00:00',
+            createdAt: '2019-11-17 10:00:00',
+            updatedAt: '2019-11-17 10:00:00',
+            id: 0,
+            class_id: 0,
+            board_id: 0,
+            post_type: 0,
+            type: 0,
+            user_id: 0,
+            user_member_id: 0,
+            title: '',
+            text: '',
+            count: 0,
+            param1: 0,
+            deletedYN: false,
+            owner: {
+                nickname: '',
+                level: 0,
+            },
+            course_list: [
+                {
+                    startDay: '2019-11-17',
+                    createdAt: '2019-11-17',
+                    updatedAt: '2019-11-17',
+                    id: 0,
+                    curriculum_id: 0,
+                    class_id: 0,
+                    index: 0,
+                    title: '',
+                    contents: '',
+                    startTime: '2019-11-17',
+                    endTime: '2019-11-17',
+                    deletedYN: false,
+                    attachment: [],
+                },
+            ],
+        }
+    };
+
+    private courseDetailData: ICourseData = {
+        course: {
+            startDay: '2019-11-17 10:00:00',
+            createdAt: '2019-11-17 10:00:00',
+            updatedAt: '2019-11-17 10:00:00',
+            id: 0,
+            curriculum_id: 0,
+            class_id: 0,
+            index: 0,
+            title: '',
+            contents: '',
+            startTime: '10:00:00',
+            endTime: '10:00:00',
+        }
+    };
+
 
     private makeClassInfo: IMakeClassInfo={
         name:'',
@@ -109,6 +173,14 @@ export default class ClassModule extends VuexModule {
 
     get classID(): number {
         return  this.classIdx;
+    }
+
+    get curriculumDetailItem(): ICurriculumList{
+        return this.curriculumDetailData;
+    }
+
+    get courseDetailItem(): ICourseData{
+        return this.courseDetailData;
     }
 
     /**
@@ -133,6 +205,16 @@ export default class ClassModule extends VuexModule {
     public [SET_MYCLASS_HOME_DATA]( info: IClassInfo ): void{
         this.myClassHomeData=info;
         localStorage.setItem('homeData', JSON.stringify(this.myClassHomeData) );
+    }
+
+    @Mutation
+    public [SET_CURRICULUM_DETAIL]( data: any ){
+        this.curriculumDetailData=data;
+    }
+
+    @Mutation
+    public [SET_COURSE_DETAIL]( data: any ){
+        this.courseDetailData=data;
     }
 
     /**
@@ -287,4 +369,33 @@ export default class ClassModule extends VuexModule {
               return Promise.reject(error);
           });
     }
+
+
+
+    @Action
+    public [GET_CURRICULUM_DETAIL_ACTION](payload: { classId: number, curriculumId: number }): Promise<any>{
+        return MyClassService.getEduCurList(payload.classId, payload.curriculumId )
+            .then((data) => {
+                this.context.commit(SET_CURRICULUM_DETAIL, data);
+                console.log('curriculumDetailData=', this.curriculumDetailData);
+                return Promise.resolve(this.curriculumDetailData);
+            }).catch((error) => {
+                console.log(error);
+                return Promise.reject(error);
+            });
+    }
+
+    @Action
+    public [GET_COURSE_DETAIL_ACTION](payload: { classId: number, curriculumId: number, courseId: number }): Promise<any>{
+        return MyClassService.getEduCourseList(payload.classId, payload.curriculumId, payload.courseId )
+            .then((data) => {
+                this.context.commit(SET_COURSE_DETAIL, data);
+                console.log('courseDetailData=', this.courseDetailData);
+                return Promise.resolve(this.courseDetailData);
+            }).catch((error) => {
+                console.log(error);
+                return Promise.reject(error);
+            });
+    }
+
 }
