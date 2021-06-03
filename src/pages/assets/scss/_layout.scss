@@ -1,7 +1,6 @@
 .wrapper {
   min-height:100vh;
   background-color:#f4f5f6;
-
   .contents {
     min-height:calc(100vh - 238px);
   }
@@ -259,15 +258,11 @@ footer {
 
     &.footer-address {
       float:left;
-      li {
-        font-size:12px;
-      }
+      li {font-size:12px;}
     }
     &.footer-menu {
       float:right;
-      li {
-        font-size:16px;
-      }
+      li {font-size:16px;}
     }
 
   }
@@ -292,27 +287,23 @@ footer {
 
 // contents-right/left
 .contents-inner {
-  position:relative;
-  width:1020px;
-  margin:0 auto;
-
-  .contents-group{
-    margin-top:20px;
+  position: relative;
+  width: 1020px;
+  margin: 0 auto 30px auto;
+  .contents-group {
+    margin-top: 20px;
     padding: 0 50px 150px;
     .contents-left {
-      width:300px;
-      float:left;
+      width: 280px;
+      float: left;
     }
-
     .contents-right {
-      width:600px;
-      float:right;
-
-      .cnt-top {position:relative;}
-      .cnt-tit {
-        font-size:18px;
-        font-weight:500;
-      }
+      width: 600px;
+      float: right;
+      .cnt-top {position: relative;}
+      .cnt-tit {font-size: 18px;font-weight: 500;}
     }
   }
 }
+
+.contents.mypage .contents-left {width: 300px;}
