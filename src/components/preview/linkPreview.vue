@@ -28,8 +28,7 @@
 
 <script lang="ts">
 import {Component, Emit, Prop, Vue} from 'vue-property-decorator';
-import * as cheerio from 'cheerio';
-import {request} from '@/api/service/AxiosService';
+// import {request} from '@/api/service/AxiosService';
 
 @Component
 export default class LinkPreview extends Vue{
@@ -70,7 +69,7 @@ export default class LinkPreview extends Vue{
 
     console.log(injectURL);
 
-    const fetchHTML = async (link: string) => {
+    /*const fetchHTML = async (link: string) => {
       return await request('get', link);
     };
 
@@ -99,7 +98,7 @@ export default class LinkPreview extends Vue{
       }
     };
 
-    findOGTags(injectURL);
+    findOGTags(injectURL);*/
   }
 
 

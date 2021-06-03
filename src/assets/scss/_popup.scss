@@ -476,44 +476,6 @@ $popupDepth: 10;
   }
 }
 
-//.preview {
-//  > .pre-txt {
-//    display: inline-block;
-//    padding: 15px 0;
-//    font-size: 14px;
-//    color: #373749;
-//    border-bottom: 1px solid #f4f5f6;
-//    > img{
-//      display: inline-block;
-//      padding-right: 10px;
-//    }
-//  }
-//}
-
-
-//
-///* 클래스 교육과정 첨부파일 preview list */
-//.preview {
-//  ul {padding:0 40px;}
-//  li {position:relative;}
-//
-//  .add-file-delete {
-//    @include pos-vertical($right:0);
-//  }
-//
-//  /* file 첨부 preview*/
-//  .add-file-list {
-//    .list-item {
-//      p {
-//        background:url(../../assets/images/file.svg) no-repeat left center;
-//        padding:15px 0 15px 34px;
-//        border-bottom:1px solid #f4f5f6;
-//      }
-//    }
-//  }
-//}
-
-
 
 .form-temp-save {@include pos-vertical($right:40px);}
 .popup-feed-detail {padding:20px 40px 0;}
@@ -710,6 +672,7 @@ $popupDepth: 10;
   background-position: left center;
   background-repeat: no-repeat;
 
+  &.admin {background-image:url(../../assets/images/btn-round-admin.svg);}
   &.manager {background-image:url(../../assets/images/btn-round-admin.svg);}
   &.staff {background-image:url(../../assets/images/btn-round-staff.svg);}
   &.member {background-image:url(../../assets/images/btn-round-member.svg);}
@@ -971,10 +934,23 @@ $popupDepth: 10;
   }
 }
 /*viewer-control*/
-.control {
-  &.prev {@include pos-vertical($left:0);}
-  &.next {@include pos-vertical($right:0);}
-}
+  .control {
+    // 20210601 ksj
+    width: calc((100vw - 700px) / 2);
+    height: 30vh;
+    &.prev {
+      @include pos-vertical($left: 0);
+      img {
+        @include pos-vertical($left: 0); // 20210601 ksj
+      }
+    }
+    &.next {
+      @include pos-vertical($right: 0);
+      img {
+        @include pos-vertical($right: 0); // 20210601 ksj
+      }
+    }
+  }
 
 .viewer-page {
   @include pos-abs($left:50%, $bottom:18px);

@@ -32,20 +32,22 @@ const routes: RouteConfig[] = [
   },
 ];
 
+const router = new VueRouter({
+  base:process.env.VUE_APP_BASE_URL,
+  routes,
+  mode: 'history',
+});
+
+
 /*  main.ts  에서 token 체크를 하고 있는데 해당 부분이 비동기이기에 새로고침시 무한 루프에 빠진다. 아래 코드로 무한루프 방지*/
 const originalPath = VueRouter.prototype.push;
 VueRouter.prototype.push = function(url: RawLocation) {
   // @ts-ignore
   return originalPath.call(this, url).catch((error: any) => {
     if (error.name !== 'NavigationDuplicated') {
-      // location.reload();
+      //
+     throw error;
     }
   });
 };
-
-const router = new VueRouter({
-  base:process.env.VUE_APP_BASE_URL,
-  routes,
-  mode: 'history',
-});
 export default router;

@@ -79,8 +79,8 @@
             text-align:center;
             span {
               display:inline-block;
-              width:100%; //jbc
-              height:100%;//jbc
+              width:100%;
+              height:100%;
               background-color:#ececec;
               border-radius:50%;
               overflow:hidden;
@@ -574,29 +574,16 @@
       grid-row-end: 3;
       grid-column-start: 1;
       grid-column-end: 3;
-      a{
-        img {
-          width: 238px;
-          height: 320px;
-        }
-      }
+      a img {width: 238px;height: 320px;}
     }
     &.img-item:nth-child(2){
       margin-bottom: 10px;
-      a{
-        img {
-          width: 236px;
-          height: 150px;
-        }
-      }
+      a img {width: 236px;height: 150px;}
     }
 
     &.img-item:nth-child(3){
       a{
-        img {
-          width: 236px;
-          height: 160px;
-        }
+        img {width: 236px;height: 160px;}
         &:after{
           content:attr(data-count);
           position:absolute;
@@ -743,7 +730,7 @@
 
 .cnt-top {
   position: relative;
-  margin-bottom:26px;
+  margin-bottom: 26px;
   .color-mark {
     position: relative;
     display: inline-block;
@@ -752,7 +739,11 @@
     border: none;
     right: -2px;
   }
-  .cnt-top-btn {position:absolute;top:0;right:0;}
+  .cnt-top-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
 }
 
 .classes-schedule {

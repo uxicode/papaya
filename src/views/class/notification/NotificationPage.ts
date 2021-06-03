@@ -18,7 +18,6 @@ const Post = namespace('Post');
     Modal,
     AddNotifyPopup,
     NotificationListView,
-    NotifyDetailPopup
   }
 })
 export default class NotificationPage extends Vue {
@@ -39,10 +38,10 @@ export default class NotificationPage extends Vue {
   private GET_POST_LIST_ACTION!: (  payload: { classId: number, paging: {page_no: number, count: number } }) => Promise<IPostModel[] & IPostInLinkModel[]>;
 
   @Post.Action
-  private GET_RESERVED_LIST!: (classId: number) => Promise<any>;
+  private GET_RESERVED_LIST_ACTION!: (classId: number) => Promise<any>;
 
   @Post.Action
-  private DELETE_POST!: (payload: { classId: string | number, postId: number })=>Promise<any>;
+  private DELETE_POST_ACTION!: (payload: { classId: string | number, postId: number })=>Promise<any>;
 
 
   // private postListItems: IPostModel[] & IPostInLinkModel[]= [];
@@ -56,23 +55,12 @@ export default class NotificationPage extends Vue {
   //datepicker
   private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
   private startDateMenu: boolean=false;
-
-
-  private isDetailPopupOpen: boolean=false;
-  private detailPostId: number=-1; // 동적으로 변경 안되는 상태
-
   private isReservedChk: boolean=false;
 
-  private isLoading: boolean=false;
 
 
   get reservedChk(): boolean {
     return this.isReservedChk;
-  }
-
-
-  get detailPostIdModel() {
-    return this.detailPostId;
   }
 
   get postListItemsModel() {
@@ -93,30 +81,10 @@ export default class NotificationPage extends Vue {
 
   private async getList() {
     //알림 가져오기
-    /* await PostService.getAllPostsByClassId(this.classID, {page_no: 1, count: 100})
-       .then((data) => {
-         // console.log(data);
-         this.postListItems = data.post_list;
-         console.log('noticeListItems=',this.postListItems);
-         this.postListItems.forEach((item, index ) => {
-           let {isBookmark}=item;
-           if( item.user_keep_class_posts.length > 0){
-             isBookmark=!isBookmark;
-             this.postListItems.splice(index, 1, {...item, isBookmark} );
-           }
-         });
-       });*/
     await this.GET_POST_LIST_ACTION({classId: Number( this.classID ), paging:{page_no:1, count:100} });
 
     //예약된 알림 가져오기.
-    /*await PostService.getReservedPost( this.classID, {page_no:1, count:100})
-      .then((data)=>{
-        this.reservedTotal=data.total_count;
-        this.reservedItems=data.post_list;
-      });*/
-
-    await this.GET_RESERVED_LIST(Number(this.classID));
-
+    await this.GET_RESERVED_LIST_ACTION(Number(this.classID));
 
     //댓글 총 개수 가져옴
     await getAllPromise( this.getAllCommentsPromiseResult())
@@ -171,30 +139,25 @@ export default class NotificationPage extends Vue {
     this.isAddPopupOpen=true;
   }
 
-  private async onDetailPostOpen(id: number) {
-    console.log(id);
-    this.isLoading=true;
-    this.detailPostId = id; // update postId
-
-    setTimeout(() => {
-      this.isLoading=false;
-      this.isDetailPopupOpen=true;
-    }, 500);
-  }
-
-  private onDetailPostPopupStatus(value: boolean) {
-    this.isDetailPopupOpen=value;
-  }
-
   private onReservedMenuDownUp() {
     this.isReservedChk=!this.isReservedChk;
   }
 
-  private onDeleteByPostId(postIdx: number) {
-    this.DELETE_POST( {classId: this.classID, postId: postIdx})
+  /**
+   * 예약 알림 제거
+   * @param postIdx
+   * @private
+   */
+  private async onDeleteReservedByPostId(postIdx: number) {
+    await this.DELETE_POST_ACTION( {classId: this.classID, postId: postIdx})
       .then((data)=>{
         alert('예약된 알림이 제거 되었습니다.');
       });
+    await this.GET_RESERVED_LIST_ACTION(Number(this.classID));
+  }
+
+  private onDetailPostOpen(id: number) {
+    console.log('클릭');
   }
 
 

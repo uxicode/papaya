@@ -1,4 +1,4 @@
-import {Vue, Component, Prop} from 'vue-property-decorator';
+import {Vue, Component, Prop, Watch} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {getAllPromise} from '@/views/model/types';
 import MyClassService from '@/api/service/MyClassService';
@@ -51,6 +51,21 @@ export default class MyClassListDetailView extends Vue{
 
   get commentsTotalItemsModel() {
     return this.commentsTotalItems;
+  }
+
+  //myClassHeader 에서 select 로 가입클래스를 선택하면 classId 및 클래스 홈의 데이를 변경하는  MYCLASS_HOME() action 함수를  ㅌ
+  // 호출 하지만 정작 컨텐츠가 해당 사항을 반영하지 못하기에 ( classId 가 바뀌는 것을 header 와 sidemenu 만 인지된다. ) 아래처럼 watch 를 써서 classId 를 체크 하게 한다.
+  //
+  @Watch('classID')
+  public changeClassId( val: string, old: string) {
+    if (val !== old) {
+      this.getClassList().then(
+        ()=>{
+          this.isPageLoaded=true;
+        }
+      );
+    }
+
   }
 
   public created(): void{

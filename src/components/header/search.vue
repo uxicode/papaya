@@ -251,7 +251,9 @@ export default class Search extends Vue {
             });
       });
     }else{
-      this.$router.push({path: `${CLASS_BASE_URL}/${item.class_id}/enrollClass`});
+      this.$router.push({path: `${CLASS_BASE_URL}/${item.class_id}/enrollClass`}).then(()=>{
+        location.reload();
+      });
     }
 
     this.SEARCHING(false);
