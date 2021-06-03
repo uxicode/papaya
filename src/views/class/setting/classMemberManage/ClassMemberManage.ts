@@ -17,7 +17,6 @@ const MyClass = namespace('MyClass');
     }
 })
 export default class ClassMemberManage extends Vue{
-    private isActive: boolean = false;
     private isDetailAccordion: boolean = false;
     private isDetailPopup: boolean = false;
     private isBlockModal: boolean = false;
@@ -164,9 +163,8 @@ export default class ClassMemberManage extends Vue{
             alert('운영자는 차단할 수 없습니다.');
             return;
         }
-        this.isActive = false;
-        this.isBlockModal = true;
         this.getMemberInfo();
+        this.isBlockModal = true;
     }
 
     /**
@@ -195,9 +193,8 @@ export default class ClassMemberManage extends Vue{
             alert('운영자는 강제탈퇴할 수 없습니다.');
             return;
         }
-        this.isActive = false;
-        this.isBanModal = true;
         this.getMemberInfo();
+        this.isBanModal = true;
     }
 
     /**

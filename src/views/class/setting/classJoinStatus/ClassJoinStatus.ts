@@ -1,6 +1,7 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassMemberInfo, IQnaInfo} from '@/views/model/my-class.model';
+import MyClassService from '@/api/service/MyClassService';
 import ClassMemberService from '@/api/service/ClassMemberService';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -22,6 +23,7 @@ export default class ClassJoinStatus extends Vue {
     private applyList: IClassMemberInfo[] = [];
     private classMemberInfo: any = [];
     private answerList: IQnaInfo[] = [];
+    private waitingMemberId: number = 0;
 
     @MyClass.Getter
     private classID!: number;
@@ -43,18 +45,11 @@ export default class ClassJoinStatus extends Vue {
      * @private
      */
     private getApplyMembers(): void {
-        ClassMemberService.getAllClassMembers(this.classID)
-          .then((data) => {
-              // 가입 대기 상태인 멤버의 리스트만 나와야하지만 현재 api에서 따로 조회가 안됨.
-              // this.applyList = data.class_member_list.filter(
-              //   (item: IClassMemberInfo) => item.status === 0
-              // );
-              // 운영자를 제외한 나머지 멤버만 조회
-              this.applyList = data.class_member_list.filter(
-                (item: IClassMemberInfo) => item.level !== 1
-              );
-              console.log(this.applyList);
-          });
+        MyClassService.getClassInfoById(this.classID)
+            .then((data: any) => {
+                console.log(data);
+                this.applyList = data.classinfo.class_members.filter((item: IClassMemberInfo) => item.status === 0);
+            });
     }
 
     /**
@@ -63,17 +58,32 @@ export default class ClassJoinStatus extends Vue {
      * @private
      */
     private openJoinDetail(id: number): void {
-        this.isJoinDetail = true;
-
-        ClassMemberService.getClassMemberInfo(this.classID, id)
-          .then((data) => {
-              this.classMemberInfo = data;
+        this.waitingMemberId = id;
+        ClassMemberService.getClassMemberInfo(this.classID, this.waitingMemberId)
+          .then((data: any) => {
+              this.classMemberInfo = data.member_info;
+              console.log(this.classMemberInfo);
           });
 
-        ClassMemberService.getMemberClassQnA(this.classID, id)
+        ClassMemberService.getMemberClassQnA(this.classID, this.waitingMemberId)
           .then((data) => {
             this.answerList = data.qnalist;
           });
+
+        this.isJoinDetail = true;
+    }
+
+    /**
+     * 가입 신청 수락
+     * @private
+     */
+    private joinAccept(): void {
+        ClassMemberService.setClassMemberInfo(this.classID, this.waitingMemberId, {status: 1})
+            .then((data: any) => {
+               console.log(data);
+            });
+        this.applyList = this.applyList.filter((item: any) => item.id !== this.waitingMemberId);
+        this.isJoinDetail = false;
     }
 
     /**

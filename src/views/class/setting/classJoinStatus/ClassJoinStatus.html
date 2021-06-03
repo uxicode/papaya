@@ -38,11 +38,11 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.7.7.1 (클래스 가입 신청 상세) -->
     <transition name="modal">
-        <modal v-if="isJoinDetail" size="540px" body-padding="0" @modalClose="isJoinDetail=false;">
+        <modal v-if="isJoinDetail" size="540px" body-padding="0" @modalClose="isJoinDetail=false">
             <div slot="header">
                 <div class="popup-icon add"></div>
                 <div class="popup-close">
-                    <button class="close" @click="isJoinDetail = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    <button class="close" @click="isJoinDetail=false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
             <div slot="body">
@@ -71,8 +71,8 @@
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isJoinDetail = false">거절</btn>
-                    <btn type="navi">신청 수락</btn>
+                    <btn type="outline" @btnClick="isJoinDetail=false">거절</btn>
+                    <btn type="navi" @btnClick="joinAccept">신청 수락</btn>
                 </div>
             </div>
         </modal>

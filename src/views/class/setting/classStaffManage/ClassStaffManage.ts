@@ -196,6 +196,10 @@ export default class ClassStaffManage extends Vue {
      */
     private banModalOpen(memberId: number, nickname: string): void {
         this.memberId = memberId;
+        if (this.classInfo.me.id === this.memberId) {
+            alert('자기 자신은 강제탈퇴할 수 없습니다.');
+            return;
+        }
         this.isActive = false;
         this.isBanModal = true;
         this.nickname = nickname;

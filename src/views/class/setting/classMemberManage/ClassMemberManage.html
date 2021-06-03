@@ -101,10 +101,10 @@
                                         </button>
                                     </template>
                                     <v-list>
-                                        <v-list-item @click="blockModalOpen(memberId)">
+                                        <v-list-item @click="blockModalOpen(memberId, memberLevel)">
                                             <v-list-item-title>멤버 차단</v-list-item-title>
                                         </v-list-item>
-                                        <v-list-item @click="banModalOpen(memberId)">
+                                        <v-list-item @click="banModalOpen(memberId, memberLevel)">
                                             <v-list-item-title>멤버 강제 탈퇴</v-list-item-title>
                                         </v-list-item>
                                     </v-list>
@@ -183,7 +183,7 @@
                             <li class="member-item bd-none">
                                 <div class="member-type"
                                      :class="memberLevelIcon(memberLevel)">
-                                    <p class="member-name">{{ memberNickname }}</p>
+                                    <p class="member-name">{{ nickname }}</p>
                                     <p class="member-tit">{{ memberLevelTxt(memberLevel) }}</p>
                                 </div>
                             </li>

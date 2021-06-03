@@ -340,10 +340,11 @@ export default class ClassSettingMain extends Vue{
      */
     private guideTxtModify(text: string): void {
         MyClassService.setClassInfoById(this.classID, {description: text})
-          .then(() => {
-             console.log('가입 안내 문구 수정 완료');
-             this.isGuideTxt = false;
+          .then((data) => {
+             console.log(data);
+             this.info.description = data.description;
           });
+        this.isGuideTxt = false;
     }
 
     /**
