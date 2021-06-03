@@ -32,8 +32,6 @@ export default class NotifyDetailPopup extends Vue {
     @Prop(Boolean)
     private isOpen!: boolean;
 
-    @Prop(Number)
-    private postId!: number;
 
     @Post.Getter
     private postDetailItem!: IPostModel & IPostInLinkModel;
@@ -50,7 +48,6 @@ export default class NotifyDetailPopup extends Vue {
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
-    private isLoaded: boolean=false;
     private isPhotoViewer: boolean = false;
 
     get commentItemsModel() {
@@ -71,7 +68,6 @@ export default class NotifyDetailPopup extends Vue {
 
     private popupChange( value: boolean ) {
         this.$emit('change', value);
-        this.isLoaded=false;
     }
 
     private getImgFileDataSort(fileData: IAttachFileModel[] ) {

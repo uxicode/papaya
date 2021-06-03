@@ -265,14 +265,14 @@ export default class PostModule extends VuexModule {
    * @param payload
    */
   @Action
-  public [POST_TYPE_CHANGE_ACTION](payload: { classId: string | number, postId: number }): Promise<any>{
+  public [POST_TYPE_CHANGE_ACTION](payload: { classId: string | number, postId: number } ): Promise<any>{
     const findIdx=this.postListItems.findIndex((item) => item.id === payload.postId);
     const targetItem = this.postListItems[findIdx];
     let { type }=targetItem;
     const { title, text }=targetItem;
     type=( type===0 )? 1 : 0;
-    return PostService.setPostById( payload.classId, payload.postId, {type, title, text} )
-      .then( (data)=>{
+
+    return PostService.setPostById( payload.classId, payload.postId, {type, title, text} ).then( (data)=>{
         this.postListItems.splice(findIdx, 1, {...targetItem, type, title, text});
         return Promise.resolve(data);
       }).catch((error) => {
@@ -338,7 +338,7 @@ export default class PostModule extends VuexModule {
   }
 
   /**
-   * 멤버가 투표 선택~( 현재 선택한 데이터가 어디에도 표시 되지 않고 있음) 
+   * 멤버가 투표 선택~( 현재 선택한 데이터가 어디에도 표시 되지 않고 있음)
    * @param payload
    */
   @Action

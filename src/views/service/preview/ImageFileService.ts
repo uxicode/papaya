@@ -5,9 +5,15 @@ class ImageFileService implements IFile{
   public imgFileItems: any[] = [];
   public imgURLFileItems: string[] = [];
 
+
+
   //start : IFile 에 있는 필수 선언 메서드 ================================================
   public getItems(): any[] {
     return this.imgFileItems;
+  }
+
+  public setImgURLItems( items: string[] ): void{
+    this.imgURLFileItems=items;
   }
 
   public getImgURLItems(): string[] {

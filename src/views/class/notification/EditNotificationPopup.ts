@@ -1,8 +1,15 @@
-import {Vue, Component, Prop} from 'vue-property-decorator';
+import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
-import {ICreatePost, ILinkModel, IVoteModel} from '@/views/model/post.model';
+import {
+  IAttachFileModel,
+  ICreatePost,
+  ILinkModel,
+  IPostInLinkModel,
+  IPostModel,
+  IVoteModel
+} from '@/views/model/post.model';
 import AddVotePopup from '@/views/class/notification/AddVotePopup';
 import AddLinkPopup from '@/views/class/notification/AddLinkPopup';
 import AddReservationPopup from '@/views/class/notification/AddReservationPopup';
@@ -17,7 +24,7 @@ import ImagePreview from '@/components/preview/imagePreview.vue';
 import LinkPreview from '@/components/preview/linkPreview.vue';
 import VotePreview from '@/components/preview/votePreview.vue';
 import AlarmPreview from '@/components/preview/alarmPreview.vue';
-import WithRender from './EditNotification.html';
+import WithRender from './EditNotificationPopup.html';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -38,7 +45,7 @@ const Post = namespace('Post');
     AlarmPreview
   }
 })
-export default class AddNotifyPopup extends Vue{
+export default class EditNotificationPopup extends Vue{
 
   @Prop(Boolean)
   private isOpen!: boolean;
@@ -48,6 +55,15 @@ export default class AddNotifyPopup extends Vue{
 
   @MyClass.Getter
   private myClassHomeModel!: IClassInfo;
+
+  @Post.Getter
+  private postDetailItem!: IPostModel & IPostInLinkModel;
+
+  @Post.Getter
+  private commentItems!: any[];
+
+  @Post.Getter
+  private replyItems!: any[];
 
   @Post.Action
   private ADD_POST_ACTION!: (payload: { classId: number; formData: FormData })=>Promise<any>;
@@ -59,10 +75,7 @@ export default class AddNotifyPopup extends Vue{
   private isOpenAddVotePopup: boolean=false;
   private isOpenAddLinkPopup: boolean=false;
   private isOpenAddReservation: boolean=false;
-
-  private alarmData: { alarmAt: string }={
-    alarmAt: ''
-  };
+  private alarmData: { alarmAt: string }={alarmAt: ''};
   private voteData: IVoteModel={
     vote:{
       parent_id:0,
@@ -118,9 +131,116 @@ export default class AddNotifyPopup extends Vue{
     return this.linkData.link.title;
   }
 
+  get commentItemsModel() {
+    return this.commentItems;
+  }
 
-  private getProfileImg(imgUrl: string | null | undefined ): string{
+  get replyItemsModel() {
+    return this.replyItems;
+  }
+
+
+
+  /**
+   * 클릭한 상세 정보값이 들어오고 난 후에 postData 를 갱신해야 한다.
+   */
+  get postDetailModel():  IPostModel & IPostInLinkModel{
+    const {title, text, vote, link, attachment }=this.postDetailItem;
+    // this.alarmData = { alarmAt };
+    this.postData= { title, text };
+
+    if (attachment.length) {
+      //이미지 파일이 있을 시 화면에 로드 시켜둠
+      this.imgFileService.setImgURLItems( this.imgPreviewInit(attachment) );
+
+      const fileItems=this.attachFilePreviewInit( attachment);
+
+
+
+      console.log(fileItems);
+      this.attachFileService.setItems( fileItems);
+    }
+
+    //vote 가 존재 할때만
+    if ( vote ) {
+      this.votePreviewInit(vote);
+    }
+
+    //링크가 존재 할 때만
+    if( link ){
+      this.linkPreviewInit(link);
+    }
+
+    return this.postDetailItem;
+  }
+
+  get postDataModel() {
+    return this.postData;
+  }
+
+  public attachFilePreviewInit(attachment: IAttachFileModel[]): IAttachFileModel[] {
+    return attachment.filter((item: IAttachFileModel) => item.contentType !== 'image/png' && item.contentType !== 'image/jpg' && item.contentType !== 'image/jpeg' && item.contentType !== 'image/gif');
+  }
+
+
+  public imgPreviewInit( attachment: IAttachFileModel[] ): string[]{
+    const imgItems=attachment.filter( (item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg' || item.contentType === 'image/gif');
+    return imgItems.map((item: IAttachFileModel) => {
+      return item.location;
+    });
+  }
+
+  public votePreviewInit( vote: any ) {
+    const reformat=vote.vote_choices.map( (item: any)=>{
+      return { index:item.index, text:item.text};
+    });
+
+    this.voteData = {
+      vote: {
+        parent_id: vote.parent_id,
+        type: vote.type,
+        title: vote.title,
+        multi_choice: vote.multi_choice,
+        anonymous_mode: vote.anonymous_mode,
+        open_progress_level: vote.open_progress_level,
+        open_result_level: vote.open_result_level,
+        finishAt: vote.finishAt
+      },
+      vote_choice_list: reformat
+    };
+  }
+
+  public linkPreviewInit( link: any) {
+    const linkUrlItems=link.link_items.map( (item: any)=>{
+      return {url: item.url, index: item.index};
+    });
+    this.linkData={
+      link: {
+        title: link.title,
+      },
+      link_item_list: linkUrlItems
+    };
+  }
+
+  public getProfileImg(imgUrl: string | null | undefined ): string{
     return ImageSettingService.getProfileImg( imgUrl );
+  }
+
+  private getImgFileDataSort(fileData: IAttachFileModel[] ) {
+    return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg' || item.contentType === 'image/gif');
+  }
+
+  @Watch('isOpen')
+  private currentStatus( val: boolean, old: boolean) {
+    if (val !== old && val ) {
+      this.$nextTick(()=>{
+        //상세글 입력 창 크기 데이터 크기 즉 텍스트의 길이에 맞추어 재설정한다.
+        const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLInputElement;
+        console.log(scheduleDetailAreaTxt);
+        this.definePostDetailInputHeight();
+
+      });
+    }
   }
 
   private popupChange( value: boolean ) {
@@ -129,22 +249,16 @@ export default class AddNotifyPopup extends Vue{
 
 
   /**
-   * 일정 등록시 타이틀 부분
-   * @param val
-   * @private
-   */
-  private addPostTitleChange(val: string) {
-    this.postData.title=val;
-    // console.log(this.scheduleData.title);
-  }
-
-  /**
    *  새일정 등록 > textarea 에 글 입력시
    * @param value
    * @private
    */
   private postDetailAreaInputHandler(value: any) {
     this.postData.text=value;
+    this.definePostDetailInputHeight();
+  }
+
+  private definePostDetailInputHeight() {
     const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLInputElement;
     scheduleDetailAreaTxt.style.height = String( Utils.autoResizeTextArea(this.postData.text) + 'px');
   }

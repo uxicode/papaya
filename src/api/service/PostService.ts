@@ -71,9 +71,24 @@ export class PostService{
     return request('post', `/vote/${voteId}/member/${memberId}/select`, payload);
   }
 
-  ///class/{class_id}/posts/{post_id}
+  /**
+   * 게시글 수정 - 공지/일반으로 변경 혹은 게시글( 제목/내용 수정  )
+   * @param classId
+   * @param postId
+   * @param payload
+   */
   public static setPostById( classId: string | number, postId: number, payload: {type: number, title: string, text: string}): Promise<any>{
     return request('put', `${CLASS_BASE_URL}/${classId}/posts/${postId}`, payload);
+  }
+
+  /**
+   * 알림 게시글 내용( 투표/링크/이미지/파일 등 ) 전부 수정하기
+   * @param classId
+   * @param postId
+   * @param formData
+   */
+  public static setPostInfoAllById(classId: string | number, postId: number, formData: FormData): Promise<any> {
+    return request('put', `${CLASS_BASE_URL}/${classId}/posts/${postId}/all`, formData);
   }
 
   public static deletePostById(classId: string | number, postId: number): Promise<any> {
