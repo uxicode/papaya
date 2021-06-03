@@ -67,6 +67,10 @@ export class PostService{
     return request('post', '/vote', payload );
   }
 
+  public static setUserVoteSelect( voteId: string | number, memberId: number, payload: { vote_choice_ids: number[] }): Promise<any>{
+    return request('post', `/vote/${voteId}/member/${memberId}/select`, payload);
+  }
+
   ///class/{class_id}/posts/{post_id}
   public static setPostById( classId: string | number, postId: number, payload: {type: number, title: string, text: string}): Promise<any>{
     return request('put', `${CLASS_BASE_URL}/${classId}/posts/${postId}`, payload);

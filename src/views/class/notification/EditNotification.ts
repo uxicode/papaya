@@ -17,7 +17,7 @@ import ImagePreview from '@/components/preview/imagePreview.vue';
 import LinkPreview from '@/components/preview/linkPreview.vue';
 import VotePreview from '@/components/preview/votePreview.vue';
 import AlarmPreview from '@/components/preview/alarmPreview.vue';
-import WithRender from './AddNotifyPopup.html';
+import WithRender from './EditNotification.html';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -293,7 +293,7 @@ export default class AddNotifyPopup extends Vue{
         this.postData = {title: '', text: ''}; //post 데이터 비우기
         this.voteDataClear(); //투표 데이터 비우기
         this.$emit('submit', false); //post 등록 팝업 닫기 알림~
-    });
+      });
   }
 
   //start : vote 이벤트 핸들러 ================================================
