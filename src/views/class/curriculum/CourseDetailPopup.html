@@ -1,0 +1,55 @@
+<!-- start: 공통 팝업 / 파일명 : W.4.5.5.3.1 (교육과정 코스 - 상세) -->
+<transition name="modal">
+    <modal v-if="isClassCurrDetail" size="600px" body-padding="0" @modalClose="isClassCurrDetail=false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <div class="popup-icon edu"></div>
+            <div class="popup-close">
+                <button class="close" @click="isClassCurrDetail = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-cnt">
+                <p class="popup-txt type2">{{ curriculumList.curriculum.title }}</p>
+                <h2 class="popup-tit pdb-0">{{ curriculumList.curriculum.course_list[countCourseNumber].title===''? (countCourseNumber+1)+'회차수업' : curriculumList.curriculum.course_list[countCourseNumber].title }}</h2>
+            </div>
+
+            <div class="popup-form">
+                <div class="popup-form-top">
+                    <div class="form-item pd-desc">
+                        <ul class="feed-info period clearfix">
+                            <li v-show="curriculumList.curriculum.course_list[countCourseNumber].startDay!=='Invalid date'">{{ curriculumList.curriculum.course_list[countCourseNumber].startDay }}</li>
+                            <li v-show="curriculumList.curriculum.course_list[countCourseNumber].startTime!==null">{{ curriculumList.curriculum.course_list[countCourseNumber].startTime }}</li>
+                            <li v-show="curriculumList.curriculum.course_list[countCourseNumber].endTime!==null">{{ curriculumList.curriculum.course_list[countCourseNumber].endTime }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="popup-feed-detail">
+                <div class="fd-cnt">
+                    <p class="fd-txt">
+                        {{ curriculumList.curriculum.course_list[countCourseNumber].contents }}
+                    </p>
+
+                    <div class="fd-inner">
+                        <!-- start: attach 에 이미지파일이 있는 경우 -->
+                        <list-in-img-preview
+                                :file-items="curriculumList.curriculum.course_list[countCourseNumber].attachment"
+                                location="location"></list-in-img-preview>
+                        <!-- end: attach 에 이미지파일이 있는 경우 -->
+
+                        <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+                        <list-in-file-preview
+                                :file-items="curriculumList.curriculum.course_list[countCourseNumber].attachment"
+                                name="originalname"
+                                location="location"></list-in-file-preview>
+                        <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </modal>
+</transition>
+<!-- end: 공통 팝업 -->

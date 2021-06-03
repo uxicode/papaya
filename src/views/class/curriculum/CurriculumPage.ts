@@ -11,8 +11,6 @@ const MyClass = namespace('MyClass');
 export default class CurriculumPage extends Vue {
     @MyClass.Getter
     private classID!: number;
-
-
 }
 
 
