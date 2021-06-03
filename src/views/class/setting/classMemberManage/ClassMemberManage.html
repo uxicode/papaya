@@ -46,10 +46,10 @@
                                             <v-list-item @click="detailPopupOpen(item.user_id, item.level, item.nickname, item.id)">
                                                 <v-list-item-title>멤버 정보</v-list-item-title>
                                             </v-list-item>
-                                            <v-list-item @click="blockModalOpen(item.id)">
+                                            <v-list-item @click="blockModalOpen(item.id, item.level)">
                                                 <v-list-item-title>멤버 차단</v-list-item-title>
                                             </v-list-item>
-                                            <v-list-item @click="banModalOpen(item.id)">
+                                            <v-list-item @click="banModalOpen(item.id, item.level)">
                                                 <v-list-item-title>강제 탈퇴</v-list-item-title>
                                             </v-list-item>
                                         </v-list>

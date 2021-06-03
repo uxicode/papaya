@@ -376,10 +376,12 @@ export default class ClassSettingMain extends Vue{
      * @param question
      */
     private setJoinQuestion(question: string): void {
-        MyClassService.setClassQuestion(this.classID, this.questionId, {new_question: question})
-          .then(() => {
-            console.log(`question${this.questionId} 수정 성공`);
-          });
+        if (this.tempData !== '') {
+            MyClassService.setClassQuestion(this.classID, this.questionId, {new_question: question})
+                .then(() => {
+                    console.log(`question${this.questionId} 수정 성공`);
+                });
+        }
         this.isJoinQnaSetting = false;
         this.tempData = '';
         this.makeJoinQuestion(this.newQuestion);
@@ -387,14 +389,24 @@ export default class ClassSettingMain extends Vue{
 
     /**
      * 가입 질문 삭제
+     * @param idx
      * @param questionId
      * @private
      */
-    private deleteJoinQuestion(questionId: number): void {
+    private deleteJoinQuestion(idx: number, questionId: number): void {
+        this.questionList[idx].question = '';
         MyClassService.deleteClassQuestion(this.classID, questionId)
           .then(() => {
               console.log('가입 질문 삭제 성공');
           });
+    }
+
+    /**
+     * 새 가입 질문 입력값 초기화
+     * @private
+     */
+    private clearQuestionInput(): void {
+        this.newQuestion = '';
     }
 
     /**
@@ -409,6 +421,16 @@ export default class ClassSettingMain extends Vue{
                   console.log(`${newQuestion} 질문 추가 성공`);
               });
         }
+        this.newQuestion = '';
+    }
+
+    /**
+     * 가입 질문 설정 팝업 닫기
+     * @private
+     */
+    private closeQuestionPopup(): void {
+        this.isJoinQnaSetting = false;
+        this.newQuestion = '';
     }
 
     /**

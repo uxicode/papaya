@@ -39,7 +39,7 @@
                 <li v-for="(item, idx) in classNotifyList"
                     :key="idx"
                     class="list-item sub-list-item"
-                    :class="{'disabled': onOffNoti === 0}">
+                    :class="{'disabled': onOffNoti === 0 || false}">
                     <p class="list-tit">{{ item }}</p>
                     <div class="setting-btn">
                         <div class="member-info-btn">
@@ -177,7 +177,7 @@
                                                @input="valueChange($event, item.id)"
                                                :id="`question${item.id}`">
                                         <!-- form-delete active 시 display:block; -->
-                                        <button type="button" class="btn only-ico-btn form-delete active" @click="deleteJoinQuestion(item.id)"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                                        <button type="button" class="btn only-ico-btn form-delete active" @click="deleteJoinQuestion(idx, item.id)"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                                     </div>
                                 </div>
                             </li>
@@ -187,9 +187,9 @@
                                     <div class="form-group" style="width:490px;">
                                         <input v-model="newQuestion"
                                                type="text" class="form-control popup-type"
-                                               id="input6" placeholder="질문을 30자 이내로 입력해 주세요.">
+                                               id="new_question" placeholder="질문을 30자 이내로 입력해 주세요.">
                                         <!-- form-delete active 시 display:block; -->
-                                        <button type="button" class="btn only-ico-btn form-delete active"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                                        <button type="button" class="btn only-ico-btn form-delete active" @click="clearQuestionInput"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                                     </div>
                                 </div>
                             </li>
@@ -199,7 +199,7 @@
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isJoinQnaSetting = false">취소</btn>
+                    <btn type="outline" @btnClick="closeQuestionPopup">취소</btn>
                     <btn type="navi" @btnClick="setJoinQuestion(tempData)">저장</btn>
                 </div>
             </div>
