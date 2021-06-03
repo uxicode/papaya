@@ -7,9 +7,7 @@ $popupDepth: 10;
   left:0;
   width:100%;
   height:100%;
-
   &.photo-viewer {background-color:rgba(15, 15, 21, 0.8);}
-
   .tip-info {display:inline-block;width:18px;height:18px;}
 }
 
@@ -47,13 +45,10 @@ $popupDepth: 10;
         width:18px;
         height:18px;
         background:url(../../assets/images/time-outline.svg) no-repeat center / 18px; opacity:0.7;
-
         @include pos-vertical($left:0);
       }
     }
-
   }
-
   .scroll-body {overflow-y:auto;}
 }
 
@@ -93,7 +88,6 @@ $popupDepth: 10;
   border-bottom:none;
   font-size:16px;
   color:#373737;
-
   &.sm {font-size:14px;}
 }
 
@@ -108,7 +102,6 @@ $popupDepth: 10;
 .popup-tit {
   font-size:18px;
   font-weight:500;
-
   + p, + div {padding-top:20px;}
 }
 
@@ -118,7 +111,6 @@ $popupDepth: 10;
   letter-spacing:0;
   line-height:1.57;
   color:#57576d;
-
   &.type2 {color:#848499;margin-bottom:4px;}
 }
 
@@ -132,12 +124,9 @@ $popupDepth: 10;
     position: relative;
     padding:18px 0;
     border-top:1px solid #f4f5f6;
-
     &.selected, &.pd-desc {padding:10px 0;}
-
     &.post-classes {
       position:relative;
-
       p {
         color:#848499;
         padding-left:42px;
@@ -152,7 +141,6 @@ $popupDepth: 10;
         width:32px;
         height:32px;
         @include pos-vertical($left:0);
-
         &.icon-class {background:url(../../assets/images/profile-class.svg) no-repeat;}
       }
 
@@ -160,7 +148,6 @@ $popupDepth: 10;
 
       .post-writer {
         padding-left:20px;
-
         &:before {
           content:'';
           width:14px;
@@ -182,16 +169,13 @@ $popupDepth: 10;
         position:relative;
         padding-left:28px;
         color:#57576d;
-
         &:before {
           content:'';
           display:inline-block;
           width:18px;
           height:18px;
-
           @include pos-vertical($left:0);
         }
-
         &.period:before {background:url(../../assets/images/time-outline.svg) no-repeat center / 18px; opacity:0.7;}
         &.repeat:before {background:url(../../assets/images/repeat.svg) no-repeat center / 18px;}
       }
@@ -206,7 +190,6 @@ $popupDepth: 10;
 
   .form-box {
     @include pos-vertical($right:0);
-
     .form-group + .form-group {margin-left:30px;}
   }
 
@@ -223,7 +206,6 @@ $popupDepth: 10;
           display:block;
           float:left;
           margin-left:20px;
-
           &.add-img-btn {opacity:0.2;}
         }
       }
@@ -405,7 +387,6 @@ $popupDepth: 10;
         background-color:#848499;
         @include pos-vertical($right:0)
       }
-
     }
   }
   // end: vote
@@ -533,7 +514,6 @@ $popupDepth: 10;
 
 .subject-schedule {
   margin-top:4px;
-
   span {
     &:after {
       content:'・';
@@ -563,7 +543,6 @@ $popupDepth: 10;
 .comment-writer {
   position: relative;
   padding-left:20px;
-
   &:before {
     content:'';
     display:block;
@@ -597,7 +576,6 @@ $popupDepth: 10;
       width:520px;
       height:1px;
       background-color:#f4f5f6;
-
       @include pos-abs($top:0, $left:50%);
       transform:translateX(-50%);
     }
@@ -607,7 +585,6 @@ $popupDepth: 10;
 .comment-btm {
   padding:11px 20px 11px 26px;
   border-top:1px solid #f4f5f6;
-
   .form-control {
     padding:8px 20px;
     margin:0 16px 0 6px;
@@ -618,7 +595,6 @@ $popupDepth: 10;
 
 .vote-result {
   border-top:1px solid #f4f5f6;
-
   .tabs-line {
     .item {
       a {padding:16px 6px 11px 6px;}
@@ -632,7 +608,6 @@ $popupDepth: 10;
   position:relative;
   padding:20px 40px;
   border-bottom:1px solid #f4f5f6;
-
   .vote-img {
     display:block;
     width:40px;
@@ -649,7 +624,6 @@ $popupDepth: 10;
     p {
       position:relative;
       padding:20px 0 20px 32px;
-
       &:before {
         content:'';
         display:block;
@@ -850,7 +824,6 @@ $popupDepth: 10;
     border-radius:50%;
     @include pos-vertical($left:0);
   }
-
   &.manager:before {background:#ffba36 url(../../assets/images/btn-round-admin.svg) no-repeat center;}
   &.staff:before {background:#c9cad5 url(../../assets/images/btn-round-staff.svg) no-repeat center;}
   &.member:before {background:#57576d url(../../assets/images/btn-round-member.svg) no-repeat center;}
@@ -863,7 +836,6 @@ $popupDepth: 10;
   font-weight:500;
   color:#ff4d4d !important; // customVuetify 때문에 important 필요 - ksj
 }
-
 
 .member-activity {
   .activity-tit {
@@ -900,7 +872,6 @@ $popupDepth: 10;
     padding:13px 0;
     text-align:center;
     color:#57576d;
-
     img {margin-right:10px; opacity: 0.6;}
   }
 }

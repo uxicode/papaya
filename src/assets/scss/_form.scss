@@ -72,9 +72,7 @@ select {
     }
     &:focus {background-color:#f4f5f6;}
   }
-
   &.error {border-color:#ff4d4d !important;}
-  //&.popup-type.error{background-color:transparent!important;border: 1px solid #ff4d4d !important;}
   &.approval {border-color:#629f00;}
 }
 
@@ -131,7 +129,6 @@ select {
     transition: all 0.3s ease;
     width: 42px;
     height: 24px;
-
     &:after {
       z-index: 3;
       content: '';
@@ -159,7 +156,6 @@ select {
   font-family: "Noto Sans KR", sans-serif;
   color:#373749;
   background-color:#fff;
-
   &.h-full {height:100%;}
 
   + .form-message {
@@ -205,7 +201,6 @@ select {
     left:0;
     +.time-control, +.date-area {margin-left:34px;}
   }
-
   &.time {
     display:inline-block;
     .time-control {
@@ -220,7 +215,6 @@ select {
       }
     }
   }
-
   &.date {
     display:inline-block;
     .form-control {display:none;}
@@ -237,9 +231,7 @@ select {
 .checkbox-group {
   .btn-radio:first-child,
   .btn-checkbox:first-child{margin-left:0;}
-
-  .btn-radio,
-  .btn-checkbox{display: inline-block;margin-left:40px;}
+  .btn-radio, .btn-checkbox{display: inline-block;margin-left:40px;}
   .disabled {opacity:0.2;}
 }
 
@@ -270,7 +262,6 @@ select {
   input + label {
     padding-left:35px;
     vertical-align:middle;
-
     &:before {
       content:'';
       position:absolute;
@@ -282,7 +273,6 @@ select {
       transform:translateY(-50%);
       background:url(../../assets/images/checkbox-outline.svg) no-repeat;
     }
-
     &.big {
       padding-left:37px;
       &:before, &:after {width:27px;height:27px;}
@@ -299,7 +289,6 @@ select {
     color:#57576d;
     font-weight:400;
   }
-
   input {
     display:none;
     position: absolute;
@@ -320,7 +309,6 @@ select {
   input + label {
     padding-left:30px;
     vertical-align:middle;
-
     &:before {
       content:'';
       position:absolute;
@@ -335,24 +323,18 @@ select {
   }
 }
 
-
-
 .all-form {
   text-align:center;
   margin-top:40px;
   padding-bottom:75px;
-
   .form-progress {
     margin-top:20px;
-
     .progress-list {
       display:inline-block;
-
       .item {
         position:relative;
         float:left;
         height:20px;
-
         &:before {
           content:'';
           display:inline-block;
@@ -362,7 +344,6 @@ select {
           vertical-align: middle;
           background-color:#0f0f15;
         }
-
         &:after {
           content:'';
           display:inline-block;
@@ -372,14 +353,12 @@ select {
           vertical-align:middle;
           background-color:#c9cad5;
         }
-
         &.active:before {
           width:20px;
           height:20px;
           background-color:#fff;
           border:7px solid #ff4d4d;
         }
-
         &:last-child:after {display:none;}
       }
     }
@@ -392,7 +371,6 @@ select {
     text-align:left;
     background-color:#fff;
     box-shadow: 0 0 10px 0 rgba(15, 15, 21, 0.05);
-
     .form-sub-tit {
       font-size: 18px;
       font-weight: 500;
@@ -404,7 +382,6 @@ select {
   .form-cnt {
     position:relative;
     min-height:280px;
-
     .agreement {
       height:200px;
       padding:20px 20px 20px 54px;
@@ -473,7 +450,6 @@ select {
       }
     }
   }
-
   .all-form-data {padding:30px 35px;}
   .form-btm {margin-top:30px;}
 }
