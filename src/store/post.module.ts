@@ -16,6 +16,7 @@ import {
   GET_POST_DETAIL_ACTION,
   GET_COMMENTS_ACTION,
   SELECT_VOTE_ACTION,
+  DELETE_POST_FILE
 } from '@/store/action-class-types';
 import {IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
@@ -347,6 +348,20 @@ export default class PostModule extends VuexModule {
     return PostService.setUserVoteSelect( payload.voteId, payload.memberId, {vote_choice_ids} )
       .then((data)=>{
         //
+      });
+  }
+
+  @Action
+  public [DELETE_POST_FILE](payload: { classId: string | number, postId: number, ids: number[] }): Promise<any> {
+    const {ids} =payload;
+    return PostService.deletePostFileById(payload.classId, payload.postId, {ids})
+      .then((data) => {
+        const findIdx=this.postListData.findIndex((item) => item.id === payload.postId );
+        const editItem=this.postListData[findIdx];
+        const { attachment } = editItem;
+
+        const removedAttachItems=attachment.filter((item: any) => !ids.includes(item.id) );
+        this.postListData.splice(findIdx, 1, {...editItem, ...removedAttachItems} );
       });
   }
 

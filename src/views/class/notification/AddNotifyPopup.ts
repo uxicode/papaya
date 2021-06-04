@@ -63,24 +63,7 @@ export default class AddNotifyPopup extends Vue{
   private alarmData: { alarmAt: string }={
     alarmAt: ''
   };
-  private voteData: IVoteModel={
-    vote:{
-      parent_id:0,
-      type: 0,
-      title: '',
-      multi_choice: 0,
-      anonymous_mode: 0,
-      open_progress_level: 0,
-      open_result_level: 0,
-      finishAt: new Date().toISOString().substr(0, 10),
-    },
-    vote_choice_list: [
-      {
-        text: '',
-        index: 1
-      }
-    ]
-  };
+  private voteData: IVoteModel | null=null;
   private postData: ICreatePost = { title: '', text: ''};
   private linkData: ILinkModel={
     link: {
@@ -95,7 +78,7 @@ export default class AddNotifyPopup extends Vue{
 
 
   get imgFileURLItemsModel(): string[] {
-    return this.imgFileService.getImgURLItems();
+    return this.imgFileService.getItems();
   }
 
   get attachFileItemsModel(): any[] {
@@ -269,7 +252,7 @@ export default class AddNotifyPopup extends Vue{
 
     //링크 데이터가 존재 한다면 기존 postData 에 merge 한다.
     const linkMergeData = (this.getValidLink())? {...this.postData, ...this.linkData} : {...this.postData};
-    const voteMergeData = (this.voteData.vote)? {...linkMergeData, ...this.voteData} : {...this.postData};
+    const voteMergeData = (this.voteData!==null)? {...linkMergeData, ...this.voteData} : {...this.postData};
     const mergeData= (this.alarmData.alarmAt!=='')? {...voteMergeData, ...this.alarmData} : voteMergeData;
 
     //formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.
@@ -310,24 +293,7 @@ export default class AddNotifyPopup extends Vue{
     // console.log(voteData);
   }
   private voteDataClear() {
-    this.voteData={
-      vote:{
-        parent_id:0,
-        type: 0,
-        title: '',
-        multi_choice: 0,
-        anonymous_mode: 0,
-        open_progress_level: 0,
-        open_result_level: 0,
-        finishAt: '',
-      },
-      vote_choice_list: [
-        {
-          text: '',
-          index: 1
-        }
-      ]
-    };
+    this.voteData = null;
   }
   private onModifyVote() {
     this.isOpenAddVotePopup=true;

@@ -9,7 +9,7 @@ import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
 import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
 import PhotoViewer from '@/views/class/notification/PhotoViewer';
-import DetailInPreview from '@/components/preview/DetailInPreview.vue';
+import DetailInVotePreview from '@/components/preview/DetailInVotePreview.vue';
 import WithRender from './NotifyDetailPopup.html';
 
 const MyClass = namespace('MyClass');
@@ -24,7 +24,7 @@ const Post = namespace('Post');
         ListInFilePreview,
         ListInLinkPreview,
         PhotoViewer,
-        DetailInPreview,
+        DetailInVotePreview,
     }
 })
 export default class NotifyDetailPopup extends Vue {

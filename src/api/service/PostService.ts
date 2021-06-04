@@ -96,6 +96,10 @@ export class PostService{
     return request('delete', `${CLASS_BASE_URL}/${classId}/posts/${postId}`);
   }
 
+  public static deletePostFileById(classId: string | number, postId: number, payload: { ids: number[] }): Promise<any>  {
+    return request('delete', `${CLASS_BASE_URL}/${classId}/posts/${postId}/attachments`, payload );
+  }
+
 
   /**
    * 내가 가입한 클래스 알림글 북마크한 글조회

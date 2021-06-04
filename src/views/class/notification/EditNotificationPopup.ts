@@ -71,6 +71,10 @@ export default class EditNotificationPopup extends Vue{
   @Post.Action
   private GET_RESERVED_LIST_ACTION!: (classId: number) => Promise<any>;
 
+  @Post.Action
+  private DELETE_POST_FILE!: (payload: { classId: number, postId: number, ids: number[] })=>Promise<any>;
+
+
 
   private isOpenAddVotePopup: boolean=false;
   private isOpenAddLinkPopup: boolean=false;
@@ -108,7 +112,7 @@ export default class EditNotificationPopup extends Vue{
 
 
   get imgFileURLItemsModel(): string[] {
-    return this.imgFileService.getImgURLItems();
+    return this.imgFileService.getItems();
   }
 
   get attachFileItemsModel(): any[] {
@@ -155,9 +159,6 @@ export default class EditNotificationPopup extends Vue{
 
       const fileItems=this.attachFilePreviewInit( attachment);
 
-
-
-      console.log(fileItems);
       this.attachFileService.setItems( fileItems);
     }
 
@@ -183,11 +184,11 @@ export default class EditNotificationPopup extends Vue{
   }
 
 
-  public imgPreviewInit( attachment: IAttachFileModel[] ): string[]{
-    const imgItems=attachment.filter( (item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg' || item.contentType === 'image/gif');
-    return imgItems.map((item: IAttachFileModel) => {
-      return item.location;
-    });
+  public imgPreviewInit( attachment: IAttachFileModel[] ): IAttachFileModel[]{
+    /* imgItems.map((item: IAttachFileModel) => {
+       return item.location;
+     });*/
+    return attachment.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg' || item.contentType === 'image/gif');
   }
 
   public votePreviewInit( vote: any ) {
@@ -300,14 +301,51 @@ export default class EditNotificationPopup extends Vue{
    * @private
    */
   private onRemoveImgPreviewItems(idx: number): void{
-    this.imgFileService.remove(idx);
+    // const targetImg = this.imgFileService.getItemById(idx);
+    const { id }= this.postDetailItem;
+
+    const file=this.imgFileService.getItemById(idx).file;
+
+    if( file.fieldname ){
+      this.DELETE_POST_FILE( { classId: Number( this.classID ), postId: id, ids:[file.id]})
+        .then( (data)=>{
+          this.imgFileService.remove(idx);
+        });
+    }else{
+      this.imgFileService.remove(idx);
+    }
+    // console.log(targetImg);
+    //
+
+
+
+
+    //
   }
   /**
    * 추가된 이미지 파일 모두 지우기
    * @private
    */
   private onRemoveAllPreview(): void {
-    this.imgFileService.removeAll();
+
+    const { id }= this.postDetailItem;
+
+    const fileItems=this.imgFileService.getFileItems();
+
+    const ids=fileItems
+      .map((item) =>(item.file.fieldname) ? item.file.id : '')
+      .filter((item) => item !== '');
+
+    if(ids && ids.length>0){
+      this.DELETE_POST_FILE( { classId: Number( this.classID ), postId: id, ids})
+        .then( (data)=>{
+          this.imgFileService.removeAll();
+        });
+    }else{
+      this.imgFileService.removeAll();
+    }
+
+
   }
   /**
    * post 등록을 완료후 formdata 및 배열에 지정되어 있던 데이터들 비우기..
@@ -383,7 +421,7 @@ export default class EditNotificationPopup extends Vue{
 
     //링크 데이터가 존재 한다면 기존 postData 에 merge 한다.
     const linkMergeData = (this.getValidLink())? {...this.postData, ...this.linkData} : {...this.postData};
-    const voteMergeData = (this.voteData.vote)? {...linkMergeData, ...this.voteData} : {...this.postData};
+    const voteMergeData = (this.voteData!==null)? {...linkMergeData, ...this.voteData} : {...this.postData};
     const mergeData= (this.alarmData.alarmAt!=='')? {...voteMergeData, ...this.alarmData} : voteMergeData;
 
     //formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.

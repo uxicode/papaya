@@ -75,12 +75,12 @@
 
 
                                  <!-- start: 투표가 있는 경우 -->
-                                  <DetailInPreview :items="postDetailModel.vote"
-                                                   :choices-list="postDetailModel.vote.vote_choices"
+                                  <detail-in-vote-preview :items="postDetailModel.vote"
+                                                   choices-list="vote_choices"
                                                    title="title"
                                                    choice="multi_choice"
                                                    finish-at="finishAt"
-                                                   mode="anonymous_mode"></DetailInPreview>
+                                                   mode="anonymous_mode"></detail-in-vote-preview>
                                  <!-- end: 투표가 있는 경우 -->
 
                                 <!-- start: 링크가 있는 경우-->

@@ -1,28 +1,49 @@
 import {IFile} from '@/views/service/preview/IFile';
+import {PostService} from '@/api/service/PostService';
+import {IAttachFileModel} from '@/views/model/post.model';
 
 class ImageFileService implements IFile{
 
   public imgFileItems: any[] = [];
-  public imgURLFileItems: string[] = [];
+  // public imgURLFileItems: string[] = [];
 
 
 
   //start : IFile 에 있는 필수 선언 메서드 ================================================
-  public getItems(): any[] {
+  public getItems(): string[] {
+    //this.imgFileItems;
+    return this.imgFileItems.map((item) => item.url);
+  }
+
+  public getFileItems(): any[] {
     return this.imgFileItems;
   }
 
-  public setImgURLItems( items: string[] ): void{
-    this.imgURLFileItems=items;
+  public getItemById(idx: number): any {
+    return this.imgFileItems[idx];
   }
 
-  public getImgURLItems(): string[] {
-    return this.imgURLFileItems;
+  public setImgURLItems( items: IAttachFileModel[] ): void{
+    // this.imgURLFileItems=items;
+    this.imgFileItems=items.map(( item: IAttachFileModel, index: number)=>{
+      return {
+        file: item,
+        id: index,
+        url: item.location
+      };
+   });
   }
+
+
+  /*public getImgURLItems(): string[] {
+    return this.imgURLFileItems;
+  }*/
   //모델에 이미지 파일 추가
   public load( files: FileList, selector: string ): void{
     if( !files.length ){ return; }
+
     this.setImgFilePreviewSave(files);
+
     //file type input
     const imgFileInput =document.querySelector(selector) as HTMLInputElement;
     imgFileInput.value = '';
@@ -31,7 +52,7 @@ class ImageFileService implements IFile{
    * 모두 지우기
    */
   public removeAll(): void {
-    this.imgURLFileItems = [];
+    // this.imgURLFileItems = [];
     this.imgFileItems=[];
   }
   /**
@@ -39,10 +60,13 @@ class ImageFileService implements IFile{
    * @param idx
    */
   public remove(idx: number): void {
-    const blobURLs=this.imgURLFileItems.splice(idx, 1);
-    this.removeBlobURL( blobURLs ); // blob url 제거
-    this.imgFileItems.splice(idx, 1);
+
+    const removeItem=this.imgFileItems.splice(idx, 1);
+    if (removeItem[0].url.indexOf('blob') !== -1) {
+      this.removeBlobURL( removeItem[0].url ); // blob url 제거
+    }
   }
+
   public reset() {
     this.removeAll();
   }
@@ -51,8 +75,13 @@ class ImageFileService implements IFile{
    */
   public save( formData: FormData ): void {
     if( !this.imgFileItems.length ){ return; }
+
+    const addFiles= this.imgFileItems
+      .filter((item) => item.file.name !== undefined)
+      .map((item)=>item.file);
+
     // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-    this.formDataAppendToFile( formData, this.imgFileItems, 'files');
+    this.formDataAppendToFile( formData, addFiles, 'files');
   }
   //end : IFile 에 있는 필수 선언 메서드 ================================================
 
@@ -61,8 +90,13 @@ class ImageFileService implements IFile{
    * - 확인하는 방법은 현재 이미지에 적용된 src 주소값을 복사해서 현재 브라우저에 주소를 붙여 실행해 보면 된다. 이미지가 보이면 url 이 폐기되지 않은 것이다.
    * @private
    */
-  public removeBlobURL( items: string[] ) {
-    items.forEach((item) => URL.revokeObjectURL(item));
+  public removeBlobURL( target: string | string[] ) {
+    if( Array.isArray(target) ){
+      target.forEach((item) => URL.revokeObjectURL(item) );
+    }else{
+      URL.revokeObjectURL( target);
+    }
+
   }
   /**
    * 이미지 파일 -> 배열에 지정 / 미리보기 link( blob link) 배열 생성~
@@ -72,8 +106,8 @@ class ImageFileService implements IFile{
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < data.length; i++) {
-      this.imgFileItems.push(data[i]);
-      this.imgURLFileItems.push(URL.createObjectURL(data[i]));
+      this.imgFileItems.push( {file:data[i], id:i, url: URL.createObjectURL(data[i])} );
+      // this.imgURLFileItems.push( URL.createObjectURL(data[i]) );
     }
     // console.log(this.imgURLFileItems, data);
   }
