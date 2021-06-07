@@ -100,7 +100,7 @@ export default class PostModule extends VuexModule {
     },
   };
   private commentData: ICommentModel[] = [];
-  private replyData: any[]=[];
+  private replyData: IReplyModel[]=[];
 
 
   /* Getters */
@@ -344,7 +344,7 @@ export default class PostModule extends VuexModule {
   public [ADD_COMMENT_ACTION](payload: {parent_id: number, parent_type: number, member_id: number, comment: string}): Promise<any> {
     return PostService.setAddComment(payload)
       .then((data) => {
-        // console.log(data.comment.member_id);
+        console.log(data.comment);
         return Promise.resolve(this.commentData);
       });
   }
@@ -352,7 +352,8 @@ export default class PostModule extends VuexModule {
   @Action
   public [ADD_REPLY_ACTION](payload: {comment_id: number, member_id: number, comment: string}): Promise<any> {
     return PostService.setAddReply(payload)
-        .then(() => {
+        .then((data) => {
+          console.log(data.commentreply);
           return Promise.resolve(this.replyData);
         });
   }
