@@ -573,6 +573,7 @@ interface ICurriculumList {
     message?: string;
 }
 */
+type CourseAttachData = Omit<ICurriculumList, 'course_list' >;
 
 interface ICurriculumList {
     curriculum: {
@@ -602,23 +603,21 @@ interface ICurriculumList {
             level: number;
             status?: number;
         };
-        course_list?: [
-            {
-                startDay: Date | string;
-                createdAt: Date | string;
-                updatedAt: Date | string;
-                id: number;
-                curriculum_id: number;
-                class_id: number;
-                index: number;
-                title: string;
-                contents: string;
-                startTime: Date | string;
-                endTime: Date | string;
-                deletedYN: boolean;
-                attachment?: [];
-            }
-        ]
+        course_list?: Array<{
+            startDay: Date | string;
+            createdAt: Date | string;
+            updatedAt: Date | string;
+            id: number;
+            curriculum_id: number;
+            class_id: number;
+            index: number;
+            title: string;
+            contents: string;
+            startTime: Date | string;
+            endTime: Date | string;
+            deletedYN: boolean;
+            attachment?: [];
+        }>
     };
     message?: string;
 }
