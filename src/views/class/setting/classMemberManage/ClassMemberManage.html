@@ -183,7 +183,7 @@
                             <li class="member-item bd-none">
                                 <div class="member-type"
                                      :class="memberLevelIcon(memberLevel)">
-                                    <p class="member-name">{{ nickname }}</p>
+                                    <p class="member-name">{{ memberNickname }}</p>
                                     <p class="member-tit">{{ memberLevelTxt(memberLevel) }}</p>
                                 </div>
                             </li>
@@ -231,7 +231,7 @@
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="navi" @click="isBlockCompleteModal = false">확인</btn>
+                    <btn type="navi" @btnClick="isBlockCompleteModal = false">확인</btn>
                 </div>
             </div>
         </modal>

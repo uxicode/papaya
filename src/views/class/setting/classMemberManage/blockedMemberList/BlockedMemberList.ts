@@ -22,6 +22,7 @@ export default class BlockedMemberList extends Vue {
     private blockedMemberList: [] = [];
     private blockedMemberNickname: string = '';
     private blockedMemberLevel: number = 0;
+    private blockedMemberId: number = 0;
 
     @MyClass.Getter
     private classID!: number;
@@ -49,6 +50,7 @@ export default class BlockedMemberList extends Vue {
      */
     private unblockModalOpen(id: number): void {
         this.isUnblockModal = true;
+        this.blockedMemberId = id;
         this.getBlockedMemberInfo(id);
     }
 
@@ -59,9 +61,9 @@ export default class BlockedMemberList extends Vue {
      */
     private getBlockedMemberInfo(id: number): void {
         ClassMemberService.getClassMemberInfo(this.classID, id)
-          .then((data) => {
-              this.blockedMemberNickname = data.nickname;
-              this.blockedMemberLevel = data.level;
+          .then((data: any) => {
+              this.blockedMemberNickname = data.member_info.nickname;
+              this.blockedMemberLevel = data.member_info.level;
           });
     }
 
@@ -95,6 +97,19 @@ export default class BlockedMemberList extends Vue {
             default:
                 return '일반 멤버';
         }
+    }
+
+    /**
+     * 차단 해제
+     * @private
+     */
+    private submitUnblock(): void {
+        this.isUnblockModal = false;
+        ClassMemberService.setUnBlockClassMember(this.classID, this.blockedMemberId)
+            .then((msg) => {
+                console.log(msg);
+            });
+        this.isUnblockCompleteModal = true;
     }
 
     private goBack(): void {

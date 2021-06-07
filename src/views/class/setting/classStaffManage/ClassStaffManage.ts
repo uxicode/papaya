@@ -50,7 +50,20 @@ export default class ClassStaffManage extends Vue {
     private qnaList: IQnaInfo[] = [];
 
     /* 권한 설정 관련 */
-    private authList: IClassAuth[] = [];
+    private authList: IClassAuth[] = [
+        {
+            auth_type: 1,
+            be_authorized: true
+        },
+        {
+            auth_type: 2,
+            be_authorized: true
+        },
+        {
+            auth_type: 3,
+            be_authorized: true
+        }
+    ];
     private authTypeList: string[] = ['알림 관리', '일정 관리', '교육과정 관리'];
 
     get classInfo(): any {
@@ -109,6 +122,11 @@ export default class ClassStaffManage extends Vue {
           });
     }
 
+    private closeDetailPopup(): void {
+        this.isDetailPopup = false;
+        this.qnaList = [];
+    }
+
     /**
      * 스탭 권한 설정 팝업 열기
      * @param memberId
@@ -116,6 +134,11 @@ export default class ClassStaffManage extends Vue {
      * @private
      */
     private staffModifyPopupOpen(memberId: number, nickname: string): void {
+        if (this.classInfo.me.level !== 1) {
+            alert('스탭 권한설정은 운영자만 가능합니다.');
+            return;
+        }
+
         this.isStaffModifyPopup = true;
         this.memberId = memberId;
         this.nickname = nickname;

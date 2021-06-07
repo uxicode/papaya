@@ -39,7 +39,7 @@
                 <li v-for="(item, idx) in classNotifyList"
                     :key="idx"
                     class="list-item sub-list-item"
-                    :class="{'disabled': onOffNoti === 0 || false}">
+                    :class="{'disabled': onOffNoti === false}">
                     <p class="list-tit">{{ item }}</p>
                     <div class="setting-btn">
                         <div class="member-info-btn">

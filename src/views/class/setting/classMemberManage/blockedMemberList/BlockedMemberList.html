@@ -73,8 +73,8 @@
             <!-- popup footer -->
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isUnblockModal = false">취소</btn>
-                    <btn type="navi" @btnClick="isUnblockModal = false; isUnblockCompleteModal = true">차단 해제</btn>
+                    <btn type="outline" @btnClick="isUnblockModal=false">취소</btn>
+                    <btn type="navi" @btnClick="submitUnblock">차단 해제</btn>
                 </div>
             </div>
             <!--// popup footer -->
@@ -104,8 +104,8 @@
                         <ul>
                             <li class="member-item bd-none">
                                 <div class="member-type staff">
-                                    <p class="member-name">정재진엄마</p>
-                                    <p class="member-tit">스탭 멤버</p>
+                                    <p class="member-name">{{ blockedMemberNickname }}</p>
+                                    <p class="member-tit">{{ memberLevelTxt(blockedMemberLevel) }}</p>
                                 </div>
                             </li>
                         </ul>
@@ -117,7 +117,7 @@
             <!-- popup footer -->
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="navi" @btnClick="isUnblockCompleteModal = false">확인</btn>
+                    <btn type="navi" @btnClick="isUnblockCompleteModal=false">확인</btn>
                 </div>
             </div>
             <!--// popup footer -->

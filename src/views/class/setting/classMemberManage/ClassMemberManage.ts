@@ -203,12 +203,10 @@ export default class ClassMemberManage extends Vue{
      */
     private getMemberInfo(): void {
         ClassMemberService.getClassMemberInfo(this.classID, this.memberId)
-          .then((data) => {
-            console.log(data);
-            this.memberNickname = data.nickname;
-            console.log(this.memberNickname);
-            this.memberLevel = data.level;
-            console.log(this.memberLevel);
+          .then((data: any) => {
+            // console.log(data);
+            this.memberNickname = data.member_info.nickname;
+            this.memberLevel = data.member_info.level;
           });
     }
 

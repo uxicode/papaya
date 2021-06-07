@@ -75,12 +75,12 @@
 
     <!-- start: 공통 팝업 / 파일명 : W.4.5.6.1 (멤버정보 - 상세) -->
     <transition name="modal">
-        <modal v-if="isDetailPopup" size="540px" body-padding="0" @modalClose="isDetailPopup=false;">
+        <modal v-if="isDetailPopup" size="540px" body-padding="0" @modalClose="closeDetailPopup">
             <div slot="header">
                 <!-- header custom coding-->
                 <div class="popup-icon profile"></div>
                 <div class="popup-close">
-                    <button class="close" @click="isDetailPopup=false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    <button class="close" @click="closeDetailPopup"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
             <div slot="body">
@@ -140,11 +140,10 @@
                                 <p>{{ email }}</p>
                             </div>
                         </li>
-                        <li class="list-item">
+                        <li v-if="qnaList.length>0" class="list-item">
                             <a href="" @click.stop.prevent="isDetailAccordion = !isDetailAccordion">
-
+                                <p class="list-tit">가입 질문 응답</p>
                             </a>
-                            <p class="list-tit">가입 질문 응답</p>
                             <div class="basic-info">
                                 <div class="accordion-tit">
                                     <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->

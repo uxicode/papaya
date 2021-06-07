@@ -14,7 +14,6 @@ import WithRender from './EnrollClass.html';
 interface IEnrollMemberInfo {
   user_id: number;
   nickname: string;
-  qna_list: Array<{ question: string, answer: string }>;
 }
 
 interface ISideMenu {
@@ -71,16 +70,10 @@ export default class EnrollClass extends Vue {
   }
 
   public created() {
-    console.log(' this.$route.params.classId=', this.$route.params.classId);
     this.classIdx = Number( this.$route.params.classId );
     this.visibleSettingMenus(0);
     this.getClassInfo();
   }
-
-  // public updated() {
-  //   this.classIdx = Number( this.$route.params.classId );
-  //   this.getClassInfo();
-  // }
 
   /**
    * 비공개 클래스는 첫번째 메뉴만 활성화
@@ -166,12 +159,12 @@ export default class EnrollClass extends Vue {
         this.isError = true;
         this.msg = '이미 사용중인 닉네임입니다.';
       }).catch((error) => { // 검색 결과가 없을 경우 404 error 발생하므로 예외처리
-      console.log(error);
-      this.isError = false;
-      this.isApproval = true;
-      this.msg = '사용할 수 있는 닉네임입니다.';
-      this.isDisabled = false;
-    });
+          console.log(error);
+          this.isError = false;
+          this.isApproval = true;
+          this.msg = '사용할 수 있는 닉네임입니다.';
+          this.isDisabled = false;
+      });
   }
 
   /**
@@ -182,11 +175,17 @@ export default class EnrollClass extends Vue {
     this.enrollMemberInfo = {
       user_id: this.userInfo.id,
       nickname: this.inputNickname,
-      qna_list: this.qnaList,
     };
-    ClassMemberService.setClassMember(this.classIdx as number, this.enrollMemberInfo)
+    ClassMemberService.setClassMember(Number(this.classIdx), this.enrollMemberInfo)
       .then((result) => {
         console.log(result);
+        for (const item of this.qnaList) {
+          ClassMemberService.setClassMemberAnswer(Number(this.classIdx),
+            result.member_info.id, item)
+              .then((msg) => {
+                console.log(`${item} 질문답변 추가 ${msg}`);
+            });
+        }
       });
 
     this.isClassEnrollModal = false;

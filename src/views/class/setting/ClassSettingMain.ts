@@ -22,7 +22,7 @@ interface ISettingMenu {
     }
 })
 export default class ClassSettingMain extends Vue{
-    private classMemberInfo: IClassMemberInfo[] = [];
+    private classMemberInfo!: IClassMemberInfo;
     private classInfo!: IClassInfo;
 
     @MyClass.Getter
@@ -440,7 +440,10 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private gotoLink(key: string): void {
-        console.log('key=', key, 'classID=', this.classID);
+        if ((this.myClassInfo.me.level!==1) && (key==='classAdminDelegate')) {
+            alert('운영자만 접근 가능한 메뉴입니다.');
+            return;
+        }
         this.$router.push(`/class/${this.classID}/setting/${key}`)
           .then(() => {
               console.log(`${key}로 이동`);
