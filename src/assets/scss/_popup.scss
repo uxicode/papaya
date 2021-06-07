@@ -819,7 +819,7 @@ $popupDepth: 10;
 .comment-btm {
   padding:11px 20px 11px 26px;
   border-top:1px solid #f4f5f6;
-
+  &.hide {display: none;} // 20210607 ksj - 대댓글
   .form-control {
     padding:8px 20px;
     margin:0 16px 0 6px;

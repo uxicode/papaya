@@ -46,6 +46,9 @@ export default class NotifyDetailPopup extends Vue {
     private ADD_COMMENT_ACTION!: (payload: {parent_id: number, parent_type: number, member_id: number, comment: string}) => Promise<any>;
 
     @Post.Action
+    private ADD_REPLY_ACTION!: (payload: {comment_id: number, member_id: number, comment: string}) => Promise<any>;
+
+    @Post.Action
     private GET_COMMENTS_ACTION!: (postId: number) => Promise<any>;
 
     @MyClass.Getter
@@ -57,6 +60,9 @@ export default class NotifyDetailPopup extends Vue {
     private isPhotoViewer: boolean = false;
 
     private comment: string = '';
+
+    private isReply: boolean = false;
+    private reply: string = '';
 
     get commentItemsModel() {
         return this.commentItems;
@@ -99,8 +105,8 @@ export default class NotifyDetailPopup extends Vue {
             parent_type: this.postDetailModel.post_type,
             member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
             comment: this.comment})
-            .then((msg) => {
-                console.log(msg);
+            .then(() => {
+                console.log(`member_id: ${this.myClassHomeModel.me?.id} 댓글 추가 완료`);
             });
         await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
             .then(() => {
@@ -108,4 +114,29 @@ export default class NotifyDetailPopup extends Vue {
             });
         this.comment = '';
     }
+
+    private replyInputToggle(idx: number) {
+        this.reply = '';
+        const replyInput = document.querySelectorAll('.comment-btm.reply');
+        replyInput.forEach((item, index) =>
+            (idx!==index) ? item.classList.add('hide') : item.classList.toggle('hide'));
+    }
+
+    private async addReply(id: number) {
+        if (this.reply !== '') {
+            await this.ADD_REPLY_ACTION({
+                comment_id: id,
+                member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
+                comment: this.reply
+            }).then(() => {
+                console.log(`member_id: ${this.myClassHomeModel.me?.id} 대댓글 ${id} 추가 완료`);
+            });
+            await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
+                .then(() => {
+                    console.log('댓글 갱신');
+                });
+        }
+        this.reply = '';
+    }
+
 }
