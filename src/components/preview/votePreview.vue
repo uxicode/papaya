@@ -1,5 +1,5 @@
 <template>
-  <div class="form-add-list" v-if="voteItems.vote_choice_list.length>1">
+  <div class="form-add-list" v-if="fileItems!==null">
     <div class="add-item">
       <div class="add-item-top">
         <p class="add-item-tit">투표</p>
@@ -11,11 +11,11 @@
 
       <div class="add-item-cnt">
         <div class="add-vote">
-          <p class="add-vote-tit">{{ voteItems.title }}</p>
+          <p class="add-vote-tit">{{ fileItems[title] }}</p>
           <ul class="add-vote-type clearfix">
-            <li>{{ (voteItems.multi_choice)? '복수선택' : '단일선택'}}</li>
-            <li>{{ (voteItems.anonymous_mode)? '익명투표' : '공개투표' }}</li>
-            <li> {{ ( voteItems.finishAt)? voteItems.finishAt+' 마감': '종료일자없음'}} </li>
+            <li>{{ (fileItems[choice]) ? '복수선택' : '단일선택' }}</li>
+            <li>{{ (fileItems[mode]) ? '익명투표' : '공개투표' }}</li>
+            <li>{{ (fileItems[finishAt]) ? fileItems[finishAt] + ' 마감' : '종료일자없음' }}</li>
           </ul>
         </div>
       </div>
@@ -30,7 +30,19 @@ import {Vue, Component, Prop, Emit} from 'vue-property-decorator';
 export default class VotePreview extends Vue{
 
   @Prop(Object)
-  private voteItems!: string[];
+  private fileItems!: string[];
+
+  @Prop(String)
+  private finishAt!: string; //finishAt
+
+  @Prop(String)
+  private title!: string; //title
+
+  @Prop(String)
+  private choice!: string;  //multi_choice
+
+  @Prop(String)
+  private mode!: string;  //anonymous_mode
 
   @Emit()
   private remove(): void{

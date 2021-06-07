@@ -46,11 +46,11 @@ interface IPostModel{
   }>;
   user_member_id: number;
   vote: {
-    anonymous_mode: boolean, // 익명 모드
+    anonymous_mode: boolean | number, // 익명 모드
     createdAt: Date | string, //"2020-03-19 10:45:40"
     finishAt: Date | string,
     id: number,
-    multi_choice: boolean,
+    multi_choice: boolean | number,
     open_progress_level: number,
     open_result_level: number,
     parent_id: number,
@@ -138,8 +138,8 @@ interface IVoteModel{
     parent_id: number;
     type: number | string;
     title: string;
-    multi_choice: number;  //복수선택
-    anonymous_mode: number;   //익명
+    multi_choice: number | boolean;  //복수선택
+    anonymous_mode: number | boolean;   //익명
     open_progress_level: number;
     open_result_level: number;  //투명현황공개 0-전체, 1-운영자/스텝, 2-운영자
     finishAt?: Date | string | null;

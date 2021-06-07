@@ -13,8 +13,8 @@
           <li>{{ (items[finishAt]) ? items[finishAt] + ' 마감' : '종료일자없음' }}</li>
         </ul>
       </div>
-      <div class="vote-checkbox" v-if="choicesList.length>0">
-        <div class="vote-select" v-for="(item, index) in choicesList" :key="`choiceItem-${index}`">
+      <div class="vote-checkbox" v-if="items[choicesList]!==null">
+        <div class="vote-select" v-for="(item, index) in items[choicesList]" :key="`choiceItem-${index}`">
           <!--<div class="btn-radio">
             <input type="radio" name="email" id="radio1">
             <label for="radio1">경주<br><span><em class="vote-current">0</em>명</span></label>
@@ -40,7 +40,7 @@ import RadioButton from '@/components/radio/RadioButton.vue';
     RadioButton
   }
 })
-export default class DetailInPreview extends Vue{
+export default class DetailInVotePreview extends Vue{
 
   @Prop(Object)
   private items!: any;
@@ -58,17 +58,8 @@ export default class DetailInPreview extends Vue{
     }
   ]
   */
-  @Prop(Array)
-  private choicesList!: Array<{
-    createdAt: string,
-    id: number,
-    image_url: string,
-    index: number,
-    text: string,
-    updatedAt: string,
-    user_choices: [],
-    vote_id: number
-  }>;
+  @Prop(String)
+  private choicesList!: string;
 
   @Prop(String)
   private finishAt!: string; //finishAt
