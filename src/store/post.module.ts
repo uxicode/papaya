@@ -15,10 +15,12 @@ import {
   POST_TYPE_CHANGE_ACTION,
   GET_POST_DETAIL_ACTION,
   GET_COMMENTS_ACTION,
+  ADD_COMMENT_ACTION,
+  ADD_REPLY_ACTION,
   SELECT_VOTE_ACTION,
   DELETE_POST_FILE
 } from '@/store/action-class-types';
-import {IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
+import {ICommentModel, IPostInLinkModel, IPostModel, IReplyModel, IVoteModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
 import {getAllPromise} from '@/views/model/types';
 
@@ -97,7 +99,7 @@ export default class PostModule extends VuexModule {
       link_items: []
     },
   };
-  private commentData: any[] = [];
+  private commentData: ICommentModel[] = [];
   private replyData: any[]=[];
 
 
@@ -122,11 +124,11 @@ export default class PostModule extends VuexModule {
     return this.postDetailData;
   }
 
-  get commentItems(): any[] {
+  get commentItems(): ICommentModel[] {
     return this.commentData;
   }
 
-  get replyItems(): any[] {
+  get replyItems(): IReplyModel[] {
     return this.replyData;
   }
 
@@ -336,6 +338,23 @@ export default class PostModule extends VuexModule {
             this.context.commit(SET_REPLY, replyData);
           });
       });
+  }
+
+  @Action
+  public [ADD_COMMENT_ACTION](payload: {parent_id: number, parent_type: number, member_id: number, comment: string}): Promise<any> {
+    return PostService.setAddComment(payload)
+      .then((data) => {
+        // console.log(data.comment.member_id);
+        return Promise.resolve(this.commentData);
+      });
+  }
+  
+  @Action
+  public [ADD_REPLY_ACTION](payload: {comment_id: number, member_id: number, comment: string}): Promise<any> {
+    return PostService.setAddReply(payload)
+        .then(() => {
+          return Promise.resolve(this.replyData);
+        });
   }
 
   /**

@@ -104,12 +104,12 @@
                             <div class="comment-cnt" >
                                 <div v-for="(item, idx ) in commentItemsModel" class="comment pdt-0" :key="`comment-${idx}`">
                                     <div class="main-comment">
-                                        <p class="comment-writer">{{ item.owner.nickname }} <span class="wr-time">{{ updatedDiffDate(item.createdAt) }}</span></p>
+                                        <p class="comment-writer">{{ item.owner ? item.owner.nickname : '주인없음' }} <span class="wr-time">{{ updatedDiffDate(item.createdAt) }}</span></p>
                                         <p class="comment-txt">{{ item.comment }}</p>
 
                                         <div class="reply-state">
-                                            <a href="" class="txt-btn">답글 {{ replyItems.length }}</a>
-                                            <a href="" class="txt-btn">답글달기</a>
+                                            <a href="" class="txt-btn" @click.prevent>답글 {{ replyItems.length }}</a>
+                                            <a href="" class="txt-btn" @click.prevent>답글달기</a>
                                         </div>
                                     </div>
 
@@ -129,8 +129,8 @@
                     <div slot="footer">
                         <div class="comment-btm">
                             <button type="button" class="btn only-ico-btn"><img :src="require('@/assets/images/image.svg')" alt=""></button>
-                            <input type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;">
-                            <a href="" class="txt-btn disabled">등록</a>
+                            <input v-model="comment" type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;">
+                            <a href="" class="txt-btn disabled" @click.prevent="addComment">등록</a>
                         </div>
                     </div>
                 </div>

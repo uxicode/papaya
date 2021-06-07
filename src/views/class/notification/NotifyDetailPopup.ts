@@ -1,7 +1,7 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
-import {IAttachFileModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
+import {IAttachFileModel, ICommentModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
 import {Utils} from '@/utils/utils';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -37,10 +37,16 @@ export default class NotifyDetailPopup extends Vue {
     private postDetailItem!: IPostModel & IPostInLinkModel;
 
     @Post.Getter
-    private commentItems!: any[];
+    private commentItems!: ICommentModel[];
 
     @Post.Getter
     private replyItems!: any[];
+
+    @Post.Action
+    private ADD_COMMENT_ACTION!: (payload: {parent_id: number, parent_type: number, member_id: number, comment: string}) => Promise<any>;
+
+    @Post.Action
+    private GET_COMMENTS_ACTION!: (postId: number) => Promise<any>;
 
     @MyClass.Getter
     private classID!: string | number;
@@ -49,6 +55,8 @@ export default class NotifyDetailPopup extends Vue {
     private myClassHomeModel!: IClassInfo;
 
     private isPhotoViewer: boolean = false;
+
+    private comment: string = '';
 
     get commentItemsModel() {
         return this.commentItems;
@@ -85,4 +93,19 @@ export default class NotifyDetailPopup extends Vue {
         this.isPhotoViewer = value;
     }
 
+    private async addComment() {
+        await this.ADD_COMMENT_ACTION({
+            parent_id: this.postDetailModel.id,
+            parent_type: this.postDetailModel.post_type,
+            member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
+            comment: this.comment})
+            .then((msg) => {
+                console.log(msg);
+            });
+        await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
+            .then(() => {
+                console.log('댓글 갱신');
+            });
+        this.comment = '';
+    }
 }

@@ -14,5 +14,7 @@ export const DELETE_POST_ACTION: string = 'DELETE_POST_ACTION';
 export const POST_TYPE_CHANGE_ACTION: string = 'POST_TYPE_CHANGE_ACTION';
 export const GET_POST_DETAIL_ACTION: string = 'GET_POST_DETAIL_ACTION';
 export const GET_COMMENTS_ACTION: string = 'GET_COMMENTS_ACTION';
+export const ADD_COMMENT_ACTION: string = 'ADD_COMMENT_ACTION';
+export const ADD_REPLY_ACTION: string = 'ADD_REPLY_ACTION';
 export const SELECT_VOTE_ACTION: string = 'SELECT_VOTE_ACTION';
 export const DELETE_POST_FILE: string = 'DELETE_POST_FILE';

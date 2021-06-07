@@ -38,6 +38,23 @@ export class PostService{
     return request('get', `comment-reply/on/${commentId}`);
   }
 
+  /**
+   * 댓글 생성
+   * parent_id: postId , parent_type: postType
+   * @param payload
+   */
+  public static setAddComment(payload: {parent_id: number, parent_type: number, member_id: number, comment: string}) {
+    return request('post', '/comment', payload);
+  }
+
+  /**
+   * 대댓글 생성
+   * @param payload
+   */
+  public static setAddReply(payload: {comment_id: number, member_id: number, comment: string}) {
+    return request('post', '/comment-reply', payload);
+  }
+
 
   /**
    * 클래스 예약된 알림(게시글) 전체 조회
