@@ -20,7 +20,8 @@ import {
   SELECT_VOTE_ACTION,
   DELETE_POST_FILE
 } from '@/store/action-class-types';
-import {ICommentModel, IPostInLinkModel, IPostModel, IReplyModel, IVoteModel} from '@/views/model/post.model';
+import {IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
+import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
 import {PostService} from '@/api/service/PostService';
 import {getAllPromise} from '@/views/model/types';
 
@@ -340,6 +341,11 @@ export default class PostModule extends VuexModule {
       });
   }
 
+  /**
+   * 댓글 추가
+   * parent_type: 댓글이 달린 원글 타입. 0 - 알림글 , 1 - 일정글
+   * @param payload
+   */
   @Action
   public [ADD_COMMENT_ACTION](payload: {parent_id: number, parent_type: number, member_id: number, comment: string}): Promise<any> {
     return PostService.setAddComment(payload)

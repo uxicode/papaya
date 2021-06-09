@@ -1,7 +1,8 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
-import {IAttachFileModel, ICommentModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
+import {IAttachFileModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
+import {ICommentModel} from '@/views/model/comment.model';
 import {Utils} from '@/utils/utils';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -60,8 +61,6 @@ export default class NotifyDetailPopup extends Vue {
     private isPhotoViewer: boolean = false;
 
     private comment: string = '';
-
-    private isReply: boolean = false;
     private reply: string = '';
 
     get commentItemsModel() {
@@ -100,19 +99,21 @@ export default class NotifyDetailPopup extends Vue {
     }
 
     private async addComment() {
-        await this.ADD_COMMENT_ACTION({
-            parent_id: this.postDetailModel.id,
-            parent_type: this.postDetailModel.post_type,
-            member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
-            comment: this.comment})
-            .then(() => {
-                console.log(`member_id: ${this.myClassHomeModel.me?.id} 댓글 추가 완료`);
-            });
-        await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
-            .then(() => {
-                console.log('댓글 갱신');
-            });
-        this.comment = '';
+        if (this.comment !== '') {
+            await this.ADD_COMMENT_ACTION({
+                parent_id: this.postDetailModel.id,
+                parent_type: 0,
+                member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
+                comment: this.comment})
+                .then(() => {
+                    console.log(`member_id: ${this.myClassHomeModel.me?.id} 댓글 추가 완료`);
+                });
+            await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
+                .then(() => {
+                    console.log('댓글 갱신');
+                });
+            this.comment = '';
+        }
     }
 
     private replyInputToggle(idx: number) {

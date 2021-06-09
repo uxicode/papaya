@@ -10,17 +10,17 @@ interface IScheduleTotal{
   board_id: null | number;
   class_id: number;
   count: number;
-  createdAt: Date;
+  createdAt: Date | string;
   deletedYN: boolean;
-  endAt: Date;
-  expiredAt: Date;
+  endAt: Date | string;
+  expiredAt: Date | string;
   id: number;
   owner: {
     class_id: number,
-    createdAt: Date,
+    createdAt: Date | string;
     id: number,
     is_bookmarked: number,
-    joinedAt: Date,
+    joinedAt: Date | string;
     level: number,
     nickname: string,
     onoff_comment_noti: number,
@@ -34,17 +34,17 @@ interface IScheduleTotal{
     schedule_color: number,
     schedule_noti_intime: number,
     status: number,
-    updatedAt: Date,
+    updatedAt: Date | string;
     user_id: number,
     visited: number
   };
   param1: number;
   post_type: number;
-  startAt: Date;
+  startAt: Date | string;
   text: string;
   title: string;
   type: number;
-  updatedAt: Date;
+  updatedAt: Date | string;
   user_id: number;
   user_keep_class_schedules: [];
   user_member_id: number;
