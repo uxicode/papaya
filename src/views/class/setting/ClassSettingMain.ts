@@ -35,10 +35,10 @@ export default class ClassSettingMain extends Vue{
     private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
 
     @MyClass.Action
-    private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo[]>;
+    private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo>;
 
     @MyClass.Action
-    private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<IClassMemberInfo[]>;
+    private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<IClassMemberInfo>;
 
     @MyClass.Action
     private MODIFY_CLASS_QUESTION!: (payload: {classId: number, questionId: number}, text: {new_question: string}) => Promise<IQuestionInfo[]>;
@@ -121,6 +121,7 @@ export default class ClassSettingMain extends Vue{
     private guideTxt: string = '';
 
     /* 가입 질문 설정 관련 */
+    private isQuestionShow: boolean = true;
     private maxQuestion: number = 3; // 최대 질문 갯수
     private questionList: IQuestionInfo[] = [];
     private tempData: string = '';
@@ -160,7 +161,7 @@ export default class ClassSettingMain extends Vue{
               this.onOffPostNoti = data.member_info.onoff_post_noti;
               this.onOffCommentNoti = data.member_info.onoff_comment_noti;
               this.onOffScheduleNoti = data.member_info.onoff_schedule_noti;
-              for (let i = 0; i < this.notiStateList.length; i++) {
+              for (let i = 0; i < 3; i++) {
                   this.notiOnOffTxt(i);
               }
 
@@ -176,6 +177,7 @@ export default class ClassSettingMain extends Vue{
         MyClassService.getClassInfoById(this.classID)
           .then((data) => {
               this.classInfo = data.classinfo;
+              this.isQuestionShow = data.classinfo.question_showYN;
               console.log(this.classInfo);
           });
     }
@@ -256,6 +258,8 @@ export default class ClassSettingMain extends Vue{
                 break;
             case 2:
                 value = this.onOffScheduleNoti;
+                break;
+            default:
                 break;
         }
         // 새 알림, 새 댓글
@@ -377,6 +381,10 @@ export default class ClassSettingMain extends Vue{
      * @param question
      */
     private setJoinQuestion(question: string): void {
+        MyClassService.setClassInfoById(this.classID, {question_showYN: this.isQuestionShow})
+          .then((msg) => {
+            console.log(msg);
+          });
         if (this.tempData !== '') {
             MyClassService.setClassQuestion(this.classID, this.questionId, {new_question: question})
                 .then(() => {

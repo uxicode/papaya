@@ -157,13 +157,13 @@
                         <p>가입 질문 설정</p>
                         <div class="qna-setting-btn">
                             <div class="form-switcher">
-                                <input type="checkbox" id="toggle1" checked>
+                                <input v-model="isQuestionShow" type="checkbox" id="toggle1">
                                 <label for="toggle1"></label>
                             </div>
                         </div>
                     </div>
 
-                    <div class="qna-setting-list">
+                    <div class="qna-setting-list" :class="{'disabled': isQuestionShow===false}">
                         <p>질문 목록</p>
                         <ul class="qna-list">
                             <li v-for="(item, idx) in questionList"

@@ -51,6 +51,7 @@ export default class EnrollClass extends Vue {
   private answerList!: Array<Pick<IQnaInfo, 'answer'>>;
   private qnaList: any[] = [];
   private enrollMemberInfo!: IEnrollMemberInfo;
+  private memberId: number = 0;
 
   private sideMenuData: ISideMenu[] = [
     {id: 0, title: '클래스 홈', linkKey: ''},
@@ -171,22 +172,25 @@ export default class EnrollClass extends Vue {
    * 닉네임과 가입 질문 답변 정보를 포함하여 가입 신청
    * @private
    */
-  private enrollClassSubmit(): void {
+  private async enrollClassSubmit() {
     this.enrollMemberInfo = {
       user_id: this.userInfo.id,
       nickname: this.inputNickname,
     };
-    ClassMemberService.setClassMember(Number(this.classIdx), this.enrollMemberInfo)
+    await ClassMemberService.setClassMember(Number(this.classIdx), this.enrollMemberInfo)
       .then((result) => {
         console.log(result);
-        for (const item of this.qnaList) {
-          ClassMemberService.setClassMemberAnswer(Number(this.classIdx),
-            result.member_info.id, item)
-              .then((msg) => {
-                console.log(`${item} 질문답변 추가 ${msg}`);
-            });
-        }
+        this.memberId = result.member_info.id;
       });
+
+    if (this.qnaList.length>0) {
+      for (let i=0; i<this.qnaList.length; i++) {
+        await ClassMemberService.setClassMemberAnswer(Number(this.classIdx), this.memberId, this.qnaList[i])
+            .then((msg) => {
+              console.log(`${i}번째 질문답변 추가 ${msg}`);
+            });
+      }
+    }
 
     this.isClassEnrollModal = false;
     this.isClassEnrollComplete = true;

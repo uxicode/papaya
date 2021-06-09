@@ -9,7 +9,7 @@ class ClassMemberService {
    * @param memberId
    * @param payload
    */
-  public setClassMemberAnswer(classId: string | number, memberId: number, payload: {question: string, answer: string}): Promise<any> {
+  public setClassMemberAnswer(classId: number, memberId: number, payload: {question: string, answer: string}): Promise<any> {
     return request('post', `${CLASS_BASE_URL}/${classId}/members/${memberId}/answer`, payload);
   }
   /**
@@ -25,7 +25,7 @@ class ClassMemberService {
    * 클래스 맴버 생성 - 클래스 가입 시키기
    * @param classId
    */
-  public setClassMember(classId: string | number, data: any): Promise<any> {
+  public setClassMember(classId: number, data: any): Promise<any> {
     /* "user_id": 250, - user_id 넘버 값
        "nickname": "test-for클래스1",
        "open_level_id": 1,
