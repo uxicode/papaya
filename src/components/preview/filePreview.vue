@@ -13,7 +13,7 @@
         <div class="add-file">
           <ul class="add-file-list" style="padding:0;">
             <li v-for="(item, index) in fileItems" :key="`file-${index}`">
-              <p>{{ item.name }}</p>
+              <p>{{ (item[name])? item[name]: item.originalname }}</p>
               <a href="#" class="add-file-delete" @click.prevent.stop="removeFile( index )"><img :src="require('@/assets/images/delete.svg')" alt="" @load="loadedFile"></a>
             </li>
           </ul>
@@ -32,6 +32,9 @@ export default class FilePreview extends Vue{
 
   @Prop(Array)
   private fileItems!: string[];
+
+  @Prop(String)
+  private name!: string;
 
   @Emit()
   private removeFile( idx: number ) {

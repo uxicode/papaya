@@ -8,8 +8,9 @@ import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
 import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import ListInVotePreview from '@/components/preview/ListInVotePreview.vue';
 import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
-import WithRender from './NotificationListView.html';
 import NotifyDetailPopup from '@/views/class/notification/NotifyDetailPopup';
+import EditNotificationPopup from '@/views/class/notification/EditNotificationPopup';
+import WithRender from './NotificationListView.html';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -24,6 +25,7 @@ const Post = namespace('Post');
     ListInVotePreview,
     ListInLinkPreview,
     NotifyDetailPopup,
+    EditNotificationPopup,
   }
 })
 export default class NotificationListView extends Vue {
@@ -50,6 +52,7 @@ export default class NotificationListView extends Vue {
   private GET_COMMENTS_ACTION!: ( postId: number)=>Promise<any>;
 
   private isDetailPopupOpen: boolean=false;
+  private isEditPopupOpen: boolean=false;
   // private isLoading: boolean=false;
   private detailPostId: number=-1; // 동적으로 변경 안되는 상태
 
@@ -151,6 +154,20 @@ export default class NotificationListView extends Vue {
 
   private onDetailPostPopupStatus(value: boolean) {
     this.isDetailPopupOpen=value;
+  }
+
+
+  private async onEditPost(id: number) {
+    this.detailPostId = id; // update postId
+    await this.GET_POST_DETAIL_ACTION({classId: Number(this.classID), postId: this.detailPostId});
+    await this.GET_COMMENTS_ACTION(this.detailPostId)
+      .then((data)=>{
+        this.isEditPopupOpen=true;
+      });
+  }
+
+  private onEditClose(  value: boolean ){
+    this.isEditPopupOpen=value;
   }
 
 

@@ -47,6 +47,7 @@
                 <div slot="body">
                     <!-- body custom coding-->
                     <div class="scroll-body" style="height:70vh;">
+
                         <div class="popup-form">
                             <div class="popup-form-top">
                                 <div class="form-item post-classes selected"> <!-- class 선택 시 form-item에 selected 추가됨 -->
@@ -74,12 +75,12 @@
 
 
                                  <!-- start: 투표가 있는 경우 -->
-                                  <DetailInPreview :items="postDetailModel.vote"
-                                                   :choices-list="postDetailModel.vote.vote_choices"
+                                  <detail-in-vote-preview :items="postDetailModel.vote"
+                                                   choices-list="vote_choices"
                                                    title="title"
                                                    choice="multi_choice"
                                                    finish-at="finishAt"
-                                                   mode="anonymous_mode"></DetailInPreview>
+                                                   mode="anonymous_mode"></detail-in-vote-preview>
                                  <!-- end: 투표가 있는 경우 -->
 
                                 <!-- start: 링크가 있는 경우-->

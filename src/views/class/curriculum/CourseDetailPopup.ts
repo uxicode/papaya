@@ -36,34 +36,32 @@ export default class CourseDetailPopup extends Vue {
     @MyClass.Getter
     private courseDetailItem!: ICourseData;
 
-    private testData: any[] = [];
+    private testData: any = {};
 
     get curriculumDetailModel(): ICurriculumList{
         return this.curriculumDetailItem;
+    }
+
+    get curriculumDetailArray(): any {
+        return this.curriculumDetailItem.curriculum.course_list;
     }
 
     get courseDetailModel(){
         return this.courseDetailItem;
     }
 
-    private getCourseAttachmentData(){
-        this.curriculumDetailItem.curriculum.course_list = this.testData;
+    private getCourseAttachmentData(courseId: number){
+        const test1 = this.courseDetailItem.course.id;
+        const test2 = this.curriculumDetailArray;
 
-        this.$nextTick(()=>{
-            this.testData.filter(()=>{
+        test2.find((item: any) => item.id === test1);
 
-            })
-        });
+        console.log(test1, test2);
     }
 
-    private getFileDataSort(fileData: IAttachFileModel[] ) {
-        return fileData.filter( (item: IAttachFileModel) => item.contentType !== 'image/png' && item.contentType !== 'image/jpg' && item.contentType !== 'image/jpeg' && item.contentType !== 'image/gif');
-    }
 
     private popupChange( value: boolean ) {
         this.$emit('close', value);
-
-        console.log(this.getCourseAttachmentData);
     }
 
 

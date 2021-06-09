@@ -24,7 +24,7 @@
               </button>
             </template>
             <v-list>
-              <v-list-item @click="">
+              <v-list-item @click="onEditPost( item.id )">
                 <v-list-item-title>알림 수정</v-list-item-title>
               </v-list-item>
               <v-list-item @click="onPostTypeChange( item.id )">
@@ -81,4 +81,6 @@
   <notify-detail-popup
           :is-open="isDetailPopupOpen"
           @change="onDetailPostPopupStatus"></notify-detail-popup>
+
+  <edit-notification-popup :is-open="isEditPopupOpen" @change="onEditClose"></edit-notification-popup>
 </div>

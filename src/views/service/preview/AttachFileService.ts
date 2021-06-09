@@ -10,6 +10,10 @@ class AttachFileService implements IFile{
     return this.attachFileItems;
   }
 
+  public setItems(items: any[]){
+    this.attachFileItems=items;
+  }
+
   public load(files: FileList, selector: string): void {
     //전달되는 파일없을시 여기서 종료.
     if( !files.length ){ return; }
