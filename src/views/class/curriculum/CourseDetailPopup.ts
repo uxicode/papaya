@@ -10,6 +10,7 @@ import FilePreview from '@/components/preview/filePreview.vue';
 import WithRender from './CourseDetailPopup.html';
 import {ICourseData, ICurriculumList, IMyClassList} from '@/views/model/my-class.model';
 import {IAttachFileModel} from '@/views/model/post.model';
+import any = jasmine.any;
 
 const MyClass = namespace('MyClass');
 
@@ -30,35 +31,22 @@ export default class CourseDetailPopup extends Vue {
     @Prop(Boolean)
     private isOpen!: boolean;
 
+    @Prop(Number)
+    private courseId!: number;
+
+    @Prop(Object)
+    private courseDetailItem!: any;
+
     @MyClass.Getter
     private curriculumDetailItem!: ICurriculumList;
-
-    @MyClass.Getter
-    private courseDetailItem!: ICourseData;
-
-    private testData: any = {};
 
     get curriculumDetailModel(): ICurriculumList{
         return this.curriculumDetailItem;
     }
 
-    get curriculumDetailArray(): any {
-        return this.curriculumDetailItem.curriculum.course_list;
-    }
-
     get courseDetailModel(){
         return this.courseDetailItem;
     }
-
-    private getCourseAttachmentData(courseId: number){
-        const test1 = this.courseDetailItem.course.id;
-        const test2 = this.curriculumDetailArray;
-
-        test2.find((item: any) => item.id === test1);
-
-        console.log(test1, test2);
-    }
-
 
     private popupChange( value: boolean ) {
         this.$emit('close', value);

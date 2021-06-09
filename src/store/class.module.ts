@@ -172,15 +172,11 @@ export default class ClassModule extends VuexModule {
     }
 
     get classID(): number {
-        return  this.classIdx;
+        return this.classIdx;
     }
 
     get curriculumDetailItem(): ICurriculumList{
         return this.curriculumDetailData;
-    }
-
-    get courseDetailItem(): ICourseData{
-        return this.courseDetailData;
     }
 
     /**
@@ -373,7 +369,7 @@ export default class ClassModule extends VuexModule {
 
 
     @Action
-    public [GET_CURRICULUM_DETAIL_ACTION](payload: { classId: number, curriculumId: number }): Promise<any>{
+    public [GET_CURRICULUM_DETAIL_ACTION](payload: { classId: number, curriculumId: number}): Promise<any>{
         return MyClassService.getEduCurList(payload.classId, payload.curriculumId )
             .then((data) => {
                 this.context.commit(SET_CURRICULUM_DETAIL, data);

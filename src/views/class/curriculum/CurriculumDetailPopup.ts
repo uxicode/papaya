@@ -40,17 +40,15 @@ export default class CurriculumDetailPopup extends Vue {
     @MyClass.Getter
     private curriculumDetailItem!: ICurriculumList;
 
-    @MyClass.Getter
-    private courseDetailItem!: any;
-
     @MyClass.Action
     private GET_COURSE_DETAIL_ACTION!: ( payload: { classId: number, curriculumId: number, courseId: number }) =>Promise<any>;
 
+    private courseId: number = 0;
 
     private isOpenCourseDetailPopup: boolean = false;
     private detailCurriculumId: number=-1; // 동적으로 변경 안되는 상태
-    private detailCourseId: number=-1;
 
+    private courseDetailItem: any = {};
 
     private isOwner( ownerId: number, userId: number): boolean {
         return (ownerId === userId);
@@ -80,20 +78,27 @@ export default class CurriculumDetailPopup extends Vue {
         return this.curriculumDetailItem;
     }
 
+    get CourseDetailData(): any {
+        return this.curriculumDetailItem.curriculum.course_list;
+    }
+
+
     private onCourseDetailPopupClose(value: boolean ) {
         this.isOpenCourseDetailPopup=value;
     }
 
     private async onDetailCourseOpen(curriculumId: number, courseId: number) {
         this.detailCurriculumId = curriculumId;
-        this.detailCourseId = courseId;
+        this.courseId = courseId;
 
-        await this.GET_COURSE_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.detailCurriculumId, courseId: this.detailCourseId})
+        const targetData = this.CourseDetailData;
+        this.courseDetailItem = targetData.find((item: any) => item.id === this.courseId);
+
+        await this.GET_COURSE_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.detailCurriculumId, courseId: this.courseId})
             .then((data)=>{
                 this.isOpenCourseDetailPopup=true;
             });
     }
-
 }
 
 
