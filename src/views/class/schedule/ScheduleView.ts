@@ -2,21 +2,22 @@ import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {IScheduleTotal, ITimeModel } from '@/views/model/schedule.model';
+import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
 import {CalendarEvent, CalendarEventParsed} from 'vuetify';
 import {Utils} from '@/utils/utils';
 import { RRule } from 'rrule';
-import MyClassService from '@/api/service/MyClassService';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 import Modal from '@/components/modal/modal.vue';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
-import WithRender from './ScheduleView.html';
 import {ScheduleService} from '@/api/service/ScheduleService';
-
+import WithRender from './ScheduleView.html';
 
 const MyClass = namespace('MyClass');
+const Post = namespace('Post');
+const Schedule = namespace('Schedule');
 
 
 @WithRender
@@ -36,6 +37,34 @@ export default class ScheduleView extends Vue{
 
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
+
+    /* 댓글 관련 */
+    @Schedule.Getter
+    private scheduleListItems!: IScheduleTotal[];
+
+    @Schedule.Getter
+    private scheduleDetailItem!: IScheduleTotal;
+
+    @Schedule.Getter
+    private commentItems!: ICommentModel[];
+
+    @Schedule.Getter
+    private replyItems!: IReplyModel[];
+
+    @Schedule.Action
+    private GET_SCHEDULE_LIST_ACTION!: (payload: { classId: number,  paging: {page_no: number, count: number } }) => Promise<any>;
+
+    @Schedule.Action
+    private GET_SCHEDULE_DETAIL_ACTION!: (payload: { classId: number, scheduleId: number }) => Promise<any>;
+
+    @Schedule.Action
+    private GET_COMMENTS_ACTION!: (scheduleId: number) => Promise<any>;
+
+    @Schedule.Action
+    private ADD_COMMENT_ACTION!: (payload: {parent_id: number, parent_type: number, member_id: number, comment: string}) => Promise<any>;
+
+    @Schedule.Action
+    private ADD_REPLY_ACTION!: (payload: {comment_id: number, member_id: number, comment: string}) => Promise<any>;
 
 
     private imgFileURLItems: string[] = [];
@@ -140,6 +169,21 @@ export default class ScheduleView extends Vue{
         startAt:new Date(),  //2019-11-15 10:00:00
         endAt: new Date()
     };
+
+    private comment: string = '';
+    private reply: string = '';
+
+    get scheduleDetailModel() {
+        return this.scheduleDetailItem;
+    }
+
+    get commentItemsModel() {
+        return this.commentItems;
+    }
+
+    get replyItemsModel() {
+        return this.replyItems;
+    }
 
     get imgFileURLItemsModel(): string[] {
         return this.imgFileURLItems;
@@ -284,7 +328,13 @@ export default class ScheduleView extends Vue{
         const open = () => {
             this.selectedEvent = eventObj.event;
             this.selectedElement = eventObj.nativeEvent.target as HTMLElement;
-            setTimeout(() => this.selectedOpen = true, 10);
+            setTimeout(() => {
+                this.selectedOpen = true;
+                this.GET_COMMENTS_ACTION(0)
+                    .then((data) => {
+                        console.log(data);
+                    });
+            }, 10);
         };
 
         if (this.selectedOpen) {
@@ -319,6 +369,7 @@ export default class ScheduleView extends Vue{
                     end: new Date( this.scheduleLists[i].endAt ),
                     repeat: this.scheduleLists[i].count,
                     timed:true,
+                    id: this.scheduleLists[i].id,
                 });
             }
 
@@ -806,5 +857,52 @@ export default class ScheduleView extends Vue{
         document.body.removeChild(dummyLink);
         window.URL.revokeObjectURL(blobURL);
     }
+
+    private updatedDiffDate( dateValue: Date ): string{
+        return Utils.updatedDiffDate(dateValue);
+    }
+
+    private async addComment() {
+        if (this.comment !== '') {
+            await this.ADD_COMMENT_ACTION({
+                parent_id: 0,
+                parent_type: 1,
+                member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
+                comment: this.comment})
+                .then(() => {
+                    console.log(`member_id: ${this.myClassHomeModel.me?.id} 댓글 추가 완료`);
+                });
+            await this.GET_COMMENTS_ACTION(0)
+                .then(() => {
+                    console.log('댓글 갱신');
+                });
+            this.comment = '';
+        }
+    }
+
+    private replyInputToggle(idx: number) {
+        this.reply = '';
+        const replyInput = document.querySelectorAll('.comment-btm.reply');
+        replyInput.forEach((item, index) =>
+            (idx!==index) ? item.classList.add('hide') : item.classList.toggle('hide'));
+    }
+
+    private async addReply(id: number) {
+        if (this.reply !== '') {
+            await this.ADD_REPLY_ACTION({
+                comment_id: id,
+                member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
+                comment: this.reply
+            }).then(() => {
+                console.log(`member_id: ${this.myClassHomeModel.me?.id} 대댓글 ${id} 추가 완료`);
+            });
+            await this.GET_COMMENTS_ACTION(0)
+                .then(() => {
+                    console.log('댓글 갱신');
+                });
+        }
+        this.reply = '';
+    }
+
 }
 
