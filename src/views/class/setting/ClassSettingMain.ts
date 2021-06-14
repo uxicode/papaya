@@ -53,7 +53,7 @@ export default class ClassSettingMain extends Vue{
     private onOffNoti: boolean | number = true;
     private onOffPostNoti: boolean | number = true;
     private onOffCommentNoti: boolean | number = true;
-    private onOffScheduleNoti: number = 0;
+    private scheduleNotiIntime: number = 0;
     private classNotifyList: string[] = ['새 알림', '새 댓글', '일정'];
     private notiStateList: string[] = ['', '', ''];
 
@@ -160,7 +160,7 @@ export default class ClassSettingMain extends Vue{
               this.onOffNoti = data.member_info.onoff_push_noti;
               this.onOffPostNoti = data.member_info.onoff_post_noti;
               this.onOffCommentNoti = data.member_info.onoff_comment_noti;
-              this.onOffScheduleNoti = data.member_info.onoff_schedule_noti;
+              this.scheduleNotiIntime = data.member_info.schedule_noti_intime;
               for (let i = 0; i < 3; i++) {
                   this.notiOnOffTxt(i);
               }
@@ -257,7 +257,7 @@ export default class ClassSettingMain extends Vue{
                 value = this.onOffCommentNoti;
                 break;
             case 2:
-                value = this.onOffScheduleNoti;
+                value = this.scheduleNotiIntime;
                 break;
             default:
                 break;
@@ -307,11 +307,11 @@ export default class ClassSettingMain extends Vue{
                 info = {onoff_comment_noti: value};
                 break;
             case 2:
-                info = {onoff_schedule_noti: value};
+                info = (value!==0) ? {schedule_noti_intime: value, onoff_schedule_noti: 1} :
+                    {schedule_noti_intime: 0, onoff_schedule_noti: 0};
                 break;
             default:
-                info = {};
-                break;
+                return;
         }
         ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, info)
           .then((data) => {

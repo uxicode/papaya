@@ -369,7 +369,7 @@ export default class ScheduleView extends Vue{
                     end: new Date( this.scheduleLists[i].endAt ),
                     repeat: this.scheduleLists[i].count,
                     timed:true,
-                    id: this.scheduleLists[i].id,
+                    id: this.scheduleLists[i].id, // schedule_id (parent_id)
                 });
             }
 
@@ -862,16 +862,20 @@ export default class ScheduleView extends Vue{
         return Utils.updatedDiffDate(dateValue);
     }
 
+    /**
+     * 댓글 등록
+     * @private
+     */
     private async addComment() {
         if (this.comment !== '') {
             await this.ADD_COMMENT_ACTION({
                 parent_id: 0,
                 parent_type: 1,
                 member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
-                comment: this.comment})
-                .then(() => {
-                    console.log(`member_id: ${this.myClassHomeModel.me?.id} 댓글 추가 완료`);
-                });
+                comment: this.comment
+            }).then(() => {
+                console.log(`member_id: ${this.myClassHomeModel.me?.id} 댓글 추가 완료`);
+            });
             await this.GET_COMMENTS_ACTION(0)
                 .then(() => {
                     console.log('댓글 갱신');
@@ -887,6 +891,11 @@ export default class ScheduleView extends Vue{
             (idx!==index) ? item.classList.add('hide') : item.classList.toggle('hide'));
     }
 
+    /**
+     * 대댓글 등록
+     * @param id
+     * @private
+     */
     private async addReply(id: number) {
         if (this.reply !== '') {
             await this.ADD_REPLY_ACTION({
