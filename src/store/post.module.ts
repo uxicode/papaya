@@ -16,6 +16,7 @@ import {
   GET_POST_DETAIL_ACTION,
   GET_COMMENTS_ACTION,
   SELECT_VOTE_ACTION,
+  DELETE_POST_FILE
 } from '@/store/action-class-types';
 import {IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
@@ -265,14 +266,14 @@ export default class PostModule extends VuexModule {
    * @param payload
    */
   @Action
-  public [POST_TYPE_CHANGE_ACTION](payload: { classId: string | number, postId: number }): Promise<any>{
+  public [POST_TYPE_CHANGE_ACTION](payload: { classId: string | number, postId: number } ): Promise<any>{
     const findIdx=this.postListItems.findIndex((item) => item.id === payload.postId);
     const targetItem = this.postListItems[findIdx];
     let { type }=targetItem;
     const { title, text }=targetItem;
     type=( type===0 )? 1 : 0;
-    return PostService.setPostById( payload.classId, payload.postId, {type, title, text} )
-      .then( (data)=>{
+
+    return PostService.setPostById( payload.classId, payload.postId, {type, title, text} ).then( (data)=>{
         this.postListItems.splice(findIdx, 1, {...targetItem, type, title, text});
         return Promise.resolve(data);
       }).catch((error) => {
@@ -338,7 +339,7 @@ export default class PostModule extends VuexModule {
   }
 
   /**
-   * 멤버가 투표 선택~( 현재 선택한 데이터가 어디에도 표시 되지 않고 있음) 
+   * 멤버가 투표 선택~( 현재 선택한 데이터가 어디에도 표시 되지 않고 있음)
    * @param payload
    */
   @Action
@@ -347,6 +348,20 @@ export default class PostModule extends VuexModule {
     return PostService.setUserVoteSelect( payload.voteId, payload.memberId, {vote_choice_ids} )
       .then((data)=>{
         //
+      });
+  }
+
+  @Action
+  public [DELETE_POST_FILE](payload: { classId: string | number, postId: number, ids: number[] }): Promise<any> {
+    const {ids} =payload;
+    return PostService.deletePostFileById(payload.classId, payload.postId, {ids})
+      .then((data) => {
+        const findIdx=this.postListData.findIndex((item) => item.id === payload.postId );
+        const editItem=this.postListData[findIdx];
+        const { attachment } = editItem;
+
+        const removedAttachItems=attachment.filter((item: any) => !ids.includes(item.id) );
+        this.postListData.splice(findIdx, 1, {...editItem, ...removedAttachItems} );
       });
   }
 

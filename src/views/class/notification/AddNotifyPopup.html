@@ -56,12 +56,19 @@
               <!-- end: 첨부 이미지 파일 미리보기 -->
 
               <!-- start: 투표 첨부 미리보기 -->
-              <vote-preview :vote-items="voteItemModel" @remove="voteDataClear" @modify="onModifyVote"></vote-preview>
+              <vote-preview :file-items="voteItemModel"
+                            title="title"
+                            choice="multi_choice"
+                            finish-at="finishAt"
+                            mode="anonymous_mode"
+                            @remove="voteDataClear"
+                            @modify="onModifyVote"></vote-preview>
               <!-- end: 투표 첨부 미리보기 -->
 
               <!-- start: 첨부 파일 리스트 -->
               <file-preview :file-items="attachFileItemsModel"
                             @removeFile="removeAttachFileItem"
+                            name="name"
                             @removeAttachFileAll="removeAllAttachFile"></file-preview>
               <!-- end: 첨부 파일 리스트 -->
 

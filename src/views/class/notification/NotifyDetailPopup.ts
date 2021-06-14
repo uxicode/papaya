@@ -9,7 +9,7 @@ import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
 import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
 import PhotoViewer from '@/views/class/notification/PhotoViewer';
-import DetailInPreview from '@/components/preview/DetailInPreview.vue';
+import DetailInVotePreview from '@/components/preview/DetailInVotePreview.vue';
 import WithRender from './NotifyDetailPopup.html';
 
 const MyClass = namespace('MyClass');
@@ -24,7 +24,7 @@ const Post = namespace('Post');
         ListInFilePreview,
         ListInLinkPreview,
         PhotoViewer,
-        DetailInPreview,
+        DetailInVotePreview,
     }
 })
 export default class NotifyDetailPopup extends Vue {
@@ -32,8 +32,6 @@ export default class NotifyDetailPopup extends Vue {
     @Prop(Boolean)
     private isOpen!: boolean;
 
-    @Prop(Number)
-    private postId!: number;
 
     @Post.Getter
     private postDetailItem!: IPostModel & IPostInLinkModel;
@@ -50,7 +48,6 @@ export default class NotifyDetailPopup extends Vue {
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
-    private isLoaded: boolean=false;
     private isPhotoViewer: boolean = false;
 
     get commentItemsModel() {
@@ -71,7 +68,6 @@ export default class NotifyDetailPopup extends Vue {
 
     private popupChange( value: boolean ) {
         this.$emit('change', value);
-        this.isLoaded=false;
     }
 
     private getImgFileDataSort(fileData: IAttachFileModel[] ) {
