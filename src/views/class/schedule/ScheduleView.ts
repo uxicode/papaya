@@ -330,9 +330,10 @@ export default class ScheduleView extends Vue{
             this.selectedElement = eventObj.nativeEvent.target as HTMLElement;
             setTimeout(() => {
                 this.selectedOpen = true;
-                this.GET_COMMENTS_ACTION(0)
-                    .then((data) => {
-                        console.log(data);
+                // @ts-ignore
+                this.GET_COMMENTS_ACTION(this.selectedEvent.id)
+                    .then(() => {
+                        console.log(this.selectedEvent);
                     });
             }, 10);
         };
@@ -869,14 +870,16 @@ export default class ScheduleView extends Vue{
     private async addComment() {
         if (this.comment !== '') {
             await this.ADD_COMMENT_ACTION({
-                parent_id: 0,
+                // @ts-ignore
+                parent_id: this.selectedEvent.id,
                 parent_type: 1,
                 member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
                 comment: this.comment
             }).then(() => {
                 console.log(`member_id: ${this.myClassHomeModel.me?.id} 댓글 추가 완료`);
             });
-            await this.GET_COMMENTS_ACTION(0)
+            // @ts-ignore
+            await this.GET_COMMENTS_ACTION(this.selectedEvent.id)
                 .then(() => {
                     console.log('댓글 갱신');
                 });
@@ -905,7 +908,8 @@ export default class ScheduleView extends Vue{
             }).then(() => {
                 console.log(`member_id: ${this.myClassHomeModel.me?.id} 대댓글 ${id} 추가 완료`);
             });
-            await this.GET_COMMENTS_ACTION(0)
+            // @ts-ignore
+            await this.GET_COMMENTS_ACTION(this.selectedEvent.id)
                 .then(() => {
                     console.log('댓글 갱신');
                 });

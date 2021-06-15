@@ -288,7 +288,9 @@ export default class ClassSettingMain extends Vue{
                     break;
             }
         }
-        this.notiStateList[idx] = stateTxt;
+        const findIdx = this.notiStateList.findIndex((item: string, index: number) => index===idx);
+        this.notiStateList.splice(findIdx, 1, stateTxt);
+        // this.notiStateList[idx] = stateTxt;
     }
 
     /**
