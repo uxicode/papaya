@@ -47,8 +47,8 @@ export default class EnrollClass extends Vue {
   private showMsg: boolean = false;
   private isError: boolean = false;
   private isApproval: boolean = false;
-  private questionList!: Array<Pick<IQuestionInfo, 'question'>>;
-  private answerList!: Array<Pick<IQnaInfo, 'answer'>>;
+  private questionList!: any[];
+  private answerList!: any[];
   private qnaList: any[] = [];
   private enrollMemberInfo!: IEnrollMemberInfo;
   private memberId: number = 0;
@@ -183,12 +183,13 @@ export default class EnrollClass extends Vue {
         this.memberId = result.member_info.id;
       });
 
-    if (this.qnaList.length>0) {
-      for (let i=0; i<this.qnaList.length; i++) {
-        await ClassMemberService.setClassMemberAnswer(Number(this.classIdx), this.memberId, this.qnaList[i])
-            .then((msg) => {
-              console.log(`${i}번째 질문답변 추가 ${msg}`);
-            });
+    if (this.questionList.length>0) {
+      for (let i=0; i<this.questionList.length; i++) {
+        const qna = {question: this.qnaList[i].question, answer: this.qnaList[i].answer};
+        await ClassMemberService.setClassMemberAnswer(Number(this.classIdx), this.memberId, qna)
+          .then(() => {
+            console.log(`${i}번째 질문답변 추가 ${qna}`);
+          });
       }
     }
 
@@ -196,4 +197,5 @@ export default class EnrollClass extends Vue {
     this.isClassEnrollComplete = true;
     this.isClassEnrollCompleteModal = true;
   }
+
 }
