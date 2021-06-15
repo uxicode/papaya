@@ -184,11 +184,12 @@ export default class ClassProfile extends Vue {
                 info = {open_level_email: level};
                 break;
             default:
-                break;
+                return;
         }
         ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, info)
           .then(() => {
               console.log(`${info} 수정 완료`);
+              this.getClassMemberInfo();
           });
     }
 
@@ -197,7 +198,7 @@ export default class ClassProfile extends Vue {
      * @param level
      * @private
      */
-    private openLevelTxt = (level: number): string => {
+    private openLevelTxt(level: number): string {
         switch (level) {
             case 0:
                 return '비공개';
