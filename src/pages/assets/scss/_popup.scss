@@ -535,12 +535,12 @@ $popupDepth: 10;
   border-bottom:1px solid #f4f5f6;
 }
 
-.main-comment {padding:20px 40px 10px;}
+.main-comment {padding:20px 40px 10px; font-size: 14px;}
 
 .comment-writer {
   position: relative;
   padding-left:20px;
-
+  font-size: 14px;
   &:before {
     content:'';
     display:block;
