@@ -17,22 +17,9 @@
     border-radius: 5px;
     box-shadow: 0 0 10px 0 rgba(15, 15, 21, 0.05);
     background-color: #fff;
-
-    &.pd-desc {
-      padding:0;
-    }
-
-    .login-tit {
-      padding-top:20px;
-      font-size:24px;
-      color:#0f0f15;
-      font-weight:500;
-    }
-
-    .form-input {
-      margin-top:40px;
-    }
-
+    &.pd-desc {padding:0;}
+    .login-tit {padding-top:20px;font-size:24px;color:#0f0f15;font-weight:500;}
+    .form-input {margin-top:40px;}
     .login-helper {
       position:absolute;
       width:100%;
@@ -42,7 +29,6 @@
       text-align:center;
       line-height:1.57;
       color:#57576d;
-
       .find-info {
         margin-bottom:5px;
         a {
@@ -60,15 +46,11 @@
           }
         }
       }
-      .join{
-        .item{display: inline-block;padding: 0 8px;}
-      }
+      .join .item{display: inline-block;padding: 0 8px;}
     }
-
     .form-tab {
       padding-top:40px;
       border-bottom:1px solid #f4f5f6;
-
       .tabs-line {
         width:80%;
         margin:0 auto;
@@ -76,33 +58,21 @@
         .item.active a{ padding:0 6px 11px 6px; }
       }
     }
-
     .find-txt {
       padding:18px 40px;
       color:#57576d;
       border-bottom:1px solid #f4f5f6;
     }
-
     .find-info {
       padding:0 40px;
       margin-top:-1px;
       border-top:1px solid #f4f5f6;
       border-bottom:1px solid #f4f5f6;
-
-      .find-type {
-        padding:20px 0;
-      }
-
-      .find-info-input {
-        display:none;
-        padding:0 0 40px 30px;
-
-        &.active {
-          display:block;
-        }
+      .find-type {padding:20px 0;}
+      .find-info-input {display:none;padding:0 0 40px 30px;
+        &.active {display:block;}
       }
     }
-
     .find-btn {
       position:absolute;
       width:100%;
@@ -121,31 +91,16 @@
       text-align:right;
       font-weight:500;
     }
-
     .find-card {
       height:446px;
       padding:30px 40px;
-
-      .card-tit {
-        font-size:16px;
-        color:#57576d;
-      }
-
-      &.result {
-        background:url(../../assets/images/illust-confirm.png) no-repeat bottom center;
-      }
-      &.send {
-        background:url(../../assets/images/illust-email.png) no-repeat bottom center;
-      }
+      .card-tit {font-size:16px;color:#57576d;}
+      &.result {background:url(../../assets/images/illust-confirm.png) no-repeat bottom center;}
+      &.send {background:url(../../assets/images/illust-email.png) no-repeat bottom center;}
     }
-
     .reset-pw-input {
       padding:18px 40px;
-
-      .reset-txt {
-        color:#57576d;
-        margin-bottom:30px;
-      }
+      .reset-txt {color:#57576d;margin-bottom:30px;}
     }
   }
 }

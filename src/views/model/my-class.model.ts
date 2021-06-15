@@ -573,6 +573,7 @@ interface ICurriculumList {
     message?: string;
 }
 */
+type CourseAttachData = Omit<ICurriculumList, 'course_list' >;
 
 interface ICurriculumList {
     curriculum: {
@@ -602,29 +603,26 @@ interface ICurriculumList {
             level: number;
             status?: number;
         };
-        course_list?: [
-            {
-                startDay: Date | string;
-                createdAt: Date | string;
-                updatedAt: Date | string;
-                id: number;
-                curriculum_id: number;
-                class_id: number;
-                index: number;
-                title: string;
-                contents: string;
-                startTime: Date | string;
-                endTime: Date | string;
-                deletedYN: boolean;
-                attachment?: [];
-            }
-        ]
+        course_list?: Array<{
+            startDay: Date | string;
+            createdAt: Date | string;
+            updatedAt: Date | string;
+            id: number;
+            curriculum_id: number;
+            class_id: number;
+            index: number;
+            title: string;
+            contents: string;
+            startTime: Date | string;
+            endTime: Date | string;
+            deletedYN: boolean;
+            attachment?: [];
+        }>
     };
     message?: string;
 }
 
-
-interface ICourseList {
+interface ICourseData {
     course: {
         startDay: Date | string;
         createdAt: Date | string;
@@ -633,12 +631,11 @@ interface ICourseList {
         curriculum_id: number;
         class_id: number;
         index: number;
-        title: string | undefined;
+        title: string;
         contents: string;
         startTime: Date | string;
         endTime: Date | string;
     };
-    message?: string;
 }
 
 interface IModifyCurriculum {
@@ -686,7 +683,7 @@ export {
     IMakeEducation,
     IEducationList,
     ICurriculumList,
-    ICourseList,
+    ICourseData,
     IModifyCurriculum,
     IClassTag,
     IClassAuth

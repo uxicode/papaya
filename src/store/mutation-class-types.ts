@@ -17,3 +17,6 @@ export const SET_COMMENTS: string = 'SET_COMMENTS';
 export const SET_REPLY: string = 'SET_REPLY';
 export const SET_SCHEDULE_LIST: string = 'SET_SCHEDULE_LIST';
 export const SET_SCHEDULE_DETAIL: string = 'SET_SCHEDULE_DETAIL';
+
+export const SET_CURRICULUM_DETAIL: string = 'SET_CURRICULUM_DETAIL';
+export const SET_COURSE_DETAIL: string = 'SET_COURSE_DETAIL';
