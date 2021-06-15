@@ -5,7 +5,7 @@ import {
   SET_RESERVED_TOTAL,
   SET_POST_DETAIL,
   SET_COMMENTS,
-  SET_REPLY
+  SET_REPLY,
 } from '@/store/mutation-class-types';
 import {
   GET_POST_LIST_ACTION,
@@ -15,10 +15,13 @@ import {
   POST_TYPE_CHANGE_ACTION,
   GET_POST_DETAIL_ACTION,
   GET_COMMENTS_ACTION,
+  ADD_COMMENT_ACTION,
+  ADD_REPLY_ACTION,
   SELECT_VOTE_ACTION,
   DELETE_POST_FILE
 } from '@/store/action-class-types';
 import {IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
+import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
 import {PostService} from '@/api/service/PostService';
 import {getAllPromise} from '@/views/model/types';
 
@@ -97,7 +100,7 @@ export default class PostModule extends VuexModule {
       link_items: []
     },
   };
-  private commentData: any[] = [];
+  private commentData: ICommentModel[] = [];
   private replyData: any[]=[];
 
 
@@ -122,11 +125,11 @@ export default class PostModule extends VuexModule {
     return this.postDetailData;
   }
 
-  get commentItems(): any[] {
+  get commentItems(): ICommentModel[] {
     return this.commentData;
   }
 
-  get replyItems(): any[] {
+  get replyItems(): IReplyModel[] {
     return this.replyData;
   }
 
@@ -182,6 +185,7 @@ export default class PostModule extends VuexModule {
   public [SET_REPLY](data: any){
     this.replyData=data;
   }
+
 
   /**
    * 알림글 리스트 조회
@@ -325,17 +329,39 @@ export default class PostModule extends VuexModule {
 
         //대댓글 정보 가져오기 - commentItems 에 맞는 대댓정보를 가져오기 위해 2차 반복문을 실행.
         const replyIdPromiseItems=this.commentData.map((item: any)=>{
+          console.log(item.id);
           return PostService.getReplysByCommentId( item.id );
         });
 
         // console.log(replyIdItems);
         getAllPromise( replyIdPromiseItems )
           .then(( replyData: any[] )=>{
-            // console.log(replyData);
+            console.log(replyData);
             // this.replyData = replyData;
             this.context.commit(SET_REPLY, replyData);
           });
       });
+  }
+
+  /**
+   * 댓글 추가
+   * parent_type: 댓글이 달린 원글 타입. 0 - 알림글 , 1 - 일정글
+   * @param payload
+   */
+  @Action
+  public [ADD_COMMENT_ACTION](payload: {parent_id: number, parent_type: number, member_id: number, comment: string}): Promise<any> {
+    return PostService.setAddComment(payload)
+      .then((data) => {
+        return Promise.resolve(this.commentData);
+      });
+  }
+
+  @Action
+  public [ADD_REPLY_ACTION](payload: {comment_id: number, member_id: number, comment: string}): Promise<any> {
+    return PostService.setAddReply(payload)
+        .then((data) => {
+          return Promise.resolve(this.replyData);
+        });
   }
 
   /**

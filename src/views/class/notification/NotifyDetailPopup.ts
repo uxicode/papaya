@@ -2,6 +2,7 @@ import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {IAttachFileModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
+import {ICommentModel} from '@/views/model/comment.model';
 import {Utils} from '@/utils/utils';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -37,10 +38,19 @@ export default class NotifyDetailPopup extends Vue {
     private postDetailItem!: IPostModel & IPostInLinkModel;
 
     @Post.Getter
-    private commentItems!: any[];
+    private commentItems!: ICommentModel[];
 
     @Post.Getter
     private replyItems!: any[];
+
+    @Post.Action
+    private ADD_COMMENT_ACTION!: (payload: {parent_id: number, parent_type: number, member_id: number, comment: string}) => Promise<any>;
+
+    @Post.Action
+    private ADD_REPLY_ACTION!: (payload: {comment_id: number, member_id: number, comment: string}) => Promise<any>;
+
+    @Post.Action
+    private GET_COMMENTS_ACTION!: (postId: number) => Promise<any>;
 
     @MyClass.Getter
     private classID!: string | number;
@@ -49,6 +59,9 @@ export default class NotifyDetailPopup extends Vue {
     private myClassHomeModel!: IClassInfo;
 
     private isPhotoViewer: boolean = false;
+
+    private comment: string = '';
+    private reply: string = '';
 
     get commentItemsModel() {
         return this.commentItems;
@@ -83,6 +96,51 @@ export default class NotifyDetailPopup extends Vue {
 
     private onPhotoViewerStatus(value: boolean) {
         this.isPhotoViewer = value;
+    }
+
+    private async addComment() {
+        if (this.comment !== '') {
+            await this.ADD_COMMENT_ACTION({
+                parent_id: this.postDetailModel.id,
+                parent_type: 0,
+                member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
+                comment: this.comment})
+                .then(() => {
+                    console.log(`member_id: ${this.myClassHomeModel.me?.id} 댓글 추가 완료`);
+                });
+            await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
+                .then(() => {
+                    // console.log('댓글 갱신');
+                    this.comment = '';
+                });
+
+        }
+    }
+
+    private replyInputToggle(idx: number) {
+        this.reply = '';
+        const replyInput = document.querySelectorAll('.comment-btm.reply');
+        replyInput.forEach((item, index) =>
+            (idx!==index) ? item.classList.add('hide') : item.classList.toggle('hide'));
+    }
+
+    private async addReply(id: number) {
+        if (this.reply !== '') {
+            await this.ADD_REPLY_ACTION({
+                comment_id: id,
+                member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
+                comment: this.reply
+            });
+            /*.then(() => {
+                console.log(`member_id: ${this.myClassHomeModel.me?.id} 대댓글 ${id} 추가 완료`);
+            });*/
+            await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
+                .then(() => {
+                    // console.log('댓글 갱신');
+                    this.reply = '';
+                });
+        }
+        // this.reply = '';
     }
 
 }

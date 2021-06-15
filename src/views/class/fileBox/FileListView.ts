@@ -77,7 +77,10 @@ export default class FileBox extends Vue {
           this.allData = [...postData, ...scheduleData, ...curriculumData];
           console.log(this.allData);
 
-          this.totalFileSize = this.allData.map((item) => item.size).reduce((acc, cur) => acc + cur);
+          if (this.allData.length > 0) {
+            this.totalFileSize = this.allData.map((item) => item.size).reduce((acc, cur) => acc + cur);
+          }
+
         });
   }
 

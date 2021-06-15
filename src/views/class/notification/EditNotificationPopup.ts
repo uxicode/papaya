@@ -24,6 +24,7 @@ import ImagePreview from '@/components/preview/imagePreview.vue';
 import LinkPreview from '@/components/preview/linkPreview.vue';
 import VotePreview from '@/components/preview/votePreview.vue';
 import AlarmPreview from '@/components/preview/alarmPreview.vue';
+import EditVotePopup from '@/views/class/notification/EditVotePopup';
 import WithRender from './EditNotificationPopup.html';
 
 const MyClass = namespace('MyClass');
@@ -42,7 +43,8 @@ const Post = namespace('Post');
     AddReservationPopup,
     LinkPreview,
     VotePreview,
-    AlarmPreview
+    AlarmPreview,
+    EditVotePopup
   }
 })
 export default class EditNotificationPopup extends Vue{
@@ -76,7 +78,7 @@ export default class EditNotificationPopup extends Vue{
 
 
 
-  private isOpenAddVotePopup: boolean=false;
+  private isOpenEditVotePopup: boolean=false;
   private isOpenAddLinkPopup: boolean=false;
   private isOpenAddReservation: boolean=false;
   private alarmData: { alarmAt: string }={alarmAt: ''};
@@ -450,15 +452,15 @@ export default class EditNotificationPopup extends Vue{
 
   //start : vote 이벤트 핸들러 ================================================
   private addVotePopupOpen() {
-    this.isOpenAddVotePopup=true;
-    console.log(this.isOpenAddVotePopup);
+    this.isOpenEditVotePopup=true;
+    console.log(this.isOpenEditVotePopup);
   }
   private onVotePopupClose(value: boolean ) {
-    this.isOpenAddVotePopup=value;
+    this.isOpenEditVotePopup=value;
   }
   private onAddVote( voteData: IVoteModel) {
     this.voteData = voteData;
-    this.isOpenAddVotePopup=false;
+    this.isOpenEditVotePopup=false;
     // console.log(voteData);
   }
   private voteDataClear() {
@@ -482,7 +484,7 @@ export default class EditNotificationPopup extends Vue{
     };
   }
   private onModifyVote() {
-    this.isOpenAddVotePopup=true;
+    this.isOpenEditVotePopup=true;
   }
   //end : vote 이벤트 핸들러 ================================================
 

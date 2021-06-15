@@ -25,15 +25,26 @@ const MyClass = namespace('MyClass');
   }
 })
 export default class AddVotePopup extends Vue{
-  @Prop(Boolean)
-  private isOpen!: boolean;
 
-  @MyClass.Getter
-  private classID!: string | number;
+  protected openResultLevel: string = '전체공개';
+  protected openResultLevelItems = [
+    {id:0, txt:'전체 공개'},
+    {id:1, txt:'운영자와 스텝에게만 공개'},
+    {id:2, txt:'운영자에게만 공개'},
+  ];
+  protected dateModelItem: Array<{ date: string }> = [
+    {date: new Date().toISOString().substr(0, 10)},
+    {date:''},
+    {date:''},
+  ];
 
-  private dragEnabled: boolean=true;
-  private dragging: boolean= false;
-  private voteData: IVoteModel= {
+  protected anonymousChk: boolean=false;
+  protected multiChoiceChk: boolean=false;
+  protected endDateMenuChk: boolean=false;
+  protected endDateMenu: boolean=false;
+  protected dragEnabled: boolean=true;
+  protected dragging: boolean= false;
+  protected voteData: IVoteModel= {
     vote: {
       parent_id:0,
       type: '0',
@@ -59,22 +70,15 @@ export default class AddVotePopup extends Vue{
       }
     ]
   };
-  private openResultLevel: string = '전체공개';
-  private openResultLevelItems = [
-    {id:0, txt:'전체 공개'},
-    {id:1, txt:'운영자와 스텝에게만 공개'},
-    {id:2, txt:'운영자에게만 공개'},
-    ];
-  private dateModelItem: Array<{ date: string }> = [
-    {date: new Date().toISOString().substr(0, 10)},
-    {date:''},
-    {date:''},
-  ];
 
-  private anonymousChk: boolean=false;
-  private multiChoiceChk: boolean=false;
-  private endDateMenuChk: boolean=false;
-  private endDateMenu: boolean=false;
+  @Prop(Boolean)
+  private isOpen!: boolean;
+
+  @MyClass.Getter
+  private classID!: string | number;
+
+
+
 
   get isValidation(): boolean{
     const validItems=this.voteData.vote_choice_list.filter((item) => item.text !== '');

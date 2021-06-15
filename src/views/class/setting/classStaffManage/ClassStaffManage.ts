@@ -2,7 +2,7 @@ import ClassMemberService from '@/api/service/ClassMemberService';
 import UserService from '@/api/service/UserService';
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {IClassAuth, IClassMemberInfo, IQnaInfo} from '@/views/model/my-class.model';
+import {IClassAuth, IClassInfo, IClassMemberInfo, IQnaInfo} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
@@ -22,6 +22,9 @@ export default class ClassStaffManage extends Vue {
     @MyClass.Getter
     private classID!: number;
 
+    @MyClass.Getter
+    private myClassHomeModel!: IClassInfo;
+
     private classStaffList: IClassMemberInfo[] = [];
     private totalStaffNum: number = 0;
 
@@ -36,6 +39,7 @@ export default class ClassStaffManage extends Vue {
     private isBanModal: boolean = false;
     private isBanCompleteModal: boolean = false;
     private memberId: number = 0;
+    private memberLevel: number = 0;
 
     /* 멤버정보 상세 팝업 */
     private nickname: string = '';
@@ -46,8 +50,25 @@ export default class ClassStaffManage extends Vue {
     private qnaList: IQnaInfo[] = [];
 
     /* 권한 설정 관련 */
-    private authList: IClassAuth[] = [];
+    private authList: IClassAuth[] = [
+        {
+            auth_type: 1,
+            be_authorized: true
+        },
+        {
+            auth_type: 2,
+            be_authorized: true
+        },
+        {
+            auth_type: 3,
+            be_authorized: true
+        }
+    ];
     private authTypeList: string[] = ['알림 관리', '일정 관리', '교육과정 관리'];
+
+    get classInfo(): any {
+        return this.myClassHomeModel;
+    }
 
     public created() {
         this.getClassStaffs();
@@ -101,6 +122,11 @@ export default class ClassStaffManage extends Vue {
           });
     }
 
+    private closeDetailPopup(): void {
+        this.isDetailPopup = false;
+        this.qnaList = [];
+    }
+
     /**
      * 스탭 권한 설정 팝업 열기
      * @param memberId
@@ -108,6 +134,11 @@ export default class ClassStaffManage extends Vue {
      * @private
      */
     private staffModifyPopupOpen(memberId: number, nickname: string): void {
+        if (this.classInfo.me.level !== 1) {
+            alert('스탭 권한설정은 운영자만 가능합니다.');
+            return;
+        }
+
         this.isStaffModifyPopup = true;
         this.memberId = memberId;
         this.nickname = nickname;
@@ -159,9 +190,13 @@ export default class ClassStaffManage extends Vue {
      * @private
      */
     private blockModalOpen(memberId: number, nickname: string): void {
+        this.memberId = memberId;
+        if (this.classInfo.me.id === this.memberId) {
+            alert('자기 자신은 차단할 수 없습니다.');
+            return;
+        }
         this.isActive = false;
         this.isBlockModal = true;
-        this.memberId = memberId;
         this.nickname = nickname;
     }
 
@@ -183,9 +218,13 @@ export default class ClassStaffManage extends Vue {
      * @private
      */
     private banModalOpen(memberId: number, nickname: string): void {
+        this.memberId = memberId;
+        if (this.classInfo.me.id === this.memberId) {
+            alert('자기 자신은 강제탈퇴할 수 없습니다.');
+            return;
+        }
         this.isActive = false;
         this.isBanModal = true;
-        this.memberId = memberId;
         this.nickname = nickname;
     }
 
