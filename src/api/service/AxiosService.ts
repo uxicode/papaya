@@ -6,6 +6,8 @@ import {REMOVE_CLASS_DATA} from '@/store/mutation-class-types';
 import AuthService from '@/api/service/AuthService';
 
 axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 /**
  * 로그아웃 시키기
