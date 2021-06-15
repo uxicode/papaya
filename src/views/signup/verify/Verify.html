@@ -24,7 +24,7 @@
 
   <!-- start: 본인인증 팝업 -->
   <transition name="modal">
-  <modal v-if="isVerifyModal" size="450px" body-padding="0">
+  <modal v-if="isVerifyModal" size="492px" body-padding="0">
     <div slot="header">
       <h3>본인 인증</h3>
       <div class="popup-close" @click="isVerifyModal = false">
@@ -35,6 +35,7 @@
      <!-- var baseUrlDev = "http://ec2-13-209-22-152.ap-northeast-2.compute.amazonaws.com:8090/";
       var baseUrlDist = "http://ec2-15-164-48-36.ap-northeast-2.compute.amazonaws.com:8089/";-->
 <!--      <iframe src="http://ec2-13-209-22-152.ap-northeast-2.compute.amazonaws.com:8089/checkplus_main" width="450" height="550"></iframe>-->
+<!--      http://211.254.212.184:8089/checkplus_main -->
       <iframe src="http://211.254.212.184:8089/checkplus_main" width="500" height="550" ></iframe>
       <!--checkplus_success-->
     </div>

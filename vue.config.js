@@ -1,6 +1,16 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
+const target = 'http://127.0.0.1:8888';
 module.exports={
+    devServer:{
+        port:8080,
+        proxy:{
+            '^/api':{
+                target,
+                changeOrigin:true
+            }
+        }
+    },
     // productionSourceMap: false,
     chainWebpack: (config) => {
         config.plugin("fork-ts-checker").tap((args) => {
@@ -15,7 +25,8 @@ module.exports={
                     test:/.html$/,
                     loader:"vue-template-loader",
                     exclude:/index.html/
-                }
+                },
+
                 /*{
                     test: /\.(png|jpg|gif)$/i,
                     use: [
@@ -23,10 +34,15 @@ module.exports={
                             loader: 'url-loader',
                             options: {
                                 esModule: false,
+                                name: '[name].[ext]?[hash]',
+                                publicPath: './dist/',
+                                limit: 4096,
                             },
                         },
                     ],
-                }*/
+                }*//*,
+                */
+
             ]
         },
         plugins: [new BundleAnalyzerPlugin(), new VuetifyLoaderPlugin({
