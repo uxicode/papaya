@@ -318,6 +318,7 @@ export default class ClassSettingMain extends Vue{
         ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, info)
           .then((data) => {
             console.log(data);
+            this.getMyClassMemberInfo();
           });
     }
 
