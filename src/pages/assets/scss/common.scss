@@ -269,7 +269,6 @@ body {
 
 .after-line {
   position:relative;
-
   &:after {
     content:'';
     position:absolute;
@@ -285,11 +284,7 @@ body {
 
 .thumb, .icon-img {
   width:100%;
-
-  &.sm {
-    width:18px;
-    height:18px;
-  }
+  &.sm {width:18px;height:18px;}
 }
 
 .color-mark {
@@ -302,10 +297,7 @@ body {
   border-radius:50%;
   border:2px solid #fff;
 
-  &.pos-rel {
-    position:relative;
-    display:inline-block;
-  }
+  &.pos-rel {position:relative;display:inline-block;}
 
   &.red {background-color:#ff4d4d;}
   &.yellow {background-color:#ffd100;}
@@ -315,11 +307,7 @@ body {
   &.black {background-color:#0f0f15;}
 }
 
-.profile-img {
-  width:32px;
-  height:32px;
-  display:inline-block;
-}
+.profile-img {width:32px;height:32px;display:inline-block;}
 
 // tab-list
 .tabs-line {
@@ -354,9 +342,7 @@ body {
     &.active {
       a {
         font-weight:500;
-        &:after {
-          transform: scale(1);
-        }
+        &:after {transform: scale(1);}
       }
     }
   }
@@ -445,52 +431,6 @@ body {
   }
 }
 
-// pagination
-.pagination {
-  width:100%;
-  padding:14px 0;
-  text-align:center;
-
-  ul {
-    display:inline-block;
-    overflow: hidden;
-
-    li {
-      float:left;
-
-      a {
-        display:block;
-        padding:2px 0;
-        width:32px;
-        height:32px;
-        border-radius:50%;
-        line-height:32px;
-        text-align:center;
-      }
-
-      &.num {
-        &.active {
-          a{
-            background-color:#ff4d4d;
-            color:#fff;
-          }
-        }
-      }
-
-      &.arrow {
-        margin:0 10px;
-        opacity:0.2;
-        vertical-align: middle;
-
-        &.active {
-          opacity: 1;
-        }
-      }
-    }
-  }
-}
-
-
 .main-txt {
   padding:80px 0 180px 30px;
   background:url(../../assets/images/illust-welcome.png) no-repeat right top;
@@ -498,17 +438,11 @@ body {
   p {
     font-size:16px;
     color:#57576d;
-    strong {
-      font-weight:500;
-    }
+    strong {font-weight:500;}
   }
 }
 
-.main-tit {
-  font-size:26px;
-  font-weight:500;
-  line-height:1.5;
-}
+.main-tit {font-size:26px;font-weight:500;line-height:1.5;}
 
 .hashtag{
   position:relative;

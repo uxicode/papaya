@@ -14,18 +14,14 @@
 .join-type {
   color:#fff;
   margin-bottom:100px;
-
   .tb-cell {
     padding:46px 40px;
-
     &.join-basic {
       background-color:#1d1d4c;
-
       .join-type-cnt {float:right;}
     }
     &.join-guardian {
       background-color:#ff4d4d;
-
       .join-type-cnt {float:left;}
     }
 
@@ -33,11 +29,7 @@
       position:relative;
       width:440px;
       height:165px;
-
-      .join-tit {
-        border-bottom:0;
-      }
-
+      .join-tit {border-bottom:0;}
       .join-next {
         position:absolute;
         display:block;

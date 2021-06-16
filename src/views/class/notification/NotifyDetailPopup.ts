@@ -110,8 +110,10 @@ export default class NotifyDetailPopup extends Vue {
                 });
             await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
                 .then(() => {
+                    // console.log('댓글 갱신');
                     this.comment = '';
                 });
+
         }
     }
 
@@ -128,15 +130,17 @@ export default class NotifyDetailPopup extends Vue {
                 comment_id: id,
                 member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
                 comment: this.reply
-            }).then(() => {
-                console.log(`member_id: ${this.myClassHomeModel.me?.id} 대댓글 ${id} 추가 완료`);
             });
+            /*.then(() => {
+                console.log(`member_id: ${this.myClassHomeModel.me?.id} 대댓글 ${id} 추가 완료`);
+            });*/
             await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
                 .then(() => {
+                    // console.log('댓글 갱신');
                     this.reply = '';
                 });
         }
-
+        // this.reply = '';
     }
 
 }

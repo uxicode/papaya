@@ -151,6 +151,38 @@ interface IVoteModel{
   }>;
 }
 
+interface IReadAbleVote{
+    anonymous_mode: boolean | number;
+    createdAt: Date | string;
+    finishAt: Date | string;
+    id: number;
+    multi_choice: boolean | number;
+    open_progress_level: number;
+    open_result_level: number;
+    parent_id: number;
+    title: string;
+    type: number | string;
+    updatedAt: Date | string;
+    vote_choices: Array<{
+    createdAt: Date | string,
+    id: number,
+    image_url: string | null,
+    index: number,
+    text: string,
+    updatedAt: Date | string,
+    user_choices: Array<{
+      choice_id: number,
+      createdAt: Date | string,
+      deletedYN: boolean,
+      id: number,
+      member_id: number,
+      updatedAt: Date | string,
+      vote_id: number,
+    }>;
+    vote_id: number;
+  }>;
+}
+
 interface ILinkModel{
   link: {
     title: string;
@@ -180,5 +212,6 @@ interface IPostInLinkModel{
   };
 }
 
-export {IPostModel, IAttachFileModel, ICreatePost, IVoteModel, ILinkModel, IPostInLinkModel,};
+
+export {IPostModel, IAttachFileModel, ICreatePost, IVoteModel, ILinkModel, IReadAbleVote, IPostInLinkModel,};
 

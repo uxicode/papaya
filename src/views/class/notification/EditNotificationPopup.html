@@ -118,7 +118,7 @@
   </transition>
 
 
-  <add-vote-popup :is-open="isOpenAddVotePopup" @close="onVotePopupClose" @submit="onAddVote"></add-vote-popup>
+  <edit-vote-popup :is-open="isOpenEditVotePopup" :read-vote-data="postDetailItem.vote" @close="onVotePopupClose" @submit="onAddVote"></edit-vote-popup>
   <add-link-popup :is-open="isOpenAddLinkPopup" @close="onLinkPopupClose" @submit="onAddLink"></add-link-popup>
   <add-reservation-popup :is-open="isOpenAddReservation" @close="onReservationPopupClose" @submit="onAddReservation"></add-reservation-popup>
 </div>

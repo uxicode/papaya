@@ -254,6 +254,7 @@ body {
 .float-lt{float: left !important;}
 .float-rt{float: right !important;}
 .wd-half{width:50%;}
+
 .required {
   &:after {
     content:'';
@@ -269,7 +270,6 @@ body {
 
 .after-line {
   position:relative;
-
   &:after {
     content:'';
     position:absolute;
@@ -285,11 +285,7 @@ body {
 
 .thumb, .icon-img {
   width:100%;
-
-  &.sm {
-    width:18px;
-    height:18px;
-  }
+  &.sm {width:18px;height:18px;}
 }
 
 .color-mark {
@@ -302,10 +298,7 @@ body {
   border-radius:50%;
   border:2px solid #fff;
 
-  &.pos-rel {
-    position:relative;
-    display:inline-block;
-  }
+  &.pos-rel {position:relative;display:inline-block;}
 
   &.red {background-color:#ff4d4d;}
   &.yellow {background-color:#ffd100;}
@@ -315,11 +308,7 @@ body {
   &.black {background-color:#0f0f15;}
 }
 
-.profile-img {
-  width:32px;
-  height:32px;
-  display:inline-block;
-}
+.profile-img {width:32px;height:32px;display:inline-block;}
 
 // tab-list
 .tabs-line {
@@ -329,7 +318,6 @@ body {
 
   .item {
     float:left;
-    //margin-bottom:10px;
     text-align:center;
     font-size:16px;
     color:#57576d;
@@ -355,9 +343,7 @@ body {
     &.active {
       a {
         font-weight:500;
-        &:after {
-          transform: scale(1);
-        }
+        &:after {transform: scale(1);}
       }
     }
   }
@@ -407,7 +393,6 @@ body {
         height:18px;
         background-size:18px 18px;
       }
-
       &.rt-10 {right:10px;}
     }
 
@@ -446,7 +431,6 @@ body {
     }
   }
 
-
 .main-txt {
   padding:80px 0 230px 30px;
   background:url(../../assets/images/illust-welcome.png) no-repeat right top;
@@ -454,51 +438,43 @@ body {
   p {
     font-size:16px;
     color:#57576d;
-    strong {
-      font-weight:500;
-    }
+    strong {font-weight:500;}
   }
 }
 
-.main-tit {
-  font-size:26px;
-  font-weight:500;
-  line-height:1.5;
-}
+.main-tit {font-size:26px;font-weight:500;line-height:1.5;}
 
 .hashtag{
-        position:relative;
-  display:inline-block;
-        float:left;
-  font-size:12px;
+  position: relative;
+  display: inline-block;
+  float: left;
+  font-size: 12px;
 
   .tag-label {
     display: inline-block;
-    padding:6px 34px 6px 16px;
+    padding: 6px 34px 6px 16px;
     line-height: 1.45;
-      font-size:14px;
-          font-weight:500;
+    font-size: 14px;
+    font-weight: 500;
     white-space: nowrap;
-    color:#373749;
+    color: #373749;
     border-radius: 32px;
-    background-color:#f4f5f6;
-      }
+    background-color: #f4f5f6;
+  }
 
   .tag-delete {
-          position:absolute;
-    @include pos-vertical($right:4px);
-      }
-    }
+    position: absolute;
+    @include pos-vertical($right: 4px);
+  }
+}
 
 .pos-right{
-  //$zIndex:null, $top:null, $left:null, $right:null, $bottom:null
   @include pos-abs($top:0, $right:0);
 }
 .img-responsive{
   max-width: 100%;
   height:auto;
 }
-
 .comment-container{
   position: relative;
   width: 100%;
@@ -511,11 +487,7 @@ body {
   width:100%;
   padding-top:100px;
   font-size: 16px;
-
-  &.none{
-    font-size: 16px;
-    color: #1d1d1d;
-  }
+  &.none{font-size: 16px;color: #1d1d1d;}
 }
 
 .badge {

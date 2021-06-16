@@ -157,27 +157,15 @@
   position: relative;
   min-height:440px;
   background-color:#fff;
-
-  .class-tag {
-    a {
-      .search-more {right:20px;}
-    }
-  }
+  .class-tag a .search-more {right:20px;}
 
   .tb-cnt {
-    .tb-search {
-      tr {
-        th,td {
-          &:first-child {
-            padding-left:30px;
-          }
-        }
+    tr {
+      th, td {
+        &:first-child {padding-left: 30px;}
       }
     }
   }
 }
 
-.result-footer {
-  padding:20px 0;
-  background-color:#fff;
-}
+.result-footer {padding:20px 0;background-color:#fff;}
