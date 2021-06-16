@@ -6,8 +6,8 @@ import Btn from '@/components/button/Btn.vue';
 import {
     IClassInfo,
     IMakeEducation,
-    IEducationList,
     ICurriculumList,
+    ICurriculumDetailList,
     IModifyCurriculum,
 } from '@/views/model/my-class.model';
 import {IAttachFileModel} from '@/views/model/post.model';
@@ -111,7 +111,7 @@ export default class ModifyCurriculumPopup extends Vue {
     private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
 
 
-    private makeCurriculumItems: IMakeEducation={
+    private makeCurriculumData: IMakeEducation={
         title: '',
         goal: '',
         course_list: [
@@ -130,9 +130,9 @@ export default class ModifyCurriculumPopup extends Vue {
 
     // private testCourse: Array<Pick<IMakeEducation, 'course_list'>> = [];
 
-    private allEduList: IEducationList[]= [];
+    private allEduList: ICurriculumList[]= [];
 
-    private curriculumDetailData: ICurriculumList={
+    private curriculumDetailData: ICurriculumDetailList={
         curriculum: {
             startAt: '2019-11-17 10:00:00',
             endAt: '2019-11-17 10:00:00',
@@ -201,7 +201,7 @@ export default class ModifyCurriculumPopup extends Vue {
     }
 
     get isSubmitValidate(): boolean{
-        return (this.makeCurriculumItems.title !== '' && this.makeCurriculumItems.goal !== '');
+        return (this.makeCurriculumData.title !== '' && this.makeCurriculumData.goal !== '');
     }
 
     private getProfileImg(imgUrl: string | null | undefined ): string{
@@ -294,10 +294,10 @@ export default class ModifyCurriculumPopup extends Vue {
             }
         }
 
-        this.makeCurriculumItems.course_list = [];
+        this.makeCurriculumData.course_list = [];
 
         for (let i = 0; i < num; i++) {
-            this.makeCurriculumItems.course_list.push({
+            this.makeCurriculumData.course_list.push({
                 index: i,
                 id: i,
                 title: '',
@@ -396,10 +396,10 @@ export default class ModifyCurriculumPopup extends Vue {
             this.formData = new FormData();
         }
 
-        const temp = JSON.stringify( {...this.makeCurriculumItems} );
+        const temp = JSON.stringify( {...this.makeCurriculumData} );
         this.formData.append('data', temp );
 
-        MyClassService.setEducationList( this.classID, this.formData )
+        MyClassService.setCurriculumList( this.classID, this.formData )
             .then((data)=>{
                 console.log( '교육과정 생성 성공', data );
                 this.$emit('submit', false);
@@ -553,7 +553,7 @@ export default class ModifyCurriculumPopup extends Vue {
     private imgFilesAllClear() {
         this.imgFileURLItems = [];
         this.imgFileDatas=[];
-        this.makeCurriculumItems={
+        this.makeCurriculumData={
             title: '',
             goal: '',
             course_list: [
@@ -620,12 +620,12 @@ export default class ModifyCurriculumPopup extends Vue {
     /**
      * 클래스 교육과정 전체 조회
      */
-    get allEducationList(): IEducationList[] {
+    get curriculumListItemsModel(): ICurriculumList[] {
         return this.allEduList;
     }
 
     private getEduList(): void {
-        MyClassService.getEducationList(this.classID)
+        MyClassService.getCurriculumList(this.classID)
             .then((data) => {
                 this.allEduList = data;
                 // console.log(this.allEduList);
@@ -635,7 +635,7 @@ export default class ModifyCurriculumPopup extends Vue {
     /**
      * 클래스 교육과정 정보 조회
      */
-    get curriculumList(): ICurriculumList{
+    get curriculumList(): ICurriculumDetailList{
         return this.curriculumDetailData;
     }
 
@@ -763,11 +763,11 @@ export default class ModifyCurriculumPopup extends Vue {
     }
 
     private getCourseItemStartTime(idx: number): string{
-        return (this.makeCurriculumItems.course_list)? this.makeCurriculumItems.course_list[idx].startTime=this.selectStartTimeModel : '' ;
+        return (this.makeCurriculumData.course_list)? this.makeCurriculumData.course_list[idx].startTime=this.selectStartTimeModel : '' ;
     }
 
     private getCourseItemEndTime(idx: number): string{
-        return (this.makeCurriculumItems.course_list)? this.makeCurriculumItems.course_list[idx].endTime=this.selectEndTimeModel : '' ;
+        return (this.makeCurriculumData.course_list)? this.makeCurriculumData.course_list[idx].endTime=this.selectEndTimeModel : '' ;
     }
 
     private getModifyCourseStartTime(idx: number): any{

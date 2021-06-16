@@ -252,7 +252,9 @@ export default class PostModule extends VuexModule {
   public [DELETE_POST_ACTION](payload: { classId: string | number, postId: number }): Promise<any>{
     return PostService.deletePostById( payload.classId, payload.postId )
       .then((data)=>{
+        console.log(this.postListItems);
         const findIdx=this.postListItems.findIndex((item) => item.id === payload.postId);
+
         this.postListItems.splice(findIdx, 1);
         return Promise.resolve(data);
       }).catch((error) => {

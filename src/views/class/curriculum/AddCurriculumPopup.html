@@ -25,7 +25,7 @@
                             <txt-field id="curriculumTitle"
                                        add-class="popup-type"
                                        placeholder="제목을 20자 이내로 작성해 주세요."
-                                       v-model="makeCurriculumItems.title"
+                                       v-model="makeCurriculumData.title"
                                        rules="required"
                                        valid-name="제목">
                             </txt-field>
@@ -33,7 +33,7 @@
                     </div>
                     <div class="popup-form-cnt">
                         <div class="form-item post-cnt" style="height:154px;">
-                            <textarea class="form-textarea" v-model="makeCurriculumItems.goal" placeholder="일정 내용을 작성해 주세요."></textarea>
+                            <textarea class="form-textarea" v-model="makeCurriculumData.goal" placeholder="일정 내용을 작성해 주세요."></textarea>
                         </div>
 
                         <div class="add-curriculum bd-top">
@@ -90,13 +90,21 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <button type="button" class="btn navi" @click="onAddCurriculumSubmit">등록</button>
+                    <button type="button" class="btn navi" @click="setCurriculumDataToFormData">등록</button>
                 </div>
             </div>
         </modal>
     </transition>
     <!-- end: 공통 팝업 -->
 
-    <add-course-popup :is-open="isOpenAddCoursePopup" @close="onCoursePopupClose" @submit="onAddCourse"></add-course-popup>
+    <add-course-popup
+            :is-open="isOpenAddCoursePopup"
+            :make-curriculum-items="makeCurriculumData"
+            :course-idx="courseIdx"
+            :img-file-service="imgFileService"
+            :attach-file-service="attachFileService"
+            :form-data="formData"
+            @close="onCoursePopupClose"
+            @submit="onAddCourse"></add-course-popup>
 
 </div>

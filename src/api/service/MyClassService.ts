@@ -143,7 +143,7 @@ class MyClassService {
      * 클래스 교육과정
      * @param classId
      */
-    public getEducationList(classId: number): Promise<any>{
+    public getCurriculumList(classId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum` );
     }
 
@@ -152,8 +152,8 @@ class MyClassService {
      * @param classId
      * @param curriculumItems
      */
-    public setEducationList(classId: number, curriculumItems: any): Promise<any>{
-        return request('post', `${CLASS_BASE_URL}/${classId}/curriculum`, curriculumItems );
+    public setCurriculumList(classId: number, formData: FormData) {
+        return request('post', `${CLASS_BASE_URL}/${classId}/curriculum`, formData );
     }
 
     /**
