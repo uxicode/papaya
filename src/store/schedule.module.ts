@@ -16,6 +16,7 @@ import {IScheduleTotal} from '@/views/model/schedule.model';
 import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
 import {PostService} from '@/api/service/PostService';
 import {ScheduleService} from '@/api/service/ScheduleService';
+import {CommentService} from '@/api/service/CommentService';
 import {getAllPromise} from '@/views/model/types';
 
 @Module({
@@ -143,7 +144,7 @@ export default class ScheduleModule extends VuexModule {
 
   @Action
   public [GET_COMMENTS_ACTION]( scheduleId: number): Promise<any> {
-    return ScheduleService.getCommentsByScheduleId(scheduleId)
+    return CommentService.getCommentsByScheduleId(scheduleId)
         .then((data) => {
           // console.log(data);
 
@@ -152,7 +153,7 @@ export default class ScheduleModule extends VuexModule {
 
           //대댓글 정보 가져오기 - commentItems 에 맞는 대댓정보를 가져오기 위해 2차 반복문을 실행.
           const replyIdPromiseItems=this.commentData.map((item: any)=>{
-            return PostService.getReplysByCommentId( item.id );
+            return CommentService.getReplysByCommentId( item.id );
           });
 
           // console.log(replyIdItems);
@@ -172,7 +173,7 @@ export default class ScheduleModule extends VuexModule {
    */
   @Action
   public [ADD_COMMENT_ACTION](payload: {parent_id: number, parent_type: number, member_id: number, comment: string}): Promise<any> {
-    return PostService.setAddComment(payload)
+    return CommentService.setAddComment(payload)
         .then((data) => {
           console.log(data.comment);
           return Promise.resolve(this.commentData);
@@ -181,7 +182,7 @@ export default class ScheduleModule extends VuexModule {
 
   @Action
   public [ADD_REPLY_ACTION](payload: {comment_id: number, member_id: number, comment: string}): Promise<any> {
-    return PostService.setAddReply(payload)
+    return CommentService.setAddReply(payload)
         .then((data) => {
           console.log(data.commentreply);
           return Promise.resolve(this.replyData);

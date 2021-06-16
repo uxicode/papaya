@@ -22,39 +22,6 @@ export class PostService{
     return request('get', `${CLASS_BASE_URL}/${classId}/posts/${postId}`);
   }
 
-  /**
-   * 하나의 알림에 댓글 전체 조회.
-   * @param postId
-   */
-  public static getCommentsByPostId(postId: number): Promise<any> {
-    return request('get', `/comment/type/post/${postId}`);
-  }
-
-  /**
-   * 하나의 댓글에 달린 답글 전체 조회
-   * @param commentId
-   */
-  public static getReplysByCommentId(commentId: number): Promise<any> {
-    return request('get', `comment-reply/on/${commentId}`);
-  }
-
-  /**
-   * 댓글 생성
-   * parent_id: postId , parent_type: postType
-   * @param payload
-   */
-  public static setAddComment(payload: {parent_id: number, parent_type: number, member_id: number, comment: string}) {
-    return request('post', '/comment', payload);
-  }
-
-  /**
-   * 대댓글 생성
-   * @param payload
-   */
-  public static setAddReply(payload: {comment_id: number, member_id: number, comment: string}) {
-    return request('post', '/comment-reply', payload);
-  }
-
 
   /**
    * 클래스 예약된 알림(게시글) 전체 조회

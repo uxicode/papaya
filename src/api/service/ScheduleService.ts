@@ -76,12 +76,6 @@ export class ScheduleService{
     return request('get', `${CLASS_BASE_URL}/${classId}/schedule`, paging );
   }
 
-  /**
-   * 하나의 일정에 달린 댓글 조회
-   * @param scheduleId
-   */
-  public static getCommentsByScheduleId(scheduleId: number) {
-    return request('get', `comment/type/schedule/${scheduleId}`);
-  }
+
 
 }

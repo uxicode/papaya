@@ -110,6 +110,8 @@
                                         <div class="reply-state">
                                             <a href="" class="txt-btn" @click.prevent>답글 {{ item.reply_count }}</a>
                                             <a href="" class="txt-btn" @click.prevent="replyInputToggle(idx)">답글달기</a>
+                                            <a href="" class="txt-btn" @click.prevent="">수정</a>
+                                            <a href="" class="txt-btn" @click.prevent="">삭제</a>
                                         </div>
                                     </div>
 
@@ -117,6 +119,11 @@
                                      <div v-for="( replyItem, jdx) in replyItemsModel[idx].comment_list" class="reply" :key="`reply-${jdx}`">
                                        <p class="comment-writer">{{ replyItem.owner.nickname }} <span class="wr-time">{{ updatedDiffDate(replyItem.createdAt) }}</span></p>
                                        <p class="comment-txt">{{ replyItem.comment }}</p>
+
+                                       <div class="reply-state">
+                                         <a href="" class="txt-btn" @click.prevent="">수정</a>
+                                         <a href="" class="txt-btn" @click.prevent="">삭제</a>
+                                       </div>
                                      </div>
                                    </template>
 

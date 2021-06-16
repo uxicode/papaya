@@ -110,9 +110,8 @@ export default class NotifyDetailPopup extends Vue {
                 });
             await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
                 .then(() => {
-                    console.log('댓글 갱신');
+                    this.comment = '';
                 });
-            this.comment = '';
         }
     }
 
@@ -134,10 +133,10 @@ export default class NotifyDetailPopup extends Vue {
             });
             await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
                 .then(() => {
-                    console.log('댓글 갱신');
+                    this.reply = '';
                 });
         }
-        this.reply = '';
+
     }
 
 }
