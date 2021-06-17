@@ -877,12 +877,13 @@ $popupDepth: 10;
 
 .main-comment {
   padding: 20px 40px 10px;
+  font-size: 14px;
 }
 
 .comment-writer {
   position: relative;
   padding-left: 20px;
-
+  font-size: 14px;
   &:before {
     content: '';
     display: block;
@@ -905,6 +906,7 @@ $popupDepth: 10;
   margin-top: 10px;
   line-height: 1.6;
   color: #57576d;
+  font-size: 14px;
 
   &.hide {
     display: none;
@@ -928,6 +930,7 @@ $popupDepth: 10;
 
   .txt-btn {
     margin-right: 20px;
+    font-size: 14px;
   }
 }
 
