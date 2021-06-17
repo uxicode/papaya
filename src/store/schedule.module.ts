@@ -149,7 +149,11 @@ export default class ScheduleModule extends VuexModule {
           // console.log(data);
 
           // this.commentItems = data.comment_list;
-          this.context.commit(SET_COMMENTS, data.comment_list);
+          // this.context.commit(SET_COMMENTS, data.comment_list);
+
+          // 댓글 삭제를 해도 완전히 제거가 안되고 deleteYN: true 로 변경만 되므로 filter 로 걸러준다.
+          const notDeletedComments = data.comment_list.filter((item: any) => item.deletedYN === false);
+          this.context.commit(SET_COMMENTS, notDeletedComments);
 
           //대댓글 정보 가져오기 - commentItems 에 맞는 대댓정보를 가져오기 위해 2차 반복문을 실행.
           const replyIdPromiseItems=this.commentData.map((item: any)=>{

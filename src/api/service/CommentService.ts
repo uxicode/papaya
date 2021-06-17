@@ -14,10 +14,10 @@ export class CommentService {
   /**
    * 댓글 수정
    * @param commentId
-   * @param comment
+   * @param payload
    */
-  public static setCommentModify(commentId: number, comment: string): Promise<any> {
-    return request('put', `/comment/${commentId}`, comment);
+  public static setCommentModify(commentId: number, payload: { comment: string }): Promise<any> {
+    return request('put', `/comment/${commentId}`, payload);
   }
 
   /**
@@ -55,9 +55,10 @@ export class CommentService {
   /**
    * 대댓글 수정
    * @param replyId
+   * @param payload
    */
-  public static setReply(replyId: number): Promise<any> {
-    return request('put', `comment-reply/${replyId}`);
+  public static setReply(replyId: number, payload: {comment: string}): Promise<any> {
+    return request('put', `comment-reply/${replyId}`, payload);
   }
 
   /**

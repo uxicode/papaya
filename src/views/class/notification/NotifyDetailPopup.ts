@@ -11,6 +11,7 @@ import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
 import PhotoViewer from '@/views/class/notification/PhotoViewer';
 import DetailInVotePreview from '@/components/preview/DetailInVotePreview.vue';
+import {CommentService} from '@/api/service/CommentService';
 import WithRender from './NotifyDetailPopup.html';
 
 const MyClass = namespace('MyClass');
@@ -62,6 +63,8 @@ export default class NotifyDetailPopup extends Vue {
 
     private comment: string = '';
     private reply: string = '';
+    private tempComment: string = '';
+    private tempReply: string = '';
 
     get commentItemsModel() {
         return this.commentItems;
@@ -141,6 +144,79 @@ export default class NotifyDetailPopup extends Vue {
                 });
         }
         // this.reply = '';
+    }
+
+    /**
+     * 댓글 수정 input
+     * @param comment
+     * @param idx
+     * @private
+     */
+    private openCommentModify(comment: string, idx: number): void {
+        const commentTxt = document.querySelectorAll('.main-comment .comment-txt');
+        const modifyComment = document.querySelectorAll('.main-comment .modify-comment');
+        commentTxt.forEach((item, index) =>
+            (idx===index) ? item.classList.toggle('hide') : item.classList.remove('hide'));
+        modifyComment.forEach((item, index) =>
+            (idx===index) ? item.classList.toggle('active') : item.classList.remove('active'));
+        this.tempComment = comment;
+        // @ts-ignore
+        modifyComment[idx].firstChild.focus();
+    }
+
+    /**
+     * 수정한 댓글 제출
+     * @param id
+     * @param newComment
+     * @private
+     */
+    private submitCommentModify(id: number, newComment: string): void {
+        CommentService.setCommentModify(id,{comment: newComment})
+            .then((data) => {
+                console.log(data);
+                const findIdx = this.commentItemsModel.findIndex((item) => item.id === id);
+                this.commentItemsModel.splice(findIdx, 1, data.comment);
+            });
+    }
+
+    /**
+     * 댓글 삭제
+     * @param id
+     * @private
+     */
+    private deleteComment(id: number): void {
+        CommentService.deleteComment(id)
+            .then((data) => {
+                console.log(data);
+                const findIdx = this.commentItemsModel.findIndex((item) => item.id === id);
+                this.commentItemsModel.splice(findIdx, 1);
+            });
+    }
+
+    /**
+     * 대댓글 수정 input
+     * @param reply
+     * @param idx
+     * @private
+     */
+    private openReplyModify(reply: string, idx: number): void {
+        const replyTxt = document.querySelectorAll('.reply .comment-txt');
+        const modifyReply = document.querySelectorAll('.reply .modify-reply');
+        replyTxt.forEach((item, index) =>
+            (idx===index) ? item.classList.toggle('hide') : item.classList.remove('hide'));
+        modifyReply.forEach((item, index) =>
+            (idx===index) ? item.classList.toggle('active') : item.classList.remove('active'));
+        this.tempReply = reply;
+        // @ts-ignore
+        modifyReply[idx].firstChild.focus();
+    }
+
+    private submitReplyModify(id: number, newReply: string): void {
+        CommentService.setReply(id, {comment: newReply})
+            .then((data) => {
+                console.log(data);
+
+            });
     }
 
 }

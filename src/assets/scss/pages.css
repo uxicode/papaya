@@ -386,7 +386,7 @@ select::-ms-expand {
   left: 3px;
   width: 18px;
   height: 18px;
-  background-color: #fff;제
+  background-color: #fff;
   border-radius: 50%;
   transition: all 0.3s ease;
   transform: translateX(0);
