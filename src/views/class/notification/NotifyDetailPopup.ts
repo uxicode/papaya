@@ -134,9 +134,6 @@ export default class NotifyDetailPopup extends Vue {
                 member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
                 comment: this.reply
             });
-            /*.then(() => {
-                console.log(`member_id: ${this.myClassHomeModel.me?.id} 대댓글 ${id} 추가 완료`);
-            });*/
             await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
                 .then(() => {
                     // console.log('댓글 갱신');
@@ -165,18 +162,31 @@ export default class NotifyDetailPopup extends Vue {
     }
 
     /**
+     * 등록 버튼 클릭 시 댓글 수정 입력란 숨김
+     * @private
+     */
+    private closeCommentModify(): void {
+        const commentTxt = document.querySelectorAll('.main-comment .comment-txt');
+        const modifyComment = document.querySelectorAll('.main-comment .modify-comment');
+        commentTxt.forEach((item) => item.classList.remove('hide'));
+        modifyComment.forEach((item) => item.classList.remove('active'));
+    }
+
+    /**
      * 수정한 댓글 제출
      * @param id
      * @param newComment
      * @private
      */
-    private submitCommentModify(id: number, newComment: string): void {
-        CommentService.setCommentModify(id,{comment: newComment})
+    private async submitCommentModify(id: number, newComment: string) {
+        await CommentService.setCommentModify(id,{comment: newComment})
             .then((data) => {
                 console.log(data);
-                const findIdx = this.commentItemsModel.findIndex((item) => item.id === id);
-                this.commentItemsModel.splice(findIdx, 1, data.comment);
+                // const findIdx = this.commentItemsModel.findIndex((item) => item.id === id);
+                // this.commentItemsModel.splice(findIdx, 1, data.comment);
             });
+        await this.GET_COMMENTS_ACTION(this.postDetailModel.id);
+        this.closeCommentModify();
     }
 
     /**
@@ -184,13 +194,15 @@ export default class NotifyDetailPopup extends Vue {
      * @param id
      * @private
      */
-    private deleteComment(id: number): void {
-        CommentService.deleteComment(id)
+    private async deleteComment(id: number) {
+        await CommentService.deleteComment(id)
             .then((data) => {
                 console.log(data);
-                const findIdx = this.commentItemsModel.findIndex((item) => item.id === id);
-                this.commentItemsModel.splice(findIdx, 1);
+                // const findIdx = this.commentItemsModel.findIndex((item) => item.id === id);
+                // this.commentItemsModel.splice(findIdx, 1);
             });
+        await this.GET_COMMENTS_ACTION(this.postDetailModel.id);
+        this.closeCommentModify();
     }
 
     /**
@@ -199,24 +211,57 @@ export default class NotifyDetailPopup extends Vue {
      * @param idx
      * @private
      */
-    private openReplyModify(reply: string, idx: number): void {
+    private openReplyModify(reply: string, jdx: number): void {
         const replyTxt = document.querySelectorAll('.reply .comment-txt');
         const modifyReply = document.querySelectorAll('.reply .modify-reply');
         replyTxt.forEach((item, index) =>
-            (idx===index) ? item.classList.toggle('hide') : item.classList.remove('hide'));
+            (jdx===index) ? item.classList.toggle('hide') : item.classList.remove('hide'));
         modifyReply.forEach((item, index) =>
-            (idx===index) ? item.classList.toggle('active') : item.classList.remove('active'));
+            (jdx===index) ? item.classList.toggle('active') : item.classList.remove('active'));
         this.tempReply = reply;
         // @ts-ignore
-        modifyReply[idx].firstChild.focus();
+        modifyReply[jdx].firstChild.focus();
     }
 
-    private submitReplyModify(id: number, newReply: string): void {
-        CommentService.setReply(id, {comment: newReply})
+    /**
+     * 등록 버튼 클릭 시 대댓글 수정 입력란 숨김
+     * @private
+     */
+    private closeReplyModify(): void {
+        const replyTxt = document.querySelectorAll('.reply .comment-txt');
+        const modifyReply = document.querySelectorAll('.reply .modify-reply');
+        replyTxt.forEach((item) => item.classList.remove('hide'));
+        modifyReply.forEach((item) => item.classList.remove('active'));
+    }
+
+
+    /**
+     * 대댓글 수정 제출
+     * @param id
+     * @param newReply
+     * @private
+     */
+    private async submitReplyModify(id: number, newReply: string) {
+        await CommentService.setReply(id, {comment: newReply})
             .then((data) => {
                 console.log(data);
-
             });
+        await this.GET_COMMENTS_ACTION(this.postDetailModel.id);
+        this.closeReplyModify();
+    }
+
+    /**
+     * 대댓글 삭제
+     * @param id
+     * @private
+     */
+    private async deleteReply(id: number) {
+        await CommentService.deleteReply(id)
+            .then((data) => {
+                console.log(data);
+            });
+        await this.GET_COMMENTS_ACTION(this.postDetailModel.id);
+        this.closeReplyModify();
     }
 
 }
