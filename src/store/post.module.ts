@@ -5,7 +5,8 @@ import {
   SET_RESERVED_TOTAL,
   SET_POST_DETAIL,
   SET_COMMENTS,
-  SET_REPLY
+  SET_REPLY,
+  SET_VOTE
 } from '@/store/mutation-class-types';
 import {
   GET_POST_LIST_ACTION,
@@ -20,7 +21,7 @@ import {
   SELECT_VOTE_ACTION,
   DELETE_POST_FILE
 } from '@/store/action-class-types';
-import {IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
+import {IPostInLinkModel, IPostModel, IReadAbleVote, IVoteModel} from '@/views/model/post.model';
 import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
 import {PostService} from '@/api/service/PostService';
 import {CommentService} from '@/api/service/CommentService';
@@ -103,6 +104,7 @@ export default class PostModule extends VuexModule {
   };
   private commentData: ICommentModel[] = [];
   private replyData: IReplyModel[]=[];
+  private voteData!: IReadAbleVote;
 
 
   /* Getters */
@@ -132,6 +134,10 @@ export default class PostModule extends VuexModule {
 
   get replyItems(): IReplyModel[] {
     return this.replyData;
+  }
+
+  get voteItems(): IReadAbleVote {
+    return this.voteData;
   }
 
   /**
@@ -187,6 +193,12 @@ export default class PostModule extends VuexModule {
     this.replyData=data;
   }
 
+  @Mutation
+  public [SET_VOTE](data: IReadAbleVote): void{
+    this.voteData=data;
+  }
+
+
   /**
    * 알림글 리스트 조회
    * @param payload
@@ -197,7 +209,7 @@ export default class PostModule extends VuexModule {
       .then((data) => {
         // console.log(data);
         // this.postListItems = data.post_list;
-        console.log('noticeListItems=', this.postListData);
+        // console.log('noticeListItems=', this.postListData);
 
         this.context.commit(SET_POST_IN_BOOKMARK, data.post_list);
 
@@ -359,7 +371,7 @@ export default class PostModule extends VuexModule {
         return Promise.resolve(this.commentData);
       });
   }
-  
+
   @Action
   public [ADD_REPLY_ACTION](payload: {comment_id: number, member_id: number, comment: string}): Promise<any> {
     return CommentService.setAddReply(payload)
@@ -395,5 +407,6 @@ export default class PostModule extends VuexModule {
         this.postListData.splice(findIdx, 1, {...editItem, ...removedAttachItems} );
       });
   }
+
 
 }

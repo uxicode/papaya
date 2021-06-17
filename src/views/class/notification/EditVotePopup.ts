@@ -30,21 +30,34 @@ const Post = namespace('Post');
 })
 export default class EditVotePopup extends AddVotePopup {
 
-  @Prop(Object)
-  public readVoteData!: IReadAbleVote;
+
   public voteTitle: string = '';
   public type: number | string = '0';
   public voteList: any = [];
 
 
   @Post.Getter
-  private postDetailItem!: IPostModel & IPostInLinkModel;
+  private voteItems!: IReadAbleVote;
 
-  public updated() {
-    this.voteTitle=this.readVoteData.title;
-    this.type=this.readVoteData.type;
-    this.voteList=this.readVoteData.vote_choices;
+  get readVoteData(): IVoteModel{
+    const {anonymous_mode, finishAt, id, multi_choice, open_progress_level, open_result_level, parent_id, title, type, vote_choices}=this.voteItems;
+    const vote_choice_list=vote_choices.map( (item)=>{
+      const {text, index}=item;
+      return {text, index};
+    });
+    this.voteData= {
+      vote: {
+        parent_id, type, title, multi_choice, anonymous_mode, open_progress_level, open_result_level, finishAt
+      },
+      vote_choice_list
+    };
+    console.log(this.voteData);
 
-    console.log( this.readVoteData );
+    return this.voteData;
   }
+
+  public optionChange(value: number ): void {
+    super.optionChange(value);
+  }
+
 }

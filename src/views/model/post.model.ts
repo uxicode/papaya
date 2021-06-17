@@ -151,19 +151,19 @@ interface IVoteModel{
   }>;
 }
 
-interface IReadAbleVote{
-    anonymous_mode: boolean | number;
-    createdAt: Date | string;
-    finishAt: Date | string;
-    id: number;
-    multi_choice: boolean | number;
-    open_progress_level: number;
-    open_result_level: number;
-    parent_id: number;
-    title: string;
-    type: number | string;
-    updatedAt: Date | string;
-    vote_choices: Array<{
+interface IReadAbleVote {
+  anonymous_mode: boolean | number;
+  createdAt: Date | string;
+  finishAt: Date | string;
+  id: number;
+  multi_choice: boolean | number;
+  open_progress_level: number;
+  open_result_level: number;
+  parent_id: number;
+  title: string;
+  type: number | string;
+  updatedAt: Date | string;
+  vote_choices: Array<{
     createdAt: Date | string,
     id: number,
     image_url: string | null,

@@ -7,7 +7,7 @@ import {
   ICreatePost,
   ILinkModel,
   IPostInLinkModel,
-  IPostModel,
+  IPostModel, IReadAbleVote,
   IVoteModel
 } from '@/views/model/post.model';
 import AddVotePopup from '@/views/class/notification/AddVotePopup';
@@ -26,6 +26,7 @@ import VotePreview from '@/components/preview/votePreview.vue';
 import AlarmPreview from '@/components/preview/alarmPreview.vue';
 import EditVotePopup from '@/views/class/notification/EditVotePopup';
 import WithRender from './EditNotificationPopup.html';
+import {SET_VOTE} from '@/store/mutation-class-types';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -67,6 +68,9 @@ export default class EditNotificationPopup extends Vue{
   @Post.Getter
   private replyItems!: any[];
 
+  @Post.Mutation
+  private SET_VOTE!: (data: IReadAbleVote)=> void;
+
   @Post.Action
   private ADD_POST_ACTION!: (payload: { classId: number; formData: FormData })=>Promise<any>;
 
@@ -75,7 +79,6 @@ export default class EditNotificationPopup extends Vue{
 
   @Post.Action
   private DELETE_POST_FILE!: (payload: { classId: number, postId: number, ids: number[] })=>Promise<any>;
-
 
 
   private isOpenEditVotePopup: boolean=false;
@@ -451,7 +454,7 @@ export default class EditNotificationPopup extends Vue{
   }
 
   //start : vote 이벤트 핸들러 ================================================
-  private addVotePopupOpen() {
+  private editVotePopupOpen() {
     this.isOpenEditVotePopup=true;
     console.log(this.isOpenEditVotePopup);
   }
@@ -485,6 +488,7 @@ export default class EditNotificationPopup extends Vue{
   }
   private onModifyVote() {
     this.isOpenEditVotePopup=true;
+    this.SET_VOTE( this.postDetailItem.vote );
   }
   //end : vote 이벤트 핸들러 ================================================
 

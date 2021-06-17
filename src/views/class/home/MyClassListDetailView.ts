@@ -94,7 +94,7 @@ export default class MyClassListDetailView extends Vue{
 
       const max=this.getMax<number>([data[0].class_schedule_list.length, data[1].curriculum_list.length, data[2].post_list.length] );
       // console.log(max);
-      console.log(data[0].class_schedule_list );
+      // console.log(data[0].class_schedule_list );
 
 
       this.noticeSchedule=data[0].class_schedule_list.filter((item: any) =>item.type===1 );
@@ -120,7 +120,7 @@ export default class MyClassListDetailView extends Vue{
       }
 
       this.allData = [...allData];
-      console.log(this.allData);
+      // console.log(this.allData);
       // const allData=[ ...data[0].post_list,  ...data[1].class_schedule_list, ...data[2].curriculum_list];
     }).catch((error)=>{
       console.log('class more info error', error );
