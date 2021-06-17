@@ -165,7 +165,7 @@
   font-weight:500;
   vertical-align: middle;
   color:#0f0f15;
-
+  &.ft-14{font-size:14px;}
   &:hover {color:#57576d;}
   &:active {color:#0f0f15;}
   &:disabled, &.disabled {opacity: 0.2;}
