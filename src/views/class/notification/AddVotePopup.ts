@@ -95,7 +95,11 @@ export default class AddVotePopup extends Vue{
     };
   }
 
-  private resetVoteList() {
+  public optionChange(value: number ): void {
+    this.resetVoteList();
+    this.voteData.vote.type=value;
+  }
+  public resetVoteList() {
     this.voteData.vote_choice_list=[
       {
         text: '제주도 여행',
@@ -137,10 +141,7 @@ export default class AddVotePopup extends Vue{
     this.$emit('close', value);
   }
 
-  private optionChange(value: number ): void {
-    this.resetVoteList();
-    this.voteData.vote.type=value;
-  }
+
 
   private checkMove(e: MoveEvent<any> ) {
     window.console.log('Future index: ' + e.draggedContext.futureIndex);

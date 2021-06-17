@@ -104,17 +104,17 @@
                             <div class="comment-cnt">
                                 <div v-for="(item, idx ) in commentItemsModel" class="comment pdt-0" :key="`comment-${idx}`">
                                     <div class="main-comment">
-                                        <p class="comment-writer">{{ (item.owner) ? item.owner.nickname : '' }} <span class="wr-time">{{ updatedDiffDate(item.createdAt) }}</span></p>
+                                        <p class="comment-writer">{{ item.owner ? item.owner.nickname : '주인없음' }} <span class="wr-time">{{ updatedDiffDate(item.createdAt) }}</span></p>
                                         <p class="comment-txt">{{ item.comment }}</p>
                                         <div class="modify-comment">
                                           <input v-model="tempComment" type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;">
-                                          <a href="" class="txt-btn" :class="{'disabled': item.comment===tempComment}" @click.prevent="submitCommentModify(item.id, tempComment)">등록</a>
+                                          <a href="" class="txt-btn ft-14" :class="{'disabled': item.comment===tempComment}" @click.prevent="submitCommentModify(item.id, tempComment)">등록</a>
                                         </div>
                                         <div class="reply-state">
-                                            <a href="" class="txt-btn" @click.prevent style="cursor:default">답글 {{ item.reply_count }}</a>
-                                            <a href="" class="txt-btn" @click.prevent="replyInputToggle(idx)">답글달기</a>
-                                            <a href="" class="txt-btn modify" @click.prevent="openCommentModify(item.comment, idx)">수정</a>
-                                            <a href="" class="txt-btn delete" @click.prevent="deleteComment(item.id)">삭제</a>
+                                            <a href="" class="txt-btn ft-14" @click.prevent style="cursor:default">답글 {{ item.reply_count }}</a>
+                                            <a href="" class="txt-btn ft-14" @click.prevent="replyInputToggle(idx)">답글달기</a>
+                                            <a href="" class="txt-btn ft-14 modify" @click.prevent="openCommentModify(item.comment, idx)">수정</a>
+                                            <a href="" class="txt-btn ft-14 delete" @click.prevent="deleteComment(item.id)">삭제</a>
                                         </div>
                                     </div>
 
@@ -124,19 +124,19 @@
                                        <p class="comment-txt">{{ replyItem.comment }}</p>
                                        <div class="modify-reply">
                                          <input v-model="tempReply" type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;">
-                                         <a href="" class="txt-btn" :class="{'disabled': replyItem.comment===tempReply}" @click.prevent="submitReplyModify(replyItem.id, tempReply)">등록</a>
+                                         <a href="" class="txt-btn ft-14" :class="{'disabled': replyItem.comment===tempReply}" @click.prevent="submitReplyModify(replyItem.id, tempReply)">등록</a>
                                        </div>
 
                                        <div class="reply-state">
-                                         <a href="" class="txt-btn modify" @click.prevent="openReplyModify(replyItem.comment, jdx)">수정</a>
-                                         <a href="" class="txt-btn delete" @click.prevent="deleteReply(replyItem.id)">삭제</a>
+                                         <a href="" class="txt-btn ft-14 modify" @click.prevent="openReplyModify(replyItem.comment, jdx)">수정</a>
+                                         <a href="" class="txt-btn ft-14 delete" @click.prevent="deleteReply(replyItem.id)">삭제</a>
                                        </div>
                                      </div>
                                    </template>
 
                                     <div class="comment-btm reply hide">
                                         <input v-model="reply" type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;">
-                                        <a href="" class="txt-btn" :class="{'disabled': reply===''}" @click.prevent="addReply(item.id)">등록</a>
+                                        <a href="" class="txt-btn ft-14" :class="{'disabled': reply===''}" @click.prevent="addReply(item.id)">등록</a>
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +146,7 @@
                         <div class="comment-btm">
                             <button type="button" class="btn only-ico-btn"><img :src="require('@/assets/images/image.svg')" alt=""></button>
                             <input v-model="comment" type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;">
-                            <a href="" class="txt-btn" :class="{'disabled': comment===''}" @click.prevent="addComment">등록</a>
+                            <a href="" class="txt-btn ft-14" :class="{'disabled': comment===''}" @click.prevent="addComment">등록</a>
                         </div>
                     </div>
                 </div>
