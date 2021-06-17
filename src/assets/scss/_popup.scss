@@ -688,7 +688,18 @@ $popupDepth: 10;
   border-bottom:1px solid #f4f5f6;
 }
 
-.main-comment {padding:20px 40px 10px;}
+// ksj
+.modify, .delete {display: none;}
+
+.main-comment {
+  padding:20px 40px 10px;
+
+  // ksj
+  &:hover {
+    .modify, .delete {display: inline-block;}
+  }
+}
+
 
 .comment-writer {
   position: relative;
@@ -747,6 +758,11 @@ $popupDepth: 10;
       @include pos-abs($top:0, $left:50%);
       transform:translateX(-50%);
     }
+  }
+
+  // ksj
+  &:hover {
+    .modify, .delete {display: inline-block;}
   }
 }
 
