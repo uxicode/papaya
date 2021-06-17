@@ -38,16 +38,17 @@ export default class AddVotePopup extends Vue{
     {date:''},
   ];
 
-  protected anonymousChk: boolean=false;
-  protected multiChoiceChk: boolean=false;
-  protected endDateMenuChk: boolean=false;
-  protected endDateMenu: boolean=false;
-  protected dragEnabled: boolean=true;
-  protected dragging: boolean= false;
-  protected voteData: IVoteModel= {
+  private anonymousChk: boolean=false;
+  private multiChoiceChk: boolean=false;
+  private endDateMenuChk: boolean=false;
+  private endDateMenu: boolean=false;
+  private dragEnabled: boolean=true;
+  private dragging: boolean= false;
+  private voteType: string = 'txt';
+  private voteData: IVoteModel= {
     vote: {
       parent_id:0,
-      type: '0',
+      type: 0,
       title: '',
       multi_choice: 0,
       anonymous_mode: 0,
@@ -95,9 +96,14 @@ export default class AddVotePopup extends Vue{
     };
   }
 
-  public optionChange(value: number ): void {
+  get currentType(): boolean {
+    return this.voteType === 'txt';
+  }
+
+  public optionChange(value: string ): void {
     this.resetVoteList();
-    this.voteData.vote.type=value;
+    this.voteType=value;
+    this.voteData.vote.type=(this.voteType==='txt')? 0 : 1;
   }
   public resetVoteList() {
     this.voteData.vote_choice_list=[
@@ -185,6 +191,7 @@ export default class AddVotePopup extends Vue{
   private onVoteSubmit() {
     this.$emit('submit', this.voteData);
   }
+
 
 
 

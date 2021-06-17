@@ -85,24 +85,7 @@ export default class EditNotificationPopup extends Vue{
   private isOpenAddLinkPopup: boolean=false;
   private isOpenAddReservation: boolean=false;
   private alarmData: { alarmAt: string }={alarmAt: ''};
-  private voteData: IVoteModel={
-    vote:{
-      parent_id:0,
-      type: 0,
-      title: '',
-      multi_choice: 0,
-      anonymous_mode: 0,
-      open_progress_level: 0,
-      open_result_level: 0,
-      finishAt: new Date().toISOString().substr(0, 10),
-    },
-    vote_choice_list: [
-      {
-        text: '',
-        index: 1
-      }
-    ]
-  };
+  private voteData: IVoteModel | null=null;
   private postData: ICreatePost = { title: '', text: ''};
   private linkData: ILinkModel={
     link: {
@@ -201,16 +184,10 @@ export default class EditNotificationPopup extends Vue{
       return { index:item.index, text:item.text};
     });
 
+    const { parent_id, type, title, multi_choice, anonymous_mode, open_progress_level, open_result_level, finishAt}=vote;
     this.voteData = {
       vote: {
-        parent_id: vote.parent_id,
-        type: vote.type,
-        title: vote.title,
-        multi_choice: vote.multi_choice,
-        anonymous_mode: vote.anonymous_mode,
-        open_progress_level: vote.open_progress_level,
-        open_result_level: vote.open_result_level,
-        finishAt: vote.finishAt
+        parent_id, type, title, multi_choice, anonymous_mode, open_progress_level, open_result_level, finishAt
       },
       vote_choice_list: reformat
     };
@@ -464,7 +441,7 @@ export default class EditNotificationPopup extends Vue{
   private onAddVote( voteData: IVoteModel) {
     this.voteData = voteData;
     this.isOpenEditVotePopup=false;
-    // console.log(voteData);
+    console.log(voteData);
   }
   private voteDataClear() {
     this.voteData={
