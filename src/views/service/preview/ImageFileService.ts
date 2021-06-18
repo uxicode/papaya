@@ -23,7 +23,7 @@ class ImageFileService implements IFile{
     return this.imgFileItems[idx];
   }
 
-  public setImgURLItems( items: IAttachFileModel[] ): void{
+  public setAttachItems( items: IAttachFileModel[] ): void{
     // this.imgURLFileItems=items;
     this.imgFileItems=items.map(( item: IAttachFileModel, index: number)=>{
       return {
@@ -79,6 +79,9 @@ class ImageFileService implements IFile{
     const addFiles= this.imgFileItems
       .filter((item) => item.file.name !== undefined)
       .map((item)=>item.file);
+
+    //전송할 파일이 없다면 여기서 종료.
+    if( addFiles.length<1 ){ return; }
 
     // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
     this.formDataAppendToFile( formData, addFiles, 'files');

@@ -47,7 +47,7 @@ export default class AddVotePopup extends Vue{
   private voteType: string = 'txt';
   private voteData: IVoteModel= {
     vote: {
-      parent_id:0,
+      parent_id:-1,
       type: 0,
       title: '',
       multi_choice: 0,

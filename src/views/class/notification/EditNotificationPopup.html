@@ -18,6 +18,7 @@
               <div class="popup-form-top">
                 <div class="form-item post-classes selected"> <!-- class 선택 시 form-item 에 selected 추가됨 -->
                   <p>
+                    <!-- getProfileImg : mixin 에 정의됨. -->
                     <span class="icon"><img :src="getProfileImg(myClassHomeModel.image_url)" class="icon-img" alt=""></span>
                     <span class="gr-name">{{ myClassHomeModel.g_name }}</span>
                     <strong class="cls-name">{{ myClassHomeModel.name }}</strong>
@@ -57,7 +58,7 @@
                 <!-- end: 첨부 이미지 파일 미리보기 -->
 
                 <!-- start: 투표 첨부 미리보기 -->
-                <vote-preview :file-items="voteItemModel"
+                <vote-preview :file-items="voteItemModel.vote"
                               title="title"
                               choice="multi_choice"
                               finish-at="finishAt"
@@ -108,7 +109,7 @@
         </div>
         <div slot="footer">
           <div class="btn-group rt">
-            <button type="button" class="btn primary navi" :disabled="!isSubmitValidate" @click="onAddPostSubmit">등록</button>
+            <button type="button" class="btn primary navi" :disabled="!isSubmitValidate" @click="onAddPostSubmit">수정</button>
           </div>
         </div>
       </template>

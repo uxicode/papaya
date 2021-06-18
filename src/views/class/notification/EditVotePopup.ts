@@ -48,9 +48,9 @@ export default class EditVotePopup extends Vue {
   ];
   private voteData: IVoteModel= {
     vote: {
-      parent_id:0,
+      parent_id:-1,
       type: 0,
-      title: '',
+      title: 'none',
       multi_choice: 0,
       anonymous_mode: 0,
       open_progress_level: 0,
