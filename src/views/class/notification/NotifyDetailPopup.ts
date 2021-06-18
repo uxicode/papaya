@@ -2,7 +2,7 @@ import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {IAttachFileModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
-import {ICommentModel} from '@/views/model/comment.model';
+import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
 import {Utils} from '@/utils/utils';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -145,20 +145,24 @@ export default class NotifyDetailPopup extends Vue {
 
     /**
      * 댓글 수정 input
-     * @param comment
+     * @param data
      * @param idx
      * @private
      */
-    private openCommentModify(comment: string, idx: number): void {
-        const commentTxt = document.querySelectorAll('.main-comment .comment-txt');
-        const modifyComment = document.querySelectorAll('.main-comment .modify-comment');
-        commentTxt.forEach((item, index) =>
-            (idx===index) ? item.classList.toggle('hide') : item.classList.remove('hide'));
-        modifyComment.forEach((item, index) =>
-            (idx===index) ? item.classList.toggle('active') : item.classList.remove('active'));
-        this.tempComment = comment;
-        // @ts-ignore
-        modifyComment[idx].firstChild.focus();
+    private openCommentModify(data: ICommentModel, idx: number): void {
+        if (data.owner.id === this.myClassHomeModel.me?.id) {
+            const commentTxt = document.querySelectorAll('.main-comment .comment-txt');
+            const modifyComment = document.querySelectorAll('.main-comment .modify-comment');
+            commentTxt.forEach((item, index) =>
+                (idx===index) ? item.classList.toggle('hide') : item.classList.remove('hide'));
+            modifyComment.forEach((item, index) =>
+                (idx===index) ? item.classList.toggle('active') : item.classList.remove('active'));
+            this.tempComment = data.comment;
+            // @ts-ignore
+            modifyComment[idx].firstChild.focus();
+        } else {
+            alert('본인이 쓴 댓글만 수정 가능합니다.');
+        }
     }
 
     /**
@@ -191,18 +195,22 @@ export default class NotifyDetailPopup extends Vue {
 
     /**
      * 댓글 삭제
-     * @param id
      * @private
+     * @param data
      */
-    private async deleteComment(id: number) {
-        await CommentService.deleteComment(id)
-            .then((data) => {
-                console.log(data);
-                // const findIdx = this.commentItemsModel.findIndex((item) => item.id === id);
-                // this.commentItemsModel.splice(findIdx, 1);
-            });
-        await this.GET_COMMENTS_ACTION(this.postDetailModel.id);
-        this.closeCommentModify();
+    private async deleteComment(data: ICommentModel) {
+        if (data.owner.id === this.myClassHomeModel.me?.id) {
+            await CommentService.deleteComment(data.id)
+                .then((result) => {
+                    console.log(result);
+                    // const findIdx = this.commentItemsModel.findIndex((item) => item.id === id);
+                    // this.commentItemsModel.splice(findIdx, 1);
+                });
+            await this.GET_COMMENTS_ACTION(this.postDetailModel.id);
+            this.closeCommentModify();
+        } else {
+            alert('본인이 쓴 댓글만 삭제 가능합니다');
+        }
     }
 
     /**
@@ -211,16 +219,20 @@ export default class NotifyDetailPopup extends Vue {
      * @param idx
      * @private
      */
-    private openReplyModify(reply: string, jdx: number): void {
-        const replyTxt = document.querySelectorAll('.reply .comment-txt');
-        const modifyReply = document.querySelectorAll('.reply .modify-reply');
-        replyTxt.forEach((item, index) =>
-            (jdx===index) ? item.classList.toggle('hide') : item.classList.remove('hide'));
-        modifyReply.forEach((item, index) =>
-            (jdx===index) ? item.classList.toggle('active') : item.classList.remove('active'));
-        this.tempReply = reply;
-        // @ts-ignore
-        modifyReply[jdx].firstChild.focus();
+    private openReplyModify(data: IReplyModel, jdx: number): void {
+        if (data.owner.id === this.myClassHomeModel.me?.id) {
+            const replyTxt = document.querySelectorAll('.reply .comment-txt');
+            const modifyReply = document.querySelectorAll('.reply .modify-reply');
+            replyTxt.forEach((item, index) =>
+                (jdx===index) ? item.classList.toggle('hide') : item.classList.remove('hide'));
+            modifyReply.forEach((item, index) =>
+                (jdx===index) ? item.classList.toggle('active') : item.classList.remove('active'));
+            this.tempReply = data.comment;
+            // @ts-ignore
+            modifyReply[jdx].firstChild.focus();
+        } else {
+            alert('본인이 쓴 대댓글만 수정 가능합니다.');
+        }
     }
 
     /**
@@ -252,16 +264,20 @@ export default class NotifyDetailPopup extends Vue {
 
     /**
      * 대댓글 삭제
-     * @param id
      * @private
+     * @param data
      */
-    private async deleteReply(id: number) {
-        await CommentService.deleteReply(id)
-            .then((data) => {
-                console.log(data);
-            });
-        await this.GET_COMMENTS_ACTION(this.postDetailModel.id);
-        this.closeReplyModify();
+    private async deleteReply(data: IReplyModel) {
+        if (data.owner.id === this.myClassHomeModel.me?.id) {
+            await CommentService.deleteReply(data.id)
+                .then((result) => {
+                    console.log(result);
+                });
+            await this.GET_COMMENTS_ACTION(this.postDetailModel.id);
+            this.closeReplyModify();
+        } else {
+            alert('본인이 쓴 대댓글만 삭제 가능합니다');
+        }
     }
 
 }
