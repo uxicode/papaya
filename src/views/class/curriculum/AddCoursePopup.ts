@@ -175,32 +175,19 @@ export default class AddCoursePopup extends Vue {
     //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
 
 
-    // private textReplacing() {
-    //     for( let i=0; i<this.imgFileService.imgFileItems.length; i++ ){
-    //         const test11 = this.imgFileService.imgFileItems[i].file.name;
-    //
-    //         console.log(test11);
-    //     }
-    // }
-
-
     /**
      * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
      * @private
      */
     private onAddCourseSubmit(): void{
-        this.makeCurriculumData.course_list = [
-            {
-                index: 0,
-                id: 0,
-                startDay: '',
-                startTime: '',
-                endTime: '',
-                title: '',
-                contents: '',
-            }
-        ];
+
+        const hour = (this.startTimeSelectModel.apm === '오후') ? Number(this.startTimeSelectModel.hour) + 12 : Number(this.startTimeSelectModel.hour);
+        const minute= Number( this.startTimeSelectModel.minute );
+
+
         this.popupChange( false );
+
+        console.log(this.makeCurriculumData);
     }
 
     private popupChange( value: boolean ) {

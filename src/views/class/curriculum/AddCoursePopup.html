@@ -21,14 +21,15 @@
                     <div class="form-item">
                         <txt-field id="courseTitle"
                                    add-class="popup-type"
-                                   placeholder="수업 제목을 20자 이내로 작성해 주세요."
                                    v-model="makeCurriculumData.course_list[courseIdx].title"
+                                   placeholder="수업 제목을 20자 이내로 작성해 주세요."
                                    rules="required"
                                    valid-name="수업제목">
                         </txt-field>
                     </div>
                 </div>
                 <div class="popup-form-cnt">
+
                     <div class="form-item">
                         <p>수업 날짜</p>
                         <div class="form-box">
@@ -67,7 +68,7 @@
                                         </v-text-field>
                                     </template>
                                     <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                                    <v-date-picker v-model="datePickerModel" no-title @input="datePickerChange"></v-date-picker>
+                                    <v-date-picker v-model="makeCurriculumData.course_list[courseIdx].startDay" no-title @input="datePickerChange"></v-date-picker>
                                 </v-menu>
                             </div>
                         </div>
@@ -164,8 +165,8 @@
                         <textarea
                                 ref="courseDetailAreaTxt"
                                 class="form-textarea auto-resize"
-                                v-model="makeCurriculumData.course_list[courseIdx].contents"
                                 placeholder="일정 내용을 작성해 주세요."
+                                v-model="makeCurriculumData.course_list[courseIdx].contents"
                                 ></textarea>
                         <!-- end: 일정 상세 내용 입력창 -->
                     </div>
