@@ -35,7 +35,7 @@
                                     </button>
                                 </template>
                                 <v-list>
-                                    <v-list-item @click="modifyCurriculumHandler( item.id )">
+                                    <v-list-item @click="onModifyCurriculumPopupOpen(item.id)">
                                         <v-list-item-title class="lt">교육과정 수정</v-list-item-title>
                                     </v-list-item>
                                     <v-list-item @click="deleteCurriculum( item.id )">
@@ -84,7 +84,7 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <button type="button" @click="isCreateError = false" class="btn navi">확인</button>
+                    <btn type="navi" @btnClick="isCreateError = false">확인</btn>
                 </div>
             </div>
         </modal>
@@ -100,4 +100,11 @@
     <curriculum-detail-popup
             :is-open="isDetailPopupOpen"
             @change="onDetailCurriculumPopupStatus"></curriculum-detail-popup>
+
+    <modify-curriculum-popup
+            :is-open="isModifyPopupOpen"
+            :card-id="detailCurriculumId"
+            @change="onModifyCurriculumPopupStatus"
+            @submit="onModifyCurriculum"></modify-curriculum-popup>
+
 </div>

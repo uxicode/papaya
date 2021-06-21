@@ -1,11 +1,11 @@
 <!--start: 공통 팝업 / 파일명 : W.4.5.5.2 (교육과정 수정 - 수업내용수정) (4.5.5.2 ~ 4.5.5.2.2)-->
 <transition name="modal">
-    <modal v-if="isModifyClassCourse" size="540px" body-padding="0" @modalClose="isModifyClassCourse=false">
+    <modal v-if="isModifyCourse" size="540px" body-padding="0" @modalClose="popupChange(false)">
         <div slot="header">
             <!-- header custom coding-->
             <div class="popup-icon edu"></div>
             <div class="popup-close">
-                <button class="close" @click="isModifyClassCourse = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                <button class="close" @click="popupChange(false)"><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
         </div>
         <div slot="body">
@@ -234,7 +234,7 @@
         <div slot="footer">
             <!-- footer custom coding-->
             <div class="btn-group rt">
-                <button type="button" class="btn navi" @click="modifyCourseConfirm(countCourseNumber)">수정</button>
+                <btn type="navi" @btnClick="modifyCourseConfirm(countCourseNumber)">수정</btn>
             </div>
         </div>
     </modal>
