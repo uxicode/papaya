@@ -6,7 +6,7 @@ import Btn from '@/components/button/Btn.vue';
 import CourseDetailPopup from '@/views/class/curriculum/CourseDetailPopup';
 import {
     IClassInfo,
-    ICurriculumList,
+    ICurriculumDetailList,
 } from '@/views/model/my-class.model';
 import WithRender from './CurriculumDetailPopup.html';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
@@ -38,7 +38,7 @@ export default class CurriculumDetailPopup extends Vue {
     private myClassHomeModel!: IClassInfo;
 
     @MyClass.Getter
-    private curriculumDetailItem!: ICurriculumList;
+    private curriculumDetailItem!: ICurriculumDetailList;
 
     @MyClass.Action
     private GET_COURSE_DETAIL_ACTION!: ( payload: { classId: number, curriculumId: number, courseId: number }) =>Promise<any>;
@@ -74,7 +74,7 @@ export default class CurriculumDetailPopup extends Vue {
         this.$emit('change', value);
     }
 
-    get curriculumDetailModel(): ICurriculumList{
+    get curriculumDetailModel(): ICurriculumDetailList{
         return this.curriculumDetailItem;
     }
 

@@ -15,6 +15,7 @@ export const SET_RESERVED_TOTAL: string = 'SET_RESERVED_TOTAL';
 export const SET_POST_DETAIL: string = 'SET_POST_DETAIL';
 export const SET_COMMENTS: string = 'SET_COMMENTS';
 export const SET_REPLY: string = 'SET_REPLY';
+export const SET_CURRICULUM_LIST: string = 'SET_CURRICULUM_LIST';
 export const SET_SCHEDULE_LIST: string = 'SET_SCHEDULE_LIST';
 export const SET_SCHEDULE_DETAIL: string = 'SET_SCHEDULE_DETAIL';
 

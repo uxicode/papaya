@@ -9,10 +9,12 @@ import AddCoursePopup from '@/views/class/curriculum/AddCoursePopup';
 import {
     IClassInfo,
     IMakeEducation,
-    ICurriculumList,
+    ICurriculumDetailList, ICurriculumList,
 } from '@/views/model/my-class.model';
-import MyClassService from '@/api/service/MyClassService';
+import {ImageFileService} from '@/views/service/preview/ImageFileService';
+import {AttachFileService} from '@/views/service/preview/AttachFileService';
 import WithRender from './AddCurriculumPopup.html';
+
 
 const MyClass = namespace('MyClass');
 
@@ -30,34 +32,42 @@ export default class AddCurriculumPopup extends Vue {
     @Prop(Boolean)
     private isOpen!: boolean;
 
+    @Prop(Number)
+    private detailCurriculumId!: number;
+
     @MyClass.Getter
     private classID!: number;
 
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
+    @MyClass.Getter
+    private curriculumListItems!: ICurriculumList;
+
+    @MyClass.Action
+    private GET_CURRICULUM_LIST_ACTION!: ( payload: {classId: number}) => Promise<any>;
+
+    @MyClass.Action
+    private ADD_CURRICULUM_ACTION!: (payload: {classId: number, formData: FormData}) => Promise<any>;
+
+    @MyClass.Action
+    private GET_CURRICULUM_DETAIL_ACTION!: ( payload: { classId: number, curriculumId: number }) =>Promise<any>;
+
+
     /* Modal 오픈 상태값 */
     private isOpenAddCoursePopup: boolean=false;
 
-
     private courseIdx: number = 0;
-    private countCourseNumber: number = 0;
 
     private CourseSettingsItems: string[] = ['수업 내용 수정', '수업 삭제'];
     private CourseSettingsModel: string = '수업 내용 수정';
 
-    private imageLoadedCount: number=0;
+    private formData: FormData = new FormData();
 
-    private imgFileURLItems: string[] = [];
-    private imgFileDatas: any[] = [];
-    private attachFileItems: any[] = [];
-    private formData!: FormData;
+    private imgFileService: ImageFileService = new ImageFileService();
+    private attachFileService: AttachFileService = new AttachFileService();
 
-    /**
-     * 클래스 교육과정 메인리스트
-     */
-
-    private makeCurriculumItems: IMakeEducation={
+    private makeCurriculumData: IMakeEducation={
         title: '',
         goal: '',
         course_list: [
@@ -73,8 +83,7 @@ export default class AddCurriculumPopup extends Vue {
         ]
     };
 
-
-    private curriculumDetailData: ICurriculumList={
+    private curriculumDetailData: ICurriculumDetailList={
         curriculum: {
             startAt: '2019-11-17 10:00:00',
             endAt: '2019-11-17 10:00:00',
@@ -120,11 +129,9 @@ export default class AddCurriculumPopup extends Vue {
     private curriculumDetailDataNum: number = 10;
     private eduItems: Array< {title: string }>=[];
 
-
     get isSubmitValidate(): boolean{
-        return (this.makeCurriculumItems.title !== '' && this.makeCurriculumItems.goal !== '');
+        return (this.makeCurriculumData.title !== '' && this.makeCurriculumData.goal !== '');
     }
-
 
     get currentCourseSettingItems(): string[]{
         return this.CourseSettingsItems;
@@ -170,10 +177,10 @@ export default class AddCurriculumPopup extends Vue {
             }
         }
 
-        this.makeCurriculumItems.course_list = [];
+        this.makeCurriculumData.course_list = [];
 
         for (let i = 0; i < num; i++) {
-            this.makeCurriculumItems.course_list.push({
+            this.makeCurriculumData.course_list.push({
                 index: i,
                 id: i,
                 title: '',
@@ -185,23 +192,10 @@ export default class AddCurriculumPopup extends Vue {
         }
     }
 
-
-
     /**
      * 교육과정 > 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
      * @private
      */
-    private submitAddCurriculum(): void{
-        //시나리오 --> 등록 버튼 클릭 > 이미지 추가한 배열값 formdata에 입력 > 전송 >전송 성공후> filesAllClear 호출 > 팝업 닫기
-
-        // this.setImageFormData();
-        // this.setAttachFileFormData();
-        this.setCurriculumDataToFormData();
-    }
-
-    private onAddCurriculumSubmit() {
-        this.submitAddCurriculum();
-    }
 
     private setCurriculumDataToFormData() {
         if( !this.isSubmitValidate ){return;}
@@ -210,60 +204,31 @@ export default class AddCurriculumPopup extends Vue {
             this.formData = new FormData();
         }
 
-        const temp = JSON.stringify( {...this.makeCurriculumItems} );
+        const temp = JSON.stringify({...this.makeCurriculumData} );
         this.formData.append('data', temp );
 
-        MyClassService.setEducationList( this.classID, this.formData )
-            .then((data)=>{
-                console.log( '교육과정 생성 성공', data );
+        this.ADD_CURRICULUM_ACTION({ classId: Number(this.classID), formData: this.formData })
+            .then((data) => {
                 this.$emit('submit', false);
-                this.imgFilesAllClear();
-                this.attachFilesAllClear();
-            });
-    }
 
-
-
-    private attachFilesAllClear() {
-        this.attachFileItems = [];
-        this.formData.delete('files');
-        // this.imageLoadedCount=0;
-    }
-
-    private imgFilesAllClear() {
-        this.imgFileURLItems = [];
-        this.imgFileDatas=[];
-        this.makeCurriculumItems={
-            title: '',
-            goal: '',
-            course_list: [
-                {
-                    index: 0,
-                    id: 0,
-                    startDay: '',
-                    startTime: '',
-                    endTime: '',
+                this.GET_CURRICULUM_LIST_ACTION({classId: Number(this.classID)}).then();
+                this.formData = new FormData();
+                this.makeCurriculumData = {
                     title: '',
-                    contents: ''
-                }
-            ]
-        };
-        this.formData.delete('files');
-        this.imageLoadedCount=0;
-    }
-
-
-    /**
-     * 클래스 교육과정 정보 조회
-     */
-    get curriculumList(): ICurriculumList{
-        return this.curriculumDetailData;
-    }
-
-
-    private curriculumClickHandler( idx: number ) {
-        // this.isClassCurr = true;
-        this.countCourseNumber = idx;
+                    goal: '',
+                    course_list: [
+                        {
+                            index: 0,
+                            id: 0,
+                            startDay: '',
+                            startTime: '',
+                            endTime: '',
+                            title: '',
+                            contents: ''
+                        }
+                    ]
+                };
+            });
     }
 
 }
