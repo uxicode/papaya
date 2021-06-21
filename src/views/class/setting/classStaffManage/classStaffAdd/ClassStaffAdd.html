@@ -20,7 +20,7 @@
                 <div class="activity-tit">
                     <p>일반 멤버 {{ totalMemberNum }}</p>
                 </div>
-                <div class="member-management-list scroll-body" style="height:586px;">
+                <div v-if="totalMemberNum>0" class="member-management-list scroll-body" style="height:586px;">
                     <ul>
                         <li v-for="(item, idx) in classMemberList"
                             :key="idx"
@@ -32,6 +32,12 @@
                             <a href="#" class="member-more" @click.stop.prevent="staffModifyPopupOpen(item.id, item.nickname)">스탭 추가하기</a>
                         </li>
                     </ul>
+                </div>
+                <!-- 멤버 없음 -->
+                <div v-else class="no-notify" style="height:540px;">
+                    <div class="no-data">
+                        <p>멤버가 없습니다.</p>
+                    </div>
                 </div>
             </div>
         </div>

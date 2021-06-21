@@ -4,6 +4,7 @@ import {IAttachFileModel, IPostInLinkModel, IPostModel} from '@/views/model/post
 import Modal from '@/components/modal/modal.vue';
 import AddNotifyPopup from '@/views/class/notification/AddNotifyPopup';
 import {PostService} from '@/api/service/PostService';
+import {CommentService} from '@/api/service/CommentService';
 import {getAllPromise} from '@/views/model/types';
 import NotificationListView from '@/views/class/notification/NotificationListView';
 import NotifyDetailPopup from '@/views/class/notification/NotifyDetailPopup';
@@ -113,7 +114,7 @@ export default class NotificationPage extends Vue {
     // const commentTotalItems: Array<{ total: any; postId: number, id: number; }> = [];
     const totalPromise: Array<Promise<any>> = [];
     this.postListItems.forEach((item: IPostModel) => {
-      totalPromise.push( PostService.getCommentsByPostId(item.id) );
+      totalPromise.push( CommentService.getCommentsByPostId(item.id) );
     });
     return totalPromise;
   }

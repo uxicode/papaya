@@ -499,7 +499,7 @@
                   <strong class="cls-name">{{ myClassHomeModel.name }}</strong>
                 </p>
 
-                <p class="post-writer" :class="{ 'crown':myClassHomeModel.me.level ===1}">{{ myClassHomeModel.me.nickname }}</p>
+                <p class="post-writer" :class="{ 'manager':myClassHomeModel.me.level ===1}">{{ myClassHomeModel.me.nickname }}</p>
               </div>
             </div>
           </div>
@@ -532,53 +532,43 @@
 
           <div class="popup-feed-comment">
             <div class="comment-top">
-              <p>댓글 12</p>
+              <p>댓글 {{ commentItemsModel.length }}</p>
             </div>
             <div class="comment-cnt">
-              <div class="comment">
+              <div v-for="(item, idx ) in commentItemsModel" class="comment pdt-0" :key="`comment-${idx}`">
                 <div class="main-comment">
-                  <p class="comment-writer">박정수 <span class="wr-time">15분 전</span></p>
-                  <p class="comment-txt">
-                    댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
-                    댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
-                  </p>
+                  <p class="comment-writer">{{ item.owner.nickname }} <span class="wr-time">{{ updatedDiffDate(item.createdAt) }}</span></p>
+                  <p class="comment-txt">{{ item.comment }}</p>
 
                   <div class="reply-state">
-                    <a href="" class="txt-btn">답글 12</a>
-                    <a href="" class="txt-btn">답글달기</a>
+                    <a href="" class="txt-btn" @click.prevent>답글 {{ item.reply_count }}</a>
+                    <a href="" class="txt-btn" @click.prevent="replyInputToggle(idx)">답글달기</a>
                   </div>
                 </div>
 
-                <div class="reply">
-                  <p class="comment-writer">김동현 <span class="wr-time">15분 전</span></p>
-                  <p class="comment-txt">
-                    댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
-                    댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
-                  </p>
-                </div>
+                <template v-if="replyItemsModel[idx]!==undefined">
+                  <div v-for="( replyItem, jdx) in replyItemsModel[idx].comment_list" class="reply" :key="`reply-${jdx}`">
+                    <p class="comment-writer">{{ replyItem.owner.nickname }} <span class="wr-time">{{ updatedDiffDate(replyItem.createdAt) }}</span></p>
+                    <p class="comment-txt">{{ replyItem.comment }}</p>
+                  </div>
+                </template>
 
-                <div class="reply">
-                  <p class="comment-writer">김동현 <span class="wr-time">15분 전</span></p>
-                  <p class="comment-txt">
-                    댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
-                    댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다. 댓글 내용이 들어갑니다.
-                  </p>
+                <div class="comment-btm reply hide">
+                  <input v-model="reply" type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;">
+                  <a href="" class="txt-btn disabled" @click.prevent="addReply(item.id)">등록</a>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
-      <div slot="footer">
-        <!-- footer custom coding-->
-        <div class="comment-btm">
-          <button type="button" class="btn only-ico-btn"><img :src="require('@/assets/images/image.svg')" alt="">
-          </button>
-          <input type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;">
-          <a href="" class="txt-btn disabled">등록</a>
+        <div slot="footer">
+          <div class="comment-btm">
+            <button type="button" class="btn only-ico-btn"><img :src="require('@/assets/images/image.svg')" alt=""></button>
+            <input v-model="comment" type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;">
+            <a href="" class="txt-btn disabled" @click.prevent="addComment">등록</a>
+          </div>
         </div>
-      </div>
     </modal>
   </transition>
   <!-- end: 공통 팝업 -->

@@ -1,5 +1,5 @@
 <template>
-  <div class="form-add-list" v-if="fileItems!==null">
+  <div class="form-add-list" v-if="fileItems!==null && length>0">
     <div class="add-item">
       <div class="add-item-top">
         <p class="add-item-tit">투표</p>
@@ -34,6 +34,9 @@ export default class VotePreview extends Vue{
 
   @Prop(String)
   private finishAt!: string; //finishAt
+
+  @Prop(Number)
+  private length!: number; //finishAt
 
   @Prop(String)
   private title!: string; //title

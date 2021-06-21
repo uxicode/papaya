@@ -1,4 +1,4 @@
-import {Component, Prop, Vue, Watch} from 'vue-property-decorator';
+import {Component, Mixins, Prop, Vue, Watch} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
@@ -7,7 +7,7 @@ import {
   ICreatePost,
   ILinkModel,
   IPostInLinkModel,
-  IPostModel,
+  IPostModel, IReadAbleVote,
   IVoteModel
 } from '@/views/model/post.model';
 import AddVotePopup from '@/views/class/notification/AddVotePopup';
@@ -24,6 +24,8 @@ import ImagePreview from '@/components/preview/imagePreview.vue';
 import LinkPreview from '@/components/preview/linkPreview.vue';
 import VotePreview from '@/components/preview/votePreview.vue';
 import AlarmPreview from '@/components/preview/alarmPreview.vue';
+import EditVotePopup from '@/views/class/notification/EditVotePopup';
+import UtilsMixins from '@/mixin/UtilsMixins';
 import WithRender from './EditNotificationPopup.html';
 
 const MyClass = namespace('MyClass');
@@ -42,10 +44,11 @@ const Post = namespace('Post');
     AddReservationPopup,
     LinkPreview,
     VotePreview,
-    AlarmPreview
+    AlarmPreview,
+    EditVotePopup
   }
 })
-export default class EditNotificationPopup extends Vue{
+export default class EditNotificationPopup extends  Mixins(UtilsMixins){
 
   @Prop(Boolean)
   private isOpen!: boolean;
@@ -65,6 +68,9 @@ export default class EditNotificationPopup extends Vue{
   @Post.Getter
   private replyItems!: any[];
 
+  @Post.Mutation
+  private SET_VOTE!: (data: IReadAbleVote)=> void;
+
   @Post.Action
   private ADD_POST_ACTION!: (payload: { classId: number; formData: FormData })=>Promise<any>;
 
@@ -75,29 +81,11 @@ export default class EditNotificationPopup extends Vue{
   private DELETE_POST_FILE!: (payload: { classId: number, postId: number, ids: number[] })=>Promise<any>;
 
 
-
-  private isOpenAddVotePopup: boolean=false;
+  private isOpenEditVotePopup: boolean=false;
   private isOpenAddLinkPopup: boolean=false;
   private isOpenAddReservation: boolean=false;
   private alarmData: { alarmAt: string }={alarmAt: ''};
-  private voteData: IVoteModel={
-    vote:{
-      parent_id:0,
-      type: 0,
-      title: '',
-      multi_choice: 0,
-      anonymous_mode: 0,
-      open_progress_level: 0,
-      open_result_level: 0,
-      finishAt: new Date().toISOString().substr(0, 10),
-    },
-    vote_choice_list: [
-      {
-        text: '',
-        index: 1
-      }
-    ]
-  };
+  private voteData: IVoteModel | null=null;
   private postData: ICreatePost = { title: '', text: ''};
   private linkData: ILinkModel={
     link: {
@@ -109,7 +97,6 @@ export default class EditNotificationPopup extends Vue{
   private formData: FormData=new FormData();
   private imgFileService: ImageFileService=new ImageFileService();
   private attachFileService: AttachFileService=new AttachFileService();
-
 
   get imgFileURLItemsModel(): string[] {
     return this.imgFileService.getItems();
@@ -143,8 +130,6 @@ export default class EditNotificationPopup extends Vue{
     return this.replyItems;
   }
 
-
-
   /**
    * 클릭한 상세 정보값이 들어오고 난 후에 postData 를 갱신해야 한다.
    */
@@ -153,25 +138,20 @@ export default class EditNotificationPopup extends Vue{
     // this.alarmData = { alarmAt };
     this.postData= { title, text };
 
-    if (attachment.length) {
-      //이미지 파일이 있을 시 화면에 로드 시켜둠
-      this.imgFileService.setImgURLItems( this.imgPreviewInit(attachment) );
-
-      const fileItems=this.attachFilePreviewInit( attachment);
-
-      this.attachFileService.setItems( fileItems);
+    if (attachment.length && attachment.length>0) {
+      //이미지 파일이 있을 시 화면에 로드 시켜둠  //imgPreviewInit : mixin 에 정의됨.
+      this.imgFileService.setAttachItems( this.imgPreviewInit(attachment) );
+      //첨부파일 있을시 화면에 로드 시켜둠 //attachFilePreviewInit : mixin 에 정의됨.
+      this.attachFileService.setAttachItems( this.attachFilePreviewInit( attachment) );
     }
-
     //vote 가 존재 할때만
     if ( vote ) {
       this.votePreviewInit(vote);
     }
-
     //링크가 존재 할 때만
     if( link ){
       this.linkPreviewInit(link);
     }
-
     return this.postDetailItem;
   }
 
@@ -179,33 +159,30 @@ export default class EditNotificationPopup extends Vue{
     return this.postData;
   }
 
-  public attachFilePreviewInit(attachment: IAttachFileModel[]): IAttachFileModel[] {
-    return attachment.filter((item: IAttachFileModel) => item.contentType !== 'image/png' && item.contentType !== 'image/jpg' && item.contentType !== 'image/jpeg' && item.contentType !== 'image/gif');
-  }
-
-
-  public imgPreviewInit( attachment: IAttachFileModel[] ): IAttachFileModel[]{
-    /* imgItems.map((item: IAttachFileModel) => {
-       return item.location;
-     });*/
-    return attachment.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg' || item.contentType === 'image/gif');
-  }
-
   public votePreviewInit( vote: any ) {
     const reformat=vote.vote_choices.map( (item: any)=>{
       return { index:item.index, text:item.text};
     });
-
+    const {
+      parent_id,
+      type,
+      title,
+      multi_choice,
+      anonymous_mode,
+      open_progress_level,
+      open_result_level,
+      finishAt
+    } = vote;
     this.voteData = {
       vote: {
-        parent_id: vote.parent_id,
-        type: vote.type,
-        title: vote.title,
-        multi_choice: vote.multi_choice,
-        anonymous_mode: vote.anonymous_mode,
-        open_progress_level: vote.open_progress_level,
-        open_result_level: vote.open_result_level,
-        finishAt: vote.finishAt
+        parent_id,
+        type,
+        title,
+        multi_choice,
+        anonymous_mode,
+        open_progress_level,
+        open_result_level,
+        finishAt
       },
       vote_choice_list: reformat
     };
@@ -223,23 +200,14 @@ export default class EditNotificationPopup extends Vue{
     };
   }
 
-  public getProfileImg(imgUrl: string | null | undefined ): string{
-    return ImageSettingService.getProfileImg( imgUrl );
-  }
-
-  private getImgFileDataSort(fileData: IAttachFileModel[] ) {
-    return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg' || item.contentType === 'image/gif');
-  }
-
   @Watch('isOpen')
   private currentStatus( val: boolean, old: boolean) {
     if (val !== old && val ) {
       this.$nextTick(()=>{
         //상세글 입력 창 크기 데이터 크기 즉 텍스트의 길이에 맞추어 재설정한다.
-        const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLInputElement;
-        console.log(scheduleDetailAreaTxt);
-        this.definePostDetailInputHeight();
-
+        const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLTextAreaElement;
+        // console.log(scheduleDetailAreaTxt);
+        this.txtAreaEleH( scheduleDetailAreaTxt, this.postData.text );
       });
     }
   }
@@ -256,41 +224,19 @@ export default class EditNotificationPopup extends Vue{
    */
   private postDetailAreaInputHandler(value: any) {
     this.postData.text=value;
-    this.definePostDetailInputHeight();
+    const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLTextAreaElement;
+    this.txtAreaEleH( scheduleDetailAreaTxt, this.postData.text );
   }
 
-  private definePostDetailInputHeight() {
-    const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLInputElement;
-    scheduleDetailAreaTxt.style.height = String( Utils.autoResizeTextArea(this.postData.text) + 'px');
-  }
-
-
-
+  //start : 이미지 preview  및 이미지 등록 ================================================
   /**
    * 이미지등록 아이콘 클릭시 > input type=file 에 클릭 이벤트 발생시킴.
    * @private
    */
   private addImgFileInputFocus() {
+    //input click event 발생시키기 - mixin 으로 이동
     this.inputEventBind('#imgFileInput');
   }
-
-  private addFilesInputFocus(){
-    this.inputEventBind('#attachFileInput');
-  }
-
-  /**
-   * //input click event 발생시키기.
-   * @param targetSelector
-   * @private
-   */
-  private inputEventBind( targetSelector: string ) {
-    //파일 input 에 클릭 이벤트 붙이기~
-    const imgFileInput = document.querySelector(targetSelector) as HTMLInputElement;
-    //input click event 발생시키기.
-    imgFileInput.dispatchEvent(Utils.createMouseEvent('click'));
-  }
-
-  //start : 이미지 preview  및 이미지 등록 ================================================
   //모델에 이미지 파일 추가
   private addFileToImage( files: FileList ){
     this.imgFileService.load(files, '#imgFileInput');
@@ -314,14 +260,8 @@ export default class EditNotificationPopup extends Vue{
     }else{
       this.imgFileService.remove(idx);
     }
-    // console.log(targetImg);
-    //
-
-
-
-
-    //
   }
+
   /**
    * 추가된 이미지 파일 모두 지우기
    * @private
@@ -344,8 +284,6 @@ export default class EditNotificationPopup extends Vue{
     }else{
       this.imgFileService.removeAll();
     }
-
-
   }
   /**
    * post 등록을 완료후 formdata 및 배열에 지정되어 있던 데이터들 비우기..
@@ -358,6 +296,14 @@ export default class EditNotificationPopup extends Vue{
   //end : 이미지 preview  및 이미지 등록 ================================================
 
   //start : 파일 첨부 미리보기 및 파일 업로드 ================================================
+  /**
+   * 첨부파일등록 아이콘 클릭시 > input type=file 에 클릭 이벤트 발생시킴.
+   * @private
+   */
+  private addFilesInputFocus(){
+    //input click event 발생시키기 - mixin 으로 이동
+    this.inputEventBind('#attachFileInput');
+  }
   //모델에 이미지 파일 추가
   private addAttachFileTo( files: FileList ){
     this.attachFileService.load(files, '#attachFileInput');
@@ -412,54 +358,20 @@ export default class EditNotificationPopup extends Vue{
     return invalidLinkItems.length > 0;
   }
 
-  /**
-   * 알림 데이터 post 전송
-   * @private
-   */
-  private setPostDataToFormData() {
-    if( !this.isSubmitValidate ){return;}
 
-    //링크 데이터가 존재 한다면 기존 postData 에 merge 한다.
-    const linkMergeData = (this.getValidLink())? {...this.postData, ...this.linkData} : {...this.postData};
-    const voteMergeData = (this.voteData!==null)? {...linkMergeData, ...this.voteData} : {...this.postData};
-    const mergeData= (this.alarmData.alarmAt!=='')? {...voteMergeData, ...this.alarmData} : voteMergeData;
-
-    //formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.
-    const temp = JSON.stringify( mergeData );
-    this.formData.append('data', temp );
-
-    // voteData 는 알림의 id 값을 알아야 하기에 먼저 알림을 생성/등록>완료 후 해당 알림의 id 을 가져와서 voteData 를 생성한다.
-    this.ADD_POST_ACTION({classId: Number(this.classID), formData: this.formData})
-      .then((data) => {
-        if (this.alarmData.alarmAt !== '') {
-          //예약된 알림 가져오기.
-          this.GET_RESERVED_LIST_ACTION(Number(this.classID))
-            .then((alarmData) => {
-              console.log(alarmData);
-              this.alarmData.alarmAt = '';
-            });
-        }
-        // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
-        this.imgFilesAllClear(); //이미지 데이터 비우기
-        this.attachFilesAllClear();//파일 데이터 비우기
-        this.postData = {title: '', text: ''}; //post 데이터 비우기
-        this.voteDataClear(); //투표 데이터 비우기
-        this.$emit('submit', false); //post 등록 팝업 닫기 알림~
-      });
-  }
 
   //start : vote 이벤트 핸들러 ================================================
-  private addVotePopupOpen() {
-    this.isOpenAddVotePopup=true;
-    console.log(this.isOpenAddVotePopup);
+  private editVotePopupOpen() {
+    this.isOpenEditVotePopup=true;
+    console.log(this.isOpenEditVotePopup);
   }
   private onVotePopupClose(value: boolean ) {
-    this.isOpenAddVotePopup=value;
+    this.isOpenEditVotePopup=value;
   }
   private onAddVote( voteData: IVoteModel) {
     this.voteData = voteData;
-    this.isOpenAddVotePopup=false;
-    // console.log(voteData);
+    this.isOpenEditVotePopup=false;
+    console.log(voteData);
   }
   private voteDataClear() {
     this.voteData={
@@ -482,7 +394,9 @@ export default class EditNotificationPopup extends Vue{
     };
   }
   private onModifyVote() {
-    this.isOpenAddVotePopup=true;
+   // console.log('this.postDetailItem.vote=', this.postDetailItem.vote);
+    this.SET_VOTE( this.postDetailItem.vote );
+    this.isOpenEditVotePopup=true;
   }
   //end : vote 이벤트 핸들러 ================================================
 
@@ -528,4 +442,44 @@ export default class EditNotificationPopup extends Vue{
     this.isOpenAddReservation=true;
   }
   //end : 예약 알림 미리보기 ================================================
+
+
+
+  /**
+   * 알림 데이터 post 전송
+   * @private
+   */
+  private setPostDataToFormData() {
+    if( !this.isSubmitValidate ){return;}
+
+    //링크 데이터가 존재 한다면 기존 postData 에 merge 한다.
+    const linkMergeData = (this.getValidLink())? {...this.postData, ...this.linkData} : {...this.postData};
+    const voteMergeData = (this.voteData!==null)? {...linkMergeData, ...this.voteData} : {...this.postData};
+    const mergeData= (this.alarmData.alarmAt!=='')? {...voteMergeData, ...this.alarmData} : voteMergeData;
+
+    //formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.
+    const temp = JSON.stringify( mergeData );
+    this.formData.append('data', temp );
+
+
+
+    // voteData 는 알림의 id 값을 알아야 하기에 먼저 알림을 생성/등록>완료 후 해당 알림의 id 을 가져와서 voteData 를 생성한다.
+    /* this.ADD_POST_ACTION({classId: Number(this.classID), formData: this.formData})
+       .then((data) => {
+         if (this.alarmData.alarmAt !== '') {
+           //예약된 알림 가져오기.
+           this.GET_RESERVED_LIST_ACTION(Number(this.classID))
+             .then((alarmData) => {
+               console.log(alarmData);
+               this.alarmData.alarmAt = '';
+             });
+         }
+         // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
+         this.imgFilesAllClear(); //이미지 데이터 비우기
+         this.attachFilesAllClear();//파일 데이터 비우기
+         this.postData = {title: '', text: ''}; //post 데이터 비우기
+         this.voteDataClear(); //투표 데이터 비우기
+         this.$emit('submit', false); //post 등록 팝업 닫기 알림~
+       });*/
+  }
 }

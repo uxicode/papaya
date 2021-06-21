@@ -18,6 +18,7 @@
               <div class="popup-form-top">
                 <div class="form-item post-classes selected"> <!-- class 선택 시 form-item 에 selected 추가됨 -->
                   <p>
+                    <!-- getProfileImg : mixin 에 정의됨. -->
                     <span class="icon"><img :src="getProfileImg(myClassHomeModel.image_url)" class="icon-img" alt=""></span>
                     <span class="gr-name">{{ myClassHomeModel.g_name }}</span>
                     <strong class="cls-name">{{ myClassHomeModel.name }}</strong>
@@ -98,7 +99,7 @@
                     <input class="input-file" type="file" name="files" id="attachFileInput" accept=".pdf, .xls, .xlsx, .ppt, .pptx, .doc, .docx" multiple @change="addAttachFileTo( $event.target.files )" hidden />
                   </a>
                 </li>
-                <li><a href="" @click.prevent="addVotePopupOpen"><img :src="require('@/assets/images/vote.svg')" alt=""></a></li>
+                <li><a href="" @click.prevent="editVotePopupOpen"><img :src="require('@/assets/images/vote.svg')" alt=""></a></li>
                 <li><a href="" @click.prevent="addLinkPopupOpen"><img :src="require('@/assets/images/link.svg')" alt=""></a></li>
                 <li><a href="" @click.prevent="addReservationPopupOpen"><img :src="require('@/assets/images/time-outline.svg')" alt=""></a></li>
               </ul>
@@ -108,7 +109,7 @@
         </div>
         <div slot="footer">
           <div class="btn-group rt">
-            <button type="button" class="btn primary navi" :disabled="!isSubmitValidate" @click="onAddPostSubmit">등록</button>
+            <button type="button" class="btn primary navi" :disabled="!isSubmitValidate" @click="onAddPostSubmit">수정</button>
           </div>
         </div>
       </template>
@@ -117,8 +118,7 @@
     </modal>
   </transition>
 
-
-  <add-vote-popup :is-open="isOpenAddVotePopup" @close="onVotePopupClose" @submit="onAddVote"></add-vote-popup>
+  <edit-vote-popup :is-open="isOpenEditVotePopup" @close="onVotePopupClose" @submit="onAddVote"></edit-vote-popup>
   <add-link-popup :is-open="isOpenAddLinkPopup" @close="onLinkPopupClose" @submit="onAddLink"></add-link-popup>
   <add-reservation-popup :is-open="isOpenAddReservation" @close="onReservationPopupClose" @submit="onAddReservation"></add-reservation-popup>
 </div>

@@ -7,6 +7,7 @@ import ClassModule from '@/store/class.module';
 import SearchModule from '@/store/search.module';
 import PageHistoryStatus from '@/store/PageHistoryStatus';
 import PostModule from '@/store/post.module';
+import ScheduleModule from '@/store/schedule.module';
 
 Vue.use(Vuex);
 
@@ -18,6 +19,7 @@ const store = new Vuex.Store({
     MyClass: ClassModule,
     SearchStatus: SearchModule,
     Post: PostModule,
+    Schedule: ScheduleModule,
   },
 });
 

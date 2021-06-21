@@ -39,7 +39,7 @@
                 <li v-for="(item, idx) in classNotifyList"
                     :key="idx"
                     class="list-item sub-list-item"
-                    :class="{'disabled': onOffNoti === 0}">
+                    :class="{'disabled': !onOffNoti}">
                     <p class="list-tit">{{ item }}</p>
                     <div class="setting-btn">
                         <div class="member-info-btn">
@@ -57,7 +57,7 @@
                                             <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
                                         </button>
                                     </template>
-                                    <v-list v-if="idx!==2">
+                                    <v-list v-if="idx!==2 && onOffNoti">
                                         <v-list-item @click="notiOnOff(idx, 1)">
                                             <v-list-item-title>받기</v-list-item-title>
                                         </v-list-item>
@@ -65,7 +65,7 @@
                                             <v-list-item-title>받지 않기</v-list-item-title>
                                         </v-list-item>
                                     </v-list>
-                                    <v-list v-else>
+                                    <v-list v-else-if="idx===2 && onOffNoti">
                                         <v-list-item @click="notiOnOff(idx, 10)">
                                             <v-list-item-title>10분 전 받기</v-list-item-title>
                                         </v-list-item>
@@ -157,13 +157,13 @@
                         <p>가입 질문 설정</p>
                         <div class="qna-setting-btn">
                             <div class="form-switcher">
-                                <input type="checkbox" id="toggle1" checked>
+                                <input v-model="isQuestionShow" type="checkbox" id="toggle1">
                                 <label for="toggle1"></label>
                             </div>
                         </div>
                     </div>
 
-                    <div class="qna-setting-list">
+                    <div class="qna-setting-list" :class="{'disabled': isQuestionShow===false}">
                         <p>질문 목록</p>
                         <ul class="qna-list">
                             <li v-for="(item, idx) in questionList"
@@ -177,7 +177,7 @@
                                                @input="valueChange($event, item.id)"
                                                :id="`question${item.id}`">
                                         <!-- form-delete active 시 display:block; -->
-                                        <button type="button" class="btn only-ico-btn form-delete active" @click="deleteJoinQuestion(item.id)"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                                        <button type="button" class="btn only-ico-btn form-delete active" @click="deleteJoinQuestion(idx, item.id)"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                                     </div>
                                 </div>
                             </li>
@@ -187,9 +187,9 @@
                                     <div class="form-group" style="width:490px;">
                                         <input v-model="newQuestion"
                                                type="text" class="form-control popup-type"
-                                               id="input6" placeholder="질문을 30자 이내로 입력해 주세요.">
+                                               id="new_question" placeholder="질문을 30자 이내로 입력해 주세요.">
                                         <!-- form-delete active 시 display:block; -->
-                                        <button type="button" class="btn only-ico-btn form-delete active"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
+                                        <button type="button" class="btn only-ico-btn form-delete active" @click="clearQuestionInput"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                                     </div>
                                 </div>
                             </li>
@@ -199,7 +199,7 @@
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isJoinQnaSetting = false">취소</btn>
+                    <btn type="outline" @btnClick="closeQuestionPopup">취소</btn>
                     <btn type="navi" @btnClick="setJoinQuestion(tempData)">저장</btn>
                 </div>
             </div>

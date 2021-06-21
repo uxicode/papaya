@@ -22,7 +22,8 @@
 
                         <!-- 가입 신청 버튼 / 신청 완료 시 primary 제거 후 disabled 클래스 추가 -->
                         <div class="class-bookmark">
-                            <btn type="navi" :class="{'disabled': isClassEnrollComplete}" style="font-size: 12px;" @btnClick="openEnrollClassModal">가입 신청</btn>
+                            <btn type="navi" :class="{'disabled': isClassEnrollComplete}" style="font-size: 12px;" @btnClick="openEnrollClassModal">
+                              {{ isClassEnrollComplete ? '신청 완료' : '가입 신청' }}</btn>
                         </div>
 
                     </div>
@@ -112,9 +113,9 @@
                                 </div>
                             </div>
                             <ul class="enroll-qna">
-                                <li v-for="(item, idx) in questionList">
-                                    <p>{{ idx+1 }}. {{ item.question }}</p>
-                                    <textarea v-model="answerList[idx].answer" class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
+                                <li v-for="(item, idx) in qnaList">
+                                    <p>{{ Number(idx)+1 }}. {{ item.question }}</p>
+                                    <textarea v-model="item.answer" class="form-textarea" placeholder="답변을 작성해 주세요."></textarea>
                                 </li>
                             </ul>
                         </div>

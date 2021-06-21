@@ -1,4 +1,4 @@
-import axios, {AxiosResponse, AxiosRequestConfig, AxiosPromise} from 'axios';
+import axios, {AxiosResponse, AxiosRequestConfig} from 'axios';
 import router from '@/router';
 import store from '@/store';
 import {GET_REFRESH_TOKEN, GET_TOKEN, LOGOUT} from '@/store/mutation-auth-types';
@@ -6,6 +6,8 @@ import {REMOVE_CLASS_DATA} from '@/store/mutation-class-types';
 import AuthService from '@/api/service/AuthService';
 
 axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 /**
  * 로그아웃 시키기

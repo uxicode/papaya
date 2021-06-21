@@ -1,4 +1,4 @@
-import {Vue, Component, Watch} from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo, IClassMemberInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
@@ -22,8 +22,8 @@ interface ISettingMenu {
     }
 })
 export default class ClassSettingMain extends Vue{
-    private classMemberInfo: IClassMemberInfo[] = [];
-    private classInfo: IClassInfo[] = [];
+    private classMemberInfo!: IClassMemberInfo;
+    private classInfo!: IClassInfo;
 
     @MyClass.Getter
     private classID!: number;
@@ -35,10 +35,10 @@ export default class ClassSettingMain extends Vue{
     private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
 
     @MyClass.Action
-    private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo[]>;
+    private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo>;
 
     @MyClass.Action
-    private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<IClassMemberInfo[]>;
+    private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<IClassMemberInfo>;
 
     @MyClass.Action
     private MODIFY_CLASS_QUESTION!: (payload: {classId: number, questionId: number}, text: {new_question: string}) => Promise<IQuestionInfo[]>;
@@ -53,7 +53,7 @@ export default class ClassSettingMain extends Vue{
     private onOffNoti: boolean | number = true;
     private onOffPostNoti: boolean | number = true;
     private onOffCommentNoti: boolean | number = true;
-    private onOffScheduleNoti: number = 0;
+    private scheduleNotiIntime: number = 0;
     private classNotifyList: string[] = ['새 알림', '새 댓글', '일정'];
     private notiStateList: string[] = ['', '', ''];
 
@@ -121,6 +121,7 @@ export default class ClassSettingMain extends Vue{
     private guideTxt: string = '';
 
     /* 가입 질문 설정 관련 */
+    private isQuestionShow: boolean = true;
     private maxQuestion: number = 3; // 최대 질문 갯수
     private questionList: IQuestionInfo[] = [];
     private tempData: string = '';
@@ -159,8 +160,8 @@ export default class ClassSettingMain extends Vue{
               this.onOffNoti = data.member_info.onoff_push_noti;
               this.onOffPostNoti = data.member_info.onoff_post_noti;
               this.onOffCommentNoti = data.member_info.onoff_comment_noti;
-              this.onOffScheduleNoti = data.member_info.onoff_schedule_noti;
-              for (let i = 0; i < this.notiStateList.length; i++) {
+              this.scheduleNotiIntime = data.member_info.schedule_noti_intime;
+              for (let i = 0; i < 3; i++) {
                   this.notiOnOffTxt(i);
               }
 
@@ -176,6 +177,7 @@ export default class ClassSettingMain extends Vue{
         MyClassService.getClassInfoById(this.classID)
           .then((data) => {
               this.classInfo = data.classinfo;
+              this.isQuestionShow = data.classinfo.question_showYN;
               console.log(this.classInfo);
           });
     }
@@ -255,7 +257,9 @@ export default class ClassSettingMain extends Vue{
                 value = this.onOffCommentNoti;
                 break;
             case 2:
-                value = this.onOffScheduleNoti;
+                value = this.scheduleNotiIntime;
+                break;
+            default:
                 break;
         }
         // 새 알림, 새 댓글
@@ -284,7 +288,9 @@ export default class ClassSettingMain extends Vue{
                     break;
             }
         }
-        this.notiStateList[idx] = stateTxt;
+        const findIdx = this.notiStateList.findIndex((item: string, index: number) => index===idx);
+        this.notiStateList.splice(findIdx, 1, stateTxt);
+        // this.notiStateList[idx] = stateTxt;
     }
 
     /**
@@ -303,15 +309,16 @@ export default class ClassSettingMain extends Vue{
                 info = {onoff_comment_noti: value};
                 break;
             case 2:
-                info = {onoff_schedule_noti: value};
+                info = (value!==0) ? {schedule_noti_intime: value, onoff_schedule_noti: 1} :
+                    {schedule_noti_intime: 0, onoff_schedule_noti: 0};
                 break;
             default:
-                info = {};
-                break;
+                return;
         }
         ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, info)
           .then((data) => {
             console.log(data);
+            this.getMyClassMemberInfo();
           });
     }
 
@@ -340,10 +347,11 @@ export default class ClassSettingMain extends Vue{
      */
     private guideTxtModify(text: string): void {
         MyClassService.setClassInfoById(this.classID, {description: text})
-          .then(() => {
-             console.log('가입 안내 문구 수정 완료');
-             this.isGuideTxt = false;
+          .then((data) => {
+             console.log(data);
+             this.info.description = data.description;
           });
+        this.isGuideTxt = false;
     }
 
     /**
@@ -376,10 +384,16 @@ export default class ClassSettingMain extends Vue{
      * @param question
      */
     private setJoinQuestion(question: string): void {
-        MyClassService.setClassQuestion(this.classID, this.questionId, {new_question: question})
-          .then(() => {
-            console.log(`question${this.questionId} 수정 성공`);
+        MyClassService.setClassInfoById(this.classID, {question_showYN: this.isQuestionShow})
+          .then((msg) => {
+            console.log(msg);
           });
+        if (this.tempData !== '') {
+            MyClassService.setClassQuestion(this.classID, this.questionId, {new_question: question})
+                .then(() => {
+                    console.log(`question${this.questionId} 수정 성공`);
+                });
+        }
         this.isJoinQnaSetting = false;
         this.tempData = '';
         this.makeJoinQuestion(this.newQuestion);
@@ -387,14 +401,24 @@ export default class ClassSettingMain extends Vue{
 
     /**
      * 가입 질문 삭제
+     * @param idx
      * @param questionId
      * @private
      */
-    private deleteJoinQuestion(questionId: number): void {
+    private deleteJoinQuestion(idx: number, questionId: number): void {
+        this.questionList[idx].question = '';
         MyClassService.deleteClassQuestion(this.classID, questionId)
           .then(() => {
               console.log('가입 질문 삭제 성공');
           });
+    }
+
+    /**
+     * 새 가입 질문 입력값 초기화
+     * @private
+     */
+    private clearQuestionInput(): void {
+        this.newQuestion = '';
     }
 
     /**
@@ -409,6 +433,16 @@ export default class ClassSettingMain extends Vue{
                   console.log(`${newQuestion} 질문 추가 성공`);
               });
         }
+        this.newQuestion = '';
+    }
+
+    /**
+     * 가입 질문 설정 팝업 닫기
+     * @private
+     */
+    private closeQuestionPopup(): void {
+        this.isJoinQnaSetting = false;
+        this.newQuestion = '';
     }
 
     /**
@@ -417,7 +451,10 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private gotoLink(key: string): void {
-        console.log('key=', key, 'classID=', this.classID);
+        if ((this.myClassInfo.me.level!==1) && (key==='classAdminDelegate')) {
+            alert('운영자만 접근 가능한 메뉴입니다.');
+            return;
+        }
         this.$router.push(`/class/${this.classID}/setting/${key}`)
           .then(() => {
               console.log(`${key}로 이동`);
@@ -454,6 +491,7 @@ export default class ClassSettingMain extends Vue{
 
         // 클래스에 멤버가 있으며 나의 멤버 등급이 운영자일 경우 탈퇴 불가
         if (class_members.length >= 1 && me.level === 1) {
+            this.isWithdraw = false;
             this.isWithdrawDenied = true;
         } else {
             ClassMemberService.deleteClassMemberByUser(this.classID, this.myClassInfo.me.id)

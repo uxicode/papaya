@@ -3,7 +3,7 @@ import {namespace} from 'vuex-class';
 import {CLASS_BASE_URL} from '@/api/base';
 import {Utils} from '@/utils/utils';
 import {IUserMe} from '@/api/model/user.model';
-import { IQuestionInfo} from '@/views/model/my-class.model';
+import {IQnaInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
@@ -14,7 +14,6 @@ import WithRender from './EnrollClass.html';
 interface IEnrollMemberInfo {
   user_id: number;
   nickname: string;
-  qna_list: Array<{ question: string, answer: string }>;
 }
 
 interface ISideMenu {
@@ -48,9 +47,11 @@ export default class EnrollClass extends Vue {
   private showMsg: boolean = false;
   private isError: boolean = false;
   private isApproval: boolean = false;
-  private questionList: Array<Pick<IQuestionInfo, 'question'>> = [{question: ''}, {question: ''}, {question: ''}];
-  private answerList: any[] = [{answer: ''}, {answer: ''}, {answer: ''}];
+  private questionList!: any[];
+  private answerList!: any[];
+  private qnaList: any[] = [];
   private enrollMemberInfo!: IEnrollMemberInfo;
+  private memberId: number = 0;
 
   private sideMenuData: ISideMenu[] = [
     {id: 0, title: '클래스 홈', linkKey: ''},
@@ -70,16 +71,10 @@ export default class EnrollClass extends Vue {
   }
 
   public created() {
-    console.log(' this.$route.params.classId=', this.$route.params.classId);
     this.classIdx = Number( this.$route.params.classId );
     this.visibleSettingMenus(0);
     this.getClassInfo();
   }
-
-  // public updated() {
-  //   this.classIdx = Number( this.$route.params.classId );
-  //   this.getClassInfo();
-  // }
 
   /**
    * 비공개 클래스는 첫번째 메뉴만 활성화
@@ -142,11 +137,12 @@ export default class EnrollClass extends Vue {
    */
   private openEnrollClassModal(): void {
     this.isClassEnrollModal = true;
-
     MyClassService.getClassQuestion(this.classIdx as number)
       .then((data) => {
         console.log(data);
-        this.questionList = data.questionlist;
+        this.questionList = (data.questionlist.length > 0) ? data.questionlist : [];
+        this.qnaList = Object.assign({} ,this.questionList, this.answerList);
+        console.log(this.qnaList);
       });
   }
 
@@ -164,44 +160,42 @@ export default class EnrollClass extends Vue {
         this.isError = true;
         this.msg = '이미 사용중인 닉네임입니다.';
       }).catch((error) => { // 검색 결과가 없을 경우 404 error 발생하므로 예외처리
-      console.log(error);
-      this.isError = false;
-      this.isApproval = true;
-      this.msg = '사용할 수 있는 닉네임입니다.';
-      this.isDisabled = false;
-    });
+          console.log(error);
+          this.isError = false;
+          this.isApproval = true;
+          this.msg = '사용할 수 있는 닉네임입니다.';
+          this.isDisabled = false;
+      });
   }
 
   /**
    * 닉네임과 가입 질문 답변 정보를 포함하여 가입 신청
    * @private
    */
-  private enrollClassSubmit(): void {
+  private async enrollClassSubmit() {
     this.enrollMemberInfo = {
       user_id: this.userInfo.id,
       nickname: this.inputNickname,
-      qna_list: [
-        {
-          question: this.questionList[0].question,
-          answer: this.answerList[0].answer
-        },
-        {
-          question: this.questionList[1].question,
-          answer: this.answerList[1].answer
-        },
-        {
-          question: this.questionList[2].question,
-          answer: this.answerList[2].answer
-        },
-      ],
     };
-    ClassMemberService.setClassMember(this.classIdx as number, this.enrollMemberInfo)
+    await ClassMemberService.setClassMember(Number(this.classIdx), this.enrollMemberInfo)
       .then((result) => {
         console.log(result);
+        this.memberId = result.member_info.id;
       });
+
+    if (this.questionList.length>0) {
+      for (let i=0; i<this.questionList.length; i++) {
+        const qna = {question: this.qnaList[i].question, answer: this.qnaList[i].answer};
+        await ClassMemberService.setClassMemberAnswer(Number(this.classIdx), this.memberId, qna)
+          .then(() => {
+            console.log(`${i}번째 질문답변 추가 ${qna}`);
+          });
+      }
+    }
 
     this.isClassEnrollModal = false;
     this.isClassEnrollComplete = true;
     this.isClassEnrollCompleteModal = true;
   }
+
 }

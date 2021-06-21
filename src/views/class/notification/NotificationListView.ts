@@ -157,13 +157,21 @@ export default class NotificationListView extends Vue {
   }
 
 
+  /**
+   * 알림글 수정
+   * @param id
+   * @private
+   */
   private async onEditPost(id: number) {
     this.detailPostId = id; // update postId
-    await this.GET_POST_DETAIL_ACTION({classId: Number(this.classID), postId: this.detailPostId});
-    await this.GET_COMMENTS_ACTION(this.detailPostId)
+    await this.GET_POST_DETAIL_ACTION({classId: Number(this.classID), postId: this.detailPostId})
       .then((data)=>{
         this.isEditPopupOpen=true;
       });
+    /*await this.GET_COMMENTS_ACTION(this.detailPostId)
+      .then((data)=>{
+
+      });*/
   }
 
   private onEditClose(  value: boolean ){

@@ -1,7 +1,7 @@
 <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2 (알림 - 새 알림 작성-fit) -->
 <transition name="modal">
   <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2.3.1 (알림 - 새 알림 작성-투표 - tab:텍스트) -->
-  <modal v-if="isOpen"  size="540px" body-padding="0" @modalClose="popupChange( false )">
+  <modal v-if="isOpen && readVoteData!==undefined"  size="540px" body-padding="0" @modalClose="popupChange( false )">
     <div slot="header">
       <!-- header custom coding-->
       <div class="popup-icon vote"></div>
@@ -14,7 +14,7 @@
       <div class="popup-cnt pdb-desc" style="padding-bottom:0;">
         <h2 class="popup-tit">투표 만들기</h2>
         <div class="form-item">
-<!--          <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">-->
+          <!--          <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">-->
           <txt-field add-class="popup-type"
                      placeholder="제목을 50자 이내로 작성해 주세요."
                      v-model="voteData.vote.title"></txt-field>
@@ -53,14 +53,14 @@
                   <!-- start: 텍스트 타입 리스트 (드래그앤드랍으로 이동) -->
                   <template v-if="currentType">
                     <draggable class="create-link-list"
-                               v-model="voteData.vote_choice_list"
+                               v-model="readVoteData.vote_choice_list"
                                :move="checkMove"
                                v-bind="dragOptions"
                                @start="dragging = true"
                                @end="dragging = false"
                                handle=".handle"
                                style="min-height:20px;">
-                      <div class="create-form list-type active" v-for="( ele, index ) in voteData.vote_choice_list" :key="`ele-${index}`">
+                      <div class="create-form list-type active" v-for="( ele, index ) in readVoteData.vote_choice_list" :key="`ele-${index}`">
                         <span class="num">{{ index+1 }}</span>
                         <div class="form-group inline">
                           <input type="text" class="form-control popup-type sm" placeholder="항목을 입력해 주세요." v-model="ele.text" style="width: 390px;">
@@ -73,7 +73,7 @@
                       </div>
 
                       <div class="create-add-list"  slot="footer">
-                        <a href="" class="bd-none" @click.prevent.stop="addVoteList( voteData.vote_choice_list.length )">
+                        <a href="" class="bd-none" @click.prevent.stop="addVoteList( readVoteData.vote_choice_list.length )">
                           <img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span>
                         </a>
                       </div>
@@ -90,12 +90,12 @@
                                @end="onDragEnd"
                                handle=".handle"
                                style="min-height:20px;">
-                      <div class="create-form list-type active" v-for="( ele, index ) in voteData.vote_choice_list" :key="`ele-${index}`">
+                      <div class="create-form list-type active" v-for="( ele, index ) in readVoteData.vote_choice_list" :key="`ele-${index}`">
                         <span class="num">{{ index+1 }}</span>
                         <div class="form-group date">
-<!--                          <input type="text" class="form-control" v-model="ele.text" placeholder="날짜를 선택해 주세요.">-->
-<!--                          <button type="button" class="btn form-btn form-calendar" @click="clearTxtField(index)"></button>-->
-<!--                          <span class="date-area ft-desc">날짜를 선택해 주세요.</span>-->
+                          <!--                          <input type="text" class="form-control" v-model="ele.text" placeholder="날짜를 선택해 주세요.">-->
+                          <!--                          <button type="button" class="btn form-btn form-calendar" @click="clearTxtField(index)"></button>-->
+                          <!--                          <span class="date-area ft-desc">날짜를 선택해 주세요.</span>-->
                           <v-menu
                                   transition="scale-transition"
                                   offset-y
@@ -124,7 +124,7 @@
                       </div>
 
                       <div class="create-add-list"  slot="footer">
-                        <a href="" class="bd-none" @click.prevent.stop="addVoteDateList( voteData.vote_choice_list.length-1 )">
+                        <a href="" class="bd-none" @click.prevent.stop="addVoteDateList( readVoteData.vote_choice_list.length-1 )">
                           <img :src="require('@/assets/images/add.svg')" alt=""> <span class="btn-txt">항목 추가</span>
                         </a>
                       </div>

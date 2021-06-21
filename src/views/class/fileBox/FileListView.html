@@ -7,7 +7,7 @@
         <div class="classes-file-list">
             <div class="list-group">
                 <p class="list-tit file-info bd-btm">총 <span class="num">{{ attachments.length }}</span>개 / <span>{{ getFileSize(totalFileSize) }}</span></p>
-                <div class="scroll-body file" style="height: 565px;">
+                <div v-if="allData.length>0" class="scroll-body file" style="height: 565px;">
                     <ul class="file-group mgt-0 mgb-0" style="background-color: #fff; height: inherit;">
                         <li v-for="(item, idx) in attachments"
                             :key="idx"
@@ -57,11 +57,15 @@
                                 </div>
                             </div>
                         </li>
-
                     </ul>
                 </div>
+                <!-- 파일 없음 -->
+                <div v-else class="no-notify">
+                    <div class="no-data">
+                        <p>파일이 없습니다.</p>
+                    </div>
+                </div>
             </div>
-
         </div>
     </div>
 

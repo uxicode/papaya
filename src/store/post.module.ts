@@ -5,7 +5,8 @@ import {
   SET_RESERVED_TOTAL,
   SET_POST_DETAIL,
   SET_COMMENTS,
-  SET_REPLY
+  SET_REPLY,
+  SET_VOTE
 } from '@/store/mutation-class-types';
 import {
   GET_POST_LIST_ACTION,
@@ -15,11 +16,16 @@ import {
   POST_TYPE_CHANGE_ACTION,
   GET_POST_DETAIL_ACTION,
   GET_COMMENTS_ACTION,
+  ADD_COMMENT_ACTION,
+  ADD_REPLY_ACTION,
   SELECT_VOTE_ACTION,
-  DELETE_POST_FILE
+  DELETE_POST_FILE,
+  EDIT_POST_ACTION
 } from '@/store/action-class-types';
-import {IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
+import {IPostInLinkModel, IPostModel, IReadAbleVote, IVoteModel} from '@/views/model/post.model';
+import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
 import {PostService} from '@/api/service/PostService';
+import {CommentService} from '@/api/service/CommentService';
 import {getAllPromise} from '@/views/model/types';
 
 @Module({
@@ -97,8 +103,9 @@ export default class PostModule extends VuexModule {
       link_items: []
     },
   };
-  private commentData: any[] = [];
-  private replyData: any[]=[];
+  private commentData: ICommentModel[] = [];
+  private replyData: IReplyModel[]=[];
+  private voteData!: IReadAbleVote;
 
 
   /* Getters */
@@ -122,12 +129,16 @@ export default class PostModule extends VuexModule {
     return this.postDetailData;
   }
 
-  get commentItems(): any[] {
+  get commentItems(): ICommentModel[] {
     return this.commentData;
   }
 
-  get replyItems(): any[] {
+  get replyItems(): IReplyModel[] {
     return this.replyData;
+  }
+
+  get voteItems(): IReadAbleVote {
+    return this.voteData;
   }
 
   /**
@@ -138,7 +149,7 @@ export default class PostModule extends VuexModule {
   public [SET_POST_IN_BOOKMARK](  items: IPostModel[] & IPostInLinkModel[] ): void{
     this.postListData=items;
     //
-    this.postListData.reverse();
+    // this.postListData.reverse();
 
     this.postListData.forEach(( item: any, index: number ) => {
       let {isBookmark}=item;
@@ -183,6 +194,12 @@ export default class PostModule extends VuexModule {
     this.replyData=data;
   }
 
+  @Mutation
+  public [SET_VOTE](data: IReadAbleVote): void{
+    this.voteData=data;
+  }
+
+
   /**
    * 알림글 리스트 조회
    * @param payload
@@ -193,7 +210,7 @@ export default class PostModule extends VuexModule {
       .then((data) => {
         // console.log(data);
         // this.postListItems = data.post_list;
-        console.log('noticeListItems=', this.postListData);
+        // console.log('noticeListItems=', this.postListData);
 
         this.context.commit(SET_POST_IN_BOOKMARK, data.post_list);
 
@@ -263,6 +280,7 @@ export default class PostModule extends VuexModule {
       });
   }
 
+
   /**
    *  알림글을 공지 혹은 일반 글로 등록
    * @param payload
@@ -317,17 +335,33 @@ export default class PostModule extends VuexModule {
   }
 
   @Action
+  public [EDIT_POST_ACTION](payload: { classId: number, postId: number, formData: FormData }): Promise<any>{
+    return PostService.setPostInfoAllById( payload.classId, payload.postId, payload.formData )
+      .then( (data)=>{
+
+      }).catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
+      });
+  }
+
+
+  @Action
   public [GET_COMMENTS_ACTION]( postId: number): Promise<any> {
-    return PostService.getCommentsByPostId(postId)
+    return CommentService.getCommentsByPostId(postId)
       .then((data) => {
         // console.log(data);
 
         // this.commentItems = data.comment_list;
-        this.context.commit(SET_COMMENTS, data.comment_list);
+        // this.context.commit(SET_COMMENTS, data.comment_list);
+
+        // 댓글 삭제를 해도 완전히 제거가 안되고 deleteYN: true 로 변경만 되므로 filter 로 걸러준다.
+        const notDeletedComments = data.comment_list.filter((item: any) => item.deletedYN === false);
+        this.context.commit(SET_COMMENTS, notDeletedComments);
 
         //대댓글 정보 가져오기 - commentItems 에 맞는 대댓정보를 가져오기 위해 2차 반복문을 실행.
         const replyIdPromiseItems=this.commentData.map((item: any)=>{
-          return PostService.getReplysByCommentId( item.id );
+          return CommentService.getReplysByCommentId( item.id );
         });
 
         // console.log(replyIdItems);
@@ -338,6 +372,29 @@ export default class PostModule extends VuexModule {
             this.context.commit(SET_REPLY, replyData);
           });
       });
+  }
+
+  /**
+   * 댓글 추가
+   * parent_type: 댓글이 달린 원글 타입. 0 - 알림글 , 1 - 일정글
+   * @param payload
+   */
+  @Action
+  public [ADD_COMMENT_ACTION](payload: {parent_id: number, parent_type: number, member_id: number, comment: string}): Promise<any> {
+    return CommentService.setAddComment(payload)
+      .then((data) => {
+        console.log(data.comment);
+        return Promise.resolve(this.commentData);
+      });
+  }
+
+  @Action
+  public [ADD_REPLY_ACTION](payload: {comment_id: number, member_id: number, comment: string}): Promise<any> {
+    return CommentService.setAddReply(payload)
+        .then((data) => {
+          console.log(data.commentreply);
+          return Promise.resolve(this.replyData);
+        });
   }
 
   /**
@@ -366,5 +423,6 @@ export default class PostModule extends VuexModule {
         this.postListData.splice(findIdx, 1, {...editItem, ...removedAttachItems} );
       });
   }
+
 
 }

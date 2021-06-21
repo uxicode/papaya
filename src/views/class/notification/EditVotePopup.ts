@@ -1,6 +1,8 @@
-import {Vue, Component, Prop} from 'vue-property-decorator';
+import {Component, Prop, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {IVoteModel} from '@/views/model/post.model';
+import AddVotePopup from '@/views/class/notification/AddVotePopup';
+
+import {IPostInLinkModel, IPostModel, IReadAbleVote, IVoteModel} from '@/views/model/post.model';
 import draggable, {MoveEvent} from 'vuedraggable';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
@@ -8,9 +10,11 @@ import RadioButton from '@/components/radio/RadioButton.vue';
 import Modal from '@/components/modal/modal.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
-import WithRender from '@/views/class/notification/AddVotePopup.html';
+import WithRender from '@/views/class/notification/EditVotePopup.html';
+
 
 const MyClass = namespace('MyClass');
+const Post = namespace('Post');
 
 @WithRender
 @Component({
@@ -24,32 +28,29 @@ const MyClass = namespace('MyClass');
     draggable
   }
 })
-export default class AddVotePopup extends Vue{
+export default class EditVotePopup extends Vue {
 
-  protected openResultLevel: string = '전체공개';
-  protected openResultLevelItems = [
+
+  public voteTitle: string = '';
+  public type: number | string = '0';
+  public voteList: any = [];
+  private voteType: string = 'txt';
+  private openResultLevel: string = '전체공개';
+  private openResultLevelItems = [
     {id:0, txt:'전체 공개'},
     {id:1, txt:'운영자와 스텝에게만 공개'},
     {id:2, txt:'운영자에게만 공개'},
   ];
-  protected dateModelItem: Array<{ date: string }> = [
+  private dateModelItem: Array<{ date: string }> = [
     {date: new Date().toISOString().substr(0, 10)},
     {date:''},
     {date:''},
   ];
-
-  private anonymousChk: boolean=false;
-  private multiChoiceChk: boolean=false;
-  private endDateMenuChk: boolean=false;
-  private endDateMenu: boolean=false;
-  private dragEnabled: boolean=true;
-  private dragging: boolean= false;
-  private voteType: string = 'txt';
   private voteData: IVoteModel= {
     vote: {
       parent_id:-1,
       type: 0,
-      title: '',
+      title: 'none',
       multi_choice: 0,
       anonymous_mode: 0,
       open_progress_level: 0,
@@ -72,14 +73,39 @@ export default class AddVotePopup extends Vue{
     ]
   };
 
+  private anonymousChk: boolean=false;
+  private multiChoiceChk: boolean=false;
+  private endDateMenuChk: boolean=false;
+  private endDateMenu: boolean=false;
+  private dragEnabled: boolean=true;
+  private dragging: boolean= false;
+
+  @Post.Getter
+  private voteItems!: IReadAbleVote;
+
+  get readVoteData(): IVoteModel{
+    const {anonymous_mode, finishAt, id, multi_choice, open_progress_level, open_result_level, parent_id, title, type, vote_choices}=this.voteItems;
+    const vote_choice_list=vote_choices.map( (item)=>{
+      const {text, index}=item;
+      return {text, index};
+    });
+    this.voteData= {
+      vote: {
+        parent_id, type, title, multi_choice, anonymous_mode, open_progress_level, open_result_level, finishAt
+      },
+      vote_choice_list
+    };
+    console.log(this.voteData);
+
+    return this.voteData;
+  }
+
+
   @Prop(Boolean)
   private isOpen!: boolean;
 
   @MyClass.Getter
   private classID!: string | number;
-
-
-
 
   get isValidation(): boolean{
     const validItems=this.voteData.vote_choice_list.filter((item) => item.text !== '');
@@ -95,17 +121,13 @@ export default class AddVotePopup extends Vue{
       ghostClass: 'ghost'
     };
   }
-
   get currentType(): boolean {
     return this.voteType === 'txt';
   }
 
-  public optionChange(value: string ): void {
-    this.resetVoteList();
-    this.voteType=value;
-    this.voteData.vote.type=(this.voteType==='txt')? 0 : 1;
-  }
   public resetVoteList() {
+    // const firstPlaceholder = (this.voteData.vote.type === 0) ? '제주도 여행' : new Date().toISOString().substr(0, 10);
+    console.log(this.voteData.vote.type);
     this.voteData.vote_choice_list=[
       {
         text: '제주도 여행',
@@ -120,7 +142,12 @@ export default class AddVotePopup extends Vue{
         index: 3
       }
     ];
+  }
 
+  public optionChange(value: string ): void {
+    this.resetVoteList();
+    this.voteType=value;
+    this.voteData.vote.type=(this.voteType==='txt')? 0 : 1;
   }
 
   private addVoteList(idx: number) {
@@ -191,8 +218,6 @@ export default class AddVotePopup extends Vue{
   private onVoteSubmit() {
     this.$emit('submit', this.voteData);
   }
-
-
 
 
 }
