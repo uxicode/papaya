@@ -82,7 +82,7 @@ export default class ClassStaffManage extends Vue {
         MyClassService.getClassInfoById(this.classID)
           .then((data) => {
               // 가입 승인된 스탭 멤버만 불러온다.
-              this.classStaffList = data.classinfo.class_members.detailCurriculumId(
+              this.classStaffList = data.classinfo.class_members.filter(
                 (item: IClassMemberInfo) => (item.status === 1 && item.level === 2));
               console.log(this.classStaffList);
               this.totalStaffNum = this.classStaffList.length;
