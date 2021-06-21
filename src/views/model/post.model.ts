@@ -136,7 +136,7 @@ interface ICreatePost{
 interface IVoteModel{
   vote: {
     parent_id: number;
-    type: number | string;
+    type: number;
     title: string;
     multi_choice: number | boolean;  //복수선택
     anonymous_mode: number | boolean;   //익명
@@ -161,7 +161,7 @@ interface IReadAbleVote {
   open_result_level: number;
   parent_id: number;
   title: string;
-  type: number | string;
+  type: number;
   updatedAt: Date | string;
   vote_choices: Array<{
     createdAt: Date | string,

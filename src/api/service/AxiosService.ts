@@ -1,4 +1,4 @@
-import axios, {AxiosResponse, AxiosRequestConfig, AxiosPromise} from 'axios';
+import axios, {AxiosResponse, AxiosRequestConfig} from 'axios';
 import router from '@/router';
 import store from '@/store';
 import {GET_REFRESH_TOKEN, GET_TOKEN, LOGOUT} from '@/store/mutation-auth-types';

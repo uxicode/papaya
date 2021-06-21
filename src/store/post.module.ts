@@ -19,7 +19,8 @@ import {
   ADD_COMMENT_ACTION,
   ADD_REPLY_ACTION,
   SELECT_VOTE_ACTION,
-  DELETE_POST_FILE
+  DELETE_POST_FILE,
+  EDIT_POST_ACTION
 } from '@/store/action-class-types';
 import {IPostInLinkModel, IPostModel, IReadAbleVote, IVoteModel} from '@/views/model/post.model';
 import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
@@ -148,7 +149,7 @@ export default class PostModule extends VuexModule {
   public [SET_POST_IN_BOOKMARK](  items: IPostModel[] & IPostInLinkModel[] ): void{
     this.postListData=items;
     //
-    this.postListData.reverse();
+    // this.postListData.reverse();
 
     this.postListData.forEach(( item: any, index: number ) => {
       let {isBookmark}=item;
@@ -277,6 +278,7 @@ export default class PostModule extends VuexModule {
       });
   }
 
+
   /**
    *  알림글을 공지 혹은 일반 글로 등록
    * @param payload
@@ -329,6 +331,18 @@ export default class PostModule extends VuexModule {
         return Promise.reject(error);
       });
   }
+
+  @Action
+  public [EDIT_POST_ACTION](payload: { classId: number, postId: number, formData: FormData }): Promise<any>{
+    return PostService.setPostInfoAllById( payload.classId, payload.postId, payload.formData )
+      .then( (data)=>{
+
+      }).catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
+      });
+  }
+
 
   @Action
   public [GET_COMMENTS_ACTION]( postId: number): Promise<any> {

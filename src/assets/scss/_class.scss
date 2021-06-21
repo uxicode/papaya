@@ -637,6 +637,7 @@
       border:1px solid #c9cad5;
       border-radius:5px;
       background-color:#fff;
+      font-weight:bold;
       &:before {
         content:'';
         position: absolute;
@@ -677,7 +678,7 @@
     left:12px;
     background:url(../../assets/images/pic6.png) no-repeat;
   }
-  .vote-tit {font-size:16px;font-weight:500;line-height:1.8;}
+  .vote-tit {font-size:16px;font-weight:bold;line-height:1.8;}
   .vote-option {
     font-size:12px;
     color:#848499;
