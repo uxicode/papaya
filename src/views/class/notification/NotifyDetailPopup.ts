@@ -101,6 +101,10 @@ export default class NotifyDetailPopup extends Vue {
         this.isPhotoViewer = value;
     }
 
+    /**
+     * 댓글 등록
+     * @private
+     */
     private async addComment() {
         if (this.comment !== '') {
             await this.ADD_COMMENT_ACTION({
@@ -120,6 +124,11 @@ export default class NotifyDetailPopup extends Vue {
         }
     }
 
+    /**
+     * 대댓글 입력란 toggle
+     * @param idx
+     * @private
+     */
     private replyInputToggle(idx: number) {
         this.reply = '';
         const replyInput = document.querySelectorAll('.comment-btm.reply');
@@ -127,6 +136,11 @@ export default class NotifyDetailPopup extends Vue {
             (idx!==index) ? item.classList.add('hide') : item.classList.toggle('hide'));
     }
 
+    /**
+     * 대댓글 등록
+     * @param id
+     * @private
+     */
     private async addReply(id: number) {
         if (this.reply !== '') {
             await this.ADD_REPLY_ACTION({
@@ -136,11 +150,9 @@ export default class NotifyDetailPopup extends Vue {
             });
             await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
                 .then(() => {
-                    // console.log('댓글 갱신');
                     this.reply = '';
                 });
         }
-        // this.reply = '';
     }
 
     /**
@@ -183,14 +195,9 @@ export default class NotifyDetailPopup extends Vue {
      * @private
      */
     private async submitCommentModify(id: number, newComment: string) {
-        await CommentService.setCommentModify(id,{comment: newComment})
-            .then((data) => {
-                console.log(data);
-                // const findIdx = this.commentItemsModel.findIndex((item) => item.id === id);
-                // this.commentItemsModel.splice(findIdx, 1, data.comment);
-            });
-        await this.GET_COMMENTS_ACTION(this.postDetailModel.id);
-        this.closeCommentModify();
+        await CommentService.setCommentModify(id,{comment: newComment});
+        await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
+            .then(() => this.closeCommentModify());
     }
 
     /**
@@ -200,14 +207,9 @@ export default class NotifyDetailPopup extends Vue {
      */
     private async deleteComment(data: ICommentModel) {
         if (data.owner.id === this.myClassHomeModel.me?.id) {
-            await CommentService.deleteComment(data.id)
-                .then((result) => {
-                    console.log(result);
-                    // const findIdx = this.commentItemsModel.findIndex((item) => item.id === id);
-                    // this.commentItemsModel.splice(findIdx, 1);
-                });
-            await this.GET_COMMENTS_ACTION(this.postDetailModel.id);
-            this.closeCommentModify();
+            await CommentService.deleteComment(data.id);
+            await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
+                .then(() => this.closeCommentModify());
         } else {
             alert('본인이 쓴 댓글만 삭제 가능합니다');
         }
@@ -258,8 +260,8 @@ export default class NotifyDetailPopup extends Vue {
             .then((data) => {
                 console.log(data);
             });
-        await this.GET_COMMENTS_ACTION(this.postDetailModel.id);
-        this.closeReplyModify();
+        await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
+            .then(() => this.closeReplyModify());
     }
 
     /**
