@@ -320,9 +320,9 @@ export default class ClassModule extends VuexModule {
         this.context.commit(SET_CLASS_ID, id);
         return MyClassService.getClassInfoById( id )
           .then( (data)=>{
-              this.context.commit(SET_MYCLASS_HOME_DATA, data.classinfo);
+              this.context.commit(SET_MYCLASS_HOME_DATA, data.classinfo );
               // console.log('통신 후 vuex MYCLASS_HOME=', this.classID, '::리스트 클릭 id=', id, this.classIdx );
-              return Promise.resolve(this.myClassHomeModel);
+              return Promise.resolve(this.myClassHomeModel );
           }).catch((error)=>{
               console.log(error);
               return Promise.reject(error);

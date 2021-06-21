@@ -133,7 +133,7 @@ export default class SearchResultPage extends Vue {
   private getClassInfoBySearchResultClassId( items: any[] ): any[] {
     const promiseItems: any[] = [];
     items.forEach( ( item: any ) => {
-      promiseItems.push( MyClassService.getClassInfoById( 724 ) );
+      promiseItems.push( MyClassService.getClassInfoById( item.class_id ) );
     });
     return promiseItems;
   }

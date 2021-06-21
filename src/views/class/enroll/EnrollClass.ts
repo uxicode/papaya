@@ -10,6 +10,7 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import MyClassListDetailView from '@/views/class/home/MyClassListDetailView';
 import WithRender from './EnrollClass.html';
+import {MYCLASS_HOME} from '@/store/action-class-types';
 
 interface IEnrollMemberInfo {
   user_id: number;
@@ -22,6 +23,7 @@ interface ISideMenu {
   linkKey: string;
 }
 const Auth = namespace('Auth');
+const MyClass = namespace('MyClass');
 // const MyClass = namespace('MyClass');
 @WithRender
 @Component({
@@ -37,6 +39,12 @@ export default class EnrollClass extends Vue {
 
   @Auth.Getter
   private userInfo!: IUserMe;
+
+  @MyClass.Getter
+  private classID!: string | number;
+
+  @MyClass.Action
+  private MYCLASS_HOME!: ( id: string | number )=> Promise<any>;
 
   private classIdx: number = 0;
   private classInfo: {} = {};
@@ -107,12 +115,20 @@ export default class EnrollClass extends Vue {
    * @private
    */
   private getClassInfo(): void {
+
+    this.MYCLASS_HOME( this.classIdx )
+      .then( (data) =>{
+        this.classInfo = data;
+        this.isPrivate = data.is_private;
+        console.log('enroll classInfo=', data, this.classInfo, this.classID );
+      });
+    /*
     MyClassService.getClassInfoById(this.classIdx)
       .then((data) => {
         this.classInfo = data.classinfo;
         this.isPrivate = data.classinfo.is_private;
         console.log('this.classInfo=', this.classInfo);
-      });
+      });*/
   }
 
   /**
