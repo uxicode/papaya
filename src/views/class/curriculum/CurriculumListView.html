@@ -5,7 +5,7 @@
 
     <div class="curriculum-list clearfix">
         <div class="curr-list-group">
-            <div v-for="(item, index) in allEducationList.curriculum_list" :key="index" class="curr-item">
+            <div v-for="(item, index) in curriculumListItems.curriculum_list" :key="index" class="curr-item">
                 <div class="fd-head">
                     <p class="fd-tit">{{ item.title }}</p>
                     <div class="fd-writer type2">
@@ -27,7 +27,7 @@
                                     min-width="160px"
                                     :close-on-click="true">
                                 <template v-slot:activator="{ on, attrs }">
-                                    <button v-if="isOwner( item.owner.user_id, item.user_id)"
+                                   <button v-if="isOwner( item.owner.user_id, item.user_id)"
                                             type="button"
                                             class="list-popup-btn"
                                             v-bind="attrs"
@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <div class="simple-notify" v-show="allEducationList.total===0">
+    <div class="simple-notify" v-show="curriculumListItems.total===0">
         <div class="no-data">
             <img :src="require('@/assets/images/icn-80-notice-nodata.svg')" alt="">
             <p>등록된 교육과정이 없습니다.</p>

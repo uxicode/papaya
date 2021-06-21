@@ -478,17 +478,74 @@ interface IMakeEducation {
     }>;
 }
 
-interface IEducationList {
+interface ICurriculumList {
     total: number;
     page_no: null | number;
-    pages: null | string;
+    pages: null | number;
     item_count: number;
-    curriculum_list: [];
+    curriculum_list: Array<{
+        startAt: Date | string;
+        endAt: Date | string;
+        expiredAt: Date | string;
+        createdAt: Date | string;
+        updatedAt: Date | string;
+        id: number;
+        class_id: number;
+        board_id: null,
+        post_type: number;
+        type: number;
+        user_id: number;
+        user_member_id: number;
+        title: string;
+        text: string;
+        count: number;
+        param1: number;
+        deletedYN: boolean;
+        owner: {
+            joinedAt: Date | string;
+            createdAt: Date | string;
+            updatedAt: Date | string;
+            id: number;
+            class_id: number;
+            user_id: number;
+            nickname: string;
+            profile_image: null | string,
+            is_bookmarked: number;
+            schedule_color: number;
+            level: number;
+            status: number;
+            open_level_id: number;
+            open_level_mobileno: number;
+            open_level_email: number;
+            onoff_push_noti: number;
+            onoff_post_noti: number;
+            onoff_comment_noti: number;
+            onoff_schedule_noti: number;
+            schedule_noti_intime: number;
+            visited: number;
+        },
+        course_list: [
+            {
+                startDay: Date | string;
+                createdAt: Date | string;
+                updatedAt: Date | string;
+                id: number;
+                curriculum_id: number;
+                class_id: number;
+                index: number;
+                title: string;
+                contents: string;
+                startTime: Date | string;
+                endTime: Date | string;
+                deletedYN: boolean;
+            }
+        ]
+    }>;
     message: string;
 }
 
 /*
-interface ICurriculumList {
+interface ICurriculumDetailList {
     curriculum: {
         startAt: Date;
         endAt: Date;
@@ -573,9 +630,8 @@ interface ICurriculumList {
     message?: string;
 }
 */
-type CourseAttachData = Omit<ICurriculumList, 'course_list' >;
 
-interface ICurriculumList {
+interface ICurriculumDetailList {
     curriculum: {
         startAt: Date | string;
         endAt: Date | string;
@@ -622,7 +678,7 @@ interface ICurriculumList {
     message?: string;
 }
 
-interface ICourseData {
+interface ICurriculumCourseData {
     course: {
         startDay: Date | string;
         createdAt: Date | string;
@@ -681,9 +737,9 @@ export {
     IQuestionInfo,
     IQnaInfo,
     IMakeEducation,
-    IEducationList,
     ICurriculumList,
-    ICourseData,
+    ICurriculumDetailList,
+    ICurriculumCourseData,
     IModifyCurriculum,
     IClassTag,
     IClassAuth
