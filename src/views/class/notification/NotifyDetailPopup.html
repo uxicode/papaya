@@ -113,8 +113,8 @@
                                         <div class="reply-state">
                                             <a href="" class="txt-btn ft-14" @click.prevent style="cursor:default">답글 {{ item.reply_count }}</a>
                                             <a href="" class="txt-btn ft-14" @click.prevent="replyInputToggle(idx)">답글달기</a>
-                                            <a href="" class="txt-btn ft-14 modify" @click.prevent="openCommentModify(item.comment, idx)">수정</a>
-                                            <a href="" class="txt-btn ft-14 delete" @click.prevent="deleteComment(item.id)">삭제</a>
+                                            <a href="" class="txt-btn ft-14 modify" @click.prevent="openCommentModify(item, idx)">수정</a>
+                                            <a href="" class="txt-btn ft-14 delete" @click.prevent="deleteComment(item)">삭제</a>
                                         </div>
                                     </div>
 
@@ -128,8 +128,8 @@
                                        </div>
 
                                        <div class="reply-state">
-                                         <a href="" class="txt-btn ft-14 modify" @click.prevent="openReplyModify(replyItem.comment, jdx)">수정</a>
-                                         <a href="" class="txt-btn ft-14 delete" @click.prevent="deleteReply(replyItem.id)">삭제</a>
+                                         <a href="" class="txt-btn ft-14 modify" @click.prevent="openReplyModify(replyItem, jdx)">수정</a>
+                                         <a href="" class="txt-btn ft-14 delete" @click.prevent="deleteReply(replyItem)">삭제</a>
                                        </div>
                                      </div>
                                    </template>
