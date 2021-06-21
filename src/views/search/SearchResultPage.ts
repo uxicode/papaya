@@ -175,12 +175,13 @@ export default class SearchResultPage extends Vue {
   }
 
   private gotoLink(item: any): void {
-    // console.log('item', item, this.userInfo );
+    // console.log('item', item, this.userInfo,  item.class_id , item.id );
     const idx=( item.class_id!==null)? item.class_id : item.id;
+
 
     this.myClassCheck(idx)
       .then(( data )=>{
-        // console.log(data.result);
+        console.log(data.result);
         //이미 가입된 멤버일때
         if( data.result!==null ){
           //class home data 갱신시킴.
@@ -188,9 +189,11 @@ export default class SearchResultPage extends Vue {
            //해당 클래스 홈으로 이동
            this.$router.push({path: `${CLASS_BASE_URL}/${idx}`});
          });
+         console.log('가입된 멤버', data.result);
         }else{
+          console.log('가입된 멤버 아님', data.result);
           //가입 멤버가 아니기에 클래스 가입 페이지로 이동.
-          this.$router.push({path: `${CLASS_BASE_URL}/${idx}/enrollClass`});
+          this.$router.push({path: `${CLASS_BASE_URL}/enrollClass`, query:{ classIdx:idx }});
         }
       }).catch((error)=>{
         //오류 발생시 메인으로 이동시킴.

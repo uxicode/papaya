@@ -1,18 +1,31 @@
 <template>
   <!--
- <check-button :btn-id="체크박스 아이디"
+
+  설명
+   <check-button :btn-id="체크박스 아이디"
                       :check-name="체크박스 네임"
                       :b-data="v-model 로 쓰여질 배열 데이터 혹은 boolean 값"
                       :btn-value="체크박스 value"
                       @click="클릭시 실행할 함수">라벨 텍스트</check-button>
+
+  ex)
+
+ public allCheckValue: string = 'all';
+private allChecked: boolean = true;
+
+
+<check-button :btn-id="`check${item.idx}`"
+                          :check-name="`check${item.idx}`"
+                          :b-data="checkData"
+                          :btn-value="item.val"
+                          @click="updateCheck">{{ item.tit }}</check-button>
   -->
   <div class="btn-checkbox">
     <input type="checkbox"
            :name="checkName"
            :id="btnId"
            :value="btnValue"
-           :checked="checked"
-           v-model="bData"
+           v-model="checked"
            @click="update( $event.target.value, $event.target.checked )">
     <label :for="btnId">
       <slot></slot>
@@ -35,20 +48,19 @@ export default class CheckButton extends Vue{
   @Prop(String)
   public label!: string;
 
-  @Prop(String )
+  @Prop([Boolean, String])
   public btnValue!: string | boolean;
 
-  @Prop( [ Array, Boolean ] )
-  private bData!: string[] | boolean;
+  @Prop( [ Array, Boolean, String ] )
+  private bData!: string[] | boolean | string;
 
-  private checked: boolean=true;
+  @Prop({default: true})
+  private checked!: boolean;
 
   @Emit()
   private update( value: string | boolean, checked: boolean ): void {
     // console.log( this.btnValue, value );
-    this.checked=checked;
-    this.btnValue=value;
-    this.$emit('click', this.btnValue, this.checked );
+    this.$emit('click', value, checked );
   }
 
 

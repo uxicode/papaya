@@ -59,6 +59,7 @@
 
                 <!-- start: 투표 첨부 미리보기 -->
                 <vote-preview :file-items="voteItemModel.vote"
+                              :length="voteItemModel.vote_choice_list.length"
                               title="title"
                               choice="multi_choice"
                               finish-at="finishAt"

@@ -113,7 +113,6 @@ export default class AddNotifyPopup extends Vue{
     return this.linkData.link.title;
   }
 
-
   private getProfileImg(imgUrl: string | null | undefined ): string{
     return ImageSettingService.getProfileImg( imgUrl );
   }
@@ -122,7 +121,6 @@ export default class AddNotifyPopup extends Vue{
     this.$emit('change', value);
     this.allClear();
   }
-
 
   /**
    * 일정 등록시 타이틀 부분

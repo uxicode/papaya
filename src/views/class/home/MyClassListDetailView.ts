@@ -59,16 +59,17 @@ export default class MyClassListDetailView extends Vue{
   @Watch('classID')
   public changeClassId( val: string, old: string) {
     if (val !== old) {
+      console.log('changeClassId', val, old);
       this.getClassList().then(
         ()=>{
           this.isPageLoaded=true;
         }
       );
     }
-
   }
 
   public created(): void{
+    console.log(this.$route.params.classId, this.$route.query.classIdx, this.classID );
     this.getClassList().then(
       ()=>{
         this.isPageLoaded=true;

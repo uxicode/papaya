@@ -12,7 +12,7 @@
           <check-button btn-id="allCheck"
                         check-name="allCheck"
                         :btn-value="allCheckValue"
-                        :b-data="allChecked"
+                        :checked="allChecked"
                         @click="updateCheck">전체 동의</check-button>
         </div>
         <div v-for="item in termsList" :key="item.idx">
@@ -24,9 +24,9 @@
             </div>-->
             <check-button :btn-id="`check${item.idx}`"
                           :check-name="`check${item.idx}`"
-                          :b-data="checkData"
                           :btn-value="item.val"
-                          @click="updateCheck">{{ item.tit }}</check-button>
+                          :checked="item.isChecked"
+                          @click="updateCheck">{{ item.tit }}{{checkData}}</check-button>
 
 
             <!-- accordion-cnt가 active일 경우 accordion-btn도 active -->
