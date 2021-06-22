@@ -318,6 +318,46 @@ select {
   }
 }
 
+// check-round
+.check-round {
+  position: relative;
+  label {
+    position: relative;
+    font-size:14px;
+    color:#57576d;
+    font-weight:400;
+  }
+
+  input {
+    display:none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    &:checked + label:before{
+      background:url(../../assets/images/icn-24-box-round-check.svg) no-repeat;
+    }
+  }
+
+  input + label {
+    padding-left:35px;
+    vertical-align:middle;
+    &:before {
+      content:'';
+      position:absolute;
+      display:block;
+      width:24px;
+      height:24px;
+      top:50%;
+      left:0;
+      transform:translateY(-50%);
+      background:url(../../assets/images/checkbox-circle-outline.svg) no-repeat;
+    }
+  }
+}
+
 .all-form {
   text-align:center;
   margin-top:40px;
