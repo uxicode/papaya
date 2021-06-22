@@ -20,7 +20,7 @@ private allChecked: boolean = true;
                           :btn-value="item.val"
                           @click="updateCheck">{{ item.tit }}</check-button>
   -->
-  <div class="btn-checkbox">
+  <div class="btn-checkbox" :class="buttonType">
     <input type="checkbox"
            :name="checkName"
            :id="btnId"
@@ -40,6 +40,9 @@ import {Vue, Component, Prop, Emit} from 'vue-property-decorator';
 export default class CheckButton extends Vue{
 
   @Prop(String)
+  private readonly type: string | undefined;
+
+  @Prop(String)
   public checkName!: string;
 
   @Prop(String)
@@ -48,14 +51,20 @@ export default class CheckButton extends Vue{
   @Prop(String)
   public label!: string;
 
-  @Prop([Boolean, String])
-  public btnValue!: string | boolean;
+  @Prop([Boolean, String, Number])
+  public btnValue!: string | boolean | number;
 
   @Prop( [ Array, Boolean, String ] )
   private bData!: string[] | boolean | string;
 
   @Prop({default: true})
   private checked!: boolean;
+
+  get buttonType(): object{
+    return {
+      'round': this.type !== undefined && this.type === 'round',
+    };
+  }
 
   @Emit()
   private update( value: string | boolean, checked: boolean ): void {

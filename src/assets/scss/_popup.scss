@@ -754,48 +754,49 @@ $popupDepth: 10;
 
 .popup-feed-detail {
   padding: 20px 40px 0;
-}
+  .vote-area {
+    padding: 14px 20px 20px;
 
-.vote-area {
-  padding: 14px 20px 20px;
-
-  &:before {
-    display: none;
-  }
-}
-
-.vote-top {
-  padding-bottom: 10px;
-  border-bottom: 1px solid #f4f5f6;
-}
-
-.vote-select {
-  position: relative;
-  padding: 10px 20px;
-  border-radius: 5px;
-  background-color: #f4f5f6;
-
-  .btn-radio {
-    label {
-      padding-left: 45px;
-
-      span {
-        font-size: 12px;
-      }
+    &:before {
+      display: none;
     }
   }
 
-  + .vote-select {
-    margin-top: 10px;
+  .vote-top {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f4f5f6;
+  }
+
+  .vote-select {
+    position: relative;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #f4f5f6;
+
+    .btn-radio {
+      label {
+        padding-left: 45px;
+
+        span {
+          font-size: 12px;
+        }
+      }
+    }
+
+    + .vote-select {
+      margin-top: 10px;
+    }
+  }
+
+  .vote-img {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    @include pos-vertical($right: 10px);
   }
 }
 
-.vote-img {
-  width: 40px;
-  height: 40px;
-  overflow: hidden;
-  @include pos-vertical($right: 10px);
-}
+
 
 .curriculum-list {
   position: relative;

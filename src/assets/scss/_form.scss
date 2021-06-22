@@ -238,6 +238,7 @@ select {
 // checkbox
 .btn-checkbox {
   position: relative;
+
   label {
     position: relative;
     font-size:14px;
@@ -245,7 +246,6 @@ select {
     font-weight:400;
   }
   &.inline {display:inline-block;}
-
   input {
     display:none;
     position: absolute;
@@ -258,7 +258,6 @@ select {
       background:url(../../assets/images/checkbox-marked.svg) no-repeat;
     }
   }
-
   input + label {
     padding-left:35px;
     vertical-align:middle;
@@ -276,6 +275,23 @@ select {
     &.big {
       padding-left:37px;
       &:before, &:after {width:27px;height:27px;}
+    }
+  }
+
+  &.round{
+    input{
+      width: 24px;
+      height: 24px;
+      &:checked + label:before{
+        background:url(../../assets/images/icn-24-box-round-check.svg) no-repeat;
+      }
+    }
+    input + label {
+      &:before {
+        width:24px;
+        height:24px;
+        background:url(../../assets/images/checkbox-circle-outline.svg) no-repeat;
+      }
     }
   }
 }
