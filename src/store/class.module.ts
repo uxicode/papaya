@@ -377,7 +377,7 @@ export default class ClassModule extends VuexModule {
     public [MAKE_CLASS]( infos: IMakeClassInfoBase ): Promise<IMakeClassInfo>{
         this.context.commit( CREATE_CLASS_LIST, infos );
 
-        // console.log(this.makeClassInfo);
+        console.log(this.makeClassInfo);
         return MyClassService.setMakeClass( this.makeClassInfo )
           .then( (data: any)=>{
               // console.log(data.classinfo);
@@ -396,12 +396,11 @@ export default class ClassModule extends VuexModule {
     @Action({rawError: true})
     public [MYCLASS_HOME]( id: string | number ): Promise<any>{
         this.context.commit(SET_CLASS_ID, id);
-        // console.log( 'store.getters[Auth/userInfo]=', store.getters['Auth/userInfo'] );
         return MyClassService.getClassInfoById( id )
           .then( (data)=>{
-              this.context.commit(SET_MYCLASS_HOME_DATA, data.classinfo);
+              this.context.commit(SET_MYCLASS_HOME_DATA, data.classinfo );
               // console.log('통신 후 vuex MYCLASS_HOME=', this.classID, '::리스트 클릭 id=', id, this.classIdx );
-              return Promise.resolve(this.myClassHomeModel);
+              return Promise.resolve(this.myClassHomeModel );
           }).catch((error)=>{
               console.log(error);
               return Promise.reject(error);

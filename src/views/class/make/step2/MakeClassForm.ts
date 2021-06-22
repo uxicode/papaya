@@ -49,7 +49,7 @@ export default class MakeClassForm extends Vue{
   }
 
   get isValidation(): boolean{
-    return !!this.classFormData.name && !!this.classFormData.is_private &&  !!this.classFormData.startday;
+    return !!this.classFormData.name  &&  !!this.classFormData.startday;
   }
 
   public created() {
@@ -67,9 +67,9 @@ export default class MakeClassForm extends Vue{
   }
 
 
-  private privateOptionChange( value: boolean, checked: boolean ): void{
-    // console.log(value, checked);
-    this.classFormData.is_private=value;
+  private privateOptionChange( value: string | boolean, checked: boolean ): void{
+    console.log(value, checked, !!this.classFormData.name && !!this.classFormData.is_private &&  !!this.classFormData.startday );
+    this.classFormData.is_private=(value === 'yes');
   }
 
   private submit(): void{

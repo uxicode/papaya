@@ -84,17 +84,23 @@ export default class TermsCheck extends Vue {
         // 선택한 checkbox value 값 termsList 에서 index 찾기
         const itemIndex=this.termsList.findIndex( ( item: ICheckData ) =>item.val === value );
         // console.log( itemIndex );
+        const targetCheckInfo=this.termsList[itemIndex];
+        let { isChecked }=targetCheckInfo;
+
         if (checked) {
             this.termsCheckData.push(value);
             if (itemIndex !== -1) {
-                this.termsList[itemIndex].isChecked=true;
+                isChecked=true;
+                this.termsList.splice(itemIndex, 1, {...targetCheckInfo, isChecked});
             }
             //만약 체크된 개수가 termsList 와 같을 때 모두 체크됨으로 간주 -> 전체동의 체크
             this.allChecked = this.termsCheckData.length === this.termsList.length;
         }else{
+            //체크 되지 않은 항목 제거~ / 체크 항목 개수(this.termsCheckData.length) 로 전체 동의 상태인지 확인 할 수 있음.
             this.termsCheckData.splice(this.termsCheckData.indexOf(value), 1);
             if (itemIndex !== -1) {
-                this.termsList[itemIndex].isChecked=false;
+                isChecked=false;
+                this.termsList.splice(itemIndex, 1, {...targetCheckInfo, isChecked});
             }
             this.allChecked=false;
         }

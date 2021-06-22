@@ -63,7 +63,8 @@
                 </section>
             </template>
 
-            <!-- 공개 클래스일 경우 -->
+            <!-- 공개 클래스일 경우 ( 클래스에 가입되어 있지 않ㄷ자면 /
+            단순히  getClassInfoById( 해당 api 가 권한이 없다) ( /class/${classId} 관련된 데이터만 정렬해야함.-->
             <template v-else>
                 <my-class-list-detail-view></my-class-list-detail-view>
             </template>
