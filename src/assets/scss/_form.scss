@@ -323,8 +323,8 @@ select {
   }
 }
 
-// check-round
-.check-round {
+// checkbox
+.btn-checkbox {
   position: relative;
   label {
     position: relative;
@@ -332,6 +332,7 @@ select {
     color:#57576d;
     font-weight:400;
   }
+  &.inline {display:inline-block;}
 
   input {
     display:none;
@@ -342,7 +343,7 @@ select {
     height: 20px;
     opacity: 0;
     &:checked + label:before{
-      background:url(../../assets/images/icn-24-box-round-check.svg) no-repeat;
+      background:url(../../assets/images/checkbox-marked.svg) no-repeat;
     }
   }
 
@@ -358,7 +359,24 @@ select {
       top:50%;
       left:0;
       transform:translateY(-50%);
-      background:url(../../assets/images/checkbox-circle-outline.svg) no-repeat;
+      background:url(../../assets/images/checkbox-outline.svg) no-repeat;
+    }
+    &.big {
+      padding-left:37px;
+      &:before, &:after {width:27px;height:27px;}
+    }
+  }
+
+  &.chk-round{
+    input {
+      &:checked + label:before{
+        background:url(../../assets/images/icn-24-box-round-check.svg) no-repeat;
+      }
+    }
+    input + label {
+      &:before {
+        background:url(../../assets/images/checkbox-circle-outline.svg) no-repeat;
+      }
     }
   }
 }
