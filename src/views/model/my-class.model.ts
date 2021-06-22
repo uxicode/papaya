@@ -467,7 +467,7 @@ interface IQnaInfo {
 interface IMakeEducation {
     title: string;
     goal: string;
-    course_list?: Array<{
+    course_list: Array<{
         index?: number;
         id?: number;
         startDay?: Date | string;
