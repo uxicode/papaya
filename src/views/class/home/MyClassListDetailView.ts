@@ -1,6 +1,6 @@
 import {Vue, Component, Prop, Watch} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {getAllPromise} from '@/views/model/types';
+import {getAllPromise, getMax} from '@/views/model/types';
 import MyClassService from '@/api/service/MyClassService';
 import {NoticeScheduleModel} from '@/views/model/schedule.model';
 import {IAttachFileModel, IPostModel} from '@/views/model/post.model';
@@ -64,7 +64,7 @@ export default class MyClassListDetailView extends Vue{
   @Watch('classID')
   public changeClassId( val: string, old: string) {
     if (val !== old) {
-      console.log('changeClassId', val, old);
+      // console.log('changeClassId', val, old);
       this.getClassList().then(
         ()=>{
           this.isPageLoaded=true;
@@ -74,7 +74,7 @@ export default class MyClassListDetailView extends Vue{
   }
 
   public created(): void{
-    console.log(this.$route.params.classId, this.$route.query.classIdx, this.classID );
+    // console.log(this.$route.params.classId, this.$route.query.classIdx, this.classID );
     this.getClassList().then(
       ()=>{
         this.isPageLoaded=true;
@@ -82,11 +82,11 @@ export default class MyClassListDetailView extends Vue{
     );
   }
 
-  public getMax<T>( items: T[] ): T{
+  /*public getMax<T>( items: T[] ): T{
     return items.reduce( (a: T, b: T )=>{
       return a>b? a : b;
     });
-  }
+  }*/
 
   //{total_count: 0, post_listcount: 0, post_list: Array(0)}
   //{ total: 0, class_schedule_list: Array(0)}
@@ -106,11 +106,9 @@ export default class MyClassListDetailView extends Vue{
         PostService.getAllPostsByClassId( this.classID, { page_no: 1, count:10}),
       ]).then( ( data: any )=>{
 
-        const max=this.getMax<number>([data[0].class_schedule_list.length, data[1].curriculum_list.length, data[2].post_list.length] );
+        const max=getMax<number>([data[0].class_schedule_list.length, data[1].curriculum_list.length, data[2].post_list.length] );
         // console.log(max);
         // console.log(data[0].class_schedule_list );
-
-
         this.noticeSchedule=data[0].class_schedule_list.filter((item: any) =>item.type===1 );
 
         const allData: any[] = [];
@@ -143,7 +141,7 @@ export default class MyClassListDetailView extends Vue{
     }else{
       await PostService.getAllPostsByClassId( this.classID, { page_no: 1, count:10})
         .then( (data)=>{
-          console.log('PostService data', data);
+          // console.log('PostService data', data);
 
           this.allData=data.post_list.map( ( item: any )=> item );
           //
