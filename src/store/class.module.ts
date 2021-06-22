@@ -299,7 +299,7 @@ export default class ClassModule extends VuexModule {
     public [MAKE_CLASS]( infos: IMakeClassInfoBase ): Promise<IMakeClassInfo>{
         this.context.commit( CREATE_CLASS_LIST, infos );
 
-        // console.log(this.makeClassInfo);
+        console.log(this.makeClassInfo);
         return MyClassService.setMakeClass( this.makeClassInfo )
           .then( (data: any)=>{
               // console.log(data.classinfo);
