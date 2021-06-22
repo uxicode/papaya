@@ -367,9 +367,13 @@ export default class PostModule extends VuexModule {
         // console.log(replyIdItems);
         getAllPromise( replyIdPromiseItems )
           .then(( replyData: any[] )=>{
-            // console.log(replyData);
+            console.log(replyData);
             // this.replyData = replyData;
             this.context.commit(SET_REPLY, replyData);
+
+            // const notDeletedReplys = replyData.map((item) => item.comment_list.filter((reply: any) => reply.deletedYN===false));
+            // console.log(notDeletedReplys);
+            // this.context.commit(SET_REPLY, notDeletedReplys);
           });
       });
   }

@@ -5,6 +5,7 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import AddCurriculumPopup from '@/views/class/curriculum/AddCurriculumPopup';
 import CurriculumDetailPopup from '@/views/class/curriculum/CurriculumDetailPopup';
+import ModifyCurriculumPopup from '@/views/class/curriculum/ModifyCurriculumPopup';
 import {
     IClassInfo,
     ICurriculumList,
@@ -22,7 +23,8 @@ const MyClass = namespace('MyClass');
         Modal,
         Btn,
         AddCurriculumPopup,
-        CurriculumDetailPopup
+        CurriculumDetailPopup,
+        ModifyCurriculumPopup,
     }
 })
 export default class CurriculumListView extends Vue {
@@ -51,6 +53,7 @@ export default class CurriculumListView extends Vue {
     private isCreateError: boolean = false;
 
     private isAddPopupOpen: boolean=false;
+    private isModifyPopupOpen: boolean=false;
 
 
     public created() {
@@ -84,6 +87,29 @@ export default class CurriculumListView extends Vue {
 
     private onDetailCurriculumPopupStatus(value: boolean) {
         this.isDetailPopupOpen=value;
+    }
+
+    /**
+     * 교육과정 수정 팝업 오픈
+     * @param id
+     * @private
+     */
+    private async onModifyCurriculumPopupOpen(id: number) {
+        await this.GET_CURRICULUM_DETAIL_ACTION({classId: Number(this.classID), curriculumId: id})
+            .then((data)=>{
+                this.detailCurriculumId = data.curriculum.id;
+                this.isModifyPopupOpen=true;
+
+            });
+
+    }
+
+    private onModifyCurriculumPopupStatus(value: boolean) {
+        this.isModifyPopupOpen=value;
+    }
+
+    private onModifyCurriculum(value: boolean) {
+        this.isModifyPopupOpen=value;
     }
 
     /**
