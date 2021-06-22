@@ -89,126 +89,209 @@
         <a href="" class="classes-add-btn"></a>
       </div>
     </div>
-    <template v-for="i in allDataModel.length" v-else>
-      <template v-for="item in allDataModel[i-1]" >
-        <!-- start: 일정 -->
-        <div class="feed-item cal" v-if="item.name==='schedule'">
-          <div class="fd-head">
-            <h3 class="fd-tit">{{ item.list.title }}</h3>
-            <div class="fd-writer type2">
-              <p class="writer">
-                <span class="name" :class="{'manager':isOwner( item.list.owner.user_id, item.list.user_id)}">{{  item.list.owner.nickname }}</span>
-                <span class="time">{{ item.list.updatedAt }}</span>
-                <span class="noti">{{ item.list.type === 0 ? '일반' : '공지' }}</span>
-              </p>
-            </div>
-            <div class="fd-btn">
-              <div class="list-popup">
-                <v-menu
-                        min-width="200px"
-                        :close-on-click="true">
-                  <template v-slot:activator="{ on, attrs }">
-                    <button v-if="isOwner( item.list.owner.user_id, item.list.user_id)"
-                            type="button"
-                            class="list-popup-btn"
-                            v-bind="attrs"
-                            v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
-                    </button>
-                  </template>
-                  <v-list>
-                    <v-list-item @click="">
-                      <v-list-item-title>일정 수정</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="">
-                      <v-list-item-title>공지로 등록</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="">
-                      <v-list-item-title>일정 보관</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="">
-                      <v-list-item-title>일정 삭제</v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
+    <template v-else>
+      <template v-if="isMember">
+        <template v-for="i in allDataModel.length">
+          <template v-for="item in allDataModel[i-1]" >
+            <!-- start: 일정 -->
+            <div class="feed-item cal" v-if="item.name==='schedule'">
+              <div class="fd-head">
+                <h3 class="fd-tit">{{ item.list.title }}</h3>
+                <div class="fd-writer type2">
+                  <p class="writer">
+                    <span class="name" :class="{'manager':isOwner( item.list.owner.user_id, item.list.user_id)}">{{  item.list.owner.nickname }}</span>
+                    <span class="time">{{ item.list.updatedAt }}</span>
+                    <span class="noti">{{ item.list.type === 0 ? '일반' : '공지' }}</span>
+                  </p>
+                </div>
+                <div class="fd-btn">
+                  <div class="list-popup">
+                    <v-menu
+                            min-width="200px"
+                            :close-on-click="true">
+                      <template v-slot:activator="{ on, attrs }">
+                        <button v-if="isOwner( item.list.owner.user_id, item.list.user_id)"
+                                type="button"
+                                class="list-popup-btn"
+                                v-bind="attrs"
+                                v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
+                        </button>
+                      </template>
+                      <v-list>
+                        <v-list-item @click="">
+                          <v-list-item-title>일정 수정</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="">
+                          <v-list-item-title>공지로 등록</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="">
+                          <v-list-item-title>일정 보관</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="">
+                          <v-list-item-title>일정 삭제</v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
 
+                  </div>
+                </div>
+              </div>
+              <div class="fd-cnt">
+                <p class="fd-txt">{{ item.list.text }}</p>
+
+                <div class="fd-inner">
+                  <ul class="schedule-list">
+                    <li><a href="">{{ item.list.startAt }} - {{ item.list.endAt }}</a></li>
+                  </ul>
+
+                  <!-- start: attach 에 이미지파일이 있는 경우 -->
+                  <list-in-img-preview :file-items="item.list.attachment" location="location"></list-in-img-preview>
+                  <!-- end: attach 에 이미지파일이 있는 경우 -->
+
+                  <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+                  <list-in-file-preview :file-items="item.list.attachment" name="originalname" location="location"></list-in-file-preview>
+                  <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+
+                </div>
               </div>
             </div>
-          </div>
-          <div class="fd-cnt">
-            <p class="fd-txt">{{ item.list.text }}</p>
+            <!-- end: 일정 -->
 
-            <div class="fd-inner">
-              <ul class="schedule-list">
-                <li><a href="">{{ item.list.startAt }} - {{ item.list.endAt }}</a></li>
-              </ul>
-
-              <!-- start: attach 에 이미지파일이 있는 경우 -->
-              <list-in-img-preview :file-items="item.list.attachment" location="location"></list-in-img-preview>
-              <!-- end: attach 에 이미지파일이 있는 경우 -->
-
-              <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
-              <list-in-file-preview :file-items="item.list.attachment" name="originalname" location="location"></list-in-file-preview>
-              <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
-
-            </div>
-          </div>
-        </div>
-        <!-- end: 일정 -->
-
-        <!-- start: 교육과정 -->
-        <div class="feed-item edu" v-if="item.name==='curriculum'">
-          <div class="fd-head">
-            <h3 class="fd-tit">{{ item.list.title }}</h3>
-            <div class="fd-writer type2">
-              <p class="writer">
-                <span class="name" :class="{'manager':isOwner( item.list.owner.user_id, item.list.user_id)}">{{ item.list.owner.nickname }}</span>
-                <span class="time">{{ item.list.updatedAt }}</span>
-              </p>
-            </div>
-            <div class="fd-btn">
-              <div class="list-popup">
-                <v-menu  v-if="isOwner( item.list.owner.user_id, item.list.user_id)"
-                         min-width="200px"
-                         :close-on-click="true">
-                  <template v-slot:activator="{ on, attrs }">
-                    <button type="button"
-                            class="list-popup-btn"
-                            v-bind="attrs"
-                            v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
-                    </button>
-                  </template>
-                  <v-list>
-                    <v-list-item @click="">
-                      <v-list-item-title>교육과정 수정</v-list-item-title>
-                    </v-list-item>
-                    <v-list-item @click="">
-                      <v-list-item-title>교육과정 삭제</v-list-item-title>
-                    </v-list-item>
-                  </v-list>
-                </v-menu>
+            <!-- start: 교육과정 -->
+            <div class="feed-item edu" v-if="item.name==='curriculum'">
+              <div class="fd-head">
+                <h3 class="fd-tit">{{ item.list.title }}</h3>
+                <div class="fd-writer type2">
+                  <p class="writer">
+                    <span class="name" :class="{'manager':isOwner( item.list.owner.user_id, item.list.user_id)}">{{ item.list.owner.nickname }}</span>
+                    <span class="time">{{ item.list.updatedAt }}</span>
+                  </p>
+                </div>
+                <div class="fd-btn">
+                  <div class="list-popup">
+                    <v-menu  v-if="isOwner( item.list.owner.user_id, item.list.user_id)"
+                             min-width="200px"
+                             :close-on-click="true">
+                      <template v-slot:activator="{ on, attrs }">
+                        <button type="button"
+                                class="list-popup-btn"
+                                v-bind="attrs"
+                                v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
+                        </button>
+                      </template>
+                      <v-list>
+                        <v-list-item @click="">
+                          <v-list-item-title>교육과정 수정</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="">
+                          <v-list-item-title>교육과정 삭제</v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </div>
+                </div>
+              </div>
+              <div class="fd-cnt">
+                <p class="fd-txt">{{ item.list.text }}</p>
+                <p class="fd-txt">총 {{ item.list.course_list.length }}회의 수업이 있습니다.</p>
               </div>
             </div>
-          </div>
-          <div class="fd-cnt">
-            <p class="fd-txt">{{ item.list.text }}</p>
-            <p class="fd-txt">총 {{ item.list.course_list.length }}회의 수업이 있습니다.</p>
-          </div>
-        </div>
-        <!-- end: 교육과정 -->
+            <!-- end: 교육과정 -->
 
+            <!-- start: 알림 -->
+            <div class="feed-item noti" v-if="item.name==='post'">
+              <div class="fd-head">
+                <h3 class="fd-tit">{{ item.list.title }}</h3>
+                <div class="fd-writer type2">
+                  <p class="writer">
+                    <span class="name crown" :class="{'manager':isOwner( item.list.owner.user_id, item.list.user_id)}">{{ item.list.owner.nickname }}</span>
+                    <span class="time">{{ item.list.updatedAt }}</span>
+                  </p>
+                </div>
+                <div class="fd-btn">
+                  <div class="list-popup">
+                    <v-menu  v-if="isOwner( item.list.owner.user_id, item.list.user_id)"
+                             min-width="200px"
+                             :close-on-click="true">
+                      <template v-slot:activator="{ on, attrs }">
+                        <button type="button"
+                                class="list-popup-btn"
+                                v-bind="attrs"
+                                v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
+                        </button>
+                      </template>
+                      <v-list>
+                        <v-list-item @click="">
+                          <v-list-item-title>알림 수정</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="">
+                          <v-list-item-title>공지로 등록/등록 해제</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item @click="">
+                          <v-list-item-title>알림 삭제</v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </div>
+                </div>
+              </div>
+              <div class="fd-cnt">
+                <p class="fd-txt">{{ item.list.text }}</p>
+
+                <div class="fd-inner">
+
+                  <!-- start: attach 에 이미지파일이 있는 경우 -->
+                  <list-in-img-preview :file-items="item.list.attachment" location="location"></list-in-img-preview>
+                  <!-- end: attach 에 이미지파일이 있는 경우 -->
+
+                  <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+                  <list-in-file-preview :file-items="item.list.attachment" name="originalname" location="location"></list-in-file-preview>
+                  <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+
+                  <!-- start:  투표가 있는 경우 -->
+                  <list-in-vote-preview
+                          :file-items="item.list.vote"
+                          title="title"
+                          choice="multi_choice"
+                          finish-at="finishAt"
+                          mode="anonymous_mode"></list-in-vote-preview>
+                  <!-- end:  투표가 있는 경우 -->
+
+                  <!-- start: 링크가 있는 경우-->
+                  <list-in-link-preview
+                          :file-items="item.list.link"
+                          title="title"
+                          url="url" children="link_items"></list-in-link-preview>
+                  <!-- end: 링크가 있는 경우 -->
+
+                </div>
+              </div>
+
+              <!--<div class="fd-foot clearfix">
+                <span class="fd-viewer">124명 읽음</span>
+                <span class="fd-comment">댓글 12</span>
+              </div>-->
+            </div>
+            <!-- end: 알림 -->
+
+
+          </template>
+        </template>
+      </template>
+      <template  v-for="item in allDataModel" v-else>
         <!-- start: 알림 -->
-        <div class="feed-item noti" v-if="item.name==='post'">
+        <div class="feed-item noti" >
           <div class="fd-head">
-            <h3 class="fd-tit">{{ item.list.title }}</h3>
+            <h3 class="fd-tit">{{ item.title }}</h3>
             <div class="fd-writer type2">
               <p class="writer">
-                <span class="name crown" :class="{'manager':isOwner( item.list.owner.user_id, item.list.user_id)}">{{ item.list.owner.nickname }}</span>
-                <span class="time">{{ item.list.updatedAt }}</span>
+                <span class="name crown" :class="{'manager':isOwner( item.owner.user_id, item.user_id)}">{{ item.owner.nickname }}</span>
+                <span class="time">{{ item.updatedAt }}</span>
               </p>
             </div>
             <div class="fd-btn">
               <div class="list-popup">
-                <v-menu  v-if="isOwner( item.list.owner.user_id, item.list.user_id)"
+                <v-menu  v-if="isOwner( item.owner.user_id, item.user_id)"
                          min-width="200px"
                          :close-on-click="true">
                   <template v-slot:activator="{ on, attrs }">
@@ -234,21 +317,21 @@
             </div>
           </div>
           <div class="fd-cnt">
-            <p class="fd-txt">{{ item.list.text }}</p>
+            <p class="fd-txt">{{ item.text }}</p>
 
             <div class="fd-inner">
 
               <!-- start: attach 에 이미지파일이 있는 경우 -->
-              <list-in-img-preview :file-items="item.list.attachment" location="location"></list-in-img-preview>
+              <list-in-img-preview :file-items="item.attachment" location="location"></list-in-img-preview>
               <!-- end: attach 에 이미지파일이 있는 경우 -->
 
               <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
-              <list-in-file-preview :file-items="item.list.attachment" name="originalname" location="location"></list-in-file-preview>
+              <list-in-file-preview :file-items="item.attachment" name="originalname" location="location"></list-in-file-preview>
               <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
 
               <!-- start:  투표가 있는 경우 -->
               <list-in-vote-preview
-                      :file-items="item.list.vote"
+                      :file-items="item.vote"
                       title="title"
                       choice="multi_choice"
                       finish-at="finishAt"
@@ -257,7 +340,7 @@
 
               <!-- start: 링크가 있는 경우-->
               <list-in-link-preview
-                      :file-items="item.list.link"
+                      :file-items="item.link"
                       title="title"
                       url="url" children="link_items"></list-in-link-preview>
               <!-- end: 링크가 있는 경우 -->
@@ -271,10 +354,9 @@
           </div>-->
         </div>
         <!-- end: 알림 -->
-
-
       </template>
     </template>
+
 
   </div>
 </section>
