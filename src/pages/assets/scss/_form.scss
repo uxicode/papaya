@@ -274,6 +274,7 @@ select {
     }
   }
 
+  //check-round
   &.chk-round{
     input {
       &:checked + label:before{
