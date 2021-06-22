@@ -8,7 +8,7 @@ import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import WithRender from './CourseDetailPopup.html';
-import {ICourseData, ICurriculumList, IMyClassList} from '@/views/model/my-class.model';
+import {ICurriculumCourseData, ICurriculumDetailList, IMyClassList} from '@/views/model/my-class.model';
 import {IAttachFileModel} from '@/views/model/post.model';
 import any = jasmine.any;
 
@@ -38,9 +38,9 @@ export default class CourseDetailPopup extends Vue {
     private courseDetailItem!: any;
 
     @MyClass.Getter
-    private curriculumDetailItem!: ICurriculumList;
+    private curriculumDetailItem!: ICurriculumDetailList;
 
-    get curriculumDetailModel(): ICurriculumList{
+    get curriculumDetailModel(): ICurriculumDetailList{
         return this.curriculumDetailItem;
     }
 

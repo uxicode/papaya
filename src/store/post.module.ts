@@ -269,7 +269,9 @@ export default class PostModule extends VuexModule {
   public [DELETE_POST_ACTION](payload: { classId: string | number, postId: number }): Promise<any>{
     return PostService.deletePostById( payload.classId, payload.postId )
       .then((data)=>{
+        console.log(this.postListItems);
         const findIdx=this.postListItems.findIndex((item) => item.id === payload.postId);
+
         this.postListItems.splice(findIdx, 1);
         return Promise.resolve(data);
       }).catch((error) => {
@@ -365,9 +367,13 @@ export default class PostModule extends VuexModule {
         // console.log(replyIdItems);
         getAllPromise( replyIdPromiseItems )
           .then(( replyData: any[] )=>{
-            // console.log(replyData);
+            console.log(replyData);
             // this.replyData = replyData;
             this.context.commit(SET_REPLY, replyData);
+
+            // const notDeletedReplys = replyData.map((item) => item.comment_list.filter((reply: any) => reply.deletedYN===false));
+            // console.log(notDeletedReplys);
+            // this.context.commit(SET_REPLY, notDeletedReplys);
           });
       });
   }

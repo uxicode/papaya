@@ -133,10 +133,9 @@ export default class ClassMember extends Vue{
      */
     private getMyMemberLevel(): void {
         ClassMemberService.getClassMemberInfo(this.classID, this.classInfo.me.id)
-          .then((data) => {
-            //console.log(data.member_info);
-            this.myMemberLevel = data.level;
-            //console.log(this.myMemberLevel);
+          .then((data: any) => {
+            this.myMemberLevel = data.member_info.level;
+            console.log(this.myMemberLevel);
           });
     }
 

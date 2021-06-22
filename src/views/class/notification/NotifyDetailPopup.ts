@@ -2,7 +2,7 @@ import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {IAttachFileModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
-import {ICommentModel} from '@/views/model/comment.model';
+import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
 import {Utils} from '@/utils/utils';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -101,6 +101,10 @@ export default class NotifyDetailPopup extends Vue {
         this.isPhotoViewer = value;
     }
 
+    /**
+     * 댓글 등록
+     * @private
+     */
     private async addComment() {
         if (this.comment !== '') {
             await this.ADD_COMMENT_ACTION({
@@ -120,6 +124,11 @@ export default class NotifyDetailPopup extends Vue {
         }
     }
 
+    /**
+     * 대댓글 입력란 toggle
+     * @param idx
+     * @private
+     */
     private replyInputToggle(idx: number) {
         this.reply = '';
         const replyInput = document.querySelectorAll('.comment-btm.reply');
@@ -127,6 +136,11 @@ export default class NotifyDetailPopup extends Vue {
             (idx!==index) ? item.classList.add('hide') : item.classList.toggle('hide'));
     }
 
+    /**
+     * 대댓글 등록
+     * @param id
+     * @private
+     */
     private async addReply(id: number) {
         if (this.reply !== '') {
             await this.ADD_REPLY_ACTION({
@@ -134,34 +148,44 @@ export default class NotifyDetailPopup extends Vue {
                 member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
                 comment: this.reply
             });
-            /*.then(() => {
-                console.log(`member_id: ${this.myClassHomeModel.me?.id} 대댓글 ${id} 추가 완료`);
-            });*/
             await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
                 .then(() => {
-                    // console.log('댓글 갱신');
                     this.reply = '';
                 });
         }
-        // this.reply = '';
     }
 
     /**
      * 댓글 수정 input
-     * @param comment
+     * @param data
      * @param idx
      * @private
      */
-    private openCommentModify(comment: string, idx: number): void {
+    private openCommentModify(data: ICommentModel, idx: number): void {
+        if (data.owner.id === this.myClassHomeModel.me?.id) {
+            const commentTxt = document.querySelectorAll('.main-comment .comment-txt');
+            const modifyComment = document.querySelectorAll('.main-comment .modify-comment');
+            commentTxt.forEach((item, index) =>
+                (idx===index) ? item.classList.toggle('hide') : item.classList.remove('hide'));
+            modifyComment.forEach((item, index) =>
+                (idx===index) ? item.classList.toggle('active') : item.classList.remove('active'));
+            this.tempComment = data.comment;
+            // @ts-ignore
+            modifyComment[idx].firstChild.focus();
+        } else {
+            alert('본인이 쓴 댓글만 수정 가능합니다.');
+        }
+    }
+
+    /**
+     * 등록 버튼 클릭 시 댓글 수정 입력란 숨김
+     * @private
+     */
+    private closeCommentModify(): void {
         const commentTxt = document.querySelectorAll('.main-comment .comment-txt');
         const modifyComment = document.querySelectorAll('.main-comment .modify-comment');
-        commentTxt.forEach((item, index) =>
-            (idx===index) ? item.classList.toggle('hide') : item.classList.remove('hide'));
-        modifyComment.forEach((item, index) =>
-            (idx===index) ? item.classList.toggle('active') : item.classList.remove('active'));
-        this.tempComment = comment;
-        // @ts-ignore
-        modifyComment[idx].firstChild.focus();
+        commentTxt.forEach((item) => item.classList.remove('hide'));
+        modifyComment.forEach((item) => item.classList.remove('active'));
     }
 
     /**
@@ -170,27 +194,25 @@ export default class NotifyDetailPopup extends Vue {
      * @param newComment
      * @private
      */
-    private submitCommentModify(id: number, newComment: string): void {
-        CommentService.setCommentModify(id,{comment: newComment})
-            .then((data) => {
-                console.log(data);
-                const findIdx = this.commentItemsModel.findIndex((item) => item.id === id);
-                this.commentItemsModel.splice(findIdx, 1, data.comment);
-            });
+    private async submitCommentModify(id: number, newComment: string) {
+        await CommentService.setCommentModify(id,{comment: newComment});
+        await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
+            .then(() => this.closeCommentModify());
     }
 
     /**
      * 댓글 삭제
-     * @param id
      * @private
+     * @param data
      */
-    private deleteComment(id: number): void {
-        CommentService.deleteComment(id)
-            .then((data) => {
-                console.log(data);
-                const findIdx = this.commentItemsModel.findIndex((item) => item.id === id);
-                this.commentItemsModel.splice(findIdx, 1);
-            });
+    private async deleteComment(data: ICommentModel) {
+        if (data.owner.id === this.myClassHomeModel.me?.id) {
+            await CommentService.deleteComment(data.id);
+            await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
+                .then(() => this.closeCommentModify());
+        } else {
+            alert('본인이 쓴 댓글만 삭제 가능합니다');
+        }
     }
 
     /**
@@ -199,24 +221,65 @@ export default class NotifyDetailPopup extends Vue {
      * @param idx
      * @private
      */
-    private openReplyModify(reply: string, idx: number): void {
-        const replyTxt = document.querySelectorAll('.reply .comment-txt');
-        const modifyReply = document.querySelectorAll('.reply .modify-reply');
-        replyTxt.forEach((item, index) =>
-            (idx===index) ? item.classList.toggle('hide') : item.classList.remove('hide'));
-        modifyReply.forEach((item, index) =>
-            (idx===index) ? item.classList.toggle('active') : item.classList.remove('active'));
-        this.tempReply = reply;
-        // @ts-ignore
-        modifyReply[idx].firstChild.focus();
+    private openReplyModify(data: IReplyModel, jdx: number): void {
+        if (data.owner.id === this.myClassHomeModel.me?.id) {
+            const replyTxt = document.querySelectorAll('.reply .comment-txt');
+            const modifyReply = document.querySelectorAll('.reply .modify-reply');
+            replyTxt.forEach((item, index) =>
+                (jdx===index) ? item.classList.toggle('hide') : item.classList.remove('hide'));
+            modifyReply.forEach((item, index) =>
+                (jdx===index) ? item.classList.toggle('active') : item.classList.remove('active'));
+            this.tempReply = data.comment;
+            // @ts-ignore
+            modifyReply[jdx].firstChild.focus();
+        } else {
+            alert('본인이 쓴 대댓글만 수정 가능합니다.');
+        }
     }
 
-    private submitReplyModify(id: number, newReply: string): void {
-        CommentService.setReply(id, {comment: newReply})
+    /**
+     * 등록 버튼 클릭 시 대댓글 수정 입력란 숨김
+     * @private
+     */
+    private closeReplyModify(): void {
+        const replyTxt = document.querySelectorAll('.reply .comment-txt');
+        const modifyReply = document.querySelectorAll('.reply .modify-reply');
+        replyTxt.forEach((item) => item.classList.remove('hide'));
+        modifyReply.forEach((item) => item.classList.remove('active'));
+    }
+
+
+    /**
+     * 대댓글 수정 제출
+     * @param id
+     * @param newReply
+     * @private
+     */
+    private async submitReplyModify(id: number, newReply: string) {
+        await CommentService.setReply(id, {comment: newReply})
             .then((data) => {
                 console.log(data);
-
             });
+        await this.GET_COMMENTS_ACTION(this.postDetailModel.id)
+            .then(() => this.closeReplyModify());
+    }
+
+    /**
+     * 대댓글 삭제
+     * @private
+     * @param data
+     */
+    private async deleteReply(data: IReplyModel) {
+        if (data.owner.id === this.myClassHomeModel.me?.id) {
+            await CommentService.deleteReply(data.id)
+                .then((result) => {
+                    console.log(result);
+                });
+            await this.GET_COMMENTS_ACTION(this.postDetailModel.id);
+            this.closeReplyModify();
+        } else {
+            alert('본인이 쓴 대댓글만 삭제 가능합니다');
+        }
     }
 
 }
