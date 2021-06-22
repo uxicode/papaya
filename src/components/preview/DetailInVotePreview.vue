@@ -19,12 +19,19 @@
             <input type="radio" name="email" id="radio1">
             <label for="radio1">경주<br><span><em class="vote-current">0</em>명</span></label>
           </div>-->
-          <radio-button :btn-id="`radio-${index}`"
+
+          <check-button :btn-id="`check-${index}`"
+                        :check-name="`check-${index}`"
+                        :checked="currentCheckStatus( items[userChoices], item.id)"
+                        :btn-value="item.id"
+                        @click="optionFindChange">{{ item.text }}<br><span><em class="vote-current">0</em>명</span></check-button>
+
+          <!--<radio-button :btn-id="`radio-${index}`"
                         radio-name="radio"
                         :btn-value="item.text"
                         :active-value="radioValue"
                         v-model="radioValue"
-                        @click="optionFindChange">{{ item.text }}<br><span><em class="vote-current">0</em>명</span></radio-button>
+                        @click="optionFindChange">{{ item.text }}<br><span><em class="vote-current">0</em>명</span></radio-button>-->
         </div>
       </div>
     </div>
@@ -33,11 +40,13 @@
 
 <script lang="ts">
 import {Vue, Component, Prop } from 'vue-property-decorator';
+import CheckButton from '@/components/check/CheckButton.vue';
 import RadioButton from '@/components/radio/RadioButton.vue';
 
 @Component({
   components: {
-    RadioButton
+    RadioButton,
+    CheckButton
   }
 })
 export default class DetailInVotePreview extends Vue{
@@ -62,6 +71,9 @@ export default class DetailInVotePreview extends Vue{
   private choicesList!: string;
 
   @Prop(String)
+  private userChoices!: string;
+
+  @Prop(String)
   private finishAt!: string; //finishAt
 
   @Prop(String)
@@ -81,11 +93,20 @@ export default class DetailInVotePreview extends Vue{
     const currentTime = new Date().getTime();
     return (finishTime > currentTime);
   }
-
-  public optionFindChange( value: string | number | boolean, checked: boolean ) {
+  //class - 724 / postid - 1302 /  vote - 206 ( 369, 370, 371 )
+  public optionFindChange( value: string | boolean, checked: boolean ) {
     console.log(value, checked);
     // this.btnValue=value;
     // this.$emit('click', this.currentValue, this.checked );
+  }
+
+  public currentCheckStatus( values: any[], idx: string | number ) {
+    /*if( values.length ){
+      values.filter(item=>item.choice_id===idx)
+      return values.choice_id === idx;
+    }else{
+      return false;
+    }*/
   }
 
 

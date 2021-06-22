@@ -16,15 +16,15 @@ Vue.use(VueRouter);
 const routes: RouteConfig[] = [
   ...LoginRouter,
   ...SignUpRouter,
-  ...MyClassRouter,
-  ...MyPageRouter,
-  ...SearchResultRouter,
   {
-    path: '/class/:classId/enrollClass',
+    path: '/class/enrollClass',
     name: 'EnrollClass',
     beforeEnter: getIsAuth,
     components: {default: () => import('@/views/class/enroll/EnrollClass'), header: MyClassHeader, footer: AppFooter}, // W.4.4.1.1
   },
+  ...MyClassRouter,
+  ...MyPageRouter,
+  ...SearchResultRouter,
   {
     path: '*',
     name: 'notfound',
