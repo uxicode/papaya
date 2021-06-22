@@ -214,6 +214,7 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
 
   private popupChange( value: boolean ) {
     this.$emit('change', value);
+    this.allClear();
   }
 
 
@@ -445,6 +446,14 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
 
 
 
+  private allClear() {
+    // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
+    this.imgFilesAllClear(); //이미지 데이터 비우기
+    this.attachFilesAllClear();//파일 데이터 비우기
+    this.postData = {title: '', text: ''}; //post 데이터 비우기
+    this.voteDataClear(); //투표 데이터 비우기
+  }
+
   /**
    * 알림 데이터 post 전송
    * @private
@@ -481,5 +490,7 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
          this.voteDataClear(); //투표 데이터 비우기
          this.$emit('submit', false); //post 등록 팝업 닫기 알림~
        });*/
+
+    this.allClear();
   }
 }
