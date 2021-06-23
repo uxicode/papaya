@@ -63,15 +63,17 @@ export default class ModifyCurriculumPopup extends Vue {
     private CourseSettingsItems: string[] = ['수업 내용 수정', '수업 삭제'];
 
     /* 수정할 값 */
-    private courseTitle: string = '';
-    private courseGoal: string = '';
-
     private imageLoadedCount: number=0;
     private imgFileURLItems: string[] = [];
     private imgFileDatas: any[] = [];
     private attachFileItems: any[] = [];
     private formData!: FormData;
     private modifyCourseDataItems: any = {};
+
+    private curriculumDetailDataNum: number = 10;
+    private eduItems: Array< {title: string }>=[];
+
+    private modifyClassItems: any = {};
 
     get imgFileURLItemsModel(): string[] {
         return this.imgFileURLItems;
@@ -92,12 +94,6 @@ export default class ModifyCurriculumPopup extends Vue {
     get currentCourseSettingItems(): string[]{
         return this.CourseSettingsItems;
     }
-
-
-    private curriculumDetailDataNum: number = 10;
-    private eduItems: Array< {title: string }>=[];
-
-    private modifyClassItems: any = {};
 
     private getProfileImg(imgUrl: string | null | undefined ): string{
         return ImageSettingService.getProfileImg( imgUrl );

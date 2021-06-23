@@ -160,7 +160,7 @@ class MyClassService {
      * 클래스 교육과정 수정
      * @param classId
      * @param curriculumId
-     * @param curriculumItems
+     * @param modifyItems
      */
     public setCurriculumModify(classId: number, curriculumId: number, modifyItems: any): Promise<any>{
         return request('put', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}`, modifyItems );
