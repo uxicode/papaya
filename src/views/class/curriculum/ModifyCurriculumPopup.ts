@@ -82,7 +82,7 @@ export default class ModifyCurriculumPopup extends Vue {
     }
 
     get curriculumDetailItemModel(): any {
-        return this.curriculumDetailItem.curriculum;
+        return this.curriculumDetailItem;
     }
 
     get currentSettingItems(): string[]{
