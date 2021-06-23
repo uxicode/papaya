@@ -24,12 +24,12 @@
               <input type="text"
                      id="curriculumModifyTitle"
                      class="form-control popup-type"
-                     v-model="modifyClassItems.title">
+                     v-model="curriculumDetailItemModel.title">
             </div>
           </div>
           <div class="popup-form-cnt">
             <div class="form-item post-cnt" style="height:154px;">
-              <textarea class="form-textarea" v-model="modifyClassItems.text"></textarea>
+              <textarea class="form-textarea" v-model="curriculumDetailItemModel.text"></textarea>
             </div>
 
             <div class="add-curriculum bd-top">
@@ -44,7 +44,7 @@
                 </div>
               </div>
               <div class="scroll-body" style="height:124px;">
-                <div v-for="(item, index) in modifyClassItems.course_list" class="add-curr-item" :key="`curriculumDetailDataNum-${index}`">
+                <div v-for="(item, index) in curriculumDetailItemModel.course_list" class="add-curr-item" :key="`curriculumDetailDataNum-${index}`">
 
                   <a href="#" class="add-curr-tit" @click.prevent="onModifyCurriculumPopupOpen(item.id)">
                     <span class="curr-num">{{ index+1 }} 회차</span>

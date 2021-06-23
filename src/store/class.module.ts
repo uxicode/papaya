@@ -168,61 +168,57 @@ export default class ClassModule extends VuexModule {
         message: '',
     };
     private curriculumDetailData: ICurriculumDetailList={
-        curriculum: {
-            startAt: '2019-11-17 10:00:00',
-            endAt: '2019-11-17 10:00:00',
-            expiredAt: '2019-11-17 10:00:00',
-            createdAt: '2019-11-17 10:00:00',
-            updatedAt: '2019-11-17 10:00:00',
-            id: 0,
-            class_id: 0,
-            board_id: 0,
-            post_type: 0,
-            type: 0,
-            user_id: 0,
-            user_member_id: 0,
-            title: '',
-            text: '',
-            count: 0,
-            param1: 0,
-            deletedYN: false,
-            owner: {
-                nickname: '',
-                level: 0,
+        startAt: '2019-11-17 10:00:00',
+        endAt: '2019-11-17 10:00:00',
+        expiredAt: '2019-11-17 10:00:00',
+        createdAt: '2019-11-17 10:00:00',
+        updatedAt: '2019-11-17 10:00:00',
+        id: 0,
+        class_id: 0,
+        board_id: 0,
+        post_type: 0,
+        type: 0,
+        user_id: 0,
+        user_member_id: 0,
+        title: '',
+        text: '',
+        count: 0,
+        param1: 0,
+        deletedYN: false,
+        owner: {
+            nickname: '',
+            level: 0,
+        },
+        course_list: [
+            {
+                startDay: '2019-11-17',
+                createdAt: '2019-11-17',
+                updatedAt: '2019-11-17',
+                id: 0,
+                curriculum_id: 0,
+                class_id: 0,
+                index: 0,
+                title: '',
+                contents: '',
+                startTime: '2019-11-17',
+                endTime: '2019-11-17',
+                deletedYN: false,
+                attachment: [],
             },
-            course_list: [
-                {
-                    startDay: '2019-11-17',
-                    createdAt: '2019-11-17',
-                    updatedAt: '2019-11-17',
-                    id: 0,
-                    curriculum_id: 0,
-                    class_id: 0,
-                    index: 0,
-                    title: '',
-                    contents: '',
-                    startTime: '2019-11-17',
-                    endTime: '2019-11-17',
-                    deletedYN: false,
-                    attachment: [],
-                },
-            ],
-        }
+        ],
     };
     private courseDetailData: ICurriculumCourseData = {
-        course: {
-            startDay: '2019-11-17 10:00:00',
-            createdAt: '2019-11-17 10:00:00',
-            updatedAt: '2019-11-17 10:00:00',
-            id: 0,
-            curriculum_id: 0,
-            class_id: 0,
-            index: 0,
-            title: '',
-            contents: '',
-            startTime: '10:00:00',
-            endTime: '10:00:00',
-        }
+        startDay: '2019-11-17 10:00:00',
+        createdAt: '2019-11-17 10:00:00',
+        updatedAt: '2019-11-17 10:00:00',
+        id: 0,
+        curriculum_id: 0,
+        class_id: 0,
+        index: 0,
+        title: '',
+        contents: '',
+        startTime: '10:00:00',
+        endTime: '10:00:00',
     };
     private makeClassInfo: IMakeClassInfo={
         name:'',
@@ -251,6 +247,10 @@ export default class ClassModule extends VuexModule {
 
     get curriculumDetailItem(): ICurriculumDetailList{
         return this.curriculumDetailData;
+    }
+
+    get courseDetailItem(): ICurriculumCourseData {
+        return this.courseDetailData;
     }
 
     /**
@@ -460,7 +460,7 @@ export default class ClassModule extends VuexModule {
     public [GET_CURRICULUM_DETAIL_ACTION](payload: { classId: number, curriculumId: number}): Promise<any>{
         return MyClassService.getEduCurList(payload.classId, payload.curriculumId )
             .then((data) => {
-                this.context.commit(SET_CURRICULUM_DETAIL, data);
+                this.context.commit(SET_CURRICULUM_DETAIL, data.curriculum);
                 console.log('curriculumDetailData=', this.curriculumDetailData);
                 return Promise.resolve(this.curriculumDetailData);
             }).catch((error) => {
@@ -473,7 +473,7 @@ export default class ClassModule extends VuexModule {
     public [GET_COURSE_DETAIL_ACTION](payload: { classId: number, curriculumId: number, courseId: number }): Promise<any>{
         return MyClassService.getEduCourseList(payload.classId, payload.curriculumId, payload.courseId )
             .then((data) => {
-                this.context.commit(SET_COURSE_DETAIL, data);
+                this.context.commit(SET_COURSE_DETAIL, data.course);
                 console.log('courseDetailData=', this.courseDetailData);
                 return Promise.resolve(this.courseDetailData);
             }).catch((error) => {

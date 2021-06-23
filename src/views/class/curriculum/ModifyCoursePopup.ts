@@ -8,7 +8,7 @@ import {
     IMakeEducation,
     ICurriculumList,
     ICurriculumDetailList,
-    IModifyCurriculum,
+    IModifyCurriculum, ICurriculumCourseData,
 } from '@/views/model/my-class.model';
 import {IAttachFileModel} from '@/views/model/post.model';
 import {Utils} from '@/utils/utils';
@@ -58,6 +58,9 @@ export default class ModifyCoursePopup extends Vue {
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
+    @MyClass.Getter
+    private courseDetailItem!: ICurriculumCourseData;
+
     @MyClass.Action
     private GET_COURSE_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number, courseId: number }) => Promise<any>;
 
@@ -89,6 +92,10 @@ export default class ModifyCoursePopup extends Vue {
 
     get modifyDataItemsModel(): any {
         return this.modifyClassItems;
+    }
+
+    get courseDetailItemModel(): any {
+        return this.courseDetailItem;
     }
 
     /**
@@ -139,9 +146,9 @@ export default class ModifyCoursePopup extends Vue {
         ]
     };
 
-    public updated(){
-        this.getCourseDetail();
-    }
+    // public updated(){
+    //     this.getCourseDetail();
+    // }
 
     private getCourseDetail() {
         MyClassService.getEduCourseList(this.classID, this.curriculumId, this.courseId)
