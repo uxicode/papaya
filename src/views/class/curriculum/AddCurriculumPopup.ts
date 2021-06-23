@@ -63,6 +63,8 @@ export default class AddCurriculumPopup extends Vue {
     private CourseSettingsModel: string = '수업 내용 수정';
 
     private formData: FormData = new FormData();
+    private imgFileService: ImageFileServiceHelper=new ImageFileServiceHelper();
+    private attachFileService: AttachFileService=new AttachFileService();
 
     private makeCurriculumData: IMakeEducation={
         title: '',
@@ -201,6 +203,14 @@ export default class AddCurriculumPopup extends Vue {
         if (Utils.isUndefined(this.formData)) {
             this.formData = new FormData();
         }
+
+        //이미지 파일 저장.
+        this.imgFileService.save( this.formData );
+
+        //파일 저장.
+        this.attachFileService.save( this.formData );
+
+        console.log(this.imgFileService);
 
         const temp = JSON.stringify({...this.makeCurriculumData} );
         this.formData.append('data', temp );

@@ -127,8 +127,24 @@ class ImageFileService implements IFile{
 }
 
 class ImageFileServiceHelper extends ImageFileService {
+
+  public save( formData: FormData ): void {
+    if( !this.imgFileItems.length ){ return; }
+
+    const addFiles= this.imgFileItems
+        .filter((item) => item.file.name !== undefined)
+        .map((item)=>item.file);
+
+    //전송할 파일이 없다면 여기서 종료.
+    if( addFiles.length<1 ){ return; }
+
+    // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
+    this.formDataAppendToFile( formData, addFiles, 'files');
+  }
+
+
   //formdata 에 append 하여 formdata ( 딕셔너리 목록 ) 추가하기.
-  protected formDataAppendToFile( formData: FormData, targetLists: File[], appendName: string | string[] ) {
+  protected formDataAppendToFile( formData: FormData, targetLists: File[], appendName: string | string[]) {
     targetLists.forEach(( item: File, index: number )=>{
       // console.log(item, item.name);
       // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
@@ -137,11 +153,12 @@ class ImageFileServiceHelper extends ImageFileService {
         formData.append( appendName[index], item, `1_${index}_${item.name}` );
       }else{
         formData.append(appendName, item, `1_${index}_${item.name}` );
+
+        console.log(targetLists);
       }
-      console.log(item);
-      console.log(formData);
     });
   }
+
 }
 
 export {ImageFileService, ImageFileServiceHelper};

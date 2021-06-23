@@ -43,14 +43,17 @@ export default class AddCoursePopup extends Vue {
     @Prop(FormData)
     private formData!: FormData;
 
+    @Prop(Object)
+    private imgFileService!: any;
+
+    @Prop(Object)
+    private attachFileService!: any;
+
     @MyClass.Getter
     private classID!: number;
 
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
-
-    private imgFileService: ImageFileServiceHelper=new ImageFileServiceHelper();
-    private attachFileService: AttachFileService=new AttachFileService();
 
     private dateMenu: boolean=false;
     private startTimeMenu: boolean=false;
@@ -63,6 +66,7 @@ export default class AddCoursePopup extends Vue {
         hour: [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
         minute: [ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00']
     };
+
 
     get imgFileURLItemsModel(): string[] {
         return this.imgFileService.getItems();
@@ -179,12 +183,6 @@ export default class AddCoursePopup extends Vue {
 
         this.makeCurriculumData.course_list[idx].startTime = `${startHour}:${startMinute}`;
         this.makeCurriculumData.course_list[idx].endTime = `${endHour}:${endMinute}`;
-
-        //이미지 파일 저장.
-        this.imgFileService.save( this.formData );
-
-        //파일 저장.
-        this.attachFileService.save( this.formData );
 
 
         console.log(this.imgFileService);
