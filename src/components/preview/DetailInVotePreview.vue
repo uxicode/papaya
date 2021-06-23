@@ -14,7 +14,7 @@
         </ul>
       </div>
       <div class="vote-checkbox" v-if="items[choicesList]!==null">
-        <div class="vote-select" v-for="(item, index) in items[choicesList]" :key="`choiceItem-${index}`">
+        <div class="vote-select" v-for="(choiceItem, index) in checkModel" :key="`choiceItem-${index}`">
           <!--<div class="btn-radio">
             <input type="radio" name="email" id="radio1">
             <label for="radio1">경주<br><span><em class="vote-current">0</em>명</span></label>
@@ -23,9 +23,9 @@
           <check-button :btn-id="`check-${index}`"
                         :check-name="`check-${index}`"
                         type="round"
-                        :checked="currentCheckStatus( items[userChoices], item.id)"
-                        :btn-value="item.id"
-                        @click="optionFindChange">{{ item.text }}<br><span><em class="vote-current">0</em>명</span></check-button>
+                        :checked="choiceItem.chk"
+                        :btn-value="choiceItem.id"
+                        @click="optionFindChange">{{ choiceItem.text }}<br><span><em class="vote-current">{{choiceItem.len}}</em>명</span></check-button>
 
           <!--<radio-button :btn-id="`radio-${index}`"
                         radio-name="radio"
@@ -43,6 +43,7 @@
 import {Vue, Component, Prop } from 'vue-property-decorator';
 import CheckButton from '@/components/check/CheckButton.vue';
 import RadioButton from '@/components/radio/RadioButton.vue';
+import {IReadAbleVoteList, IVoteUserChoice} from '@/views/model/post.model';
 
 @Component({
   components: {
@@ -86,7 +87,26 @@ export default class DetailInVotePreview extends Vue{
   @Prop(String)
   private mode!: string;  //anonymous_mode
 
-  private radioValue: string = '';
+  private userSelectItems: Array<{ id: number, text: string, len: number, chk: boolean; }> = [];
+
+  get checkModel() {
+    // console.log(this.items[this.choicesList]);
+    if (this.items[this.choicesList] ) {
+      this.userSelectItems=this.items[this.choicesList].map( ( item: any | any[] )=>{
+        return {
+          id: item.id,
+          text: item.text,
+          len: (item.user_choices.length) ? item.user_choices.length : 0,
+          chk: (item.user_choices.length > 0)
+        };
+      });
+    }
+
+    return this.userSelectItems;
+  }
+
+
+  // private radioValue: string = '';
 
   public isVote(item: Date | null): boolean {
     if (item === null) {return true;}
@@ -95,21 +115,22 @@ export default class DetailInVotePreview extends Vue{
     return (finishTime > currentTime);
   }
   //class - 724 / postid - 1302 /  vote - 206 ( 369, 370, 371 )
-  public optionFindChange( value: string | boolean, checked: boolean ) {
-    console.log(value, checked);
+  public optionFindChange(value: string | number | boolean, checked: boolean) {
+
+    const findIdx = this.userSelectItems.findIndex((item: { id: number, text: string, len: number, chk: boolean }) => {
+      return Number(item.id) === Number(value);
+    });
+    if (findIdx === -1) {
+      return;
+    }
+    const targetObj = this.userSelectItems[findIdx];
+    let {chk}=targetObj;
+    chk = checked;
+    this.userSelectItems.splice( findIdx, 1, {...targetObj, chk});
+
     // this.btnValue=value;
     // this.$emit('click', this.currentValue, this.checked );
   }
-
-  public currentCheckStatus( values: any[], idx: string | number ) {
-    /*if( values.length ){
-      values.filter(item=>item.choice_id===idx)
-      return values.choice_id === idx;
-    }else{
-      return false;
-    }*/
-  }
-
 
 }
 </script>

@@ -1,6 +1,6 @@
 import ClassMemberService from '@/api/service/ClassMemberService';
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
-import {INullable} from '@/views/model/types';
+import {INullable} from '@/types/types';
 import {
     IMyClassList,
     IMakeClassInfo,
@@ -358,6 +358,7 @@ export default class ClassModule extends VuexModule {
     public [MYCLASS_LIST_ACTION](): Promise<IMyClassList[]> {
         return MyClassService.getAllMyClass()
             .then((data: any) => {
+                this.context.commit(SET_CLASS_ID, -1);
                 this.context.commit(MYCLASS_LIST, data.myclass_list);
                 return Promise.resolve(data.myclass_list);
             }).catch((error: any) => {

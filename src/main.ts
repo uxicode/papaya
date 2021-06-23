@@ -20,8 +20,14 @@ import './assets/scss/common.scss';
 //false로 설정하면 배포에 대한 팁을 출력하지 않습니다.
 Vue.config.productionTip = false;
 
+/**
+ * 공통 에러 이벤트 핸들러
+ * @param err
+ * @param vm
+ * @param info
+ */
 Vue.config.errorHandler = (err: Error, vm: Vue, info: string) => {
-  console.log(`Error ${err.toString()}\n info: ${info}`, err, vm);
+  console.log(`Error ${err.toString()}\n info: ${info}`, err, '에러난 해당 component=', vm.$vnode.tag );
 };
 
 new Vue({

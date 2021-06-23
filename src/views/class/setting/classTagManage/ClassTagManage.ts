@@ -79,11 +79,11 @@ export default class ClassTagManage extends Vue {
     @Watch('tagList',{immediate: true, deep: false})
     private getClassTags(): void {
         //console.log('동적라우트값=' , this.$route.params.classId, this.classID);
-        MyClassService.getClassTags(this.classID)
+        /*MyClassService.getClassTags(this.classID)
           .then((data) => {
               this.tagList = data.tag_list;
               //console.log(this.tagList);
-          });
+          });*/
     }
 
     /**

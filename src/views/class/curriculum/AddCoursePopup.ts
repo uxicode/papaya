@@ -98,6 +98,7 @@ export default class AddCoursePopup extends Vue {
      */
     private addImgFileInputFocus() {
         this.inputEventBind('#imgFileInput');
+        this.imgFileService.courseIndexNumber(this.courseIdx);
     }
 
     private addFilesInputFocus(){

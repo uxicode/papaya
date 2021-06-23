@@ -10,7 +10,6 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import MyClassListDetailView from '@/views/class/home/MyClassListDetailView';
 import WithRender from './EnrollClass.html';
-import {MYCLASS_HOME} from '@/store/action-class-types';
 
 interface IEnrollMemberInfo {
   user_id: number;
@@ -63,7 +62,7 @@ export default class EnrollClass extends Vue {
 
   private sideMenuData: ISideMenu[] = [
     {id: 0, title: '클래스 홈', linkKey: ''},
-    {id: 1, title: '알림', linkKey: 'alert'},
+    {id: 1, title: '알림', linkKey: 'notification'},
     {id: 2, title: '일정', linkKey: 'schedule'},
     {id: 3, title: '파일함', linkKey: 'fileBox'},
     {id: 4, title: '교육과정', linkKey: 'curriculum'},
@@ -101,13 +100,15 @@ export default class EnrollClass extends Vue {
   private sideMenuClickHandler(idx: number): void {
     this.$emit('sideClick', idx);
 
-    this.$router.push({path:`${CLASS_BASE_URL}/${this.classIdx}/${this.sideMenuData[idx].linkKey}`})
-      .catch((error) => {
+    this.$router.push({path: `${CLASS_BASE_URL}/${this.classIdx}/${this.sideMenuData[idx].linkKey}`});
+      /*.catch((error) => {
         console.log(error);
+
+        Promise.reject(error);
         //에러 난 경우 새로고침
         // window.location.reload();
         Utils.getWindowReload();
-      });
+      });*/
   }
 
   /**
