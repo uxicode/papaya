@@ -32,7 +32,6 @@ class ImageFileService implements IFile{
    });
   }
 
-
   /*public getImgURLItems(): string[] {
     return this.imgURLFileItems;
   }*/
@@ -133,11 +132,14 @@ class ImageFileServiceHelper extends ImageFileService {
     targetLists.forEach(( item: File, index: number )=>{
       // console.log(item, item.name);
       // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
+
       if( Array.isArray(appendName) ){
-        formData.append( appendName[index], item, item.name );
+        formData.append( appendName[index], item, `1_${index}_${item.name}` );
       }else{
-        formData.append(appendName, item, `${index}_${item.name}` );
+        formData.append(appendName, item, `1_${index}_${item.name}` );
       }
+      console.log(item);
+      console.log(formData);
     });
   }
 }

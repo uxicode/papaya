@@ -2,6 +2,8 @@ import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 
 import {Utils} from '@/utils/utils';
+import {ImageFileService, ImageFileServiceHelper} from '@/views/service/preview/ImageFileService';
+import {AttachFileService} from '@/views/service/preview/AttachFileService';
 import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
@@ -11,8 +13,6 @@ import {
     IMakeEducation,
     ICurriculumDetailList, ICurriculumList,
 } from '@/views/model/my-class.model';
-import {ImageFileService} from '@/views/service/preview/ImageFileService';
-import {AttachFileService} from '@/views/service/preview/AttachFileService';
 import WithRender from './AddCurriculumPopup.html';
 
 
@@ -63,9 +63,6 @@ export default class AddCurriculumPopup extends Vue {
     private CourseSettingsModel: string = '수업 내용 수정';
 
     private formData: FormData = new FormData();
-
-    private imgFileService: ImageFileService = new ImageFileService();
-    private attachFileService: AttachFileService = new AttachFileService();
 
     private makeCurriculumData: IMakeEducation={
         title: '',
@@ -191,6 +188,7 @@ export default class AddCurriculumPopup extends Vue {
             });
         }
     }
+
 
     /**
      * 교육과정 > 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (

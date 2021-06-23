@@ -337,9 +337,7 @@ export default class PostModule extends VuexModule {
   @Action
   public [EDIT_POST_ACTION](payload: { classId: number, postId: number, formData: FormData }): Promise<any>{
     return PostService.setPostInfoAllById( payload.classId, payload.postId, payload.formData )
-      .then( (data)=>{
-
-      }).catch((error) => {
+      .then().catch((error) => {
         console.log(error);
         return Promise.reject(error);
       });
