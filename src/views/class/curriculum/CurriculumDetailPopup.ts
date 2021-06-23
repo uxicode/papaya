@@ -79,7 +79,7 @@ export default class CurriculumDetailPopup extends Vue {
     }
 
     get CourseDetailData(): any {
-        return this.curriculumDetailItem.curriculum.course_list;
+        return this.curriculumDetailItem.course_list;
     }
 
 
