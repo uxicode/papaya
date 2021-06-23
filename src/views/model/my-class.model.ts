@@ -701,6 +701,9 @@ interface IModifyCurriculum {
         endTime: Date | string;
         contents: string;
     }>;
+    deleted_course_list?: Array<{
+        id: number;
+    }>;
 }
 
 interface IClassTag {

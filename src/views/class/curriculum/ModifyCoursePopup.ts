@@ -46,12 +46,6 @@ export default class ModifyCoursePopup extends Vue {
     @Prop(Boolean)
     private isModifyCourse!: boolean;
 
-    @Prop(Number)
-    private curriculumId!: number;
-
-    @Prop(Number)
-    private courseId!: number;
-    
     @MyClass.Getter
     private classID!: number;
 
@@ -145,17 +139,6 @@ export default class ModifyCoursePopup extends Vue {
             }
         ]
     };
-
-    // public updated(){
-    //     this.getCourseDetail();
-    // }
-
-    private getCourseDetail() {
-        MyClassService.getEduCourseList(this.classID, this.curriculumId, this.courseId)
-            .then((data) => {
-                this.modifyCourseDataItems = data.course;
-            });
-    }
 
     get isSubmitValidate(): boolean{
         return (this.makeCurriculumData.title !== '' && this.makeCurriculumData.goal !== '');
@@ -561,8 +544,17 @@ export default class ModifyCoursePopup extends Vue {
         console.log(this.modifyClassItems);
     }
 
-    private modifyCourseConfirm(courseIdx: number): void{
+    private modifyCourseConfirm(): void{
+        MyClassService.setEduCourseModify(this.classID, this.courseDetailItemModel.curriculum_id, this.courseDetailItemModel.id,
+            {
+
+            }).then(() => {
+
+            });
+
         this.isModifyCourse = false;
+
+
 
         this.setImageFormData();
         this.setAttachFileFormData();
@@ -570,24 +562,8 @@ export default class ModifyCoursePopup extends Vue {
         this.removeAllAttachFile();
     }
 
-    private modifyConfirm(cardId: number){
-        this.formData = new FormData();
-
-        const temp = JSON.stringify( {...this.modifyClassItems} );
-        this.formData.append('data', temp );
-
-        MyClassService.setCurriculumModify(this.classID, cardId, this.formData)
-            .then((data)=>{
-                console.log(cardId);
-                console.log('교육과정 수정 성공', data);
-                this.imgFilesAllClear();
-                this.attachFilesAllClear();
-            });
-    }
-
     private modifyCourseHandler(courseIdx: number, idx: number) {
         this.isModifyCourse = true;
-        this.courseId = courseIdx;
         this.countCourseNumber = idx;
 
         this.modifyCourseDataItems = this.modifyDataItemsModel.course_list[idx];

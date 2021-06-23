@@ -205,6 +205,16 @@ class MyClassService {
         return request('post', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course` );
     }
 
+    /**
+     * 클래스 교육과정 개별코스 정보 수정
+     * @param classId
+     * @param curriculumId
+     * @param courseId
+     * @param data
+     */
+    public setEduCourseModify(classId: number, curriculumId: number, courseId: number, data: any): Promise<any>{
+        return request('put', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course/${courseId}`, data);
+    }
 }
 
 export default new MyClassService();

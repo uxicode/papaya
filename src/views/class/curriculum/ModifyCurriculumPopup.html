@@ -85,7 +85,7 @@
       <div slot="footer">
         <!-- footer custom coding-->
         <div class="btn-group rt">
-          <btn type="navi" @btnClick="modifyConfirm(cardId)">등록</btn>
+          <btn type="navi" @btnClick="modifyConfirm">등록</btn>
         </div>
       </div>
     </modal>
@@ -94,8 +94,6 @@
 
   <modify-course-popup
         :is-modify-course="isModifyClassCourse"
-        :curriculum-id="cardId"
-        :course-id="courseId"
         @change="onModifyCoursePopupStatus"
         @submit="onModifyCourse">
   </modify-course-popup>

@@ -35,7 +35,7 @@ import {
     GET_CURRICULUM_DETAIL_ACTION,
     GET_COURSE_DETAIL_ACTION,
     ADD_CURRICULUM_ACTION,
-    DELETE_CURRICULUM_ACTION,
+    DELETE_CURRICULUM_ACTION, MODIFY_CURRICULUM_ACTION,
 } from '@/store/action-class-types';
 import {PostService} from '@/api/service/PostService';
 
@@ -509,6 +509,17 @@ export default class ClassModule extends VuexModule {
             });
     }
 
-
+    @Action
+    public [MODIFY_CURRICULUM_ACTION](payload: {classId: number, curriculumId: number, formData: FormData}): Promise<any> {
+        return MyClassService.setCurriculumModify(payload.classId, payload.curriculumId, payload.formData)
+            .then((data) => {
+                console.log('modified curriculum data=', data.curriculum);
+                this.context.commit(SET_CURRICULUM_DETAIL, data.curriculum);
+                return Promise.resolve(this.curriculumDetailData);
+            }).catch((error) => {
+                console.log(error);
+                return Promise.reject(error);
+            });
+    }
 
 }
