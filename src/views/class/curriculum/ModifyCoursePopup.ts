@@ -1,4 +1,4 @@
-import {GET_COURSE_DETAIL_ACTION} from "@/store/action-class-types";
+import {GET_COURSE_DETAIL_ACTION} from '@/store/action-class-types';
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import TxtField from '@/components/form/txtField.vue';
@@ -52,7 +52,7 @@ export default class ModifyCoursePopup extends Vue {
 
     @Prop(Number)
     private courseId!: number;
-    
+
     @MyClass.Getter
     private classID!: number;
 

@@ -1,6 +1,6 @@
 import {Vue, Component, Prop, Watch} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {getAllPromise, getMax} from '@/views/model/types';
+import {getAllPromise, getMax} from '@/types/types';
 import MyClassService from '@/api/service/MyClassService';
 import {NoticeScheduleModel} from '@/views/model/schedule.model';
 import {IAttachFileModel, IPostModel} from '@/views/model/post.model';

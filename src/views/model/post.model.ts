@@ -1,3 +1,6 @@
+import {IScheduleTotal} from '@/views/model/schedule.model';
+import {PartialExcept} from '@/types/types';
+
 interface IPostModel{
   attachment: [];
   class_id: number;
@@ -183,6 +186,36 @@ interface IReadAbleVote {
   }>;
 }
 
+interface IReadAbleVoteList {
+  id: number;
+  index: number;
+  text: string;
+  image_url?: string | null;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+  user_choices: Array<{
+    choice_id: number,
+    id: number,
+    vote_id: number,
+    member_id: number,
+    deletedYN?: boolean,
+    createdAt?: Date | string,
+    updatedAt?: Date | string,
+  }>;
+}
+
+
+
+interface IVoteUserChoice{
+  choice_id: number;
+  id: number;
+  member_id: number;
+  updatedAt: Date | string;
+  vote_id: number;
+  createdAt?: Date | string;
+  deletedYN?: boolean;
+}
+
 interface ILinkModel{
   link: {
     title: string;
@@ -213,5 +246,5 @@ interface IPostInLinkModel{
 }
 
 
-export {IPostModel, IAttachFileModel, ICreatePost, IVoteModel, ILinkModel, IReadAbleVote, IPostInLinkModel,};
+export {IPostModel, IAttachFileModel, ICreatePost, IVoteModel, ILinkModel, IReadAbleVote, IPostInLinkModel,IVoteUserChoice, IReadAbleVoteList};
 

@@ -9,7 +9,10 @@ import RadioButton from '@/components/radio/RadioButton.vue';
 import Pagination from '@/components/pagination/pagination.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './SearchResultPage.html';
-import {getAllPromise} from '@/views/model/types';
+import {getAllPromise} from '@/types/types';
+import {SEARCH_DATA_SAVED} from '@/store/mutation-search-types';
+import {IClassTag} from '@/views/model/my-class.model';
+import {SEARCH_OPTION_CHANGE_ACTION} from '@/store/action-search-types';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
@@ -26,6 +29,18 @@ const SearchStatus = namespace('SearchStatus');
 })
 export default class SearchResultPage extends Vue {
 
+  @SearchStatus.Mutation
+  public SEARCH_DATA_SAVED!: (data: ISearchModel[] | IClassTag[]) => void;
+
+  @SearchStatus.Action
+  private SEARCH_RESULT_ACTION!: ( payload: { keyword: string, page_no: number, count: number} )=>Promise<any>;
+
+  @SearchStatus.Action
+  private SEARCH_OPTION_CHANGE_ACTION!: ( payload: { option: string, keyword: string})=>void;
+
+  @MyClass.Action
+  private MYCLASS_HOME!: (id: string | number) => Promise<any>;
+
   @Auth.Getter
   private userInfo!: IUserMe;
 
@@ -38,11 +53,8 @@ export default class SearchResultPage extends Vue {
   @SearchStatus.Getter
   private searchResultData!: ISearchModel[];
 
-  @MyClass.Action
-  private MYCLASS_HOME!: (id: string | number) => Promise<any>;
-
-  @SearchStatus.Action
-  private SEARCH_RESULT_ACTION!: ( payload: { keyword: string, page_no: number, count: number} )=>Promise<any>;
+  @SearchStatus.Getter
+  private searchOptionData!: ISearchModel[];
 
   private radioValue: string = 'all';
   private currentPageNum: number=1;
@@ -57,7 +69,6 @@ export default class SearchResultPage extends Vue {
     { idx:3, name:'태그', value:'tag'}
   ];
 
-
   get searchTotalModel(): number{
     return this.searchTotal;
   }
@@ -71,34 +82,49 @@ export default class SearchResultPage extends Vue {
   }
 
   get searchResultsModel(): any[]{
-    return this.searchResults;
+    return ( this.searchOptionData.length>0 )? this.searchOptionData : this.searchResultData;
   }
 
   public created() {
     this.getResultList();
   }
 
-  @Watch('searchResultData')
+  /*@Watch('searchResultData')
   public changeData(value: any[], old: any[]) {
     if (value !== old) {
       // console.log('watch =' , value );
       this.getResultList();
     }
-  }
+  }*/
+
+  /*public changeResultByOption() {
+    //SearchApiService.getSearchResult 은 ( 기관명/ 클래스명 / 태그 라이크 검색 ) 3가지로 구분 되지 않고 통합검색 되어 버린다.
+    switch (this.radioValue) {
+      case 'union' :
+        this.searchResults=[...this.searchResultData.filter( (item: any )=> item.g_name.match( this.keyword )!==null ) ];
+        break;
+      case 'class' :
+        this.searchResults=[...this.searchResultData.filter( (item: any )=> item.name.match( this.keyword )!==null) ];
+        break;
+      case 'tag':
+        this.searchResults=[...this.searchResultData.filter( (item: any )=> {
+          return ( item.class_tags!==undefined) && ( item.class_tags.filter((target: any) =>target.keyword.match(this.keyword) !== null) );
+        }) ];
+        break;
+      default:
+        this.searchResults = [...this.searchResultData];
+        break;
+    }
+    this.SEARCH_DATA_SAVED(this.searchResults);
+  }*/
 
   public getResultList() {
-    if( this.radioValue ==='union'){
-      this.searchResults=[...this.searchResultData.filter( (item: any )=> item.g_name.match( this.keyword )!==null ) ];
-    }else if( this.radioValue ==='class'){
-      this.searchResults=[...this.searchResultData.filter( (item: any )=> item.name.match( this.keyword )!==null) ];
-    }else if( this.radioValue==='tag'){
-      this.searchResults=[...this.searchResultData.filter( (item: any )=> {
-        return ( item.class_tags!==undefined) && ( item.class_tags.filter((target: any) =>target.keyword.match(this.keyword) !== null) );
-      }) ];
-    }else{
-      this.searchResults = [...this.searchResultData];
-    }
-    this.getClassOwnerName(  this.searchResults )
+    //검색 결과 없으면 여기서 종료.
+    if (this.searchResultData.length <= 0) {return;}
+
+    console.log('검색결과=', this.searchResultData.length );
+
+    this.getClassOwnerName(  this.searchResultData )
       .then( ( data: any )=>{
         // console.log('owner 데이터 완료', data );
         this.ownerItems=data.map((item: any) => {
@@ -118,8 +144,10 @@ export default class SearchResultPage extends Vue {
 
 
   private async getClassOwnerName(items: any[]) {
+    console.log('search getClassOwnerName=', items);
     const ownerPromiseItems = await this.getClassInfoBySearchResultClassId(items);
-    return await getAllPromise( ownerPromiseItems ).then(( info: any )=>{
+    return getAllPromise( ownerPromiseItems )
+      .then(( info: any )=>{
       // console.log('info=', info);
       return Promise.resolve(info);
     }).catch((error)=>{
@@ -133,7 +161,9 @@ export default class SearchResultPage extends Vue {
   private getClassInfoBySearchResultClassId( items: any[] ): any[] {
     const promiseItems: any[] = [];
     items.forEach( ( item: any ) => {
-      promiseItems.push( MyClassService.getClassInfoById( item.class_id ) );
+      console.log('SearchResultClassId=', item.class_id, item.id  );
+      const idx=(item.class_id)? item.class_id : item.id;
+      promiseItems.push( MyClassService.getClassInfoById( idx ) );
     });
     return promiseItems;
   }
@@ -141,6 +171,8 @@ export default class SearchResultPage extends Vue {
 
   private pageChange(num: number): void{
     this.currentPageNum=num;
+    //
+    // console.log('currentPageNum', this.currentPageNum);
     this.SEARCH_RESULT_ACTION({keyword:this.keyword, page_no:this.currentPageNum, count:this.numOfPage})
       .then((data) => {
         //로딩바 설정 해야 함.
@@ -155,6 +187,7 @@ export default class SearchResultPage extends Vue {
   }
 
   private nextPage(num: number): void{
+    console.log('num', num);
     this.pageChange(num);
   }
 
@@ -178,6 +211,10 @@ export default class SearchResultPage extends Vue {
     // console.log('item', item, this.userInfo,  item.class_id , item.id );
     const idx=( item.class_id!==null)? item.class_id : item.id;
 
+    if (idx === null) {
+      console.log('존재하지 않는 idx', idx);
+      return;
+    }
 
     this.myClassCheck(idx)
       .then(( data )=>{
@@ -228,7 +265,10 @@ export default class SearchResultPage extends Vue {
     this.radioValue=value;
 
     this.pageChange(1);
-    this.getResultList();
+
+    this.SEARCH_OPTION_CHANGE_ACTION( {option:this.radioValue, keyword: this.keyword});
+
+    // this.getResultList();
   }
 
   private gotoMakeClassPage() {
