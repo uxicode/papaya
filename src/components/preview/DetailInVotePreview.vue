@@ -4,7 +4,7 @@
       <span class="vote-count"><span class="count-num">0</span>/233명 응답</span>
     </p>
 
-    <div class="vote-area">
+    <div class="vote-area none">
       <div class="vote-top">
         <p class="vote-tit">{{ items[title] }}</p>
         <ul class="vote-option clearfix">
@@ -22,6 +22,7 @@
 
           <check-button :btn-id="`check-${index}`"
                         :check-name="`check-${index}`"
+                        type="round"
                         :checked="currentCheckStatus( items[userChoices], item.id)"
                         :btn-value="item.id"
                         @click="optionFindChange">{{ item.text }}<br><span><em class="vote-current">0</em>명</span></check-button>
