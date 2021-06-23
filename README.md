@@ -57,6 +57,35 @@ npm run test:e2e
 npm run test:unit
 ```
 
+## 기능 별 화면 
+
+### header / footer 
+
+### search 
+- 검색 결과 `src/views/search/SearchResultPage `
+- 검색 호출 helper  `src/views/service/search/SearchService`
+- 상단 gnb 서치 아이콘 `src/components/header/search.vue`
+
+###  side menu 
+
+###  api 호출 
+
+### store   `src/store`
+
+### 공통 컴포넌트 `src/components/`
+
+
+### 공통 함수 `src/mixin/`  
+- 사용된 곳 `src/views/class/notification/EditNotificationPopup.ts`
+ex) 
+```
+import UtilsMixins from '@/mixin/UtilsMixins';
+
+export default class 클래스이름 extends  Mixins(UtilsMixins){ 
+   //여기서 mixin 함수 호출 가능 
+}
+```
+
 ### 화면 ID 가이드
 > 
 > - 페이지 성격 분류는 P 로 끝나면 된다. HP - 홈/메인, MP - 마이페이지,  LP - 각 카테고리 랜딩 페이지, SBP - 서브 하위페이지 

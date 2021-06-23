@@ -668,7 +668,7 @@
   border:1px solid #c9cad5;
   border-radius:5px;
 
-  &:before {
+  &:not(.none):before {
     content:'';
     position:absolute;
     display: block;
