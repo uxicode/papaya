@@ -274,15 +274,18 @@ select {
     }
   }
 
-  //check-round
-  &.chk-round{
-    input {
+  &.round{
+    input{
+      width: 24px;
+      height: 24px;
       &:checked + label:before{
         background:url(../../assets/images/icn-24-box-round-check.svg) no-repeat;
       }
     }
     input + label {
       &:before {
+        width:24px;
+        height:24px;
         background:url(../../assets/images/checkbox-circle-outline.svg) no-repeat;
       }
     }
