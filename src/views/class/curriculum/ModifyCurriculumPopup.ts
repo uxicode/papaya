@@ -3,13 +3,7 @@ import {namespace} from 'vuex-class';
 import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
-import {
-    IClassInfo,
-    IMakeEducation,
-    ICurriculumList,
-    ICurriculumDetailList,
-    IModifyCurriculum,
-} from '@/views/model/my-class.model';
+import {IClassInfo, ICurriculumDetailList,} from '@/views/model/my-class.model';
 import {IAttachFileModel} from '@/views/model/post.model';
 import {Utils} from '@/utils/utils';
 import MyClassService from '@/api/service/MyClassService';
@@ -22,14 +16,6 @@ import ImageSettingService from '@/views/service/profileImg/ImageSettingService'
 import WithRender from './ModifyCurriculumPopup.html';
 
 const MyClass = namespace('MyClass');
-
-/*start: 추가 테스트*/
-interface ITimeModel{
-    apm: string;
-    hour: string;
-    minute: string;
-}
-/*end: 추가 테스트*/
 
 @WithRender
 @Component({
@@ -56,6 +42,9 @@ export default class ModifyCurriculumPopup extends Vue {
 
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
+
+    @MyClass.Getter
+    private curriculumDetailItem!: ICurriculumDetailList;
 
     @MyClass.Action
     private GET_CURRICULUM_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number}) => Promise<any>;
@@ -92,8 +81,8 @@ export default class ModifyCurriculumPopup extends Vue {
         return this.attachFileItems;
     }
 
-    get modifyDataItemsModel(): any {
-        return this.modifyClassItems;
+    get curriculumDetailItemModel(): any {
+        return this.curriculumDetailItem.curriculum;
     }
 
     get currentSettingItems(): string[]{
@@ -108,12 +97,7 @@ export default class ModifyCurriculumPopup extends Vue {
     private curriculumDetailDataNum: number = 10;
     private eduItems: Array< {title: string }>=[];
 
-    private modifyClassItems!: any;
-
-    public updated() {
-        console.log('cardId=',this.cardId);
-        this.getModifyEduCurList(this.cardId);
-    }
+    private modifyClassItems: any = {};
 
     private getProfileImg(imgUrl: string | null | undefined ): string{
         return ImageSettingService.getProfileImg( imgUrl );
@@ -379,13 +363,6 @@ export default class ModifyCurriculumPopup extends Vue {
     }
 
 
-    private getModifyEduCurList(cardId: number): void {
-        MyClassService.getEduCurList(this.classID, cardId)
-            .then((data) => {
-                this.modifyClassItems = data.curriculum;
-                console.log('selected curriculum data = ', this.modifyClassItems);
-            });
-    }
 
     private modifyConfirm(cardId: number){
         this.formData = new FormData();
@@ -406,7 +383,7 @@ export default class ModifyCurriculumPopup extends Vue {
         this.courseId = courseIdx;
         this.countCourseNumber = idx;
 
-        this.modifyCourseDataItems = this.modifyDataItemsModel.course_list[idx];
+        this.modifyCourseDataItems = this.curriculumDetailItemModel.course_list[idx];
         console.log(this.modifyCourseDataItems.attachment);
     }
 

@@ -210,19 +210,17 @@ export default class ClassModule extends VuexModule {
         }
     };
     private courseDetailData: ICurriculumCourseData = {
-        course: {
-            startDay: '2019-11-17 10:00:00',
-            createdAt: '2019-11-17 10:00:00',
-            updatedAt: '2019-11-17 10:00:00',
-            id: 0,
-            curriculum_id: 0,
-            class_id: 0,
-            index: 0,
-            title: '',
-            contents: '',
-            startTime: '10:00:00',
-            endTime: '10:00:00',
-        }
+        startDay: '2019-11-17 10:00:00',
+        createdAt: '2019-11-17 10:00:00',
+        updatedAt: '2019-11-17 10:00:00',
+        id: 0,
+        curriculum_id: 0,
+        class_id: 0,
+        index: 0,
+        title: '',
+        contents: '',
+        startTime: '10:00:00',
+        endTime: '10:00:00',
     };
     private makeClassInfo: IMakeClassInfo={
         name:'',
@@ -251,6 +249,10 @@ export default class ClassModule extends VuexModule {
 
     get curriculumDetailItem(): ICurriculumDetailList{
         return this.curriculumDetailData;
+    }
+
+    get courseDetailItem(): ICurriculumCourseData {
+        return this.courseDetailData;
     }
 
     /**
@@ -473,7 +475,7 @@ export default class ClassModule extends VuexModule {
     public [GET_COURSE_DETAIL_ACTION](payload: { classId: number, curriculumId: number, courseId: number }): Promise<any>{
         return MyClassService.getEduCourseList(payload.classId, payload.curriculumId, payload.courseId )
             .then((data) => {
-                this.context.commit(SET_COURSE_DETAIL, data);
+                this.context.commit(SET_COURSE_DETAIL, data.course);
                 console.log('courseDetailData=', this.courseDetailData);
                 return Promise.resolve(this.courseDetailData);
             }).catch((error) => {

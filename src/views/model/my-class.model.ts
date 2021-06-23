@@ -679,19 +679,17 @@ interface ICurriculumDetailList {
 }
 
 interface ICurriculumCourseData {
-    course: {
-        startDay: Date | string;
-        createdAt: Date | string;
-        updatedAt: Date | string;
-        id: number;
-        curriculum_id: number;
-        class_id: number;
-        index: number;
-        title: string;
-        contents: string;
-        startTime: Date | string;
-        endTime: Date | string;
-    };
+    startDay: Date | string;
+    createdAt: Date | string;
+    updatedAt: Date | string;
+    id: number;
+    curriculum_id: number;
+    class_id: number;
+    index: number;
+    title: string;
+    contents: string;
+    startTime: Date | string;
+    endTime: Date | string;
 }
 
 interface IModifyCurriculum {

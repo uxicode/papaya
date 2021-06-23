@@ -95,9 +95,9 @@ export default class CurriculumListView extends Vue {
      * @private
      */
     private async onModifyCurriculumPopupOpen(id: number) {
+        this.detailCurriculumId = id;
         await this.GET_CURRICULUM_DETAIL_ACTION({classId: Number(this.classID), curriculumId: id})
             .then((data)=>{
-                this.detailCurriculumId = data.curriculum.id;
                 this.isModifyPopupOpen=true;
 
             });
