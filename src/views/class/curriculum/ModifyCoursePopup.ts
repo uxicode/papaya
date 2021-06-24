@@ -1,3 +1,4 @@
+import {GET_COURSE_DETAIL_ACTION} from "@/store/action-class-types";
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import TxtField from '@/components/form/txtField.vue';
@@ -6,9 +7,8 @@ import Btn from '@/components/button/Btn.vue';
 import {
     IClassInfo,
     IMakeEducation,
-    ICurriculumList,
-    ICurriculumDetailList,
-    IModifyCurriculum, ICurriculumCourseData,
+    IModifyCurriculum,
+    ICurriculumCourseData,
 } from '@/views/model/my-class.model';
 import {IAttachFileModel} from '@/views/model/post.model';
 import {Utils} from '@/utils/utils';

@@ -59,6 +59,7 @@ export default class MyClassListView extends Vue{
 
   // 트랜지션을 시작할 때 인덱스 * 100 ms 만큼의 딜레이를 적용합니다.
   public beforeEnter(el: HTMLElement): void {
+    // console.log( el.dataset.index )
     if(el.dataset.index !=='0'){
       // el.classList.add('skeleton-inner');
       // console.log(this.startNum, this.endNum);

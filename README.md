@@ -122,7 +122,8 @@ f([1, 2]);
 let { a, b }: { a: string, b: number } = o;
 ```
 
-- 
+
+--------- 
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).

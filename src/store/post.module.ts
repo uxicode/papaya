@@ -26,7 +26,7 @@ import {IPostInLinkModel, IPostModel, IReadAbleVote, IVoteModel} from '@/views/m
 import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
 import {PostService} from '@/api/service/PostService';
 import {CommentService} from '@/api/service/CommentService';
-import {getAllPromise} from '@/views/model/types';
+import {getAllPromise} from '@/types/types';
 
 @Module({
   namespaced: true,
@@ -338,7 +338,7 @@ export default class PostModule extends VuexModule {
   public [EDIT_POST_ACTION](payload: { classId: number, postId: number, formData: FormData }): Promise<any>{
     return PostService.setPostInfoAllById( payload.classId, payload.postId, payload.formData )
       .then( (data)=>{
-
+//
       }).catch((error) => {
         console.log(error);
         return Promise.reject(error);

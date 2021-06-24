@@ -206,8 +206,10 @@ export default class Search extends Vue {
 
   public mounted() {
     setTimeout(() => {
-      const searchInput=document.querySelector('#searchInput') as HTMLInputElement;
-      searchInput.focus();
+      const searchInput=document.querySelector('#searchInput');
+      if ( searchInput !== null ) {
+        ( searchInput as HTMLInputElement ).focus();
+      }
     }, 1000);
   }
 
@@ -315,8 +317,11 @@ export default class Search extends Vue {
 
     //$nextTick - 해당하는 엘리먼트가 화면에 렌더링이 되고 난 후
     this.$nextTick(() => {
-      const searchClassInput = document.querySelector('#searchInput') as HTMLInputElement;
-      searchClassInput.focus();
+      const searchClassInput = document.querySelector('#searchInput');
+      if (searchClassInput !== null) {
+        (searchClassInput as HTMLInputElement) .focus();
+      }
+
 
       //키가 눌렸을 때 체크 Observable
       // targetInputSelector: string

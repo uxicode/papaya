@@ -1,7 +1,7 @@
 interface ISearchModel {
   board_id: number;
   class_id: number;
-  class_tags: [];
+  class_tags?: [];
   code: string | null;
   contents_updatedAt: Date;
   contents_updated_type: number;

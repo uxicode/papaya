@@ -1,12 +1,13 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import { getAllPromise } from '@/views/model/types';
+import { getAllPromise } from '@/types/types';
 import {CLASS_BASE_URL} from '@/api/base';
 import { IMyClassList, ClassEachInfo} from '@/views/model/my-class.model';
 import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
 import MyClassListView from '@/views/class/classList/MyClassListView';
 import WithRender from './MyClassListPage.html';
+import {MYCLASS_LIST} from '@/store/mutation-class-types';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
@@ -150,6 +151,7 @@ export default class MyClassListPage extends Vue {
     this.MYCLASS_LIST_ACTION().then(() =>{
       if (this.myClassLists !== null && this.myClassLists!==undefined) {
         if (this.myClassLists.length > 0) {
+          console.log(this.myClassLists);
           this.getUpdateList();
         }
       }
@@ -170,26 +172,36 @@ export default class MyClassListPage extends Vue {
   }
 
 
+
+
   private getUpdateList(): void{
     //범위 설정.
     const {begin, end} = this.rangeOfCount();
 
+    // console.log(begin, end);
     this.startNum=begin;
     this.endNum=end;
 
     // console.log(begin, end);
     //end 가 classItem 개수보다 많을 때 여기서 종료
 
-    // console.log(this.totalCount, this.startNum, this.endNum);
-    if( end>this.totalCount ){
-      this.endNum=this.totalCount;
-      return;
+    console.log(this.totalCount, this.startNum, this.endNum);
+
+
+    console.log( this.endNum, this.totalCount );
+    if( this.endNum<= this.totalCount){
+      this.findMemberRange( begin, end ).then(( data )=>{
+        this.classItems=[...this.classItems, ...data];
+      });
     }
 
-    this.findMemberRange( begin, end ).then(( data )=>{
-      this.classItems=[...this.classItems, ...data];
-    });
-    ++this.pageCount;
+    if( this.endNum>this.totalCount ){
+      this.endNum=this.totalCount;
+      // return;
+    }else{
+      ++this.pageCount;
+    }
+
   }
 
   /**
