@@ -45,7 +45,6 @@ const MyPageRouter=[
             { path: 'customerCenter', name: 'customerCenter', component: () =>import('../views/mypage/customerCenter/CustomerCenter') }, // 고객센터-상세 (W7.1.6)
             { path: 'termsOfService', name: 'termsOfService', component: () =>import('../views/mypage/termsOfService/TermsOfService') }, // 이용약관-상세 (W7.1.7)
         ],
-        beforeEnter: getIsAuth,
     },
 ];
 export {MyPageRouter};

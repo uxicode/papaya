@@ -19,6 +19,8 @@ export default class TermsOfService extends Vue {
     @Auth.Getter
     private userInfo!: IUserMe;
 
+    private isUser: boolean = false;
+
     private termsItems: ITermData[]=[];
     private termsList: Array<Omit<ICheckData, 'idx'|'isChecked'>> = [
         {
@@ -40,6 +42,7 @@ export default class TermsOfService extends Vue {
     }
 
     public created() {
+        this.checkUser();
         this.getTerms();
     }
 
@@ -75,6 +78,14 @@ export default class TermsOfService extends Vue {
         btn[idx].classList.toggle('collapsed');
         const accordion = document.querySelectorAll('.collapse');
         accordion[idx].classList.toggle('show');
+    }
+
+    /**
+     * 로그인한 회원인지 아닌지 체크
+     * @private
+     */
+    private checkUser(): void {
+        this.isUser = !!(this.myInfo);
     }
 
 }

@@ -6,7 +6,7 @@
             <li v-for="(item, idx) in termsList" class="panel">
                 <!-- start: heading -->
                 <div class="panel-heading"><a class="bt-cnt collapsed" @click="accordionToggle(idx)">{{ item.tit }}
-                    <span class="agr-txt mgr-30">{{ (idx===0) ? String(myInfo.createdAt).substr(0,10) : String(myInfo.marketingAgreeAt).substr(0,10) }}일에 동의함</span>
+                    <span v-if="isUser" class="agr-txt mgr-30">{{ (idx===0) ? String(myInfo.createdAt).substr(0,10) : String(myInfo.marketingAgreeAt).substr(0,10) }}일에 동의함</span>
                     <div class="bt-icon"><img :src="require('@/assets/images/icn-18-arrow-down.png')"></div>
                 </a></div>
                 <!-- end: heading -->

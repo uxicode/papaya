@@ -548,8 +548,8 @@ export default class ModifyCoursePopup extends Vue {
         MyClassService.setEduCourseModify(this.classID, this.courseDetailItemModel.curriculum_id, this.courseDetailItemModel.id,
             {
 
-            }).then(() => {
-
+            }).then((data) => {
+                console.log(data);
             });
 
         this.isModifyCourse = false;

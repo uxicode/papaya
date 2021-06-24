@@ -1,4 +1,3 @@
-import {MODIFY_CURRICULUM_ACTION} from "@/store/action-class-types";
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import TxtField from '@/components/form/txtField.vue';
@@ -375,7 +374,7 @@ export default class ModifyCurriculumPopup extends Vue {
             goal: this.curriculumDetailItemModel.text,
             course_list: [],
             deleted_course_list: [],
-        }
+        };
         this.formData = new FormData();
         const temp = JSON.stringify( {...this.modifyClassItems} );
         this.formData.append('data', temp );
