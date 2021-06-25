@@ -1,16 +1,9 @@
-import {GET_COURSE_DETAIL_ACTION} from '@/store/action-class-types';
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
-import {
-    IClassInfo,
-    IMakeEducation,
-    ICurriculumList,
-    ICurriculumDetailList,
-    IModifyCurriculum,
-} from '@/views/model/my-class.model';
+import {IClassInfo, ICurriculumDetailList,} from '@/views/model/my-class.model';
 import {IAttachFileModel} from '@/views/model/post.model';
 import {Utils} from '@/utils/utils';
 import MyClassService from '@/api/service/MyClassService';
@@ -23,14 +16,6 @@ import ImageSettingService from '@/views/service/profileImg/ImageSettingService'
 import WithRender from './ModifyCurriculumPopup.html';
 
 const MyClass = namespace('MyClass');
-
-/*start: 추가 테스트*/
-interface ITimeModel{
-    apm: string;
-    hour: string;
-    minute: string;
-}
-/*end: 추가 테스트*/
 
 @WithRender
 @Component({
@@ -58,36 +43,30 @@ export default class ModifyCurriculumPopup extends Vue {
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
+    @MyClass.Getter
+    private curriculumDetailItem!: ICurriculumDetailList;
+
+    @MyClass.Action
+    private GET_CURRICULUM_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number}) => Promise<any>;
+
     @MyClass.Action
     private GET_COURSE_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number, courseId: number }) => Promise<any>;
 
     /* Modal 오픈 상태값 */
-    private isAddCurriculum: boolean = false;
-    private isClassCurr: boolean = false;
-    private isDetailCurriculum: boolean = false;
-    private isClassCurrDetail: boolean = false;
-    private isCreateError: boolean = false;
-    private isModifyClass: boolean = false;
     private isModifyClassCourse: boolean = false;
 
     private countCourseNumber: number = 0;
-
-
     private courseId: number = 0;
 
-
     private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
-    private EduSettingsModel: string = '교육과정 수정';
 
     private CourseSettingsItems: string[] = ['수업 내용 수정', '수업 삭제'];
-    private CourseSettingsModel: string = '수업 내용 수정';
 
-    private startDateItem: string = '';
-    private startTimeItem: string = '';
-    private endTimeItem: string = '';
+    /* 수정할 값 */
+    private courseTitle: string = '';
+    private courseGoal: string = '';
 
     private imageLoadedCount: number=0;
-
     private imgFileURLItems: string[] = [];
     private imgFileDatas: any[] = [];
     private attachFileItems: any[] = [];
@@ -102,124 +81,8 @@ export default class ModifyCurriculumPopup extends Vue {
         return this.attachFileItems;
     }
 
-    get modifyDataItemsModel(): any {
-        return this.modifyClassItems;
-    }
-
-    /**
-     * 클래스 교육과정 메인리스트
-     */
-
-        //datepicker
-    private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
-    private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
-    private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
-    private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-
-    private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
-    private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-
-
-    private makeCurriculumData: IMakeEducation={
-        title: '',
-        goal: '',
-        course_list: [
-            {
-                index: 0,
-                id: 0,
-                startDay: '',
-                startTime: '',
-                endTime: '',
-                title: '',
-                contents: ''
-            }
-        ]
-    };
-
-
-    // private testCourse: Array<Pick<IMakeEducation, 'course_list'>> = [];
-
-    private allEduList: ICurriculumList[]= [];
-
-    private curriculumDetailData: ICurriculumDetailList={
-        curriculum: {
-            startAt: '2019-11-17 10:00:00',
-            endAt: '2019-11-17 10:00:00',
-            expiredAt: '2019-11-17 10:00:00',
-            createdAt: '2019-11-17 10:00:00',
-            updatedAt: '2019-11-17 10:00:00',
-            id: 0,
-            class_id: 0,
-            board_id: 0,
-            post_type: 0,
-            type: 0,
-            user_id: 0,
-            user_member_id: 0,
-            title: '',
-            text: '',
-            count: 0,
-            param1: 0,
-            deletedYN: false,
-            owner: {
-                nickname: '',
-                level: 0,
-            },
-            course_list: [
-                {
-                    startDay: '2019-11-17',
-                    createdAt: '2019-11-17',
-                    updatedAt: '2019-11-17',
-                    id: 0,
-                    curriculum_id: 0,
-                    class_id: 0,
-                    index: 0,
-                    title: '',
-                    contents: '',
-                    startTime: '2019-11-17',
-                    endTime: '2019-11-17',
-                    deletedYN: false,
-                    attachment: [],
-                },
-            ],
-        }
-    };
-
-    private curriculumDetailDataNum: number = 10;
-    private eduItems: Array< {title: string }>=[];
-    // private settingItems: Array<{ vo: string[], sItem: string }> = [];
-
-    private modifyClassItems: IModifyCurriculum={
-        title: '',
-        goal: '',
-        course_list: [
-            {
-                id: 0,
-                index: 0,
-                title: '',
-                startDay: '',
-                startTime: '',
-                endTime: '',
-                contents: '',
-            }
-        ]
-    };
-
-    public created(){
-        // this.settingItems=this.mItemByMakeEduList();
-        this.getEduList();
-    }
-
-    public updated() {
-        // console.log('cardId=',this.cardId);
-        this.getModifyEduCurList(this.cardId);
-    }
-
-    get isSubmitValidate(): boolean{
-        return (this.makeCurriculumData.title !== '' && this.makeCurriculumData.goal !== '');
-    }
-
-    private getProfileImg(imgUrl: string | null | undefined ): string{
-        return ImageSettingService.getProfileImg( imgUrl );
+    get curriculumDetailItemModel(): any {
+        return this.curriculumDetailItem;
     }
 
     get currentSettingItems(): string[]{
@@ -231,30 +94,13 @@ export default class ModifyCurriculumPopup extends Vue {
     }
 
 
-    get currentStartTimeModel(): string{
-        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute}분`;
-    }
+    private curriculumDetailDataNum: number = 10;
+    private eduItems: Array< {title: string }>=[];
 
-    get selectStartTimeModel(): string{
-        const time = Number(this.startTimeSelectModel.hour)+12;
-        if( this.startTimeSelectModel.apm === '오후' ){
-            return `${time}:${this.startTimeSelectModel.minute}:00`;
-        }else {
-            return `${this.startTimeSelectModel.hour}:${this.startTimeSelectModel.minute}:00`;
-        }
-    }
+    private modifyClassItems: any = {};
 
-    get currentEndTimeModel(): string{
-        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute}분`;
-    }
-
-    get selectEndTimeModel(): string{
-        const time = Number(this.endTimeSelectModel.hour)+12;
-        if( this.endTimeSelectModel.apm === '오후' ){
-            return `${time}:${this.endTimeSelectModel.minute}:00`;
-        }else {
-            return `${this.endTimeSelectModel.hour}:${this.endTimeSelectModel.minute}:00`;
-        }
+    private getProfileImg(imgUrl: string | null | undefined ): string{
+        return ImageSettingService.getProfileImg( imgUrl );
     }
 
     /**
@@ -292,35 +138,6 @@ export default class ModifyCurriculumPopup extends Vue {
     get courseListNumModel(): Array< {title: string }>{
         this.eduItems.length = 10;
         return this.eduItems;
-    }
-
-    private setCourseList( num: number ): void{
-        if( this.curriculumDetailDataNum >= 0 ){
-            this.curriculumDetailDataNum=num;
-            this.eduItems.length=num;
-
-            if( this.curriculumDetailDataNum > 50){
-                this.isCreateError = true;
-
-                num = 50;
-                this.curriculumDetailDataNum=50;
-                this.eduItems.length=50;
-            }
-        }
-
-        this.makeCurriculumData.course_list = [];
-
-        for (let i = 0; i < num; i++) {
-            this.makeCurriculumData.course_list.push({
-                index: i,
-                id: i,
-                title: '',
-                startDay: '',
-                startTime: '',
-                endTime: '',
-                contents: ''
-            });
-        }
     }
 
 
@@ -396,31 +213,12 @@ export default class ModifyCurriculumPopup extends Vue {
 
         // this.setImageFormData();
         // this.setAttachFileFormData();
-        this.setPostDataToFormData();
     }
 
     private onAddPostSubmit() {
         this.submitAddPost();
     }
 
-    private setPostDataToFormData() {
-        if( !this.isSubmitValidate ){return;}
-
-        if (Utils.isUndefined(this.formData)) {
-            this.formData = new FormData();
-        }
-
-        const temp = JSON.stringify( {...this.makeCurriculumData} );
-        this.formData.append('data', temp );
-
-        MyClassService.setCurriculumList( this.classID, this.formData )
-            .then((data)=>{
-                console.log( '교육과정 생성 성공', data );
-                this.$emit('submit', false);
-                this.imgFilesAllClear();
-                this.attachFilesAllClear();
-            });
-    }
 
     /**
      * 이미지 파일이 저장된 배열을 전송할 formdata 에 값 대입.
@@ -564,149 +362,7 @@ export default class ModifyCurriculumPopup extends Vue {
         // this.imageLoadedCount=0;
     }
 
-    private imgFilesAllClear() {
-        this.imgFileURLItems = [];
-        this.imgFileDatas=[];
-        this.makeCurriculumData={
-            title: '',
-            goal: '',
-            course_list: [
-                {
-                    index: 0,
-                    id: 0,
-                    startDay: '',
-                    startTime: '',
-                    endTime: '',
-                    title: '',
-                    contents: ''
-                }
-            ]
-        };
-        this.formData.delete('files');
-        this.imageLoadedCount=0;
-    }
 
-    /**
-     * 시작일시 - datepicker 일자 선택시
-     * @private
-     */
-    private startDatePickerChange() {
-        this.startDateMenu = false;
-        this.startDateItem = this.startDatePickerModel;
-        // this.makeCourseItems.startDay = this.startDateItem;
-    }
-
-    private startTimeChange() {
-        this.startTimeItem = this.selectStartTimeModel;
-        // this.makeCourseItems.startTime = this.startTimeItem;
-
-    }
-
-    private endTimeChange() {
-        this.endTimeItem = this.selectEndTimeModel;
-        // this.makeCourseItems.endTime = this.endTimeItem;
-    }
-
-    private makeCourseSubmit(courseIdx: number): void{
-        this.isClassCurr = false;
-
-        this.getCourseItemStartTime(courseIdx);
-        this.getCourseItemEndTime(courseIdx);
-
-        this.setImageFormData();
-        this.setAttachFileFormData();
-        this.removeAllPreview();
-        this.removeAllAttachFile();
-    }
-
-    /**
-     * 클래스 교육과정 삭제
-     */
-    private deleteCurriculum( curriculumID: number ): void{
-        MyClassService.deleteEducationList ( this.classID, curriculumID )
-            .then(() => {
-                console.log('교육과정 삭제 성공');
-                alert('선택하신 교육과정이 삭제 되었습니다.');
-            });
-    }
-
-
-    /**
-     * 클래스 교육과정 전체 조회
-     */
-    get curriculumListItemsModel(): ICurriculumList[] {
-        return this.allEduList;
-    }
-
-    private getEduList(): void {
-        MyClassService.getCurriculumList(this.classID)
-            .then((data) => {
-                this.allEduList = data;
-                // console.log(this.allEduList);
-            });
-    }
-
-    /**
-     * 클래스 교육과정 정보 조회
-     */
-    get curriculumList(): ICurriculumDetailList{
-        return this.curriculumDetailData;
-    }
-
-    private getEducurriculumDetailData(cardId: number): void {
-        MyClassService.getEduCurList(this.classID, cardId)
-            .then((data) => {
-                console.log(cardId);
-                console.log('getEducurriculumDetailData 함수 데이터', data);
-                this.curriculumDetailData = data;
-            });
-    }
-
-    /**
-     * 클래스 교육과정 수정
-     */
-
-    private getModifyEduCurList(cardId: number): void {
-        MyClassService.getEduCurList(this.classID, cardId)
-            .then((data) => {
-                this.curriculumDetailData = data;
-                this.modifyClassItems.course_list = this.curriculumList.curriculum.course_list;
-                this.modifyClassItems.title = this.curriculumList.curriculum.title;
-                this.modifyClassItems.goal = this.curriculumList.curriculum.text;
-            });
-    }
-
-    private modifyCurriculumChangeTitle(value: string){
-        this.$emit('input', value );
-        this.modifyClassItems.title = value;
-    }
-
-    private modifyChangeText(value: string){
-        this.$emit('textarea', value);
-        this.modifyClassItems.goal = value;
-    }
-
-    private modifyCourseChangeTitle(value: string, num: number){
-        this.$emit('input', value );
-    }
-
-    private modifyCourseChangeText(value: string, num: number){
-        this.$emit('textarea', value );
-    }
-
-    private modifyCourseChangeStartTime(courseIdx: number) {
-        this.getModifyCourseStartTime(courseIdx);
-        console.log(this.modifyClassItems);
-    }
-
-    private modifyCourseConfirm(courseIdx: number): void{
-        this.isModifyClassCourse = false;
-
-        this.setImageFormData();
-        this.setAttachFileFormData();
-        this.removeAllPreview();
-        this.removeAllAttachFile();
-    }
 
     private modifyConfirm(cardId: number){
         this.formData = new FormData();
@@ -718,43 +374,8 @@ export default class ModifyCurriculumPopup extends Vue {
             .then((data)=>{
                 console.log(cardId);
                 console.log('교육과정 수정 성공', data);
-                this.imgFilesAllClear();
                 this.attachFilesAllClear();
             });
-    }
-
-
-    private cardClickHandler( idx: number ) {
-        this.isDetailCurriculum = true;
-        this.cardId=idx;
-
-        this.$nextTick(()=>{
-            this.getEducurriculumDetailData(this.cardId);
-        });
-    }
-
-    private curriculumClickHandler( idx: number ) {
-        this.isClassCurr = true;
-        this.countCourseNumber = idx;
-    }
-
-    private curriculumDetailClickHandler( idx: number ) {
-        this.isClassCurrDetail = true;
-        this.countCourseNum(idx);
-    }
-
-    private addCurriculumHandler(idx: number) {
-        this.isAddCurriculum= true;
-        this.setCourseList(10);
-    }
-
-    private modifyCurriculumHandler(curriculumIdx: number) {
-        this.isModifyClass = true;
-        this.cardId = curriculumIdx;
-
-        this.$nextTick(()=>{
-            this.getModifyEduCurList(this.cardId);
-        });
     }
 
     private modifyCourseHandler(courseIdx: number, idx: number) {
@@ -762,37 +383,9 @@ export default class ModifyCurriculumPopup extends Vue {
         this.courseId = courseIdx;
         this.countCourseNumber = idx;
 
-        this.modifyCourseDataItems = this.modifyDataItemsModel.course_list[idx];
+        this.modifyCourseDataItems = this.curriculumDetailItemModel.course_list[idx];
         console.log(this.modifyCourseDataItems.attachment);
     }
-
-
-
-    private getCurrItemTitleById( title: string): string {
-        return (title)? title : '';
-    }
-
-    private getCurrCourseItemTitleById( title: string ): string {
-        return (title)? title: '';
-    }
-
-    private getCourseItemStartTime(idx: number): string{
-        return (this.makeCurriculumData.course_list)? this.makeCurriculumData.course_list[idx].startTime=this.selectStartTimeModel : '' ;
-    }
-
-    private getCourseItemEndTime(idx: number): string{
-        return (this.makeCurriculumData.course_list)? this.makeCurriculumData.course_list[idx].endTime=this.selectEndTimeModel : '' ;
-    }
-
-    private getModifyCourseStartTime(idx: number): any{
-        return (this.modifyClassItems.course_list)? this.modifyClassItems.course_list[idx].startTime = this.selectStartTimeModel : '';
-    }
-
-    private getModifyCourseEndTime(idx: number): any{
-        return (this.modifyClassItems.course_list)? this.modifyClassItems.course_list[idx].endTime = this.selectEndTimeModel : '';
-    }
-
-
 
 
     /**
@@ -806,9 +399,7 @@ export default class ModifyCurriculumPopup extends Vue {
             .then((data)=>{
                 console.log(data);
                 this.isModifyClassCourse=true;
-
             });
-
     }
 
     private onModifyCoursePopupStatus(value: boolean) {

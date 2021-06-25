@@ -7,8 +7,6 @@ class ImageFileService implements IFile{
   public imgFileItems: any[] = [];
   // public imgURLFileItems: string[] = [];
 
-
-
   //start : IFile 에 있는 필수 선언 메서드 ================================================
   public getItems(): string[] {
     //this.imgFileItems;
@@ -33,7 +31,6 @@ class ImageFileService implements IFile{
       };
    });
   }
-
 
   /*public getImgURLItems(): string[] {
     return this.imgURLFileItems;
@@ -101,6 +98,21 @@ class ImageFileService implements IFile{
     }
 
   }
+
+  //formdata 에 append 하여 formdata ( 딕셔너리 목록 ) 추가하기.
+  protected formDataAppendToFile( formData: FormData, targetLists: File[], appendName: string | string[] ) {
+    targetLists.forEach(( item: File, index: number )=>{
+      // console.log(item, item.name);
+      // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
+      if( Array.isArray(appendName) ){
+        formData.append( appendName[index], item, item.name );
+      }else{
+        formData.append(appendName, item, `${index}_${item.name}` );
+        console.log(item);
+      }
+    });
+  }
+
   /**
    * 이미지 파일 -> 배열에 지정 / 미리보기 link( blob link) 배열 생성~
    * @param data
@@ -115,18 +127,8 @@ class ImageFileService implements IFile{
     // console.log(this.imgURLFileItems, data);
   }
 
-  //formdata 에 append 하여 formdata ( 딕셔너리 목록 ) 추가하기.
-  private formDataAppendToFile( formData: FormData, targetLists: File[], appendName: string | string[] ) {
-    targetLists.forEach(( item: File, index: number )=>{
-      // console.log(item, item.name);
-      // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-      if( Array.isArray(appendName) ){
-        formData.append( appendName[index], item, item.name );
-      }else{
-        formData.append(appendName, item, `${index}_${item.name}` );
-      }
-    });
-  }
+
 }
 
 export {ImageFileService};
+

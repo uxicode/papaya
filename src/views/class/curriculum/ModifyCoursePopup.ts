@@ -1,4 +1,3 @@
-import {GET_COURSE_DETAIL_ACTION} from '@/store/action-class-types';
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import TxtField from '@/components/form/txtField.vue';
@@ -9,7 +8,7 @@ import {
     IMakeEducation,
     ICurriculumList,
     ICurriculumDetailList,
-    IModifyCurriculum,
+    IModifyCurriculum, ICurriculumCourseData,
 } from '@/views/model/my-class.model';
 import {IAttachFileModel} from '@/views/model/post.model';
 import {Utils} from '@/utils/utils';
@@ -52,33 +51,24 @@ export default class ModifyCoursePopup extends Vue {
 
     @Prop(Number)
     private courseId!: number;
-
+    
     @MyClass.Getter
     private classID!: number;
 
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
+    @MyClass.Getter
+    private courseDetailItem!: ICurriculumCourseData;
+
     @MyClass.Action
     private GET_COURSE_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number, courseId: number }) => Promise<any>;
 
-    /* Modal 오픈 상태값 */
-    private isAddCurriculum: boolean = false;
-    private isClassCurr: boolean = false;
-    private isDetailCurriculum: boolean = false;
-    private isClassCurrDetail: boolean = false;
     private isCreateError: boolean = false;
-    private isModifyClass: boolean = false;
-
     private countCourseNumber: number = 0;
 
-    private cardId: number = 0;
-
     private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
-    private EduSettingsModel: string = '교육과정 수정';
-
     private CourseSettingsItems: string[] = ['수업 내용 수정', '수업 삭제'];
-    private CourseSettingsModel: string = '수업 내용 수정';
 
     private startDateItem: string = '';
     private startTimeItem: string = '';
@@ -102,6 +92,10 @@ export default class ModifyCoursePopup extends Vue {
 
     get modifyDataItemsModel(): any {
         return this.modifyClassItems;
+    }
+
+    get courseDetailItemModel(): any {
+        return this.courseDetailItem;
     }
 
     /**
@@ -152,9 +146,9 @@ export default class ModifyCoursePopup extends Vue {
         ]
     };
 
-    public updated(){
-        this.getCourseDetail();
-    }
+    // public updated(){
+    //     this.getCourseDetail();
+    // }
 
     private getCourseDetail() {
         MyClassService.getEduCourseList(this.classID, this.curriculumId, this.courseId)
