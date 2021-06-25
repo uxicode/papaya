@@ -701,6 +701,19 @@ interface IModifyCurriculum {
         endTime: Date | string;
         contents: string;
     }>;
+    deleted_course_list?: Array<{
+        id: number;
+    }>;
+}
+
+interface IModifyCourse {
+    id: number;
+    index: number;
+    title: string;
+    contents: string;
+    startDay: Date | string;
+    startTime: Date | string;
+    endTime: Date | string;
 }
 
 interface IClassTag {
@@ -736,6 +749,7 @@ export {
     ICurriculumDetailList,
     ICurriculumCourseData,
     IModifyCurriculum,
+    IModifyCourse,
     IClassTag,
     IClassAuth
 };

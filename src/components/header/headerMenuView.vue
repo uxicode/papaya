@@ -15,14 +15,19 @@
              <!--           <img :src="replaceUserMenuImg()? require('@/assets/images/mypage-white.svg' ) : require('@/assets/images/mypage.svg' )" alt="" />-->
            </button>
            <div class="list-popup-menu" :class="{'active': isActive}" >
-             <router-link :to="{path:'/myProfile'}" class="list-popup-item" @click.native="leftMenuActive(0)">MY프로필</router-link>
-             <router-link :to="{path:'/bookmark'}" class="list-popup-item" @click.native="leftMenuActive(1)">보관함</router-link>
-             <div class="line"></div>
+             <template v-if="isUser">
+               <router-link :to="{path:'/myProfile'}" class="list-popup-item" @click.native="leftMenuActive(0)">MY프로필
+               </router-link>
+               <router-link :to="{path:'/bookmark'}" class="list-popup-item" @click.native="leftMenuActive(1)">보관함
+               </router-link>
+               <div class="line"></div>
+             </template>
              <router-link :to="{path:'/noticeBoard'}" class="list-popup-item" @click.native="leftMenuActive(0)">공지사항</router-link>
              <router-link :to="{path:'/customerCenter'}" class="list-popup-item" @click.native="leftMenuActive(1)">고객센터</router-link>
              <router-link :to="{path:'/termsOfService'}" class="list-popup-item" @click.native="leftMenuActive(2)">이용약관</router-link>
              <div class="line"></div>
-             <a href="" class="list-popup-item" @click="isLogout">로그아웃</a>
+             <a v-if="isUser" href="" class="list-popup-item" @click="isLogout">로그아웃</a>
+             <a v-else href="" class="list-popup-item" @click.prevent="gotoSignUpPage">회원가입</a>
            </div>
          </div>
        </li>
@@ -57,6 +62,7 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {SEARCHING} from '@/store/mutation-search-types';
+import {IUserMe} from '@/api/model/user.model';
 import EventBus from '@/store/EventBus';
 
 const Auth = namespace('Auth');
@@ -67,6 +73,10 @@ const SearchStatus = namespace('SearchStatus');
 export default class HeaderMenuView extends Vue {
   private isActive: boolean = false;
   private isSearch: boolean= false;
+  private isUser: boolean = false;
+
+  @Auth.Getter
+  private userInfo!: IUserMe;
 
   @Auth.Mutation
   private LOGOUT!: () => void;
@@ -87,6 +97,14 @@ nk :to="{path:'/class/schedule'}">모든 일정</route
   /*private menuInfos: ( string[] )=[
     {gnb:[], lnb:[] }
   ]*/
+
+  get myInfo() {
+    return this.userInfo;
+  }
+
+  public created() {
+    this.checkUser();
+  }
 
   private isLogout(): void {
     this.LOGOUT();
@@ -129,6 +147,19 @@ nk :to="{path:'/class/schedule'}">모든 일정</route
     this.SEARCHING(this.isSearch);
     // console.log('search 클릭');
   }
+
+  /**
+   * 로그인한 회원인지 아닌지 체크
+   * @private
+   */
+  private checkUser(): void {
+    this.isUser = !!(this.myInfo);
+  }
+
+  private gotoSignUpPage(): void {
+    this.$router.push('/signup');
+  }
+
 }
 </script>
 

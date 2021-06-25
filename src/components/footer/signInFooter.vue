@@ -17,9 +17,9 @@
       </ul>
 
       <ul class="footer-menu">
-        <li><a href="#" class="item-txt-w">공지사항</a></li>
-        <li><a href="#" class="item-txt-w">고객센터</a></li>
-        <li><a href="#" class="item-txt-w">이용약관</a></li>
+        <li><router-link :to="{path:'/noticeBoard'}" class="item-txt-w" @click.native="leftMenuActive(0)">공지사항</router-link></li>
+        <li><router-link :to="{path:'/customerCenter'}" class="item-txt-w" @click.native="leftMenuActive(1)">고객센터</router-link></li>
+        <li><router-link :to="{path:'/termsOfService'}" class="item-txt-w" @click.native="leftMenuActive(2)">이용약관</router-link></li>
       </ul>
     </div>
   </footer>
@@ -29,6 +29,7 @@
 <script lang="ts">
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import EventBus from '@/store/EventBus';
 
 const History = namespace('History');
 
@@ -41,6 +42,15 @@ export default class SignInFooter extends Vue{
   public updated() {
     // this.currRouteName=this.$route.name;
     console.log(this.pageHistory);
+  }
+
+  /**
+   * EventBus를 이용한 마이페이지 좌측 메뉴 활성화 값 전달
+   * @param idx
+   * @private
+   */
+  private leftMenuActive(idx: number): void {
+    EventBus.$emit('activeLeftMenu', idx);
   }
 }
 

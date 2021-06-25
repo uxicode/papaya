@@ -19,13 +19,15 @@
           <span class="info-or">{{myClassHomeModel.g_name}}</span>
           <ul class="info-list">
             <li>{{ myClassHomeModel.startday }}</li>
-            <li>{{ myClassHomeModel.is_private? '공개' : '비공개' }}</li>
+            <li>{{ myClassHomeModel.is_private? '비공개' : '공개' }}</li>
             <li><button type="button" @click="gotoClassMemberPage">멤버 {{ myClassHomeModel.member_count }} &gt;</button></li>
           </ul>
           <p class="info-tag">{{getHashTag(myClassHomeModel.class_tags) }}</p>
         </div>
         <div class="class-bookmark">
-          <a type="button" class="btn ico-btn ico-left active"><span class="icon heart"></span>즐겨찾기</a>
+          <a v-if="isConfirmed" type="button" class="btn ico-btn ico-left active"><span class="icon heart"></span>즐겨찾기</a>
+          <btn v-else type="navi" :class="{'disabled': isMember}" @btnClick="openEnrollClassPopup" style="font-size: 12px;">
+            {{ isMember ? '신청 완료' : '가입 신청' }}</btn>
         </div>
       </div>
       <div class="class-menu">
@@ -96,6 +98,15 @@ export default class SideMenu extends Vue{
   @Prop(Number)
   private activeNum: number | null | undefined;
 
+  @Prop(Number)
+  private sideMenuLength!: number;
+
+  @MyClass.Action
+  private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
+
+  @MyClass.Mutation
+  private UPDATE_SIDE_MENU_LENGTH!: (num: number)=>void;
+
   @MyClass.Getter
   private classID!: string | number;
 
@@ -105,8 +116,7 @@ export default class SideMenu extends Vue{
   @MyClass.Getter
   private sideNumModel!: number;
 
-  @MyClass.Action
-  private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
+
 
   private sideMenuData: ISideMenu[]=[
     {id:0, title: '클래스 홈', linkKey:'' },
@@ -118,6 +128,9 @@ export default class SideMenu extends Vue{
   ];
   private isPopup: boolean=false;
 
+  private isMember: boolean=false; // 멤버 여부 (신청 시 승인여부와 관계없이 멤버가 된다)
+  private isConfirmed: boolean=false; // 가입 승인 여부
+
   get isOwner(): boolean{
     return (this.myClassHomeModel.owner_id === this.myClassHomeModel.me?.user_id);
   }
@@ -128,10 +141,12 @@ export default class SideMenu extends Vue{
 
   public created(){
     // console.log( '사이드 메뉴 시작점...')
+    this.checkMember();
+
     //화면 새로고침시에
-    if (performance.navigation.type === 1) {
-      this.sideMenuClickHandler(0);
-    }
+    // if (performance.navigation.type === 1) {
+    //   this.sideMenuClickHandler(0);
+    // }
     /*window.onpageshow = function(event) {
       if ( event.persisted || (window.performance && window.performance.navigation.type === 1)) {
         // Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우
@@ -155,15 +170,19 @@ export default class SideMenu extends Vue{
   }
 
   private sideMenuClickHandler(idx: number): void {
-    this.$emit('sideClick', idx);
-    const queryVal = (idx === 0) ? {} : {timestamp: `${new Date().getTime()}`};
-    this.$router.push({path:`${CLASS_BASE_URL }/${this.classID}/${this.sideMenuData[idx].linkKey}`} )
-        .catch((error) => {
-          console.log('side-menu 에서 error', error);
-          //에러 난 경우 새로고침
-          // window.location.reload();
-          Utils.getWindowReload();
-        });
+    if( (!this.isMember) && (idx!==0)) {
+      alert('클래스에 가입하면 보실 수 있습니다.');
+    } else {
+      this.$emit('sideClick', idx);
+      const queryVal = (idx === 0) ? {} : {timestamp: `${new Date().getTime()}`};
+      this.$router.push({path:`${CLASS_BASE_URL }/${this.classID}/${this.sideMenuData[idx].linkKey}`} )
+          .catch((error) => {
+            console.log('side-menu 에서 error', error);
+            //에러 난 경우 새로고침
+            // window.location.reload();
+            Utils.getWindowReload();
+          });
+    }
   }
 
   /**
@@ -207,9 +226,39 @@ export default class SideMenu extends Vue{
     if( idx === this.sideMenuModel.length-1 ){
       return (this.isOwner);
     }else{
-      return true;
+      //this.myClassHomeModel.is_private
+      if(idx>0){
+
+        if( !this.myClassHomeModel.me ){
+          return !Boolean(this.myClassHomeModel.is_private);
+        }else{
+          return true;
+        }
+      }else{
+        return true;
+      }
     }
   }
+
+  /**
+   * 멤버 및 가입승인 여부 체크
+   * @private
+   */
+  private checkMember(): void {
+    this.isMember = !!(this.myClassHomeModel.me);
+    this.isConfirmed = (this.isMember)&&(this.myClassHomeModel.me?.status === 1);
+  }
+
+  /**
+   * 가입 신청 팝업 열기
+   * @private
+   */
+  private openEnrollClassPopup(): void {
+    if (!this.isMember) {
+      this.$emit('enroll');
+    }
+  }
+
 }
 
 </script>
