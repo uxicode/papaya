@@ -1,41 +1,42 @@
 <div class="contents home">
     <div class="contents-inner">
         <div class="contents-group">
-            <section class="contents-left">
-                <div class="class-home">
-                    <div class="class-home-info">
-                        <div class="info-img">
-                            <img :src="require('@/assets/images/bg-icon.png')" alt="">
-                        </div>
-                        <div class="info-txt">
-                            <p class="info-cn">{{ classInfo.name }}</p>
-                            <span class="info-or">{{ classInfo.g_name }}</span>
-                            <ul class="info-list">
-                                <li>{{ classInfo.startday }}</li>
-                                <li>{{ classInfo.is_private ? '비공개클래스' : '오픈클래스' }}</li>
-                                <li><a href="">멤버 {{ classInfo.member_count }}</a></li>
-                            </ul>
-                            <p class="info-tag">
-                                {{ getHashTag(classInfo.class_tags) }}
-                            </p>
-                        </div>
+          <side-menu :active-num="activeMenuNumModel" @sideClick="update" @enroll="openEnrollClassModal"></side-menu>
+<!--            <section class="contents-left">-->
+<!--                <div class="class-home">-->
+<!--                    <div class="class-home-info">-->
+<!--                        <div class="info-img">-->
+<!--                            <img :src="require('@/assets/images/bg-icon.png')" alt="">-->
+<!--                        </div>-->
+<!--                        <div class="info-txt">-->
+<!--                            <p class="info-cn">{{ classInfo.name }}</p>-->
+<!--                            <span class="info-or">{{ classInfo.g_name }}</span>-->
+<!--                            <ul class="info-list">-->
+<!--                                <li>{{ classInfo.startday }}</li>-->
+<!--                                <li>{{ classInfo.is_private ? '비공개클래스' : '오픈클래스' }}</li>-->
+<!--                                <li><a href="">멤버 {{ classInfo.member_count }}</a></li>-->
+<!--                            </ul>-->
+<!--                            <p class="info-tag">-->
+<!--                                {{ getHashTag(classInfo.class_tags) }}-->
+<!--                            </p>-->
+<!--                        </div>-->
 
-                        <!-- 가입 신청 버튼 / 신청 완료 시 primary 제거 후 disabled 클래스 추가 -->
-                        <div class="class-bookmark">
-                            <btn type="navi" :class="{'disabled': isClassEnrollComplete}" style="font-size: 12px;" @btnClick="openEnrollClassModal">
-                              {{ isClassEnrollComplete ? '신청 완료' : '가입 신청' }}</btn>
-                        </div>
+<!--                        &lt;!&ndash; 가입 신청 버튼 / 신청 완료 시 primary 제거 후 disabled 클래스 추가 &ndash;&gt;-->
+<!--                        <div class="class-bookmark">-->
+<!--                            <btn type="navi" :class="{'disabled': isClassEnrollComplete}" style="font-size: 12px;" @btnClick="openEnrollClassModal">-->
+<!--                              {{ isClassEnrollComplete ? '신청 완료' : '가입 신청' }}</btn>-->
+<!--                        </div>-->
 
-                    </div>
-                    <div class="class-menu">
-                        <ul class="menu-list">
-                            <li v-for="(item, index) in sideMenuModel" :key="`item-${index}`" v-if="visibleSettingMenus(index)">
-                                <a href="" :class="[`type${index+1}`, {'active': index===activeNum }]" @click.prevent="sideMenuClickHandler( index )">{{ item.title }}</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+<!--                    </div>-->
+<!--                    <div class="class-menu">-->
+<!--                        <ul class="menu-list">-->
+<!--                            <li v-for="(item, index) in sideMenuModel" :key="`item-${index}`" v-if="visibleSettingMenus(index)">-->
+<!--                                <a href="" :class="[`type${index+1}`, {'active': index===activeNum }]" @click.prevent="sideMenuClickHandler( index )">{{ item.title }}</a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </section>-->
 
             <!-- 비공개 클래스일 경우 -->
             <template v-if="isPrivate">

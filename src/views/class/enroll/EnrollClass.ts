@@ -1,13 +1,11 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {CLASS_BASE_URL} from '@/api/base';
-import {Utils} from '@/utils/utils';
 import {IUserMe} from '@/api/model/user.model';
-import {IQnaInfo, IQuestionInfo} from '@/views/model/my-class.model';
 import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
+import SideMenu from '@/components/sideMenu/sideMenu.vue';
 import MyClassListDetailView from '@/views/class/home/MyClassListDetailView';
 import WithRender from './EnrollClass.html';
 
@@ -23,18 +21,25 @@ interface ISideMenu {
 }
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
-// const MyClass = namespace('MyClass');
+
 @WithRender
 @Component({
   components: {
     Modal,
     Btn,
-    MyClassListDetailView
+    SideMenu,
+    MyClassListDetailView,
   }
 })
 export default class EnrollClass extends Vue {
   @Prop(Number)
   private activeNum: number | null | undefined;
+
+  @MyClass.Mutation
+  private UPDATE_SIDE_NUM!: (num: number)=>void;
+
+  @MyClass.Action
+  private MYCLASS_HOME!: ( id: string | number )=> Promise<any>;
 
   @Auth.Getter
   private userInfo!: IUserMe;
@@ -42,8 +47,15 @@ export default class EnrollClass extends Vue {
   @MyClass.Getter
   private classID!: string | number;
 
-  @MyClass.Action
-  private MYCLASS_HOME!: ( id: string | number )=> Promise<any>;
+  @MyClass.Getter
+  private sideNumModel!: number;
+
+  get activeMenuNumModel(): number {
+    return this.sideNumModel;
+  }
+  set activeMenuNumModel( value: number) {
+    this.UPDATE_SIDE_NUM(value);
+  }
 
   private classIdx: number = 0;
   private classInfo: {} = {};
@@ -60,55 +72,17 @@ export default class EnrollClass extends Vue {
   private enrollMemberInfo!: IEnrollMemberInfo;
   private memberId: number = 0;
 
-  private sideMenuData: ISideMenu[] = [
-    {id: 0, title: '클래스 홈', linkKey: ''},
-    {id: 1, title: '알림', linkKey: 'notification'},
-    {id: 2, title: '일정', linkKey: 'schedule'},
-    {id: 3, title: '파일함', linkKey: 'fileBox'},
-    {id: 4, title: '교육과정', linkKey: 'curriculum'},
-  ];
-
   /* Modal 상태 값 */
   private isClassEnrollModal: boolean = false;
   private isClassEnrollComplete: boolean = false;
   private isClassEnrollCompleteModal: boolean = false;
 
-  get sideMenuModel(): ISideMenu[] {
-    return this.sideMenuData;
-  }
 
   public created() {
+    this.activeMenuNumModel=0;
     console.log('enroll class this.$route.params.classIdx= ', this.$route.query.classIdx );
     this.classIdx = Number( this.$route.query.classIdx );
-    this.visibleSettingMenus(0);
     this.getClassInfo();
-  }
-
-  /**
-   * 비공개 클래스는 첫번째 메뉴만 활성화
-   * @param idx
-   * @private
-   */
-  private visibleSettingMenus(idx: number): boolean {
-    if (this.isPrivate) {
-      return idx === 0;
-    } else {
-      return true;
-    }
-  }
-
-  private sideMenuClickHandler(idx: number): void {
-    this.$emit('sideClick', idx);
-
-    this.$router.push({path: `${CLASS_BASE_URL}/${this.classIdx}/${this.sideMenuData[idx].linkKey}`});
-      /*.catch((error) => {
-        console.log(error);
-
-        Promise.reject(error);
-        //에러 난 경우 새로고침
-        // window.location.reload();
-        Utils.getWindowReload();
-      });*/
   }
 
   /**
@@ -130,23 +104,6 @@ export default class EnrollClass extends Vue {
         this.isPrivate = data.classinfo.is_private;
         console.log('this.classInfo=', this.classInfo);
       });*/
-  }
-
-  /**
-   * 클래스 태그를 가져와서 해시 태그로 변환
-   * @param items
-   * @private
-   */
-  private getHashTag(items: any[]): string | undefined {
-    if (!items) {
-      return;
-    }
-    // console.log(' items=',  items)
-    if (items.length === 0) {
-      return;
-    }
-    const keywords = items.map((prop) => '#' + prop.keyword);
-    return keywords.join(' ');
   }
 
   /**
@@ -216,4 +173,13 @@ export default class EnrollClass extends Vue {
     this.isClassEnrollCompleteModal = true;
   }
 
+  /**
+   * 인덱스 갱신
+   * @param idx
+   * @private
+   */
+  private update(idx: number): void{
+    this.activeMenuNumModel=idx;
+    // console.log(this.activeMenuNum);
+  }
 }
