@@ -1,9 +1,6 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-
 import {Utils} from '@/utils/utils';
-import {ImageFileServiceHelper} from '@/views/service/preview/ImageFileService';
-import {AttachFileServiceHelper} from '@/views/service/preview/AttachFileService';
 import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
@@ -67,17 +64,7 @@ export default class AddCurriculumPopup extends Vue {
     private makeCurriculumData: IMakeEducation={
         title: '',
         goal: '',
-        course_list: [
-            {
-                index: 0,
-                id: 0,
-                startDay: '',
-                startTime: '',
-                endTime: '',
-                title: '',
-                contents: ''
-            }
-        ]
+        course_list: []
     };
 
     private curriculumDetailDataNum: number = 10;
@@ -146,6 +133,7 @@ export default class AddCurriculumPopup extends Vue {
         }
     }
 
+
     /**
      * 교육과정 > 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
      * @private
@@ -170,17 +158,7 @@ export default class AddCurriculumPopup extends Vue {
                 this.makeCurriculumData = {
                     title: '',
                     goal: '',
-                    course_list: [
-                        {
-                            index: 0,
-                            id: 0,
-                            startDay: '',
-                            startTime: '',
-                            endTime: '',
-                            title: '',
-                            contents: ''
-                        }
-                    ]
+                    course_list: []
                 };
             });
 

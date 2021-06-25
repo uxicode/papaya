@@ -8,7 +8,7 @@ import CurriculumDetailPopup from '@/views/class/curriculum/CurriculumDetailPopu
 import ModifyCurriculumPopup from '@/views/class/curriculum/ModifyCurriculumPopup';
 import {
     IClassInfo, ICurriculumDetailList,
-    ICurriculumList,
+    ICurriculumList, IMakeEducation,
 } from '@/views/model/my-class.model';
 import WithRender from './CurriculumListView.html';
 
@@ -58,7 +58,6 @@ export default class CurriculumListView extends Vue {
     private isAddPopupOpen: boolean=false;
     private isModifyPopupOpen: boolean=false;
 
-
     public created() {
         this.getList().then();
     }
@@ -94,7 +93,7 @@ export default class CurriculumListView extends Vue {
 
     private onDetailCurriculumPopupStatus(value: boolean) {
         this.isDetailPopupOpen=value;
-        this.courseDetailArray();
+        this.courseDetailArray( this.courseDetailData );
     }
 
     /**
@@ -108,20 +107,20 @@ export default class CurriculumListView extends Vue {
             .then((data)=>{
                 this.isModifyPopupOpen=true;
             });
-        this.courseDetailArray();
 
     }
 
     private onModifyCurriculumPopupStatus(value: boolean) {
         this.isModifyPopupOpen=value;
+        this.courseDetailArray( this.courseDetailData );
     }
 
     private onModifyCurriculum(value: boolean) {
         this.isModifyPopupOpen=value;
     }
 
-    private courseDetailArray() {
-        this.courseDetailData.sort((x: any, y: any)=> x.index - y.index);
+    private courseDetailArray(target: any) {
+        target.sort((x: any, y: any)=> x.index - y.index);
     }
 
     /**
@@ -136,7 +135,7 @@ export default class CurriculumListView extends Vue {
                 this.isDetailPopupOpen=true;
             });
 
-        this.courseDetailArray();
+        this.courseDetailArray( this.courseDetailData );
     }
 
     private deleteCurriculum(id: number){

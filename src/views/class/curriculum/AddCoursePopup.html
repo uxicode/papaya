@@ -68,7 +68,7 @@
                                         </v-text-field>
                                     </template>
                                     <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                                    <v-date-picker v-model="makeCurriculumData.course_list[courseIdx].startDay" no-title @input="datePickerChange"></v-date-picker>
+                                    <v-date-picker v-model="datePickerModel" no-title @input="datePickerChange"></v-date-picker>
                                 </v-menu>
                             </div>
                         </div>

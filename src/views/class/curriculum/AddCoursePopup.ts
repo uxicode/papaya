@@ -12,8 +12,8 @@ import FilePreview from '@/components/preview/filePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import WithRender from './AddCoursePopup.html';
 import {Utils} from '@/utils/utils';
-import {ImageFileServiceHelper} from '@/views/service/preview/ImageFileService';
-import {AttachFileServiceHelper} from '@/views/service/preview/AttachFileService';
+import {ImageFileServiceHelper} from '@/views/service/preview/ImageFileServiceHelper';
+import {AttachFileServiceHelper} from '@/views/service/preview/AttachFileServiceHelper';
 
 const MyClass = namespace('MyClass');
 
@@ -90,6 +90,8 @@ export default class AddCoursePopup extends Vue {
 
     private datePickerChange( ) {
         this.dateMenu = false;
+        console.log(this.datePickerModel);
+        console.log(typeof this.datePickerModel);
     }
 
     private popupChange( value: boolean ) {
@@ -184,6 +186,7 @@ export default class AddCoursePopup extends Vue {
 
         this.makeCurriculumData.course_list[idx].startTime = `${startHour}:${startMinute}`;
         this.makeCurriculumData.course_list[idx].endTime = `${endHour}:${endMinute}`;
+        this.makeCurriculumData.course_list[idx].startDay = this.datePickerModel;
 
         this.imgFileService.save( this.formData );
         this.attachFileService.save( this.formData);

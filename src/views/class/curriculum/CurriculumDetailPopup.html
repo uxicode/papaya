@@ -58,7 +58,7 @@
                                         <span class="turn">{{ index + 1 }} 회차</span>
                                         <div class="curriculum-info">
                                             <p class="subject-tit mgb-0">{{ item.title===''? index+1+'회차수업' : item.title }}</p>
-                                            <div class="subject-schedule">
+                                            <div class="subject-schedule" v-if="item.startDay!=='Invalid date' && item.startTime!==null && item.endTime!==null">
                                                 <span v-show="item.startDay!=='Invalid date'">{{ item.startDay }}</span>
                                                 <span v-show="item.startTime!==null">{{ item.startTime }}</span>
                                                 <span v-show="item.endTime!==null">{{ item.endTime }}</span>
