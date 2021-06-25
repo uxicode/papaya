@@ -12,6 +12,8 @@ axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 const cancelTokenSource = axios.CancelToken.source();
 let pendingCount: number=0;
+
+
 /**
  * 로그아웃 시키기
  */
@@ -78,10 +80,10 @@ const mismatchAccess=( config: any, data: any )=>{
 axios.interceptors.response.use((response: AxiosResponse) => {
   // Do something with response data
   pendingCount--;
-  console.log(pendingCount);
+  // console.log(pendingCount);
   if (pendingCount > 15) {
-    console.log(pendingCount);
-    cancelTokenSource.cancel('데이터 대기 상태가 길어져서 요청을 취소 합니다.');
+    // console.log(pendingCount);
+    // cancelTokenSource.cancel('데이터 대기 상태가 길어져서 요청을 취소 합니다.');
     pendingCount=0;
   }
   return response;
@@ -118,7 +120,7 @@ const request = (method: string, url: string, data: any | null = null ): Promise
       'Content-Type': 'multipart/form-data;charset=utf-8;'
     }, ...cancel};
   }else{
-    reqObj = {method, url, data, ...cancel};
+    reqObj = {method, url, data, ...cancel };
   }
   return axios(reqObj).then((res: AxiosResponse) => {
     // console.log( res.data )

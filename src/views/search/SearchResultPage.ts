@@ -33,8 +33,7 @@ export default class SearchResultPage extends Vue {
   public SEARCH_DATA_SAVED!: (data: ISearchModel[] | IClassTag[]) => void;
 
   @SearchStatus.Action
-  private SEARCH_RESULT_ACTION!: ( payload: { keyword: string } )=>Promise<any>;
-  // private SEARCH_RESULT_ACTION!: ( payload: { keyword: string, page_no: number, count: number} )=>Promise<any>;
+  private SEARCH_RESULT_ACTION!: ( payload: { keyword: string, page_no: number, count: number } )=>Promise<any>;
 
   @SearchStatus.Action
   private SEARCH_OPTION_CHANGE_ACTION!: ( payload: { option: string, keyword: string})=>void;
@@ -175,7 +174,7 @@ export default class SearchResultPage extends Vue {
     //
     // console.log('currentPageNum', this.currentPageNum);
     //, page_no:this.currentPageNum, count:this.numOfPage
-    this.SEARCH_RESULT_ACTION({keyword:this.keyword})
+    this.SEARCH_RESULT_ACTION({keyword:this.keyword, page_no:this.currentPageNum, count:this.numOfPage})
       .then((data) => {
         //로딩바 설정 해야 함.
         console.log(this.searchResultsModel);

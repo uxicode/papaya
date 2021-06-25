@@ -107,17 +107,18 @@ export default class SearchModule extends VuexModule {
   }
 
   @Action({rawError: true})
-  public [SEARCH_RESULT_ACTION]( payload: { keyword: string} ): Promise<any>{
+  public [SEARCH_RESULT_ACTION]( payload: { keyword: string, page_no: number, count: number}={keyword:'', page_no:1, count:10} ): Promise<any>{
 //payload: { keyword: string, page_no: number, count: number}={keyword:'', page_no:1, count:10}
-//     const {keyword, page_no, count} = payload;
-    const {keyword} = payload;
+    const {keyword, page_no, count} = payload;
+    // const {keyword} = payload;
 
     //{page_no, count}
-    return SearchApiService.getSearchResult(keyword )
+    return SearchApiService.getSearchResult(keyword, {page_no, count} )
       .then((data) => {
         this.context.commit(SEARCH_KEYWORD, keyword );
         this.context.commit(SEARCH_DATA_SAVED, data.classlist );
         this.context.commit(SEARCH_TOTAL, data.total );
+
         // this.searchResults=data.best_classlist;
         // console.log(this.bestItems );
         console.log(data);
