@@ -119,15 +119,17 @@ export default class SearchResultPage extends Vue {
   }*/
 
   public getResultList() {
-    console.log('검색결과=', this.searchResultData );
+    // console.log('검색결과=', this.searchResultData );
     //검색 결과 없으면 여기서 종료.
     if (this.searchResultData.length <= 0) {return;}
 
-    // console.log('검색결과=', this.searchResultData.length );
+    // console.log('검색결과=', this.searchResultData );
 
-    this.getClassOwnerName(  this.searchResultData )
+   /*
+   // 앞뒤로 browser next prev 버튼으로 이동시 에러는 아래 항목 때문..
+   this.getClassOwnerName(  this.searchResultData )
       .then( ( data: any )=>{
-        console.log('owner 데이터 완료', data );
+        // console.log('owner 데이터 완료', data );
         this.ownerItems=data.map((item: any) => {
 
           console.log(item.classinfo.owner);
@@ -138,32 +140,28 @@ export default class SearchResultPage extends Vue {
           };
         });
       });
+      */
   }
 
 
 
   private getOwnerName(index: number) {
-    return (this.ownerItems[index] !== undefined) ? this.ownerItems[index].nickname : '';
+    console.log('this.searchResultsModel[index]=', this.searchResultsModel[index] );
+    // return ( this.ownerItems[index] ) ? this.ownerItems[index].nickname : '';
+    return  '';
   }
 
 
-  private async getClassOwnerName(items: any[]) {
+  private getClassOwnerName(items: any[]) {
     // console.log('search getClassOwnerName=', items);
-    const ownerPromiseItems = await this.getClassInfoBySearchResultClassId(items);
+
+    const ownerPromiseItems = this.getClassInfoBySearchResultClassId(items);
     // console.log(ownerPromiseItems);
     return getAllPromise(ownerPromiseItems)
       .then((info: any) => {
         console.log('info=', info);
         return Promise.resolve(info);
       }).catch((error) => {
-        console.log(error, items, ownerPromiseItems);
-        try {
-          if (ownerPromiseItems.length) {
-            return getAllPromise(ownerPromiseItems);
-          }
-        } catch (e) {
-          return Promise.reject('owner data find fail');
-        }
         return Promise.reject('owner data find fail');
       });
   }
@@ -172,6 +170,8 @@ export default class SearchResultPage extends Vue {
   //class/:classId 조회가 안되는 --> 67, 70, 597, 598, 599, 600
   private getClassInfoBySearchResultClassId( items: any[] ): any[] {
     // const promiseItems: any[] = [];
+    ////class/{class_id}/members/{member_id}
+    //class_id 가 없을 시 id 로 조회 // owner 는 member_id -> owner_member_id / owner_id 는 그냥 가입했을때 주어지는 고유 index 넘버임( user_id 와 같다 ).
     return items.map( (item: any)=>{
       const idx=(item.class_id)? item.class_id : item.id;
       return MyClassService.getClassInfoById( idx );

@@ -389,7 +389,8 @@ export default class Search extends Vue {
           // , query: { timeStamp: `${new Date().getTime()}` } 처럼 query 값을 같이 주는 이유는 새로고침 후
           // 검색결과  router 주소값이 매번 /search/result 와 같이 똑같은 url 값으로 라우터 이동이 이루어지기 때문에
           //주소값을 매번 검색시 갱신해 줄 필요가 있다.
-          this.$router.push({ path: '/search/result', query: { q: `${new Date().getTime()}` } }).then(() => {
+          //, query: { q: `${new Date().getTime()}` }
+          this.$router.push({ path: '/search/result' }).then(() => {
             console.log(`SearchResultPage` + '으로 이동');
           }).catch((error)=>{
             console.log(error);
