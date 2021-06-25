@@ -132,10 +132,8 @@ export default class CurriculumListView extends Vue {
         await this.GET_CURRICULUM_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.detailCurriculumId})
             .then((data)=>{
                 this.isDetailPopupOpen=true;
+                this.courseDetailData.sort(this.courseDetailArray);
             });
-        this.courseDetailData.sort(this.courseDetailArray);
-
-        console.log(`test1`,this.curriculumDetailItem);
     }
 
     private deleteCurriculum(id: number){

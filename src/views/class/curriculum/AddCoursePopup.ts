@@ -67,6 +67,8 @@ export default class AddCoursePopup extends Vue {
         minute: [ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00']
     };
 
+    private imgFilePreview!: string[];
+
     get imgFileURLItemsModel(): string[] {
         return this.imgFileService.getItems();
     }
@@ -93,6 +95,14 @@ export default class AddCoursePopup extends Vue {
 
     private datePickerChange( ) {
         this.dateMenu = false;
+    }
+
+    private popupChange( value: boolean ) {
+        this.$emit('close', value);
+    }
+
+    private imgFilePreviewModel(): any {
+        this.imgFilePreview = this.attachFileItemsModel;
     }
 
     /**
@@ -141,10 +151,6 @@ export default class AddCoursePopup extends Vue {
     private onRemoveAllPreview(): void {
         this.imgFileService.removeAll();
     }
-
-
-
-
     //end : 이미지 preview  및 이미지 등록 ================================================
 
     //start : 파일 첨부 미리보기 및 파일 업로드 ================================================
@@ -160,9 +166,6 @@ export default class AddCoursePopup extends Vue {
     }
 
     //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
-
-
-
 
     /**
      * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
@@ -187,11 +190,6 @@ export default class AddCoursePopup extends Vue {
 
         this.popupChange( false );
     }
-
-    private popupChange( value: boolean ) {
-        this.$emit('close', value);
-    }
-
 }
 
 

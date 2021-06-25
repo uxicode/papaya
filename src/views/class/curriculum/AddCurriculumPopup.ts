@@ -168,23 +168,6 @@ export default class AddCurriculumPopup extends Vue {
      * 교육과정 > 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
      * @private
      */
-
-    private submitAddPost(): void{
-        //시나리오 --> 등록 버튼 클릭 > 이미지 추가한 배열값 formdata 에 입력 > 전송 >전송 성공후> filesAllClear 호출 > 팝업 닫기
-        // //이미지 파일 저장.
-        // this.imgFileService.save( this.formData );
-        //
-        // //파일 저장.
-        // this.attachFileService.save( this.formData );
-
-        //알림 데이터 전송 ( 투표 및 링크 데이터 )
-        this.setCurriculumDataToFormData();
-    }
-
-    private onAddPostSubmit() {
-        this.submitAddPost();
-    }
-
     private setCurriculumDataToFormData() {
         if( !this.isSubmitValidate ){return;}
 
