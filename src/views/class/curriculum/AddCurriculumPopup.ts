@@ -63,8 +63,6 @@ export default class AddCurriculumPopup extends Vue {
     private CourseSettingsModel: string = '수업 내용 수정';
 
     private formData: FormData = new FormData();
-    private imgFileService: ImageFileServiceHelper=new ImageFileServiceHelper();
-    private attachFileService: AttachFileServiceHelper=new AttachFileServiceHelper();
 
     private makeCurriculumData: IMakeEducation={
         title: '',
@@ -95,7 +93,6 @@ export default class AddCurriculumPopup extends Vue {
 
     private popupChange( value: boolean ) {
         this.$emit('change', value);
-        this.allClear();
     }
 
     private addCoursePopupOpen(idx: number) {
@@ -150,21 +147,6 @@ export default class AddCurriculumPopup extends Vue {
     }
 
     /**
-     * post 등록을 완료후 formdata 및 배열에 지정되어 있던 데이터들 비우기..
-     * @private
-     */
-    private imgFilesAllClear() {
-        this.imgFileService.removeAll();
-        this.formData.delete('files');
-    }
-
-    private attachFilesAllClear() {
-        this.attachFileService.removeAll();
-        this.formData.delete('files');
-    }
-
-
-    /**
      * 교육과정 > 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
      * @private
      */
@@ -185,29 +167,23 @@ export default class AddCurriculumPopup extends Vue {
 
                 this.GET_CURRICULUM_LIST_ACTION({classId: Number(this.classID)}).then();
                 this.formData = new FormData();
+                this.makeCurriculumData = {
+                    title: '',
+                    goal: '',
+                    course_list: [
+                        {
+                            index: 0,
+                            id: 0,
+                            startDay: '',
+                            startTime: '',
+                            endTime: '',
+                            title: '',
+                            contents: ''
+                        }
+                    ]
+                };
             });
 
-    }
-
-    private allClear() {
-        // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
-        this.imgFilesAllClear(); //이미지 데이터 비우기
-        this.attachFilesAllClear();//파일 데이터 비우기
-        this.makeCurriculumData = {
-            title: '',
-            goal: '',
-            course_list: [
-                {
-                    index: 0,
-                    id: 0,
-                    startDay: '',
-                    startTime: '',
-                    endTime: '',
-                    title: '',
-                    contents: ''
-                }
-            ]
-        };
     }
 
 }

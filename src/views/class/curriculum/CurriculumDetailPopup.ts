@@ -96,8 +96,6 @@ export default class CurriculumDetailPopup extends Vue {
 
         const targetData = this.courseDetailData;
 
-        console.log(`test`,targetData);
-
         this.courseDetailItem = targetData.find((item: any) => item.id === this.courseId);
 
         await this.GET_COURSE_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.detailCurriculumId, courseId: this.courseId})

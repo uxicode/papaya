@@ -94,6 +94,7 @@ export default class CurriculumListView extends Vue {
 
     private onDetailCurriculumPopupStatus(value: boolean) {
         this.isDetailPopupOpen=value;
+        this.courseDetailArray();
     }
 
     /**
@@ -107,6 +108,7 @@ export default class CurriculumListView extends Vue {
             .then((data)=>{
                 this.isModifyPopupOpen=true;
             });
+        this.courseDetailArray();
 
     }
 
@@ -118,8 +120,8 @@ export default class CurriculumListView extends Vue {
         this.isModifyPopupOpen=value;
     }
 
-    private courseDetailArray(x: any, y: any){
-        return x.index - y.index;
+    private courseDetailArray() {
+        this.courseDetailData.sort((x: any, y: any)=> x.index - y.index);
     }
 
     /**
@@ -132,8 +134,9 @@ export default class CurriculumListView extends Vue {
         await this.GET_CURRICULUM_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.detailCurriculumId})
             .then((data)=>{
                 this.isDetailPopupOpen=true;
-                this.courseDetailData.sort(this.courseDetailArray);
             });
+
+        this.courseDetailArray();
     }
 
     private deleteCurriculum(id: number){
