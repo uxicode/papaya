@@ -508,6 +508,7 @@ export default class ClassModule extends VuexModule {
         return MyClassService.setCurriculumList( payload.classId, payload.formData )
             .then(( data )=>{
                 // console.log( data );
+                console.log(payload.formData);
                 return Promise.resolve(data);
             }).catch((error) => {
                 console.log(error);

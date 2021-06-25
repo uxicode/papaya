@@ -48,7 +48,7 @@
                                 </div>
                             </div>
                             <div class="scroll-body" style="height:124px;">
-                                <div v-for="(item, index) in makeCurriculumData.course_list" class="add-curr-item" :key="`curriculumDetailDataNum-${index}`">
+                                <div v-for="(item, index) in courseListNumModel" class="add-curr-item" :key="`curriculumDetailDataNum-${index}`">
 
                                     <a href="#" class="add-curr-tit" @click.prevent="addCoursePopupOpen(index)">
                                         <span class="curr-num">{{ index+1 }} 회차</span>
@@ -90,7 +90,7 @@
             <div slot="footer">
                 <!-- footer custom coding-->
                 <div class="btn-group rt">
-                    <button type="button" class="btn navi" @click="setCurriculumDataToFormData">등록</button>
+                    <button type="button" class="btn navi" @click="onAddPostSubmit">등록</button>
                 </div>
             </div>
         </modal>
@@ -102,6 +102,8 @@
             :make-curriculum-data="makeCurriculumData"
             :course-idx="courseIdx"
             :form-data="formData"
+            :img-file-service="imgFileService"
+            :attach-file-service="attachFileService"
             @close="onCoursePopupClose"
             @submit="onAddCourse"></add-course-popup>
 

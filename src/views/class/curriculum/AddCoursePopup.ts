@@ -43,6 +43,12 @@ export default class AddCoursePopup extends Vue {
     @Prop(FormData)
     private formData!: FormData;
 
+    @Prop(Object)
+    private imgFileService!: any;
+
+    @Prop(Object)
+    private attachFileService: any;
+
     @MyClass.Getter
     private classID!: number;
 
@@ -60,9 +66,6 @@ export default class AddCoursePopup extends Vue {
         hour: [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
         minute: [ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00']
     };
-
-    private imgFileService: ImageFileServiceHelper=new ImageFileServiceHelper();
-    private attachFileService: AttachFileService=new AttachFileService();
 
     get imgFileURLItemsModel(): string[] {
         return this.imgFileService.getItems();
@@ -103,6 +106,7 @@ export default class AddCoursePopup extends Vue {
 
     private addFilesInputFocus(){
         this.inputEventBind('#attachFileInput');
+        this.attachFileService.courseIndexNumber(this.courseIdx);
     }
 
     /**
@@ -138,14 +142,7 @@ export default class AddCoursePopup extends Vue {
         this.imgFileService.removeAll();
     }
 
-    /**
-     * post 등록을 완료후 formdata 및 배열에 지정되어 있던 데이터들 비우기..
-     * @private
-     */
-    private imgFilesAllClear() {
-        this.imgFileService.removeAll();
-        this.formData.delete('files');
-    }
+
 
 
     //end : 이미지 preview  및 이미지 등록 ================================================
@@ -161,10 +158,7 @@ export default class AddCoursePopup extends Vue {
     private removeAttachFileItem(idx: number): void{
         this.attachFileService.remove(idx);
     }
-    private attachFilesAllClear() {
-        this.attachFileService.removeAll();
-        this.formData.delete('files');
-    }
+
     //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
 
 

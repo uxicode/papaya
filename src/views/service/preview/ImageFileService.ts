@@ -121,6 +121,7 @@ class ImageFileService implements IFile{
         formData.append( appendName[index], item, item.name );
       }else{
         formData.append(appendName, item, `${index}_${item.name}` );
+        console.log(item);
       }
     });
   }
@@ -131,10 +132,24 @@ class ImageFileServiceHelper extends ImageFileService {
 
   get getCourseIdx(): number{
     return this.courseIndex;
-  };
+  }
 
   public courseIndexNumber(index: number) {
     this.courseIndex = index;
+  }
+
+  public save( formData: FormData ): void {
+    if( !this.imgFileItems.length ){ return; }
+
+    const addFiles= this.imgFileItems
+        .filter((item) => item.file.name !== undefined)
+        .map((item)=>item.file);
+
+    //전송할 파일이 없다면 여기서 종료.
+    if( addFiles.length<1 ){ return; }
+
+    // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
+    this.formDataAppendToFile( formData, addFiles, 'files');
   }
 
   //formdata 에 append 하여 formdata ( 딕셔너리 목록 ) 추가하기.
@@ -147,9 +162,6 @@ class ImageFileServiceHelper extends ImageFileService {
       if( Array.isArray(appendName) ){
         formData.append( appendName[index], item, `${this.courseIndex+1}_${index}_${item.name}` );
       }else{
-
-        console.log(`${this.courseIndex+1}_${index}_${item.name}`);
-        console.log(this.courseIndex);
         formData.append(appendName, item, `${this.courseIndex+1}_${index}_${item.name}` );
       }
     });
