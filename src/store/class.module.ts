@@ -516,6 +516,8 @@ export default class ClassModule extends VuexModule {
             .then((data) => {
                 console.log('modified curriculum data=', data.curriculum);
                 this.context.commit(SET_CURRICULUM_DETAIL, data.curriculum);
+                const findIdx = this.curriculumListItems.curriculum_list.findIndex(item => item.id===payload.curriculumId);
+                this.curriculumListItems.curriculum_list.splice(findIdx, 1, data.curriculum);
                 return Promise.resolve(this.curriculumDetailData);
             }).catch((error) => {
                 console.log(error);

@@ -381,7 +381,6 @@ export default class ModifyCurriculumPopup extends Vue {
 
         await this.MODIFY_CURRICULUM_ACTION({classId: this.classID, curriculumId: this.curriculumDetailItemModel.id, formData: this.formData})
             .then(() => {
-
                 this.attachFilesAllClear();
                 this.popupChange(false);
             });
