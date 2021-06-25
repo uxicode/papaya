@@ -8,11 +8,11 @@ import ImageSettingService from '@/views/service/profileImg/ImageSettingService'
 import RadioButton from '@/components/radio/RadioButton.vue';
 import Pagination from '@/components/pagination/pagination.vue';
 import Btn from '@/components/button/Btn.vue';
-import WithRender from './SearchResultPage.html';
 import {getAllPromise} from '@/types/types';
-import {SEARCH_DATA_SAVED} from '@/store/mutation-search-types';
+// import {SEARCH_DATA_SAVED} from '@/store/mutation-search-types';
 import {IClassTag} from '@/views/model/my-class.model';
-import {SEARCH_OPTION_CHANGE_ACTION} from '@/store/action-search-types';
+// import {SEARCH_OPTION_CHANGE_ACTION} from '@/store/action-search-types';
+import WithRender from './SearchResultPage.html';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
@@ -119,15 +119,19 @@ export default class SearchResultPage extends Vue {
   }*/
 
   public getResultList() {
+    console.log('검색결과=', this.searchResultData );
     //검색 결과 없으면 여기서 종료.
     if (this.searchResultData.length <= 0) {return;}
 
-    console.log('검색결과=', this.searchResultData.length );
+    // console.log('검색결과=', this.searchResultData.length );
 
     this.getClassOwnerName(  this.searchResultData )
       .then( ( data: any )=>{
-        // console.log('owner 데이터 완료', data );
+        console.log('owner 데이터 완료', data );
         this.ownerItems=data.map((item: any) => {
+
+          console.log(item.classinfo.owner);
+
           return {
             id: item.classinfo.id,
             nickname:item.classinfo.owner.nickname
@@ -144,28 +148,40 @@ export default class SearchResultPage extends Vue {
 
 
   private async getClassOwnerName(items: any[]) {
-    console.log('search getClassOwnerName=', items);
+    // console.log('search getClassOwnerName=', items);
     const ownerPromiseItems = await this.getClassInfoBySearchResultClassId(items);
-    return getAllPromise( ownerPromiseItems )
-      .then(( info: any )=>{
-      // console.log('info=', info);
-      return Promise.resolve(info);
-    }).catch((error)=>{
-      console.log(error);
-      return Promise.reject('owner data find fail');
-    });
+    // console.log(ownerPromiseItems);
+    return getAllPromise(ownerPromiseItems)
+      .then((info: any) => {
+        console.log('info=', info);
+        return Promise.resolve(info);
+      }).catch((error) => {
+        console.log(error, items, ownerPromiseItems);
+        try {
+          if (ownerPromiseItems.length) {
+            return getAllPromise(ownerPromiseItems);
+          }
+        } catch (e) {
+          return Promise.reject('owner data find fail');
+        }
+        return Promise.reject('owner data find fail');
+      });
   }
 
 
   //class/:classId 조회가 안되는 --> 67, 70, 597, 598, 599, 600
   private getClassInfoBySearchResultClassId( items: any[] ): any[] {
-    const promiseItems: any[] = [];
-    items.forEach( ( item: any ) => {
-      console.log('SearchResultClassId=', item.class_id, item.id  );
+    // const promiseItems: any[] = [];
+    return items.map( (item: any)=>{
       const idx=(item.class_id)? item.class_id : item.id;
+      return MyClassService.getClassInfoById( idx );
+    });
+    /*items.forEach( ( item: any ) => {
+      const idx=(item.class_id)? item.class_id : item.id;
+      console.log('SearchResultClassId=', idx );
       promiseItems.push( MyClassService.getClassInfoById( idx ) );
     });
-    return promiseItems;
+    return promiseItems;*/
   }
 
 
@@ -204,12 +220,9 @@ export default class SearchResultPage extends Vue {
     return keywords.join(' ');
   }
 
-  private async myClassCheck( id: number ){
-    return await MyClassService.getMyInfoInThisClass( id );
-  }
 
   private gotoLink(item: any): void {
-    // console.log('item', item, this.userInfo,  item.class_id , item.id );
+    console.log('item', item, this.userInfo,  item.class_id , item.id );
     const idx=( item.class_id!==null)? item.class_id : item.id;
 
     if (idx === null) {
@@ -217,26 +230,43 @@ export default class SearchResultPage extends Vue {
       return;
     }
 
-    this.myClassCheck(idx)
-      .then(( data )=>{
+    MyClassService.getMyInfoInThisClass(idx)
+      .then((data) => {
         console.log(data.result);
         //이미 가입된 멤버일때
-        if( data.result!==null ){
-          //class home data 갱신시킴.
-         this.MYCLASS_HOME(idx).then(()=>{
-           //해당 클래스 홈으로 이동
-           this.$router.push({path: `${CLASS_BASE_URL}/${idx}`});
-         });
-         console.log('가입된 멤버', data.result);
-        }else{
-          console.log('가입된 멤버 아님', data.result);
-          //가입 멤버가 아니기에 클래스 가입 페이지로 이동.
-          this.$router.push({path: `${CLASS_BASE_URL}/enrollClass`, query:{ classIdx:idx }});
-        }
-      }).catch((error)=>{
-        //오류 발생시 메인으로 이동시킴.
-         this.$router.push({path: '/'});
+        this.gotoClassPage({result: data.result, idx: `${idx}`});
+      }).catch((error) => {
+
+      console.log('search error', error, idx);
+
+      if (idx) {
+        MyClassService.getMyInfoInThisClass(idx)
+          .then( (retry)=>{
+            this.gotoClassPage({result: retry.result, idx: `${idx}`});
+        });
+
+      }
+
+      //오류 발생시 메인으로 이동시킴.
+      // this.$router.push({path: '/'});
     });
+  }
+
+  private gotoClassPage( payload: {result: any, idx: string } ) {
+    const {result, idx}=payload;
+
+    if (result!== null) {
+      //class home data 갱신시킴.
+      this.MYCLASS_HOME(idx).then(() => {
+        //해당 클래스 홈으로 이동
+        this.$router.push({path: `${CLASS_BASE_URL}/${idx}`});
+      });
+      // console.log('가입된 멤버', data.result);
+    } else {
+      // console.log('가입된 멤버 아님', data.result);
+      //가입 멤버가 아니기에 클래스 가입 페이지로 이동.
+      this.$router.push({path: `${CLASS_BASE_URL}/enrollClass`, query: { classIdx: idx}});
+    }
   }
 
 

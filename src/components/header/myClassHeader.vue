@@ -98,7 +98,7 @@ export default class MyClassHeader extends Vue {
     console.log('myClassLists=', this.myClassLists.length, this.userInfo, this.isAuth );
 
     //로그인한 상태이지만 현재 갱신된 상태이기에 데이터를 재지정 해줄 필요가 있다.
-    /*if (this.isAuth && this.userInfo === null) {
+    if (this.isAuth && this.userInfo === null) {
 
       this.MYCLASS_LIST_ACTION()
           .then((data) => {
@@ -111,7 +111,7 @@ export default class MyClassHeader extends Vue {
         this.init();
         this.selectBoxCurrentStatus();
       }
-    }*/
+    }
   }
 
   private init() {

@@ -121,7 +121,7 @@ export default class SearchModule extends VuexModule {
 
         // this.searchResults=data.best_classlist;
         // console.log(this.bestItems );
-        console.log(data);
+        // console.log(data);
         return Promise.resolve(data);
       }).catch((error) => {
         return Promise.reject(error);

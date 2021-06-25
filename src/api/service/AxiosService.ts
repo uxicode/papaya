@@ -8,6 +8,7 @@ import AuthService from '@/api/service/AuthService';
 axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+axios.defaults.timeout=1000;
 
 
 const cancelTokenSource = axios.CancelToken.source();
@@ -82,8 +83,8 @@ axios.interceptors.response.use((response: AxiosResponse) => {
   pendingCount--;
   // console.log(pendingCount);
   if (pendingCount > 15) {
-    // console.log(pendingCount);
-    // cancelTokenSource.cancel('데이터 대기 상태가 길어져서 요청을 취소 합니다.');
+    console.log(pendingCount);
+    cancelTokenSource.cancel('데이터 대기 상태가 길어져서 요청을 취소 합니다.');
     pendingCount=0;
   }
   return response;

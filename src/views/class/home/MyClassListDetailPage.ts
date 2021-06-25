@@ -39,7 +39,7 @@ export default class MyClassListDetailPage extends Vue {
 
   public created() {
     this.activeMenuNumModel=0;
-    console.log('클래스 홈 컨테이너 클래스 = ', this.activeMenuNumModel);
+    // console.log('클래스 홈 컨테이너 클래스 = ', this.activeMenuNumModel);
   }
 
   /**

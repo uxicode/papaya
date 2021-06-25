@@ -63,6 +63,12 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
   // private moreInfos: IClassMember[]=[];
   private moreInfos: ClassEachInfo[]=[];
 
+  @MyClass.Action
+  private MYCLASS_LIST_ACTION!: ()=> Promise<IMyClassList[]>;
+
+  @MyClass.Action
+  private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
+
   @Auth.Getter
   private userInfo!: IUserMe;
 
@@ -72,11 +78,6 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
   @MyClass.Getter
   private classID!: number;
 
-  @MyClass.Action
-  private MYCLASS_LIST_ACTION!: ()=> Promise<IMyClassList[]>;
-
-  @MyClass.Action
-  private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
   //end : 변수 선언부 ================================================
 
 
@@ -148,13 +149,22 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
    * @private
    */
   private getMyClass(): void {
+    console.log(this.myClassLists);
     this.MYCLASS_LIST_ACTION().then(() =>{
+
+      console.log(this.myClassLists);
+
       if (this.myClassLists !== null && this.myClassLists!==undefined) {
         if (this.myClassLists.length > 0) {
-          console.log(this.myClassLists);
+          // console.log(this.myClassLists);
           this.getUpdateList();
         }
+      }else{
+        //
+        console.log(this.myClassLists);
       }
+    }).catch( (error)=>{
+      console.log('error=', error, this.myClassLists);
     });
   }
 

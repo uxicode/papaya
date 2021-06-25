@@ -371,6 +371,7 @@ export default class Search extends Vue {
   private gotoTagKeyword(keyword: string) {
     this.searchType = SEARCH_TYPE.RESULT;
     this.SEARCHING(false);
+
     this.getSearchResultData(keyword);
   }
 
@@ -381,6 +382,7 @@ export default class Search extends Vue {
    * @private
    */
   private getSearchResultData( keyword: string ) {
+    console.log('keyword=', keyword);
     this.SEARCH_RESULT_ACTION({keyword, page_no:1, count:10})
         .then((data) => {
           console.log(data);

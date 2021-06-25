@@ -97,7 +97,7 @@ export default class MyClassListDetailView extends Vue{
 
     this.memberStatus=isMember.result;
 
-    console.log('isMember=',  this.memberStatus );
+    // console.log('isMember=',  this.memberStatus );
 
     if (isMember.result) {
       await getAllPromise([
