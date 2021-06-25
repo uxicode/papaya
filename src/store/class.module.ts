@@ -35,7 +35,9 @@ import {
     GET_CURRICULUM_DETAIL_ACTION,
     GET_COURSE_DETAIL_ACTION,
     ADD_CURRICULUM_ACTION,
-    DELETE_CURRICULUM_ACTION, MODIFY_CURRICULUM_ACTION,
+    DELETE_CURRICULUM_ACTION,
+    MODIFY_CURRICULUM_ACTION,
+    MODIFY_COURSE_ACTION,
 } from '@/store/action-class-types';
 import {PostService} from '@/api/service/PostService';
 
@@ -242,7 +244,7 @@ export default class ClassModule extends VuexModule {
         return this.classIdx;
     }
 
-    get cousreIndex(): number {
+    get courseIndex(): number {
         return this.courseIdx;
     }
 
@@ -477,7 +479,7 @@ export default class ClassModule extends VuexModule {
 
     @Action
     public [GET_COURSE_DETAIL_ACTION](payload: { classId: number, curriculumId: number, courseId: number }): Promise<any>{
-        return MyClassService.getEduCourseList(payload.classId, payload.curriculumId, payload.courseId )
+        return MyClassService.getEduCourseDetail(payload.classId, payload.curriculumId, payload.courseId )
             .then((data) => {
                 this.context.commit(SET_COURSE_DETAIL, data.course);
                 console.log('courseDetailData=', this.courseDetailData);
@@ -522,7 +524,7 @@ export default class ClassModule extends VuexModule {
             .then((data) => {
                 console.log('modified curriculum data=', data.curriculum);
                 this.context.commit(SET_CURRICULUM_DETAIL, data.curriculum);
-                const findIdx = this.curriculumListItems.curriculum_list.findIndex(item => item.id===payload.curriculumId);
+                const findIdx = this.curriculumListItems.curriculum_list.findIndex((item) => item.id===payload.curriculumId);
                 this.curriculumListItems.curriculum_list.splice(findIdx, 1, data.curriculum);
                 return Promise.resolve(this.curriculumDetailData);
             }).catch((error) => {
@@ -531,4 +533,12 @@ export default class ClassModule extends VuexModule {
             });
     }
 
+    @Action
+    public [MODIFY_COURSE_ACTION](payload: {classId: number, curriculumId: number, courseId: number, formData: FormData}): Promise<any> {
+        return MyClassService.setEduCourseModify(payload.classId, payload.curriculumId, payload.courseId, payload.formData)
+            .then((data) => {
+               console.log('modified course data=', data.updated_course);
+               this.context.commit(SET_COURSE_DETAIL, data.updated_course);
+            });
+    }
 }

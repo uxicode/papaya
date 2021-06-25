@@ -706,6 +706,16 @@ interface IModifyCurriculum {
     }>;
 }
 
+interface IModifyCourse {
+    id: number;
+    index: number;
+    title: string;
+    contents: string;
+    startDay: Date | string;
+    startTime: Date | string;
+    endTime: Date | string;
+}
+
 interface IClassTag {
     id: number;
     class_id: number;
@@ -739,6 +749,7 @@ export {
     ICurriculumDetailList,
     ICurriculumCourseData,
     IModifyCurriculum,
+    IModifyCourse,
     IClassTag,
     IClassAuth
 };

@@ -7,7 +7,7 @@ import {
     IClassInfo,
     IMakeEducation,
     IModifyCurriculum,
-    ICurriculumCourseData,
+    ICurriculumCourseData, IModifyCourse,
 } from '@/views/model/my-class.model';
 import {IAttachFileModel} from '@/views/model/post.model';
 import {Utils} from '@/utils/utils';
@@ -138,6 +138,16 @@ export default class ModifyCoursePopup extends Vue {
             }
         ]
     };
+
+    private courseItem: IModifyCourse = {
+        id: 0,
+        index: 0,
+        title: '',
+        contents: '',
+        startDay: '',
+        startTime: '',
+        endTime: '',
+    }
 
     get isSubmitValidate(): boolean{
         return (this.makeCurriculumData.title !== '' && this.makeCurriculumData.goal !== '');
@@ -543,22 +553,29 @@ export default class ModifyCoursePopup extends Vue {
         console.log(this.modifyClassItems);
     }
 
-    private modifyCourseConfirm(): void{
-        MyClassService.setEduCourseModify(this.classID, this.courseDetailItemModel.curriculum_id, this.courseDetailItemModel.id,
-            {
+    /**
+     * 개별코스 수정 임시 저장
+     * emit 을 이용하여 교육과정 수정으로 데이터를 올려 보낸다.
+     * @private
+     */
+    private modifyCourseSave(): void{
+        this.courseItem = {
+            id: this.courseDetailItemModel.id,
+            index: this.courseDetailItemModel.index,
+            title: this.courseDetailItemModel.title,
+            contents: this.courseDetailItemModel.contents,
+            startDay: this.courseDetailItemModel.startDay,
+            startTime: this.courseDetailItemModel.startTime,
+            endTime: this.courseDetailItemModel.endTime,
+        }
 
-            }).then((data) => {
-                console.log(data);
-            });
+        this.$emit('modifyCourse', this.courseItem);
+        this.popupChange(false);
 
-        this.isModifyCourse = false;
-
-
-
-        this.setImageFormData();
-        this.setAttachFileFormData();
-        this.removeAllPreview();
-        this.removeAllAttachFile();
+        // this.setImageFormData();
+        // this.setAttachFileFormData();
+        // this.removeAllPreview();
+        // this.removeAllAttachFile();
     }
 
     private modifyCourseHandler(courseIdx: number, idx: number) {

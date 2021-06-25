@@ -186,12 +186,21 @@ class MyClassService {
     }
 
     /**
+     * 클래스 교육과정 개별코스 전체 조회
+     * @param classId
+     * @param curriculumId
+     */
+    public getEduCourseList(classId: number, curriculumId: number): Promise<any>{
+        return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course`);
+    }
+
+    /**
      * 클래스 교육과정 개별코스 정보 조회
      * @param classId
      * @param curriculumId
      * @param courseId
      */
-    public getEduCourseList(classId: number, curriculumId: number, courseId: number): Promise<any>{
+    public getEduCourseDetail(classId: number, curriculumId: number, courseId: number): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course/${courseId}` );
     }
 
