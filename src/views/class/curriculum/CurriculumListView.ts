@@ -7,7 +7,7 @@ import AddCurriculumPopup from '@/views/class/curriculum/AddCurriculumPopup';
 import CurriculumDetailPopup from '@/views/class/curriculum/CurriculumDetailPopup';
 import ModifyCurriculumPopup from '@/views/class/curriculum/ModifyCurriculumPopup';
 import {
-    IClassInfo,
+    IClassInfo, ICurriculumDetailList,
     ICurriculumList,
 } from '@/views/model/my-class.model';
 import WithRender from './CurriculumListView.html';
@@ -46,6 +46,9 @@ export default class CurriculumListView extends Vue {
     @MyClass.Action
     private DELETE_CURRICULUM_ACTION!: (payload: { classId: number, curriculumId: number }) => Promise<any>;
 
+    @MyClass.Getter
+    private curriculumDetailItem!: ICurriculumDetailList;
+
     /* Modal 오픈 상태값 */
     private isDetailPopupOpen: boolean=false;
     private detailCurriculumId: number=-1; // 동적으로 변경 안되는 상태
@@ -58,6 +61,10 @@ export default class CurriculumListView extends Vue {
 
     public created() {
         this.getList().then();
+    }
+
+    get courseDetailData(): any {
+        return this.curriculumDetailItem.course_list;
     }
 
     private async getList() {
@@ -99,7 +106,6 @@ export default class CurriculumListView extends Vue {
         await this.GET_CURRICULUM_DETAIL_ACTION({classId: Number(this.classID), curriculumId: id})
             .then((data)=>{
                 this.isModifyPopupOpen=true;
-
             });
 
     }
@@ -112,16 +118,21 @@ export default class CurriculumListView extends Vue {
         this.isModifyPopupOpen=value;
     }
 
+    private courseDetailArray(x: any, y: any){
+        return x.index - y.index;
+    }
+
     /**
      * 디테일 팝업 오픈
      * @param id
      */
     private async onDetailCurriculumOpen(id: number) {
         this.detailCurriculumId = id; // update postId
+
         await this.GET_CURRICULUM_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.detailCurriculumId})
             .then((data)=>{
                 this.isDetailPopupOpen=true;
-
+                this.courseDetailData.sort(this.courseDetailArray);
             });
     }
 

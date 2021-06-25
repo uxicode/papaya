@@ -7,24 +7,15 @@ import {
     IClassInfo,
     IMakeEducation,
 } from '@/views/model/my-class.model';
-import {Utils} from '@/utils/utils';
-import {ImageFileService} from '@/views/service/preview/ImageFileService';
+import {ITimeModel} from '@/views/model/schedule.model';
+import {ImageFileServiceHelper} from '@/views/service/preview/ImageFileService';
 import {AttachFileService} from '@/views/service/preview/AttachFileService';
-import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
-import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import WithRender from './AddCoursePopup.html';
+import {Utils} from '@/utils/utils';
 
 const MyClass = namespace('MyClass');
-
-/*start: 추가 테스트*/
-interface ITimeModel{
-    apm: string;
-    hour: string;
-    minute: string;
-}
-/*end: 추가 테스트*/
 
 @WithRender
 @Component({
@@ -34,11 +25,12 @@ interface ITimeModel{
         Btn,
         ImagePreview,
         FilePreview,
-        ListInImgPreview,
-        ListInFilePreview,
     }
 })
+
+// 상속, 오버라이딩, 타입스크립트 / 객체지향
 export default class AddCoursePopup extends Vue {
+
     @Prop(Boolean)
     private isOpen!: boolean;
 
@@ -52,10 +44,10 @@ export default class AddCoursePopup extends Vue {
     private formData!: FormData;
 
     @Prop(Object)
-    private imgFileService!: ImageFileService;
+    private imgFileService!: any;
 
     @Prop(Object)
-    private attachFileService!: AttachFileService;
+    private attachFileService: any;
 
     @MyClass.Getter
     private classID!: number;
@@ -74,6 +66,8 @@ export default class AddCoursePopup extends Vue {
         hour: [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
         minute: [ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00']
     };
+
+    private imgFilePreview!: string[];
 
     get imgFileURLItemsModel(): string[] {
         return this.imgFileService.getItems();
@@ -103,16 +97,26 @@ export default class AddCoursePopup extends Vue {
         this.dateMenu = false;
     }
 
+    private popupChange( value: boolean ) {
+        this.$emit('close', value);
+    }
+
+    private imgFilePreviewModel(): any {
+        this.imgFilePreview = this.attachFileItemsModel;
+    }
+
     /**
      * 이미지등록 아이콘 클릭시 > input type=file 에 클릭 이벤트 발생시킴.
      * @private
      */
     private addImgFileInputFocus() {
         this.inputEventBind('#imgFileInput');
+        this.imgFileService.courseIndexNumber(this.courseIdx);
     }
 
     private addFilesInputFocus(){
         this.inputEventBind('#attachFileInput');
+        this.attachFileService.courseIndexNumber(this.courseIdx);
     }
 
     /**
@@ -147,14 +151,6 @@ export default class AddCoursePopup extends Vue {
     private onRemoveAllPreview(): void {
         this.imgFileService.removeAll();
     }
-    /**
-     * post 등록을 완료후 formdata 및 배열에 지정되어 있던 데이터들 비우기..
-     * @private
-     */
-    private imgFilesAllClear() {
-        this.imgFileService.removeAll();
-        // this.formData.delete('files');
-    }
     //end : 이미지 preview  및 이미지 등록 ================================================
 
     //start : 파일 첨부 미리보기 및 파일 업로드 ================================================
@@ -168,36 +164,32 @@ export default class AddCoursePopup extends Vue {
     private removeAttachFileItem(idx: number): void{
         this.attachFileService.remove(idx);
     }
-    private attachFilesAllClear() {
-        this.attachFileService.removeAll();
-        // this.formData.delete('files');
-    }
-    //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
 
+    //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
 
     /**
      * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
      * @private
      */
-    private onAddCourseSubmit(): void{
+    private onAddCourseSubmit(idx: number): void{
+        const startHour = (this.startTimeSelectModel.apm === '오후') ? Number(this.startTimeSelectModel.hour) + 12 : Number(this.startTimeSelectModel.hour);
+        const startMinute= Number( this.startTimeSelectModel.minute );
+        const endHour = (this.endTimeSelectModel.apm === '오후') ? Number(this.endTimeSelectModel.hour) + 12 : Number(this.endTimeSelectModel.hour);
+        const endMinute= Number( this.endTimeSelectModel.minute );
 
-        const hour = (this.startTimeSelectModel.apm === '오후') ? Number(this.startTimeSelectModel.hour) + 12 : Number(this.startTimeSelectModel.hour);
-        const minute= Number( this.startTimeSelectModel.minute );
+        this.makeCurriculumData.course_list[idx].startTime = `${startHour}:${startMinute}`;
+        this.makeCurriculumData.course_list[idx].endTime = `${endHour}:${endMinute}`;
 
+        //이미지 파일 저장.
+        this.imgFileService.save( this.formData );
+
+        //파일 저장.
+        this.attachFileService.save( this.formData );
+
+        console.log(this.imgFileService);
 
         this.popupChange( false );
-
-        console.log(this.makeCurriculumData);
     }
-
-    private popupChange( value: boolean ) {
-        this.$emit('close', value);
 }
-
-}
-
-
-
-
 
 

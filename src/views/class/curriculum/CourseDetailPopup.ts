@@ -8,9 +8,7 @@ import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import WithRender from './CourseDetailPopup.html';
-import {ICurriculumCourseData, ICurriculumDetailList, IMyClassList} from '@/views/model/my-class.model';
-import {IAttachFileModel} from '@/views/model/post.model';
-import any = jasmine.any;
+import {ICurriculumDetailList} from '@/views/model/my-class.model';
 
 const MyClass = namespace('MyClass');
 

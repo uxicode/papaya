@@ -51,6 +51,7 @@ export default class ClassModule extends VuexModule {
     private count: number = 0;
     private classIdx: number = -1;
     private sideMenuNum: number=0;
+    private courseIdx: number = 0;
     private memberId: string | number = 0;
     private myClassHomeData: IClassInfo={
         contents_updatedAt:new Date(),
@@ -239,6 +240,10 @@ export default class ClassModule extends VuexModule {
 
     get classID(): number {
         return this.classIdx;
+    }
+
+    get cousreIndex(): number {
+        return this.courseIdx;
     }
 
     get curriculumListItems(): ICurriculumList{
@@ -503,6 +508,7 @@ export default class ClassModule extends VuexModule {
         return MyClassService.setCurriculumList( payload.classId, payload.formData )
             .then(( data )=>{
                 // console.log( data );
+                console.log(payload.formData);
                 return Promise.resolve(data);
             }).catch((error) => {
                 console.log(error);
