@@ -97,7 +97,7 @@ export default class ModifyCurriculumPopup extends Vue {
         startDay: '',
         startTime: '',
         endTime: ''
-    }
+    };
 
     private modifyCourseList: any = [];
 
@@ -441,7 +441,7 @@ export default class ModifyCurriculumPopup extends Vue {
             deleted_course_list: [],
             course_list: this.modifyCourseList,
         };
-        /**
+        /*
          * {
              "title": "파파야 교육과정 1111",
              "goal": "교육과정 목표 수능 1점.",

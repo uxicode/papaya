@@ -43,7 +43,7 @@
                                 <p class="add-curr-tit">수업 회차</p>
                                 <div class="form-box">
                                     <div class="form-group">
-                                        <input type="number" class="form-control" value="10" @input="setCourseList($event.target.value)">
+                                        <input type="number" class="form-control" v-model="curriculumDetailDataNum" @input="setCourseList($event.target.value)">
                                     </div>
                                 </div>
                             </div>

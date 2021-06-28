@@ -20,10 +20,10 @@
                                 </button>
                             </template>
                             <v-list>
-                                <v-list-item>
+                                <v-list-item @click="onModifyCurriculumPopupOpen(curriculumDetailModel.id)">
                                     <v-list-item-title class="lt">교육과정 수정</v-list-item-title>
                                 </v-list-item>
-                                <v-list-item>
+                                <v-list-item @click="deleteCurriculum( curriculumDetailModel.id )">
                                     <v-list-item-title class="lt">교육과정 삭제</v-list-item-title>
                                 </v-list-item>
                             </v-list>
@@ -84,5 +84,11 @@
             :course-id="courseId"
             :course-detail-item="courseDetailItem"
             @close="onCourseDetailPopupClose"></course-detail-popup>
+
+    <modify-curriculum-popup
+            :is-open="isModifyPopupOpen"
+            :card-id="detailCurriculumId"
+            @change="onModifyCurriculumPopupStatus"
+            @submit="onModifyCurriculum"></modify-curriculum-popup>
 
 </div>

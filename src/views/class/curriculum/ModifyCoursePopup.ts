@@ -147,7 +147,7 @@ export default class ModifyCoursePopup extends Vue {
         startDay: '',
         startTime: '',
         endTime: '',
-    }
+    };
 
     get isSubmitValidate(): boolean{
         return (this.makeCurriculumData.title !== '' && this.makeCurriculumData.goal !== '');
@@ -567,7 +567,7 @@ export default class ModifyCoursePopup extends Vue {
             startDay: this.courseDetailItemModel.startDay,
             startTime: this.courseDetailItemModel.startTime,
             endTime: this.courseDetailItemModel.endTime,
-        }
+        };
 
         this.$emit('modifyCourse', this.courseItem);
         this.popupChange(false);

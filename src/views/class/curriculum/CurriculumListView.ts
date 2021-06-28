@@ -58,6 +58,12 @@ export default class CurriculumListView extends Vue {
     private isAddPopupOpen: boolean=false;
     private isModifyPopupOpen: boolean=false;
 
+    private makeCurriculumData: IMakeEducation={
+        title: '',
+        goal: '',
+        course_list: []
+    };
+
     public created() {
         this.getList().then();
     }
@@ -74,6 +80,7 @@ export default class CurriculumListView extends Vue {
         return (ownerId === userId);
     }
 
+
     /**
      * 팝업 상태
      * @param value
@@ -89,6 +96,20 @@ export default class CurriculumListView extends Vue {
 
     private onAddCurriculumPopupOpen() {
         this.isAddPopupOpen=true;
+
+        this.makeCurriculumData.course_list = [];
+
+        for (let i = 0; i < 10; i++) {
+            this.makeCurriculumData.course_list.push({
+                index: i,
+                id: i,
+                title: '',
+                startDay: '',
+                startTime: '',
+                endTime: '',
+                contents: ''
+            });
+        }
     }
 
     private onDetailCurriculumPopupStatus(value: boolean) {

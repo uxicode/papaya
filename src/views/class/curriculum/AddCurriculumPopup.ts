@@ -32,6 +32,9 @@ export default class AddCurriculumPopup extends Vue {
     @Prop(Number)
     private detailCurriculumId!: number;
 
+    @Prop(Object)
+    private makeCurriculumData!: any;
+
     @MyClass.Getter
     private classID!: number;
 
@@ -61,11 +64,11 @@ export default class AddCurriculumPopup extends Vue {
 
     private formData: FormData = new FormData();
 
-    private makeCurriculumData: IMakeEducation={
-        title: '',
-        goal: '',
-        course_list: []
-    };
+    // private makeCurriculumData: IMakeEducation={
+    //     title: '',
+    //     goal: '',
+    //     course_list: []
+    // };
 
     private curriculumDetailDataNum: number = 10;
     private eduItems: Array< {title: string }>=[];
@@ -91,10 +94,9 @@ export default class AddCurriculumPopup extends Vue {
         this.isOpenAddCoursePopup=value;
     }
     private onAddCourse() {
-        // this.voteData = voteData;
         this.isOpenAddCoursePopup=false;
-        // console.log(voteData);
     }
+
 
     /**
      * 교육과정 수업 회차 설정
@@ -155,11 +157,8 @@ export default class AddCurriculumPopup extends Vue {
 
                 this.GET_CURRICULUM_LIST_ACTION({classId: Number(this.classID)}).then();
                 this.formData = new FormData();
-                this.makeCurriculumData = {
-                    title: '',
-                    goal: '',
-                    course_list: []
-                };
+                this.makeCurriculumData.title = '';
+                this.makeCurriculumData.goal = '';
             });
 
     }
