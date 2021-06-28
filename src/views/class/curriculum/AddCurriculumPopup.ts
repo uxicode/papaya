@@ -161,7 +161,7 @@ export default class AddCurriculumPopup extends Vue {
                     title: '',
                     goal: '',
                     course_list: []
-                }
+                };
             });
 
     }

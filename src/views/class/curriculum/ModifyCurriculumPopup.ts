@@ -78,7 +78,7 @@ export default class ModifyCurriculumPopup extends Vue {
     private imgFileDatas: any[] = [];
     private attachFileItems: any[] = [];
     private formData!: FormData;
-    private curriculumDetailDataNum: number = 10;
+    private curriculumDetailDataNum: number = 0;
     private eduItems: Array< {title: string }>=[];
 
     private modifyCurriculumData: IModifyCurriculum = {
@@ -180,7 +180,7 @@ export default class ModifyCurriculumPopup extends Vue {
             this.eduItems.length=num;
 
             if( this.curriculumDetailDataNum > 50){
-                this.isCreateError = true;
+                // this.isCreateError = true;
 
                 num = 50;
                 this.curriculumDetailDataNum=50;
@@ -454,11 +454,12 @@ export default class ModifyCurriculumPopup extends Vue {
 
     /**
      * 코스 수정 팝업 오픈
-     * @param id
      * @private
+     * @param curriculumId
+     * @param courseId
      */
-    private async onModifyCoursePopupOpen( curriculumId: number, coursId: number) {
-        this.courseId = coursId;
+    private async onModifyCoursePopupOpen( curriculumId: number, courseId: number) {
+        this.courseId = courseId;
         this.curriculumId = curriculumId;
         await this.GET_COURSE_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.curriculumId, courseId: this.courseId})
             .then((data)=>{
@@ -471,8 +472,20 @@ export default class ModifyCurriculumPopup extends Vue {
         this.isModifyClassCourse=value;
     }
 
-    private onModifyCourse(value: boolean) {
-        this.isModifyClassCourse=value;
+    /**
+     * 개별 수업내용 삭제
+     * @param id
+     * @private
+     */
+    private deleteCourse(id: number): void {
+        MyClassService.deleteEduCourse(this.classID, this.cardId, id)
+            .then((result) => {
+               console.log(result);
+               if (this.curriculumDetailItem.course_list !== undefined) {
+                   const findIdx = this.curriculumDetailItem.course_list.findIndex((item) => item.id === id);
+                   this.curriculumDetailItem.course_list.splice(findIdx, 1);
+               }
+            });
     }
 
     /**
