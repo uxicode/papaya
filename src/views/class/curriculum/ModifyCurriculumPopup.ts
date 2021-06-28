@@ -97,7 +97,7 @@ export default class ModifyCurriculumPopup extends Vue {
         startDay: '',
         startTime: '',
         endTime: ''
-    }
+    };
 
     private modifyCourseList: any = [];
 
@@ -441,28 +441,6 @@ export default class ModifyCurriculumPopup extends Vue {
             deleted_course_list: [],
             course_list: this.modifyCourseList,
         };
-        /**
-         * {
-             "title": "파파야 교육과정 1111",
-             "goal": "교육과정 목표 수능 1점.",
-             "deleted_course_list": [
-                 {
-                    "id":2573
-                 },
-             ],
-             "course_list": [
-                 {
-                     "id": 1022,
-                     "index": 1,
-                     "title": "1회차수업",
-                     "startDay": "2019-11-15",
-                     "startTime": "10:00:00",
-                     "endTime": "11:00:00",
-                     "contents": "수업내용 100자이내로 설명."
-                 },
-             ]
-            }
-         */
         this.formData = new FormData();
         const temp = JSON.stringify( {...this.modifyCurriculumData} );
         this.formData.append('data', temp );

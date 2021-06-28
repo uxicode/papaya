@@ -15,9 +15,9 @@
                 <p class="popup-txt">클래스를 표현할 수 있는 태그를 추가해 보세요. 총 10개까지 등록 가능합니다.</p>
 
                 <div class="tag-cnt">
-                    <span class="label">등록된 태그 <strong>{{ tagList.length }}/10</strong></span>
+                    <span class="label">등록된 태그 <strong>{{ tagListModel.length }}/10</strong></span>
                     <div class="tag-list mgt-16">
-                        <div v-for="(item, idx) in tagList"
+                        <div v-for="(item, idx) in tagListModel"
                              :key="idx"
                              class="hashtag">
                             <span class="tag-label">{{ item.keyword }}</span>
