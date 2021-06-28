@@ -50,4 +50,6 @@ VueRouter.prototype.push = function(url: RawLocation) {
     }
   });
 };
+
+
 export default router;
