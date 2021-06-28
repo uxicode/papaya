@@ -1,6 +1,6 @@
 import ClassMemberService from '@/api/service/ClassMemberService';
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
-import {INullable} from '@/views/model/types';
+import {INullable} from '@/types/types';
 import {
     IMyClassList,
     IMakeClassInfo,
@@ -36,6 +36,8 @@ import {
     GET_COURSE_DETAIL_ACTION,
     ADD_CURRICULUM_ACTION,
     DELETE_CURRICULUM_ACTION,
+    MODIFY_CURRICULUM_ACTION,
+    MODIFY_COURSE_ACTION,
 } from '@/store/action-class-types';
 import {PostService} from '@/api/service/PostService';
 
@@ -51,6 +53,7 @@ export default class ClassModule extends VuexModule {
     private count: number = 0;
     private classIdx: number = -1;
     private sideMenuNum: number=0;
+    private courseIdx: number = 0;
     private memberId: string | number = 0;
     private myClassHomeData: IClassInfo={
         contents_updatedAt:new Date(),
@@ -168,61 +171,57 @@ export default class ClassModule extends VuexModule {
         message: '',
     };
     private curriculumDetailData: ICurriculumDetailList={
-        curriculum: {
-            startAt: '2019-11-17 10:00:00',
-            endAt: '2019-11-17 10:00:00',
-            expiredAt: '2019-11-17 10:00:00',
-            createdAt: '2019-11-17 10:00:00',
-            updatedAt: '2019-11-17 10:00:00',
-            id: 0,
-            class_id: 0,
-            board_id: 0,
-            post_type: 0,
-            type: 0,
-            user_id: 0,
-            user_member_id: 0,
-            title: '',
-            text: '',
-            count: 0,
-            param1: 0,
-            deletedYN: false,
-            owner: {
-                nickname: '',
-                level: 0,
+        startAt: '2019-11-17 10:00:00',
+        endAt: '2019-11-17 10:00:00',
+        expiredAt: '2019-11-17 10:00:00',
+        createdAt: '2019-11-17 10:00:00',
+        updatedAt: '2019-11-17 10:00:00',
+        id: 0,
+        class_id: 0,
+        board_id: 0,
+        post_type: 0,
+        type: 0,
+        user_id: 0,
+        user_member_id: 0,
+        title: '',
+        text: '',
+        count: 0,
+        param1: 0,
+        deletedYN: false,
+        owner: {
+            nickname: '',
+            level: 0,
+        },
+        course_list: [
+            {
+                startDay: '2019-11-17',
+                createdAt: '2019-11-17',
+                updatedAt: '2019-11-17',
+                id: 0,
+                curriculum_id: 0,
+                class_id: 0,
+                index: 0,
+                title: '',
+                contents: '',
+                startTime: '2019-11-17',
+                endTime: '2019-11-17',
+                deletedYN: false,
+                attachment: [],
             },
-            course_list: [
-                {
-                    startDay: '2019-11-17',
-                    createdAt: '2019-11-17',
-                    updatedAt: '2019-11-17',
-                    id: 0,
-                    curriculum_id: 0,
-                    class_id: 0,
-                    index: 0,
-                    title: '',
-                    contents: '',
-                    startTime: '2019-11-17',
-                    endTime: '2019-11-17',
-                    deletedYN: false,
-                    attachment: [],
-                },
-            ],
-        }
+        ],
     };
     private courseDetailData: ICurriculumCourseData = {
-        course: {
-            startDay: '2019-11-17 10:00:00',
-            createdAt: '2019-11-17 10:00:00',
-            updatedAt: '2019-11-17 10:00:00',
-            id: 0,
-            curriculum_id: 0,
-            class_id: 0,
-            index: 0,
-            title: '',
-            contents: '',
-            startTime: '10:00:00',
-            endTime: '10:00:00',
-        }
+        startDay: '2019-11-17 10:00:00',
+        createdAt: '2019-11-17 10:00:00',
+        updatedAt: '2019-11-17 10:00:00',
+        id: 0,
+        curriculum_id: 0,
+        class_id: 0,
+        index: 0,
+        title: '',
+        contents: '',
+        startTime: '10:00:00',
+        endTime: '10:00:00',
     };
     private makeClassInfo: IMakeClassInfo={
         name:'',
@@ -245,12 +244,20 @@ export default class ClassModule extends VuexModule {
         return this.classIdx;
     }
 
+    get courseIndex(): number {
+        return this.courseIdx;
+    }
+
     get curriculumListItems(): ICurriculumList{
         return this.curriculumListData;
     }
 
     get curriculumDetailItem(): ICurriculumDetailList{
         return this.curriculumDetailData;
+    }
+
+    get courseDetailItem(): ICurriculumCourseData {
+        return this.courseDetailData;
     }
 
     /**
@@ -353,6 +360,7 @@ export default class ClassModule extends VuexModule {
     public [MYCLASS_LIST_ACTION](): Promise<IMyClassList[]> {
         return MyClassService.getAllMyClass()
             .then((data: any) => {
+                this.context.commit(SET_CLASS_ID, -1);
                 this.context.commit(MYCLASS_LIST, data.myclass_list);
                 return Promise.resolve(data.myclass_list);
             }).catch((error: any) => {
@@ -460,7 +468,7 @@ export default class ClassModule extends VuexModule {
     public [GET_CURRICULUM_DETAIL_ACTION](payload: { classId: number, curriculumId: number}): Promise<any>{
         return MyClassService.getEduCurList(payload.classId, payload.curriculumId )
             .then((data) => {
-                this.context.commit(SET_CURRICULUM_DETAIL, data);
+                this.context.commit(SET_CURRICULUM_DETAIL, data.curriculum);
                 console.log('curriculumDetailData=', this.curriculumDetailData);
                 return Promise.resolve(this.curriculumDetailData);
             }).catch((error) => {
@@ -471,9 +479,9 @@ export default class ClassModule extends VuexModule {
 
     @Action
     public [GET_COURSE_DETAIL_ACTION](payload: { classId: number, curriculumId: number, courseId: number }): Promise<any>{
-        return MyClassService.getEduCourseList(payload.classId, payload.curriculumId, payload.courseId )
+        return MyClassService.getEduCourseDetail(payload.classId, payload.curriculumId, payload.courseId )
             .then((data) => {
-                this.context.commit(SET_COURSE_DETAIL, data);
+                this.context.commit(SET_COURSE_DETAIL, data.course);
                 console.log('courseDetailData=', this.courseDetailData);
                 return Promise.resolve(this.courseDetailData);
             }).catch((error) => {
@@ -502,6 +510,7 @@ export default class ClassModule extends VuexModule {
         return MyClassService.setCurriculumList( payload.classId, payload.formData )
             .then(( data )=>{
                 // console.log( data );
+                console.log(payload.formData);
                 return Promise.resolve(data);
             }).catch((error) => {
                 console.log(error);
@@ -509,6 +518,27 @@ export default class ClassModule extends VuexModule {
             });
     }
 
+    @Action
+    public [MODIFY_CURRICULUM_ACTION](payload: {classId: number, curriculumId: number, formData: FormData}): Promise<any> {
+        return MyClassService.setCurriculumModify(payload.classId, payload.curriculumId, payload.formData)
+            .then((data) => {
+                console.log('modified curriculum data=', data.curriculum);
+                this.context.commit(SET_CURRICULUM_DETAIL, data.curriculum);
+                const findIdx = this.curriculumListItems.curriculum_list.findIndex((item) => item.id===payload.curriculumId);
+                this.curriculumListItems.curriculum_list.splice(findIdx, 1, data.curriculum);
+                return Promise.resolve(this.curriculumDetailData);
+            }).catch((error) => {
+                console.log(error);
+                return Promise.reject(error);
+            });
+    }
 
-
+    @Action
+    public [MODIFY_COURSE_ACTION](payload: {classId: number, curriculumId: number, courseId: number, formData: FormData}): Promise<any> {
+        return MyClassService.setEduCourseModify(payload.classId, payload.curriculumId, payload.courseId, payload.formData)
+            .then((data) => {
+               console.log('modified course data=', data.updated_course);
+               this.context.commit(SET_COURSE_DETAIL, data.updated_course);
+            });
+    }
 }

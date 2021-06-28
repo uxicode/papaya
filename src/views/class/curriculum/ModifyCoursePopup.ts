@@ -1,4 +1,3 @@
-import {GET_COURSE_DETAIL_ACTION} from "@/store/action-class-types";
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import TxtField from '@/components/form/txtField.vue';
@@ -7,9 +6,8 @@ import Btn from '@/components/button/Btn.vue';
 import {
     IClassInfo,
     IMakeEducation,
-    ICurriculumList,
-    ICurriculumDetailList,
     IModifyCurriculum,
+    ICurriculumCourseData, IModifyCourse,
 } from '@/views/model/my-class.model';
 import {IAttachFileModel} from '@/views/model/post.model';
 import {Utils} from '@/utils/utils';
@@ -47,38 +45,23 @@ export default class ModifyCoursePopup extends Vue {
     @Prop(Boolean)
     private isModifyCourse!: boolean;
 
-    @Prop(Number)
-    private curriculumId!: number;
-
-    @Prop(Number)
-    private courseId!: number;
-    
     @MyClass.Getter
     private classID!: number;
 
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
+    @MyClass.Getter
+    private courseDetailItem!: ICurriculumCourseData;
+
     @MyClass.Action
     private GET_COURSE_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number, courseId: number }) => Promise<any>;
 
-    /* Modal 오픈 상태값 */
-    private isAddCurriculum: boolean = false;
-    private isClassCurr: boolean = false;
-    private isDetailCurriculum: boolean = false;
-    private isClassCurrDetail: boolean = false;
     private isCreateError: boolean = false;
-    private isModifyClass: boolean = false;
-
     private countCourseNumber: number = 0;
 
-    private cardId: number = 0;
-
     private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
-    private EduSettingsModel: string = '교육과정 수정';
-
     private CourseSettingsItems: string[] = ['수업 내용 수정', '수업 삭제'];
-    private CourseSettingsModel: string = '수업 내용 수정';
 
     private startDateItem: string = '';
     private startTimeItem: string = '';
@@ -102,6 +85,10 @@ export default class ModifyCoursePopup extends Vue {
 
     get modifyDataItemsModel(): any {
         return this.modifyClassItems;
+    }
+
+    get courseDetailItemModel(): any {
+        return this.courseDetailItem;
     }
 
     /**
@@ -152,15 +139,14 @@ export default class ModifyCoursePopup extends Vue {
         ]
     };
 
-    public updated(){
-        this.getCourseDetail();
-    }
-
-    private getCourseDetail() {
-        MyClassService.getEduCourseList(this.classID, this.curriculumId, this.courseId)
-            .then((data) => {
-                this.modifyCourseDataItems = data.course;
-            });
+    private courseItem: IModifyCourse = {
+        id: 0,
+        index: 0,
+        title: '',
+        contents: '',
+        startDay: '',
+        startTime: '',
+        endTime: '',
     }
 
     get isSubmitValidate(): boolean{
@@ -567,33 +553,33 @@ export default class ModifyCoursePopup extends Vue {
         console.log(this.modifyClassItems);
     }
 
-    private modifyCourseConfirm(courseIdx: number): void{
-        this.isModifyCourse = false;
+    /**
+     * 개별코스 수정 임시 저장
+     * emit 을 이용하여 교육과정 수정으로 데이터를 올려 보낸다.
+     * @private
+     */
+    private modifyCourseSave(): void{
+        this.courseItem = {
+            id: this.courseDetailItemModel.id,
+            index: this.courseDetailItemModel.index,
+            title: this.courseDetailItemModel.title,
+            contents: this.courseDetailItemModel.contents,
+            startDay: this.courseDetailItemModel.startDay,
+            startTime: this.courseDetailItemModel.startTime,
+            endTime: this.courseDetailItemModel.endTime,
+        }
 
-        this.setImageFormData();
-        this.setAttachFileFormData();
-        this.removeAllPreview();
-        this.removeAllAttachFile();
-    }
+        this.$emit('modifyCourse', this.courseItem);
+        this.popupChange(false);
 
-    private modifyConfirm(cardId: number){
-        this.formData = new FormData();
-
-        const temp = JSON.stringify( {...this.modifyClassItems} );
-        this.formData.append('data', temp );
-
-        MyClassService.setCurriculumModify(this.classID, cardId, this.formData)
-            .then((data)=>{
-                console.log(cardId);
-                console.log('교육과정 수정 성공', data);
-                this.imgFilesAllClear();
-                this.attachFilesAllClear();
-            });
+        // this.setImageFormData();
+        // this.setAttachFileFormData();
+        // this.removeAllPreview();
+        // this.removeAllAttachFile();
     }
 
     private modifyCourseHandler(courseIdx: number, idx: number) {
         this.isModifyCourse = true;
-        this.courseId = courseIdx;
         this.countCourseNumber = idx;
 
         this.modifyCourseDataItems = this.modifyDataItemsModel.course_list[idx];

@@ -17,7 +17,7 @@ import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
 import {PostService} from '@/api/service/PostService';
 import {ScheduleService} from '@/api/service/ScheduleService';
 import {CommentService} from '@/api/service/CommentService';
-import {getAllPromise} from '@/views/model/types';
+import {getAllPromise} from '@/types/types';
 
 @Module({
   namespaced: true,

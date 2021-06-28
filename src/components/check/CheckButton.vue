@@ -39,8 +39,6 @@ import {Vue, Component, Prop, Emit} from 'vue-property-decorator';
 @Component
 export default class CheckButton extends Vue{
 
-  @Prop(String)
-  private readonly type: string | undefined;
 
   @Prop(String)
   public checkName!: string;
@@ -60,14 +58,17 @@ export default class CheckButton extends Vue{
   @Prop({default: true})
   private checked!: boolean;
 
+  @Prop(String)
+  private readonly type: string | undefined;
+
   get buttonType(): object{
     return {
-      'round': this.type !== undefined && this.type === 'round',
+      round: this.type !== undefined && this.type === 'round',
     };
   }
 
   @Emit()
-  private update( value: string | boolean, checked: boolean ): void {
+  private update( value: string | number | boolean, checked: boolean ): void {
     // console.log( this.btnValue, value );
     this.$emit('click', value, checked );
   }

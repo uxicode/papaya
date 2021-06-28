@@ -23,8 +23,8 @@
                                     type="text"
                                     id="courseModifyTitle"
                                     class="form-control popup-type"
-                                    v-model="modifyCourseDataItems.title"
-                                    @input="modifyCourseChangeTitle($event.target.value, countCourseNumber)">
+                                    v-model="courseDetailItemModel.title"
+                                    >
                         </div>
                     </div>
                     <div class="popup-form-cnt">
@@ -62,7 +62,7 @@
                                         <template v-slot:activator="{ on, attrs }">
                                             <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
                                             <v-text-field
-                                                    v-model="modifyCourseDataItems.startDay"
+                                                    v-model="courseDetailItemModel.startDay"
                                                     v-bind="attrs"
                                                     v-on="on"
                                                     hide-details
@@ -75,7 +75,7 @@
                                             </v-text-field>
                                         </template>
                                         <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                                        <v-date-picker v-model="modifyCourseDataItems.startDay" :id="`date-${curriculumDetailDataNum}`" no-title @input="startDatePickerChange(countCourseNumber)"></v-date-picker>
+                                        <v-date-picker v-model="courseDetailItemModel.startDay" :id="`date-${curriculumDetailDataNum}`" no-title @input="startDatePickerChange(countCourseNumber)"></v-date-picker>
                                     </v-menu>
                                 </div>
                             </div>
@@ -98,7 +98,7 @@
                                             offset-y>
                                         <template v-slot:activator="{ on, attrs }">
                                             <v-text-field
-                                                    v-model="modifyCourseDataItems.startTime"
+                                                    v-model="courseDetailItemModel.startTime"
                                                     v-bind="attrs"
                                                     v-on="on"
                                                     hide-details solo flat>
@@ -146,7 +146,7 @@
                                             offset-y>
                                         <template v-slot:activator="{ on, attrs }">
                                             <v-text-field
-                                                    v-model="modifyCourseDataItems.endTime"
+                                                    v-model="courseDetailItemModel.endTime"
                                                     v-bind="attrs"
                                                     v-on="on"
                                                     hide-details solo flat>
@@ -178,8 +178,8 @@
                         </div>
                         <div class="form-item post-cnt" style="height:120px;">
                             <textarea class="form-textarea"
-                                      v-model="modifyCourseDataItems.contents"
-                                      @input="modifyCourseChangeText($event.target.value, countCourseNumber)"></textarea>
+                                      v-model="courseDetailItemModel.contents"
+                                      ></textarea>
                         </div>
 
                         <!-- start: 첨부 이미지 파일 미리보기 -->
@@ -234,7 +234,7 @@
         <div slot="footer">
             <!-- footer custom coding-->
             <div class="btn-group rt">
-                <btn type="navi" @btnClick="modifyCourseConfirm(countCourseNumber)">수정</btn>
+                <btn type="navi" @btnClick="modifyCourseSave">수정</btn>
             </div>
         </div>
     </modal>

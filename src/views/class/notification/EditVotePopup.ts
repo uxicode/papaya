@@ -85,6 +85,7 @@ export default class EditVotePopup extends Vue {
 
   get readVoteData(): IVoteModel{
     const {anonymous_mode, finishAt, id, multi_choice, open_progress_level, open_result_level, parent_id, title, type, vote_choices}=this.voteItems;
+    // tslint:disable-next-line:variable-name
     const vote_choice_list=vote_choices.map( (item)=>{
       const {text, index}=item;
       return {text, index};

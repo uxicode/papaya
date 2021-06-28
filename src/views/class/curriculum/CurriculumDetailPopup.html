@@ -4,7 +4,7 @@
         <modal v-if="isOpen" size="600px" body-padding="0" @modalClose="popupChange(false)">
             <div slot="header">
                 <!-- header custom coding-->
-                <p class="popup-header-tit mgb-0">{{ curriculumDetailModel.curriculum.title }}</p>
+                <p class="popup-header-tit mgb-0">{{ curriculumDetailModel.title }}</p>
 
                 <div class="popup-btn">
                     <div class="list-popup">
@@ -42,30 +42,30 @@
                                 <strong class="cls-name">{{myClassHomeModel.name}}</strong>
                             </p>
 
-                            <span class="post-writer" :class="{'manager':isOwner( curriculumDetailModel.curriculum.owner.user_id, curriculumDetailModel.curriculum.user_id)}">{{ curriculumDetailModel.curriculum.owner.nickname }}</span>
+                            <span class="post-writer" :class="{'manager':isOwner( curriculumDetailModel.owner.user_id, curriculumDetailModel.user_id)}">{{ curriculumDetailModel.owner.nickname }}</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="popup-feed-detail scroll-body" style="max-height:500px;">
                     <div class="fd-cnt">
-                        <p class="fd-txt">{{ curriculumDetailModel.curriculum.text }}</p>
+                        <p class="fd-txt">{{ curriculumDetailModel.text }}</p>
 
                         <div class="fd-inner">
                             <div class="curriculum-list">
-                                <div v-for="(item, index) in curriculumDetailModel.curriculum.course_list" :key="index" class="curriculum-item">
+                                <div v-for="(item, index) in curriculumDetailModel.course_list" :key="index" class="curriculum-item">
                                     <a href="#" class="open-course" @click="onDetailCourseOpen(item.curriculum_id, item.id)">
                                         <span class="turn">{{ index + 1 }} 회차</span>
                                         <div class="curriculum-info">
                                             <p class="subject-tit mgb-0">{{ item.title===''? index+1+'회차수업' : item.title }}</p>
-                                            <div class="subject-schedule">
+                                            <div class="subject-schedule" v-if="item.startDay!=='Invalid date' && item.startTime!==null && item.endTime!==null">
                                                 <span v-show="item.startDay!=='Invalid date'">{{ item.startDay }}</span>
                                                 <span v-show="item.startTime!==null">{{ item.startTime }}</span>
                                                 <span v-show="item.endTime!==null">{{ item.endTime }}</span>
                                             </div>
                                             <div class="subject-sub">
-                                                <span v-if="getImgFileLen(curriculumDetailModel.curriculum.course_list[index].attachment)>0">이미지 {{ getImgFileLen(curriculumDetailModel.curriculum.course_list[index].attachment) }}</span>
-                                                <span v-if="getFileDataSort(curriculumDetailModel.curriculum.course_list[index].attachment).length>0">파일 {{ getFileDataSort(curriculumDetailModel.curriculum.course_list[index].attachment).length }}</span>
+                                                <span v-if="getImgFileLen(curriculumDetailModel.course_list[index].attachment)>0">이미지 {{ getImgFileLen(curriculumDetailModel.course_list[index].attachment) }}</span>
+                                                <span v-if="getFileDataSort(curriculumDetailModel.course_list[index].attachment).length>0">파일 {{ getFileDataSort(curriculumDetailModel.course_list[index].attachment).length }}</span>
                                             </div>
                                         </div>
                                     </a>

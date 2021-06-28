@@ -1,12 +1,14 @@
-import {Component, Vue} from 'vue-property-decorator';
+import {Component, Mixins, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import { getAllPromise } from '@/views/model/types';
+import { getAllPromise } from '@/types/types';
 import {CLASS_BASE_URL} from '@/api/base';
 import { IMyClassList, ClassEachInfo} from '@/views/model/my-class.model';
 import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
 import MyClassListView from '@/views/class/classList/MyClassListView';
 import WithRender from './MyClassListPage.html';
+import {MYCLASS_LIST} from '@/store/mutation-class-types';
+import PagingMixins from '@/mixin/PagingMixins';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
@@ -19,12 +21,12 @@ const MyClass = namespace('MyClass');
     MyClassListView
   }
 })
-export default class MyClassListPage extends Vue {
+export default class MyClassListPage extends Mixins(PagingMixins) {
 
   //start : 변수 선언부 ================================================
   public numOfPage: number=12; // 더보기 클릭 > 불러올 카드 리스트 개수
   public pageCount: number=0; // 페이징
-  public dummyData: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+  // public dummyData: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
   public startNum: number =0;
   public endNum: number =0;
 
@@ -61,6 +63,12 @@ export default class MyClassListPage extends Vue {
   // private moreInfos: IClassMember[]=[];
   private moreInfos: ClassEachInfo[]=[];
 
+  @MyClass.Action
+  private MYCLASS_LIST_ACTION!: ()=> Promise<IMyClassList[]>;
+
+  @MyClass.Action
+  private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
+
   @Auth.Getter
   private userInfo!: IUserMe;
 
@@ -70,11 +78,6 @@ export default class MyClassListPage extends Vue {
   @MyClass.Getter
   private classID!: number;
 
-  @MyClass.Action
-  private MYCLASS_LIST_ACTION!: ()=> Promise<IMyClassList[]>;
-
-  @MyClass.Action
-  private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
   //end : 변수 선언부 ================================================
 
 
@@ -105,7 +108,6 @@ export default class MyClassListPage extends Vue {
 
  //start : public ================================================
   public created() {
-    // console.log( this.dummyData );
     this.getMyClass();
   }
 
@@ -147,12 +149,22 @@ export default class MyClassListPage extends Vue {
    * @private
    */
   private getMyClass(): void {
+    console.log(this.myClassLists);
     this.MYCLASS_LIST_ACTION().then(() =>{
+
+      console.log(this.myClassLists);
+
       if (this.myClassLists !== null && this.myClassLists!==undefined) {
         if (this.myClassLists.length > 0) {
+          // console.log(this.myClassLists);
           this.getUpdateList();
         }
+      }else{
+        //
+        console.log(this.myClassLists);
       }
+    }).catch( (error)=>{
+      console.log('error=', error, this.myClassLists);
     });
   }
 
@@ -170,26 +182,54 @@ export default class MyClassListPage extends Vue {
   }
 
 
+
+
   private getUpdateList(): void{
     //범위 설정.
     const {begin, end} = this.rangeOfCount();
 
+    // console.log(begin, end);
     this.startNum=begin;
     this.endNum=end;
 
     // console.log(begin, end);
-    //end 가 classItem 개수보다 많을 때 여기서 종료
+    //총 페이지 카운트
+    const totalPageCount=this.getTotalPageCount({total: this.totalCount, numOfPage: this.numOfPage});
+    //페이지 카운트 구하기
+    const pageItems = this.getPageNum({ totalPageCount, pageSize: totalPageCount, curPageNum: 1});
+    // console.log('num=', num, num[this.pageCount]*this.numOfPage );
 
-    // console.log(this.totalCount, this.startNum, this.endNum);
-    if( end>this.totalCount ){
+    //마지막 페이지 카운트
+    const lastPageNum = pageItems[pageItems.length - 1];
+    // console.log(lastPageNum,  this.totalCount );
+    // console.log( this.endNum, this.totalCount );
+
+    //마지막 범위 숫자가 총 개수 보다 크지 않으면 카드리스트를 생성시킴.
+    if( this.endNum<= this.totalCount){
+      this.createClassCardList({begin, end});
+      ++this.pageCount;
+    }else{
       this.endNum=this.totalCount;
-      return;
+      this.pageCount=lastPageNum;
+
+      if (this.totalCount > 0) {
+        this.createClassCardList({begin, end});
+      }
+
     }
 
+  }
+
+  /**
+   * 멤버가 가입한 클래스 뷰 카드 리스트  생성.
+   * @param range
+   * @private
+   */
+  private createClassCardList(range: { begin: number, end: number }) {
+    const {begin, end}=range;
     this.findMemberRange( begin, end ).then(( data )=>{
       this.classItems=[...this.classItems, ...data];
     });
-    ++this.pageCount;
   }
 
   /**

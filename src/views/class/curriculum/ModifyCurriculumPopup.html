@@ -1,6 +1,6 @@
 <div>
   <!-- start: 공통 팝업 / 파일명 : W.4.5.5.1 (교육과정 수정) (4.5.5.1 ~ 4.5.5.1.1)-->
-  <transition name="modal" >
+  <transition name="modal">
     <modal v-if="isOpen" size="600px" body-padding="0" @modalClose="popupChange(false)">
       <div slot="header">
         <!-- header custom coding-->
@@ -21,21 +21,15 @@
               </p>
             </div>
             <div class="form-item">
-              <input
-                      type="text"
-                      id="curriculumModifyTitle"
-                      class="form-control popup-type"
-                      v-model="modifyClassItems.title"
-                      @input="modifyCurriculumChangeTitle($event.target.value)"
-              >
+              <input type="text"
+                     id="curriculumModifyTitle"
+                     class="form-control popup-type"
+                     v-model="curriculumDetailItemModel.title">
             </div>
           </div>
           <div class="popup-form-cnt">
             <div class="form-item post-cnt" style="height:154px;">
-                        <textarea
-                                class="form-textarea"
-                                v-model="modifyClassItems.goal"
-                                @input="modifyChangeText($event.target.value)"></textarea>
+              <textarea class="form-textarea" v-model="curriculumDetailItemModel.text"></textarea>
             </div>
 
             <div class="add-curriculum bd-top">
@@ -45,14 +39,14 @@
                 <p class="add-curr-tit">수업 회차</p>
                 <div class="form-box">
                   <div class="form-group">
-                    <input type="number" class="form-control" :value="modifyDataItemsModel.course_list.length" @input="modifyCourseListItems($event.target.value)">
+                    <input type="number" class="form-control" v-model="curriculumDetailDataNum" @input="setCourseList($event.target.value)">
                   </div>
                 </div>
               </div>
               <div class="scroll-body" style="height:124px;">
-                <div v-for="(item, index) in modifyDataItemsModel.course_list" class="add-curr-item" :key="`curriculumDetailDataNum-${index}`">
+                <div v-for="(item, index) in curriculumDetailItemModel.course_list" class="add-curr-item" :key="`curriculumDetailDataNum-${index}`">
 
-                  <a href="#" class="add-curr-tit" @click.prevent="onModifyCurriculumPopupOpen(item.id)">
+                  <a href="#" class="add-curr-tit" @click.prevent="onModifyCoursePopupOpen(item.id)">
                     <span class="curr-num">{{ index+1 }} 회차</span>
                     <span>{{ item.title }}</span>
                   </a>
@@ -72,10 +66,10 @@
                         </template>
                         <v-list>
                           <v-list-item>
-                            <v-list-item-title class="lt" @click="modifyCourseHandler( item.id, index )">교육과정 수정</v-list-item-title>
+                            <v-list-item-title class="lt" @click="onModifyCoursePopupOpen(item.id)">수업 내용 수정</v-list-item-title>
                           </v-list-item>
                           <v-list-item>
-                            <v-list-item-title class="lt" @click="">교육과정 삭제</v-list-item-title>
+                            <v-list-item-title class="lt" @click="">수업 내용 삭제</v-list-item-title>
                           </v-list-item>
                         </v-list>
                       </v-menu>
@@ -91,18 +85,18 @@
       <div slot="footer">
         <!-- footer custom coding-->
         <div class="btn-group rt">
-          <btn type="navi" @btnClick="modifyConfirm(cardId)">등록</btn>
+          <btn type="navi" @btnClick="modifyConfirm">등록</btn>
         </div>
       </div>
     </modal>
   </transition>
   <!-- end: 공통 팝업 -->
+
   <modify-course-popup
         :is-modify-course="isModifyClassCourse"
-        :curriculum-id="cardId"
-        :course-id="courseId"
         @change="onModifyCoursePopupStatus"
-        @submit="onModifyCourse">
+        @submit="onModifyCourse"
+        @modifyCourse="getModifyCourseData">
   </modify-course-popup>
 
 </div>

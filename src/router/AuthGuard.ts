@@ -9,7 +9,7 @@ import {NavigationGuardNext, Route} from 'vue-router';
  * @param next 파이프라인의 다음 훅으로 이동. 훅이 없는 경우 네비게이션은 승인.
  */
 const getIsAuth = (to: Route, from: Route, next: NavigationGuardNext): void => {
-  // console.log(to.path);
+  // console.log(to, from );
   const loginPath: string = `/login?rqPath=${encodeURIComponent(to.path)}`;
   // console.log('store.getters[\'Auth/isAuth\']', store.getters['Auth/isAuth']);
   if ( store.getters['Auth/isAuth']) {

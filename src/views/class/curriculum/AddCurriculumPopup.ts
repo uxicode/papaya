@@ -1,6 +1,5 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-
 import {Utils} from '@/utils/utils';
 import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -9,10 +8,8 @@ import AddCoursePopup from '@/views/class/curriculum/AddCoursePopup';
 import {
     IClassInfo,
     IMakeEducation,
-    ICurriculumDetailList, ICurriculumList,
+    ICurriculumList,
 } from '@/views/model/my-class.model';
-import {ImageFileService} from '@/views/service/preview/ImageFileService';
-import {AttachFileService} from '@/views/service/preview/AttachFileService';
 import WithRender from './AddCurriculumPopup.html';
 
 
@@ -64,66 +61,10 @@ export default class AddCurriculumPopup extends Vue {
 
     private formData: FormData = new FormData();
 
-    private imgFileService: ImageFileService = new ImageFileService();
-    private attachFileService: AttachFileService = new AttachFileService();
-
     private makeCurriculumData: IMakeEducation={
         title: '',
         goal: '',
-        course_list: [
-            {
-                index: 0,
-                id: 0,
-                startDay: '',
-                startTime: '',
-                endTime: '',
-                title: '',
-                contents: ''
-            }
-        ]
-    };
-
-    private curriculumDetailData: ICurriculumDetailList={
-        curriculum: {
-            startAt: '2019-11-17 10:00:00',
-            endAt: '2019-11-17 10:00:00',
-            expiredAt: '2019-11-17 10:00:00',
-            createdAt: '2019-11-17 10:00:00',
-            updatedAt: '2019-11-17 10:00:00',
-            id: 0,
-            class_id: 0,
-            board_id: 0,
-            post_type: 0,
-            type: 0,
-            user_id: 0,
-            user_member_id: 0,
-            title: '',
-            text: '',
-            count: 0,
-            param1: 0,
-            deletedYN: false,
-            owner: {
-                nickname: '',
-                level: 0,
-            },
-            course_list: [
-                {
-                    startDay: '2019-11-17',
-                    createdAt: '2019-11-17',
-                    updatedAt: '2019-11-17',
-                    id: 0,
-                    curriculum_id: 0,
-                    class_id: 0,
-                    index: 0,
-                    title: '',
-                    contents: '',
-                    startTime: '2019-11-17',
-                    endTime: '2019-11-17',
-                    deletedYN: false,
-                    attachment: [],
-                },
-            ],
-        }
+        course_list: []
     };
 
     private curriculumDetailDataNum: number = 10;
@@ -192,11 +133,11 @@ export default class AddCurriculumPopup extends Vue {
         }
     }
 
+
     /**
      * 교육과정 > 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
      * @private
      */
-
     private setCurriculumDataToFormData() {
         if( !this.isSubmitValidate ){return;}
 
@@ -205,6 +146,7 @@ export default class AddCurriculumPopup extends Vue {
         }
 
         const temp = JSON.stringify({...this.makeCurriculumData} );
+
         this.formData.append('data', temp );
 
         this.ADD_CURRICULUM_ACTION({ classId: Number(this.classID), formData: this.formData })
@@ -216,19 +158,10 @@ export default class AddCurriculumPopup extends Vue {
                 this.makeCurriculumData = {
                     title: '',
                     goal: '',
-                    course_list: [
-                        {
-                            index: 0,
-                            id: 0,
-                            startDay: '',
-                            startTime: '',
-                            endTime: '',
-                            title: '',
-                            contents: ''
-                        }
-                    ]
+                    course_list: []
                 };
             });
+
     }
 
 }

@@ -8,6 +8,12 @@ import AuthService from '@/api/service/AuthService';
 axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+axios.defaults.timeout=1000;
+
+
+const cancelTokenSource = axios.CancelToken.source();
+let pendingCount: number=0;
+
 
 /**
  * 로그아웃 시키기
@@ -32,6 +38,7 @@ axios.interceptors.request.use((config: AxiosRequestConfig) => {
   // Do something before request is sent
   // console.log('(localStorage.getItem='+localStorage.getItem('token'));
   config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
+  pendingCount++;
   return config;
 }, (error: any) => {
   // Do something with request error
@@ -56,12 +63,15 @@ const  definedRefreshToken=async ( error: any )=>{
   }
 };
 
-const mismatchAccess=( )=>{
+const mismatchAccess=( config: any, data: any )=>{
   if( store.getters['Auth/isAuth'] ){
+    console.log('접근 error / url =', config.url, ':: method=', config.method );
+
     alert('잘못된 접근입니다. 메인 페이지로 이동합니다.');
     router.push('/').then(() => {
       console.log('메인으로 이동');
     });
+
   }
 };
 
@@ -70,20 +80,27 @@ const mismatchAccess=( )=>{
  */
 axios.interceptors.response.use((response: AxiosResponse) => {
   // Do something with response data
+  pendingCount--;
+  // console.log(pendingCount);
+  if (pendingCount > 15) {
+    console.log(pendingCount);
+    cancelTokenSource.cancel('데이터 대기 상태가 길어져서 요청을 취소 합니다.');
+    pendingCount=0;
+  }
   return response;
 }, (error: any) => {
 
-  const {status, data} = error.response;
+  const {status, data, config} = error.response;
   // let errorMsg: any = error;
   // console.log('error=', error);
   // console.log(':::status=', status);
   if (status === 401) {
     definedRefreshToken( error );
   }else if (status === 400) {
-    mismatchAccess();
+    mismatchAccess(config, data);
   }else{
     if( data.message !=='클래스에 해당 닉네임의 사용자 정보가 없습니다.'){
-      mismatchAccess();
+      mismatchAccess(config, data);
     }
   }
 
@@ -94,15 +111,17 @@ axios.interceptors.response.use((response: AxiosResponse) => {
 const request = (method: string, url: string, data: any | null = null ): Promise<any> => {
   // console.log( 'data status=', method, data, url );
   let reqObj: object;
-
+  const cancel={
+    cancelToken:cancelTokenSource.token
+  };
   if (method === 'get') {
-    reqObj = (data !== null)? {method, url, params: data} : {method, url};
+    reqObj = (data !== null)? {method, url, params: data, ...cancel} : {method, url, ...cancel};
   } else if(method === 'upload'){
     reqObj = { method:'post', url, data, headers: {
       'Content-Type': 'multipart/form-data;charset=utf-8;'
-    } };
+    }, ...cancel};
   }else{
-    reqObj = {method, url, data};
+    reqObj = {method, url, data, ...cancel };
   }
   return axios(reqObj).then((res: AxiosResponse) => {
     // console.log( res.data )

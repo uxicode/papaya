@@ -31,14 +31,16 @@ export default class CurriculumDetailPopup extends Vue {
     @Prop(Number)
     private curriculumId!: number;
 
+    @Prop(Object)
+    private curriculumDetailItem!: ICurriculumDetailList;
+
     @MyClass.Getter
     private classID!: number;
 
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
-    @MyClass.Getter
-    private curriculumDetailItem!: ICurriculumDetailList;
+
 
     @MyClass.Action
     private GET_COURSE_DETAIL_ACTION!: ( payload: { classId: number, curriculumId: number, courseId: number }) =>Promise<any>;
@@ -78,8 +80,9 @@ export default class CurriculumDetailPopup extends Vue {
         return this.curriculumDetailItem;
     }
 
-    get CourseDetailData(): any {
-        return this.curriculumDetailItem.curriculum.course_list;
+
+    get courseDetailData(): any {
+        return this.curriculumDetailItem.course_list;
     }
 
 
@@ -91,7 +94,8 @@ export default class CurriculumDetailPopup extends Vue {
         this.detailCurriculumId = curriculumId;
         this.courseId = courseId;
 
-        const targetData = this.CourseDetailData;
+        const targetData = this.courseDetailData;
+
         this.courseDetailItem = targetData.find((item: any) => item.id === this.courseId);
 
         await this.GET_COURSE_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.detailCurriculumId, courseId: this.courseId})

@@ -15,7 +15,8 @@ export class SearchApiService{
    * @param paging
    */
   public static getSearchResult( searchTxt: string, paging: {page_no: number, count: number}={page_no:1, count:10}): Promise<any> {
-    return request('get', `${CLASS_BASE_URL}/search/all/${searchTxt}`, paging );
+    //paging: {page_no: number, count: number}={page_no:1, count:10}
+    return request('get', `${CLASS_BASE_URL}/search/all/${searchTxt}`, paging);
   }
 
   /**

@@ -2,6 +2,7 @@
   <div class="contents-inner">
     <div class="result-top">
       <h2><strong> ‘{{ keyword }}’</strong>에 대한 <strong class="fc-red">{{ searchTotal }}</strong>건의 검색결과</h2>
+      <!-- api 에 query 조건이 없고 한번 불러올때 최대 100개 까지만 불러올 수 있기에 front 에서 해결하기 불가
       <div class="result-filter" v-if="isResultNone">
         <div class="checkbox-group">
           <radio-button v-for="(item, index) in radioItems"
@@ -14,6 +15,7 @@
           </radio-button>
         </div>
       </div>
+      -->
     </div>
 
     <div class="result-cnt">
@@ -81,7 +83,6 @@
               @prev="이전 페이지 버튼 클릭시 이벤트 핸들러"
               @next="다음 페이지 버튼 클릭시 이벤트 핸들러"-->
       <pagination
-              :filter-type="this.radioValue"
               :total.sync="currentTotal"
               :num-of-page="numOfPage"
               :page-size="pageSize"

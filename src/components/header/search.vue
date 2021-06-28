@@ -206,8 +206,10 @@ export default class Search extends Vue {
 
   public mounted() {
     setTimeout(() => {
-      const searchInput=document.querySelector('#searchInput') as HTMLInputElement;
-      searchInput.focus();
+      const searchInput=document.querySelector('#searchInput');
+      if ( searchInput !== null ) {
+        ( searchInput as HTMLInputElement ).focus();
+      }
     }, 1000);
   }
 
@@ -315,8 +317,11 @@ export default class Search extends Vue {
 
     //$nextTick - 해당하는 엘리먼트가 화면에 렌더링이 되고 난 후
     this.$nextTick(() => {
-      const searchClassInput = document.querySelector('#searchInput') as HTMLInputElement;
-      searchClassInput.focus();
+      const searchClassInput = document.querySelector('#searchInput');
+      if (searchClassInput !== null) {
+        (searchClassInput as HTMLInputElement) .focus();
+      }
+
 
       //키가 눌렸을 때 체크 Observable
       // targetInputSelector: string
@@ -366,6 +371,7 @@ export default class Search extends Vue {
   private gotoTagKeyword(keyword: string) {
     this.searchType = SEARCH_TYPE.RESULT;
     this.SEARCHING(false);
+
     this.getSearchResultData(keyword);
   }
 
@@ -376,13 +382,15 @@ export default class Search extends Vue {
    * @private
    */
   private getSearchResultData( keyword: string ) {
+    console.log('keyword=', keyword);
     this.SEARCH_RESULT_ACTION({keyword, page_no:1, count:10})
         .then((data) => {
           console.log(data);
           // , query: { timeStamp: `${new Date().getTime()}` } 처럼 query 값을 같이 주는 이유는 새로고침 후
           // 검색결과  router 주소값이 매번 /search/result 와 같이 똑같은 url 값으로 라우터 이동이 이루어지기 때문에
           //주소값을 매번 검색시 갱신해 줄 필요가 있다.
-          this.$router.push({ path: '/search/result', query: { q: `${new Date().getTime()}` } }).then(() => {
+          //, query: { q: `${new Date().getTime()}` }
+          this.$router.push({ path: '/search/result' }).then(() => {
             console.log(`SearchResultPage` + '으로 이동');
           }).catch((error)=>{
             console.log(error);

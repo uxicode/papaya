@@ -686,6 +686,7 @@ export default class ScheduleView extends Vue{
         }
         // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
         this.appendFormData(this.imgFileDatas, 'files');
+        console.log(this.imgFileDatas);
     }
 
     private setAttachFileFormData() {
