@@ -20875,7 +20875,7 @@ select::-ms-expand {
   color: #57576d;
 }
 .classes-member .classes-member-list .member-list .list-item .member-info.admin {
-  background-image: url(../../assets/images/btn-round-admin.svg);
+  background-image: url(../images/btn-round-manager.svg);
 }
 .classes-member .classes-member-list .member-list .list-item .member-info.staff {
   background-image: url(../../assets/images/btn-round-staff.svg);
@@ -21264,7 +21264,7 @@ select::-ms-expand {
   left: 0;
   width: 14px;
   height: 14px;
-  background: url(../../assets/images/btn-round-admin.svg) no-repeat center/100% 100%;
+  background: url(../images/btn-round-manager.svg) no-repeat center/100% 100%;
 }
 .search-classes .class-tag a {
   position: relative;

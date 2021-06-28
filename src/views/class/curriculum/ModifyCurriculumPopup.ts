@@ -43,15 +43,6 @@ export default class ModifyCurriculumPopup extends Vue {
     @Prop(Number)
     private cardId!: number;
 
-    @MyClass.Getter
-    private classID!: number;
-
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
-
-    @MyClass.Getter
-    private curriculumDetailItem!: ICurriculumDetailList;
-
     @MyClass.Action
     private GET_CURRICULUM_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number}) => Promise<any>;
 
@@ -60,6 +51,15 @@ export default class ModifyCurriculumPopup extends Vue {
 
     @MyClass.Action
     private MODIFY_CURRICULUM_ACTION!: (payload: {classId: number, curriculumId: number, formData: FormData}) => Promise<any>;
+
+    @MyClass.Getter
+    private classID!: number;
+
+    @MyClass.Getter
+    private myClassHomeModel!: IClassInfo;
+
+    @MyClass.Getter
+    private curriculumDetailItem!: ICurriculumDetailList;
 
     private isModifyClassCourse: boolean = false;
     private isCreateError: boolean = false;
@@ -77,8 +77,6 @@ export default class ModifyCurriculumPopup extends Vue {
     private imgFileDatas: any[] = [];
     private attachFileItems: any[] = [];
     private formData!: FormData;
-    private modifyCourseDataItems: any = {};
-
     private curriculumDetailDataNum: number = 10;
     private eduItems: Array< {title: string }>=[];
 

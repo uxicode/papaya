@@ -649,7 +649,7 @@ $popupDepth: 10;
   background-position: left center;
   background-repeat: no-repeat;
 
-  &.admin {background-image:url(../../assets/images/btn-round-admin.svg);}
+  &.admin {background-image:url(../../assets/images/btn-round-manager.svg);}
   &.staff {background-image:url(../../assets/images/btn-round-staff.svg);}
   &.member {background-image:url(../../assets/images/btn-round-member.svg);}
 
@@ -826,7 +826,7 @@ $popupDepth: 10;
     border-radius:50%;
     @include pos-vertical($left:0);
   }
-  &.manager:before {background:#ffba36 url(../../assets/images/btn-round-admin.svg) no-repeat center;}
+  &.manager:before {background:#ffba36 url(../../assets/images/btn-round-manager.svg) no-repeat center;}
   &.staff:before {background:#c9cad5 url(../../assets/images/btn-round-staff.svg) no-repeat center;}
   &.member:before {background:#57576d url(../../assets/images/btn-round-member.svg) no-repeat center;}
 

@@ -1065,7 +1065,7 @@ $popupDepth: 10;
   background-repeat: no-repeat;
 
   &.manager {
-    background-image: url(../../assets/images/btn-round-admin.svg);
+    background-image: url(../images/btn-round-manager.svg);
   }
 
   &.staff {
@@ -1364,7 +1364,7 @@ $popupDepth: 10;
   }
 
   &.manager:before {
-    background: #ffba36 url(../../assets/images/btn-round-admin.svg) no-repeat center;
+    background: #ffba36 url(../images/btn-round-manager.svg) no-repeat center;
   }
 
   &.staff:before {
