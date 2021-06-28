@@ -28,14 +28,6 @@ const MyClass = namespace('MyClass');
     }
 })
 export default class CurriculumListView extends Vue {
-    @MyClass.Getter
-    private classID!: number;
-
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
-
-    @MyClass.Getter
-    private curriculumListItems!: ICurriculumList;
 
     @MyClass.Action
     private GET_CURRICULUM_LIST_ACTION!: ( payload: {classId: number}) => Promise<ICurriculumList>;
@@ -49,14 +41,31 @@ export default class CurriculumListView extends Vue {
     @MyClass.Getter
     private curriculumDetailItem!: ICurriculumDetailList;
 
+    @MyClass.Getter
+    private classID!: number;
+
+    @MyClass.Getter
+    private myClassHomeModel!: IClassInfo;
+
+    @MyClass.Getter
+    private curriculumListItems!: ICurriculumList;
+
     /* Modal 오픈 상태값 */
     private isDetailPopupOpen: boolean=false;
-    private detailCurriculumId: number=-1; // 동적으로 변경 안되는 상태
+    private cardId: number=-1; // 동적으로 변경 안되는 상태
 
     private isCreateError: boolean = false;
 
     private isAddPopupOpen: boolean=false;
     private isModifyPopupOpen: boolean=false;
+
+    private makeCurriculumData: IMakeEducation={
+        title: '',
+        goal: '',
+        course_list: []
+    };
+
+    private curriculumDetailDataNum = 10;
 
     public created() {
         this.getList().then();
@@ -74,6 +83,7 @@ export default class CurriculumListView extends Vue {
         return (ownerId === userId);
     }
 
+
     /**
      * 팝업 상태
      * @param value
@@ -87,8 +97,22 @@ export default class CurriculumListView extends Vue {
 
     }
 
-    private onAddCurriculumPopupOpen() {
+    private onAddCurriculumPopupOpen(num: number) {
         this.isAddPopupOpen=true;
+
+        this.makeCurriculumData.course_list = [];
+
+        for (let i = 0; i < num; i++) {
+            this.makeCurriculumData.course_list.push({
+                index: i,
+                id: i,
+                title: '',
+                startDay: '',
+                startTime: '',
+                endTime: '',
+                contents: ''
+            });
+        }
     }
 
     private onDetailCurriculumPopupStatus(value: boolean) {
@@ -102,7 +126,7 @@ export default class CurriculumListView extends Vue {
      * @private
      */
     private async onModifyCurriculumPopupOpen(id: number) {
-        this.detailCurriculumId = id;
+        this.cardId = id;
         await this.GET_CURRICULUM_DETAIL_ACTION({classId: Number(this.classID), curriculumId: id})
             .then((data)=>{
                 this.isModifyPopupOpen=true;
@@ -128,9 +152,9 @@ export default class CurriculumListView extends Vue {
      * @param id
      */
     private async onDetailCurriculumOpen(id: number) {
-        this.detailCurriculumId = id; // update postId
+        this.cardId = id; // update postId
 
-        await this.GET_CURRICULUM_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.detailCurriculumId})
+        await this.GET_CURRICULUM_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.cardId})
             .then((data)=>{
                 this.isDetailPopupOpen=true;
             });
@@ -139,7 +163,8 @@ export default class CurriculumListView extends Vue {
     }
 
     private deleteCurriculum(id: number){
-        this.detailCurriculumId = id;
+        this.cardId = id;
+        console.log(this.classID);
         this.DELETE_CURRICULUM_ACTION({classId: Number(this.classID), curriculumId: id})
             .then((data)=>{
                 console.log(`delete curriculum`, data);

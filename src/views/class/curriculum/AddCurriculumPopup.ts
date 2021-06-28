@@ -30,7 +30,13 @@ export default class AddCurriculumPopup extends Vue {
     private isOpen!: boolean;
 
     @Prop(Number)
-    private detailCurriculumId!: number;
+    private cardId!: number;
+
+    @Prop(Object)
+    private makeCurriculumData!: any;
+
+    @Prop(Number)
+    private curriculumDetailDataNum!: number;
 
     @MyClass.Getter
     private classID!: number;
@@ -54,6 +60,7 @@ export default class AddCurriculumPopup extends Vue {
     /* Modal 오픈 상태값 */
     private isOpenAddCoursePopup: boolean=false;
 
+
     private courseIdx: number = 0;
 
     private CourseSettingsItems: string[] = ['수업 내용 수정', '수업 삭제'];
@@ -61,13 +68,7 @@ export default class AddCurriculumPopup extends Vue {
 
     private formData: FormData = new FormData();
 
-    private makeCurriculumData: IMakeEducation={
-        title: '',
-        goal: '',
-        course_list: []
-    };
-
-    private curriculumDetailDataNum: number = 10;
+    // private curriculumDetailDataNum: number = 10;
     private eduItems: Array< {title: string }>=[];
 
     get isSubmitValidate(): boolean{
@@ -91,10 +92,9 @@ export default class AddCurriculumPopup extends Vue {
         this.isOpenAddCoursePopup=value;
     }
     private onAddCourse() {
-        // this.voteData = voteData;
         this.isOpenAddCoursePopup=false;
-        // console.log(voteData);
     }
+
 
     /**
      * 교육과정 수업 회차 설정
@@ -145,6 +145,8 @@ export default class AddCurriculumPopup extends Vue {
             this.formData = new FormData();
         }
 
+        console.log(this.classID);
+
         const temp = JSON.stringify({...this.makeCurriculumData} );
 
         this.formData.append('data', temp );
@@ -155,11 +157,11 @@ export default class AddCurriculumPopup extends Vue {
 
                 this.GET_CURRICULUM_LIST_ACTION({classId: Number(this.classID)}).then();
                 this.formData = new FormData();
-                this.makeCurriculumData = {
+                this.makeCurriculumData={
                     title: '',
                     goal: '',
                     course_list: []
-                };
+                }
             });
 
     }
