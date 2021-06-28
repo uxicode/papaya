@@ -59,6 +59,19 @@ const MyClass = namespace('MyClass');
   }
 })
 export default class MyClassHeader extends Vue {
+
+
+  @MyClass.Mutation
+  private UPDATE_SIDE_NUM!: (num: number)=>void;
+
+
+  @MyClass.Action
+  private MYCLASS_HOME!: ( id: string | number )=> Promise<any>;
+
+  @MyClass.Action
+  private MYCLASS_LIST_ACTION!: () => Promise<IMyClassList[]>;
+
+
   @SearchStatus.Getter
   private isSearchChk!: boolean;
 
@@ -70,16 +83,6 @@ export default class MyClassHeader extends Vue {
 
   @MyClass.Getter
   private myClassLists!:  IMyClassList[];
-
-  @MyClass.Mutation
-  private UPDATE_SIDE_NUM!: (num: number)=>void;
-
-
-  @MyClass.Action
-  private MYCLASS_HOME!: ( id: string | number )=> Promise<any>;
-
-  @MyClass.Action
-  private MYCLASS_LIST_ACTION!: () => Promise<IMyClassList[]>;
 
   private myClassNameItems: string[] = [];
   private myClassIdxItems: string[] | number[] = [];
@@ -99,7 +102,6 @@ export default class MyClassHeader extends Vue {
 
     //로그인한 상태이지만 현재 갱신된 상태이기에 데이터를 재지정 해줄 필요가 있다.
     if (this.isAuth && this.userInfo === null) {
-
       this.MYCLASS_LIST_ACTION()
           .then((data) => {
             this.init();
