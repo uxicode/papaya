@@ -170,7 +170,8 @@ export default class SideMenu extends Vue{
   }
 
   private sideMenuClickHandler(idx: number): void {
-    if( (!this.isMember) && (idx!==0)) {
+    // 클래스 멤버가 아닐때는 알림까지만 접속 가능
+    if( (!this.isMember) && (idx > 1)) {
       alert('클래스에 가입하면 보실 수 있습니다.');
     } else {
       this.$emit('sideClick', idx);

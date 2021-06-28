@@ -98,13 +98,27 @@
               @pageChange="페이징 넘버 버튼 클릭시 이벤트 핸들러"
               @prev="이전 페이지 버튼 클릭시 이벤트 핸들러"
               @next="다음 페이지 버튼 클릭시 이벤트 핸들러"-->
-                <pagination
-                        :total.sync="currentTotal"
-                        :num-of-page="numOfPage"
-                        :page-size="pageSize"
-                        @pageChange="pageChange"
-                        @prev="prevPage"
-                        @next="nextPage"></pagination>
+<!--                <pagination-->
+<!--                        :total.sync="currentTotal"-->
+<!--                        :num-of-page="numOfPage"-->
+<!--                        :page-size="pageSize"-->
+<!--                        @pageChange="pageChange"-->
+<!--                        @prev="prevPage"-->
+<!--                        @next="nextPage"></pagination>-->
+
+              <template v-if="!manualChk">
+                <div class="btn-group ct">
+                  <btn type="outline" @btnClick="manualInputClickHandler">직접입력</btn>
+                </div>
+              </template>
+              <template v-else>
+                <div class="popup-search-input">
+                  <txt-field size="320" v-model="manualInputField" placeholder="학교 이름을 직접 입력해 주세요."></txt-field>
+                </div>
+                <div class="btn-group rt">
+                  <btn type="navi" @btnClick="applyManualValClickHandler">확인</btn>
+                </div>
+              </template>
             </div>
         </modal>
     </transition>

@@ -41,6 +41,8 @@ export default class ClassTagManage extends Vue {
     private isLoading: boolean = false;
     private searchTagValue: string = '';
     private searchResultItems: IClassTag[] = [];
+    private isManualClick: boolean=false;
+    private manualInputField: string = '';
 
     /* 검색 결과 페이징 */
     private numOfPage: number=10;
@@ -65,6 +67,10 @@ export default class ClassTagManage extends Vue {
 
     get currentTotal(): number{
         return this.searchResults.length;
+    }
+
+    get manualChk(): boolean{
+        return this.isManualClick;
     }
 
     public created() {
@@ -94,6 +100,8 @@ export default class ClassTagManage extends Vue {
      */
     private closeTagSearchPopup(): void{
         this.isClassTagSearch=false;
+        this.manualInputField = '';
+        this.isManualClick = false;
     }
 
     private search(){
@@ -174,6 +182,21 @@ export default class ClassTagManage extends Vue {
 
     private nextPage(num: number): void{
         this.pageChange(num);
+    }
+
+    private manualInputClickHandler(): void{
+        this.isManualClick=true;
+    }
+
+    /**
+     * 직접입력 -> 확인 버튼 클릭시
+     * @private
+     */
+    private applyManualValClickHandler(): void{
+        this.addTag(this.manualInputField);
+        this.closeTagSearchPopup();
+        this.manualInputField = '';
+        this.isManualClick = false;
     }
 
     /**
