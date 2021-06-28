@@ -65,8 +65,6 @@ export default class CurriculumListView extends Vue {
         course_list: []
     };
 
-    private curriculumDetailDataNum = 10;
-
     public created() {
         this.getList().then();
     }

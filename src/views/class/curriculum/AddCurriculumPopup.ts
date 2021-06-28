@@ -35,9 +35,6 @@ export default class AddCurriculumPopup extends Vue {
     @Prop(Object)
     private makeCurriculumData!: any;
 
-    @Prop(Number)
-    private curriculumDetailDataNum!: number;
-
     @MyClass.Getter
     private classID!: number;
 
@@ -68,7 +65,7 @@ export default class AddCurriculumPopup extends Vue {
 
     private formData: FormData = new FormData();
 
-    // private curriculumDetailDataNum: number = 10;
+    private curriculumDetailDataNum: number = 10;
     private eduItems: Array< {title: string }>=[];
 
     get isSubmitValidate(): boolean{
@@ -161,7 +158,7 @@ export default class AddCurriculumPopup extends Vue {
                     title: '',
                     goal: '',
                     course_list: []
-                }
+                };
             });
 
     }
