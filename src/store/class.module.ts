@@ -40,7 +40,8 @@ import {
     MODIFY_COURSE_ACTION,
 } from '@/store/action-class-types';
 import {PostService} from '@/api/service/PostService';
-
+import router from '@/router';
+import {Route} from 'vue-router';
 
 @Module({
     namespaced: true,
@@ -360,7 +361,13 @@ export default class ClassModule extends VuexModule {
     public [MYCLASS_LIST_ACTION](): Promise<IMyClassList[]> {
         return MyClassService.getAllMyClass()
             .then((data: any) => {
-                this.context.commit(SET_CLASS_ID, -1);
+
+                // console.log(router.currentRoute);
+                if (router.currentRoute.name === 'myClassList') {
+                    console.log('현재 route name=', router.currentRoute);
+                    this.context.commit(SET_CLASS_ID, -1);
+                }
+
                 this.context.commit(MYCLASS_LIST, data.myclass_list);
                 return Promise.resolve(data.myclass_list);
             }).catch((error: any) => {
