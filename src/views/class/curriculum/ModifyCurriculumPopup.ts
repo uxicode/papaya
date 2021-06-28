@@ -40,8 +40,14 @@ export default class ModifyCurriculumPopup extends Vue {
     @Prop(Boolean)
     private isOpen!: boolean;
 
-    @Prop(Number)
-    private cardId!: number;
+    @MyClass.Action
+    private GET_CURRICULUM_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number}) => Promise<any>;
+
+    @MyClass.Action
+    private GET_COURSE_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number, courseId: number }) => Promise<any>;
+
+    @MyClass.Action
+    private MODIFY_CURRICULUM_ACTION!: (payload: {classId: number, curriculumId: number, formData: FormData}) => Promise<any>;
 
     @MyClass.Getter
     private classID!: number;
@@ -52,19 +58,11 @@ export default class ModifyCurriculumPopup extends Vue {
     @MyClass.Getter
     private curriculumDetailItem!: ICurriculumDetailList;
 
-    @MyClass.Action
-    private GET_CURRICULUM_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number}) => Promise<any>;
-
-    @MyClass.Action
-    private GET_COURSE_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number, courseId: number }) => Promise<any>;
-
-    @MyClass.Action
-    private MODIFY_CURRICULUM_ACTION!: (payload: {classId: number, curriculumId: number, formData: FormData}) => Promise<any>;
-
     private isModifyClassCourse: boolean = false;
     private isCreateError: boolean = false;
 
     private countCourseNumber: number = 0;
+    private curriculumId: number = 0;
     private courseId: number = 0;
 
     private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
@@ -480,9 +478,10 @@ export default class ModifyCurriculumPopup extends Vue {
      * @param id
      * @private
      */
-    private async onModifyCoursePopupOpen(id: number) {
-        this.courseId = id;
-        await this.GET_COURSE_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.cardId, courseId: this.courseId})
+    private async onModifyCoursePopupOpen( curriculumId: number, coursId: number) {
+        this.courseId = coursId;
+        this.curriculumId = curriculumId;
+        await this.GET_COURSE_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.curriculumId, courseId: this.courseId})
             .then((data)=>{
                 // console.log(data);
                 this.isModifyClassCourse=true;

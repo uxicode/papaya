@@ -36,12 +36,6 @@ export default class CurriculumDetailPopup extends Vue {
     @Prop(Object)
     private curriculumDetailItem!: ICurriculumDetailList;
 
-    @MyClass.Getter
-    private classID!: number;
-
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
-
     @MyClass.Action
     private GET_CURRICULUM_DETAIL_ACTION!: ( payload: { classId: number, curriculumId: number }) =>Promise<any>;
 
@@ -51,12 +45,17 @@ export default class CurriculumDetailPopup extends Vue {
     @MyClass.Action
     private DELETE_CURRICULUM_ACTION!: (payload: { classId: number, curriculumId: number }) => Promise<any>;
 
+    @MyClass.Getter
+    private classID!: number;
+
+    @MyClass.Getter
+    private myClassHomeModel!: IClassInfo;
 
     private courseId: number = 0;
 
     private isOpenCourseDetailPopup: boolean = false;
     private isModifyPopupOpen: boolean=false;
-    private detailCurriculumId: number=-1; // 동적으로 변경 안되는 상태
+    private cardId: number=-1; // 동적으로 변경 안되는 상태
 
     private courseDetailItem: any = {};
 
@@ -97,9 +96,9 @@ export default class CurriculumDetailPopup extends Vue {
      * @param id
      * @private
      */
-    private async onModifyCurriculumPopupOpen(id: number) {
+    private async onModifyCurriculumPopupOpen(id: number ) {
         this.popupChange(false);
-        console.log(id);
+
         await this.GET_CURRICULUM_DETAIL_ACTION({classId: Number(this.classID), curriculumId: id})
             .then((data)=>{
                 this.isModifyPopupOpen=true;
@@ -126,21 +125,20 @@ export default class CurriculumDetailPopup extends Vue {
     }
 
     private async onDetailCourseOpen(curriculumId: number, courseId: number) {
-        this.detailCurriculumId = curriculumId;
+        this.cardId = curriculumId;
         this.courseId = courseId;
 
         const targetData = this.courseDetailData;
 
         this.courseDetailItem = targetData.find((item: any) => item.id === this.courseId);
-
-        await this.GET_COURSE_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.detailCurriculumId, courseId: this.courseId})
+        await this.GET_COURSE_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.cardId, courseId: this.courseId})
             .then((data)=>{
                 this.isOpenCourseDetailPopup=true;
             });
     }
 
     private deleteCurriculum(id: number){
-        this.detailCurriculumId = id;
+        this.cardId = id;
         this.popupChange(false);
         this.DELETE_CURRICULUM_ACTION({classId: Number(this.classID), curriculumId: id})
             .then((data)=>{

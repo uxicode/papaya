@@ -59,7 +59,7 @@
     </div>
 
     <div class="curriculum-add" v-show="isOwner">
-        <a href="" class="curriculum-add-btn" @click.prevent="onAddCurriculumPopupOpen"></a>
+        <a href="" class="curriculum-add-btn" @click.prevent="onAddCurriculumPopupOpen(10)"></a>
     </div>
 
     <!-- start: 공통 팝업 / (수업 회차 50 초과 입력시 안내 팝업) -->
@@ -95,6 +95,7 @@
     <add-curriculum-popup
             :is-open="isAddPopupOpen"
             :make-curriculum-data="makeCurriculumData"
+            :curriculum-detail-data-num="curriculumDetailDataNum"
             @change="onAddCurriculumPopupStatus"
             @submit="onAddCurriculum"></add-curriculum-popup>
 
@@ -105,7 +106,7 @@
 
     <modify-curriculum-popup
             :is-open="isModifyPopupOpen"
-            :card-id="detailCurriculumId"
+            :card-id="cardId"
             @change="onModifyCurriculumPopupStatus"
             @submit="onModifyCurriculum"></modify-curriculum-popup>
 

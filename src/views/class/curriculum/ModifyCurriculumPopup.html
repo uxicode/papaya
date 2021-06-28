@@ -46,7 +46,7 @@
               <div class="scroll-body" style="height:124px;">
                 <div v-for="(item, index) in curriculumDetailItemModel.course_list" class="add-curr-item" :key="`curriculumDetailDataNum-${index}`">
 
-                  <a href="#" class="add-curr-tit" @click.prevent="onModifyCoursePopupOpen(item.id)">
+                  <a href="#" class="add-curr-tit" @click.prevent="onModifyCoursePopupOpen( curriculumDetailItemModel.id, item.id )">
                     <span class="curr-num">{{ index+1 }} 회차</span>
                     <span>{{ item.title }}</span>
                   </a>
