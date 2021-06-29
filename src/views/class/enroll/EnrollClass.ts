@@ -34,8 +34,6 @@ const MyClass = namespace('MyClass');
   }
 })
 export default class EnrollClass extends Vue {
-  @Prop(Number)
-  private activeNum: number | null | undefined;
 
   @MyClass.Mutation
   private UPDATE_SIDE_NUM!: (num: number)=>void;
@@ -160,6 +158,9 @@ export default class EnrollClass extends Vue {
         this.memberId = result.member_info.id;
       });
 
+    // 가입 신청시 자동으로 승인상태(1)이 되기에 승인전(0)으로 변경
+    await ClassMemberService.setClassMemberInfo(Number(this.classIdx), this.memberId, {status: 0});
+
     if (this.questionList.length>0) {
       for (let i=0; i<this.questionList.length; i++) {
         const qna = {question: this.qnaList[i].question, answer: this.qnaList[i].answer};
@@ -184,4 +185,5 @@ export default class EnrollClass extends Vue {
     this.activeMenuNumModel=idx;
     // console.log(this.activeMenuNum);
   }
+
 }

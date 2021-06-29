@@ -16,7 +16,8 @@ import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
 import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
-import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
+import {AttachFileServiceHelper} from '@/views/service/preview/AttachFileServiceHelper';
+import {ImageFileServiceHelper} from '@/views/service/preview/ImageFileServiceHelper';
 import WithRender from './ModifyCoursePopup.html';
 
 const MyClass = namespace('MyClass');
@@ -45,6 +46,9 @@ export default class ModifyCoursePopup extends Vue {
     @Prop(Boolean)
     private isModifyCourse!: boolean;
 
+    @Prop(Number)
+    private courseIdx!: number;
+
     @MyClass.Getter
     private classID!: number;
 
@@ -60,9 +64,6 @@ export default class ModifyCoursePopup extends Vue {
     private isCreateError: boolean = false;
     private countCourseNumber: number = 0;
 
-    private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
-    private CourseSettingsItems: string[] = ['수업 내용 수정', '수업 삭제'];
-
     private startDateItem: string = '';
     private startTimeItem: string = '';
     private endTimeItem: string = '';
@@ -75,12 +76,15 @@ export default class ModifyCoursePopup extends Vue {
     private formData!: FormData;
     private modifyCourseDataItems: any = {};
 
+    private imgFileService: ImageFileServiceHelper=new ImageFileServiceHelper();
+    private attachFileService: AttachFileServiceHelper=new AttachFileServiceHelper();
+
     get imgFileURLItemsModel(): string[] {
-        return this.imgFileURLItems;
+        return this.imgFileService.getItems();
     }
 
     get attachFileItemsModel(): any[] {
-        return this.attachFileItems;
+        return this.attachFileService.getItems();
     }
 
     get modifyDataItemsModel(): any {
@@ -91,11 +95,7 @@ export default class ModifyCoursePopup extends Vue {
         return this.courseDetailItem;
     }
 
-    /**
-     * 클래스 교육과정 메인리스트
-     */
-
-        //datepicker
+    //datepicker
     private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
     private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
     private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
@@ -152,19 +152,6 @@ export default class ModifyCoursePopup extends Vue {
     get isSubmitValidate(): boolean{
         return (this.makeCurriculumData.title !== '' && this.makeCurriculumData.goal !== '');
     }
-
-    private getProfileImg(imgUrl: string | null | undefined ): string{
-        return ImageSettingService.getProfileImg( imgUrl );
-    }
-
-    get currentSettingItems(): string[]{
-        return this.EduSettingsItems;
-    }
-
-    get currentCourseSettingItems(): string[]{
-        return this.CourseSettingsItems;
-    }
-
 
     get currentStartTimeModel(): string{
         return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute}분`;
@@ -267,18 +254,12 @@ export default class ModifyCoursePopup extends Vue {
      */
     private addImgFileInputFocus() {
         this.inputEventBind('#imgFileInput');
+        this.imgFileService.courseIndexNumber(this.courseIdx);
     }
 
     private addFilesInputFocus(){
         this.inputEventBind('#attachFileInput');
-    }
-
-    private modifyImgFileInputFocus() {
-        this.inputEventBind('#imgFileInputModify');
-    }
-
-    private modifyFilesInputFocus(){
-        this.inputEventBind('#attachFileInputModify');
+        this.attachFileService.courseIndexNumber(this.courseIdx);
     }
 
     /**
@@ -568,6 +549,8 @@ export default class ModifyCoursePopup extends Vue {
             startTime: this.courseDetailItemModel.startTime,
             endTime: this.courseDetailItemModel.endTime,
         };
+
+        this.setImageFormData();
 
         this.$emit('modifyCourse', this.courseItem);
         this.popupChange(false);

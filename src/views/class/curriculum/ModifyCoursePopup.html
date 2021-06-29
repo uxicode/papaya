@@ -178,8 +178,7 @@
                         </div>
                         <div class="form-item post-cnt" style="height:120px;">
                             <textarea class="form-textarea"
-                                      v-model="courseDetailItemModel.contents"
-                                      ></textarea>
+                                      v-model="courseDetailItemModel.contents"></textarea>
                         </div>
 
                         <!-- start: 첨부 이미지 파일 미리보기 -->
@@ -190,17 +189,19 @@
                         <!-- end: 첨부 이미지 파일 미리보기 -->
 
                         <!-- start: 첨부 파일 리스트 -->
-                        <file-preview :file-items="attachFileItems"
+                        <file-preview :file-items="attachFileItemsModel"
                                       @removeFile="removeAttachFileItem"
+                                      name="name"
                                       @removeAttachFileAll="removeAllAttachFile"></file-preview>
                         <!-- end: 첨부 파일 리스트 -->
+
                     </div>
                 </div>
                 <div class="popup-form-btm">
                     <div class="form-add-btn">
                         <ul class="clearfix">
                             <li>
-                                <a href="#" class="info-img" @click.prevent="modifyImgFileInputFocus">
+                                <a href="#" class="info-img" @click.prevent="addImgFileInputFocus">
                                     <img :src="require('@/assets/images/image.svg')" alt="">
                                     <input class="input-file"
                                            type="file" name="files"
@@ -208,12 +209,12 @@
                                            accept="image/*"
                                            multiple
                                            @change="modifyFileToImage( $event.target.files )"
-                                            hidden />
+                                           hidden />
                                 </a>
 
                             </li>
                             <li>
-                                <a href="#" @click.prevent="modifyFilesInputFocus">
+                                <a href="#" @click.prevent="addFilesInputFocus">
                                     <img :src="require('@/assets/images/file.svg')" alt="">
                                     <input class="input-file"
                                            type="file"

@@ -6,11 +6,11 @@
 
       <ul class="footer-address">
         <li class="items">
-          <p class="item-txt-w">(주)이니션 대표이사 : 류동석<br />서울시 강남구 삼성로100길 24-1<br />오트리스빌딩 A동 2층</p>
+          <p class="item-txt-w">(주)이니션 대표이사 : 류동석<br />서울시 강남구 테헤란로26길 12<br />제일비전타워 10층</p>
         </li>
         <li class="items">
           <address class="item-txt-w">
-            A-2F, 24-1, Samseong-ro 100-gil,<br />
+            10F, 12, Teheran-ro 26-gil,<br />
             Gangnam-gu, Seoul, Republic of Korea
           </address>
         </li>
