@@ -168,7 +168,8 @@ export default class SearchResultPage extends Vue {
 
 
   //class/:classId 조회가 안되는 --> 67, 70, 597, 598, 599, 600
-  private getClassInfoBySearchResultClassId( items: any[] ): any[] {
+
+  //private getClassInfoBySearchResultClassId( items: any[] ): any[] {
     // const promiseItems: any[] = [];
     ////class/{class_id}/members/{member_id}
     //class_id 가 없을 시 id 로 조회 // owner 는 member_id -> owner_member_id / owner_id 는 그냥 가입했을때 주어지는 고유 index 넘버임( user_id 와 같다 ).
@@ -178,11 +179,11 @@ export default class SearchResultPage extends Vue {
     });*/
     /*items.forEach( ( item: any ) => {
       const idx=(item.class_id)? item.class_id : item.id;
-      console.log('SearchResultClassId=', idx );
+      console.log('SearchResultClasnpm sId=', idx );
       promiseItems.push( MyClassService.getClassInfoById( idx ) );
     });
     return promiseItems;*/
-  }
+  //}
 
 
   private pageChange(num: number): void{

@@ -33,10 +33,12 @@ export default class CourseDetailPopup extends Vue {
     private courseId!: number;
 
     @Prop(Object)
+    private curriculumDetailItem!: ICurriculumDetailList;
+
+    @Prop(Object)
     private courseDetailItem!: any;
 
-    @MyClass.Getter
-    private curriculumDetailItem!: ICurriculumDetailList;
+    private isPhotoViewer: boolean = false;
 
     get curriculumDetailModel(): ICurriculumDetailList{
         return this.curriculumDetailItem;
@@ -49,7 +51,6 @@ export default class CourseDetailPopup extends Vue {
     private popupChange( value: boolean ) {
         this.$emit('close', value);
     }
-
 
 }
 

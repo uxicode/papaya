@@ -21,14 +21,13 @@
                 </div>
                 <div class="fd-foot">
                     <p class="en-count">총 {{ item.course_list.length }}회차 수업 등록</p>
-                    <div class="fd-btn">
+                    <div class="fd-btn" v-if="isOwner( item.owner.user_id, item.user_id)">
                         <div class="list-popup">
                             <v-menu
                                     min-width="160px"
                                     :close-on-click="true">
                                 <template v-slot:activator="{ on, attrs }">
-                                   <button v-if="isOwner( item.owner.user_id, item.user_id)"
-                                            type="button"
+                                   <button  type="button"
                                             class="list-popup-btn"
                                             v-bind="attrs"
                                             v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
