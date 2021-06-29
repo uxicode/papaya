@@ -7,6 +7,7 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import SideMenu from '@/components/sideMenu/sideMenu.vue';
 import MyClassListDetailView from '@/views/class/home/MyClassListDetailView';
+import NotificationPage from '@/views/class/notification/NotificationPage';
 import WithRender from './EnrollClass.html';
 
 interface IEnrollMemberInfo {
@@ -29,6 +30,7 @@ const MyClass = namespace('MyClass');
     Btn,
     SideMenu,
     MyClassListDetailView,
+    NotificationPage,
   }
 })
 export default class EnrollClass extends Vue {
@@ -117,7 +119,7 @@ export default class EnrollClass extends Vue {
         console.log(data);
         this.questionList = (data.questionlist.length > 0) ? data.questionlist : [];
         this.qnaList = Object.assign({} ,this.questionList, this.answerList);
-        console.log(this.qnaList);
+        // console.log(this.qnaList);
       });
   }
 

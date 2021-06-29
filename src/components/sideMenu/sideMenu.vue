@@ -116,8 +116,6 @@ export default class SideMenu extends Vue{
   @MyClass.Getter
   private sideNumModel!: number;
 
-
-
   private sideMenuData: ISideMenu[]=[
     {id:0, title: '클래스 홈', linkKey:'' },
     {id:1, title: '알림', linkKey:'notification' },
@@ -144,9 +142,9 @@ export default class SideMenu extends Vue{
     this.checkMember();
 
     //화면 새로고침시에
-    // if (performance.navigation.type === 1) {
-    //   this.sideMenuClickHandler(0);
-    // }
+    if (performance.navigation.type === 1) {
+      this.sideMenuClickHandler(0);
+    }
     /*window.onpageshow = function(event) {
       if ( event.persisted || (window.performance && window.performance.navigation.type === 1)) {
         // Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우
@@ -170,9 +168,10 @@ export default class SideMenu extends Vue{
   }
 
   private sideMenuClickHandler(idx: number): void {
-    // 클래스 멤버가 아닐때는 알림까지만 접속 가능
-    if( (!this.isMember) && (idx > 1)) {
-      alert('클래스에 가입하면 보실 수 있습니다.');
+    // 클래스 멤버가 아닐때는 알림 페이지까지만 접속 가능
+    if( !this.isMember) {
+      if (idx <= 1) { this.$emit('sideClick', idx); }
+      else { alert('클래스에 가입하면 보실 수 있습니다.'); }
     } else {
       this.$emit('sideClick', idx);
       const queryVal = (idx === 0) ? {} : {timestamp: `${new Date().getTime()}`};
@@ -219,8 +218,12 @@ export default class SideMenu extends Vue{
   }
 
   private gotoClassMemberPage(): void{
-    console.log('멤버보기 클릭=', this.classID);
-    this.$router.push({path:`${CLASS_BASE_URL}/${this.classID}/member`});
+    if (this.isConfirmed) {
+      console.log('멤버보기 클릭=', this.classID);
+      this.$router.push({path:`${CLASS_BASE_URL}/${this.classID}/member`});
+    } else {
+      alert('가입 승인된 멤버만 볼 수 있습니다.');
+    }
   }
 
   private visibleSettingMenus(idx: number): boolean{

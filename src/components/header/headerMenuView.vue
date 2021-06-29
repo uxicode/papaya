@@ -102,7 +102,7 @@ nk :to="{path:'/class/schedule'}">모든 일정</route
     return this.userInfo;
   }
 
-  public created() {
+  public updated() {
     this.checkUser();
   }
 
@@ -154,6 +154,7 @@ nk :to="{path:'/class/schedule'}">모든 일정</route
    */
   private checkUser(): void {
     this.isUser = !!(this.myInfo);
+    // console.log('로그인 여부 확인');
   }
 
   private gotoSignUpPage(): void {

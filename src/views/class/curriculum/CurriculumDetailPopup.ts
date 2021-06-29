@@ -55,7 +55,7 @@ export default class CurriculumDetailPopup extends Vue {
 
     private isOpenCourseDetailPopup: boolean = false;
     private isModifyPopupOpen: boolean=false;
-    private cardId: number=-1; // 동적으로 변경 안되는 상태
+    private cardId: number=-1;
 
     private courseDetailItem: any = {};
 
