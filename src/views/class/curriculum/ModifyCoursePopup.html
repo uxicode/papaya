@@ -19,25 +19,18 @@
                 <div class="scroll-body" style="max-height:432px;">
                     <div class="popup-form-top">
                         <div class="form-item">
-                            <input
-                                    type="text"
-                                    id="courseModifyTitle"
-                                    class="form-control popup-type"
-                                    v-model="courseDetailItemModel.title"
-                                    >
+                            <txt-field id="courseModifyTitle"
+                                       add-class="popup-type"
+                                       v-model="courseDetailItemModel.title"
+                                       placeholder="수업 제목을 20자 이내로 작성해 주세요."
+                                       rules="required"
+                                       valid-name="수업제목">
+                            </txt-field>
                         </div>
                     </div>
                     <div class="popup-form-cnt">
                         <div class="form-item">
                             <p>수업 날짜</p>
-                            <!--<div class="form-box">-->
-                            <!--<div class="form-group date">-->
-                            <!--<input type="text" class="form-control" size="10" value="2020. 2. 28">-->
-                            <!--<span class="date-area">2020. 2. 28</span>-->
-                            <!--<button type="button" class="btn form-btn form-calendar"></button>-->
-                            <!-- </div>-->
-                            <!--</div>-->
-
                             <div class="form-box">
                                 <div class="form-group date" style="float:left;">
                                     <!--
@@ -54,7 +47,7 @@
                                            offset-y   // 메뉴 버튼을 중심으로 y 값으로 정렬 배치
                                  -->
                                     <v-menu
-                                            v-model="startDateMenu"
+                                            v-model="dateMenu"
                                             :close-on-content-click="false"
                                             transition="scale-transition"
                                             offset-y
@@ -75,7 +68,7 @@
                                             </v-text-field>
                                         </template>
                                         <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                                        <v-date-picker v-model="courseDetailItemModel.startDay" :id="`date-${curriculumDetailDataNum}`" no-title @input="startDatePickerChange(countCourseNumber)"></v-date-picker>
+                                        <v-date-picker v-model="courseDetailItemModel.startDay" :id="`date-${curriculumDetailDataNum}`" no-title @input="datePickerChange"></v-date-picker>
                                     </v-menu>
                                 </div>
                             </div>
@@ -83,10 +76,6 @@
                         <div class="form-item">
                             <p>수업 시작 시간</p>
                             <div class="form-box">
-                                <!--<div class="form-group time">-->
-                                <!--<input type="text" class="time-control no-time" size="8" value="시간 없음">-->
-                                <!--<button type="button" class="btn form-btn form-time"></button>-->
-                                <!--</div>-->
                                 <div class="form-group time">
                                     <v-menu
                                             nudge-left="30px"
@@ -108,17 +97,17 @@
                                             </v-text-field>
                                         </template>
                                         <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
-                                        <v-select v-model="startTimeSelectModel.apm" @input="modifyCourseChangeStartTime(countCourseNumber)" :items="['오전', '오후'] " placeholder="오전" hide-details solo flat style="display:inline-block;width:70px;">
+                                        <v-select v-model="startTimeSelectModel.apm" :items="referTimeItems.apm" placeholder="오전" hide-details solo flat style="display:inline-block;width:70px;" @input="addStartApmSchedule">
                                             <template v-slot:selection="{item, index}">
                                                 <span style="font-size:14px;">{{item}}</span>
                                             </template>
                                         </v-select>
-                                        <v-select v-model="startTimeSelectModel.hour" @input="modifyCourseChangeStartTime(countCourseNumber)" :items="[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] " placeholder="12 시" hide-details solo flat style="display:inline-block;width:70px;">
+                                        <v-select v-model="startTimeSelectModel.hour" :items="referTimeItems.hour" placeholder="12 시" hide-details solo flat style="display:inline-block;width:70px;" @input="addStartApmSchedule">
                                             <template v-slot:selection="{item, index}">
                                                 <span style="font-size:14px;">{{item}}시</span>
                                             </template>
                                         </v-select>
-                                        <v-select v-model="startTimeSelectModel.minute" @input="modifyCourseChangeStartTime(countCourseNumber)" :items="[ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00'] " placeholder="00 분" hide-details solo flat style="display:inline-block;width:70px">
+                                        <v-select v-model="startTimeSelectModel.minute" :items="referTimeItems.minute" placeholder="00 분" hide-details solo flat style="display:inline-block;width:70px"  @input="addStartApmSchedule">
                                             <template v-slot:selection="{item, index}">
                                                 <span style="font-size:14px;">{{item}}분</span>
                                             </template>
@@ -129,53 +118,48 @@
                             </div>
                         </div>
                         <div class="form-item">
-                            <p>수업 종료 시간</p>
-                            <div class="form-box">
-                                <!--<div class="form-group time">-->
-                                <!--<input type="text" class="time-control no-time" size="8" value="시간 없음">-->
-                                <!--<button type="button" class="btn form-btn form-time"></button>-->
-                                <!--</div>-->
-                                <div class="form-group time" style="float:left;margin-left:0;">
-                                    <v-menu
-                                            nudge-left="30px"
-                                            origin="center top"
-                                            v-model="endTimeMenu"
-                                            :close-on-content-click="false"
-                                            transition="scale-transition"
-                                            content-class="time-select-menu bg-white"
-                                            offset-y>
-                                        <template v-slot:activator="{ on, attrs }">
-                                            <v-text-field
-                                                    v-model="courseDetailItemModel.endTime"
-                                                    v-bind="attrs"
-                                                    v-on="on"
-                                                    hide-details solo flat>
-                                                <template v-slot:append>
-                                                    <button type="button" class="btn form-btn form-time" v-on="on"></button>
-                                                </template>
-                                            </v-text-field>
-                                        </template>
-                                        <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
-                                        <v-select v-model="endTimeSelectModel.apm" @input="getModifyCourseEndTime(countCourseNumber)" :items="['오전', '오후'] " placeholder="오전" hide-details solo flat style="display:inline-block;width:70px;">
-                                            <template v-slot:selection="{item, index}">
-                                                <span style="font-size:14px;">{{ item }}</span>
-                                            </template>
-                                        </v-select>
-                                        <v-select v-model="endTimeSelectModel.hour" @input="getModifyCourseEndTime(countCourseNumber)" :items="[ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'] " placeholder="12 시" hide-details solo flat style="display:inline-block;width:70px;">
-                                            <template v-slot:selection="{item, index}">
-                                                <span style="font-size:14px;">{{ item }}시</span>
-                                            </template>
-                                        </v-select>
-                                        <v-select v-model="endTimeSelectModel.minute" @input="getModifyCourseEndTime(countCourseNumber)" :items="[ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00'] " placeholder="00 분" hide-details solo flat style="display:inline-block;width:70px">
-                                            <template v-slot:selection="{item, index}">
-                                                <span style="font-size:14px;">{{ item }}분</span>
-                                            </template>
-                                        </v-select>
-                                    </v-menu>
-                                </div>
-
+                          <p>수업 종료 시간</p>
+                          <div class="form-box">
+                            <div class="form-group time">
+                              <v-menu
+                                      nudge-left="30px"
+                                      origin="center top"
+                                      v-model="endTimeMenu"
+                                      :close-on-content-click="false"
+                                      transition="scale-transition"
+                                      content-class="time-select-menu bg-white"
+                                      offset-y>
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-text-field
+                                          v-model="courseDetailItemModel.endTime"
+                                          v-bind="attrs"
+                                          v-on="on"
+                                          hide-details solo flat>
+                                    <template v-slot:append>
+                                      <button type="button" class="btn form-btn form-time" v-on="on"></button>
+                                    </template>
+                                  </v-text-field>
+                                </template>
+                                <!-- hide-details //디테일 텍스트 없앰  solo // 단독 표시  flat  //평평한 박스 및 쉐도우 없앰   -->
+                                <v-select v-model="endTimeSelectModel.apm" :items="referTimeItems.apm" placeholder="오전" hide-details solo flat style="display:inline-block;width:70px;" @input="addEndApmSchedule">
+                                  <template v-slot:selection="{item, index}">
+                                    <span style="font-size:14px;">{{ item }}</span>
+                                  </template>
+                                </v-select>
+                                <v-select v-model="endTimeSelectModel.hour" :items="referTimeItems.hour" placeholder="12 시" hide-details solo flat style="display:inline-block;width:70px;" @input="addEndApmSchedule">
+                                  <template v-slot:selection="{item, index}">
+                                    <span style="font-size:14px;">{{ item }}시</span>
+                                  </template>
+                                </v-select>
+                                <v-select v-model="endTimeSelectModel.minute" :items="referTimeItems.minute" placeholder="00 분" hide-details solo flat style="display:inline-block;width:70px"  @input="addEndApmSchedule">
+                                  <template v-slot:selection="{item, index}">
+                                    <span style="font-size:14px;">{{ item }}분</span>
+                                  </template>
+                                </v-select>
+                              </v-menu>
                             </div>
-                        </div>
+                          </div>
+                      </div>
                         <div class="form-item post-cnt" style="height:120px;">
                             <textarea class="form-textarea"
                                       v-model="courseDetailItemModel.contents"></textarea>
@@ -183,9 +167,8 @@
 
                         <!-- start: 첨부 이미지 파일 미리보기 -->
                         <image-preview :file-items="imgFileURLItemsModel"
-                                       @remove="removeImgPreviewItems"
-                                       @loaded="imageLoadedCheck"
-                                       @removeAll="removeAllPreview"></image-preview>
+                                       @remove="onRemoveImgPreviewItems"
+                                       @removeAll="onRemoveAllPreview"></image-preview>
                         <!-- end: 첨부 이미지 파일 미리보기 -->
 
                         <!-- start: 첨부 파일 리스트 -->
@@ -200,32 +183,18 @@
                 <div class="popup-form-btm">
                     <div class="form-add-btn">
                         <ul class="clearfix">
-                            <li>
-                                <a href="#" class="info-img" @click.prevent="addImgFileInputFocus">
-                                    <img :src="require('@/assets/images/image.svg')" alt="">
-                                    <input class="input-file"
-                                           type="file" name="files"
-                                           id="imgFileInputModify"
-                                           accept="image/*"
-                                           multiple
-                                           @change="modifyFileToImage( $event.target.files )"
-                                           hidden />
-                                </a>
-
-                            </li>
-                            <li>
-                                <a href="#" @click.prevent="addFilesInputFocus">
-                                    <img :src="require('@/assets/images/file.svg')" alt="">
-                                    <input class="input-file"
-                                           type="file"
-                                           name="files"
-                                           id="attachFileInputModify"
-                                           accept=".pdf, .xls, .xlsx, .ppt, .pptx, .doc, .docx"
-                                           multiple
-                                           @change="modifyAttachFileTo( $event.target.files )"
-                                           hidden />
-                                </a>
-                            </li>
+                          <li>
+                            <a href="#" class="info-img" @click.prevent="addImgFileInputFocus">
+                              <img :src="require('@/assets/images/image.svg')" alt="">
+                              <input class="input-file" type="file" name="files" id="imgFileInput" accept="image/*" multiple @change="addFileToImage( $event.target.files )" hidden />
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#" @click.prevent="addFilesInputFocus">
+                              <img :src="require('@/assets/images/file.svg')" alt="">
+                              <input class="input-file" type="file" name="files" id="attachFileInput" accept=".pdf, .xls, .xlsx, .ppt, .pptx, .doc, .docx" multiple @change="addAttachFileTo( $event.target.files )" hidden />
+                            </a>
+                          </li>
                         </ul>
                     </div>
                 </div>

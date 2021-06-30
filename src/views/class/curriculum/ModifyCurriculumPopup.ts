@@ -77,7 +77,7 @@ export default class ModifyCurriculumPopup extends Vue {
     private imgFileURLItems: string[] = [];
     private imgFileDatas: any[] = [];
     private attachFileItems: any[] = [];
-    private formData!: FormData;
+    private formData: FormData = new FormData();
     private curriculumDetailDataNum: number = 0;
     private eduItems: Array< {title: string }>=[];
 
