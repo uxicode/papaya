@@ -22,6 +22,7 @@ import {
   ADD_REPLY_ACTION,
   SELECT_VOTE_ACTION,
   EDIT_POST_ACTION,
+  EDIT_POST_TXT_ACTION,
   DELETE_POST_FILE_ACTION
 } from '@/store/action-class-types';
 import {IPostInLinkModel, IPostModel, IReadAbleVote, IVoteModel} from '@/views/model/post.model';
@@ -221,7 +222,7 @@ export default class PostModule extends VuexModule {
    * 알림글 리스트 조회
    * @param payload
    */
-  @Action
+  @Action({rawError: true})
   public [GET_POST_LIST_ACTION]( payload: { classId: number,  paging: {page_no: number, count: number } }  ): Promise<IPostModel[] & IPostInLinkModel[]>{
     return PostService.getAllPostsByClassId( payload.classId, payload.paging)
       .then((data) => {
@@ -243,7 +244,7 @@ export default class PostModule extends VuexModule {
    * 알림 글 생성
    * @param payload
    */
-  @Action
+  @Action({rawError: true})
   public [ADD_POST_ACTION](payload: { classId: number, formData: FormData  }): Promise<any> {
     return PostService.setAddPost( payload.classId, payload.formData )
       .then(( data )=>{
@@ -286,7 +287,7 @@ export default class PostModule extends VuexModule {
    * 알림글 삭제
    * @param payload
    */
-  @Action
+  @Action({rawError: true})
   public [DELETE_POST_ACTION](payload: { classId: string | number, postId: number }): Promise<any>{
     return PostService.deletePostById( payload.classId, payload.postId )
       .then((data)=>{
@@ -308,15 +309,17 @@ export default class PostModule extends VuexModule {
    *  알림글을 공지 혹은 일반 글로 등록
    * @param payload
    */
-  @Action
+  @Action({rawError: true})
   public [POST_TYPE_CHANGE_ACTION](payload: { classId: string | number, postId: number } ): Promise<any>{
-    const findIdx=this.postListItems.findIndex((item) => item.id === payload.postId);
+    const { classId, postId }=payload;
+
+    const findIdx=this.postListItems.findIndex((item) => item.id === postId);
     const targetItem = this.postListItems[findIdx];
     let { type }=targetItem;
     const { title, text }=targetItem;
     type=( type===0 )? 1 : 0;
 
-    return PostService.setPostById( payload.classId, payload.postId, {type, title, text} ).then( (data)=>{
+    return PostService.setPostById( classId, postId, {type, title, text} ).then( (data)=>{
         this.postListItems.splice(findIdx, 1, {...targetItem, type, title, text});
         return Promise.resolve(data);
       }).catch((error) => {
@@ -326,7 +329,7 @@ export default class PostModule extends VuexModule {
   }
 
 
-  @Action
+  @Action({rawError: true})
   public [GET_RESERVED_LIST_ACTION](classId: number ) {
     PostService.getReservedPost( classId )
       .then((data)=>{
@@ -345,6 +348,7 @@ export default class PostModule extends VuexModule {
   @Action
   public [GET_POST_DETAIL_ACTION](payload: { classId: number, postId: number }): Promise<any>{
     const {classId, postId}=payload;
+
     return PostService.getPostsById(classId, postId)
       .then((data) => {
         this.context.commit(SET_POST_DETAIL, data.post);
@@ -378,7 +382,27 @@ export default class PostModule extends VuexModule {
   }
 
 
-  @Action
+  @Action({rawError: true})
+  public [EDIT_POST_TXT_ACTION]( payload: { classId: string | number, postId: number, tit: string, txt: string } ): Promise<any>{
+
+    const {classId, postId, tit, txt}=payload;
+    const findIdx=this.postListData.findIndex((item) => item.id === postId);
+    const targetItem = this.postListData[findIdx];
+    const {type}=targetItem;
+
+    return PostService.setPostById(classId, postId, {type, title: tit, text:txt })
+      .then((data) => {
+        const {title, text} = data;
+        this.postListData.splice(findIdx, 1, {...targetItem, title, text});
+        return Promise.resolve(data);
+      }).catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
+      });
+  }
+
+
+  @Action({rawError: true})
   public [DELETE_POST_FILE_ACTION](payload: { classId: string | number, postId: number, ids: number[] }): Promise<any> {
     const {classId, postId, ids} = payload;
     return PostService.deletePostFileById(classId, postId, {ids})
@@ -407,7 +431,7 @@ export default class PostModule extends VuexModule {
    * 멤버가 투표 선택~( 현재 선택한 데이터가 어디에도 표시 되지 않고 있음)
    * @param payload
    */
-  @Action
+  @Action({rawError: true})
   public [SELECT_VOTE_ACTION](payload: {voteId: number, memberId: number, vote_choice_ids: number[] }){
     const {vote_choice_ids}=payload;
     return PostService.setUserVoteSelect( payload.voteId, payload.memberId, {vote_choice_ids} )
@@ -416,7 +440,7 @@ export default class PostModule extends VuexModule {
       });
   }
 
-  @Action
+  @Action({rawError: true})
   public [GET_COMMENTS_ACTION]( postId: number): Promise<any> {
     return CommentService.getCommentsByPostId(postId)
       .then((data) => {
@@ -454,7 +478,7 @@ export default class PostModule extends VuexModule {
    * parent_type: 댓글이 달린 원글 타입. 0 - 알림글 , 1 - 일정글
    * @param payload
    */
-  @Action
+  @Action({rawError: true})
   public [ADD_COMMENT_ACTION](payload: {parent_id: number, parent_type: number, member_id: number, comment: string}): Promise<any> {
     return CommentService.setAddComment(payload)
       .then((data) => {
@@ -463,7 +487,7 @@ export default class PostModule extends VuexModule {
       });
   }
 
-  @Action
+  @Action({rawError: true})
   public [ADD_REPLY_ACTION](payload: {comment_id: number, member_id: number, comment: string}): Promise<any> {
     return CommentService.setAddReply(payload)
       .then((data) => {

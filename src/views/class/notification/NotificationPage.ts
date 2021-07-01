@@ -1,13 +1,11 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {IAttachFileModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
+import { IPostInLinkModel, IPostModel} from '@/views/model/post.model';
 import Modal from '@/components/modal/modal.vue';
 import AddNotifyPopup from '@/views/class/notification/AddNotifyPopup';
-import {PostService} from '@/api/service/PostService';
 import {CommentService} from '@/api/service/CommentService';
 import {getAllPromise} from '@/types/types';
 import NotificationListView from '@/views/class/notification/NotificationListView';
-import NotifyDetailPopup from '@/views/class/notification/NotifyDetailPopup';
 import WithRender from './NotificationPage.html';
 
 const MyClass = namespace('MyClass');
