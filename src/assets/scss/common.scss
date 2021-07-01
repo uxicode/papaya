@@ -499,6 +499,11 @@ body {
   border-radius: 2px;
   background-color: #fb0a0a;
 }
+/*단어별 줄 바꿈*/
+.word-bk {
+  word-wrap: break-word;
+  word-break: keep-all;
+}
 @import "./customVuetify";
 @import "./transition";
 @import "./layout";

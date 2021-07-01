@@ -54,6 +54,7 @@
       <!-- start:  투표가 있는 경우 -->
       <list-in-vote-preview
               :file-items="item.vote"
+              :length="getVoteListLen( item.vote )"
               title="title"
               choice="multi_choice"
               finish-at="finishAt"

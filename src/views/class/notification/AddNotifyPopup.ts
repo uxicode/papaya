@@ -244,14 +244,15 @@ export default class AddNotifyPopup extends Vue{
     if( this.linkData===null ){ return false;}
     if( !this.linkData.link_item_list.length ){ return false;}
 
-    const invalidLinkItems: Array<{ index: number, url: string }> = [];
+    const validLinkItems: Array<{ index: number, url: string }> = [];
     this.linkData.link_item_list.forEach( (item: { index: number, url: string } )=>{
       //유효하지 않은 url 찾기
-      if( item.url!=='' && !Utils.getIsValidLink(item.url)  ){
-        invalidLinkItems.push(item);
+      // console.log(item.url !== '', Utils.getIsValidLink(item.url) );
+      if( item.url!=='' && Utils.getIsValidLink(item.url)  ){
+        validLinkItems.push(item);
       }
     });
-    return invalidLinkItems.length > 0;
+    return validLinkItems.length > 0;
   }
 
   /**
@@ -260,6 +261,7 @@ export default class AddNotifyPopup extends Vue{
    */
   private setPostDataToFormData() {
     if( !this.isSubmitValidate ){return;}
+
 
     //링크 데이터가 존재 한다면 기존 postData 에 merge 한다.
     const linkMergeData = (this.getValidLink())? {...this.postData, ...this.linkData} : {...this.postData};

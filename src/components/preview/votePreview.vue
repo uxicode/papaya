@@ -36,7 +36,7 @@ export default class VotePreview extends Vue{
   private finishAt!: string; //finishAt
 
   @Prop(Number)
-  private length!: number; //finishAt
+  private length!: number;
 
   @Prop(String)
   private title!: string; //title

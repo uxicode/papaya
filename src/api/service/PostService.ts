@@ -28,7 +28,7 @@ export class PostService{
    * @param classId
    * @param payload
    */
-  public static getReservedPost(classId: number | string, payload: {page_no: number, count: number}={page_no:1, count:1000} ): Promise<any>{
+  public static getReservedPost(classId: number | string, payload: {page_no: number, count: number}={page_no:1, count:100} ): Promise<any>{
     return  request('get', `${CLASS_BASE_URL}/${classId}/posts/reserved`, payload);
   }
 
@@ -49,6 +49,10 @@ export class PostService{
 
   public static setAddVote(classId: string | number, payload: IVoteModel ): Promise<any>{
     return request('post', '/vote', payload );
+  }
+
+  public static deleteVote( voteId: number): Promise<any>{
+    return request('delete', `/vote/${voteId}`);
   }
 
   public static setUserVoteSelect( voteId: string | number, memberId: number, payload: { vote_choice_ids: number[] }): Promise<any>{

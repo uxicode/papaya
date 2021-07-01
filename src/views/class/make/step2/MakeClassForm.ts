@@ -5,9 +5,9 @@ import TxtField from '@/components/form/txtField.vue';
 import SelectBox from '@/components/selectbox/SelectBox.vue';
 import RadioButton from '@/components/radio/RadioButton.vue';
 
-import WithRender from './MakeClassForm.html';
 import {IMakeClassInfo, IMakeClassInfoBase} from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
+import WithRender from './MakeClassForm.html';
 
 const MyClass = namespace('MyClass');
 
@@ -68,13 +68,16 @@ export default class MakeClassForm extends Vue{
 
 
   private privateOptionChange( value: string | boolean, checked: boolean ): void{
-    console.log(value, checked, !!this.classFormData.name && !!this.classFormData.is_private &&  !!this.classFormData.startday );
+    // console.log(value, checked, !!this.classFormData.name && !!this.classFormData.is_private &&  !!this.classFormData.startday );
     this.classFormData.is_private=(value === 'yes');
+    // console.log(this.classFormData.is_private);
   }
 
   private submit(): void{
     const randomNum = Utils.getRandomNum(0, 6);
     this.classFormData.image_url=randomNum+'';
+
+    // console.log(this.classFormData);
 
     this.MAKE_CLASS( this.classFormData )
       .then( (data: any )=>{

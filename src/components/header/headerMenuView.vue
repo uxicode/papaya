@@ -15,19 +15,22 @@
              <!--           <img :src="replaceUserMenuImg()? require('@/assets/images/mypage-white.svg' ) : require('@/assets/images/mypage.svg' )" alt="" />-->
            </button>
            <div class="list-popup-menu" :class="{'active': isActive}" >
-             <template v-if="isUser">
-               <router-link :to="{path:'/myProfile'}" class="list-popup-item" @click.native="leftMenuActive(0)">MY프로필
-               </router-link>
-               <router-link :to="{path:'/bookmark'}" class="list-popup-item" @click.native="leftMenuActive(1)">보관함
-               </router-link>
+             <template v-if="isMyInfo">
+               <router-link :to="{path:'/myProfile'}" class="list-popup-item" @click.native="leftMenuActive(0)">MY프로필</router-link>
+               <router-link :to="{path:'/bookmark'}" class="list-popup-item" @click.native="leftMenuActive(1)">보관함</router-link>
                <div class="line"></div>
              </template>
              <router-link :to="{path:'/noticeBoard'}" class="list-popup-item" @click.native="leftMenuActive(0)">공지사항</router-link>
              <router-link :to="{path:'/customerCenter'}" class="list-popup-item" @click.native="leftMenuActive(1)">고객센터</router-link>
              <router-link :to="{path:'/termsOfService'}" class="list-popup-item" @click.native="leftMenuActive(2)">이용약관</router-link>
              <div class="line"></div>
-             <a v-if="isUser" href="" class="list-popup-item" @click="isLogout">로그아웃</a>
-             <a v-else href="" class="list-popup-item" @click.prevent="gotoSignUpPage">회원가입</a>
+             <template v-if="isMyInfo">
+               <a href="" class="list-popup-item" @click.prevent="isLogout">로그아웃</a>
+             </template>
+             <template v-else>
+               <a href="" class="list-popup-item" @click.prevent="gotoSignUpPage">회원가입</a>
+             </template>
+
            </div>
          </div>
        </li>
@@ -90,26 +93,15 @@ export default class HeaderMenuView extends Vue {
   @SearchStatus.Mutation
   private SEARCHING!: ( chk: boolean )=>void;
 
-/*nk :to="{path:'/'}">홈</router-link></li>
-nk :to="{path:'/class/notify'}">모든 알림</router-
-nk :to="{path:'/class/schedule'}">모든 일정</route
->자료실</a></li>*/
-  /*private menuInfos: ( string[] )=[
-    {gnb:[], lnb:[] }
-  ]*/
-
-  get myInfo() {
-    return this.userInfo;
-  }
-
-  public created() {
-    this.checkUser();
+  //로그인한 회원인지 아닌지 체크
+  get isMyInfo() {
+    return !!this.userInfo;
   }
 
   private isLogout(): void {
     this.LOGOUT();
     this.REMOVE_CLASS_DATA();
-    this.$router.push('/login');
+    this.$router.push({path:'/login'});
   }
 
   /**
@@ -148,13 +140,6 @@ nk :to="{path:'/class/schedule'}">모든 일정</route
     // console.log('search 클릭');
   }
 
-  /**
-   * 로그인한 회원인지 아닌지 체크
-   * @private
-   */
-  private checkUser(): void {
-    this.isUser = !!(this.myInfo);
-  }
 
   private gotoSignUpPage(): void {
     this.$router.push('/signup');

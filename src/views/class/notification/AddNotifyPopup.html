@@ -33,13 +33,13 @@
               </div>
             </div>
             <div class="popup-form-cnt">
-              <div class="form-item post-cnt" style="max-height:300px;height:auto;overflow-y:auto;overflow-x:hidden;margin:0;">
+              <div class="form-item post-cnt pdl-40 pdr-40" style="max-height:300px;height:auto;overflow-y:auto;overflow-x:hidden;margin:0;">
                 <!-- start: 일정 상세 내용 입력창 -->
                 <textarea
-                        style="margin: 0 40px;"
+                        style="min-height:80px;"
                         ref="scheduleDetailAreaTxt"
                         v-model="postData.text"
-                        class="form-textarea auto-resize"
+                        class="form-textarea auto-resize word-bk"
                         placeholder="일정 내용을 작성해 주세요."
                         @input="postDetailAreaInputHandler( $event.target.value )"></textarea>
                 <!-- end: 일정 상세 내용 입력창 -->
