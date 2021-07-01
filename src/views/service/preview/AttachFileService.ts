@@ -74,7 +74,7 @@ class AttachFileService implements IFile{
 
   //end : IFile 에 있는 필수 선언 메서드 ================================================
   //로드한 파일 배열에 저장
-  private setAttachFileSave(data: FileList ): void {
+  protected setAttachFileSave(data: FileList ): void {
     // console.log(data);
      for (let i = 0; i < data.length; i++) {
       // console.log(data,  item, Utils.getFileType(item) );

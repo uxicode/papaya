@@ -462,7 +462,7 @@ export default class ClassModule extends VuexModule {
     public [GET_CURRICULUM_LIST_ACTION]( payload: { classId: number}  ): Promise<any>{
         return MyClassService.getCurriculumList( payload.classId )
             .then((data) => {
-                console.log(`test`,data);
+                console.log(data);
                 this.context.commit(SET_CURRICULUM_LIST, data);
                 console.log('curriculumListData=', this.curriculumListData);
                 return Promise.resolve(this.curriculumListData);

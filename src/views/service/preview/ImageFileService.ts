@@ -117,7 +117,7 @@ class ImageFileService implements IFile{
    * 이미지 파일 -> 배열에 지정 / 미리보기 link( blob link) 배열 생성~
    * @param data
    */
-  private setImgFilePreviewSave(data: FileList ): void {
+  protected setImgFilePreviewSave(data: FileList ): void {
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < data.length; i++) {

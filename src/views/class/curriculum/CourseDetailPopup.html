@@ -16,7 +16,7 @@
                 <h2 class="popup-tit pdb-0">{{ courseDetailModel.title===''? (courseDetailModel.index+1)+'회차수업' : courseDetailModel.title }}</h2>
             </div>
 
-            <div class="popup-form">
+            <div class="popup-form" v-if="courseDetailModel.startDay!=='Invalid date'&&courseDetailModel.startTime!==null&&courseDetailModel.endTime!==null">
                 <div class="popup-form-top">
                     <div class="form-item pd-desc">
                         <ul class="feed-info period clearfix">

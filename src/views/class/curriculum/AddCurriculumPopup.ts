@@ -7,6 +7,7 @@ import Btn from '@/components/button/Btn.vue';
 import AddCoursePopup from '@/views/class/curriculum/AddCoursePopup';
 import {ImageFileServiceHelper} from '@/views/service/preview/ImageFileServiceHelper';
 import {AttachFileServiceHelper} from '@/views/service/preview/AttachFileServiceHelper';
+
 import {
     IClassInfo,
     IMakeEducation,
@@ -66,6 +67,12 @@ export default class AddCurriculumPopup extends Vue {
 
     private formData: FormData = new FormData();
 
+    private imgFileService: ImageFileServiceHelper=new ImageFileServiceHelper();
+    private attachFileService: AttachFileServiceHelper=new AttachFileServiceHelper();
+
+    private imgAttachData: any[] = [];
+    private attachFileData: any[] = [];
+
     private curriculumDetailDataNum: number = 10;
     private eduItems: Array< {title: string }>=[];
 
@@ -121,6 +128,8 @@ export default class AddCurriculumPopup extends Vue {
         }
 
         this.makeCurriculumData.course_list = [];
+        this.imgAttachData = [];
+        this.attachFileData = [];
 
         for (let i = 0; i < num; i++) {
             this.makeCurriculumData.course_list.push({
@@ -137,16 +146,18 @@ export default class AddCurriculumPopup extends Vue {
 
     private courseDelete(idx: number){
         const findIdx=this.makeCurriculumData.course_list.findIndex((item: any) => item.id === idx);
-
-        console.log(idx);
+        const courseListLen = this.makeCurriculumData.course_list.length;
+        const test = this.attachFileData.filter((item)=> item.index === idx);
 
         this.makeCurriculumData.course_list.splice(findIdx, 1);
-
-        const courseListLen = this.makeCurriculumData.course_list.length;
-
         this.curriculumDetailDataNum = courseListLen;
         this.eduItems.length = courseListLen;
 
+        if( this.attachFileData.length < 1 && this.imgAttachData.length < 1 ){ return; }
+
+        test.forEach((item: any)=>{
+            this.attachFileData.splice(this.attachFileData.findIndex((itemTest: any) => itemTest.index === item.index), 1);
+        });
     }
 
     /**
@@ -160,9 +171,14 @@ export default class AddCurriculumPopup extends Vue {
             this.formData = new FormData();
         }
 
+        this.imgFileService.saveData( this.formData, this.imgAttachData );
+        this.attachFileService.saveData( this.formData, this.attachFileData);
+
         const temp = JSON.stringify({...this.makeCurriculumData} );
 
         this.formData.append('data', temp );
+
+        console.log(this.formData.getAll('files'));
 
         this.ADD_CURRICULUM_ACTION({ classId: Number(this.classID), formData: this.formData })
             .then((data) => {
@@ -177,6 +193,10 @@ export default class AddCurriculumPopup extends Vue {
         this.formData = new FormData();
         this.makeCurriculumData.title = '';
         this.makeCurriculumData.goal = '';
+        this.imgAttachData = [];
+        this.attachFileData = [];
+        this.imgFileService.removeAll();
+        this.attachFileService.removeAll();
         this.setCourseList(10);
     }
 
