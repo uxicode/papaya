@@ -134,10 +134,11 @@ export default class SideMenu extends Vue{
   public created(){
     // console.log( '사이드 메뉴 시작점...')
     this.checkMember();
+
     //화면 새로고침시에
-    if (performance.navigation.type === 1) {
-      this.sideMenuClickHandler(0);
-    }
+    // if (performance.navigation.type === 1) {
+    //   this.sideMenuClickHandler(0);
+    // }
     /*window.onpageshow = function(event) {
       if ( event.persisted || (window.performance && window.performance.navigation.type === 1)) {
         // Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우
@@ -161,14 +162,15 @@ export default class SideMenu extends Vue{
   }
 
   private sideMenuClickHandler(idx: number): void {
-    // 클래스 멤버(가입 승인)가 아닐때는 알림 페이지까지만 접속 가능
-    if( !this.isConfirmed) {
-      if (idx <= 1) { this.$emit('sideClick', idx); }
-      else { alert('클래스 멤버만 보실 수 있습니다.'); }
+    if( (!this.isMember) && (idx>1)) {
+      alert('클래스에 가입하면 보실 수 있습니다.');
     } else {
-      this.$emit('sideClick', idx);
-      const queryVal = (idx === 0) ? {} : {timestamp: `${new Date().getTime()}`};
-      this.$router.push({path:`${CLASS_BASE_URL }/${this.classID}/${this.sideMenuData[idx].linkKey}`} )
+
+      const queryVal = (idx === 1) ? String( idx ) : '';
+      this.$router.push({ path:`${CLASS_BASE_URL }/${this.classID}/${this.sideMenuData[idx].linkKey}`, query:{sideNum:queryVal}} )
+          .then(()=>{
+            this.$emit('sideClick', idx);
+          })
           .catch((error) => {
             console.log('side-menu 에서 error', error);
             //에러 난 경우 새로고침
@@ -225,6 +227,7 @@ export default class SideMenu extends Vue{
     }else{
       //this.myClassHomeModel.is_private
       if(idx>0){
+
         if( !this.myClassHomeModel.me ){
           return !Boolean(this.myClassHomeModel.is_private);
         }else{

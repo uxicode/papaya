@@ -327,6 +327,9 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
       // console.log(data.length);
       //member_count ( 멤버수 )/ is_private ( 공개/비공개 )
       const member=data.map( (item: any ) => {
+
+        // console.log(item.classinfo.is_private);
+
         return {
           member_count:item.classinfo.member_count,
           is_private:item.classinfo.is_private,

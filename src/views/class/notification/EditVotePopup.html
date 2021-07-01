@@ -1,18 +1,18 @@
 <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2 (알림 - 새 알림 작성-fit) -->
 <transition name="modal">
   <!-- start: 공통 팝업 / 파일명 : W.4.5.2.2.3.1 (알림 - 새 알림 작성-투표 - tab:텍스트) -->
-  <modal v-if="isOpen && readVoteData!==undefined"  size="540px" body-padding="0" @modalClose="popupChange( false )">
+  <modal v-if="isOpen && readVoteData!==undefined"  size="540px" body-padding="0" @modalClose="editCancel">
     <div slot="header">
       <!-- header custom coding-->
       <div class="popup-icon vote"></div>
       <div class="popup-close">
-        <button class="close" @click="popupChange( false )"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+        <button class="close" @click="editCancel"><img :src="require('@/assets/images/close.svg')" alt=""></button>
       </div>
     </div>
     <div slot="body">
       <!-- body custom coding-->
       <div class="popup-cnt pdb-desc" style="padding-bottom:0;">
-        <h2 class="popup-tit">투표 만들기</h2>
+        <h2 class="popup-tit">투표 수정하기</h2>
         <div class="form-item">
           <!--          <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">-->
           <txt-field add-class="popup-type"
@@ -105,7 +105,7 @@
                               <button type="button" class="btn form-btn form-calendar" v-on="on" @click="clearTxtField(index)"></button>
                               <v-text-field
                                       class="d-inline-block"
-                                      v-model="dateModelItem[index].date"
+                                      v-model="ele.text"
                                       v-bind="attrs"
                                       v-on="on"
                                       hide-details
@@ -114,7 +114,7 @@
                               </v-text-field>
                             </template>
                             <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-                            <v-date-picker v-model="dateModelItem[index].date" no-title ></v-date-picker>
+                            <v-date-picker v-model="ele.text" no-title ></v-date-picker>
                           </v-menu>
                         </div>
                         <div class="create-sub-btn">

@@ -61,9 +61,14 @@ export default class NotificationListView extends Vue {
     return this.detailPostId;
   }
 
+  public getVoteListLen( item: any ) {
+    return ( item )? ( (item.vote_choices)? item.vote_choices.length: -1) : -1;
+  }
+
   private isOwner( ownerId: number, userId: number): boolean {
     return (ownerId === userId);
   }
+
 
   /**
    * 북마크 toggle 이벤트 핸들러

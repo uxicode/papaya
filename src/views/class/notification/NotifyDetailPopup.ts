@@ -34,7 +34,6 @@ export default class NotifyDetailPopup extends Vue {
     @Prop(Boolean)
     private isOpen!: boolean;
 
-
     @Post.Getter
     private postDetailItem!: IPostModel & IPostInLinkModel;
 

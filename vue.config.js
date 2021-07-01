@@ -1,15 +1,17 @@
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin');
-const target = 'http://127.0.0.1:8888';
+//http://211.254.212.184:8089/api/v1
+const target = 'http://localhost:3000';
 module.exports={
     devServer:{
         port:8080,
         proxy:{
-            '^/api':{
+            '^/v1':{
                 target,
                 changeOrigin:true
             }
-        }
+        },
+        historyApiFallback: true,
     },
     // productionSourceMap: false,
     chainWebpack: (config) => {

@@ -11,6 +11,14 @@ class AttachFileService implements IFile{
     return this.attachFileItems.map( (item)=>item.file);
   }
 
+  public getFileItems(): any[] {
+    return this.attachFileItems;
+  }
+
+  public getItemById(idx: number): any {
+    return this.attachFileItems[idx];
+  }
+
   public setAttachItems( items: IAttachFileModel[] ){
     this.attachFileItems=items.map(( item: IAttachFileModel, index: number)=>{
       return {

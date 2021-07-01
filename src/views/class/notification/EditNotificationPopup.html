@@ -58,8 +58,8 @@
                 <!-- end: 첨부 이미지 파일 미리보기 -->
 
                 <!-- start: 투표 첨부 미리보기 -->
-                <vote-preview :file-items="voteItemModel.vote"
-                              :length="voteItemModel.vote_choice_list.length"
+                <vote-preview :file-items="voteInfoModel"
+                              :length="voteListLen"
                               title="title"
                               choice="multi_choice"
                               finish-at="finishAt"
@@ -100,7 +100,7 @@
                     <input class="input-file" type="file" name="files" id="attachFileInput" accept=".pdf, .xls, .xlsx, .ppt, .pptx, .doc, .docx" multiple @change="addAttachFileTo( $event.target.files )" hidden />
                   </a>
                 </li>
-                <li><a href="" @click.prevent="editVotePopupOpen"><img :src="require('@/assets/images/vote.svg')" alt=""></a></li>
+                <li><a href="" @click.prevent="onModifyVote"><img :src="require('@/assets/images/vote.svg')" alt=""></a></li>
                 <li><a href="" @click.prevent="addLinkPopupOpen"><img :src="require('@/assets/images/link.svg')" alt=""></a></li>
                 <li><a href="" @click.prevent="addReservationPopupOpen"><img :src="require('@/assets/images/time-outline.svg')" alt=""></a></li>
               </ul>
@@ -110,7 +110,7 @@
         </div>
         <div slot="footer">
           <div class="btn-group rt">
-            <button type="button" class="btn primary navi" :disabled="!isSubmitValidate" @click="onAddPostSubmit">수정</button>
+            <button type="button" class="btn primary navi" :disabled="!isSubmitValidate" @click="onEditPostSubmit">수정</button>
           </div>
         </div>
       </template>
@@ -119,8 +119,11 @@
     </modal>
   </transition>
 
-  <edit-vote-popup :is-open="isOpenEditVotePopup" @close="onVotePopupClose" @submit="onAddVote"></edit-vote-popup>
-  <add-link-popup :is-open="isOpenAddLinkPopup" @close="onLinkPopupClose" @submit="onAddLink"></add-link-popup>
+<!--  수정시 투표가 없는 경우는 투표 추가 -->
+  <add-vote-popup :is-open="isOpenAddVotePopup" @close="onVotePopupClose" @submit="onAddVote"></add-vote-popup>
+  <!--  수정시 투표가 있는 경우는 투표 수정-->
+  <edit-vote-popup :is-open="isOpenEditVotePopup" @close="onVotePopupClose" @submit="onSubmitBeforeEditVote"></edit-vote-popup>
+  <add-link-popup :is-open="isOpenAddLinkPopup" @close="onLinkPopupClose" @submit="onSubmitBeforeEditLink"></add-link-popup>
   <add-reservation-popup :is-open="isOpenAddReservation" @close="onReservationPopupClose" @submit="onAddReservation"></add-reservation-popup>
 </div>
 <!-- end: 공통 팝업 -->

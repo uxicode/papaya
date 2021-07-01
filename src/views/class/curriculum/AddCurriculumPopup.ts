@@ -157,7 +157,7 @@ export default class AddCurriculumPopup extends Vue {
 
                 this.GET_CURRICULUM_LIST_ACTION({classId: Number(this.classID)}).then();
                 this.formData = new FormData();
-                this.makeCurriculumData={
+                this.makeCurriculumData = {
                     title: '',
                     goal: '',
                     course_list: []

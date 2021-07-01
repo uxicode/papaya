@@ -73,6 +73,10 @@ export default class NotificationPage extends Vue {
   }
 
   public created() {
+    console.log( this.$route.query.sideNum );
+    if (this.$route.query.sideNum && this.$route.query.sideNum !== '') {
+      this.$emit('sideNum', Number(this.$route.query.sideNum));
+    }
     this.getList().then(
       ()=>{
         this.isPageLoaded=true;
