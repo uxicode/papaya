@@ -170,12 +170,15 @@ export default class SideMenu extends Vue{
   }
 
   private sideMenuClickHandler(idx: number): void {
-    if( (!this.isMember) && (idx!==0)) {
+    if( (!this.isMember) && (idx>1)) {
       alert('클래스에 가입하면 보실 수 있습니다.');
     } else {
-      this.$emit('sideClick', idx);
-      const queryVal = (idx === 0) ? {} : {timestamp: `${new Date().getTime()}`};
-      this.$router.push({path:`${CLASS_BASE_URL }/${this.classID}/${this.sideMenuData[idx].linkKey}`} )
+
+      const queryVal = (idx === 1) ? String( idx ) : '';
+      this.$router.push({ path:`${CLASS_BASE_URL }/${this.classID}/${this.sideMenuData[idx].linkKey}`, query:{sideNum:queryVal}} )
+          .then(()=>{
+            this.$emit('sideClick', idx);
+          })
           .catch((error) => {
             console.log('side-menu 에서 error', error);
             //에러 난 경우 새로고침
