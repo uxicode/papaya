@@ -2,49 +2,37 @@
   <div class="form-wrapper">
     <h3 class="form-sub-tit ct">본인인증</h3>
     <div class="form-cnt">
-      <div class="form-card">
+      <div v-if="!isVerifyComplete" class="form-card">
         <p class="card-tit">본인 인증을 해주세요.</p>
         <p class="card-txt">14세 이상의 개인은 본인 인증을 통해 가입이 가능합니다.</p>
 
         <div class="mgt-30">
           <!--<button type="button" class="btn basic x40 primary red">본인 인증하기</button>-->
           <btn @btnClick="verifyModalOpen">본인 인증하기</btn>
+
+          <!-- nice 서버에 submit할 form -->
+          <form name="form_chk" method="post">
+            <input type="hidden" name="m" value="checkplusService">
+            <input type="hidden" name="EncodeData" value="">
+          </form>
+
         </div>
       </div>
+
+      <div v-else class="form-card bg">
+        <p class="card-tit">본인 인증이 완료되었습니다.</p>
+        <p class="card-txt">다음 버튼을 통해 회원가입 단계를 계속해서 진행해 주시기 바랍니다.</p>
+      </div>
     </div>
+
     <div class="form-btm">
       <div class="btn-group rt">
         <btn type="outline" @btnClick="historyBack">이전</btn>
-        <btn type="navi" :disabled="isVerifyComplete" @btnClick="gotoNext">다음</btn>
+        <btn type="navi" :disabled="!isVerifyComplete" @btnClick="gotoNext">다음</btn>
         <!--<router-link class="btn basic x40 sm outline ct" :to="{path:'termsCheck'}">이전</router-link>
         <router-link class="btn basic x40 sm primary navi ct" disabled :to="{path:'signUpForm'}">다음</router-link>-->
       </div>
     </div>
   </div>
 
-  <!-- start: 본인인증 팝업 -->
-  <transition name="modal">
-  <modal v-if="isVerifyModal" size="492px" body-padding="0">
-    <div slot="header">
-      <h3>본인 인증</h3>
-      <div class="popup-close" @click="isVerifyModal = false">
-        <button type="button" class="close" ><img :src="require('@/assets/images/close.svg')" alt=""></button>
-      </div>
-    </div>
-    <div slot="body">
-     <!-- var baseUrlDev = "http://ec2-13-209-22-152.ap-northeast-2.compute.amazonaws.com:8090/";
-      var baseUrlDist = "http://ec2-15-164-48-36.ap-northeast-2.compute.amazonaws.com:8089/";-->
-<!--      <iframe src="http://ec2-13-209-22-152.ap-northeast-2.compute.amazonaws.com:8089/checkplus_main" width="450" height="550"></iframe>-->
-<!--      http://211.254.212.184:8089/checkplus_main -->
-      <iframe src="https://wwwtest.papayaclass.com/api/v1/checkplus_main" width="500" height="550" ></iframe>
-      <!--checkplus_success-->
-    </div>
-    <div slot="footer">
-      <div class="btn-group ct">
-        <btn @btnClick="isVerifyModal = false">확인</btn>
-      </div>
-    </div>
-  </modal>
-  </transition>
-  <!-- end: 본인인증 팝업 -->
 </div>
