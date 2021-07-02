@@ -545,6 +545,16 @@
       .fd-tit {color: #000;opacity: 0.3;font-weight: 500;}
       .fd-schedule {font-size: 12px;color: #f9862a;}
     }
+
+    .img-list {
+      li {
+        &.img-item:nth-child(1),
+        &.img-item:nth-child(2),
+        &.img-item:nth-child(3){
+          a img {width: 254px;}
+        }
+      }
+    }
   }
 }
 
