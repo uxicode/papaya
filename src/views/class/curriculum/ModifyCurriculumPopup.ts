@@ -40,6 +40,9 @@ export default class ModifyCurriculumPopup extends Vue {
     @Prop(Boolean)
     private isOpen!: boolean;
 
+    @Prop(Number)
+    private cardId!: number;
+
     @MyClass.Action
     private GET_CURRICULUM_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number}) => Promise<any>;
 
@@ -74,10 +77,8 @@ export default class ModifyCurriculumPopup extends Vue {
     private imgFileURLItems: string[] = [];
     private imgFileDatas: any[] = [];
     private attachFileItems: any[] = [];
-    private formData!: FormData;
-    private modifyCourseDataItems: any = {};
-
-    private curriculumDetailDataNum: number = 10;
+    private formData: FormData = new FormData();
+    private curriculumDetailDataNum: number = 0;
     private eduItems: Array< {title: string }>=[];
 
     private modifyCurriculumData: IModifyCurriculum = {
@@ -179,7 +180,7 @@ export default class ModifyCurriculumPopup extends Vue {
             this.eduItems.length=num;
 
             if( this.curriculumDetailDataNum > 50){
-                this.isCreateError = true;
+                // this.isCreateError = true;
 
                 num = 50;
                 this.curriculumDetailDataNum=50;
@@ -439,28 +440,6 @@ export default class ModifyCurriculumPopup extends Vue {
             deleted_course_list: [],
             course_list: this.modifyCourseList,
         };
-        /*
-         * {
-             "title": "파파야 교육과정 1111",
-             "goal": "교육과정 목표 수능 1점.",
-             "deleted_course_list": [
-                 {
-                    "id":2573
-                 },
-             ],
-             "course_list": [
-                 {
-                     "id": 1022,
-                     "index": 1,
-                     "title": "1회차수업",
-                     "startDay": "2019-11-15",
-                     "startTime": "10:00:00",
-                     "endTime": "11:00:00",
-                     "contents": "수업내용 100자이내로 설명."
-                 },
-             ]
-            }
-         */
         this.formData = new FormData();
         const temp = JSON.stringify( {...this.modifyCurriculumData} );
         this.formData.append('data', temp );
@@ -475,11 +454,12 @@ export default class ModifyCurriculumPopup extends Vue {
 
     /**
      * 코스 수정 팝업 오픈
-     * @param id
      * @private
+     * @param curriculumId
+     * @param courseId
      */
-    private async onModifyCoursePopupOpen( curriculumId: number, coursId: number) {
-        this.courseId = coursId;
+    private async onModifyCoursePopupOpen( curriculumId: number, courseId: number) {
+        this.courseId = courseId;
         this.curriculumId = curriculumId;
         await this.GET_COURSE_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.curriculumId, courseId: this.courseId})
             .then((data)=>{
@@ -492,8 +472,20 @@ export default class ModifyCurriculumPopup extends Vue {
         this.isModifyClassCourse=value;
     }
 
-    private onModifyCourse(value: boolean) {
-        this.isModifyClassCourse=value;
+    /**
+     * 개별 수업내용 삭제
+     * @param id
+     * @private
+     */
+    private deleteCourse(id: number): void {
+        MyClassService.deleteEduCourse(this.classID, this.cardId, id)
+            .then((result) => {
+               console.log(result);
+               if (this.curriculumDetailItem.course_list !== undefined) {
+                   const findIdx = this.curriculumDetailItem.course_list.findIndex((item) => item.id === id);
+                   this.curriculumDetailItem.course_list.splice(findIdx, 1);
+               }
+            });
     }
 
     /**

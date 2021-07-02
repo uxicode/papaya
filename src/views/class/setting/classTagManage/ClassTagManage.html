@@ -15,9 +15,9 @@
                 <p class="popup-txt">클래스를 표현할 수 있는 태그를 추가해 보세요. 총 10개까지 등록 가능합니다.</p>
 
                 <div class="tag-cnt">
-                    <span class="label">등록된 태그 <strong>{{ tagList.length }}/10</strong></span>
+                    <span class="label">등록된 태그 <strong>{{ tagListModel.length }}/10</strong></span>
                     <div class="tag-list mgt-16">
-                        <div v-for="(item, idx) in tagList"
+                        <div v-for="(item, idx) in tagListModel"
                              :key="idx"
                              class="hashtag">
                             <span class="tag-label">{{ item.keyword }}</span>
@@ -98,13 +98,27 @@
               @pageChange="페이징 넘버 버튼 클릭시 이벤트 핸들러"
               @prev="이전 페이지 버튼 클릭시 이벤트 핸들러"
               @next="다음 페이지 버튼 클릭시 이벤트 핸들러"-->
-                <pagination
-                        :total.sync="currentTotal"
-                        :num-of-page="numOfPage"
-                        :page-size="pageSize"
-                        @pageChange="pageChange"
-                        @prev="prevPage"
-                        @next="nextPage"></pagination>
+<!--                <pagination-->
+<!--                        :total.sync="currentTotal"-->
+<!--                        :num-of-page="numOfPage"-->
+<!--                        :page-size="pageSize"-->
+<!--                        @pageChange="pageChange"-->
+<!--                        @prev="prevPage"-->
+<!--                        @next="nextPage"></pagination>-->
+
+              <template v-if="!manualChk">
+                <div class="btn-group ct">
+                  <btn type="outline" @btnClick="manualInputClickHandler">직접입력</btn>
+                </div>
+              </template>
+              <template v-else>
+                <div class="popup-search-input">
+                  <txt-field size="320" v-model="manualInputField" placeholder="학교 이름을 직접 입력해 주세요."></txt-field>
+                </div>
+                <div class="btn-group rt">
+                  <btn type="navi" @btnClick="applyManualValClickHandler">확인</btn>
+                </div>
+              </template>
             </div>
         </modal>
     </transition>

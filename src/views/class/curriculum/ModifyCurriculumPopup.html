@@ -66,10 +66,10 @@
                         </template>
                         <v-list>
                           <v-list-item>
-                            <v-list-item-title class="lt" @click="onModifyCoursePopupOpen(item.id)">수업 내용 수정</v-list-item-title>
+                            <v-list-item-title class="lt" @click="onModifyCoursePopupOpen(cardId, item.id)">수업 내용 수정</v-list-item-title>
                           </v-list-item>
                           <v-list-item>
-                            <v-list-item-title class="lt" @click="">수업 내용 삭제</v-list-item-title>
+                            <v-list-item-title class="lt" @click="deleteCourse(item.id)">수업 내용 삭제</v-list-item-title>
                           </v-list-item>
                         </v-list>
                       </v-menu>
@@ -94,8 +94,9 @@
 
   <modify-course-popup
         :is-modify-course="isModifyClassCourse"
+        :course-idx="courseId"
+        :form-data="formData"
         @change="onModifyCoursePopupStatus"
-        @submit="onModifyCourse"
         @modifyCourse="getModifyCourseData">
   </modify-course-popup>
 
