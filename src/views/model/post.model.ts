@@ -153,6 +153,21 @@ interface IVoteModel{
     image_url?: string;
   }>;
 }
+interface IAddVoteModel{
+  parent_id: number;
+  type: number;
+  title: string;
+  multi_choice: number | boolean;  //복수선택
+  anonymous_mode: number | boolean;   //익명
+  open_progress_level: number;
+  open_result_level: number;  //투명현황공개 0-전체, 1-운영자/스텝, 2-운영자
+  finishAt?: Date | string | null;
+  vote_choice_list: Array<{
+    text: string;
+    index: number;
+    image_url?: string;
+  }>;
+}
 
 interface IReadAbleVote {
   anonymous_mode: boolean | number;
@@ -246,5 +261,16 @@ interface IPostInLinkModel{
 }
 
 
-export {IPostModel, IAttachFileModel, ICreatePost, IVoteModel, ILinkModel, IReadAbleVote, IPostInLinkModel,IVoteUserChoice, IReadAbleVoteList};
+export {
+  IPostModel,
+  IAttachFileModel,
+  ICreatePost,
+  IVoteModel,
+  ILinkModel,
+  IReadAbleVote,
+  IPostInLinkModel,
+  IVoteUserChoice,
+  IReadAbleVoteList,
+  IAddVoteModel
+};
 

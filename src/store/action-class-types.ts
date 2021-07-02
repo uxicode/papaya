@@ -29,3 +29,5 @@ export const GET_SCHEDULE_LIST_ACTION: string = 'GET_SCHEDULE_LIST_ACTION';
 export const EDIT_POST_ACTION: string = 'EDIT_POST_ACTION';
 export const DELETE_POST_FILE_ACTION: string = 'DELETE_POST_FILE_ACTION';
 export const EDIT_POST_TXT_ACTION: string = 'EDIT_POST_TXT_ACTION';
+export const ADD_VOTE_ACTION: string = 'ADD_VOTE_ACTION';
+export const DELETE_VOTE_ACTION: string = 'DELETE_VOTE_ACTION';

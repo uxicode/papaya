@@ -28,6 +28,7 @@ import EditVotePopup from '@/views/class/notification/EditVotePopup';
 import UtilsMixins from '@/mixin/UtilsMixins';
 import {PostService} from '@/api/service/PostService';
 import WithRender from './EditNotificationPopup.html';
+import {ADD_VOTE_ACTION, DELETE_VOTE_ACTION} from '@/store/action-class-types';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -69,6 +70,12 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   @Post.Action
   private EDIT_POST_TXT_ACTION!: ( payload: { classId: string | number, postId: number, tit: string, txt: string } )=>Promise<any>;
 
+  @Post.Action
+  private ADD_VOTE_ACTION!: (payload: { classId: number, postId: number, voteData: IVoteModel})=>Promise<any>;
+
+  @Post.Action
+  private DELETE_VOTE_ACTION!: (payload: {  postId: number, voteId: number})=>Promise<any>;
+
   @MyClass.Getter
   private classID!: string | number;
 
@@ -109,6 +116,8 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   private attachFileService: AttachFileService=new AttachFileService();
   private removeFiles: number[]= [];
   private removeVoteId: number=-1;
+  private isEditVote: boolean=false;
+  private isAddVote: boolean=false;
 
 
   get imgFileURLItemsModel(): string[] {
@@ -381,21 +390,37 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   }
 
   private onAddVote( voteData: IVoteModel) {
+    this.isAddVote=true;
+    //기존 알림에서 투표를 추가하게 되면 parent_id 신규 속성값이 필요하다.
     this.voteData = voteData;
+    const {id}=this.postDetailItem;
+    let {parent_id}=this.voteData.vote;
+    parent_id=id;
+    this.voteData.vote = {...this.voteData.vote, parent_id};
     this.isOpenAddVotePopup=false;
     // console.log(voteData);
   }
 
   private onSubmitBeforeEditVote(voteData: IVoteModel) {
+    this.isEditVote=true;
     this.voteData = voteData;
+    /*const {id}=this.postDetailItem;
+    let {parent_id}=this.voteData.vote;
+    parent_id=id;
+    this.voteData.vote = {...this.voteData.vote, parent_id};*/
     this.isOpenEditVotePopup=false;
     console.log(voteData);
   }
+
   private voteDataClear() {
     const { vote }=this.postDetailItem;
     if (vote) {
       this.removeVoteId=vote.id;
     }
+    this.resetVoteData();
+  }
+
+  private resetVoteData() {
     this.voteData=null;
   }
 
@@ -462,7 +487,20 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
     this.imgFilesAllClear(); //이미지 데이터 비우기
     this.attachFilesAllClear();//파일 데이터 비우기
     this.postData = {title: '', text: ''}; //post 데이터 비우기
-    this.voteDataClear(); //투표 데이터 비우기
+    this.resetVoteData(); //투표 데이터 비우기
+    this.linkData={
+      link: {title: ''},
+      link_item_list: []
+    };
+    this.isAddVote=false;
+    this.isEditVote=false;
+  }
+
+  private editCancel() {
+    this.allClear();
+    this.isAddVote=false;
+    this.isEditVote=false;
+    this.popupChange(false);
   }
 
   /**
@@ -472,77 +510,102 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   private async editPostFormData() {
     if( !this.isSubmitValidate ){return;}
 
-    //이미지 파일 저장.
-    await this.imgFileService.save( this.formData );
 
-    //파일 저장.
-    await this.attachFileService.save( this.formData );
+    //데이터를 전달하기도 전에 this.allClear 하는 문제 해결해야 함.
+    await this.editInfos()
+      .then(()=>{
+        // this.allClear();
+        this.popupChange(false);
+        console.log('editInfos 함수 수정 완료');
+      });
+  }
 
-    //링크 데이터가 존재 한다면 기존 postData 에 merge 한다.
-    const linkMergeData = (this.getValidLink())? {...this.postData, ...this.linkData} : {...this.postData};
-    const voteMergeData = (this.voteData!==null)? {...linkMergeData, ...this.voteData} : {...this.postData};
-    const mergeData= (this.alarmData.alarmAt!=='')? {...voteMergeData, ...this.alarmData} : voteMergeData;
-
-    //formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.
-    const temp = JSON.stringify( mergeData );
-    await this.formData.append('data', temp );
+  private async editInfos(): Promise<any> {
 
     const { id }= this.postDetailItem;
 
-    // console.log(this.formData.getAll('data'), this.formData.getAll('files'), id, Number(this.classID));
-     // 링크, 이미지 제거/추가,  파일 제거/추가 가 있을 경우만 아래  -> EDIT_POST_ACTION 을 사용하는 것으로 변경
-    if( this.getValidLink() || this.imgFileService.getAddFiles().length>0 || this.attachFileService.getAddFiles().length>0 || this.removeFiles.length > 0){
+    //이미지, 첨부파일 제거가 있다면
+    if (this.removeFiles.length > 0) {
+      this.DELETE_POST_FILE_ACTION( { classId: Number( this.classID ), postId: id, ids:this.removeFiles })
+        .then( (deleteResult)=>{
+          console.log(deleteResult);
+          this.removeFiles=[];
+          this.imgFilesAllClear(); //이미지 데이터 비우기
+          this.attachFilesAllClear();//파일 데이터 비우기
+        });
+    }
+
+    //투표 제거가 있다면
+    if( this.removeVoteId!==-1 ){
+      this.DELETE_VOTE_ACTION({postId: id, voteId: this.removeVoteId})
+        .then((deleteVoteResult) => {
+          console.log(deleteVoteResult);
+          this.removeVoteId = -1;
+        });
+    }
+
+    //타이틀과 본문 텍스트만 수정된 경우
+    if( !this.getValidLink() &&
+      this.voteData===null &&
+      this.alarmData.alarmAt==='' &&
+      this.imgFileService.getAddFiles().length<1 &&
+      this.attachFileService.getAddFiles().length<1 &&
+      this.removeFiles.length <1) {
+      this.EDIT_POST_TXT_ACTION({
+        classId: Number(this.classID),
+        postId: id,
+        tit: this.postData.title,
+        txt: this.postData.text
+      })
+        .then((data) => {
+          console.log(data);
+          this.postData = {title: '', text: ''}; //post 데이터 비우기
+        });
+    }
+
+    //이게 신규인지 edit 인지 파악필요.
+    if (this.voteData !== null && this.isAddVote ) {
+      console.log(this.voteData);
+      this.ADD_VOTE_ACTION( {classId: Number(this.classID), postId: id, voteData: this.voteData})
+        .then((data)=>{
+          console.log('투표 추가 완료', data);
+        });
+    }
+
+    // 투표수정 저, 링크수, 이미지 추가,  파일 추가 가 있을 경우만
+    if( this.getValidLink() || this.imgFileService.getAddFiles().length>0 || this.attachFileService.getAddFiles().length>0 || ( this.voteData !== null && this.isEditVote ) ) {
+
+      //이미지 파일 저장.
+      this.imgFileService.save( this.formData );
+
+      //파일 저장.
+      this.attachFileService.save( this.formData );
+
+      //링크 데이터가 존재 한다면 기존 postData 에 merge 한다.
+      const linkMergeData = (this.getValidLink())? {...this.postData, ...this.linkData} : {...this.postData};
+      const voteMergeData = (this.voteData!==null)? {...linkMergeData, ...this.voteData} : {...linkMergeData};
+      const mergeData= (this.alarmData.alarmAt!=='')? {...voteMergeData, ...this.alarmData} : {...voteMergeData};
+
+
+      //formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.
+      const temp = JSON.stringify( mergeData );
+      this.formData.append('data', temp );
+
       //파일/이미지 제거가 존재하면 아래실행.
-      if (this.removeFiles.length > 0) {
-        this.DELETE_POST_FILE_ACTION( { classId: Number( this.classID ), postId: id, ids:this.removeFiles })
-          .then( (deleteResult)=>{
-            console.log(deleteResult);
-            this.removeFiles=[];
-            this.imgFilesAllClear(); //이미지 데이터 비우기
-            this.attachFilesAllClear();//파일 데이터 비우기
-          });
-      }
-      this.EDIT_POST_ACTION({classId: Number(this.classID), postId: id,  formData: this.formData})
-        .then( (data)=>{
+      this.EDIT_POST_ACTION({classId: Number(this.classID), postId: id, formData: this.formData})
+        .then((data) => {
           PostService.getPostsById(Number(this.classID), id)
-            .then( (readData)=>{
+            .then((readData) => {
               console.log('수정된 readdata=', readData);
               //
-              this.EDIT_POST( {postId:id, editInfo: readData.post});
+              this.EDIT_POST({postId: id, editInfo: readData.post});
 
               this.allClear();
             });
         });
-    }else{
-
-      //투표 제거가 있다면
-      if( this.removeVoteId!==-1 ){
-        PostService.deleteVote(this.removeVoteId)
-          .then((deleteVoteResult)=>{
-            console.log(deleteVoteResult);
-            this.removeVoteId=-1;
-            this.voteDataClear(); //투표 데이터 비우기
-          });
-      }
-
-      //타이틀과 본문 텍스트만 수정된 경우
-      if( !this.getValidLink() &&
-        this.voteData===null &&
-        this.alarmData.alarmAt==='' &&
-        this.imgFileService.getAddFiles().length<1 &&
-        this.attachFileService.getAddFiles().length<1 &&
-        this.removeFiles.length <1){
-
-        this.EDIT_POST_TXT_ACTION( {classId: Number(this.classID), postId: id, tit: this.postData.title, txt:this.postData.text})
-          .then((data)=>{
-            console.log( data );
-            this.postData = {title: '', text: ''}; //post 데이터 비우기
-          });
-      }
-
     }
 
-    this.popupChange(false);
+    // console.log(this.formData.getAll('data'), this.formData.getAll('files'), id, Number(this.classID));
 
   }
 }

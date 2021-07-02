@@ -578,7 +578,7 @@
   grid-template-columns: repeat(3, 1fr);
   li {
     position:relative;
-    img {width:100%; object-fit: fill}
+    img {width:100%; object-fit: cover;}//jbc
     &.img-item:nth-child(1){
       grid-row-start: 1;
       grid-row-end: 3;
