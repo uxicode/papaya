@@ -26,9 +26,8 @@ import VotePreview from '@/components/preview/votePreview.vue';
 import AlarmPreview from '@/components/preview/alarmPreview.vue';
 import EditVotePopup from '@/views/class/notification/EditVotePopup';
 import UtilsMixins from '@/mixin/UtilsMixins';
-import WithRender from './EditNotificationPopup.html';
 import {PostService} from '@/api/service/PostService';
-import {EDIT_POST} from '@/store/mutation-class-types';
+import WithRender from './EditNotificationPopup.html';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -55,6 +54,21 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   @Prop(Boolean)
   private isOpen!: boolean;
 
+  @Post.Action
+  private ADD_POST_ACTION!: (payload: { classId: number; formData: FormData })=>Promise<any>;
+
+  @Post.Action
+  private GET_RESERVED_LIST_ACTION!: (classId: number) => Promise<any>;
+
+  @Post.Action
+  private EDIT_POST_ACTION!: (payload: { classId: number, postId: number, formData: FormData }) => Promise<any>;
+
+  @Post.Action
+  private DELETE_POST_FILE_ACTION!: (payload: { classId: number, postId: number, ids: number[] })=>Promise<any>;
+
+  @Post.Action
+  private EDIT_POST_TXT_ACTION!: ( payload: { classId: string | number, postId: number, tit: string, txt: string } )=>Promise<any>;
+
   @MyClass.Getter
   private classID!: string | number;
 
@@ -75,19 +89,6 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
 
   @Post.Mutation
   private EDIT_POST!: ( info: { postId: number, editInfo: any })=> void;
-
-  @Post.Action
-  private ADD_POST_ACTION!: (payload: { classId: number; formData: FormData })=>Promise<any>;
-
-  @Post.Action
-  private GET_RESERVED_LIST_ACTION!: (classId: number) => Promise<any>;
-
-  @Post.Action
-  private EDIT_POST_ACTION!: (payload: { classId: number, postId: number, formData: FormData }) => Promise<any>;
-
-  @Post.Action
-  private DELETE_POST_FILE_ACTION!: (payload: { classId: number, postId: number, ids: number[] })=>Promise<any>;
-
 
   private isOpenEditVotePopup: boolean=false;
   private isOpenAddVotePopup: boolean=false;
@@ -234,7 +235,6 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
 
   private popupChange( value: boolean ) {
     this.$emit('change', value);
-    this.allClear();
   }
 
 
@@ -490,36 +490,59 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
     const { id }= this.postDetailItem;
 
     // console.log(this.formData.getAll('data'), this.formData.getAll('files'), id, Number(this.classID));
-
-    //vote 제거 / vote 신규 / vote 수정 api 별도 처리 , 첨부파일( 이미지,파일) 삭제 api 별도 처리
-    // 링크, 이미지 추가,  파일 추가 가 있을 경우만 아래  -> EDIT_POST_ACTION 을 사용하는 것으로 변경해야 함.
-    await this.EDIT_POST_ACTION({classId: Number(this.classID), postId: id,  formData: this.formData})
-      .then( (data)=>{
-        if (this.removeFiles.length > 0) {
-
-          this.DELETE_POST_FILE_ACTION( { classId: Number( this.classID ), postId: id, ids:this.removeFiles })
-            .then( (deleteResult)=>{
-              console.log(deleteResult);
-              this.removeFiles=[];
-            });
-        }
-
-        if( this.removeVoteId!==-1 ){
-          PostService.deleteVote(this.removeVoteId)
-            .then((deleteVoteResult)=>{
-              console.log(deleteVoteResult);
-              this.removeVoteId=-1;
-            });
-        }
-        PostService.getPostsById(Number(this.classID), id)
-          .then( (readData)=>{
-            console.log('수정된 readdata=', readData);
-            //
-            this.EDIT_POST( {postId:id, editInfo: readData.post});
-
-            this.popupChange(false);
+     // 링크, 이미지 제거/추가,  파일 제거/추가 가 있을 경우만 아래  -> EDIT_POST_ACTION 을 사용하는 것으로 변경
+    if( this.getValidLink() || this.imgFileService.getAddFiles().length>0 || this.attachFileService.getAddFiles().length>0 || this.removeFiles.length > 0){
+      //파일/이미지 제거가 존재하면 아래실행.
+      if (this.removeFiles.length > 0) {
+        this.DELETE_POST_FILE_ACTION( { classId: Number( this.classID ), postId: id, ids:this.removeFiles })
+          .then( (deleteResult)=>{
+            console.log(deleteResult);
+            this.removeFiles=[];
+            this.imgFilesAllClear(); //이미지 데이터 비우기
+            this.attachFilesAllClear();//파일 데이터 비우기
           });
-      });
+      }
+      this.EDIT_POST_ACTION({classId: Number(this.classID), postId: id,  formData: this.formData})
+        .then( (data)=>{
+          PostService.getPostsById(Number(this.classID), id)
+            .then( (readData)=>{
+              console.log('수정된 readdata=', readData);
+              //
+              this.EDIT_POST( {postId:id, editInfo: readData.post});
+
+              this.allClear();
+            });
+        });
+    }else{
+
+      //투표 제거가 있다면
+      if( this.removeVoteId!==-1 ){
+        PostService.deleteVote(this.removeVoteId)
+          .then((deleteVoteResult)=>{
+            console.log(deleteVoteResult);
+            this.removeVoteId=-1;
+            this.voteDataClear(); //투표 데이터 비우기
+          });
+      }
+
+      //타이틀과 본문 텍스트만 수정된 경우
+      if( !this.getValidLink() &&
+        this.voteData===null &&
+        this.alarmData.alarmAt==='' &&
+        this.imgFileService.getAddFiles().length<1 &&
+        this.attachFileService.getAddFiles().length<1 &&
+        this.removeFiles.length <1){
+
+        this.EDIT_POST_TXT_ACTION( {classId: Number(this.classID), postId: id, tit: this.postData.title, txt:this.postData.text})
+          .then((data)=>{
+            console.log( data );
+            this.postData = {title: '', text: ''}; //post 데이터 비우기
+          });
+      }
+
+    }
+
+    this.popupChange(false);
 
   }
 }

@@ -35,7 +35,21 @@ export default class UtilsMixins extends Vue {
 
   public txtAreaEleH( txtAreaEle: HTMLTextAreaElement, txt: string ) {
     // const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLInputElement;
-    txtAreaEle.style.height = String( Utils.autoResizeTextArea(txt) + 'px');
+
+    let txtAreaSizeTotal=0;
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < txt.length; i++) {
+      //영문/한글 섞인 문자를 바이트 수 계산
+      txtAreaSizeTotal += Utils.getCharByteSize(txt.charAt(i));
+    }
+    const lineH=20;
+    const maxTxtLen=117; //한줄에 최대한 들어갈 수 있는 텍스트의 바이트 수 - 영문/한글 섞인 계산된 바이트 수
+    const lineInLen=txtAreaSizeTotal/maxTxtLen; //maxTxtLen , 즉 몇줄까지 입력되었는 지 라인 수 계산
+    const numOfLine: number = (txt.match(/\n/g) || []).length; // 엔터키가 몇개 들어 갔는 지 체크
+    const resultH=lineH+( lineInLen+numOfLine)*lineH; //1줄 높이( 20px )+( 텍스트 입력 라인 수+엔터키 개수 ) * 1줄 높이( 20px )
+
+    // txtAreaEle.style.height = String( Utils.autoResizeTextArea(txt) + 'px');
+    txtAreaEle.style.height = resultH+'px';
   }
 
   /**
