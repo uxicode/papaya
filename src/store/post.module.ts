@@ -366,18 +366,15 @@ export default class PostModule extends VuexModule {
   }
 
   @Action
-  public [EDIT_POST_ACTION](payload: { classId: number, postId: number, formData: FormData }): Promise<any>{
-    const {classId, postId, formData} = payload;
+  public [EDIT_POST_ACTION](payload: { promise: Array<Promise<any>> }): Promise<any>{
+    const {promise} = payload;
 
-    return PostService.setPostInfoAllById( classId, postId, formData )
-      .then((data) => {
-        // const modifyData = data.post;
+    return getAllPromise(promise)
+      .then((data)=>{
 
-        // const findIdx=this.postListItems.findIndex((item) => item.id === payload.postId);
-        // this.postListItems.splice(findIdx, 1, {...this.postListItems[findIdx],  ...modifyData});
-        // this.postListItems.splice(findIdx, 1, {});
+        console.log(data);
 
-        return Promise.resolve(data.post);
+        return Promise.resolve(data);
       }).catch((error) => {
         console.log(error);
         return Promise.reject(error);
@@ -410,7 +407,7 @@ export default class PostModule extends VuexModule {
     const {classId, postId, ids} = payload;
     return PostService.deletePostFileById(classId, postId, {ids})
       .then((data) => {
-        const findIdx=this.postListData.findIndex((item) => item.id === postId );
+       /* const findIdx=this.postListData.findIndex((item) => item.id === postId );
         const { attachment } = this.postListData[findIdx];
         const removedAttachItems=attachment.filter((item: any) => !ids.includes(item.id) );
         console.log(removedAttachItems, data);
@@ -420,7 +417,7 @@ export default class PostModule extends VuexModule {
         };
 
         this.context.commit(EDIT_POST, {postId, editInfo: bindData});
-
+*/
         return Promise.resolve( this.postListItems );
       }).catch((error) => {
         console.log(error);
@@ -436,7 +433,7 @@ export default class PostModule extends VuexModule {
       .then((deleteVoteResult)=>{
         console.log(deleteVoteResult);
 
-        this.context.commit(EDIT_POST, {postId, editInfo: {vote: null} });
+        // this.context.commit(EDIT_POST, {postId, editInfo: {vote: null} });
 
         return Promise.resolve( this.postListItems );
       }).catch((error) => {
