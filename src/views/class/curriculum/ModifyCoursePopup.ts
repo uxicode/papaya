@@ -220,7 +220,7 @@ export default class ModifyCoursePopup extends Vue {
 
         console.log('formData = ', this.formData);
 
-        this.$emit('modifyCourse', this.courseItem, this.formData);
+        this.$emit('modifyCourse', this.courseItem);
 
         this.popupChange(false);
         this.imgFilesAllClear();

@@ -62,7 +62,6 @@ export default class ModifyCurriculumPopup extends Vue {
     private curriculumDetailItem!: ICurriculumDetailList;
 
     private isModifyClassCourse: boolean = false;
-    private isCreateError: boolean = false;
 
     private countCourseNumber: number = 0;
     private curriculumId: number = 0;
@@ -94,23 +93,7 @@ export default class ModifyCurriculumPopup extends Vue {
         endTime: ''
     };
 
-    private modifyCourseList: any = [];
-
-    private makeCurriculumData: IMakeEducation={
-        title: '',
-        goal: '',
-        course_list: [
-            {
-                index: 0,
-                id: 0,
-                startDay: '',
-                startTime: '',
-                endTime: '',
-                title: '',
-                contents: ''
-            }
-        ]
-    };
+    private modifyCourseList: IModifyCourse[] = [];
 
     get curriculumDetailItemModel(): any {
         return this.curriculumDetailItem;
@@ -146,10 +129,10 @@ export default class ModifyCurriculumPopup extends Vue {
             }
         }
 
-        this.makeCurriculumData.course_list = [];
+        this.modifyCurriculumData.course_list = [];
 
         for (let i = 0; i < num; i++) {
-            this.makeCurriculumData.course_list.push({
+            this.modifyCurriculumData.course_list.push({
                 index: i,
                 id: i,
                 title: '',
@@ -180,12 +163,12 @@ export default class ModifyCurriculumPopup extends Vue {
             deleted_course_list: [],
             course_list: this.modifyCourseList,
         };
-        this.formData = new FormData();
         const temp = JSON.stringify( {...this.modifyCurriculumData} );
         this.formData.append('data', temp );
 
         await this.MODIFY_CURRICULUM_ACTION({classId: this.classID, curriculumId: this.curriculumDetailItemModel.id, formData: this.formData})
-            .then(() => {
+            .then((res: any) => {
+                console.log(res);
                 this.popupChange(false);
                 this.modifyCourseList = [];
             });

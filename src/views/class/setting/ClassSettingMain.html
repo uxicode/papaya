@@ -175,7 +175,8 @@
                                         <input type="text" class="form-control popup-type"
                                                v-model="item.question"
                                                @input="valueChange($event, item.id)"
-                                               :id="`question${item.id}`">
+                                               :id="`question${item.id}`"
+                                               :readonly="isQuestionShow===false">
                                         <!-- form-delete active 시 display:block; -->
                                         <button type="button" class="btn only-ico-btn form-delete active" @click="deleteJoinQuestion(idx, item.id)"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                                     </div>
@@ -187,7 +188,8 @@
                                     <div class="form-group" style="width:490px;">
                                         <input v-model="newQuestion"
                                                type="text" class="form-control popup-type"
-                                               id="new_question" placeholder="질문을 30자 이내로 입력해 주세요.">
+                                               id="new_question" placeholder="질문을 30자 이내로 입력해 주세요."
+                                               :readonly="isQuestionShow===false">
                                         <!-- form-delete active 시 display:block; -->
                                         <button type="button" class="btn only-ico-btn form-delete active" @click="clearQuestionInput"><img :src="require('@/assets/images/delete.svg')" alt=""></button>
                                     </div>

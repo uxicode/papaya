@@ -35,12 +35,7 @@ const MyClassRouter=[
       {path: 'step3', name: 'makeClassComplete', component: () => import('../views/class/make/step3/MakeClassComplete')}, //클래스 만들기 step 3
     ]
   },
-  {
-    path: '/classWithdrawComplete',
-    name: 'classWithdrawComplete',
-    beforeEnter: getIsAuth,
-    components: {default: () => import('@/views/class/setting/ClassWithdrawComplete'), header: AppHeader, footer: AppFooter}, // W.4.5.7.11.1.1
-  }
+
 ];
 
 export {MyClassRouter};
