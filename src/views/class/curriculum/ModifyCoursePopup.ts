@@ -215,14 +215,16 @@ export default class ModifyCoursePopup extends Vue {
             endTime: this.courseDetailItemModel.endTime,
         };
 
-        // this.imgFileService.save( this.formData );
-        // this.attachFileService.save( this.formData);
+        this.imgFileService.save( this.formData );
+        this.attachFileService.save( this.formData);
 
-        this.$emit('modifyCourse', this.courseItem);
+        console.log('formData = ', this.formData);
+
+        this.$emit('modifyCourse', this.courseItem, this.formData);
 
         this.popupChange(false);
-        // this.imgFilesAllClear();
-        // this.attachFilesAllClear();
+        this.imgFilesAllClear();
+        this.attachFilesAllClear();
 
     }
 

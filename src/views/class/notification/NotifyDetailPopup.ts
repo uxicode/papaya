@@ -6,10 +6,10 @@ import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
 import {Utils} from '@/utils/utils';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
+import PhotoViewer from '@/components/photoViewer/photoViewer.vue';
 import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
 import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
-import PhotoViewer from '@/views/class/notification/PhotoViewer';
 import DetailInVotePreview from '@/components/preview/DetailInVotePreview.vue';
 import {CommentService} from '@/api/service/CommentService';
 import WithRender from './NotifyDetailPopup.html';
@@ -22,10 +22,10 @@ const Post = namespace('Post');
     components:{
         Btn,
         Modal,
+        PhotoViewer,
         ListInImgPreview,
         ListInFilePreview,
         ListInLinkPreview,
-        PhotoViewer,
         DetailInVotePreview,
     }
 })
