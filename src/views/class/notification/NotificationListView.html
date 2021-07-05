@@ -16,7 +16,7 @@
                   min-width="200px"
                   :close-on-click="true">
             <template v-slot:activator="{ on, attrs }" >
-              <button v-if="isEditAuth(item.owner.user_id)"
+              <button
                       type="button"
                       class="list-popup-btn"
                       v-bind="attrs"

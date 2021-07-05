@@ -75,9 +75,8 @@
       </div>
     </div>
 
-    <!-- start: 리스트 뷰 -->
+    <!-- start: 리스트 뷰 :post-list-items="postListItemsModel" -->
     <notification-list-view v-if="postListItemsModel.length>0"
-                            :post-list-items="postListItemsModel"
                             :comments-total-items="commentsTotalItemsModel"
                             @click:detailPost="onDetailPostOpen"></notification-list-view>
     <!-- end: 리스트 뷰 -->

@@ -95,7 +95,7 @@ export default class EditVotePopup extends Vue {
 
   get readVoteData(): IVoteModel{
     this.resetData();
-    // console.log(this.voteData);
+    console.log(this.voteData);
     return this.voteData;
   }
 
@@ -132,7 +132,7 @@ export default class EditVotePopup extends Vue {
         type,
         vote_choices
       } = this.voteItems;
-
+      console.log(this.voteItems);
       //투표
       this.voteType=( type===0 )? 'txt' : 'date';
 

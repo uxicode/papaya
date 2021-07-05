@@ -1,7 +1,7 @@
 import {request} from '@/api/service/AxiosService';
 import {CLASS_BASE_URL, USER_BASE_URL} from '@/api/base';
 import {IKeepPostList} from '@/views/model/my-class.model';
-import {IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
+import {IAddVoteModel, IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
 
 export class PostService{
   /**
@@ -47,8 +47,8 @@ export class PostService{
   }
 
 
-  public static setAddVote(classId: string | number, payload: IVoteModel ): Promise<any>{
-    return request('post', '/vote', payload );
+  public static setAddVote(classId: string | number, vote: IAddVoteModel ): Promise<any>{
+    return request('post', '/vote', vote );
   }
 
   public static deleteVote( voteId: number): Promise<any>{

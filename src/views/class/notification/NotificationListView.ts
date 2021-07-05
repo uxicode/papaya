@@ -34,17 +34,13 @@ const Post = namespace('Post');
   }
 })
 export default class NotificationListView extends Vue {
+/*
   @Prop(Array)
   private readonly postListItems!: IPostModel[] & IPostInLinkModel[];
+*/
 
   @Prop(Array)
   private readonly commentsTotalItems!: any[];
-
-  @MyClass.Getter
-  private classID!: string | number;
-
-  @Auth.Getter
-  private userInfo!: IUserMe | null;
 
 
   @Post.Action
@@ -59,16 +55,39 @@ export default class NotificationListView extends Vue {
   @Post.Action
   private GET_COMMENTS_ACTION!: ( postId: number)=>Promise<any>;
 
+  @MyClass.Getter
+  private classID!: string | number;
+
+  @Auth.Getter
+  private userInfo!: IUserMe | null;
+
+  @Post.Getter
+  private postListItems!: IPostModel[] & IPostInLinkModel[];
+
   private isDetailPopupOpen: boolean=false;
   private isEditPopupOpen: boolean=false;
   // private isLoading: boolean=false;
   private detailPostId: number=-1; // 동적으로 변경 안되는 상태
 
   private isNoticePopupOpen: boolean=false;
+  private currentUserAuth: number=-1;
 
 
   get detailPostIdModel() {
     return this.detailPostId;
+  }
+
+  public created() {
+    //currentUserAuth
+
+    MyClassService.getMyInfoInThisClass(Number(this.classID))
+      .then((data) => {
+        const {user_id} = (data.result);
+        this.currentUserAuth = user_id;
+        return Promise.resolve( user_id );
+      }).catch((error) => {
+      return Promise.reject( false );
+    });
   }
 
 
@@ -83,20 +102,17 @@ export default class NotificationListView extends Vue {
    * @private
    */
   private isOwner( ownerId: number, userId: number): boolean {
-    console.log(ownerId, userId);
+    // console.log(ownerId, userId);
     return (ownerId === userId);
   }
 
-  private getIsMember( ownerId: number ): Promise<boolean> {
-    return  MyClassService.getMyInfoInThisClass(Number(this.classID))
-      .then((data) => {
-        const {user_id} = (data.result);
-        const check = (user_id === ownerId);
-        console.log(user_id, ownerId, check);
-        return Promise.resolve( check );
-      }).catch((error) => {
-        return Promise.reject( false );
-      });
+  /**
+   * 게시글 글쓴이와 현재 로그인 유저와 권한이 같은지 체크
+   * @param ownerId
+   * @private
+   */
+  private getIsMember( ownerId: number ): boolean {
+    return ownerId === this.currentUserAuth;
   }
 
   /**
@@ -105,11 +121,7 @@ export default class NotificationListView extends Vue {
    * @private
    */
   private isEditAuth( ownerId: number ) {
-    let chk=false;
-    const result=this.getIsMember(ownerId).then((data)=>{
-      chk=data;
-    });
-    return chk;
+    return this.getIsMember(ownerId);
   }
 
 
@@ -212,6 +224,7 @@ export default class NotificationListView extends Vue {
    */
   private async onEditPost(id: number) {
     this.detailPostId = id; // update postId
+    console.log(id);
     await this.GET_POST_DETAIL_ACTION({classId: Number(this.classID), postId: this.detailPostId})
       .then((data)=>{
         this.isEditPopupOpen=true;
