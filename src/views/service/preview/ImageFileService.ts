@@ -67,21 +67,28 @@ class ImageFileService implements IFile{
   public reset() {
     this.removeAll();
   }
+
+  /**
+   * 신규로 add 된 이미지가 있는지 체크
+   */
+  public getAddFiles(){
+   return this.imgFileItems
+     .filter((item) => item.file.name !== undefined)
+     .map((item)=>item.file);
+  }
   /**
    *  이미지 파일이 저장된 배열을 전송할 formdata 에 값 대입.
    */
   public save( formData: FormData ): void {
     if( !this.imgFileItems.length ){ return; }
 
-    const addFiles= this.imgFileItems
-      .filter((item) => item.file.name !== undefined)
-      .map((item)=>item.file);
+    const addFiles= this.getAddFiles();
 
-    //전송할 파일이 없다면 여기서 종료.
-    if( addFiles.length<1 ){ return; }
+    //신규 전송할 파일이 없다면 여기서 종료.
+    if( addFiles.length<0 ){ return; }
 
     // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-    this.formDataAppendToFile( formData, addFiles, 'files');
+    this.formDataAppendToFile( formData,  addFiles, 'files');
   }
   //end : IFile 에 있는 필수 선언 메서드 ================================================
 

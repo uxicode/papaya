@@ -1,5 +1,5 @@
 <template>
-  <div class="fd-inner" v-if="fileItems!==null">
+  <div class="fd-inner" v-if="fileItems!==null && length>0">
     <p class="fd-inner-txt fc-red">{{ isVote(fileItems[finishAt]) ? '투표 중' : '투표마감' }}</p>
     <div class="vote-area">
       <p class="vote-tit">{{ fileItems[title] }}</p>
@@ -20,6 +20,9 @@ export default class ListInVotePreview extends Vue{
 
   @Prop(Object)
   private fileItems!: any;
+
+  @Prop(Number)
+  private length!: number;
 
   @Prop(String)
   private finishAt!: string; //finishAt

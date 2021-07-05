@@ -1,11 +1,11 @@
 <template>
-  <div class="fd-inner"  v-if="getImgFileLen(fileItems)>0">
+  <div class="fd-inner"  v-if="fileItems!==null && fileItems.length>0">
     <ul class="img-list clearfix">
       <li class="img-item" v-for="( imgItem, imgIndex ) in getImgFileDataSort(fileItems)"
           :key="`img-${imgIndex}`" >
         <a :href="imgItem[location]"
-           :data-count="getImgFileMoreCheck(fileItems)"
-           :class="{'pseudo-del': getImgTotalNum(fileItems) }"
+           :data-count="imgFileMoreNum"
+           :class="{'pseudo-del': imgTotalNum }"
            target="_blank">
           <img :src="imgItem[location]" alt="">
         </a>
@@ -27,6 +27,14 @@ export default class ListInImgPreview extends Vue{
 
   @Prop(String)
   private location!: string;
+
+  get imgFileMoreNum() {
+    return (this.fileItems)? ( this.getImgFileDataSort( this.fileItems ).length>3 )? `+${this.getImgFileDataSort( this.fileItems ).length - 3}` : '' : 0;
+  }
+
+  get imgTotalNum() {
+    return (this.fileItems && this.getImgFileDataSort(this.fileItems).length <=3);
+  }
 
   private getImgFileLen( items: IAttachFileModel[] ): number{
     return (items) ? this.getImgFileDataSort( items ).length : 0;

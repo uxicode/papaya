@@ -123,7 +123,8 @@ export default class MyClassListView extends Vue{
     if(this.classMoreInfo[idx - 1]===undefined){
       return '';
     }else{
-      return (this.classMoreInfo[idx - 1].is_private) ? '공개' : '비공개';
+      // console.log(this.classMoreInfo[idx - 1]);
+      return (this.classMoreInfo[idx - 1].is_private) ? '비공개' : '공개';
     }
   }
 

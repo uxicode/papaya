@@ -4,11 +4,19 @@ import {IAttachFileModel} from '@/views/model/post.model';
 
 class AttachFileService implements IFile{
 
-  private attachFileItems: any[] = [];
+  public attachFileItems: any[] = [];
 
   //start : IFile 에 있는 필수 선언 메서드 ================================================
   public getItems(): any[] {
     return this.attachFileItems.map( (item)=>item.file);
+  }
+
+  public getFileItems(): any[] {
+    return this.attachFileItems;
+  }
+
+  public getItemById(idx: number): any {
+    return this.attachFileItems[idx];
   }
 
   public setAttachItems( items: IAttachFileModel[] ){
@@ -43,14 +51,21 @@ class AttachFileService implements IFile{
     this.removeAll();
   }
 
+  /**
+   * 신규로 add 된 파일이 있는지 체크
+   */
+  public getAddFiles(){
+    return this.attachFileItems
+      .filter((item) => item.file.name )
+      .map((item)=>item.file);
+  }
+
   public save(formData: FormData): void {
     if( !this.attachFileItems.length ){ return; }
 
     //현재 추가된 파일, 이미 업로드되어 로드된 파일 두개를 분리해서
     // 현재 추가된 파일 ( file - Blob 타입 ) 만 추출해서 formdata 에 append 한다.
-    const addFiles= this.attachFileItems
-      .filter((item) => item.file.name )
-      .map((item)=>item.file);
+    const addFiles= this.getAddFiles();
 
     //전송할 파일이 없다면 여기서 종료.
     if( addFiles.length<1 ){ return; }

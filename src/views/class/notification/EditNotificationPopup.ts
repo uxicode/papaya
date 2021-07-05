@@ -26,6 +26,7 @@ import VotePreview from '@/components/preview/votePreview.vue';
 import AlarmPreview from '@/components/preview/alarmPreview.vue';
 import EditVotePopup from '@/views/class/notification/EditVotePopup';
 import UtilsMixins from '@/mixin/UtilsMixins';
+import {PostService} from '@/api/service/PostService';
 import WithRender from './EditNotificationPopup.html';
 
 const MyClass = namespace('MyClass');
@@ -53,6 +54,21 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   @Prop(Boolean)
   private isOpen!: boolean;
 
+  @Post.Action
+  private ADD_POST_ACTION!: (payload: { classId: number; formData: FormData })=>Promise<any>;
+
+  @Post.Action
+  private GET_RESERVED_LIST_ACTION!: (classId: number) => Promise<any>;
+
+  @Post.Action
+  private EDIT_POST_ACTION!: (payload: { classId: number, postId: number, formData: FormData }) => Promise<any>;
+
+  @Post.Action
+  private DELETE_POST_FILE_ACTION!: (payload: { classId: number, postId: number, ids: number[] })=>Promise<any>;
+
+  @Post.Action
+  private EDIT_POST_TXT_ACTION!: ( payload: { classId: string | number, postId: number, tit: string, txt: string } )=>Promise<any>;
+
   @MyClass.Getter
   private classID!: string | number;
 
@@ -71,17 +87,11 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   @Post.Mutation
   private SET_VOTE!: (data: IReadAbleVote)=> void;
 
-  @Post.Action
-  private ADD_POST_ACTION!: (payload: { classId: number; formData: FormData })=>Promise<any>;
-
-  @Post.Action
-  private GET_RESERVED_LIST_ACTION!: (classId: number) => Promise<any>;
-
-  @Post.Action
-  private DELETE_POST_FILE!: (payload: { classId: number, postId: number, ids: number[] })=>Promise<any>;
-
+  @Post.Mutation
+  private EDIT_POST!: ( info: { postId: number, editInfo: any })=> void;
 
   private isOpenEditVotePopup: boolean=false;
+  private isOpenAddVotePopup: boolean=false;
   private isOpenAddLinkPopup: boolean=false;
   private isOpenAddReservation: boolean=false;
   private alarmData: { alarmAt: string }={alarmAt: ''};
@@ -97,6 +107,9 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   private formData: FormData=new FormData();
   private imgFileService: ImageFileService=new ImageFileService();
   private attachFileService: AttachFileService=new AttachFileService();
+  private removeFiles: number[]= [];
+  private removeVoteId: number=-1;
+
 
   get imgFileURLItemsModel(): string[] {
     return this.imgFileService.getItems();
@@ -116,6 +129,14 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
 
   get voteItemModel() {
     return this.voteData;
+  }
+
+  get voteInfoModel() {
+    return ( this.voteData?.vote )? this.voteData.vote : null;
+  }
+
+  get voteListLen() {
+    return (this.voteData?.vote_choice_list)? this.voteData.vote_choice_list.length : -1;
   }
 
   get linkTitle(): string{
@@ -214,7 +235,6 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
 
   private popupChange( value: boolean ) {
     this.$emit('change', value);
-    this.allClear();
   }
 
 
@@ -248,19 +268,12 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
    * @private
    */
   private onRemoveImgPreviewItems(idx: number): void{
-    // const targetImg = this.imgFileService.getItemById(idx);
-    const { id }= this.postDetailItem;
-
-    const file=this.imgFileService.getItemById(idx).file;
-
-    if( file.fieldname ){
-      this.DELETE_POST_FILE( { classId: Number( this.classID ), postId: id, ids:[file.id]})
-        .then( (data)=>{
-          this.imgFileService.remove(idx);
-        });
-    }else{
-      this.imgFileService.remove(idx);
+    //파일 제거를 api 통신 하지 않고 배열에 저장해 둔다. ( 최종 수정 버튼을 누를때 해당 제거에 대한 통신을 한다 )
+    const deleteFileId= this.imgFileService.getItemById(idx).file.id;
+    if (deleteFileId) {
+      this.removeFiles.push(deleteFileId);
     }
+    this.imgFileService.remove(idx);
   }
 
   /**
@@ -268,23 +281,11 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
    * @private
    */
   private onRemoveAllPreview(): void {
-
-    const { id }= this.postDetailItem;
-
     const fileItems=this.imgFileService.getFileItems();
-
-    const ids=fileItems
-      .map((item) =>(item.file.fieldname) ? item.file.id : '')
-      .filter((item) => item !== '');
-
-    if(ids && ids.length>0){
-      this.DELETE_POST_FILE( { classId: Number( this.classID ), postId: id, ids})
-        .then( (data)=>{
-          this.imgFileService.removeAll();
-        });
-    }else{
-      this.imgFileService.removeAll();
-    }
+    //파일 제거를 api 통신 하지 않고 배열에 저장해 둔다. ( 최종 수정 버튼을 누를때 해당 제거에 대한 통신을 한다 )
+    this.removeToItems(fileItems);
+    //
+    this.imgFileService.removeAll();
   }
   /**
    * post 등록을 완료후 formdata 및 배열에 지정되어 있던 데이터들 비우기..
@@ -310,9 +311,18 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
     this.attachFileService.load(files, '#attachFileInput');
   }
   private removeAllAttachFile(): void {
+    const fileItems=this.attachFileService.getFileItems();
+    //파일 제거를 api 통신 하지 않고 배열에 저장해 둔다. ( 최종 수정 버튼을 누를때 해당 제거에 대한 통신을 한다 )
+    this.removeToItems(fileItems);
     this.attachFileService.removeAll();
   }
+
   private removeAttachFileItem(idx: number): void{
+    //파일 제거를 api 통신 하지 않고 배열에 저장해 둔다. ( 최종 수정 버튼을 누를때 해당 제거에 대한 통신을 한다 )
+    const deleteFileId= this.attachFileService.getItemById(idx).file.id;
+    if (deleteFileId) {
+      this.removeFiles.push(deleteFileId);
+    }
     this.attachFileService.remove(idx);
   }
   private attachFilesAllClear() {
@@ -321,24 +331,23 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   }
   //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
 
-  /**
-   * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
-   * @private
-   */
-  private submitAddPost(): void{
-    //시나리오 --> 등록 버튼 클릭 > 이미지 추가한 배열값 formdata 에 입력 > 전송 >전송 성공후> filesAllClear 호출 > 팝업 닫기
-    //이미지 파일 저장.
-    this.imgFileService.save( this.formData );
-
-    //파일 저장.
-    this.attachFileService.save( this.formData );
-
-    //알림 데이터 전송 ( 투표 및 링크 데이터 )
-    this.setPostDataToFormData();
+  private removeToItems( fileItems: any[] ) {
+    const ids=fileItems
+      .map((item) =>(item.file.fieldname) ? item.file.id : '')
+      .filter((item) => item !== '');
+    if (ids.length > 0) {
+      this.removeFiles = [...this.removeFiles, ...ids];
+    }
   }
 
-  private onAddPostSubmit() {
-    this.submitAddPost();
+
+  /**
+   *  새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송
+   * @private
+   */
+  private onEditPostSubmit() {
+    //시나리오 --> 등록 버튼 클릭 > 이미지 추가한 배열값 formdata 에 입력 > 전송 >전송 성공후> filesAllClear 호출 > 팝업 닫기
+    this.editPostFormData().then(()=>console.log('수정완료.'));
   }
 
   /**
@@ -349,55 +358,57 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
     if( this.linkData===null ){ return false;}
     if( !this.linkData.link_item_list.length ){ return false;}
 
-    const invalidLinkItems: Array<{ index: number, url: string }> = [];
+    const validLinkItems: Array<{ index: number, url: string }> = [];
     this.linkData.link_item_list.forEach( (item: { index: number, url: string } )=>{
       //유효하지 않은 url 찾기
-      if( item.url!=='' && !Utils.getIsValidLink(item.url)  ){
-        invalidLinkItems.push(item);
+      // console.log(item.url !== '', Utils.getIsValidLink(item.url) );
+      if( item.url!=='' && Utils.getIsValidLink(item.url)  ){
+        validLinkItems.push(item);
       }
     });
-    return invalidLinkItems.length > 0;
+    return validLinkItems.length > 0;
   }
 
 
 
   //start : vote 이벤트 핸들러 ================================================
-  private editVotePopupOpen() {
+  /*private editVotePopupOpen() {
     this.isOpenEditVotePopup=true;
     console.log(this.isOpenEditVotePopup);
-  }
+  }*/
   private onVotePopupClose(value: boolean ) {
     this.isOpenEditVotePopup=value;
   }
+
   private onAddVote( voteData: IVoteModel) {
+    this.voteData = voteData;
+    this.isOpenAddVotePopup=false;
+    // console.log(voteData);
+  }
+
+  private onSubmitBeforeEditVote(voteData: IVoteModel) {
     this.voteData = voteData;
     this.isOpenEditVotePopup=false;
     console.log(voteData);
   }
   private voteDataClear() {
-    this.voteData={
-      vote:{
-        parent_id:0,
-        type: 0,
-        title: '',
-        multi_choice: 0,
-        anonymous_mode: 0,
-        open_progress_level: 0,
-        open_result_level: 0,
-        finishAt: '',
-      },
-      vote_choice_list: [
-        {
-          text: '',
-          index: 1
-        }
-      ]
-    };
+    const { vote }=this.postDetailItem;
+    if (vote) {
+      this.removeVoteId=vote.id;
+    }
+    this.voteData=null;
   }
+
+
   private onModifyVote() {
    // console.log('this.postDetailItem.vote=', this.postDetailItem.vote);
-    this.SET_VOTE( this.postDetailItem.vote );
-    this.isOpenEditVotePopup=true;
+    if (this.postDetailItem.vote !== null) {
+      this.SET_VOTE( this.postDetailItem.vote );
+      this.isOpenEditVotePopup=true;
+    }else{
+      this.isOpenAddVotePopup=true;
+    }
+
   }
   //end : vote 이벤트 핸들러 ================================================
 
@@ -414,7 +425,7 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   private onLinkPopupClose(value: boolean ) {
     this.isOpenAddLinkPopup=value;
   }
-  private onAddLink(linkData: ILinkModel) {
+  private onSubmitBeforeEditLink(linkData: ILinkModel) {
     this.isOpenAddLinkPopup=false;
     this.linkData = linkData;
   }
@@ -458,8 +469,14 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
    * 알림 데이터 post 전송
    * @private
    */
-  private setPostDataToFormData() {
+  private async editPostFormData() {
     if( !this.isSubmitValidate ){return;}
+
+    //이미지 파일 저장.
+    await this.imgFileService.save( this.formData );
+
+    //파일 저장.
+    await this.attachFileService.save( this.formData );
 
     //링크 데이터가 존재 한다면 기존 postData 에 merge 한다.
     const linkMergeData = (this.getValidLink())? {...this.postData, ...this.linkData} : {...this.postData};
@@ -468,29 +485,64 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
 
     //formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.
     const temp = JSON.stringify( mergeData );
-    this.formData.append('data', temp );
+    await this.formData.append('data', temp );
 
+    const { id }= this.postDetailItem;
 
+    // console.log(this.formData.getAll('data'), this.formData.getAll('files'), id, Number(this.classID));
+     // 링크, 이미지 제거/추가,  파일 제거/추가 가 있을 경우만 아래  -> EDIT_POST_ACTION 을 사용하는 것으로 변경
+    if( this.getValidLink() || this.imgFileService.getAddFiles().length>0 || this.attachFileService.getAddFiles().length>0 || this.removeFiles.length > 0){
+      //파일/이미지 제거가 존재하면 아래실행.
+      if (this.removeFiles.length > 0) {
+        this.DELETE_POST_FILE_ACTION( { classId: Number( this.classID ), postId: id, ids:this.removeFiles })
+          .then( (deleteResult)=>{
+            console.log(deleteResult);
+            this.removeFiles=[];
+            this.imgFilesAllClear(); //이미지 데이터 비우기
+            this.attachFilesAllClear();//파일 데이터 비우기
+          });
+      }
+      this.EDIT_POST_ACTION({classId: Number(this.classID), postId: id,  formData: this.formData})
+        .then( (data)=>{
+          PostService.getPostsById(Number(this.classID), id)
+            .then( (readData)=>{
+              console.log('수정된 readdata=', readData);
+              //
+              this.EDIT_POST( {postId:id, editInfo: readData.post});
 
-    // voteData 는 알림의 id 값을 알아야 하기에 먼저 알림을 생성/등록>완료 후 해당 알림의 id 을 가져와서 voteData 를 생성한다.
-    /* this.ADD_POST_ACTION({classId: Number(this.classID), formData: this.formData})
-       .then((data) => {
-         if (this.alarmData.alarmAt !== '') {
-           //예약된 알림 가져오기.
-           this.GET_RESERVED_LIST_ACTION(Number(this.classID))
-             .then((alarmData) => {
-               console.log(alarmData);
-               this.alarmData.alarmAt = '';
-             });
-         }
-         // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
-         this.imgFilesAllClear(); //이미지 데이터 비우기
-         this.attachFilesAllClear();//파일 데이터 비우기
-         this.postData = {title: '', text: ''}; //post 데이터 비우기
-         this.voteDataClear(); //투표 데이터 비우기
-         this.$emit('submit', false); //post 등록 팝업 닫기 알림~
-       });*/
+              this.allClear();
+            });
+        });
+    }else{
 
-    this.allClear();
+      //투표 제거가 있다면
+      if( this.removeVoteId!==-1 ){
+        PostService.deleteVote(this.removeVoteId)
+          .then((deleteVoteResult)=>{
+            console.log(deleteVoteResult);
+            this.removeVoteId=-1;
+            this.voteDataClear(); //투표 데이터 비우기
+          });
+      }
+
+      //타이틀과 본문 텍스트만 수정된 경우
+      if( !this.getValidLink() &&
+        this.voteData===null &&
+        this.alarmData.alarmAt==='' &&
+        this.imgFileService.getAddFiles().length<1 &&
+        this.attachFileService.getAddFiles().length<1 &&
+        this.removeFiles.length <1){
+
+        this.EDIT_POST_TXT_ACTION( {classId: Number(this.classID), postId: id, tit: this.postData.title, txt:this.postData.text})
+          .then((data)=>{
+            console.log( data );
+            this.postData = {title: '', text: ''}; //post 데이터 비우기
+          });
+      }
+
+    }
+
+    this.popupChange(false);
+
   }
 }

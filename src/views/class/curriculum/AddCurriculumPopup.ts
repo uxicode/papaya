@@ -146,18 +146,26 @@ export default class AddCurriculumPopup extends Vue {
 
     private courseDelete(idx: number){
         const findIdx=this.makeCurriculumData.course_list.findIndex((item: any) => item.id === idx);
+
+        this.makeCurriculumData.course_list.splice(findIdx, 1);
+
         const courseListLen = this.makeCurriculumData.course_list.length;
         const test = this.attachFileData.filter((item)=> item.index === idx);
 
-        this.makeCurriculumData.course_list.splice(findIdx, 1);
         this.curriculumDetailDataNum = courseListLen;
         this.eduItems.length = courseListLen;
 
+        console.log(courseListLen);
+        console.log(this.makeCurriculumData);
+
         if( this.attachFileData.length < 1 && this.imgAttachData.length < 1 ){ return; }
 
-        test.forEach((item: any)=>{
+        test.forEach((item: any, index: number)=>{
             this.attachFileData.splice(this.attachFileData.findIndex((itemTest: any) => itemTest.index === item.index), 1);
+            this.attachFileService.courseIndexNumber(this.makeCurriculumData.course_list[index]);
         });
+
+        console.log(`this.attachFileData`,this.imgAttachData);
     }
 
     /**
@@ -170,15 +178,12 @@ export default class AddCurriculumPopup extends Vue {
         if (Utils.isUndefined(this.formData)) {
             this.formData = new FormData();
         }
-
         this.imgFileService.saveData( this.formData, this.imgAttachData );
-        this.attachFileService.saveData( this.formData, this.attachFileData);
+        this.attachFileService.saveData( this.formData, this.attachFileData );
 
         const temp = JSON.stringify({...this.makeCurriculumData} );
 
         this.formData.append('data', temp );
-
-        console.log(this.formData.getAll('files'));
 
         this.ADD_CURRICULUM_ACTION({ classId: Number(this.classID), formData: this.formData })
             .then((data) => {
@@ -186,6 +191,8 @@ export default class AddCurriculumPopup extends Vue {
             });
 
         this.resetCurriculumAdd();
+
+        console.log(`222`, this.attachFileData);
     }
 
 

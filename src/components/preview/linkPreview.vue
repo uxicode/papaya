@@ -16,7 +16,7 @@
             <p class="add-link-txt">
               <a href="">자연사랑 어린이 미술대회는 지난 2016년부터 개최해 온 전통 있는 미술대회 입니다. 아이들에게 환경보호…</a>
             </p>-->
-            <span class="add-link-url"><a :href="item.url" target="_blank"><img src="assets/images/pic9.png" class="link-logo" alt="">{{ item.url }}</a></span>
+            <span class="add-link-url"><a :href="item.url" target="_blank"><!-- 웹 프론트에선 opengraph 이미지를 크롤링 할 수 없음.<img :src="require('@/assets/images/pic9.png')" class="link-logo" alt="">-->{{ item.url }}</a></span>
           </div>
 <!--          <div class="add-link-thumb"><img src="assets/images/pic.png" alt=""></div>-->
           <a href="#" class="add-file-delete d-inline-block" @click.prevent.stop="removeFile( index )"><img :src="require('@/assets/images/delete.svg')" alt=""></a>

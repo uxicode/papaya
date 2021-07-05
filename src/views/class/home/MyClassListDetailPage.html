@@ -6,7 +6,7 @@
       <side-menu :active-num="activeMenuNumModel" @sideClick="update"></side-menu>
 
       <transition name="fade" mode="out-in">
-        <router-view></router-view>
+        <router-view @sideNum="update"></router-view>
       </transition>
 
     </div>

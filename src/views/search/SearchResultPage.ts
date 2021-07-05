@@ -89,13 +89,13 @@ export default class SearchResultPage extends Vue {
     this.getResultList();
   }
 
-  /*@Watch('searchResultData')
+  @Watch('searchResultData')
   public changeData(value: any[], old: any[]) {
     if (value !== old) {
       // console.log('watch =' , value );
       this.getResultList();
     }
-  }*/
+  }
 
   /*public changeResultByOption() {
     //SearchApiService.getSearchResult 은 ( 기관명/ 클래스명 / 태그 라이크 검색 ) 3가지로 구분 되지 않고 통합검색 되어 버린다.
@@ -129,15 +129,13 @@ export default class SearchResultPage extends Vue {
     /*this.getClassOwnerName(  this.searchResultData )
       .then( ( data: any )=>{
         console.log('owner 데이터 완료', data );
-        /!*this.ownerItems=data.map((item: any) => {
-
-          console.log(item.classinfo.owner);
-
+        this.ownerItems=data.map((item: any) => {
+          console.log(item.classinfo);
           return {
             id: item.classinfo.id,
             nickname:item.classinfo.owner.nickname
           };
-        });*!/
+        });
       });*/
   }
 
@@ -145,8 +143,8 @@ export default class SearchResultPage extends Vue {
     // console.log('search getClassOwnerName=', items);
 
     //class_id 가 없을 시 id 로 조회 // owner 는 member_id -> owner_member_id / owner_id 는 그냥 가입했을때 주어지는 고유 index 넘버임( user_id 와 같다 ).
-    //owner 자체도 null 인경우가 있음.
-    const ownerPromiseItems = items.map( (item: any)=>{
+    //owner 자체도 null 인경우가 있음.   //class/:classId 조회가 안되는 --> 67, 70, 597, 598, 599, 600
+    const ownerPromiseItems = await items.map( (item: any)=>{
       const idx=(item.class_id)? item.class_id : item.id;
       return MyClassService.getClassInfoById( idx );
     });
@@ -161,29 +159,15 @@ export default class SearchResultPage extends Vue {
   }
 
   private getOwnerName(index: number) {
-    console.log('this.searchResultsModel[index]=', this.searchResultsModel[index] );
+    // console.log('this.searchResultsModel[index]=', this.searchResultsModel[index] );
+
     // return ( this.ownerItems[index] ) ? this.ownerItems[index].nickname : '';
     return  '';
   }
 
 
-  //class/:classId 조회가 안되는 --> 67, 70, 597, 598, 599, 600
 
-  //private getClassInfoBySearchResultClassId( items: any[] ): any[] {
-    // const promiseItems: any[] = [];
-    ////class/{class_id}/members/{member_id}
-    //class_id 가 없을 시 id 로 조회 // owner 는 member_id -> owner_member_id / owner_id 는 그냥 가입했을때 주어지는 고유 index 넘버임( user_id 와 같다 ).
-    /*return items.map( (item: any)=>{
-      const idx=(item.class_id)? item.class_id : item.id;
-      return MyClassService.getClassInfoById( idx );
-    });*/
-    /*items.forEach( ( item: any ) => {
-      const idx=(item.class_id)? item.class_id : item.id;
-      console.log('SearchResultClasnpm sId=', idx );
-      promiseItems.push( MyClassService.getClassInfoById( idx ) );
-    });
-    return promiseItems;*/
-  //}
+
 
 
   private pageChange(num: number): void{
@@ -243,6 +227,7 @@ export default class SearchResultPage extends Vue {
       if (idx) {
         MyClassService.getMyInfoInThisClass(idx)
           .then( (retry)=>{
+            console.log(retry.result);
             this.gotoClassPage({result: retry.result, idx: `${idx}`});
         });
 
@@ -253,7 +238,7 @@ export default class SearchResultPage extends Vue {
     });
   }
 
-  private gotoClassPage( payload: {result: any, idx: string } ) {
+  private gotoClassPage( payload: {result: any | null, idx: string } ) {
     const {result, idx}=payload;
 
     if (result!== null) {

@@ -3,6 +3,7 @@ import {IAttachFileModel} from '@/views/model/post.model';
 
 class AttachFileServiceHelper extends AttachFileService {
   public attachFilePreviewItems: any[] = [];
+  public renameDataList: any[] = [];
 
   private courseIndex: number = 0;
 
@@ -36,8 +37,14 @@ class AttachFileServiceHelper extends AttachFileService {
 
     this.setAttachFileSave(files);
     //file type input
+
     const attachFileInput =document.querySelector(selector) as HTMLInputElement;
     attachFileInput.value = '';
+
+    this.attachFileNaming();
+
+    console.log(this.attachFilePreviewItems);
+    console.log(this.renameDataList);
   }
 
   public remove(idx: number): void {
@@ -66,28 +73,36 @@ class AttachFileServiceHelper extends AttachFileService {
     if( checkAddFile.length<1 ){ return; }
 
     for(let i=0; i<this.attachFilePreviewItems.length; i++){
-      attachFileData.push(this.attachFilePreviewItems[i]);
+      attachFileData.push(this.renameDataList[i]);
     }
+
+    console.log(attachFileData);
+  }
+
+  public attachFileNaming() {
+    const targetLists = this.attachFilePreviewItems.map((item: any)=>item.file.name);
+    const courseList = this.attachFilePreviewItems.map((item: any)=>item.index);
+
+    targetLists.forEach((item: string, index: number) => {
+      const renameData = new File( [item], `${courseList[index]+1}_${index}_${item}` );
+      this.renameDataList.push(renameData);
+    });
   }
 
   public saveData(formData: FormData, saveData: any): void {
     // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-    this.formDataAppendToFile(formData, saveData, 'files'  );
+    this.formDataAppendToFile(formData, saveData, 'files' );
   }
 
   //formdata 에 append 하여 formdata ( 딕셔너리 목록 ) 추가하기.
-  protected formDataAppendToFile( formData: FormData, saveDataList: any, appendName: string | string[] ) {
-
-    const targetLists = saveDataList.map((item: any)=>item.file);
-    const courseList = saveDataList.map((item: any)=>item.index);
-
+  protected formDataAppendToFile( formData: FormData, targetLists: File[], appendName: string | string[] ) {
     targetLists.forEach(( item: File, index: number )=>{
       // console.log(item, item.name);
       // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
       if( Array.isArray(appendName) ){
         formData.append( appendName[index], item, item.name );
       }else{
-        formData.append(appendName, item, `${courseList[index]+1}_${index}_${item.name}` );
+        formData.append(appendName, item, item.name );
       }
     });
   }

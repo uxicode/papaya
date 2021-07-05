@@ -108,7 +108,7 @@ export default class MyClassHeader extends Vue {
             this.selectBoxCurrentStatus();
           });
     }else{
-      if ( this.myClassLists) {
+      if ( this.myClassLists ) {
         //
         this.init();
         this.selectBoxCurrentStatus();

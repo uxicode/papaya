@@ -41,9 +41,9 @@
 
 <script lang="ts">
 import {Vue, Component, Prop } from 'vue-property-decorator';
+import {IReadAbleVoteList, IVoteUserChoice} from '@/views/model/post.model';
 import CheckButton from '@/components/check/CheckButton.vue';
 import RadioButton from '@/components/radio/RadioButton.vue';
-import {IReadAbleVoteList, IVoteUserChoice} from '@/views/model/post.model';
 
 @Component({
   components: {

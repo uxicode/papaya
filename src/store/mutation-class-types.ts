@@ -21,3 +21,5 @@ export const SET_SCHEDULE_DETAIL: string = 'SET_SCHEDULE_DETAIL';
 export const SET_CURRICULUM_DETAIL: string = 'SET_CURRICULUM_DETAIL';
 export const SET_COURSE_DETAIL: string = 'SET_COURSE_DETAIL';
 export const SET_VOTE: string = 'SET_VOTE';
+export const EDIT_POST: string = 'EDIT_POST';
+export const DELETE_POST: string = 'DELETE_POST';

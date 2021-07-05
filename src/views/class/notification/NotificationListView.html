@@ -15,15 +15,16 @@
           <v-menu
                   min-width="200px"
                   :close-on-click="true">
-            <template v-slot:activator="{ on, attrs }">
-              <button v-if="isOwner( item.owner.user_id, item.user_id)"
+            <template v-slot:activator="{ on, attrs }" >
+              <button v-if="isEditAuth(item.owner.user_id)"
                       type="button"
                       class="list-popup-btn"
                       v-bind="attrs"
-                      v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
+                      v-on="on" ><img :src="require('@/assets/images/more.svg')" alt="">
               </button>
+              <!-- v-if="getIsMember(  item.owner.user_id )"-->
             </template>
-            <v-list>
+            <v-list >
               <v-list-item @click="onEditPost( item.id )">
                 <v-list-item-title>알림 수정</v-list-item-title>
               </v-list-item>
@@ -54,6 +55,7 @@
       <!-- start:  투표가 있는 경우 -->
       <list-in-vote-preview
               :file-items="item.vote"
+              :length="getVoteListLen( item.vote )"
               title="title"
               choice="multi_choice"
               finish-at="finishAt"
@@ -83,4 +85,6 @@
           @change="onDetailPostPopupStatus"></notify-detail-popup>
 
   <edit-notification-popup :is-open="isEditPopupOpen" @change="onEditClose"></edit-notification-popup>
+
+  <notice-popup :is-open="isNoticePopupOpen" title="접근 권한 안내" msg="해당 알림에 대한 수정 권한이 없습니다."></notice-popup>
 </div>

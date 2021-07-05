@@ -8,7 +8,7 @@ import AuthService from '@/api/service/AuthService';
 axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
-axios.defaults.timeout=1000;
+// axios.defaults.timeout=1000;
 
 
 const cancelTokenSource = axios.CancelToken.source();
@@ -83,9 +83,9 @@ axios.interceptors.response.use((response: AxiosResponse) => {
   pendingCount--;
   // console.log(pendingCount);
   if (pendingCount > 15) {
-    console.log(pendingCount);
-    cancelTokenSource.cancel('데이터 대기 상태가 길어져서 요청을 취소 합니다.');
-    pendingCount=0;
+    // console.log(pendingCount);
+    // cancelTokenSource.cancel('데이터 대기 상태가 길어져서 요청을 취소 합니다.');
+    // pendingCount=0;
   }
   return response;
 }, (error: any) => {
@@ -111,17 +111,17 @@ axios.interceptors.response.use((response: AxiosResponse) => {
 const request = (method: string, url: string, data: any | null = null ): Promise<any> => {
   // console.log( 'data status=', method, data, url );
   let reqObj: object;
-  const cancel={
+  /*const cancel={
     cancelToken:cancelTokenSource.token
-  };
+  };*/
   if (method === 'get') {
-    reqObj = (data !== null)? {method, url, params: data, ...cancel} : {method, url, ...cancel};
+    reqObj = (data !== null)? {method, url, params: data} : {method, url};
   } else if(method === 'upload'){
     reqObj = { method:'post', url, data, headers: {
       'Content-Type': 'multipart/form-data;charset=utf-8;'
-    }, ...cancel};
+    }};
   }else{
-    reqObj = {method, url, data, ...cancel };
+    reqObj = {method, url, data };
   }
   return axios(reqObj).then((res: AxiosResponse) => {
     // console.log( res.data )

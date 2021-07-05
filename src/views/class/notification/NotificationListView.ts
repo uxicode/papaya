@@ -1,8 +1,8 @@
-import {Component, Vue, Prop} from 'vue-property-decorator';
+import {Component, Prop, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import AddNotifyPopup from '@/views/class/notification/AddNotifyPopup';
-import {IAttachFileModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
+import {IPostInLinkModel, IPostModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
 import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
 import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
@@ -10,8 +10,12 @@ import ListInVotePreview from '@/components/preview/ListInVotePreview.vue';
 import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
 import NotifyDetailPopup from '@/views/class/notification/NotifyDetailPopup';
 import EditNotificationPopup from '@/views/class/notification/EditNotificationPopup';
+import NoticePopup from '@/components/modal/noticePopup.vue';
+import MyClassService from '@/api/service/MyClassService';
 import WithRender from './NotificationListView.html';
+import {IUserMe} from '@/api/model/user.model';
 
+const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
 
@@ -26,6 +30,7 @@ const Post = namespace('Post');
     ListInLinkPreview,
     NotifyDetailPopup,
     EditNotificationPopup,
+    NoticePopup
   }
 })
 export default class NotificationListView extends Vue {
@@ -37,6 +42,9 @@ export default class NotificationListView extends Vue {
 
   @MyClass.Getter
   private classID!: string | number;
+
+  @Auth.Getter
+  private userInfo!: IUserMe | null;
 
 
   @Post.Action
@@ -56,14 +64,54 @@ export default class NotificationListView extends Vue {
   // private isLoading: boolean=false;
   private detailPostId: number=-1; // 동적으로 변경 안되는 상태
 
+  private isNoticePopupOpen: boolean=false;
+
 
   get detailPostIdModel() {
     return this.detailPostId;
   }
 
+
+  public getVoteListLen( item: any ) {
+    return ( item )? ( (item.vote_choices)? item.vote_choices.length: -1) : -1;
+  }
+
+  /**
+   * 포스트 글쓴이와 멤버관리자와 일치하는지 체크
+   * @param ownerId
+   * @param userId
+   * @private
+   */
   private isOwner( ownerId: number, userId: number): boolean {
+    console.log(ownerId, userId);
     return (ownerId === userId);
   }
+
+  private getIsMember( ownerId: number ): Promise<boolean> {
+    return  MyClassService.getMyInfoInThisClass(Number(this.classID))
+      .then((data) => {
+        const {user_id} = (data.result);
+        const check = (user_id === ownerId);
+        console.log(user_id, ownerId, check);
+        return Promise.resolve( check );
+      }).catch((error) => {
+        return Promise.reject( false );
+      });
+  }
+
+  /**
+   * 게시글 글쓴이와 현재 로그인 유저와 권한이 같은지 체크
+   * @param ownerId
+   * @private
+   */
+  private isEditAuth( ownerId: number ) {
+    let chk=false;
+    const result=this.getIsMember(ownerId).then((data)=>{
+      chk=data;
+    });
+    return chk;
+  }
+
 
   /**
    * 북마크 toggle 이벤트 핸들러
@@ -168,6 +216,8 @@ export default class NotificationListView extends Vue {
       .then((data)=>{
         this.isEditPopupOpen=true;
       });
+
+
     /*await this.GET_COMMENTS_ACTION(this.detailPostId)
       .then((data)=>{
 
@@ -177,6 +227,8 @@ export default class NotificationListView extends Vue {
   private onEditClose(  value: boolean ){
     this.isEditPopupOpen=value;
   }
+
+
 
 
 }

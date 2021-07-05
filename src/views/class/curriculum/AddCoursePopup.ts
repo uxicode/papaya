@@ -202,8 +202,10 @@ export default class AddCoursePopup extends Vue {
         this.imgFileService.savePreview( this.imgAttachData );
         this.attachFileService.savePreview( this.attachFileData );
 
+        console.log(`111`, this.attachFileData);
+
         this.imgFilesAllClear();
-        this.attachFilesAllClear();
+        // this.attachFilesAllClear();
         this.popupChange( false );
     }
 }
