@@ -59,7 +59,6 @@ export default class ClassMember extends Vue{
     private searchResultItems: [] = [];
 
     /* 운영자/스탭/일반 멤버 토글 상태값 */
-    private isAdminToggle: boolean = false;
     private isInvitePopup: boolean = false;
     private isSnackbar: boolean = false;
     private isDetailPopup: boolean = false;
@@ -304,5 +303,19 @@ export default class ClassMember extends Vue{
         this.isActive = false;
         this.isBanModal = true;
         this.memberId = id;
+    }
+
+    /**
+     * 멤버 강제 탈퇴
+     * @private
+     */
+    private banMember(): void {
+        this.isBanModal = false;
+        ClassMemberService.deleteClassMemberByAdmin(this.classID, this.memberId)
+            .then((data) => {
+                const findIdx = this.classMemberList.findIndex((ele) => ele.id === data.user_id);
+                this.classMemberList.splice(findIdx, 1);
+            });
+        this.isBanCompleteModal = true;
     }
 }

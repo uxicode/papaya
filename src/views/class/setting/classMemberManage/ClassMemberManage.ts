@@ -117,19 +117,16 @@ export default class ClassMemberManage extends Vue{
 
     /**
      * 멤버 프로필 상세 팝업 열면서 해당 멤버의 정보 불러온다.
-     * @param userId
-     * @param level
-     * @param nickname
-     * @param memberId
      * @private
+     * @param item
      */
-    private detailPopupOpen(userId: number, level: number, nickname: string, memberId: number): void {
-        this.userIdNum = userId;
-        this.memberLevel = level;
-        this.nickname = nickname;
-        this.memberId = memberId;
+    private detailPopupOpen(item: IClassMemberInfo): void {
+        this.userIdNum = item.user_id;
+        this.memberLevel = item.level;
+        this.nickname = item.nickname;
+        this.memberId = item.id;
         this.isDetailPopup = true;
-        UserService.getUserInfo(userId)
+        UserService.getUserInfo(this.userIdNum)
           .then((data) => {
               this.mobileNo = data.user.mobile_no;
               this.userId = data.user.user_id;
@@ -155,6 +152,10 @@ export default class ClassMemberManage extends Vue{
      * @private
      */
     private blockModalOpen(id: number, level: number): void {
+        if (level !== 1) {
+            alert('멤버 차단은 운영자만 가능합니다.');
+            return;
+        }
         this.memberId = id;
         if (this.classInfo.me.id === this.memberId) {
             alert('자기 자신은 차단할 수 없습니다.');
@@ -185,6 +186,10 @@ export default class ClassMemberManage extends Vue{
      * @private
      */
     private banModalOpen(id: number, level: number): void {
+        if (level !== 1) {
+            alert('멤버 강제 탈퇴는 운영자만 가능합니다.');
+            return;
+        }
         this.memberId = id;
         if (this.classInfo.me.id === this.memberId) {
             alert('자기 자신은 강제탈퇴할 수 없습니다.');
@@ -195,6 +200,20 @@ export default class ClassMemberManage extends Vue{
         }
         this.getMemberInfo();
         this.isBanModal = true;
+    }
+
+    /**
+     * 멤버 강제 탈퇴
+     * @private
+     */
+    private banMember(): void {
+        this.isBanModal = false;
+        ClassMemberService.deleteClassMemberByAdmin(this.classID, this.memberId)
+            .then((data) => {
+                const findIdx = this.classMemberList.findIndex((ele) => ele.id === data.user_id);
+                this.classMemberList.splice(findIdx, 1);
+            });
+        this.isBanCompleteModal = true;
     }
 
     /**
