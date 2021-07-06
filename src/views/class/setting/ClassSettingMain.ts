@@ -22,15 +22,6 @@ interface ISettingMenu {
     }
 })
 export default class ClassSettingMain extends Vue{
-    private classMemberInfo!: IClassMemberInfo;
-    private classInfo!: IClassInfo;
-
-    @MyClass.Getter
-    private classID!: number;
-
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
-
     @MyClass.Action
     private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
 
@@ -42,6 +33,15 @@ export default class ClassSettingMain extends Vue{
 
     @MyClass.Action
     private MODIFY_CLASS_QUESTION!: (payload: {classId: number, questionId: number}, text: {new_question: string}) => Promise<IQuestionInfo[]>;
+
+    @MyClass.Getter
+    private classID!: number;
+
+    @MyClass.Getter
+    private myClassHomeModel!: IClassInfo;
+
+    private classMemberInfo!: IClassMemberInfo;
+    private classInfo!: IClassInfo;
 
     /* Modal 오픈 상태값 */
     private isGuideTxt: boolean = false;

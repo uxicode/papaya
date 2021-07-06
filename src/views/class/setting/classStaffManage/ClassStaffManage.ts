@@ -168,6 +168,9 @@ export default class ClassStaffManage extends Vue {
         ClassMemberService.setClassMemberInfo(this.classID, this.memberId, {level: 3})
           .then((data) => {
               console.log(`${data.level} 로 수정완료`);
+              const findIdx = this.classStaffList.findIndex((ele) => ele.id === this.memberId);
+              this.classStaffList.splice(findIdx, 1);
+              this.totalStaffNum--;
           });
         this.isChangeCompletePopup = true;
     }
@@ -186,7 +189,7 @@ export default class ClassStaffManage extends Vue {
      * @private
      */
     private blockModalOpen(item: IClassMemberInfo): void {
-        if (item.level !== 1) {
+        if (this.classInfo.me.level !== 1) {
             alert('멤버 차단은 운영자만 가능합니다.');
             return;
         }
@@ -210,6 +213,7 @@ export default class ClassStaffManage extends Vue {
         ClassMemberService.setBlockClassMember(this.classID, this.memberId)
           .then(() => {
               console.log(`${this.memberId} 멤버 차단 완료`);
+              this.totalStaffNum--;
           });
     }
 
@@ -218,7 +222,7 @@ export default class ClassStaffManage extends Vue {
      * @private
      */
     private banModalOpen(item: IClassMemberInfo): void {
-        if (item.level !== 1) {
+        if (this.classInfo.me.level !== 1) {
             alert('멤버 강제 탈퇴는 운영자만 가능합니다.');
             return;
         }
@@ -239,9 +243,10 @@ export default class ClassStaffManage extends Vue {
     private banMember(): void {
         this.isBanModal = false;
         ClassMemberService.deleteClassMemberByAdmin(this.classID, this.memberId)
-            .then((data) => {
-                const findIdx = this.classStaffList.findIndex((ele) => ele.id === data.user_id);
+            .then(() => {
+                const findIdx = this.classStaffList.findIndex((ele) => ele.id === this.memberId);
                 this.classStaffList.splice(findIdx, 1);
+                this.totalStaffNum--;
             });
         this.isBanCompleteModal = true;
     }

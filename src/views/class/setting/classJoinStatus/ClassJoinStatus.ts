@@ -18,15 +18,15 @@ const MyClass = namespace('MyClass');
 })
 
 export default class ClassJoinStatus extends Vue {
+    @MyClass.Getter
+    private classID!: number;
+
     private isJoinDetail: boolean = false;
 
     private applyList: IClassMemberInfo[] = [];
     private classMemberInfo: any = [];
     private answerList: IQnaInfo[] = [];
     private waitingMemberId: number = 0;
-
-    @MyClass.Getter
-    private classID!: number;
 
     get applyMembers() {
         return this.applyList;

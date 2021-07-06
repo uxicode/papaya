@@ -1,6 +1,7 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import ClassMemberService from '@/api/service/ClassMemberService';
+import {IClassMemberInfo} from '@/views/model/my-class.model';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './BlockedMemberList.html';
@@ -19,7 +20,7 @@ export default class BlockedMemberList extends Vue {
     private isUnblockModal: boolean = false;
     private isUnblockCompleteModal: boolean = false;
 
-    private blockedMemberList: [] = [];
+    private blockedMemberList: IClassMemberInfo[] = [];
     private blockedMemberNickname: string = '';
     private blockedMemberLevel: number = 0;
     private blockedMemberId: number = 0;
@@ -108,6 +109,8 @@ export default class BlockedMemberList extends Vue {
         ClassMemberService.setUnBlockClassMember(this.classID, this.blockedMemberId)
             .then((msg) => {
                 console.log(msg);
+                const findIdx = this.blockedMemberList.findIndex((ele) => ele.id === this.blockedMemberId);
+                this.blockedMemberList.splice(findIdx, 1);
             });
         this.isUnblockCompleteModal = true;
     }

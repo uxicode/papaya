@@ -17,18 +17,19 @@ const MyClass = namespace('MyClass');
     }
 })
 export default class ClassMemberManage extends Vue{
+    @MyClass.Getter
+    private classID!: number;
+
+    @MyClass.Getter
+    private myClassHomeModel!: IClassInfo;
+
+    /* modal 상태 값 */
     private isDetailAccordion: boolean = false;
     private isDetailPopup: boolean = false;
     private isBlockModal: boolean = false;
     private isBlockCompleteModal: boolean = false;
     private isBanModal: boolean = false;
     private isBanCompleteModal: boolean = false;
-
-    @MyClass.Getter
-    private classID!: number;
-
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
 
     private classMemberList: IClassMemberInfo[] = [];
     private memberId: number = 0;
@@ -152,7 +153,7 @@ export default class ClassMemberManage extends Vue{
      * @private
      */
     private blockModalOpen(id: number, level: number): void {
-        if (level !== 1) {
+        if (this.classInfo.me.level !== 1) {
             alert('멤버 차단은 운영자만 가능합니다.');
             return;
         }
@@ -177,7 +178,9 @@ export default class ClassMemberManage extends Vue{
         this.isBlockCompleteModal = true;
         ClassMemberService.setBlockClassMember(this.classID, this.memberId)
           .then(() => {
-             console.log(`${this.memberId} 멤버 차단 완료`);
+              console.log(`${this.memberId} 멤버 차단 완료`);
+              const findIdx = this.classMemberList.findIndex((ele) => ele.id === this.memberId);
+              this.classMemberList.splice(findIdx, 1);
           });
     }
 
@@ -186,7 +189,7 @@ export default class ClassMemberManage extends Vue{
      * @private
      */
     private banModalOpen(id: number, level: number): void {
-        if (level !== 1) {
+        if (this.classInfo.me.level !== 1) {
             alert('멤버 강제 탈퇴는 운영자만 가능합니다.');
             return;
         }

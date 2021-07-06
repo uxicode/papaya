@@ -89,12 +89,15 @@ export default class ClassStaffAdd extends Vue {
    * 스탭 멤버 -> 일반 멤버로 권한 수정 제출
    * @private
    */
-  private submitLevelChange(): void {
-    ClassMemberService.setClassMemberInfo(this.classID, this.memberId, {level: 2})
+  private async submitLevelChange() {
+    await ClassMemberService.setClassMemberInfo(this.classID, this.memberId, {level: 2})
       .then((data) => {
         console.log(`${data.level} 로 수정완료`);
+        const findIdx = this.classMemberList.findIndex((ele) => ele.id === this.memberId);
+        this.classMemberList.splice(findIdx, 1);
+        this.totalMemberNum--;
       });
-    this.submitAuthChange();
+    await this.submitAuthChange();
     this.isChangeCompletePopup = true;
   }
 
