@@ -1,4 +1,4 @@
-import {Vue, Component, Watch} from 'vue-property-decorator';
+import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {
     resetSearchInput,
@@ -27,26 +27,31 @@ const SearchStatus = namespace('SearchStatus');
 })
 
 export default class ClassTagManage extends Vue {
-    private tagList: IClassTag[] = [];
+    @SearchStatus.Action
+    private TAG_SEARCH_RESULT_ACTION!: ( payload: { keyword: string, page_no: number, count: number} )=>Promise<any>;
 
+    @MyClass.Getter
+    private classID!: number;
+
+    @SearchStatus.Getter
+    private keyword!: string;
+
+    private classTagList: IClassTag[] = [];
     private isClassTagSearch: boolean = false;
     private isLoading: boolean = false;
     private searchTagValue: string = '';
     private searchResultItems: IClassTag[] = [];
+    private isManualClick: boolean=false;
+    private manualInputField: string = '';
 
     /* 검색 결과 페이징 */
     private numOfPage: number=10;
     private pageSize: number=5;
     private currentPageNum: number=1;
 
-    @MyClass.Getter
-    private classID!: number;
-
-    @SearchStatus.Action
-    private TAG_SEARCH_RESULT_ACTION!: ( payload: { keyword: string, page_no: number, count: number} )=>Promise<any>;
-
-    @SearchStatus.Getter
-    private keyword!: string;
+    get tagListModel() {
+        return this.classTagList;
+    }
 
     get searchResultValue(): string{
         return this.searchTagValue;
@@ -64,26 +69,20 @@ export default class ClassTagManage extends Vue {
         return this.searchResults.length;
     }
 
+    get manualChk(): boolean{
+        return this.isManualClick;
+    }
+
     public created() {
         this.getClassTags();
     }
 
-
-    /**
-     * 클래스 태그 가져오기(처음 실행시, 즉시 갱신)
-     * @private
-     */
-    // immediate : 즉시 호출하겠다는 의미.
-    // deep : object 내의 속성값까지 감시.
-    // @Watch('감시할 변수', {immediate: true, deep: true})
-    @Watch('tagList',{immediate: true, deep: false})
     private getClassTags(): void {
-        //console.log('동적라우트값=' , this.$route.params.classId, this.classID);
-        /*MyClassService.getClassTags(this.classID)
-          .then((data) => {
-              this.tagList = data.tag_list;
-              //console.log(this.tagList);
-          });*/
+        MyClassService.getClassTags(this.classID)
+            .then((data) => {
+                console.log(data.tag_list);
+                this.classTagList = data.tag_list;
+            });
     }
 
     /**
@@ -101,6 +100,8 @@ export default class ClassTagManage extends Vue {
      */
     private closeTagSearchPopup(): void{
         this.isClassTagSearch=false;
+        this.manualInputField = '';
+        this.isManualClick = false;
     }
 
     private search(){
@@ -183,6 +184,21 @@ export default class ClassTagManage extends Vue {
         this.pageChange(num);
     }
 
+    private manualInputClickHandler(): void{
+        this.isManualClick=true;
+    }
+
+    /**
+     * 직접입력 -> 확인 버튼 클릭시
+     * @private
+     */
+    private applyManualValClickHandler(): void{
+        this.addTag(this.manualInputField);
+        this.closeTagSearchPopup();
+        this.manualInputField = '';
+        this.isManualClick = false;
+    }
+
     /**
      * 태그 이름 추가
      * @param val
@@ -193,6 +209,7 @@ export default class ClassTagManage extends Vue {
           .then((data) => {
               data.taginfo.keyword = val;
               console.log(`${data.taginfo.keyword} 태그 추가 완료`);
+              this.classTagList.push(data.taginfo);
           });
     }
 
@@ -205,6 +222,8 @@ export default class ClassTagManage extends Vue {
         MyClassService.deleteTag(this.classID, tagId)
           .then(() => {
              console.log(`${tagId} 태그 삭제 완료`);
+             const findIdx = this.classTagList.findIndex((item) => item.id === tagId);
+             this.classTagList.splice(findIdx, 1);
           });
     }
 

@@ -144,28 +144,32 @@ export default class AddCurriculumPopup extends Vue {
         }
     }
 
-    private courseDelete(idx: number){
-        const findIdx=this.makeCurriculumData.course_list.findIndex((item: any) => item.id === idx);
-
-        this.makeCurriculumData.course_list.splice(findIdx, 1);
-
+    private courseListReplace() {
         const courseListLen = this.makeCurriculumData.course_list.length;
-        const test = this.attachFileData.filter((item)=> item.index === idx);
-
         this.curriculumDetailDataNum = courseListLen;
         this.eduItems.length = courseListLen;
+    }
 
-        console.log(courseListLen);
-        console.log(this.makeCurriculumData);
-
+    private courseAttachDelete(idx: number) {
         if( this.attachFileData.length < 1 && this.imgAttachData.length < 1 ){ return; }
 
-        test.forEach((item: any, index: number)=>{
-            this.attachFileData.splice(this.attachFileData.findIndex((itemTest: any) => itemTest.index === item.index), 1);
-            this.attachFileService.courseIndexNumber(this.makeCurriculumData.course_list[index]);
+        const deleteData = this.imgAttachData.filter((item) => item.courseIdx === idx);
+
+        console.log(`삭제 된 데이터 = `, deleteData);
+
+        deleteData.forEach((index: number) => {
+            this.imgAttachData.splice(index, 1);
         });
 
-        console.log(`this.attachFileData`,this.imgAttachData);
+        console.log(`남은 데이터 = `, this.imgAttachData);
+    }
+
+    private courseDelete(idx: number){
+        const findIdx=this.makeCurriculumData.course_list.findIndex((item: any) => item.id === idx);
+        this.makeCurriculumData.course_list.splice(findIdx, 1);
+
+        this.courseListReplace();
+        this.courseAttachDelete(idx);
     }
 
     /**
@@ -178,7 +182,8 @@ export default class AddCurriculumPopup extends Vue {
         if (Utils.isUndefined(this.formData)) {
             this.formData = new FormData();
         }
-        this.imgFileService.saveData( this.formData, this.imgAttachData );
+
+        // this.imgFileService.save(this.formData, this.imgAttachData);
         this.attachFileService.saveData( this.formData, this.attachFileData );
 
         const temp = JSON.stringify({...this.makeCurriculumData} );
@@ -191,10 +196,7 @@ export default class AddCurriculumPopup extends Vue {
             });
 
         this.resetCurriculumAdd();
-
-        console.log(`222`, this.attachFileData);
     }
-
 
     private resetCurriculumAdd(){
         this.formData = new FormData();

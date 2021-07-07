@@ -224,6 +224,17 @@ class MyClassService {
     public setEduCourseModify(classId: number, curriculumId: number, courseId: number, data: any): Promise<any>{
         return request('put', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course/${courseId}`, data);
     }
+
+    /**
+     * 클래스 교육과정 개별코스 삭제
+     * @param classId
+     * @param curriculumId
+     * @param courseId
+     */
+    public deleteEduCourse(classId: number, curriculumId: number, courseId: number): Promise<any> {
+        return request('delete', `${CLASS_BASE_URL}/${classId}/curriculum/${curriculumId}/course/${courseId}`);
+    }
+
 }
 
 export default new MyClassService();

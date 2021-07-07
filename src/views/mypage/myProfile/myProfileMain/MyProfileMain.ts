@@ -164,6 +164,7 @@ export default class MyProfileMain extends Vue {
                 // console.log(data);
                 this.USER_ME_ACTION().then( ( me: IUserMe)=>{
                     console.log(me.gender);
+                    this.myInfo.gender = newGender;
                 });
             });
         this.isModifyGender = false;

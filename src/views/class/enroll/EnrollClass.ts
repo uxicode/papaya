@@ -7,6 +7,7 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import SideMenu from '@/components/sideMenu/sideMenu.vue';
 import MyClassListDetailView from '@/views/class/home/MyClassListDetailView';
+import NotificationPage from '@/views/class/notification/NotificationPage';
 import WithRender from './EnrollClass.html';
 
 interface IEnrollMemberInfo {
@@ -29,11 +30,10 @@ const MyClass = namespace('MyClass');
     Btn,
     SideMenu,
     MyClassListDetailView,
+    NotificationPage,
   }
 })
 export default class EnrollClass extends Vue {
-  @Prop(Number)
-  private activeNum: number | null | undefined;
 
   @MyClass.Mutation
   private UPDATE_SIDE_NUM!: (num: number)=>void;
@@ -117,7 +117,7 @@ export default class EnrollClass extends Vue {
         console.log(data);
         this.questionList = (data.questionlist.length > 0) ? data.questionlist : [];
         this.qnaList = Object.assign({} ,this.questionList, this.answerList);
-        console.log(this.qnaList);
+        // console.log(this.qnaList);
       });
   }
 
@@ -158,6 +158,9 @@ export default class EnrollClass extends Vue {
         this.memberId = result.member_info.id;
       });
 
+    // 가입 신청시 자동으로 승인상태(1)이 되기에 승인전(0)으로 변경
+    await ClassMemberService.setClassMemberInfo(Number(this.classIdx), this.memberId, {status: 0});
+
     if (this.questionList.length>0) {
       for (let i=0; i<this.questionList.length; i++) {
         const qna = {question: this.qnaList[i].question, answer: this.qnaList[i].answer};
@@ -182,4 +185,5 @@ export default class EnrollClass extends Vue {
     this.activeMenuNumModel=idx;
     // console.log(this.activeMenuNum);
   }
+
 }

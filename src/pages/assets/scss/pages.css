@@ -20149,7 +20149,7 @@ select::-ms-expand {
   transform: translateY(-50%);
 }
 .popup-dialog .popup-body .apply-list .apply-item .member-type.manager:before, .popup-dialog .popup-body .apply-list .member-item .member-type.manager:before, .popup-dialog .popup-body .member-management-list .apply-item .member-type.manager:before, .popup-dialog .popup-body .member-management-list .member-item .member-type.manager:before {
-  background: #ffba36 url(../../assets/images/btn-round-admin.svg) no-repeat center;
+  background: #ffba36 url(../../assets/images/btn-round-manager.svg) no-repeat center;
 }
 .popup-dialog .popup-body .apply-list .apply-item .member-type.staff:before, .popup-dialog .popup-body .apply-list .member-item .member-type.staff:before, .popup-dialog .popup-body .member-management-list .apply-item .member-type.staff:before, .popup-dialog .popup-body .member-management-list .member-item .member-type.staff:before {
   background: #c9cad5 url(../../assets/images/btn-round-staff.svg) no-repeat center;
@@ -21184,7 +21184,7 @@ select::-ms-expand {
   color: #57576d;
 }
 .classes-member .classes-member-list .member-list .list-item .member-info.admin {
-  background-image: url(../../assets/images/btn-round-admin.svg);
+  background-image: url(../../assets/images/btn-round-manager.svg);
 }
 .classes-member .classes-member-list .member-list .list-item .member-info.staff {
   background-image: url(../../assets/images/btn-round-staff.svg);
@@ -21573,7 +21573,7 @@ select::-ms-expand {
   left: 0;
   width: 14px;
   height: 14px;
-  background: url(../../assets/images/btn-round-admin.svg) no-repeat center/100% 100%;
+  background: url(../../assets/images/btn-round-manager.svg) no-repeat center/100% 100%;
 }
 .search-classes .class-tag a {
   position: relative;

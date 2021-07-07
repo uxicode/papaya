@@ -152,8 +152,9 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
     console.log(this.myClassLists);
     this.MYCLASS_LIST_ACTION().then(() =>{
 
-      console.log(this.myClassLists);
+      // console.log(this.myClassLists);
 
+      //내가 가입한 클래스 목록이 null 이거나 undefined 일경우 재로드
       if (this.myClassLists !== null && this.myClassLists!==undefined) {
         if (this.myClassLists.length > 0) {
           // console.log(this.myClassLists);

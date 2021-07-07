@@ -23,7 +23,9 @@ import {
   SELECT_VOTE_ACTION,
   EDIT_POST_ACTION,
   EDIT_POST_TXT_ACTION,
-  DELETE_POST_FILE_ACTION
+  DELETE_POST_FILE_ACTION,
+  ADD_VOTE_ACTION,
+  DELETE_VOTE_ACTION
 } from '@/store/action-class-types';
 import {IPostInLinkModel, IPostModel, IReadAbleVote, IVoteModel} from '@/views/model/post.model';
 import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
@@ -319,7 +321,8 @@ export default class PostModule extends VuexModule {
     const { title, text }=targetItem;
     type=( type===0 )? 1 : 0;
 
-    return PostService.setPostById( classId, postId, {type, title, text} ).then( (data)=>{
+    return PostService.setPostById( classId, postId, {type, title, text} )
+      .then( (data)=>{
         this.postListItems.splice(findIdx, 1, {...targetItem, type, title, text});
         return Promise.resolve(data);
       }).catch((error) => {
@@ -363,18 +366,15 @@ export default class PostModule extends VuexModule {
   }
 
   @Action
-  public [EDIT_POST_ACTION](payload: { classId: number, postId: number, formData: FormData }): Promise<any>{
-    const {classId, postId, formData} = payload;
+  public [EDIT_POST_ACTION](payload: { promise: Array<Promise<any>> }): Promise<any>{
+    const {promise} = payload;
 
-    return PostService.setPostInfoAllById( classId, postId, formData )
-      .then((data) => {
-        // const modifyData = data.post;
+    return getAllPromise(promise)
+      .then((data)=>{
 
-        // const findIdx=this.postListItems.findIndex((item) => item.id === payload.postId);
-        // this.postListItems.splice(findIdx, 1, {...this.postListItems[findIdx],  ...modifyData});
-        // this.postListItems.splice(findIdx, 1, {});
+        console.log(data);
 
-        return Promise.resolve(data.post);
+        return Promise.resolve(data);
       }).catch((error) => {
         console.log(error);
         return Promise.reject(error);
@@ -407,7 +407,7 @@ export default class PostModule extends VuexModule {
     const {classId, postId, ids} = payload;
     return PostService.deletePostFileById(classId, postId, {ids})
       .then((data) => {
-        const findIdx=this.postListData.findIndex((item) => item.id === postId );
+       /* const findIdx=this.postListData.findIndex((item) => item.id === postId );
         const { attachment } = this.postListData[findIdx];
         const removedAttachItems=attachment.filter((item: any) => !ids.includes(item.id) );
         console.log(removedAttachItems, data);
@@ -417,8 +417,69 @@ export default class PostModule extends VuexModule {
         };
 
         this.context.commit(EDIT_POST, {postId, editInfo: bindData});
+*/
+        return Promise.resolve( this.postListItems );
+      }).catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
+      });
+  }
 
-        // this.postListData.splice(findIdx, 1, {...editItem, ...removedAttachItems} );
+  @Action({rawError: true})
+  public [DELETE_VOTE_ACTION](payload: {  postId: number, voteId: number}): Promise<any>{
+    const { postId, voteId}=payload;
+
+    return PostService.deleteVote( voteId )
+      .then((deleteVoteResult)=>{
+        console.log(deleteVoteResult);
+
+        // this.context.commit(EDIT_POST, {postId, editInfo: {vote: null} });
+
+        return Promise.resolve( this.postListItems );
+      }).catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
+      });
+  }
+
+/*  */
+
+  @Action({rawError: true})
+  public [ADD_VOTE_ACTION](payload: { classId: number, postId: number, voteData: IVoteModel}): Promise<any>{
+    const {classId, postId, voteData}=payload;
+
+    const {vote, vote_choice_list} = voteData;
+
+    return PostService.setAddVote( classId,  {...vote, vote_choice_list} )
+      .then((data)=>{
+        // this.context.commit(SET_VOTE, )
+        const {
+          parent_id,
+          type,
+          title,
+          multi_choice,
+          anonymous_mode,
+          open_progress_level,
+          open_result_level,
+          finishAt,
+        } = data;
+
+        const definedVoteData={
+          vote:{
+            parent_id,
+            type,
+            title,
+            multi_choice,
+            anonymous_mode,
+            open_progress_level,
+            open_result_level,
+            finishAt
+          },
+          vote_choice_list
+        };
+
+        this.context.commit(EDIT_POST, {postId, editInfo: definedVoteData});
+
         return Promise.resolve( this.postListItems );
       }).catch((error) => {
         console.log(error);

@@ -5,29 +5,20 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import {
     IClassInfo,
-    IMakeEducation,
-    IModifyCurriculum,
-    ICurriculumCourseData, IModifyCourse,
+    ICurriculumCourseData, ICurriculumDetailList,
+    IModifyCourse,
 } from '@/views/model/my-class.model';
-import {IAttachFileModel} from '@/views/model/post.model';
+import {ITimeModel} from '@/views/model/schedule.model';
 import {Utils} from '@/utils/utils';
-import MyClassService from '@/api/service/MyClassService';
 import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
 import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
-import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
+import {AttachFileServiceHelper} from '@/views/service/preview/AttachFileServiceHelper';
+import {ImageFileServiceHelper} from '@/views/service/preview/ImageFileServiceHelper';
 import WithRender from './ModifyCoursePopup.html';
 
 const MyClass = namespace('MyClass');
-
-/*start: 추가 테스트*/
-interface ITimeModel{
-    apm: string;
-    hour: string;
-    minute: string;
-}
-/*end: 추가 테스트*/
 
 @WithRender
 @Component({
@@ -45,6 +36,15 @@ export default class ModifyCoursePopup extends Vue {
     @Prop(Boolean)
     private isModifyCourse!: boolean;
 
+    @Prop(Number)
+    private courseIdx!: number;
+
+    @Prop(FormData)
+    private formData!: FormData;
+
+    @MyClass.Action
+    private GET_COURSE_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number, courseId: number }) => Promise<any>;
+
     @MyClass.Getter
     private classID!: number;
 
@@ -52,93 +52,28 @@ export default class ModifyCoursePopup extends Vue {
     private myClassHomeModel!: IClassInfo;
 
     @MyClass.Getter
+    private curriculumDetailItem!: ICurriculumDetailList;
+
+    @MyClass.Getter
     private courseDetailItem!: ICurriculumCourseData;
 
-    @MyClass.Action
-    private GET_COURSE_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number, courseId: number }) => Promise<any>;
+    private imgFileService: ImageFileServiceHelper=new ImageFileServiceHelper();
+    private attachFileService: AttachFileServiceHelper=new AttachFileServiceHelper();
 
-    private isCreateError: boolean = false;
-    private countCourseNumber: number = 0;
-
-    private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
-    private CourseSettingsItems: string[] = ['수업 내용 수정', '수업 삭제'];
-
-    private startDateItem: string = '';
-    private startTimeItem: string = '';
-    private endTimeItem: string = '';
-
-    private imageLoadedCount: number=0;
-
-    private imgFileURLItems: string[] = [];
-    private imgFileDatas: any[] = [];
-    private attachFileItems: any[] = [];
-    private formData!: FormData;
-    private modifyCourseDataItems: any = {};
-
-    get imgFileURLItemsModel(): string[] {
-        return this.imgFileURLItems;
-    }
-
-    get attachFileItemsModel(): any[] {
-        return this.attachFileItems;
-    }
-
-    get modifyDataItemsModel(): any {
-        return this.modifyClassItems;
-    }
-
-    get courseDetailItemModel(): any {
-        return this.courseDetailItem;
-    }
-
-    /**
-     * 클래스 교육과정 메인리스트
-     */
-
-        //datepicker
-    private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
+    //datepicker
+    private dateMenu: boolean=false;
+    private startTimeMenu: boolean=false;
+    private endTimeMenu: boolean=false;
+    private datePickerModel: string= new Date().toISOString().substr(0, 10);
     private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
-    private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
-    private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-
     private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
-    private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-
-
-    private makeCurriculumData: IMakeEducation={
-        title: '',
-        goal: '',
-        course_list: [
-            {
-                index: 0,
-                id: 0,
-                startDay: '',
-                startTime: '',
-                endTime: '',
-                title: '',
-                contents: ''
-            }
-        ]
+    private referTimeItems={
+        apm: ['오전', '오후'],
+        hour: [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+        minute: [ '5', '10','15', '20','25', '30','35', '40', '45', '50', '55', '00']
     };
 
     private curriculumDetailDataNum: number = 10;
-    private eduItems: Array< {title: string }>=[];
-    private modifyClassItems: IModifyCurriculum={
-        title: '',
-        goal: '',
-        course_list: [
-            {
-                id: 0,
-                index: 0,
-                title: '',
-                startDay: '',
-                startTime: '',
-                endTime: '',
-                contents: '',
-            }
-        ]
-    };
-
     private courseItem: IModifyCourse = {
         id: 0,
         index: 0,
@@ -149,116 +84,44 @@ export default class ModifyCoursePopup extends Vue {
         endTime: '',
     };
 
-    get isSubmitValidate(): boolean{
-        return (this.makeCurriculumData.title !== '' && this.makeCurriculumData.goal !== '');
+    private countCourseNumber: number = 0;
+
+    get imgFileURLItemsModel(): string[] {
+        return this.imgFileService.getItems();
     }
 
-    private getProfileImg(imgUrl: string | null | undefined ): string{
-        return ImageSettingService.getProfileImg( imgUrl );
+    get attachFileItemsModel(): any[] {
+        return this.attachFileService.getItems();
     }
 
-    get currentSettingItems(): string[]{
-        return this.EduSettingsItems;
+    get curriculumDetailItemModel(): any {
+        return this.curriculumDetailItem;
     }
 
-    get currentCourseSettingItems(): string[]{
-        return this.CourseSettingsItems;
+    get courseDetailItemModel(): any {
+        return this.courseDetailItem;
     }
-
 
     get currentStartTimeModel(): string{
-        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute}분`;
-    }
-
-    get selectStartTimeModel(): string{
-        const time = Number(this.startTimeSelectModel.hour)+12;
-        if( this.startTimeSelectModel.apm === '오후' ){
-            return `${time}:${this.startTimeSelectModel.minute}:00`;
-        }else {
-            return `${this.startTimeSelectModel.hour}:${this.startTimeSelectModel.minute}:00`;
-        }
+        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
     }
 
     get currentEndTimeModel(): string{
-        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute}분`;
+        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
     }
 
-    get selectEndTimeModel(): string{
-        const time = Number(this.endTimeSelectModel.hour)+12;
-        if( this.endTimeSelectModel.apm === '오후' ){
-            return `${time}:${this.endTimeSelectModel.minute}:00`;
-        }else {
-            return `${this.endTimeSelectModel.hour}:${this.endTimeSelectModel.minute}:00`;
-        }
+    private addStartApmSchedule( val: string ) {
+        console.log(val, this.currentStartTimeModel );
     }
 
-
-
-    private isOwner( ownerId: number, userId: number): boolean {
-        return (ownerId === userId);
+    private addEndApmSchedule( val: string ) {
+        console.log(val, this.currentEndTimeModel );
     }
 
-    private getImgFileLen( items: IAttachFileModel[] ): number{
-        return (items) ? this.getImgFileDataSort( items ).length : 0;
-    }
-
-    private getImgTotalNum(  items: IAttachFileModel[]  ) {
-        return (items && this.getImgFileDataSort(items).length <= 3);
-    }
-
-    private getImgFileMoreCheck(  items: IAttachFileModel[] ) {
-        return (items)? ( this.getImgFileDataSort( items ).length>3 )? `+${this.getImgFileDataSort( items ).length - 3}` : '' : 0;
-    }
-
-    private getImgFileDataSort(fileData: IAttachFileModel[] ) {
-        return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg' || item.contentType === 'image/gif');
-    }
-
-    private getFileDataSort(fileData: IAttachFileModel[] ) {
-        return fileData.filter( (item: IAttachFileModel) => item.contentType !== 'image/png' && item.contentType !== 'image/jpg' && item.contentType !== 'image/jpeg' && item.contentType !== 'image/gif');
-    }
-
-
-    /**
-     * 교육과정 수업 회차 설정
-     */
-    get courseListNumModel(): Array< {title: string }>{
-        this.eduItems.length = 10;
-        return this.eduItems;
-    }
-
-    private setCourseList( num: number ): void{
-        if( this.curriculumDetailDataNum >= 0 ){
-            this.curriculumDetailDataNum=num;
-            this.eduItems.length=num;
-
-            if( this.curriculumDetailDataNum > 50){
-                this.isCreateError = true;
-
-                num = 50;
-                this.curriculumDetailDataNum=50;
-                this.eduItems.length=50;
-            }
-        }
-
-        this.makeCurriculumData.course_list = [];
-
-        for (let i = 0; i < num; i++) {
-            this.makeCurriculumData.course_list.push({
-                index: i,
-                id: i,
-                title: '',
-                startDay: '',
-                startTime: '',
-                endTime: '',
-                contents: ''
-            });
-        }
-    }
-
-
-    private countCourseNum(num: number): void{
-        this.countCourseNumber = num;
+    private datePickerChange( ) {
+        this.dateMenu = false;
+        console.log(this.datePickerModel);
+        console.log(typeof this.datePickerModel);
     }
 
     /**
@@ -267,18 +130,12 @@ export default class ModifyCoursePopup extends Vue {
      */
     private addImgFileInputFocus() {
         this.inputEventBind('#imgFileInput');
+        this.imgFileService.courseIndexNumber(this.courseIdx);
     }
 
     private addFilesInputFocus(){
         this.inputEventBind('#attachFileInput');
-    }
-
-    private modifyImgFileInputFocus() {
-        this.inputEventBind('#imgFileInputModify');
-    }
-
-    private modifyFilesInputFocus(){
-        this.inputEventBind('#attachFileInputModify');
+        this.attachFileService.courseIndexNumber(this.courseIdx);
     }
 
     /**
@@ -288,270 +145,59 @@ export default class ModifyCoursePopup extends Vue {
      */
     private inputEventBind( targetSelector: string ) {
         //파일 input 에 클릭 이벤트 붙이기~
-        const imgFileInput =document.querySelector( targetSelector ) as HTMLInputElement;
+        const imgFileInput = document.querySelector(targetSelector) as HTMLInputElement;
         //input click event 발생시키기.
-        imgFileInput.dispatchEvent( Utils.createMouseEvent('click') );
+        imgFileInput.dispatchEvent(Utils.createMouseEvent('click'));
     }
 
-
-    /**
-     * 이미지 파일 -> 배열에 지정 / 미리보기 link( blob link) 배열 생성~
-     * @param data
-     * @private
-     */
-    private setImgFilePreviewSave(data: FileList ): void {
-        // console.log(data);
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < data.length; i++) {
-            this.imgFileDatas.push(data[i]);
-            this.imgFileURLItems.push(URL.createObjectURL(data[i]));
-        }
-        /*data.forEach( ( item: File ) => {
-            // console.log(data,  item, Utils.getFileType(item) );
-
-        }); */
-    }
-
-    private setAttachFileSave(data: FileList ): void {
-        // console.log(data);
-        for (const file of data) {
-            // console.log(data,  item, Utils.getFileType(item) );
-            this.attachFileItems.push(file);
-        }
-    }
-
-    /**
-     * 교육과정 > 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
-     * @private
-     */
-    private submitAddPost(): void{
-        //시나리오 --> 등록 버튼 클릭 > 이미지 추가한 배열값 formdata에 입력 > 전송 >전송 성공후> filesAllClear 호출 > 팝업 닫기
-
-        // this.setImageFormData();
-        // this.setAttachFileFormData();
-        this.setPostDataToFormData();
-    }
-
-    private onAddPostSubmit() {
-        this.submitAddPost();
-    }
-
-    private setPostDataToFormData() {
-        if( !this.isSubmitValidate ){return;}
-
-        if (Utils.isUndefined(this.formData)) {
-            this.formData = new FormData();
-        }
-
-        const temp = JSON.stringify( {...this.makeCurriculumData} );
-        this.formData.append('data', temp );
-
-        MyClassService.setCurriculumList( this.classID, this.formData )
-            .then((data)=>{
-                console.log( '교육과정 생성 성공', data );
-                this.$emit('submit', false);
-                this.imgFilesAllClear();
-                this.attachFilesAllClear();
-            });
-    }
-
-    /**
-     * 이미지 파일이 저장된 배열을 전송할 formdata 에 값 대입.
-     * @private
-     */
-    private setImageFormData() {
-        if( !this.imgFileDatas.length ){ return; }
-
-        if (Utils.isUndefined(this.formData)) {
-            this.formData= new FormData();
-        }
-        // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-        this.formDataAppendToFile(this.imgFileDatas, 'files' );
-    }
-
-    /**
-     * 첨부 파일이 저장된 배열을 전송할 formdata 에 값 대입.
-     * @private
-     */
-    private setAttachFileFormData() {
-        if( !this.attachFileItems.length ){ return; }
-
-        if (Utils.isUndefined(this.formData)) {
-            this.formData= new FormData();
-        }
-        // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-        this.formDataAppendToFile(this.attachFileItems, 'files' );
-    }
-
-    /**
-     * formdata 에 append 하여 formdata ( 딕셔너리 목록 ) 추가하기.
-     * @param targetLists
-     * @param appendName
-     * @private
-     */
-    private formDataAppendToFile( targetLists: File[], appendName: string | string[] ) {
-        targetLists.forEach(( item: File, index: number )=>{
-            // console.log(item, item.name);
-            // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-            if( Array.isArray(appendName) ){
-                this.formData.append( appendName[index], item, `${this.countCourseNumber+1}_${index}_${item.name}` );
-            }else{
-                this.formData.append(appendName, item, `${this.countCourseNumber+1}_${index}_${item.name}` );
-            }
-        });
-    }
+    //start : 이미지 preview  및 이미지 등록 ================================================
     //모델에 이미지 파일 추가
     private addFileToImage( files: FileList ){
-
-        //전달되는 파일없을시 여기서 종료.
-        if( !files.length ){ return; }
-
-        this.setImgFilePreviewSave(files);
-        //file type input
-        const imgFileInput =document.querySelector('#imgFileInput') as HTMLInputElement;
-        imgFileInput.value = '';
+        this.imgFileService.load(files, '#imgFileInput');
     }
-
-    //모델에 이미지 파일 추가
-    private async addAttachFileTo( files: FileList ){
-        //전달되는 파일없을시 여기서 종료.
-        if( !files.length ){ return; }
-
-        this.setAttachFileSave(files);
-        //file type input
-        const attachFileInput =document.querySelector('#attachFileInput') as HTMLInputElement;
-        attachFileInput.value = '';
-    }
-
-    //모델에 이미지 파일 추가
-    private modifyFileToImage( files: FileList ){
-
-        //전달되는 파일없을시 여기서 종료.
-        if( !files.length ){ return; }
-
-        this.setImgFilePreviewSave(files);
-        //file type input
-        const modifyImgFileInput =document.querySelector('#imgFileInputModify') as HTMLInputElement;
-        modifyImgFileInput.value = '';
-    }
-
-    //모델에 이미지 파일 추가
-    private async modifyAttachFileTo( files: FileList ){
-        //전달되는 파일없을시 여기서 종료.
-        if( !files.length ){ return; }
-
-        this.setAttachFileSave(files);
-        //file type input
-        const modifyAttachFileInput =document.querySelector('#attachFileInputModify') as HTMLInputElement;
-        modifyAttachFileInput.value = '';
-    }
-
-
     /**
-     * 추가된 이미지 파일 제거하기
+     * 추가된 이미지 미리보기 파일 제거하기
      * @param idx
      * @private
      */
-    private removeImgPreviewItems(idx: number): void{
-        const blobURLs=this.imgFileURLItems.splice(idx, 1);
-        this.removeBlobURL( blobURLs ); // blob url 제거
-        this.imgFileDatas.splice(idx, 1);
-        //console.log( this.formData.getAll('files')  );
+    private onRemoveImgPreviewItems(idx: number): void{
+        this.imgFileService.remove(idx);
     }
-    /**
-     * // blob url 폐기시키고 가비지 컬렉터 대상화시킴
-     * - 확인하는 방법은 현재 이미지에 적용된 src 주소값을 복사해서 현재 브라우저에 주소를 붙여 실행해 보면 된다. 이미지가 보이면 url 이 폐기되지 않은 것이다.
-     * @private
-     */
-    private removeBlobURL( items: string[] ) {
-        items.forEach((item) => URL.revokeObjectURL(item));
-    }
-
     /**
      * 추가된 이미지 파일 모두 지우기
      * @private
      */
-    private removeAllPreview(): void {
-        this.imgFileURLItems = [];
-        this.imgFileDatas=[];
-        this.imageLoadedCount=0;
-    }
-
-    private removeAllAttachFile(): void {
-        this.attachFileItems = [];
-    }
-
-    private removeAttachFileItem(idx: number): void{
-        this.attachFileItems.splice(idx, 1);
-        //console.log( this.formData.getAll('files')  );
-    }
-
-    //이미지 로드 완료 카운트
-    private imageLoadedCheck(): void{
-        this.imageLoadedCount++;
-        console.log(this.imageLoadedCount);
-    }
-    private attachFilesAllClear() {
-        this.attachFileItems = [];
-        this.formData.delete('files');
-        // this.imageLoadedCount=0;
-    }
-
-    private imgFilesAllClear() {
-        this.imgFileURLItems = [];
-        this.imgFileDatas=[];
-        this.makeCurriculumData={
-            title: '',
-            goal: '',
-            course_list: [
-                {
-                    index: 0,
-                    id: 0,
-                    startDay: '',
-                    startTime: '',
-                    endTime: '',
-                    title: '',
-                    contents: ''
-                }
-            ]
-        };
-        this.formData.delete('files');
-        this.imageLoadedCount=0;
+    private onRemoveAllPreview(): void {
+        this.imgFileService.removeAll();
     }
 
     /**
-     * 시작일시 - datepicker 일자 선택시
+     * post 등록을 완료후 formdata 및 배열에 지정되어 있던 데이터들 비우기..
      * @private
      */
-    private startDatePickerChange() {
-        this.startDateMenu = false;
-        this.startDateItem = this.startDatePickerModel;
-        // this.makeCourseItems.startDay = this.startDateItem;
+    private imgFilesAllClear() {
+        this.imgFileService.removeAll();
+        this.formData.delete('files');
     }
 
-    private startTimeChange() {
-        this.startTimeItem = this.selectStartTimeModel;
-        // this.makeCourseItems.startTime = this.startTimeItem;
+    //end : 이미지 preview  및 이미지 등록 ================================================
 
+    //start : 파일 첨부 미리보기 및 파일 업로드 ================================================
+    //모델에 이미지 파일 추가
+    private addAttachFileTo( files: FileList ){
+        this.attachFileService.load(files, '#attachFileInput');
     }
-
-    private endTimeChange() {
-        this.endTimeItem = this.selectEndTimeModel;
-        // this.makeCourseItems.endTime = this.endTimeItem;
+    private removeAllAttachFile(): void {
+        this.attachFileService.removeAll();
     }
-
-    private modifyCourseChangeTitle(value: string, num: number){
-        this.$emit('input', value );
+    private removeAttachFileItem(idx: number): void{
+        this.attachFileService.remove(idx);
     }
-
-    private modifyCourseChangeText(value: string, num: number){
-        this.$emit('textarea', value );
+    private attachFilesAllClear() {
+        this.attachFileService.removeAll();
+        this.formData.delete('files');
     }
-
-    private modifyCourseChangeStartTime(courseIdx: number) {
-        this.getModifyCourseStartTime(courseIdx);
-        console.log(this.modifyClassItems);
-    }
+    //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
 
     /**
      * 개별코스 수정 임시 저장
@@ -569,47 +215,17 @@ export default class ModifyCoursePopup extends Vue {
             endTime: this.courseDetailItemModel.endTime,
         };
 
-        this.$emit('modifyCourse', this.courseItem);
+        this.imgFileService.save( this.formData );
+        this.attachFileService.save( this.formData);
+
+        console.log('formData = ', this.formData);
+
+        this.$emit('modifyCourse', this.courseItem, this.formData);
+
         this.popupChange(false);
+        this.imgFilesAllClear();
+        this.attachFilesAllClear();
 
-        // this.setImageFormData();
-        // this.setAttachFileFormData();
-        // this.removeAllPreview();
-        // this.removeAllAttachFile();
-    }
-
-    private modifyCourseHandler(courseIdx: number, idx: number) {
-        this.isModifyCourse = true;
-        this.countCourseNumber = idx;
-
-        this.modifyCourseDataItems = this.modifyDataItemsModel.course_list[idx];
-        console.log(this.modifyCourseDataItems.attachment);
-    }
-
-
-
-    private getCurrItemTitleById( title: string): string {
-        return (title)? title : '';
-    }
-
-    private getCurrCourseItemTitleById( title: string ): string {
-        return (title)? title: '';
-    }
-
-    private getCourseItemStartTime(idx: number): string{
-        return (this.makeCurriculumData.course_list)? this.makeCurriculumData.course_list[idx].startTime=this.selectStartTimeModel : '' ;
-    }
-
-    private getCourseItemEndTime(idx: number): string{
-        return (this.makeCurriculumData.course_list)? this.makeCurriculumData.course_list[idx].endTime=this.selectEndTimeModel : '' ;
-    }
-
-    private getModifyCourseStartTime(idx: number): any{
-        return (this.modifyClassItems.course_list)? this.modifyClassItems.course_list[idx].startTime = this.selectStartTimeModel : '';
-    }
-
-    private getModifyCourseEndTime(idx: number): any{
-        return (this.modifyClassItems.course_list)? this.modifyClassItems.course_list[idx].endTime = this.selectEndTimeModel : '';
     }
 
     private popupChange( value: boolean ) {
@@ -617,9 +233,3 @@ export default class ModifyCoursePopup extends Vue {
     }
 
 }
-
-
-
-
-
-

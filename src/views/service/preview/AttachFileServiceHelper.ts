@@ -1,8 +1,6 @@
 import {AttachFileService} from '@/views/service/preview/AttachFileService';
-import {IAttachFileModel} from '@/views/model/post.model';
 
 class AttachFileServiceHelper extends AttachFileService {
-  public attachFilePreviewItems: any[] = [];
   public renameDataList: any[] = [];
 
   private courseIndex: number = 0;
@@ -16,21 +14,6 @@ class AttachFileServiceHelper extends AttachFileService {
   }
 
   //start : IFile 에 있는 필수 선언 메서드 ================================================
-  public getItems(): any[] {
-    return this.attachFilePreviewItems.map( (item)=>item.file);
-  }
-
-  public setAttachItems( items: IAttachFileModel[] ){
-    this.attachFilePreviewItems=items.map(( item: IAttachFileModel, index: number)=>{
-      return {
-        file: item,
-        id: index,
-        index: this.courseIndex,
-        url: item.location
-      };
-    });
-  }
-
   public load(files: FileList, selector: string): void {
     //전달되는 파일없을시 여기서 종료.
     if( !files.length ){ return; }
@@ -42,51 +25,44 @@ class AttachFileServiceHelper extends AttachFileService {
     attachFileInput.value = '';
 
     this.attachFileNaming();
-
-    console.log(this.attachFilePreviewItems);
-    console.log(this.renameDataList);
   }
 
   public remove(idx: number): void {
-    this.attachFilePreviewItems.splice(idx, 1);
-
-    console.log(this.attachFilePreviewItems);
+    this.attachFileItems.splice(idx, 1);
+    this.renameDataList.splice(idx, 1);
   }
 
   public removeAll(): void {
-    this.attachFilePreviewItems = [];
-  }
-
-  public reset(): void {
-    this.removeAll();
+    this.attachFileItems = [];
+    this.renameDataList = [];
   }
 
   public savePreview(attachFileData: any): void {
-    if( !this.attachFilePreviewItems.length ){ return; }
+    if( !this.renameDataList.length ){ return; }
 
     //현재 추가된 파일, 이미 업로드되어 로드된 파일 두개를 분리해서
     // 현재 추가된 파일 ( file - Blob 타입 ) 만 추출해서 formdata 에 append 한다.
-    const checkAddFile= this.attachFilePreviewItems
-        .filter((item) => item.file.name );
+    const checkAddFile= this.renameDataList
+        .filter((item) => item.name );
 
     //전송할 파일이 없다면 여기서 종료.
     if( checkAddFile.length<1 ){ return; }
 
-    for(let i=0; i<this.attachFilePreviewItems.length; i++){
-      attachFileData.push(this.renameDataList[i]);
-    }
+    this.renameDataList.push(this.attachFileItems);
 
-    console.log(attachFileData);
+    console.log(this.renameDataList);
   }
 
   public attachFileNaming() {
-    const targetLists = this.attachFilePreviewItems.map((item: any)=>item.file.name);
-    const courseList = this.attachFilePreviewItems.map((item: any)=>item.index);
+    const targetLists = this.attachFileItems.map((item: any)=>item.file);
+    const courseList = this.attachFileItems.map((item: any)=>item.index);
 
-    targetLists.forEach((item: string, index: number) => {
-      const renameData = new File( [item], `${courseList[index]+1}_${index}_${item}` );
+    targetLists.forEach((item: any, index: number) => {
+      const renameData = new File( [item], `${courseList[index]+1}_${index}_${item.name}`, {type: item.type} );
       this.renameDataList.push(renameData);
     });
+
+    console.log(this.renameDataList);
   }
 
   public saveData(formData: FormData, saveData: any): void {
@@ -112,9 +88,7 @@ class AttachFileServiceHelper extends AttachFileService {
   protected setAttachFileSave(data: FileList ): void {
     // console.log(data);
     for (let i = 0; i < data.length; i++) {
-      // console.log(data,  item, Utils.getFileType(item) );
-      // this.attachFileItems.push(file);
-      this.attachFilePreviewItems.push( {file:data[i], index:this.courseIndex, id:i } );
+      this.attachFileItems.push( {file:data[i], index:this.courseIndex, id:i } );
     }
   }
 }

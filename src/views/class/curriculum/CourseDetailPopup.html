@@ -1,57 +1,69 @@
 <div>
-<!-- start: 공통 팝업 / 파일명 : W.4.5.5.3.1 (교육과정 코스 - 상세) -->
-<transition name="modal">
-    <modal v-if="isOpen" size="600px" body-padding="0" @modalClose="popupChange(false)">
-        <div slot="header">
-            <!-- header custom coding-->
-            <div class="popup-icon edu"></div>
-            <div class="popup-close">
-                <button class="close" @click="popupChange(false)"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+    <!-- start: 공통 팝업 / 파일명 : W.4.5.5.3.1 (교육과정 코스 - 상세) -->
+    <transition name="modal">
+        <modal v-if="isOpen" size="600px" body-padding="0" @modalClose="popupChange(false)">
+            <div slot="header">
+                <!-- header custom coding-->
+                <div class="popup-icon edu"></div>
+                <div class="popup-close">
+                    <button class="close" @click="popupChange(false)"><img :src="require('@/assets/images/close.svg')"
+                                                                           alt=""></button>
+                </div>
             </div>
-        </div>
-        <div slot="body">
-            <!-- body custom coding-->
-            <div class="popup-cnt">
-                <p class="popup-txt type2">{{ curriculumDetailModel.title }}</p>
-                <h2 class="popup-tit pdb-0">{{ courseDetailModel.title===''? (courseDetailModel.index+1)+'회차수업' : courseDetailModel.title }}</h2>
-            </div>
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-cnt">
+                    <p class="popup-txt type2">{{ curriculumDetailModel.title }}</p>
+                    <h2 class="popup-tit pdb-0">{{ courseDetailModel.title===''? (courseDetailModel.index+1)+'회차수업' :
+                        courseDetailModel.title }}</h2>
+                </div>
 
-            <div class="popup-form" v-if="courseDetailModel.startDay!=='Invalid date'&&courseDetailModel.startTime!==null&&courseDetailModel.endTime!==null">
-                <div class="popup-form-top">
-                    <div class="form-item pd-desc">
-                        <ul class="feed-info period clearfix">
-                            <li v-show="courseDetailModel.startDay!=='Invalid date'">{{ courseDetailModel.startDay }}</li>
-                            <li v-show="courseDetailModel.startTime!==null">{{ courseDetailModel.startTime }}</li>
-                            <li v-show="courseDetailModel.endTime!==null">{{ courseDetailModel.endTime }}</li>
-                        </ul>
+                <div class="popup-form"
+                     v-if="courseDetailModel.startDay!=='Invalid date'&&courseDetailModel.startTime!==null&&courseDetailModel.endTime!==null">
+                    <div class="popup-form-top">
+                        <div class="form-item pd-desc">
+                            <ul class="feed-info period clearfix">
+                                <li v-show="courseDetailModel.startDay!=='Invalid date'">{{ courseDetailModel.startDay
+                                    }}
+                                </li>
+                                <li v-show="courseDetailModel.startTime!==null">{{ courseDetailModel.startTime }}</li>
+                                <li v-show="courseDetailModel.endTime!==null">{{ courseDetailModel.endTime }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="popup-feed-detail">
+                    <div class="fd-cnt">
+                        <p class="fd-txt">
+                            {{ courseDetailModel.contents }}
+                        </p>
+
+                        <div class="fd-inner">
+                            <a href="" @click.prevent="openPhotoViewer">
+                                <!-- start: attach 에 이미지파일이 있는 경우 -->
+                                <list-in-img-preview
+                                        :file-items="courseDetailModel.attachment"
+                                        location="location"></list-in-img-preview>
+                                <!-- end: attach 에 이미지파일이 있는 경우 -->
+                            </a>
+
+                            <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우-->
+                            <list-in-file-preview
+                                    :file-items="courseDetailModel.attachment"
+                                    name="originalname"
+                                    location="location"></list-in-file-preview>
+                            <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우-->
+                        </div>
                     </div>
                 </div>
             </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
 
-            <div class="popup-feed-detail">
-                <div class="fd-cnt">
-                    <p class="fd-txt">
-                        {{ courseDetailModel.contents }}
-                    </p>
+    <photo-viewer v-if="isPhotoViewer" :is-photo-viewer="isPhotoViewer"
+                  :img-data="getImgFileDataSort(courseDetailModel.attachment)"
+                  @change="onPhotoViewerStatus"></photo-viewer>
 
-                    <div class="fd-inner">
-                        <!-- start: attach 에 이미지파일이 있는 경우 -->
-                        <list-in-img-preview
-                                :file-items="courseDetailModel.attachment"
-                                location="location"></list-in-img-preview>
-                        <!-- end: attach 에 이미지파일이 있는 경우 -->
-
-                        <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우-->
-                        <list-in-file-preview
-                                :file-items="courseDetailModel.attachment"
-                                name="originalname"
-                                location="location"></list-in-file-preview>
-                        <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우-->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </modal>
-</transition>
 </div>
-<!-- end: 공통 팝업 -->

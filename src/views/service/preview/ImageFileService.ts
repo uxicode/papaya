@@ -83,7 +83,7 @@ class ImageFileService implements IFile{
     if( !this.imgFileItems.length ){ return; }
 
     const addFiles= this.getAddFiles();
-
+    console.log(`??`, addFiles);
     //신규 전송할 파일이 없다면 여기서 종료.
     if( addFiles.length<0 ){ return; }
 
