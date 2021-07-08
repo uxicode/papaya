@@ -1,5 +1,5 @@
 <template>
-  <div class="form-add-list">
+  <div class="form-add-list" v-if="fileItems!==null && fileItems.length>0">
     <!-- start: 상단 -->
     <div class="add-item">
       <div class="add-item-top" v-show="fileItems.length>0">

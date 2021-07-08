@@ -68,7 +68,7 @@
 
                                 <a href="" @click.prevent="openPhotoViewer">
                                     <!-- start: attach 에 이미지파일이 있는 경우 -->
-                                    <list-in-img-preview :file-items="postDetailModel.attachment"
+                                    <list-in-img-preview :file-items="imgPreviewInit( postDetailModel.attachment )"
                                                          location="location"></list-in-img-preview>
                                     <!-- end: attach 에 이미지파일이 있는 경우 -->
                                 </a>
@@ -92,7 +92,7 @@
                                 <!-- end: 링크가 있는 경우 -->
 
                                 <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
-                              <list-in-file-preview :file-items="postDetailModel.attachment" name="originalname" location="location"></list-in-file-preview>
+                              <list-in-file-preview :file-items="attachFilePreviewInit( postDetailModel.attachment )" name="originalname" location="location"></list-in-file-preview>
                                 <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
 
                             </div>

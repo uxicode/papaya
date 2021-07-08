@@ -1,4 +1,4 @@
-import {Vue, Component, Prop} from 'vue-property-decorator';
+import {Vue, Component, Prop, Mixins} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {IAttachFileModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
@@ -13,6 +13,7 @@ import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
 import DetailInVotePreview from '@/components/preview/DetailInVotePreview.vue';
 import {CommentService} from '@/api/service/CommentService';
 import WithRender from './NotifyDetailPopup.html';
+import UtilsMixins from '@/mixin/UtilsMixins';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -29,7 +30,7 @@ const Post = namespace('Post');
         DetailInVotePreview,
     }
 })
-export default class NotifyDetailPopup extends Vue {
+export default class NotifyDetailPopup extends Mixins(UtilsMixins) {
 
     @Prop(Boolean)
     private isOpen!: boolean;
