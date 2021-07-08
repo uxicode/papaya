@@ -40,6 +40,12 @@ export default class AddCoursePopup extends Vue {
     @Prop(Number)
     private courseIdx!: number;
 
+    @Prop(Array)
+    private imgAttachData!: any[];
+
+    @Prop(Array)
+    private attachFileData!: any[];
+
     @Prop(FormData)
     private formData!: FormData;
 
@@ -63,6 +69,8 @@ export default class AddCoursePopup extends Vue {
 
     private imgFileService: ImageFileServiceHelper=new ImageFileServiceHelper();
     private attachFileService: AttachFileServiceHelper=new AttachFileServiceHelper();
+
+
 
     get imgFileURLItemsModel(): string[] {
         return this.imgFileService.getItems();
@@ -151,7 +159,6 @@ export default class AddCoursePopup extends Vue {
      */
     private imgFilesAllClear() {
         this.imgFileService.removeAll();
-        this.formData.delete('files');
     }
 
     //end : 이미지 preview  및 이미지 등록 ================================================
@@ -169,16 +176,10 @@ export default class AddCoursePopup extends Vue {
     }
     private attachFilesAllClear() {
         this.attachFileService.removeAll();
-        this.formData.delete('files');
     }
     //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
 
-
-    /**
-     * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
-     * @private
-     */
-    private onAddCourseSubmit(idx: number): void{
+    private courseTime(idx: number){
         const startHour = (this.startTimeSelectModel.apm === '오후') ? Number(this.startTimeSelectModel.hour) + 12 : Number(this.startTimeSelectModel.hour);
         const startMinute= Number( this.startTimeSelectModel.minute );
         const endHour = (this.endTimeSelectModel.apm === '오후') ? Number(this.endTimeSelectModel.hour) + 12 : Number(this.endTimeSelectModel.hour);
@@ -187,13 +188,22 @@ export default class AddCoursePopup extends Vue {
         this.makeCurriculumData.course_list[idx].startTime = `${startHour}:${startMinute}`;
         this.makeCurriculumData.course_list[idx].endTime = `${endHour}:${endMinute}`;
         this.makeCurriculumData.course_list[idx].startDay = this.datePickerModel;
+    }
 
-        this.imgFileService.save( this.formData );
-        this.attachFileService.save( this.formData);
 
-        this.imgFileService = new ImageFileServiceHelper();
-        this.attachFileService = new AttachFileServiceHelper();
+    /**
+     * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
+     * @private
+     */
+    private onAddCourseSubmit(): void{
 
+        this.courseTime(this.courseIdx);
+
+        // this.imgFileService.courseSave( this.imgAttachData );
+        this.attachFileService.savePreview( this.attachFileData );
+
+        this.imgFilesAllClear();
+        this.attachFilesAllClear();
         this.popupChange( false );
     }
 }

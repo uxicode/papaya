@@ -83,7 +83,7 @@ class ImageFileService implements IFile{
     if( !this.imgFileItems.length ){ return; }
 
     const addFiles= this.getAddFiles();
-
+    console.log(`??`, addFiles);
     //신규 전송할 파일이 없다면 여기서 종료.
     if( addFiles.length<0 ){ return; }
 
@@ -124,7 +124,7 @@ class ImageFileService implements IFile{
    * 이미지 파일 -> 배열에 지정 / 미리보기 link( blob link) 배열 생성~
    * @param data
    */
-  private setImgFilePreviewSave(data: FileList ): void {
+  protected setImgFilePreviewSave(data: FileList ): void {
 
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < data.length; i++) {

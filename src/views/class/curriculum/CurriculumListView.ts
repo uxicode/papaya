@@ -65,8 +65,6 @@ export default class CurriculumListView extends Vue {
         course_list: []
     };
 
-    private curriculumDetailDataNum = 10;
-
     public created() {
         this.getList().then();
     }
@@ -164,7 +162,6 @@ export default class CurriculumListView extends Vue {
 
     private deleteCurriculum(id: number){
         this.cardId = id;
-        console.log(this.classID);
         this.DELETE_CURRICULUM_ACTION({classId: Number(this.classID), curriculumId: id})
             .then((data)=>{
                 console.log(`delete curriculum`, data);

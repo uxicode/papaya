@@ -1,13 +1,13 @@
 
 <div>
     <!-- start: 공통 팝업 / 파일명 : W.4.5.5.1 (교육과정 만들기) (4.5.5.1 ~ 4.5.5.1.1)-->
-    <transition name="modal" >
+    <transition name="modal">
         <modal v-if="isOpen" size="600px" body-padding="0" @modalClose="popupChange(false)">
             <div slot="header">
                 <!-- header custom coding-->
                 <p class="popup-header-tit mgb-0">새 교육과정 등록</p>
                 <div class="popup-close">
-                    <button class="close" @click="popupChange(false)"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                    <button class="close" @click="coursePopupClose(false)"><img :src="require('@/assets/images/close.svg')" alt=""></button>
                 </div>
             </div>
             <div slot="body">
@@ -60,7 +60,6 @@
                                             <v-menu
                                                     nudge-left="30px"
                                                     origin="center top"
-                                                    v-model="courseListNumModel[index]"
                                                     transition="scale-transition"
                                                     content-class="time-select-menu bg-white"
                                                     offset-y offset-x>
@@ -70,11 +69,11 @@
                                                             v-on="on"><img :src="require('@/assets/images/more.svg')" class="sm" alt=""></button>
                                                 </template>
                                                 <v-list>
-                                                    <v-list-item
-                                                            v-for="(item, index) in currentCourseSettingItems"
-                                                            :key="index"
-                                                            @click="CourseSettingsModel=item">
-                                                        <v-list-item-title>{{ item }}</v-list-item-title>
+                                                    <v-list-item @click="addCoursePopupOpen(index)">
+                                                        <v-list-item-title class="lt">교육과정 수정</v-list-item-title>
+                                                    </v-list-item>
+                                                    <v-list-item @click="courseDelete(index)">
+                                                        <v-list-item-title class="lt">교육과정 삭제</v-list-item-title>
                                                     </v-list-item>
                                                 </v-list>
                                             </v-menu>
@@ -102,6 +101,8 @@
             :make-curriculum-data="makeCurriculumData"
             :course-idx="courseIdx"
             :form-data="formData"
+            :img-attach-data="imgAttachData"
+            :attach-file-data="attachFileData"
             @close="onCoursePopupClose"
             @submit="onAddCourse"></add-course-popup>
 

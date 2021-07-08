@@ -6,7 +6,7 @@
                 <!-- header custom coding-->
                 <p class="popup-header-tit mgb-0">{{ curriculumDetailModel.title }}</p>
 
-                <div class="popup-btn">
+                <div class="popup-btn" v-if="isOwner( curriculumDetailModel.owner.user_id, curriculumDetailModel.user_id)">
                     <div class="list-popup">
                         <v-menu
                                 min-width="160px"
@@ -82,6 +82,7 @@
     <course-detail-popup
             :is-open="isOpenCourseDetailPopup"
             :course-id="courseId"
+            :curriculum-detail-item="curriculumDetailItem"
             :course-detail-item="courseDetailItem"
             @close="onCourseDetailPopupClose"></course-detail-popup>
 
