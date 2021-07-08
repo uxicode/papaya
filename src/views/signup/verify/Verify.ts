@@ -42,7 +42,7 @@ export default class Verify extends Vue {
         // form_chk.submit();
 
         //https://wwwtest.papayaclass.com/api/v1/checkplus_main
-        const windowOpener=window.open('../testOpen.html', '_blank', 'width=500, height=800, status=yes, toolbar=yes');
+        const windowOpener=window.open('https://wwwtest.papayaclass.com/api/v1/checkplus_main', '_blank', 'width=500, height=800, status=yes, toolbar=yes');
 
         // this.verifyComplete = true; // 인증 성공시 실행되어야 하는 부분
 
