@@ -47,7 +47,7 @@ export default class ClassJoinStatus extends Vue {
     private getApplyMembers(): void {
         MyClassService.getClassInfoById(this.classID)
             .then((data: any) => {
-                console.log(data);
+                // console.log(data);
                 this.applyList = data.classinfo.class_members.filter((item: IClassMemberInfo) => item.status === 0);
             });
     }
@@ -57,15 +57,15 @@ export default class ClassJoinStatus extends Vue {
      * @param id
      * @private
      */
-    private openJoinDetail(id: number): void {
+    private async openJoinDetail(id: number) {
         this.waitingMemberId = id;
-        ClassMemberService.getClassMemberInfo(this.classID, this.waitingMemberId)
+        await ClassMemberService.getClassMemberInfo(this.classID, this.waitingMemberId)
           .then((data: any) => {
               this.classMemberInfo = data.member_info;
               console.log(this.classMemberInfo);
           });
 
-        ClassMemberService.getMemberClassQnA(this.classID, this.waitingMemberId)
+        await ClassMemberService.getMemberClassQnA(this.classID, this.waitingMemberId)
           .then((data) => {
             this.answerList = data.qnalist;
           });
@@ -81,6 +81,21 @@ export default class ClassJoinStatus extends Vue {
         ClassMemberService.setClassMemberInfo(this.classID, this.waitingMemberId, {status: 1})
             .then((data: any) => {
                console.log(data);
+            });
+        this.applyList = this.applyList.filter((item: any) => item.id !== this.waitingMemberId);
+        this.isJoinDetail = false;
+    }
+
+    /**
+     * 클래스 가입 신청 거절 (멤버 탈퇴)
+     * @private
+     */
+    private joinRefuse(): void {
+        ClassMemberService.deleteClassMemberByUser(this.classID, this.waitingMemberId)
+            .then((result: any) => {
+               console.log(result);
+               // const findIdx = this.applyList.findIndex((ele) => ele.id === result.user_id);
+               // this.applyList.splice(findIdx, 1);
             });
         this.applyList = this.applyList.filter((item: any) => item.id !== this.waitingMemberId);
         this.isJoinDetail = false;

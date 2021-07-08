@@ -188,19 +188,19 @@ export default class ClassStaffManage extends Vue {
      * 멤버 차단 팝업 열기
      * @private
      */
-    private blockModalOpen(item: IClassMemberInfo): void {
+    private blockModalOpen(id: number, nickname: string): void {
         if (this.classInfo.me.level !== 1) {
             alert('멤버 차단은 운영자만 가능합니다.');
             return;
         }
-        this.memberId = item.id;
+        this.memberId = id;
         if (this.classInfo.me.id === this.memberId) {
             alert('자기 자신은 차단할 수 없습니다.');
             return;
         }
         this.isActive = false;
         this.isBlockModal = true;
-        this.nickname = item.nickname;
+        this.nickname = nickname;
     }
 
     /**
@@ -221,19 +221,19 @@ export default class ClassStaffManage extends Vue {
      * 멤버 강제 탈퇴 팝업 열기
      * @private
      */
-    private banModalOpen(item: IClassMemberInfo): void {
+    private banModalOpen(id: number, nickname: string): void {
         if (this.classInfo.me.level !== 1) {
             alert('멤버 강제 탈퇴는 운영자만 가능합니다.');
             return;
         }
-        this.memberId = item.id;
+        this.memberId = id;
         if (this.classInfo.me.id === this.memberId) {
             alert('자기 자신은 강제탈퇴할 수 없습니다.');
             return;
         }
         this.isActive = false;
         this.isBanModal = true;
-        this.nickname = item.nickname;
+        this.nickname = nickname;
     }
 
     /**

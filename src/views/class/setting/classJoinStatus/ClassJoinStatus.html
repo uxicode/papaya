@@ -17,7 +17,7 @@
 
             <div v-if="applyMembers.length>0" class="apply-list scroll-body" style="height:580px;">
                 <ul>
-                    <li v-for="(item, idx) in applyMembers"
+                    <li v-for="(item, idx) in applyList"
                         :key="idx"
                         class="apply-item">
                         <p class="apply-name">{{ item.nickname }}</p>
@@ -71,7 +71,7 @@
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="outline" @btnClick="isJoinDetail=false">거절</btn>
+                    <btn type="outline" @btnClick="joinRefuse">거절</btn>
                     <btn type="navi" @btnClick="joinAccept">신청 수락</btn>
                 </div>
             </div>

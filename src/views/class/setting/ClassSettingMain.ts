@@ -406,10 +406,11 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private deleteJoinQuestion(idx: number, questionId: number): void {
-        this.questionList[idx].question = '';
         MyClassService.deleteClassQuestion(this.classID, questionId)
-          .then(() => {
-              console.log('가입 질문 삭제 성공');
+          .then((result: any) => {
+              console.log(result);
+              const findIdx = this.questionList.findIndex((ele) => ele.id === result.question.id);
+              this.questionList.splice(findIdx, 1);
           });
     }
 

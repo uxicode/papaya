@@ -45,10 +45,10 @@
                                             <v-list-item @click="staffModifyPopupOpen(item)">
                                                 <v-list-item-title>스탭 권한 설정 변경</v-list-item-title>
                                             </v-list-item>
-                                            <v-list-item @click="blockModalOpen(item)">
+                                            <v-list-item @click="blockModalOpen(item.id, item.nickname)">
                                                 <v-list-item-title>멤버 차단</v-list-item-title>
                                             </v-list-item>
-                                            <v-list-item @click="banModalOpen(item)">
+                                            <v-list-item @click="banModalOpen(item.id, item.nickname)">
                                                 <v-list-item-title>멤버 강제 탈퇴</v-list-item-title>
                                             </v-list-item>
                                         </v-list>
