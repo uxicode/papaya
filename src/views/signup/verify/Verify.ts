@@ -1,19 +1,22 @@
 import {Vue, Component, Watch} from 'vue-property-decorator';
-import WithRender from './Verify.html';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
+import NoticePopup from '@/components/modal/noticePopup.vue';
+import WithRender from './Verify.html';
 
 @WithRender
 @Component({
     components:{
         Btn,
         Modal,
+        NoticePopup,
     },
 })
 export default class Verify extends Vue {
 
     private verifyComplete: boolean= false;
     private verifyVal: string | number = '';
+    private isNoticePopupOpen: boolean = false;
 
     get isVerifyComplete(){
         return this.verifyComplete;
@@ -46,7 +49,16 @@ export default class Verify extends Vue {
     }
 
     @Watch('verifyVal')
-    private onUpdateVerify(val: string | number){
+    private onUpdateVerify(val: string){
         console.log(val);
+        if (val !== '') {
+            this.isNoticePopupOpen = true;
+        }
     }
+
+    private onNoticePopupStatus(value: boolean) {
+        this.isNoticePopupOpen=value;
+        this.verifyComplete = true;
+    }
+
 }

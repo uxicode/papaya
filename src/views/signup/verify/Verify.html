@@ -10,12 +10,6 @@
           <!--<button type="button" class="btn basic x40 primary red">본인 인증하기</button>-->
           <btn @btnClick="verifyModalOpen">본인 인증하기</btn>
 
-          <!-- nice 서버에 submit할 form -->
-          <form name="form_chk" method="post">
-            <input type="hidden" name="m" value="checkplusService">
-            <input type="hidden" name="EncodeData" value="">
-          </form>
-
         </div>
       </div>
 
@@ -41,10 +35,16 @@
                   style="width:300px;"
                   value="none"
                   id="parentVerifyValInput"
-                  @click="onUpdateVerify($event.target.value)"><br>
+                  @click="onUpdateVerify($event.target.value)" hidden><br>
         </form>
       </div>
     </div>
   </div>
+
+  <notice-popup
+          :is-open="isNoticePopupOpen"
+          title="본인 인증 완료"
+          msg="우측 하단 다음 버튼을 누르시고 계속 진행해주세요."
+          @change="onNoticePopupStatus"></notice-popup>
 
 </div>
