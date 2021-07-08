@@ -31,6 +31,18 @@
         <btn type="navi" :disabled="!isVerifyComplete" @btnClick="gotoNext">다음</btn>
         <!--<router-link class="btn basic x40 sm outline ct" :to="{path:'termsCheck'}">이전</router-link>
         <router-link class="btn basic x40 sm primary navi ct" disabled :to="{path:'signUpForm'}">다음</router-link>-->
+
+        <form name="verifyForm">
+          <span id="parentWinInput"></span>
+           <input type="text"
+                  v-model="verifyVal"
+                  name="receiver"
+                  class="form-control"
+                  style="width:300px;"
+                  value="none"
+                  id="parentVerifyValInput"
+                  @click="onUpdateVerify($event.target.value)"><br>
+        </form>
       </div>
     </div>
   </div>
