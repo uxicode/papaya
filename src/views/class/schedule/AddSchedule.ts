@@ -6,6 +6,8 @@ import ImageSettingService from '@/views/service/profileImg/ImageSettingService'
 import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
+import FilePreview from '@/components/preview/filePreview.vue';
+import ImagePreview from '@/components/preview/imagePreview.vue';
 import WithRender from './AddSchedule.html';
 import {ITimeModel} from '@/views/model/schedule.model';
 import {Utils} from '@/utils/utils';
@@ -20,7 +22,9 @@ const MyClass = namespace('MyClass');
   components:{
     Modal,
     TxtField,
-    Btn
+    Btn,
+    FilePreview,
+    ImagePreview
   }
 })
 export default class AddSchedule extends Mixins(UtilsMixins) {
@@ -67,6 +71,17 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   private loopRangeCheck: boolean=false;
   private loopRangeCount: number | string=10;
 
+  private formData: FormData=new FormData();
+  private imgFileService: ImageFileService=new ImageFileService();
+  private attachFileService: AttachFileService=new AttachFileService();
+
+  get imgFileURLItemsModel(): string[] {
+    return this.imgFileService.getItems();
+  }
+  get attachFileItemsModel(): any[] {
+    return this.attachFileService.getItems();
+  }
+
 
   get currentLoopRangeItems(): string[]{
     return this.loopRangeItems;
@@ -86,6 +101,68 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   }
 
 
+  /**
+   * 이미지등록 아이콘 클릭시 > input type=file 에 클릭 이벤트 발생시킴.
+   * @private
+   */
+  private addImgFileInputFocus() {
+    this.inputEventBind('#imgFileInput');
+  }
+
+  private addFilesInputFocus(){
+    this.inputEventBind('#attachFileInput');
+  }
+
+
+
+  //start : 이미지 preview  및 이미지 등록 ================================================
+  //모델에 이미지 파일 추가
+  private addFileToImage( files: FileList ){
+    this.imgFileService.load(files, '#imgFileInput');
+  }
+  /**
+   * 추가된 이미지 미리보기 파일 제거하기
+   * @param idx
+   * @private
+   */
+  private onRemoveImgPreviewItems(idx: number): void{
+    this.imgFileService.remove(idx);
+  }
+  /**
+   * 추가된 이미지 파일 모두 지우기
+   * @private
+   */
+  private onRemoveAllPreview(): void {
+    this.imgFileService.removeAll();
+  }
+  /**
+   * post 등록을 완료후 formdata 및 배열에 지정되어 있던 데이터들 비우기..
+   * @private
+   */
+  private imgFilesAllClear() {
+    this.imgFileService.removeAll();
+    this.formData.delete('files');
+  }
+  //end : 이미지 preview  및 이미지 등록 ================================================
+
+
+  //start : 파일 첨부 미리보기 및 파일 업로드 ================================================
+  //모델에 이미지 파일 추가
+  private addAttachFileTo( files: FileList ){
+    this.attachFileService.load(files, '#attachFileInput');
+  }
+  private removeAllAttachFile(): void {
+    this.attachFileService.removeAll();
+  }
+  private removeAttachFileItem(idx: number): void{
+    this.attachFileService.remove(idx);
+  }
+  private attachFilesAllClear() {
+    this.attachFileService.removeAll();
+    this.formData.delete('files');
+  }
+  //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
+
   private loopRangeCountClickHandler( value: string ){
     this.loopRangeCount=value;
     // console.log(this.loopRangeCount);
@@ -101,35 +178,14 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   }
 
   private popupChange( value: boolean ) {
-    this.$emit('change', value);
-  }
-
-  private onAddSchedulePopupCloseHandler(): void{
-    this.isOpen=false;
     this.loopRangeCheck = false;
 
     //첨부 파일들 초기화
-    this.removeAllPreview();
-    this.removeAllAttachFile();
-
+    // this.removeAllPreview();
+    // this.removeAllAttachFile();
+    this.$emit('change', value);
   }
 
-  /**
-   * 추가된 이미지 파일 모두 지우기
-   * @private
-   */
-  private removeAllPreview(): void {
-   /* this.imgFileURLItems = [];
-    this.imgFileDatas=[];
-    this.imageLoadedCount=0;*/
-  }
-  private removeAllAttachFile(): void {
-    // this.attachFileItems = [];
-  }
-
-/*  private getProfileImg(imgUrl: string | null | undefined ): string{
-    return ImageSettingService.getProfileImg( imgUrl );
-  }*/
 
   /**
    * 일정 등록시  하루종일 표시 유무 - true/false 로 등록하기에 전송시 0/1 로 변환해서 전송필요.
@@ -160,49 +216,7 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
     const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLTextAreaElement;
     /* scheduleDetailAreaTxt.style.height = String( Utils.autoResizeTextArea(this.scheduleData.body) + 'px');*/
 
-    this.txtEleH( scheduleDetailAreaTxt, this.scheduleData.body );
-  }
-
-  private txtEleH( txtAreaEle: HTMLTextAreaElement, txt: string ) {
-    // const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLInputElement;
-
-    let txtAreaSizeTotal=0;
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < txt.length; i++) {
-      //영문/한글 섞인 문자를 바이트 수 계산
-      txtAreaSizeTotal += Utils.getCharByteSize(txt.charAt(i));
-    }
-    const lineH=20;
-    const maxTxtLen=117; //한줄에 최대한 들어갈 수 있는 텍스트의 바이트 수 - 영문/한글 섞인 계산된 바이트 수
-    const lineInLen=txtAreaSizeTotal/maxTxtLen; //maxTxtLen , 즉 몇줄까지 입력되었는 지 라인 수 계산
-    const numOfLine: number = (txt.match(/\n/g) || []).length; // 엔터키가 몇개 들어 갔는 지 체크
-    const resultH=lineH+( lineInLen+numOfLine)*lineH; //1줄 높이( 20px )+( 텍스트 입력 라인 수+엔터키 개수 ) * 1줄 높이( 20px )
-
-    // txtAreaEle.style.height = String( Utils.autoResizeTextArea(txt) + 'px');
-    txtAreaEle.style.height = resultH+'px';
-  }
-
-  /**
-   * 이미지등록 아이콘 클릭시 > input type=file 에 클릭 이벤트 발생시킴.
-   * @private
-   */
-  private addImgFileInputFocus() {
-    this.inputEventBind('#imgFileInput');
-  }
-
-  private addFilesInputFocus(){
-    this.inputEventBind('#attachFileInput');
-  }
-
-  //모델에 이미지 파일 추가
-  private async addAttachFileTo( files: FileList ){
-    //전달되는 파일없을시 여기서 종료.
-    if( !files.length ){ return; }
-
-    // this.setAttachFileSave(files);
-    //file type input
-    const attachFileInput =document.querySelector('#attachFileInput') as HTMLInputElement;
-    attachFileInput.value = '';
+    this.txtAreaEleH( scheduleDetailAreaTxt, this.scheduleData.body );
   }
 
 
@@ -212,15 +226,33 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
    */
   private submitAddSchedule(): void{
     //시나리오 --> 등록 버튼 클릭 > 이미지 추가한 배열값 formdata에 입력 > 전송 >전송 성공후> filesAllClear 호출 > 팝업 닫기
-    // this.setImageFormData();
-    // this.setAttachFileFormData();
+    //이미지 파일 저장.
+    this.imgFileService.save( this.formData );
+
+    //파일 저장.
+    this.attachFileService.save( this.formData );
+
+
+
+    //formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.
+    // const temp = JSON.stringify( mergeData );
+    // this.formData.append('data', temp );
 
     //전송이 완료 되었다는 전제하에 아래 구문 수행
     setTimeout(() => {
-      this.isOpen=false;
       // this.imgFilesAllClear();
+
+      this.allClear();
+      this.popupChange(false);
     }, 500);
 
+  }
+
+
+  private allClear() {
+    // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
+    this.imgFilesAllClear(); //이미지 데이터 비우기
+    this.attachFilesAllClear();//파일 데이터 비우기
   }
 
 }

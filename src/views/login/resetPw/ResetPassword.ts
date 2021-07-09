@@ -47,6 +47,11 @@ export default class ResetPassword extends Vue {
   private completeMobileAuthMsgData: string[] =['모바일 인증이 완료 되었습니다.', '하단에 확인 버튼을 눌러 주세요.'];
   // private completeEmailAuthMsgData: string[] =['이메일 인증이 완료 되었습니다.', '하단에 확인 버튼을 눌러 주세요.'];
 
+  private isConfirmCompleteGuide: boolean=false;
+
+  private changePwStep1: boolean=true;
+  private changePwStep2: boolean=false;
+  private changePwStep3: boolean=false;
 
 
   //비밀번호 재설정 관련
@@ -297,9 +302,12 @@ export default class ResetPassword extends Vue {
 
   private changePwdComplete(): void{
     this.isModifiedPwd = false;
-    this.$router.push('/login').then(()=>{
+    this.changePwStep2=false;
+    this.changePwStep3=true;
+    // this.isConfirmCompleteGuide=true;
+    /*this.$router.push('/login').then(()=>{
       console.log('로그인으로 이동 ');
-    });
+    });*/
   }
 
 
@@ -323,6 +331,9 @@ export default class ResetPassword extends Vue {
    */
   private confirmClickHandler(): void {
     this.formData.verifiedCode = '';
+    this.changePwStep1=false;
+    this.changePwStep2=true;
+
     this.isConfirmComplete = true;
   }
 

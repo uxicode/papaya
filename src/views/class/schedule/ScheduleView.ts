@@ -262,8 +262,8 @@ export default class ScheduleView extends Vue{
     }
 
 
-    private popupChange( value: boolean ) {
-        this.$emit('change', value);
+    private onAddScheduleClose( val: boolean ) {
+        this.isOpenAddSch=val;
     }
 
     /**
