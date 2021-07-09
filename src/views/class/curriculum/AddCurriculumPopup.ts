@@ -5,6 +5,9 @@ import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import AddCoursePopup from '@/views/class/curriculum/AddCoursePopup';
+import {ImageFileServiceHelper} from '@/views/service/preview/ImageFileServiceHelper';
+import {AttachFileServiceHelper} from '@/views/service/preview/AttachFileServiceHelper';
+
 import {
     IClassInfo,
     IMakeEducation,
@@ -35,9 +38,6 @@ export default class AddCurriculumPopup extends Vue {
     @Prop(Object)
     private makeCurriculumData!: any;
 
-    @Prop(Number)
-    private curriculumDetailDataNum!: number;
-
     @MyClass.Getter
     private classID!: number;
 
@@ -56,7 +56,6 @@ export default class AddCurriculumPopup extends Vue {
     @MyClass.Action
     private GET_CURRICULUM_DETAIL_ACTION!: ( payload: { classId: number, curriculumId: number }) =>Promise<any>;
 
-
     /* Modal 오픈 상태값 */
     private isOpenAddCoursePopup: boolean=false;
 
@@ -68,7 +67,13 @@ export default class AddCurriculumPopup extends Vue {
 
     private formData: FormData = new FormData();
 
-    // private curriculumDetailDataNum: number = 10;
+    private imgFileService: ImageFileServiceHelper=new ImageFileServiceHelper();
+    private attachFileService: AttachFileServiceHelper=new AttachFileServiceHelper();
+
+    private imgAttachData: any[] = [];
+    private attachFileData: any[] = [];
+
+    private curriculumDetailDataNum: number = 10;
     private eduItems: Array< {title: string }>=[];
 
     get isSubmitValidate(): boolean{
@@ -83,6 +88,11 @@ export default class AddCurriculumPopup extends Vue {
         this.$emit('change', value);
     }
 
+    private coursePopupClose(value: boolean){
+        this.$emit('change', value);
+        this.resetCurriculumAdd();
+    }
+
     private addCoursePopupOpen(idx: number) {
         this.isOpenAddCoursePopup=true;
         this.courseIdx = idx;
@@ -94,7 +104,6 @@ export default class AddCurriculumPopup extends Vue {
     private onAddCourse() {
         this.isOpenAddCoursePopup=false;
     }
-
 
     /**
      * 교육과정 수업 회차 설정
@@ -119,6 +128,8 @@ export default class AddCurriculumPopup extends Vue {
         }
 
         this.makeCurriculumData.course_list = [];
+        this.imgAttachData = [];
+        this.attachFileData = [];
 
         for (let i = 0; i < num; i++) {
             this.makeCurriculumData.course_list.push({
@@ -133,6 +144,25 @@ export default class AddCurriculumPopup extends Vue {
         }
     }
 
+    private courseListReplace() {
+        const courseListLen = this.makeCurriculumData.course_list.length;
+        this.curriculumDetailDataNum = courseListLen;
+        this.eduItems.length = courseListLen;
+    }
+
+
+    private courseDelete(idx: number){
+        const findIdx=this.makeCurriculumData.course_list.findIndex((item: any) => item.id === idx);
+        this.makeCurriculumData.course_list.splice(findIdx, 1);
+
+        // this.imgFileService.deleteImgFileItem(this.imgAttachData, idx);
+
+        this.courseListReplace();
+    }
+
+    private receiveData(){
+        console.log(this.imgAttachData);
+    }
 
     /**
      * 교육과정 > 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
@@ -145,8 +175,10 @@ export default class AddCurriculumPopup extends Vue {
             this.formData = new FormData();
         }
 
-        console.log(this.classID);
+        this.imgFileService.saveData(this.formData, this.imgAttachData);
+        this.attachFileService.saveData( this.formData, this.attachFileData );
 
+        console.log(this.formData.getAll('files'));
         const temp = JSON.stringify({...this.makeCurriculumData} );
 
         this.formData.append('data', temp );
@@ -154,16 +186,20 @@ export default class AddCurriculumPopup extends Vue {
         this.ADD_CURRICULUM_ACTION({ classId: Number(this.classID), formData: this.formData })
             .then((data) => {
                 this.$emit('submit', false);
-
-                this.GET_CURRICULUM_LIST_ACTION({classId: Number(this.classID)}).then();
-                this.formData = new FormData();
-                this.makeCurriculumData = {
-                    title: '',
-                    goal: '',
-                    course_list: []
-                };
             });
 
+        this.resetCurriculumAdd();
+    }
+
+    private resetCurriculumAdd(){
+        this.formData = new FormData();
+        this.makeCurriculumData.title = '';
+        this.makeCurriculumData.goal = '';
+        this.imgAttachData = [];
+        this.attachFileData = [];
+        this.imgFileService.removeAll();
+        this.attachFileService.removeAll();
+        this.setCourseList(10);
     }
 
 }

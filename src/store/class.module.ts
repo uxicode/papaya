@@ -462,6 +462,7 @@ export default class ClassModule extends VuexModule {
     public [GET_CURRICULUM_LIST_ACTION]( payload: { classId: number}  ): Promise<any>{
         return MyClassService.getCurriculumList( payload.classId )
             .then((data) => {
+                console.log(data);
                 this.context.commit(SET_CURRICULUM_LIST, data);
                 console.log('curriculumListData=', this.curriculumListData);
                 return Promise.resolve(this.curriculumListData);
@@ -476,7 +477,7 @@ export default class ClassModule extends VuexModule {
         return MyClassService.getEduCurList(payload.classId, payload.curriculumId )
             .then((data) => {
                 this.context.commit(SET_CURRICULUM_DETAIL, data.curriculum);
-                console.log('curriculumDetailData=', this.curriculumDetailData);
+                console.log('curriculumDetailData=', data.curriculum);
                 return Promise.resolve(this.curriculumDetailData);
             }).catch((error) => {
                 console.log(error);
@@ -516,8 +517,8 @@ export default class ClassModule extends VuexModule {
     public [ADD_CURRICULUM_ACTION](payload: { classId: number, formData: FormData }): Promise<any> {
         return MyClassService.setCurriculumList( payload.classId, payload.formData )
             .then(( data )=>{
-                // console.log( data );
-                console.log(payload.formData);
+                // console.log(data);
+                this.curriculumListData.curriculum_list.push( data.curriculum );
                 return Promise.resolve(data);
             }).catch((error) => {
                 console.log(error);

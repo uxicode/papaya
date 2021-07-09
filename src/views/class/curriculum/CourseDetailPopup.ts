@@ -36,10 +36,10 @@ export default class CourseDetailPopup extends Vue {
     private courseId!: number;
 
     @Prop(Object)
-    private courseDetailItem!: any;
-
-    @MyClass.Getter
     private curriculumDetailItem!: ICurriculumDetailList;
+
+    @Prop(Object)
+    private courseDetailItem!: any;
 
     private isPhotoViewer: boolean = false;
 
@@ -64,6 +64,8 @@ export default class CourseDetailPopup extends Vue {
         if (this.getImgFileDataSort(attachment).length > 3) {
             this.isPhotoViewer = true;
         }
+
+        console.log(attachment);
     }
 
     private onPhotoViewerStatus(value: boolean) {
