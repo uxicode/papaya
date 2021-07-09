@@ -100,6 +100,10 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
     // console.log(this.scheduleData.title);
   }
 
+  private popupChange( value: boolean ) {
+    this.$emit('change', value);
+  }
+
   private onAddSchedulePopupCloseHandler(): void{
     this.isOpen=false;
     this.loopRangeCheck = false;
@@ -107,6 +111,7 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
     //첨부 파일들 초기화
     this.removeAllPreview();
     this.removeAllAttachFile();
+
   }
 
   /**
