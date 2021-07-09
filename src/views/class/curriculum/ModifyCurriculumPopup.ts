@@ -6,19 +6,11 @@ import Btn from '@/components/button/Btn.vue';
 import {
     IClassInfo,
     ICurriculumDetailList,
-    IMakeEducation,
     IModifyCourse,
     IModifyCurriculum,
 } from '@/views/model/my-class.model';
-import {IAttachFileModel} from '@/views/model/post.model';
-import {Utils} from '@/utils/utils';
 import MyClassService from '@/api/service/MyClassService';
-import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
-import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
-import ImagePreview from '@/components/preview/imagePreview.vue';
-import FilePreview from '@/components/preview/filePreview.vue';
 import ModifyCoursePopup from '@/views/class/curriculum/ModifyCoursePopup';
-import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 import WithRender from './ModifyCurriculumPopup.html';
 
 const MyClass = namespace('MyClass');
@@ -29,10 +21,6 @@ const MyClass = namespace('MyClass');
         TxtField,
         Modal,
         Btn,
-        ImagePreview,
-        FilePreview,
-        ListInImgPreview,
-        ListInFilePreview,
         ModifyCoursePopup,
     }
 })

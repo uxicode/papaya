@@ -132,7 +132,7 @@
                                 <p>{{ email }}</p>
                             </div>
                         </li>
-                        <li v-if="myMemberLevel===1" class="list-item">
+                        <li v-if="myMemberLevel===1 && qnaList.length>0" class="list-item">
                             <p class="list-tit">가입 질문 응답</p>
                             <div class="basic-info">
                                 <div class="accordion-tit">
