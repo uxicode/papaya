@@ -201,7 +201,7 @@ export default class AddCoursePopup extends Vue {
     private onAddCourseSubmit(): void{
         this.courseTime(this.courseIdx);
 
-        this.imgFileService.savePreview(this.imgAttachData);
+        this.imgFileService.savePreview(this.imgAttachData, this.courseIdx);
         this.sendData(this.imgAttachData);
 
         this.attachFileService.savePreview( this.attachFileData );

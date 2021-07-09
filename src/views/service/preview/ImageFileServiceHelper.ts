@@ -31,8 +31,9 @@ class ImageFileServiceHelper extends ImageFileService{
   /**
    *  이미지 파일이 저장된 배열을 전송할 formdata 에 값 대입.
    */
-  public savePreview( saveData: any ): void {
+  public savePreview( saveData: any, idx: number ): void {
     if (!this.imgFileItems.length) {return;}
+    this.courseIndex = idx;
 
     for (let i = 0; i < this.imgFileItems.length; i++) {
       saveData.push(this.imgFileItems[i]);
@@ -40,19 +41,14 @@ class ImageFileServiceHelper extends ImageFileService{
   }
 
   public deleteImgFileItem(saveData: any, idx: number){
+    const findIdx = saveData.findIndex((item: any) => item.index === idx);
 
-    const targetItem = saveData.findIndex((item: any) => item.index === idx);
-    console.log(`삭제 될 데이터 = `, targetItem);
-
-
-    // saveData.forEach((index: number) => {
+    // saveData.forEach((item: any)=>{
     //
-    //   if(targetItem === idx){
-    //
-    //   }
     // })
 
-    // console.log(`남겨진 데이터 = `, saveData);
+    saveData.splice(idx, 1);
+    console.log(`남는 데이터 = `, saveData);
   }
 
   public saveData( formData: FormData, targetData: any ): void {
