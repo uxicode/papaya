@@ -1,7 +1,7 @@
 <template>
-  <div class="form-add-list">
+  <div class="form-add-list"  v-if="linkItems!==null && linkItems.length>0">
     <div class="add-item">
-      <div class="add-item-top" v-if="linkItems.length>0">
+      <div class="add-item-top">
         <p class="add-item-tit">{{getTitle()}}</p>
         <div class="add-item-btn">
           <a href="" class="txt-btn" @click.prevent="modify">수정</a>
@@ -55,9 +55,12 @@ export default class LinkPreview extends Vue{
 
 
   private mounted() {
-   this.linkItems.forEach( (item)=>{
+    if (this.linkItems !== null) {
+      this.linkItems.forEach( (item)=>{
         this.makeLinkMeta(item.url);
-    });
+      });
+    }
+
   }
 
   private getTitle() {

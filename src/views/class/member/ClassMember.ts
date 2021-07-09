@@ -1,6 +1,6 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {IClassInfo, IClassMemberInfo, IQnaInfo, IQuestionInfo} from '@/views/model/my-class.model';
+import {IClassInfo, IClassMemberInfo, IQnaInfo} from '@/views/model/my-class.model';
 import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
 import UserService from '@/api/service/UserService';
@@ -59,7 +59,6 @@ export default class ClassMember extends Vue{
     private searchResultItems: [] = [];
 
     /* 운영자/스탭/일반 멤버 토글 상태값 */
-    private isAdminToggle: boolean = false;
     private isInvitePopup: boolean = false;
     private isSnackbar: boolean = false;
     private isDetailPopup: boolean = false;
@@ -277,10 +276,11 @@ export default class ClassMember extends Vue{
      * 멤버 차단 팝업 열기
      * @private
      */
-    private blockModalOpen(id: number): void {
+    private blockModalOpen(id: number, nickname: string): void {
         this.isActive = false;
         this.isBlockModal = true;
         this.memberId = id;
+        this.nickname = nickname;
     }
 
     /**
@@ -292,7 +292,9 @@ export default class ClassMember extends Vue{
         this.isBlockCompleteModal = true;
         ClassMemberService.setBlockClassMember(this.classID, this.memberId)
           .then(() => {
-              console.log(`${this.memberId} 멤버 차단 완료`);
+              const findIdx = this.classMemberList.findIndex((ele) => ele.id === this.memberId);
+              this.classMemberList.splice(findIdx, 1);
+              this.totalMemberNum--;
           });
     }
 
@@ -300,9 +302,25 @@ export default class ClassMember extends Vue{
      * 멤버 강제 탈퇴 팝업 열기
      * @private
      */
-    private banModalOpen(id: number): void {
+    private banModalOpen(id: number, nickname: string): void {
         this.isActive = false;
         this.isBanModal = true;
         this.memberId = id;
+        this.nickname = nickname;
+    }
+
+    /**
+     * 멤버 강제 탈퇴
+     * @private
+     */
+    private banMember(): void {
+        this.isBanModal = false;
+        ClassMemberService.deleteClassMemberByAdmin(this.classID, this.memberId)
+            .then(() => {
+                const findIdx = this.classMemberList.findIndex((ele) => ele.id === this.memberId);
+                this.classMemberList.splice(findIdx, 1);
+                this.totalMemberNum--;
+            });
+        this.isBanCompleteModal = true;
     }
 }

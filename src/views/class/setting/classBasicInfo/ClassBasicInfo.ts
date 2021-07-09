@@ -24,6 +24,9 @@ const MyClass = namespace('MyClass');
 })
 
 export default class ClassBasicInfo extends Vue {
+    @MyClass.Getter
+    private classID!: number;
+
     private classInfo: IClassInfo[] = [];
 
     private openPopupStatus: boolean = false;
@@ -34,9 +37,6 @@ export default class ClassBasicInfo extends Vue {
     private manualInputField: string = '';
     private searchResultItems: ISearchSchool[]=[];
     private isPrivate: boolean = false;
-
-    @MyClass.Getter
-    private classID!: number;
 
     get searchResultValue(): string{
         return this.searchSchoolValue;

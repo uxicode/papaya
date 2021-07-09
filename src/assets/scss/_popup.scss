@@ -1275,6 +1275,9 @@ $popupDepth: 10;
   }
 
   .qna-input {
+    .form-group {
+      padding-right: 104px; // ksj
+    }
     .form-control {
       font-size: 14px;
     }

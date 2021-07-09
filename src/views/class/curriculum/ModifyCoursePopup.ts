@@ -5,17 +5,18 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import {
     IClassInfo,
-    ICurriculumCourseData, ICurriculumDetailList,
+    ICurriculumCourseData,
+    ICurriculumDetailList,
     IModifyCourse,
 } from '@/views/model/my-class.model';
 import {ITimeModel} from '@/views/model/schedule.model';
 import {Utils} from '@/utils/utils';
+import {AttachFileServiceHelper} from '@/views/service/preview/AttachFileServiceHelper';
+import {ImageFileServiceHelper} from '@/views/service/preview/ImageFileServiceHelper';
 import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
 import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
-import {AttachFileServiceHelper} from '@/views/service/preview/AttachFileServiceHelper';
-import {ImageFileServiceHelper} from '@/views/service/preview/ImageFileServiceHelper';
 import WithRender from './ModifyCoursePopup.html';
 
 const MyClass = namespace('MyClass');
@@ -39,9 +40,6 @@ export default class ModifyCoursePopup extends Vue {
     @Prop(Number)
     private courseIdx!: number;
 
-    @Prop(FormData)
-    private formData!: FormData;
-
     @MyClass.Action
     private GET_COURSE_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number, courseId: number }) => Promise<any>;
 
@@ -57,8 +55,10 @@ export default class ModifyCoursePopup extends Vue {
     @MyClass.Getter
     private courseDetailItem!: ICurriculumCourseData;
 
+    private formData: FormData=new FormData();
     private imgFileService: ImageFileServiceHelper=new ImageFileServiceHelper();
     private attachFileService: AttachFileServiceHelper=new AttachFileServiceHelper();
+    private removeFiles: number[]= [];
 
     //datepicker
     private dateMenu: boolean=false;
@@ -94,11 +94,11 @@ export default class ModifyCoursePopup extends Vue {
         return this.attachFileService.getItems();
     }
 
-    get curriculumDetailItemModel(): any {
+    get curriculumDetailItemModel(): ICurriculumDetailList {
         return this.curriculumDetailItem;
     }
 
-    get courseDetailItemModel(): any {
+    get courseDetailItemModel(): ICurriculumCourseData {
         return this.courseDetailItem;
     }
 
@@ -125,20 +125,6 @@ export default class ModifyCoursePopup extends Vue {
     }
 
     /**
-     * 이미지등록 아이콘 클릭시 > input type=file 에 클릭 이벤트 발생시킴.
-     * @private
-     */
-    private addImgFileInputFocus() {
-        this.inputEventBind('#imgFileInput');
-        this.imgFileService.courseIndexNumber(this.courseIdx);
-    }
-
-    private addFilesInputFocus(){
-        this.inputEventBind('#attachFileInput');
-        this.attachFileService.courseIndexNumber(this.courseIdx);
-    }
-
-    /**
      * //input click event 발생시키기.
      * @param targetSelector
      * @private
@@ -151,6 +137,14 @@ export default class ModifyCoursePopup extends Vue {
     }
 
     //start : 이미지 preview  및 이미지 등록 ================================================
+    /**
+     * 이미지등록 아이콘 클릭시 > input type=file 에 클릭 이벤트 발생시킴.
+     * @private
+     */
+    private addImgFileInputFocus() {
+        //input click event 발생시키기 - mixin 으로 이동
+        this.inputEventBind('#imgFileInput');
+    }
     //모델에 이미지 파일 추가
     private addFileToImage( files: FileList ){
         this.imgFileService.load(files, '#imgFileInput');
@@ -161,16 +155,25 @@ export default class ModifyCoursePopup extends Vue {
      * @private
      */
     private onRemoveImgPreviewItems(idx: number): void{
+        //파일 제거를 api 통신 하지 않고 배열에 저장해 둔다. ( 최종 수정 버튼을 누를때 해당 제거에 대한 통신을 한다 )
+        const deleteFileId= this.imgFileService.getItemById(idx).file.id;
+        if (deleteFileId) {
+            this.removeFiles.push(deleteFileId);
+        }
         this.imgFileService.remove(idx);
     }
+
     /**
      * 추가된 이미지 파일 모두 지우기
      * @private
      */
     private onRemoveAllPreview(): void {
+        const fileItems=this.imgFileService.getFileItems();
+        //파일 제거를 api 통신 하지 않고 배열에 저장해 둔다. ( 최종 수정 버튼을 누를때 해당 제거에 대한 통신을 한다 )
+        this.removeToItems(fileItems);
+        //
         this.imgFileService.removeAll();
     }
-
     /**
      * post 등록을 완료후 formdata 및 배열에 지정되어 있던 데이터들 비우기..
      * @private
@@ -179,18 +182,34 @@ export default class ModifyCoursePopup extends Vue {
         this.imgFileService.removeAll();
         this.formData.delete('files');
     }
-
     //end : 이미지 preview  및 이미지 등록 ================================================
 
     //start : 파일 첨부 미리보기 및 파일 업로드 ================================================
+    /**
+     * 첨부파일등록 아이콘 클릭시 > input type=file 에 클릭 이벤트 발생시킴.
+     * @private
+     */
+    private addFilesInputFocus(){
+        //input click event 발생시키기 - mixin 으로 이동
+        this.inputEventBind('#attachFileInput');
+    }
     //모델에 이미지 파일 추가
     private addAttachFileTo( files: FileList ){
         this.attachFileService.load(files, '#attachFileInput');
     }
     private removeAllAttachFile(): void {
+        const fileItems=this.attachFileService.getFileItems();
+        //파일 제거를 api 통신 하지 않고 배열에 저장해 둔다. ( 최종 수정 버튼을 누를때 해당 제거에 대한 통신을 한다 )
+        this.removeToItems(fileItems);
         this.attachFileService.removeAll();
     }
+
     private removeAttachFileItem(idx: number): void{
+        //파일 제거를 api 통신 하지 않고 배열에 저장해 둔다. ( 최종 수정 버튼을 누를때 해당 제거에 대한 통신을 한다 )
+        const deleteFileId= this.attachFileService.getItemById(idx).file.id;
+        if (deleteFileId) {
+            this.removeFiles.push(deleteFileId);
+        }
         this.attachFileService.remove(idx);
     }
     private attachFilesAllClear() {
@@ -198,6 +217,15 @@ export default class ModifyCoursePopup extends Vue {
         this.formData.delete('files');
     }
     //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
+
+    private removeToItems( fileItems: any[] ) {
+        const ids=fileItems
+            .map((item) =>(item.file.fieldname) ? item.file.id : '')
+            .filter((item) => item !== '');
+        if (ids.length > 0) {
+            this.removeFiles = [...this.removeFiles, ...ids];
+        }
+    }
 
     /**
      * 개별코스 수정 임시 저장
@@ -220,7 +248,7 @@ export default class ModifyCoursePopup extends Vue {
 
         console.log('formData = ', this.formData);
 
-        this.$emit('modifyCourse', this.courseItem, this.formData);
+        this.$emit('modifyCourse', this.courseItem);
 
         this.popupChange(false);
         this.imgFilesAllClear();

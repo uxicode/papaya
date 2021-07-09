@@ -1,4 +1,4 @@
-import {Vue, Component} from 'vue-property-decorator';
+import {Vue, Component, Watch} from 'vue-property-decorator';
 import WithRender from './Verify.html';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -13,6 +13,7 @@ import Modal from '@/components/modal/modal.vue';
 export default class Verify extends Vue {
 
     private verifyComplete: boolean= false;
+    private verifyVal: string | number = '';
 
     get isVerifyComplete(){
         return this.verifyComplete;
@@ -37,9 +38,14 @@ export default class Verify extends Vue {
         // form_chk.target = 'popupChk';
         // form_chk.submit();
 
-        window.open('https://wwwtest.papayaclass.com/api/v1/checkplus_main', '_blank', 'width=500, height=800');
+        //https://wwwtest.papayaclass.com/api/v1/checkplus_main
+        const windowOpener=window.open('https://wwwtest.papayaclass.com/api/v1/checkplus_main', '_blank', 'width=500, height=800, status=yes, toolbar=yes');
 
-        this.verifyComplete = true; // 인증 성공시 실행되어야 하는 부분
+        // this.verifyComplete = true; // 인증 성공시 실행되어야 하는 부분
 
+    }
+
+    private onUpdateVerify(val: string | number){
+        console.log(val);
     }
 }

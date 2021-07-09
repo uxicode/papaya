@@ -90,10 +90,10 @@
                                                 <v-list-item @click="detailPopupOpen(data.user_id, data.level, data.nickname, data.id)">
                                                     <v-list-item-title>멤버 정보</v-list-item-title>
                                                 </v-list-item>
-                                                <v-list-item v-if="myMemberLevel===1" @click="blockModalOpen(data.id)">
+                                                <v-list-item v-if="myMemberLevel===1" @click="blockModalOpen(data.id, data.nickname)">
                                                     <v-list-item-title>멤버 차단</v-list-item-title>
                                                 </v-list-item>
-                                                <v-list-item v-if="myMemberLevel===1" @click="banModalOpen(data.id)">
+                                                <v-list-item v-if="myMemberLevel===1" @click="banModalOpen(data.id, data.nickname)">
                                                     <v-list-item-title>멤버 강제 탈퇴</v-list-item-title>
                                                 </v-list-item>
                                             </v-list>
@@ -338,7 +338,7 @@
             </div>
             <div slot="footer">
                 <div class="btn-group rt">
-                    <btn type="navi" @click="isBlockCompleteModal = false">확인</btn>
+                    <btn type="navi" @btnClick="isBlockCompleteModal=false">확인</btn>
                 </div>
             </div>
         </modal>
@@ -378,7 +378,7 @@
             <div slot="footer">
                 <div class="btn-group rt">
                     <btn type="outline" @btnClick="isBanModal = false">취소</btn>
-                    <btn type="navi" @btnClick="isBanModal = false">강제 탈퇴</btn>
+                    <btn type="navi" @btnClick="banMember">강제 탈퇴</btn>
                 </div>
             </div>
         </modal>

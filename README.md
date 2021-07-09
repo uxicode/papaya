@@ -32,9 +32,15 @@ npm install
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Compiles and minifies for build
 ```
 npm run build
+```
+
+
+### Compiles and minifies for production
+```
+npm run prod
 ```
 
 ### Run your tests

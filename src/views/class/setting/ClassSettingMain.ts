@@ -22,15 +22,6 @@ interface ISettingMenu {
     }
 })
 export default class ClassSettingMain extends Vue{
-    private classMemberInfo!: IClassMemberInfo;
-    private classInfo!: IClassInfo;
-
-    @MyClass.Getter
-    private classID!: number;
-
-    @MyClass.Getter
-    private myClassHomeModel!: IClassInfo;
-
     @MyClass.Action
     private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
 
@@ -42,6 +33,15 @@ export default class ClassSettingMain extends Vue{
 
     @MyClass.Action
     private MODIFY_CLASS_QUESTION!: (payload: {classId: number, questionId: number}, text: {new_question: string}) => Promise<IQuestionInfo[]>;
+
+    @MyClass.Getter
+    private classID!: number;
+
+    @MyClass.Getter
+    private myClassHomeModel!: IClassInfo;
+
+    private classMemberInfo!: IClassMemberInfo;
+    private classInfo!: IClassInfo;
 
     /* Modal 오픈 상태값 */
     private isGuideTxt: boolean = false;
@@ -490,7 +490,7 @@ export default class ClassSettingMain extends Vue{
         //console.log(class_members.length, me.level);
 
         // 클래스에 멤버가 있으며 나의 멤버 등급이 운영자일 경우 탈퇴 불가
-        if (class_members.length >= 1 && me.level === 1) {
+        if (class_members.length >= 2 && me.level === 1) {
             this.isWithdraw = false;
             this.isWithdrawDenied = true;
         } else {
@@ -498,7 +498,7 @@ export default class ClassSettingMain extends Vue{
               .then(() => {
                   console.log('클래스 탈퇴 완료');
               });
-            this.$router.push('../classWithdrawComplete')
+            this.$router.push({path: `/class/withdrawComplete`})
               .then();
         }
     }

@@ -25,12 +25,11 @@ interface IProfileData {
 })
 
 export default class ClassProfile extends Vue {
-    private classMemberInfo: IClassMemberInfo[] = [];
+    @MyClass.Action
+    private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo[]>;
 
-    private tempData: any = '';
-    private msg: string = '';
-    private isError: boolean = false;
-    private isApproval: boolean = false;
+    @MyClass.Action
+    private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<IClassMemberInfo[]>;
 
     @Auth.Getter
     private userInfo!: IUserMe;
@@ -41,11 +40,12 @@ export default class ClassProfile extends Vue {
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
-    @MyClass.Action
-    private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo[]>;
+    private classMemberInfo: IClassMemberInfo[] = [];
 
-    @MyClass.Action
-    private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<IClassMemberInfo[]>;
+    private tempData: any = '';
+    private msg: string = '';
+    private isError: boolean = false;
+    private isApproval: boolean = false;
 
     private isNicknameModify: boolean = false;
 
@@ -154,15 +154,13 @@ export default class ClassProfile extends Vue {
      * @param newNickname
      * @private
      */
-    private modifyNickname(newNickname: string): void {
-        ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {nickname: newNickname})
+    private async modifyNickname(newNickname: string) {
+        await ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {nickname: newNickname})
           .then(() => {
-              this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.myClassInfo.me.id}).then(() => {
-                  console.log('닉네임 변경 완료');
-                  this.tempData = '';
-              });
+              console.log('닉네임 변경 완료');
+              this.memberInfo.nickname = newNickname;
           });
-        this.isNicknameModify = false;
+        this.closeNicknameModal();
     }
 
     /**

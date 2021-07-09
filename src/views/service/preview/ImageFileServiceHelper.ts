@@ -41,13 +41,17 @@ class ImageFileServiceHelper extends ImageFileService{
 
   public deleteImgFileItem(saveData: any, idx: number){
 
-    const targetItem = saveData.findIndex((item: any) => item.index===idx);
+    const targetItem = saveData.findIndex((item: any) => item.index === idx);
     console.log(`삭제 될 데이터 = `, targetItem);
 
+
     // saveData.forEach((index: number) => {
-    //   saveData.splice( index, 1 );
-    // })
     //
+    //   if(targetItem === idx){
+    //
+    //   }
+    // })
+
     // console.log(`남겨진 데이터 = `, saveData);
   }
 

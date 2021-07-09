@@ -39,7 +39,6 @@ export default class ClassStaffManage extends Vue {
     private isBanModal: boolean = false;
     private isBanCompleteModal: boolean = false;
     private memberId: number = 0;
-    private memberLevel: number = 0;
 
     /* 멤버정보 상세 팝업 */
     private nickname: string = '';
@@ -91,17 +90,15 @@ export default class ClassStaffManage extends Vue {
 
     /**
      * 멤버 프로필 상세 팝업 열면서 해당 멤버의 정보 불러온다.
-     * @param userId
-     * @param nickname
-     * @param memberId
      * @private
+     * @param item
      */
-    private detailPopupOpen(userId: number, nickname: string, memberId: number): void {
-        this.userIdNum = userId;
-        this.nickname = nickname;
-        this.memberId = memberId;
+    private detailPopupOpen(item: IClassMemberInfo): void {
+        this.userIdNum = item.user_id;
+        this.nickname = item.nickname;
+        this.memberId = item.id;
         this.isDetailPopup = true;
-        UserService.getUserInfo(userId)
+        UserService.getUserInfo(this.userIdNum)
           .then((data) => {
               this.mobileNo = data.user.mobile_no;
               this.userId = data.user.user_id;
@@ -129,19 +126,18 @@ export default class ClassStaffManage extends Vue {
 
     /**
      * 스탭 권한 설정 팝업 열기
-     * @param memberId
-     * @param nickname
      * @private
+     * @param item
      */
-    private staffModifyPopupOpen(memberId: number, nickname: string): void {
+    private staffModifyPopupOpen(item: IClassMemberInfo): void {
         if (this.classInfo.me.level !== 1) {
             alert('스탭 권한설정은 운영자만 가능합니다.');
             return;
         }
 
         this.isStaffModifyPopup = true;
-        this.memberId = memberId;
-        this.nickname = nickname;
+        this.memberId = item.id;
+        this.nickname = item.nickname;
 
         ClassMemberService.getClassAuth(this.classID, this.memberId)
           .then((data) => {
@@ -172,6 +168,9 @@ export default class ClassStaffManage extends Vue {
         ClassMemberService.setClassMemberInfo(this.classID, this.memberId, {level: 3})
           .then((data) => {
               console.log(`${data.level} 로 수정완료`);
+              const findIdx = this.classStaffList.findIndex((ele) => ele.id === this.memberId);
+              this.classStaffList.splice(findIdx, 1);
+              this.totalStaffNum--;
           });
         this.isChangeCompletePopup = true;
     }
@@ -189,15 +188,19 @@ export default class ClassStaffManage extends Vue {
      * 멤버 차단 팝업 열기
      * @private
      */
-    private blockModalOpen(memberId: number, nickname: string): void {
-        this.memberId = memberId;
+    private blockModalOpen(item: IClassMemberInfo): void {
+        if (this.classInfo.me.level !== 1) {
+            alert('멤버 차단은 운영자만 가능합니다.');
+            return;
+        }
+        this.memberId = item.id;
         if (this.classInfo.me.id === this.memberId) {
             alert('자기 자신은 차단할 수 없습니다.');
             return;
         }
         this.isActive = false;
         this.isBlockModal = true;
-        this.nickname = nickname;
+        this.nickname = item.nickname;
     }
 
     /**
@@ -210,6 +213,7 @@ export default class ClassStaffManage extends Vue {
         ClassMemberService.setBlockClassMember(this.classID, this.memberId)
           .then(() => {
               console.log(`${this.memberId} 멤버 차단 완료`);
+              this.totalStaffNum--;
           });
     }
 
@@ -217,15 +221,34 @@ export default class ClassStaffManage extends Vue {
      * 멤버 강제 탈퇴 팝업 열기
      * @private
      */
-    private banModalOpen(memberId: number, nickname: string): void {
-        this.memberId = memberId;
+    private banModalOpen(item: IClassMemberInfo): void {
+        if (this.classInfo.me.level !== 1) {
+            alert('멤버 강제 탈퇴는 운영자만 가능합니다.');
+            return;
+        }
+        this.memberId = item.id;
         if (this.classInfo.me.id === this.memberId) {
             alert('자기 자신은 강제탈퇴할 수 없습니다.');
             return;
         }
         this.isActive = false;
         this.isBanModal = true;
-        this.nickname = nickname;
+        this.nickname = item.nickname;
+    }
+
+    /**
+     * 멤버 강제 탈퇴
+     * @private
+     */
+    private banMember(): void {
+        this.isBanModal = false;
+        ClassMemberService.deleteClassMemberByAdmin(this.classID, this.memberId)
+            .then(() => {
+                const findIdx = this.classStaffList.findIndex((ele) => ele.id === this.memberId);
+                this.classStaffList.splice(findIdx, 1);
+                this.totalStaffNum--;
+            });
+        this.isBanCompleteModal = true;
     }
 
     /**

@@ -1,4 +1,4 @@
-import {Component, Prop, Vue} from 'vue-property-decorator';
+import {Component, Mixins, Prop, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import Modal from '@/components/modal/modal.vue';
 import AddNotifyPopup from '@/views/class/notification/AddNotifyPopup';
@@ -14,6 +14,9 @@ import NoticePopup from '@/components/modal/noticePopup.vue';
 import MyClassService from '@/api/service/MyClassService';
 import WithRender from './NotificationListView.html';
 import {IUserMe} from '@/api/model/user.model';
+import {ImageFileService} from '@/views/service/preview/ImageFileService';
+import {AttachFileService} from '@/views/service/preview/AttachFileService';
+import UtilsMixins from '@/mixin/UtilsMixins';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
@@ -33,7 +36,7 @@ const Post = namespace('Post');
     NoticePopup
   }
 })
-export default class NotificationListView extends Vue {
+export default class NotificationListView extends Mixins(UtilsMixins) {
 /*
   @Prop(Array)
   private readonly postListItems!: IPostModel[] & IPostInLinkModel[];

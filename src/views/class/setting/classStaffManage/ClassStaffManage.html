@@ -39,16 +39,16 @@
                                             </button>
                                         </template>
                                         <v-list>
-                                            <v-list-item @click="detailPopupOpen(item.user_id, item.nickname, item.id)">
+                                            <v-list-item @click="detailPopupOpen(item)">
                                                 <v-list-item-title>멤버 정보</v-list-item-title>
                                             </v-list-item>
-                                            <v-list-item @click="staffModifyPopupOpen(item.id, item.nickname)">
+                                            <v-list-item @click="staffModifyPopupOpen(item)">
                                                 <v-list-item-title>스탭 권한 설정 변경</v-list-item-title>
                                             </v-list-item>
-                                            <v-list-item @click="blockModalOpen(item.id, item.nickname)">
+                                            <v-list-item @click="blockModalOpen(item)">
                                                 <v-list-item-title>멤버 차단</v-list-item-title>
                                             </v-list-item>
-                                            <v-list-item @click="banModalOpen(item.id, item.nickname)">
+                                            <v-list-item @click="banModalOpen(item)">
                                                 <v-list-item-title>멤버 강제 탈퇴</v-list-item-title>
                                             </v-list-item>
                                         </v-list>
@@ -404,7 +404,7 @@
             <div slot="footer">
                 <div class="btn-group rt">
                     <btn type="outline" @btnClick="isBanModal = false">취소</btn>
-                    <btn type="navi" @btnClick="isBanModal = false">강제 탈퇴</btn>
+                    <btn type="navi" @btnClick="banMember">강제 탈퇴</btn>
                 </div>
             </div>
         </modal>
