@@ -190,16 +190,20 @@ export default class AddCoursePopup extends Vue {
         this.makeCurriculumData.course_list[idx].startDay = this.datePickerModel;
     }
 
+    private sendData(data: any){
+        this.$emit('receive', data);
+    }
 
     /**
      * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
      * @private
      */
     private onAddCourseSubmit(): void{
-
         this.courseTime(this.courseIdx);
 
-        // this.imgFileService.courseSave( this.imgAttachData );
+        this.imgFileService.savePreview(this.imgAttachData);
+        this.sendData(this.imgAttachData);
+
         this.attachFileService.savePreview( this.attachFileData );
 
         this.imgFilesAllClear();

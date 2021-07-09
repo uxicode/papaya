@@ -150,26 +150,17 @@ export default class AddCurriculumPopup extends Vue {
         this.eduItems.length = courseListLen;
     }
 
-    private courseAttachDelete(idx: number) {
-        if( this.attachFileData.length < 1 && this.imgAttachData.length < 1 ){ return; }
-
-        const deleteData = this.imgAttachData.filter((item) => item.courseIdx === idx);
-
-        console.log(`삭제 된 데이터 = `, deleteData);
-
-        deleteData.forEach((index: number) => {
-            this.imgAttachData.splice(index, 1);
-        });
-
-        console.log(`남은 데이터 = `, this.imgAttachData);
-    }
 
     private courseDelete(idx: number){
         const findIdx=this.makeCurriculumData.course_list.findIndex((item: any) => item.id === idx);
         this.makeCurriculumData.course_list.splice(findIdx, 1);
 
+        this.imgFileService.deleteImgFileItem(this.imgAttachData, idx);
         this.courseListReplace();
-        this.courseAttachDelete(idx);
+    }
+
+    private receiveData(){
+        console.log(this.imgAttachData);
     }
 
     /**
@@ -183,9 +174,10 @@ export default class AddCurriculumPopup extends Vue {
             this.formData = new FormData();
         }
 
-        // this.imgFileService.save(this.formData, this.imgAttachData);
+        this.imgFileService.saveData(this.formData, this.imgAttachData);
         this.attachFileService.saveData( this.formData, this.attachFileData );
 
+        console.log(this.formData.getAll('files'));
         const temp = JSON.stringify({...this.makeCurriculumData} );
 
         this.formData.append('data', temp );
