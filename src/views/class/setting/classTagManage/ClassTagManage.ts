@@ -36,13 +36,16 @@ export default class ClassTagManage extends Vue {
     @SearchStatus.Getter
     private keyword!: string;
 
-    private classTagList: IClassTag[] = [];
+    private tagDataList: IClassTag[] = [];
+    private tagList: string[] = [];
     private isClassTagSearch: boolean = false;
     private isLoading: boolean = false;
     private searchTagValue: string = '';
     private searchResultItems: IClassTag[] = [];
     private isManualClick: boolean=false;
     private manualInputField: string = '';
+    private addTagKeywordList: string[] = [];
+    private deleteTagList: string[] = [];
 
     /* 검색 결과 페이징 */
     private numOfPage: number=10;
@@ -50,7 +53,7 @@ export default class ClassTagManage extends Vue {
     private currentPageNum: number=1;
 
     get tagListModel() {
-        return this.classTagList;
+        return this.tagDataList;
     }
 
     get searchResultValue(): string{
@@ -80,8 +83,12 @@ export default class ClassTagManage extends Vue {
     private getClassTags(): void {
         MyClassService.getClassTags(this.classID)
             .then((data) => {
-                console.log(data.tag_list);
-                this.classTagList = data.tag_list;
+                this.tagDataList = data.tag_list;
+                // console.log('tagDataList = ', this.tagDataList);
+                this.tagList = data.tag_list.map((item: any) => {
+                    return item.keyword;
+                });
+                console.log('tagList = ', this.tagList);
             });
     }
 
@@ -205,26 +212,37 @@ export default class ClassTagManage extends Vue {
      * @private
      */
     private addTag(val: string): void {
-        MyClassService.addClassTag(this.classID, {keyword: val})
-          .then((data) => {
-              data.taginfo.keyword = val;
-              console.log(`${data.taginfo.keyword} 태그 추가 완료`);
-              this.classTagList.push(data.taginfo);
-          });
+        const isDuplicate = this.tagList.some((ele) => {
+            if (ele === val) {return true;}
+        });
+
+        if (isDuplicate) {
+            alert('중복된 태그를 추가할 수 없습니다.');
+        } else if (this.tagList.length < 10) {
+            this.tagList.push(val);
+            this.addTagKeywordList.push(val);
+            console.log('추가 예정 태그 = ', this.addTagKeywordList);
+        } else {
+            alert('태그는 최대 10개까지만 추가 가능합니다.');
+        }
     }
 
     /**
      * 클래스 태그 삭제
-     * @param tagId
      * @private
+     * @param keyword
+     * @param idx
      */
-    private deleteTag(tagId: number): void {
-        MyClassService.deleteTag(this.classID, tagId)
-          .then(() => {
-             console.log(`${tagId} 태그 삭제 완료`);
-             const findIdx = this.classTagList.findIndex((item) => item.id === tagId);
-             this.classTagList.splice(findIdx, 1);
-          });
+    private deleteTag(keyword: string, idx: number): void {
+        const isAddedTag = this.addTagKeywordList.includes(keyword);
+        this.tagList.splice(idx, 1);
+        if (isAddedTag) {
+            const findIdx = this.addTagKeywordList.findIndex((item) => item === keyword);
+            this.addTagKeywordList.splice(findIdx, 1);
+        } else {
+            this.deleteTagList.push(keyword);
+            console.log('삭제 예정 태그 = ', this.deleteTagList);
+        }
     }
 
     /**
@@ -249,6 +267,24 @@ export default class ClassTagManage extends Vue {
      * @private
      */
     private tagModifySave(): void {
+        for (const item of this.addTagKeywordList) {
+            MyClassService.addClassTag(this.classID, {keyword: item})
+                .then((data) => {
+                    data.taginfo.keyword = item;
+                    // console.log(`${data.taginfo.keyword} 태그 추가 완료`);
+                    this.tagDataList.push(data.taginfo);
+                });
+        }
+
+        for (const item of this.deleteTagList) {
+            const tagId = this.tagDataList.find((ele) => ele.keyword === item)?.id;
+            if (tagId !== undefined) {
+                MyClassService.deleteTag(this.classID, tagId)
+                    .then(() => {
+                        console.log(`id: ${tagId} 태그 삭제 완료`);
+                    });
+            }
+        }
 
         this.goBack();
     }
