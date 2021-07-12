@@ -11,7 +11,7 @@
       </div>
       <div class="fd-btn">
         <button type="button" class="btn only-ico-btn sm bookmark" :class="{'active': item.isBookmark }" @click="onKeepPostClick(item.id)"></button>
-        <div class="list-popup">
+        <div class="list-popup" v-if="isEditAuth(  item.owner.user_id )">
           <v-menu
                   min-width="200px"
                   :close-on-click="true">
@@ -24,7 +24,7 @@
               </button>
               <!-- v-if="getIsMember(  item.owner.user_id )"-->
             </template>
-            <v-list >
+            <v-list>
               <v-list-item @click="onEditPost( item.id )">
                 <v-list-item-title>알림 수정</v-list-item-title>
               </v-list-item>

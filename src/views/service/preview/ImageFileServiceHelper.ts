@@ -35,6 +35,7 @@ class ImageFileServiceHelper extends ImageFileService{
     if (!this.imgFileItems.length) {return;}
     this.courseIndex = idx;
 
+    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.imgFileItems.length; i++) {
       saveData.push(this.imgFileItems[i]);
     }
