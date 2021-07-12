@@ -166,7 +166,7 @@ export default class SideMenu extends Vue{
       alert('클래스에 가입하면 보실 수 있습니다.');
     } else {
 
-      const queryVal = (idx === 1) ? String( idx ) : '';
+      const queryVal = String( idx );
       this.$router.push({ path:`${CLASS_BASE_URL }/${this.classID}/${this.sideMenuData[idx].linkKey}`, query:{sideNum:queryVal}} )
           .then(()=>{
             this.$emit('sideClick', idx);

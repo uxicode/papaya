@@ -86,13 +86,13 @@ export default class NotifyDetailPopup extends Mixins(UtilsMixins) {
         this.$emit('change', value);
     }
 
-    private getImgFileDataSort(fileData: IAttachFileModel[] ) {
+/*    private getImgFileDataSort(fileData: IAttachFileModel[] ) {
         return fileData.filter((item: IAttachFileModel) => item.contentType === 'image/png' || item.contentType === 'image/jpg' || item.contentType === 'image/jpeg' || item.contentType === 'image/gif');
-    }
+    }*/
 
     private openPhotoViewer(): void {
         const attachment = this.postDetailModel.attachment;
-        if (this.getImgFileDataSort(attachment).length > 3) {
+        if (this.imgPreviewInit(attachment).length > 3) {
             this.isPhotoViewer = true;
         }
     }

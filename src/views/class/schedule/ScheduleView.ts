@@ -13,11 +13,11 @@ import Btn from '@/components/button/Btn.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import AddSchedule from '@/views/class/schedule/AddSchedule';
-import {ScheduleService} from '@/api/service/ScheduleService';
+import ScheduleDetailPopup from '@/views/class/schedule/ScheduleDetailPopup';
 import WithRender from './ScheduleView.html';
+import {SET_SCHEDULE_DETAIL} from '@/store/mutation-class-types';
 
 const MyClass = namespace('MyClass');
-const Post = namespace('Post');
 const Schedule = namespace('Schedule');
 
 
@@ -29,10 +29,22 @@ const Schedule = namespace('Schedule');
         Btn,
         ImagePreview,
         FilePreview,
-        AddSchedule
+        AddSchedule,
+        ScheduleDetailPopup
     }
 })
 export default class ScheduleView extends Vue{
+
+
+
+    @Schedule.Mutation
+    private SET_SCHEDULE_DETAIL!: ( data: IScheduleTotal )=> void;
+
+    @Schedule.Action
+    private GET_SCHEDULE_ACTION!: (payload: { classId: number,  paging: {page_no: number, count: number } }) => Promise<any>;
+
+    @Schedule.Action
+    private GET_COMMENTS_ACTION!: (scheduleId: number) => Promise<any>;
 
     @MyClass.Getter
     private classID!: string | number;
@@ -44,29 +56,6 @@ export default class ScheduleView extends Vue{
     @Schedule.Getter
     private scheduleListItems!: IScheduleTotal[];
 
-    @Schedule.Getter
-    private scheduleDetailItem!: IScheduleTotal;
-
-    @Schedule.Getter
-    private commentItems!: ICommentModel[];
-
-    @Schedule.Getter
-    private replyItems!: IReplyModel[];
-
-    @Schedule.Action
-    private GET_SCHEDULE_LIST_ACTION!: (payload: { classId: number,  paging: {page_no: number, count: number } }) => Promise<any>;
-
-    @Schedule.Action
-    private GET_SCHEDULE_DETAIL_ACTION!: (payload: { classId: number, scheduleId: number }) => Promise<any>;
-
-    @Schedule.Action
-    private GET_COMMENTS_ACTION!: (scheduleId: number) => Promise<any>;
-
-    @Schedule.Action
-    private ADD_COMMENT_ACTION!: (payload: {parent_id: number, parent_type: number, member_id: number, comment: string}) => Promise<any>;
-
-    @Schedule.Action
-    private ADD_REPLY_ACTION!: (payload: {comment_id: number, member_id: number, comment: string}) => Promise<any>;
 
 
     private imgFileURLItems: string[] = [];
@@ -76,6 +65,7 @@ export default class ScheduleView extends Vue{
     private formData!: FormData;
     private imageLoadedCount: number=0;
     private isOpenAddSch: boolean=false;
+    private isOpenDetailSch: boolean= false;
     // private isTimeSelect: boolean=false;
 
     private type: string= 'month';
@@ -100,8 +90,7 @@ export default class ScheduleView extends Vue{
         'custom-daily': '3일',
     };
 
-    private scheduleLists: IScheduleTotal[]=[];
-    private calendarModel: string= '2020-3-01';
+    private calendarModel: string=new Date().toISOString().substr(0, 10); ///// '2020-3-01';
     private events: any[] = [];
     private dragTime: number | null=null;
     private dragEvent: any | null= null;
@@ -172,20 +161,6 @@ export default class ScheduleView extends Vue{
         endAt: new Date()
     };
 
-    private comment: string = '';
-    private reply: string = '';
-
-    get scheduleDetailModel() {
-        return this.scheduleDetailItem;
-    }
-
-    get commentItemsModel() {
-        return this.commentItems;
-    }
-
-    get replyItemsModel() {
-        return this.replyItems;
-    }
 
 /*    get imgFileURLItemsModel(): string[] {
         return this.imgFileURLItems;
@@ -210,7 +185,7 @@ export default class ScheduleView extends Vue{
     }*/
 
     get scheduleListsModel(): IScheduleTotal[]{
-        return this.scheduleLists;
+        return this.scheduleListItems;
     }
     get startDateModel(): string | Date | number{
         return this.startDate;
@@ -241,11 +216,18 @@ export default class ScheduleView extends Vue{
         };
     }
 
+
     public async created(){
+        if (this.$route.query.sideNum && this.$route.query.sideNum !== '') {
+            this.$emit('sideNum', Number(this.$route.query.sideNum));
+        }
         // console.log(new Date().toISOString());
-        await this.getScheduleList();
-        await this.calendarInstance.prev();
-        await this.calendarInstance.next();
+        await this.getScheduleList()
+          .then(()=>{
+              console.log('캘린더 로드 완료.');
+          });
+        // await this.calendarInstance.prev();
+        // await this.calendarInstance.next();
 
         const rule = new RRule({
             freq: RRule.WEEKLY,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
@@ -256,14 +238,150 @@ export default class ScheduleView extends Vue{
         // console.log(rule.all());
     }
 
-    public async mounted() {
+    public mounted() {
         //시작일과 종료일이 변경되었는지 확인합니다. 변경된 경우 변경 이벤트를 업데이트하고 내 보냅니다.
-        await this.calendarInstance.checkChange();
+        setTimeout(() => {
+            this.scheduleListsModel.forEach((item, idx )=>{
+                console.log(idx);
+                this.addScheduleEvent(idx);
+            });
+
+            this.calendarInstance.checkChange();
+        }, 1000);
+
+    }
+
+    private async getScheduleList(){
+        // console.log(this.classID === Number( this.$route.params.classId ) );
+        await this.GET_SCHEDULE_ACTION( { classId: Number(this.classID), paging:{page_no:1, count: 100} })
+          .then((data)=>{
+              console.log( 'getAllScheduleByClassId=', data );
+          });
+
     }
 
 
+    //상세내역 팝업
+    private scheduleDetailViewEvent(eventObj: { nativeEvent: MouseEvent, event: CalendarEvent} ) {
+        // console.log( eventObj.event );
+        const open = () => {
+            // this.selectedEvent = eventObj.event;
+            // this.selectedElement = eventObj.nativeEvent.target as HTMLElement;
+
+            const {id}=eventObj.event;
+            const findIdx = this.scheduleListsModel.findIndex((item) => item.id === id);
+            setTimeout(() => {
+                this.selectedOpen = true;
+
+                this.isOpenDetailSch=true;
+
+                const header=document.querySelector('header') as HTMLElement;
+                header.classList.add('none-index');
+
+                //SET_SCHEDULE_DETAIL
+                this.SET_SCHEDULE_DETAIL( this.scheduleListsModel[findIdx] );
+
+                this.GET_COMMENTS_ACTION(id)
+                  .then(() => {
+                      // console.log(this.selectedEvent);
+                  });
+            }, 10);
+        };
+
+        if (this.selectedOpen) {
+            this.selectedOpen = false;
+            setTimeout( open, 10);
+        } else {
+            open();
+        }
+        eventObj.nativeEvent.stopPropagation();
+    }
+
+    private updateRange( time: { start: any, end: any } ) {
+
+        /*this.$nextTick(() => {
+            const eventItems = [];
+
+            // const days = (max - min) / 86400000;
+            const eventCount = this.scheduleListsModel.length;///this.rnd(days, days + 20);
+
+            const startTimes = [];
+            const endTimes = [];
+
+            this.scheduleListsModel.forEach((item, idx )=>{
+                // console.log(idx);
+                this.addScheduleEvent(idx);
+            });
+            /!*for (let i: number = 0; i < eventCount; i++) {
+                // startTimes.push(new Date(startAt).getTime());
+                // endTimes.push(new Date(endAt).getTime());
+                this.addScheduleEvent(i);
+            }*!/
+
+            /!*
+             const min = startTimes.reduce( (prv, cur) => {
+                 return (prv > cur) ? cur : prv;
+             });
+             const max = endTimes.reduce( (prv, cur) => {
+                 return (prv > cur) ? prv : cur;
+             });
+
+             const startDateItems = Utils.getTodayFullValue(new Date(min));
+             const endDateItems = Utils.getTodayFullValue(new Date(max));
+
+             this.startDate=Utils.getDateDashFormat( startDateItems[0], startDateItems[1], startDateItems[2] );
+             this.endDate=Utils.getDateDashFormat( endDateItems[0], endDateItems[1], endDateItems[2] );*!/
+            // this.events = eventItems;
+        });*/
+
+        this.scheduleListsModel.forEach((item, idx )=>{
+            console.log(idx);
+            this.addScheduleEvent(idx);
+        });
+
+    }
+
     private onAddScheduleClose( val: boolean ) {
         this.isOpenAddSch=val;
+        if (!this.isOpenAddSch) {
+            const header=document.querySelector('header') as HTMLElement;
+            header.classList.remove('none-index');
+
+            console.log(this.scheduleListsModel.length, this.events.length);
+
+            this.addScheduleEvent(this.scheduleListsModel.length-1 );
+        }
+    }
+
+    private addScheduleEvent( idx: number ) {
+        // console.log(this.scheduleListsModel[idx]);
+        // console.log(this.scheduleListsModel.length, this.events.length);
+        const { startAt, endAt, title, text, owner, count, id }=this.scheduleListsModel[idx];
+        this.events.push({
+            name: title,
+            details: text,
+            color: this.colors[ owner.schedule_color ],
+            start: new Date(startAt),
+            end: new Date( endAt ),
+            repeat: count,
+            timed:true,
+            id, // schedule_id (parent_id)
+        });
+    }
+
+    private onDeleteCheck( scheduleId: number) {
+        const findIdx=this.events.findIndex((item)=> item.id === scheduleId );
+        this.deleteScheduleEvent(findIdx);
+    }
+
+    private deleteScheduleEvent(idx: number) {
+        this.events.splice(idx, 1);
+    }
+
+    private onDetailScheduleClose(val: boolean) {
+        this.isOpenDetailSch=val;
+        const header=document.querySelector('header') as HTMLElement;
+        header.classList.remove('none-index');
     }
 
     /**
@@ -282,15 +400,7 @@ export default class ScheduleView extends Vue{
         };
     }
 
-    private async getScheduleList(): Promise<void>{
-        // console.log(this.classID === Number( this.$route.params.classId ) );
-        await ScheduleService.getAllScheduleByClassId( this.classID )
-          .then((data)=>{
-              // console.log( 'getAllScheduleByClassId=', data.class_schedule_list );
-              this.scheduleLists=data.class_schedule_list;
-          });
 
-    }
 
 
     private loopRangeCountClickHandler( value: string ){
@@ -325,98 +435,19 @@ export default class ScheduleView extends Vue{
         return event.color;
     }
 
-    private getFullDay(date: Date): string{
-        return Utils.getFullDay( date );
-    }
-
-
-    //상세내역 팝업
-    private showEvent( eventObj: { nativeEvent: MouseEvent, event: CalendarEvent} ) {
-        // console.log( eventObj.event );
-        const open = () => {
-            this.selectedEvent = eventObj.event;
-            this.selectedElement = eventObj.nativeEvent.target as HTMLElement;
-            setTimeout(() => {
-                this.selectedOpen = true;
-                // @ts-ignore
-                this.GET_COMMENTS_ACTION(this.selectedEvent.id)
-                    .then(() => {
-                        console.log(this.selectedEvent);
-                    });
-            }, 10);
-        };
-
-        if (this.selectedOpen) {
-            this.selectedOpen = false;
-            setTimeout( open, 10);
-        } else {
-            open();
-        }
-        eventObj.nativeEvent.stopPropagation();
-    }
-
-    private updateRange( time: { start: any, end: any } ) {
-
-        this.$nextTick(() => {
-            const eventItems = [];
-
-            // const days = (max - min) / 86400000;
-            const eventCount = this.scheduleListsModel.length;///this.rnd(days, days + 20);
-
-            const startTimes = [];
-            const endTimes = [];
-            for (let i: number = 0; i < eventCount; i++) {
-
-                startTimes.push(new Date(this.scheduleLists[i].startAt).getTime());
-                endTimes.push(new Date(this.scheduleLists[i].endAt).getTime());
-
-                eventItems.push({
-                    name: this.scheduleLists[i].title,
-                    details: this.scheduleLists[i].text,
-                    color: this.colors[this.scheduleLists[i].owner.schedule_color],
-                    start: new Date( this.scheduleLists[i].startAt),
-                    end: new Date( this.scheduleLists[i].endAt ),
-                    repeat: this.scheduleLists[i].count,
-                    timed:true,
-                    id: this.scheduleLists[i].id, // schedule_id (parent_id)
-                });
-            }
-
-           /*
-            const min = startTimes.reduce( (prv, cur) => {
-                return (prv > cur) ? cur : prv;
-            });
-            const max = endTimes.reduce( (prv, cur) => {
-                return (prv > cur) ? prv : cur;
-            });
-
-            const startDateItems = Utils.getTodayFullValue(new Date(min));
-            const endDateItems = Utils.getTodayFullValue(new Date(max));
-
-            this.startDate=Utils.getDateDashFormat( startDateItems[0], startDateItems[1], startDateItems[2] );
-            this.endDate=Utils.getDateDashFormat( endDateItems[0], endDateItems[1], endDateItems[2] );*/
-
-            this.events = eventItems;
-        });
-
-
-    }
-
-
-
     private updatePopup(isOpen: boolean) {
         this.isOpenAddSch=isOpen;
     }
 
     private addScheduleOpen(): void{
+        const header=document.querySelector('header') as HTMLElement;
+        header.classList.add('none-index');
         this.updatePopup(true);
     }
 
     private getProfileImg(imgUrl: string | null | undefined ): string{
         return ImageSettingService.getProfileImg( imgUrl );
     }
-
-
 
 
  /*   private startTimeChange(){
@@ -580,232 +611,6 @@ export default class ScheduleView extends Vue{
         return Math.floor((b - a + 1) * Math.random()) + a;
     }
 
-    /*private onAddSchedulePopupCloseHandler(): void{
-        this.isPopup=false;
-        this.loopRangeCheck = false;
-
-        //첨부 파일들 초기화
-        this.removeAllPreview();
-        this.removeAllAttachFile();
-    }*/
-
-
-
-    /**
-     * 이미지등록 아이콘 클릭시 > input type=file 에 클릭 이벤트 발생시킴.
-     * @private
-     */
-   /* private addImgFileInputFocus() {
-        this.inputEventBind('#imgFileInput');
-        console.log(this.imgFileURLItemsModel);
-    }*/
-
- /*   private addFilesInputFocus(){
-        this.inputEventBind('#attachFileInput');
-    }*/
-
-    /**
-     * //input click event 발생시키기.
-     * @param targetSelector
-     * @private
-     */
-    private inputEventBind( targetSelector: string ) {
-        //파일 input 에 클릭 이벤트 붙이기~
-        const imgFileInput =document.querySelector( targetSelector ) as HTMLInputElement;
-        //input click event 발생시키기.
-        imgFileInput.dispatchEvent( Utils.createMouseEvent('click') );
-    }
-
-
-    /**
-     * 이미지 파일 -> 배열에 지정 / 미리보기 link( blob link) 배열 생성~
-     * @param data
-     * @private
-     */
-    private setImgFilePreviewSave(data: FileList ): void {
-        // console.log(data);
-        // tslint:disable-next-line:prefer-for-of
-        for (let i = 0; i < data.length; i++) {
-            this.imgFileDatas.push(data[i]);
-            this.imgFileURLItems.push(URL.createObjectURL(data[i]));
-        }
-        /*data.forEach( ( item: File ) => {
-            // console.log(data,  item, Utils.getFileType(item) );
-
-        }); */
-    }
-
-    private setAttachFileSave(data: FileList ): void {
-        // console.log(data);
-        for (const file of data) {
-            // console.log(data,  item, Utils.getFileType(item) );
-            this.attachFileItems.push(file);
-        }
-    }
-
-    /**
-     * 이미지 파일이 저장된 배열을 전송할 formdata 에 값 대입.
-     * @private
-     */
-    private setImageFormData() {
-
-        if( !this.imgFileDatas.length ){ return; }
-
-        if (this.formData === undefined) {
-            this.formData= new FormData();
-        }
-        // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-        this.appendFormData(this.imgFileDatas, 'files');
-        console.log(this.imgFileDatas);
-    }
-
-    private setAttachFileFormData() {
-        if( !this.attachFileItems.length ){ return; }
-
-        if (this.formData === undefined) {
-            this.formData= new FormData();
-        }
-        // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-        this.appendFormData(this.attachFileItems, 'files'  );
-    }
-
-    private appendFormData( targetLists: File[], appendName: string | string[] ) {
-        targetLists.forEach(( item: File, index: number )=>{
-            // console.log(item, item.name);
-            // 아래  'files'  는  전송할 api 에 지정한 이름이기에 맞추어야 한다. 다른 이름으로 되어 있다면 변경해야 함.
-            if( Array.isArray(appendName) ){
-                this.formData.append( appendName[index], item, item.name );
-            }else{
-                this.formData.append(appendName, item, item.name );
-            }
-        });
-    }
-    //모델에 이미지 파일 추가
-    /*private addFileToImage( files: FileList ){
-
-
-        //전달되는 파일없을시 여기서 종료.
-        if( !files.length ){ return; }
-
-        /!*this.setRevokeObjectURL().then( ()=>{
-
-          });*!/
-
-        this.setImgFilePreviewSave(files);
-        //file type input
-        const imgFileInput =document.querySelector('#imgFileInput') as HTMLInputElement;
-        imgFileInput.value = '';
-    }*/
-
-    //모델에 이미지 파일 추가
-   /* private async addAttachFileTo( files: FileList ){
-        //전달되는 파일없을시 여기서 종료.
-        if( !files.length ){ return; }
-
-        this.setAttachFileSave(files);
-        //file type input
-        const attachFileInput =document.querySelector('#attachFileInput') as HTMLInputElement;
-        attachFileInput.value = '';
-    }*/
-
-    /**
-     * // blob url 폐기시키고 가비지 컬렉터 대상화시킴
-     * - 확인하는 방법은 현재 이미지에 적용된 src 주소값을 복사해서 현재 브라우저에 주소를 붙여 실행해 보면 된다. 이미지가 보이면 url 이 폐기되지 않은 것이다.
-     * @private
-     */
-    private removeBlobURL( items: string[] ) {
-        items.forEach((item) => URL.revokeObjectURL(item));
-    }
-
-    /**
-     * 이미지가 로드 되었는지 체크
-     * @private
-     */
-    private setRevokeObjectURL(): Promise<string>{
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if (this.imageLoadedCount === this.imgFileURLItems.length) {
-                    return resolve('loaded');
-                } else {
-                    return reject('wait');
-                }
-            }, 500);
-        });
-    }
-    //이미지 로드 완료 카운트
-/*    private imageLoadedCheck(): void{
-        this.imageLoadedCount++;
-        console.log(this.imageLoadedCount);
-    }*/
-
-
-
-
-
-    /**
-     * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
-     * @private
-     */
-    /*private submitAddSchedule(): void{
-        //시나리오 --> 등록 버튼 클릭 > 이미지 추가한 배열값 formdata에 입력 > 전송 >전송 성공후> filesAllClear 호출 > 팝업 닫기
-        this.setImageFormData();
-        this.setAttachFileFormData();
-
-        //전송이 완료 되었다는 전제하에 아래 구문 수행
-        setTimeout(() => {
-            this.isPopup=false;
-            this.imgFilesAllClear();
-        }, 500);
-
-    }*/
-
-    /**
-     * 추가된 이미지 파일 제거하기
-     * @param idx
-     * @private
-     */
-/*    private removeImgPreviewItems(idx: number): void{
-        const blobURLs=this.imgFileURLItems.splice(idx, 1);
-        this.removeBlobURL( blobURLs ); // blob url 제거
-        this.imgFileDatas.splice(idx, 1);
-        //console.log( this.formData.getAll('files')  );
-    }*/
-
-    /*private removeAttachFileItem(idx: number): void{
-        this.attachFileItems.splice(idx, 1);
-        //console.log( this.formData.getAll('files')  );
-    }*/
-
-
-    /**
-     * 추가된 이미지 파일 모두 지우기
-     * @private
-     */
-    /*private removeAllPreview(): void {
-        this.imgFileURLItems = [];
-        this.imgFileDatas=[];
-        this.imageLoadedCount=0;
-    }*/
-  /*  private removeAllAttachFile(): void {
-        this.attachFileItems = [];
-    }*/
-
-    private imgFilesAllClear() {
-        this.imgFileURLItems = [];
-        this.imgFileDatas=[];
-        this.formData.delete('files');
-        this.imageLoadedCount=0;
-    }
-
-    private attachFilesAllClear() {
-        this.attachFileItems = [];
-        this.formData.delete('files');
-        // this.imageLoadedCount=0;
-    }
-
-
-
-
     //파일 다운로드 설정.
     //var filenamesHeader= res.headers['content-disposition'];
     //var filename=filenamesHeader.substr( filenamesHeader.indexOf('="')+1 );
@@ -830,63 +635,7 @@ export default class ScheduleView extends Vue{
         window.URL.revokeObjectURL(blobURL);
     }
 
-    private updatedDiffDate( dateValue: Date ): string{
-        return Utils.updatedDiffDate(dateValue);
-    }
 
-    /**
-     * 댓글 등록
-     * @private
-     */
-    private async addComment() {
-        if (this.comment !== '') {
-            await this.ADD_COMMENT_ACTION({
-                // @ts-ignore
-                parent_id: this.selectedEvent.id,
-                parent_type: 1,
-                member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
-                comment: this.comment
-            }).then(() => {
-                console.log(`member_id: ${this.myClassHomeModel.me?.id} 댓글 추가 완료`);
-            });
-            // @ts-ignore
-            await this.GET_COMMENTS_ACTION(this.selectedEvent.id)
-                .then(() => {
-                    console.log('댓글 갱신');
-                });
-            this.comment = '';
-        }
-    }
-
-    private replyInputToggle(idx: number) {
-        this.reply = '';
-        const replyInput = document.querySelectorAll('.comment-btm.reply');
-        replyInput.forEach((item, index) =>
-            (idx!==index) ? item.classList.add('hide') : item.classList.toggle('hide'));
-    }
-
-    /**
-     * 대댓글 등록
-     * @param id
-     * @private
-     */
-    private async addReply(id: number) {
-        if (this.reply !== '') {
-            await this.ADD_REPLY_ACTION({
-                comment_id: id,
-                member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
-                comment: this.reply
-            }).then(() => {
-                console.log(`member_id: ${this.myClassHomeModel.me?.id} 대댓글 ${id} 추가 완료`);
-            });
-            // @ts-ignore
-            await this.GET_COMMENTS_ACTION(this.selectedEvent.id)
-                .then(() => {
-                    console.log('댓글 갱신');
-                });
-        }
-        this.reply = '';
-    }
 
 }
 
