@@ -99,7 +99,7 @@ export default class NotificationListView extends Mixins(UtilsMixins) {
   }
 
   /**
-   * 포스트 글쓴이와 멤버관리자와 일치하는지 체크
+   *
    * @param ownerId
    * @param userId
    * @private

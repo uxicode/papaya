@@ -102,7 +102,7 @@
                     </a>
                   </td>
                   <td>
-                    <p class="class-admin">{{ bestItem.class.owner.nickname }}</p>
+                    <p class="class-admin">{{ getNickname( bestItem) }}</p>
                   </td>
                   <td>
                     <div class="class-tag">
@@ -211,6 +211,10 @@ export default class Search extends Vue {
         ( searchInput as HTMLInputElement ).focus();
       }
     }, 1000);
+  }
+
+  public getNickname( bestItem: any ) {
+    return bestItem.class.is_private || bestItem.class.owner === null ? '비공개' : bestItem.class.owner.nickname;
   }
 
   private getSearchHome() {

@@ -48,10 +48,9 @@ export default class Verify extends Vue {
 
     }
 
-    @Watch('verifyVal')
     private onUpdateVerify(val: string){
         console.log(val);
-        if (val !== '') {
+        if ( val ){
             this.isNoticePopupOpen = true;
         }
     }

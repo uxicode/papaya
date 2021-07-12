@@ -1,11 +1,11 @@
 <div>
   <!-- start: 공통 팝업 / 파일명 : W.4.5.3.3.4.2 (일정 만들기) (4.5.3.3.1 ~ 4.5.3.3.4.2) isPopup=false;loopRangeCheck = false-->
   <transition name="modal">
-    <modal v-if="isOpen" size="600px" body-padding="0" @modalClose="onAddSchedulePopupCloseHandler">
+    <modal v-if="isOpen" size="600px" body-padding="0" >
       <div slot="header">
         <!-- header custom coding-->
         <p class="popup-header-tit">새 일정 등록</p>
-        <div class="popup-close" @click="onAddSchedulePopupCloseHandler">
+        <div class="popup-close" @click.prevent="popupChange( false )">
           <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
         </div>
       </div>
@@ -260,7 +260,7 @@
 
                 <!-- start: 일정 상세 내용 입력창 -->
                 <textarea
-                        style="margin: 0 40px;"
+                        style="padding: 0 40px;"
                         ref="scheduleDetailAreaTxt"
                         v-model="scheduleData.body"
                         class="form-textarea auto-resize"
@@ -270,18 +270,22 @@
               </div>
             </div>
             <div class="popup-form-btm">
-              <!-- start: 첨부 이미지 파일 미리보기
-              <image-preview :file-items="imgFileURLItemsModel"
+              <!--start: 첨부 이미지 파일 미리보기-->
+              <!--<image-preview :file-items="imgFileURLItemsModel"
                              @remove="removeImgPreviewItems"
                              @loaded="imageLoadedCheck"
-                             @removeAll="removeAllPreview"></image-preview>
-              &lt;!&ndash; end: 첨부 이미지 파일 미리보기 &ndash;&gt;
+                             @removeAll="removeAllPreview"></image-preview>-->
 
-              &lt;!&ndash; start: 첨부 파일 리스트 &ndash;&gt;
-              <file-preview :file-items="attachFileItems"
-                            name="name"
+              <image-preview :file-items="imgFileURLItemsModel"
+                             @remove="onRemoveImgPreviewItems"
+                             @removeAll="onRemoveAllPreview"></image-preview>
+              <!-- end: 첨부 이미지 파일 미리보기 -->
+
+              <!-- start: 첨부 파일 리스트 -->
+              <file-preview :file-items="attachFileItemsModel"
                             @removeFile="removeAttachFileItem"
-                            @removeAttachFileAll="removeAllAttachFile"></file-preview>-->
+                            name="name"
+                            @removeAttachFileAll="removeAllAttachFile"></file-preview>
               <!-- end: 첨부 파일 리스트 -->
             </div>
           </div>
