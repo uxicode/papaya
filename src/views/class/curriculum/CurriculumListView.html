@@ -21,7 +21,7 @@
                 </div>
                 <div class="fd-foot">
                     <p class="en-count">총 {{ item.course_list.length }}회차 수업 등록</p>
-                    <div class="fd-btn" v-if="isOwner( item.owner.user_id, item.user_id)">
+                    <div class="fd-btn" v-if="getIsMember(item.owner.user_id )">
                         <div class="list-popup">
                             <v-menu
                                     min-width="160px"
@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <div class="curriculum-add" v-show="isOwner">
+    <div class="curriculum-add" v-if="getIsOwner()">
         <a href="" class="curriculum-add-btn" @click.prevent="onAddCurriculumPopupOpen(10)"></a>
     </div>
 

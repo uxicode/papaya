@@ -155,7 +155,7 @@ export default class AddCurriculumPopup extends Vue {
         const findIdx=this.makeCurriculumData.course_list.findIndex((item: any) => item.id === idx);
         this.makeCurriculumData.course_list.splice(findIdx, 1);
 
-        // this.imgFileService.deleteImgFileItem(this.imgAttachData, idx);
+        this.imgFileService.deleteImgFileItem(this.imgAttachData, idx);
 
         this.courseListReplace();
     }

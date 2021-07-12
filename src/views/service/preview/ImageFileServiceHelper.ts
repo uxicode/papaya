@@ -35,6 +35,7 @@ class ImageFileServiceHelper extends ImageFileService{
     if (!this.imgFileItems.length) {return;}
     this.courseIndex = idx;
 
+    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < this.imgFileItems.length; i++) {
       saveData.push(this.imgFileItems[i]);
     }
@@ -42,13 +43,13 @@ class ImageFileServiceHelper extends ImageFileService{
 
   public deleteImgFileItem(saveData: any, idx: number){
     const findIdx = saveData.findIndex((item: any) => item.index === idx);
+    console.log(findIdx);
 
-    // saveData.forEach((item: any)=>{
-    //
-    // })
+    saveData.forEach((index: number)=>{
+      saveData.splice(index, 1);
+    });
 
-    saveData.splice(idx, 1);
-    console.log(`남는 데이터 = `, saveData);
+    console.log(saveData);
   }
 
   public saveData( formData: FormData, targetData: any ): void {
