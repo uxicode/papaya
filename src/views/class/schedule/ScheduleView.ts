@@ -223,7 +223,8 @@ export default class ScheduleView extends Vue{
         return this.events;
     }
 
-    private get calendarInstance(): Vue & {
+
+    get calendarInstance(): Vue & {
         prev: () => void,
         next: () => void,
         checkChange: () => void,
@@ -258,6 +259,11 @@ export default class ScheduleView extends Vue{
     public async mounted() {
         //시작일과 종료일이 변경되었는지 확인합니다. 변경된 경우 변경 이벤트를 업데이트하고 내 보냅니다.
         await this.calendarInstance.checkChange();
+    }
+
+
+    private onAddScheduleClose( val: boolean ) {
+        this.isOpenAddSch=val;
     }
 
     /**
