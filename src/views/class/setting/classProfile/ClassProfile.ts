@@ -42,7 +42,7 @@ export default class ClassProfile extends Vue {
 
     private classMemberInfo: IClassMemberInfo[] = [];
 
-    private tempData: any = '';
+    private tempData: string = '';
     private msg: string = '';
     private isError: boolean = false;
     private isApproval: boolean = false;
@@ -121,11 +121,7 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private showMessage(): boolean {
-        if (this.tempData !== this.memberInfo.nickname) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.tempData !== this.memberInfo.nickname;
     }
 
     /**
@@ -155,11 +151,11 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private async modifyNickname(newNickname: string) {
-        await ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {nickname: newNickname})
-          .then(() => {
-              console.log('닉네임 변경 완료');
-              this.memberInfo.nickname = newNickname;
-          });
+        await this.MODIFY_CLASS_MEMBER_INFO({classId: this.classID, memberId: this.myClassInfo.me.id}, {nickname: newNickname})
+            .then(() => {
+                console.log('닉네임 변경 완료');
+                this.memberInfo.nickname = newNickname;
+            });
         this.closeNicknameModal();
     }
 

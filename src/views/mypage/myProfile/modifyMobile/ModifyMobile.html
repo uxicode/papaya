@@ -1,16 +1,77 @@
 <div class="my-chage">
-    <h3>모바일 번호 변경</h3>
+  <h3>모바일 번호 변경</h3>
+  <div class="tb-cnt">
+    <ValidationObserver>
+      <table class="tb tb-form">
+        <colgroup>
+          <col style="width:120px;">
+          <col style="width:auto;">
+        </colgroup>
+        <tbody>
+        <tr>
+          <th class="pdt-40"><label for="mobile" class="required">모바일 번호</label></th>
+          <td>
+            <div class="form-group inline pdt-40">
+              <txt-field id="mobile"
+                         size="267"
+                         placeholder="모바일 번호 ‘-‘없이 입력해 주세요."
+                         v-model="mobileNo"
+                         rules="required|mobile"
+                         valid-name="모바일 번호"></txt-field>
+              <btn type="outline"
+                   size="sm"
+                   :disabled="!userMobileState"
+                   @btnClick="getUserAuthByMobile">{{ userAuthByMobileChk? '재전송':'인증' }}</btn>
+            </div>
+          </td>
+        </tr>
+        <tr v-show="isMobileChk">
+          <th></th>
+          <td class="pdt-0">
+            <div class="form-group inline mgt-40" style="position:relative;">
+              <txt-field size="216"
+                         id="verifiedCode"
+                         placeholder="인증번호를 입력해 주세요."
+                         v-model="verifiedNumModel"
+                         rules="required"
+                         valid-name="인증번호"></txt-field>
+              <btn type="grey"
+                   size="sm"
+                   :disabled="!isNullVerifiedNum"
+                   @btnClick="verifyCompleteByMobile">인증</btn>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </ValidationObserver>
+  </div>
 
-    <div class="form-group inline mgt-40">
-        <label for="mobile_no" class="required">모바일 번호</label>
-        <input type="text" class="form-control"
-               v-model="mobileNo"
-               id="mobile_no" placeholder="모바일 번호 ‘-‘없이 입력해 주세요." style="width:267px">
-        <btn type="grey" size="sm">인증</btn>
-    </div>
+  <div class="btn-box">
+    <btn type="outline" @btnClick="gotoMyProfile">취소</btn>
+    <btn type="navi" :disabled="!isMobileChk" @btnClick="modifyMobileNo">확인</btn>
+  </div>
 
-    <div class="btn-box">
-        <btn type="outline" @btnClick="gotoMyProfile">취소</btn>
-        <btn type="navi" @btnClick="modifyMobileNo">확인</btn>
-    </div>
+  <!-- start: 공통 팝업 -->
+  <transition name="modal">
+    <modal v-if="isOpenPopup">
+      <div slot="header">
+        <div class="popup-icon error"></div>
+        <div class="popup-close" @click="closePopup">
+          <button type="button" class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+        </div>
+      </div>
+      <div slot="body" style="text-align:left;">
+        <h3 class="popup-tit">{{ modalTitle }}</h3>
+        <div class="msg-container popup-txt"
+             v-html="$options.filters.addMsg( modalMsg )"></div>
+      </div>
+      <div slot="footer">
+        <div class="btn-group ct">
+          <btn @btnClick="closePopup">확인</btn>
+        </div>
+      </div>
+    </modal>
+  </transition>
+  <!-- end: 공통 팝업 -->
 </div>

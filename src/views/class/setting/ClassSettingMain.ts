@@ -154,7 +154,7 @@ export default class ClassSettingMain extends Vue{
     private getMyClassMemberInfo(): void {
         this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.myClassInfo.me.id})
           .then((data: any) => {
-              this.classMemberInfo = data;
+              this.classMemberInfo = data.member_info;
 
               /* 클래스 알림 설정 초기값 삽입 */
               this.onOffNoti = data.member_info.onoff_push_noti;
@@ -178,7 +178,7 @@ export default class ClassSettingMain extends Vue{
           .then((data) => {
               this.classInfo = data.classinfo;
               this.isQuestionShow = data.classinfo.question_showYN;
-              console.log(this.classInfo);
+              // console.log(this.classInfo);
           });
     }
 

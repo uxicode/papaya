@@ -83,7 +83,7 @@ class ClassMemberService {
    * @param memberId
    * @param info
    */
-  public setClassMemberInfo(classId: string | number, memberId: number, info: object): Promise<IClassMemberInfo> {
+  public setClassMemberInfo(classId: string | number, memberId: number, info: any): Promise<any> {
     return request('put', `${CLASS_BASE_URL}/${classId}/members/${memberId}`, info);
   }
 
