@@ -49,10 +49,20 @@ interface IScheduleTotal{
   user_keep_class_schedules: [];
   user_member_id: number;
 }
-
+interface IAddSchedule{
+  repeat_type: number;
+  repeat_count: number;
+  fullday: number | boolean;
+  title: string;
+  body: string;
+  file_count: number;
+  evt_startAt: string;  //2021-05-04 18:27:00
+  evt_endAt: string;
+}
 type NoticeScheduleModel = Pick<IScheduleTotal, 'title' | 'text' | 'updatedAt' | 'owner' | 'user_id'>;
 export {
   ITimeModel,
   IScheduleTotal,
-  NoticeScheduleModel
+  NoticeScheduleModel,
+  IAddSchedule
 };

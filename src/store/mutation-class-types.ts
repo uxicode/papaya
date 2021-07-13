@@ -23,3 +23,4 @@ export const SET_COURSE_DETAIL: string = 'SET_COURSE_DETAIL';
 export const SET_VOTE: string = 'SET_VOTE';
 export const EDIT_POST: string = 'EDIT_POST';
 export const DELETE_POST: string = 'DELETE_POST';
+export const DELETE_SCHEDULE: string = 'DELETE_SCHEDULE';

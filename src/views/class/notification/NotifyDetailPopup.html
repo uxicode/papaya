@@ -158,5 +158,5 @@
 
     </transition>
 
-    <photo-viewer v-if="isPhotoViewer" :is-photo-viewer="isPhotoViewer" :img-data="getImgFileDataSort(postDetailModel.attachment)" @change="onPhotoViewerStatus"></photo-viewer>
+    <photo-viewer v-if="isPhotoViewer" :is-photo-viewer="isPhotoViewer" :img-data="imgPreviewInit(postDetailModel.attachment)" @change="onPhotoViewerStatus"></photo-viewer>
 </div>
