@@ -40,9 +40,9 @@ export default class ClassProfile extends Vue {
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
-    private classMemberInfo: IClassMemberInfo[] = [];
+    private classMemberInfo: any = {};
 
-    private tempData: string = '';
+    private tempNickname: string = '';
     private msg: string = '';
     private isError: boolean = false;
     private isApproval: boolean = false;
@@ -69,10 +69,6 @@ export default class ClassProfile extends Vue {
 
     get myInfo(): IUserMe {
         return this.userInfo;
-    }
-
-    get memberInfo(): any {
-        return this.classMemberInfo;
     }
 
     get myClassInfo(): any {
@@ -121,7 +117,7 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private showMessage(): boolean {
-        return this.tempData !== this.memberInfo.nickname;
+        return this.tempNickname !== this.classMemberInfo.nickname;
     }
 
     /**
@@ -130,7 +126,7 @@ export default class ClassProfile extends Vue {
      */
     private openNicknameModal(prevNickname: string): void {
         this.isNicknameModify = true;
-        this.tempData = prevNickname;
+        this.tempNickname = prevNickname;
     }
 
     /**
@@ -139,23 +135,19 @@ export default class ClassProfile extends Vue {
      */
     private closeNicknameModal(): void {
         this.isNicknameModify = false;
-        this.tempData = '';
+        this.tempNickname = '';
         this.isApproval = false;
         this.isError = false;
         this.msg = '';
     }
 
     /**
-     * 클래스 닉네임 변경
+     * 클래스 닉네임 변경 (임시저장)
      * @param newNickname
      * @private
      */
-    private async modifyNickname(newNickname: string) {
-        await this.MODIFY_CLASS_MEMBER_INFO({classId: this.classID, memberId: this.myClassInfo.me.id}, {nickname: newNickname})
-            .then(() => {
-                console.log('닉네임 변경 완료');
-                this.memberInfo.nickname = newNickname;
-            });
+    private modifyNickname(newNickname: string): void {
+        this.classMemberInfo.nickname = newNickname;
         this.closeNicknameModal();
     }
 
@@ -210,7 +202,11 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private goBack(): void {
-        this.$router.push('./')
-            .then();
+        this.$router.push('./').then();
+    }
+
+    private async saveData() {
+        await ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {nickname: this.classMemberInfo.nickname});
+        this.goBack();
     }
 }
