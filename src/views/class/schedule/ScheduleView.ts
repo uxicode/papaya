@@ -123,26 +123,7 @@ export default class ScheduleView extends Vue{
         '#ADC500',
         '#629F00'
     ];
-
-    //datepicker
-    private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
-    // private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
-    private startDateMenu: boolean= false; // 캘린 셀렉트 열고 닫게 하는 toggle 변수
-    private startTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-
-    // private endDatePickerModel: string= new Date().toISOString().substr(0, 10);
-    // private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
-
-    // private endDateMenu: boolean=false;  // 캘린더 셀렉트 열고 닫게 하는 toggle 변수
-    // private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
-
-    // private loopRangeModel: string = '반복없음';
-    // private loopRangeItems: string[] = ['반복없음', '매일', '매주', '매월', '매년'];
-    // private loopRangeCheck: boolean=false;
     private loopRangeCount: number | string=10;
-
-
-
     private scheduleData: {
         repeat_type: number,
         repeat_count: number,
@@ -161,11 +142,6 @@ export default class ScheduleView extends Vue{
         endAt: new Date()
     };
 
-
-/*    get imgFileURLItemsModel(): string[] {
-        return this.imgFileURLItems;
-    }*/
-
     get imgFileDatasModel(): any[] {
         return this.imgFileDatas;
     }
@@ -173,16 +149,6 @@ export default class ScheduleView extends Vue{
     get attachFileItemsModel(): any[] {
         return this.attachFileItems;
     }
-
-/*    get currentLoopRangeItems(): string[]{
-        return this.loopRangeItems;
-    }*/
-    /*get currentStartTimeModel(): string{
-        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
-    }
-    get currentEndTimeModel(): string{
-        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
-    }*/
 
     get scheduleListsModel(): IScheduleTotal[]{
         return this.scheduleListItems;
@@ -197,7 +163,6 @@ export default class ScheduleView extends Vue{
     get scheduleEvents(): any[] {
         return this.events;
     }
-
 
     get calendarInstance(): Vue & {
         prev: () => void,
@@ -216,8 +181,9 @@ export default class ScheduleView extends Vue{
         };
     }
 
-
     public async created(){
+
+        //새로고침시에 sidemenu 메뉴 활성화 동기화 시킴.
         if (this.$route.query.sideNum && this.$route.query.sideNum !== '') {
             this.$emit('sideNum', Number(this.$route.query.sideNum));
         }
@@ -239,18 +205,23 @@ export default class ScheduleView extends Vue{
     }
 
     public mounted() {
-        //시작일과 종료일이 변경되었는지 확인합니다. 변경된 경우 변경 이벤트를 업데이트하고 내 보냅니다.
+
         setTimeout(() => {
             this.scheduleListsModel.forEach((item, idx )=>{
                 console.log(idx);
                 this.addScheduleEvent(idx);
             });
 
+            //시작일과 종료일이 변경되었는지 확인합니다. 변경된 경우 변경 이벤트를 업데이트하고 내 보냅니다.
             this.calendarInstance.checkChange();
         }, 1000);
 
     }
 
+    /**
+     * 초기에 캘린더 이벤트 등 데이터 받아오기.
+     * @private
+     */
     private async getScheduleList(){
         // console.log(this.classID === Number( this.$route.params.classId ) );
         await this.GET_SCHEDULE_ACTION( { classId: Number(this.classID), paging:{page_no:1, count: 100} })
@@ -259,8 +230,6 @@ export default class ScheduleView extends Vue{
           });
 
     }
-
-
     //상세내역 팝업
     private scheduleDetailViewEvent(eventObj: { nativeEvent: MouseEvent, event: CalendarEvent} ) {
         // console.log( eventObj.event );
@@ -297,43 +266,12 @@ export default class ScheduleView extends Vue{
         eventObj.nativeEvent.stopPropagation();
     }
 
+    /**
+     * 캘린더 이벤트 생성.
+     * @param time
+     * @private
+     */
     private updateRange( time: { start: any, end: any } ) {
-
-        /*this.$nextTick(() => {
-            const eventItems = [];
-
-            // const days = (max - min) / 86400000;
-            const eventCount = this.scheduleListsModel.length;///this.rnd(days, days + 20);
-
-            const startTimes = [];
-            const endTimes = [];
-
-            this.scheduleListsModel.forEach((item, idx )=>{
-                // console.log(idx);
-                this.addScheduleEvent(idx);
-            });
-            /!*for (let i: number = 0; i < eventCount; i++) {
-                // startTimes.push(new Date(startAt).getTime());
-                // endTimes.push(new Date(endAt).getTime());
-                this.addScheduleEvent(i);
-            }*!/
-
-            /!*
-             const min = startTimes.reduce( (prv, cur) => {
-                 return (prv > cur) ? cur : prv;
-             });
-             const max = endTimes.reduce( (prv, cur) => {
-                 return (prv > cur) ? prv : cur;
-             });
-
-             const startDateItems = Utils.getTodayFullValue(new Date(min));
-             const endDateItems = Utils.getTodayFullValue(new Date(max));
-
-             this.startDate=Utils.getDateDashFormat( startDateItems[0], startDateItems[1], startDateItems[2] );
-             this.endDate=Utils.getDateDashFormat( endDateItems[0], endDateItems[1], endDateItems[2] );*!/
-            // this.events = eventItems;
-        });*/
-
         this.scheduleListsModel.forEach((item, idx )=>{
             console.log(idx);
             this.addScheduleEvent(idx);
@@ -341,18 +279,27 @@ export default class ScheduleView extends Vue{
 
     }
 
+    /**
+     * 일정 추가 팝업이 닫힌 후 호출되는 이벤트 핸들러
+     * @param val
+     * @private
+     */
     private onAddScheduleClose( val: boolean ) {
         this.isOpenAddSch=val;
         if (!this.isOpenAddSch) {
+            //상단 gnb depth 가 높기에 일정 생성 팝업이 나올때 gnb depth 를 낮춤~
             const header=document.querySelector('header') as HTMLElement;
             header.classList.remove('none-index');
-
-            console.log(this.scheduleListsModel.length, this.events.length);
-
+            // console.log(this.scheduleListsModel.length, this.events.length);
             this.addScheduleEvent(this.scheduleListsModel.length-1 );
         }
     }
 
+    /**
+     * schedule 추가 event( vuetify calendar 인스턴스 이벤트에 대입됨 )
+     * @param idx
+     * @private
+     */
     private addScheduleEvent( idx: number ) {
         // console.log(this.scheduleListsModel[idx]);
         // console.log(this.scheduleListsModel.length, this.events.length);
@@ -360,13 +307,26 @@ export default class ScheduleView extends Vue{
         this.events.push({
             name: title,
             details: text,
-            color: this.colors[ owner.schedule_color ],
+            color: this.colors[ owner? owner.schedule_color : 0 ],
             start: new Date(startAt),
             end: new Date( endAt ),
             repeat: count,
             timed:true,
             id, // schedule_id (parent_id)
         });
+    }
+
+    private addScheduleClose( value: boolean ) {
+        this.isOpenAddSch=false;
+    }
+    private updatePopup(isOpen: boolean) {
+        this.isOpenAddSch=isOpen;
+    }
+
+    private addScheduleOpen(): void{
+        const header=document.querySelector('header') as HTMLElement;
+        header.classList.add('none-index');
+        this.updatePopup(true);
     }
 
     private onDeleteCheck( scheduleId: number) {
@@ -383,7 +343,29 @@ export default class ScheduleView extends Vue{
         const header=document.querySelector('header') as HTMLElement;
         header.classList.remove('none-index');
     }
-
+    private setToday() {
+        this.calendarModel = '';
+    }
+    private prev() {
+        this.calendarInstance.prev();
+    }
+    private next() {
+        this.calendarInstance.next();
+    }
+    //상단 월 달력 header 에 custom 요일 표시
+    private getDay( d: any ){
+        const dayIdx=( d.weekday - 1<0)? this.daysOfWeek.length-1 : d.weekday - 1;
+        return this.daysOfWeek[dayIdx];
+    }
+    private getEventColor(event: CalendarEvent) {
+        return event.color;
+    }
+    private extendBottom(event: any ) {
+        // console.log('extendBottom=', event );
+        this.createEvent = event;
+        this.createStart = event.start;
+        this.extendOriginal = event.end;
+    }
     /**
      * 일정 생성 데이터 초기화
      * @private
@@ -400,23 +382,12 @@ export default class ScheduleView extends Vue{
         };
     }
 
-
-
-
     private loopRangeCountClickHandler( value: string ){
         this.loopRangeCount=value;
         // console.log(this.loopRangeCount);
     }
 
-    private setToday() {
-        this.calendarModel = '';
-    }
-    private prev() {
-        this.calendarInstance.prev();
-    }
-    private next() {
-        this.calendarInstance.next();
-    }
+
     private viewMoreDay( data: { date: any }) {
         this.calendarModel = data.date;
 
@@ -424,26 +395,8 @@ export default class ScheduleView extends Vue{
         // this.type = 'day';
     }
 
-    //상단 월 달력 header 에 custom 요일 표시
-    private getDay( d: any ){
-        const dayIdx=( d.weekday - 1<0)? this.daysOfWeek.length-1 : d.weekday - 1;
-        return this.daysOfWeek[dayIdx];
-    }
 
 
-    private getEventColor(event: CalendarEvent) {
-        return event.color;
-    }
-
-    private updatePopup(isOpen: boolean) {
-        this.isOpenAddSch=isOpen;
-    }
-
-    private addScheduleOpen(): void{
-        const header=document.querySelector('header') as HTMLElement;
-        header.classList.add('none-index');
-        this.updatePopup(true);
-    }
 
     private getProfileImg(imgUrl: string | null | undefined ): string{
         return ImageSettingService.getProfileImg( imgUrl );
@@ -499,12 +452,7 @@ export default class ScheduleView extends Vue{
         }
     }
 
-    private extendBottom(event: any ) {
-        // console.log('extendBottom=', event );
-        this.createEvent = event;
-        this.createStart = event.start;
-        this.extendOriginal = event.end;
-    }
+
 
     private mouseMove( tms: {
         date: Date,

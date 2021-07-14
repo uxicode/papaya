@@ -210,6 +210,11 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
     this.$emit('change', value);
   }
 
+  private popupClose() {
+    this.popupChange( false );
+    this.allClear();
+  }
+
 
   /**
    * 일정 등록시  하루종일 표시 유무 - true/false 로 등록하기에 전송시 0/1 로 변환해서 전송필요.
@@ -270,9 +275,9 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
 
         this.allClear();
         this.popupChange(false);
+
+        this.$emit('submit');
       });
-
-
 
   }
 
@@ -281,6 +286,16 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
     // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
     this.imgFilesAllClear(); //이미지 데이터 비우기
     this.attachFilesAllClear();//파일 데이터 비우기
+    this.scheduleData={
+      repeat_type: 0,
+      repeat_count: 0,
+      fullday: 0,
+      title: '',
+      body: '',
+      evt_startAt: '',  //2019-11-15 10:00:00
+      evt_endAt: '',
+      file_count: 0
+    };
   }
 
 }

@@ -113,7 +113,7 @@
   </div>
 
   <!-- start: 공통 팝업 / 파일명 : W.4.5.3.3.4.2 (일정 만들기) (4.5.3.3.1 ~ 4.5.3.3.4.2) isPopup=false;loopRangeCheck = false-->
-  <add-schedule :is-open="isOpenAddSch" @change="onAddScheduleClose" ></add-schedule>
+  <add-schedule :is-open="isOpenAddSch" @change="addScheduleClose" @submit="onAddScheduleClose"></add-schedule>
   <!-- end: 공통 팝업 -->
 
   <!-- start: 공통 팝업 / 파일명 : W.4.5.3.4 (일정 상세) -->

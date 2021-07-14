@@ -156,18 +156,40 @@ export default class ScheduleModule extends VuexModule {
   }
 
   @Action({rawError: true})
-  public [ADD_SCHEDULE_ACTION](payload: { classId: number, formData: FormData }): Promise<any>{
+  public async [ADD_SCHEDULE_ACTION](payload: { classId: number, formData: FormData }): Promise<any>{
     const {classId, formData}=payload;
-    return ScheduleService.setAddSchedule( Number(classId), formData)
-      .then( (data) => {
 
-        this.scheduleListData.push(data.schedule);
+   /*
+   schedule:{
+    class_id: 750
+    count: 0
+    createdAt: "2021-07-14 00:00:00"
+    deletedYN: false
+    endAt: "2021-07-14 03:30:00"
+    expiredAt: "2021-07-14 03:30:00"
+    id: 1977
+    param1: 0
+    post_type: 1
+    startAt: "2021-07-14 03:30:00"
+    text: "dsadfsdafasf"
+    title: "asdfsadfsa"
+    type: 0
+    updatedAt: "2021-07-14 00:00:00"
+    user_id: 250
+    user_member_id: 844
+   }
+   */
 
-        return Promise.resolve(data);
-      }).catch((error) => {
-        console.log(error);
-        return Promise.reject(error);
-      });
+    try{
+      const addSchedule=await ScheduleService.setAddSchedule( Number(classId), formData);
+      const {id}=addSchedule.schedule;
+      const readData=await ScheduleService.getScheduleById( classId, id );
+      const {schedule} = readData;
+      this.scheduleListData.push(schedule);
+      return Promise.resolve(readData);
+    }catch(error){
+      return Promise.reject(error);
+    }
   }
 
   /**
