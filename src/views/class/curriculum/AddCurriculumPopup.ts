@@ -156,13 +156,19 @@ export default class AddCurriculumPopup extends Vue {
         this.makeCurriculumData.course_list.splice(findIdx, 1);
 
         this.imgFileService.deleteImgFileItem(this.imgAttachData, idx);
+        this.attachFileService.deleteImgFileItem(this.attachFileData, idx);
 
         this.courseListReplace();
     }
 
-    private receiveData(){
-        console.log(this.imgAttachData);
+    private receiveImgData(){
+        return this.imgAttachData;
     }
+
+    private receiveFileData(){
+        return this.attachFileData;
+    }
+
 
     /**
      * 교육과정 > 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (

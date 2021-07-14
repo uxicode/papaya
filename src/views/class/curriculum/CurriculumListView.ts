@@ -120,15 +120,6 @@ export default class CurriculumListView extends Vue {
         this.courseDetailArray( this.courseDetailData );
     }
 
-    /**
-     * 게시글 글쓴이와 현재 로그인 유저와 권한이 같은지 체크
-     * @param ownerId
-     * @private
-     */
-    private getIsMember( ownerId: number ): boolean {
-        return ownerId === this.currentUserAuth;
-    }
-
     private getIsOwner(): boolean {
         return (this.myClassHomeModel.me?.user_id === this.myClassHomeModel.owner_id);
     }
