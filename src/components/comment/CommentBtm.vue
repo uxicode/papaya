@@ -9,17 +9,17 @@
 <script lang="ts">
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import {IPostModel} from '@/views/model/post.model';
+import {IScheduleTotal} from '@/views/model/schedule.model';
 
 const Post = namespace('Post');
 const Schedule = namespace('Schedule');
 
 @Component
 export default class CommentBtm extends Vue {
-  @Prop(Number)
-  private parentType!: number;
 
-  @Prop(Number)
-  private parentId!: number;
+  @Prop(Object)
+  private parentItem!: Pick<IPostModel | IScheduleTotal, 'post_type' | 'id'> ;
 
   @Prop(Number)
   private memberId!: number;
@@ -40,11 +40,12 @@ export default class CommentBtm extends Vue {
 
   private addCommentType(): any {
     const commentData = {
-      parent_id: this.parentId,
-      parent_type: this.parentType,
+      parent_id: this.parentItem.id,
+      parent_type: this.parentItem.post_type,
       member_id: this.memberId,
-      comment: this.comment};
-    if (this.parentType === 0) {
+      comment: this.comment
+    };
+    if (this.parentItem.post_type === 0) {
       return this.ADD_POST_COMMENT_ACTION(commentData);
     } else {
       return this.ADD_SCHEDULE_COMMENT_ACTION(commentData);
@@ -52,10 +53,10 @@ export default class CommentBtm extends Vue {
   }
 
   private getCommentsType(): any {
-    if (this.parentType === 0) {
-      return this.GET_POST_COMMENTS_ACTION(this.parentId);
+    if (this.parentItem.post_type === 0) {
+      return this.GET_POST_COMMENTS_ACTION(this.parentItem.id);
     } else {
-      return this.GET_SCHEDULE_COMMENTS_ACTION(this.parentId);
+      return this.GET_SCHEDULE_COMMENTS_ACTION(this.parentItem.id);
     }
   }
 
