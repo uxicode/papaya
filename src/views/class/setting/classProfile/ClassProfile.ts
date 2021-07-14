@@ -12,8 +12,8 @@ const MyClass = namespace('MyClass');
 
 interface IProfileData {
     type: string;
-    data: any;
-    open: any;
+    data: string;
+    open: string;
 }
 
 @WithRender
@@ -26,10 +26,10 @@ interface IProfileData {
 
 export default class ClassProfile extends Vue {
     @MyClass.Action
-    private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo[]>;
+    private GET_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo>;
 
     @MyClass.Action
-    private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<IClassMemberInfo[]>;
+    private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<any>;
 
     @Auth.Getter
     private userInfo!: IUserMe;
@@ -40,9 +40,9 @@ export default class ClassProfile extends Vue {
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
 
-    private classMemberInfo: IClassMemberInfo[] = [];
+    private classMemberInfo: any = {};
 
-    private tempData: any = '';
+    private tempNickname: string = '';
     private msg: string = '';
     private isError: boolean = false;
     private isApproval: boolean = false;
@@ -71,10 +71,6 @@ export default class ClassProfile extends Vue {
         return this.userInfo;
     }
 
-    get memberInfo(): any {
-        return this.classMemberInfo;
-    }
-
     get myClassInfo(): any {
         return this.myClassHomeModel;
     }
@@ -88,7 +84,7 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private getClassMemberInfo(): void {
-        this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.myClassInfo.me.id})
+        this.GET_CLASS_MEMBER_INFO({classId: this.classID, memberId: this.myClassInfo.me.id})
           .then((data: any) => {
               console.log(`classId = ${this.classID}, memberId = ${this.myClassInfo.me.id}`);
               this.classMemberInfo = data.member_info;
@@ -121,11 +117,7 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private showMessage(): boolean {
-        if (this.tempData !== this.memberInfo.nickname) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.tempNickname !== this.classMemberInfo.nickname;
     }
 
     /**
@@ -134,7 +126,7 @@ export default class ClassProfile extends Vue {
      */
     private openNicknameModal(prevNickname: string): void {
         this.isNicknameModify = true;
-        this.tempData = prevNickname;
+        this.tempNickname = prevNickname;
     }
 
     /**
@@ -143,23 +135,19 @@ export default class ClassProfile extends Vue {
      */
     private closeNicknameModal(): void {
         this.isNicknameModify = false;
-        this.tempData = '';
+        this.tempNickname = '';
         this.isApproval = false;
         this.isError = false;
         this.msg = '';
     }
 
     /**
-     * 클래스 닉네임 변경
+     * 클래스 닉네임 변경 (임시저장)
      * @param newNickname
      * @private
      */
-    private async modifyNickname(newNickname: string) {
-        await ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {nickname: newNickname})
-          .then(() => {
-              console.log('닉네임 변경 완료');
-              this.memberInfo.nickname = newNickname;
-          });
+    private modifyNickname(newNickname: string): void {
+        this.classMemberInfo.nickname = newNickname;
         this.closeNicknameModal();
     }
 
@@ -214,7 +202,11 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private goBack(): void {
-        this.$router.push('./')
-            .then();
+        this.$router.push('./').then();
+    }
+
+    private async saveData() {
+        await ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {nickname: this.classMemberInfo.nickname});
+        this.goBack();
     }
 }

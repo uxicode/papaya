@@ -56,7 +56,7 @@ export default class NotificationListView extends Mixins(UtilsMixins) {
   private GET_POST_DETAIL_ACTION!: ( payload: { classId: number, postId: number }) =>Promise<any>;
 
   @Post.Action
-  private GET_COMMENTS_ACTION!: ( postId: number)=>Promise<any>;
+  private GET_POST_COMMENTS_ACTION!: ( postId: number)=>Promise<any>;
 
   @MyClass.Getter
   private classID!: string | number;
@@ -182,7 +182,7 @@ export default class NotificationListView extends Mixins(UtilsMixins) {
     // this.$emit('click:detailPost', id);
     this.detailPostId = id; // update postId
     await this.GET_POST_DETAIL_ACTION({classId: Number(this.classID), postId: this.detailPostId});
-    await this.GET_COMMENTS_ACTION(this.detailPostId)
+    await this.GET_POST_COMMENTS_ACTION(this.detailPostId)
       .then((data)=>{
         this.isDetailPopupOpen=true;
       });

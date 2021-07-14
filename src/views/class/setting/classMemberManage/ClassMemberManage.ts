@@ -212,8 +212,8 @@ export default class ClassMemberManage extends Vue{
     private banMember(): void {
         this.isBanModal = false;
         ClassMemberService.deleteClassMemberByAdmin(this.classID, this.memberId)
-            .then((data) => {
-                const findIdx = this.classMemberList.findIndex((ele) => ele.id === data.user_id);
+            .then(() => {
+                const findIdx = this.classMemberList.findIndex((ele) => ele.id === this.memberId);
                 this.classMemberList.splice(findIdx, 1);
             });
         this.isBanCompleteModal = true;

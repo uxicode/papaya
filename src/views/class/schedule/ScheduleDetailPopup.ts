@@ -1,7 +1,6 @@
 import {Component, Mixins, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import UtilsMixins from '@/mixin/UtilsMixins';
-import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {IScheduleTotal} from '@/views/model/schedule.model';
 import {Utils} from '@/utils/utils';
@@ -13,6 +12,8 @@ import ListInFilePreview from '@/components/preview/ListInFilePreview.vue';
 import PhotoViewer from '@/components/photoViewer/photoViewer.vue';
 import ConfirmPopup from '@/components/modal/confirmPopup.vue';
 import NoticePopup from '@/components/modal/noticePopup.vue';
+import CommentArea from '@/components/comment/CommentArea.vue';
+import CommentBtm from '@/components/comment/CommentBtm.vue';
 import MyClassService from '@/api/service/MyClassService';
 import WithRender from './ScheduleDetailPopup.html';
 
@@ -29,7 +30,9 @@ const Schedule = namespace('Schedule');
     ListInFilePreview,
     PhotoViewer,
     ConfirmPopup,
-    NoticePopup
+    NoticePopup,
+    CommentArea,
+    CommentBtm,
   }
 })
 export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
@@ -39,13 +42,13 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
 
 
   @Schedule.Action
-  private GET_COMMENTS_ACTION!: (scheduleId: number) => Promise<any>;
+  private GET_SCHEDULE_COMMENTS_ACTION!: (scheduleId: number) => Promise<any>;
 
   @Schedule.Action
-  private ADD_COMMENT_ACTION!: (payload: {parent_id: number, parent_type: number, member_id: number, comment: string}) => Promise<any>;
+  private ADD_SCHEDULE_COMMENT_ACTION!: (payload: {parent_id: number, parent_type: number, member_id: number, comment: string}) => Promise<any>;
 
   @Schedule.Action
-  private ADD_REPLY_ACTION!: (payload: {comment_id: number, member_id: number, comment: string}) => Promise<any>;
+  private ADD_SCHEDULE_REPLY_ACTION!: (payload: {comment_id: number, member_id: number, comment: string}) => Promise<any>;
 
   @Schedule.Action
   private DELETE_SCHEDULE_ACTION!: (payload: { classId: string | number, scheduleId: number })=> Promise<any>;
@@ -60,16 +63,6 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
   @Schedule.Getter
   private scheduleDetailItem!: IScheduleTotal;
 
-  @Schedule.Getter
-  private commentItems!: ICommentModel[];
-
-  @Schedule.Getter
-  private replyItems!: IReplyModel[];
-
-
-  private comment: string = '';
-  private reply: string = '';
-
   private currentUserAuth: number=-1;
   private isPhotoViewer: boolean = false;
   private isConfirmPopupOpen: boolean=false;
@@ -79,15 +72,6 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
   get scheduleDetailModel(): IScheduleTotal{
     return this.scheduleDetailItem;
   }
-
-  get commentItemsModel() {
-    return this.commentItems;
-  }
-
-  get replyItemsModel() {
-    return this.replyItems;
-  }
-
 
   public created() {
     //currentUserAuth
@@ -157,9 +141,6 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
     this.$emit('change', value);
   }
 
-  private updatedDiffDate( dateValue: Date ): string{
-    return Utils.updatedDiffDate(dateValue);
-  }
 
   private openPhotoViewer(): void {
     const {attachment} = this.scheduleDetailModel;
@@ -171,67 +152,5 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
   private onPhotoViewerStatus(value: boolean) {
     this.isPhotoViewer = value;
   }
-
-
-
-
-  /**
-   * 댓글 등록
-   * @private
-   */
-  private async addComment() {
-    const {id}=this.scheduleDetailModel;
-    if (this.comment !== '') {
-      await this.ADD_COMMENT_ACTION({
-        // @ts-ignore
-        parent_id: id,
-        parent_type: 1,
-        member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
-        comment: this.comment
-      }).then(() => {
-        console.log(`member_id: ${this.myClassHomeModel.me?.id} 댓글 추가 완료`);
-      });
-      // @ts-ignore
-      await this.GET_COMMENTS_ACTION(id)
-        .then(() => {
-          console.log('댓글 갱신');
-        });
-      this.comment = '';
-    }
-  }
-
-  private replyInputToggle(idx: number) {
-    this.reply = '';
-    const replyInput = document.querySelectorAll('.comment-btm.reply');
-    replyInput.forEach((item, index) =>
-      (idx!==index) ? item.classList.add('hide') : item.classList.toggle('hide'));
-  }
-
-  /**
-   * 대댓글 등록
-   * @param commentId
-   * @private
-   */
-  private async addReply( commentId: number) {
-    const {id}=this.scheduleDetailModel;
-    if (this.reply !== '') {
-      await this.ADD_REPLY_ACTION({
-        comment_id: commentId,
-        member_id: (this.myClassHomeModel.me?.id) ? (this.myClassHomeModel.me?.id) : 0,
-        comment: this.reply
-      }).then(() => {
-        console.log(`member_id: ${this.myClassHomeModel.me?.id} 대댓글 ${id} 추가 완료`);
-      });
-      // @ts-ignore
-      await this.GET_COMMENTS_ACTION( id )
-        .then(() => {
-          console.log('댓글 갱신');
-        });
-    }
-    this.reply = '';
-  }
-
-
-
 
 }

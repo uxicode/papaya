@@ -17,7 +17,7 @@ import {
     SET_CLASS_ID,
     SET_MYCLASS_HOME_DATA,
     REMOVE_CLASS_DATA,
-    CLASS_MEMBER_INFO,
+    SET_CLASS_MEMBER_INFO,
     SET_MEMBER_ID,
     UPDATE_SIDE_NUM,
     SET_CURRICULUM_LIST,
@@ -29,7 +29,7 @@ import {
     KEEP_POST_LIST_ACTION,
     MAKE_CLASS,
     MYCLASS_HOME,
-    CLASS_MEMBER_INFO_ACTION,
+    GET_CLASS_MEMBER_INFO,
     MODIFY_CLASS_MEMBER_INFO,
     GET_CURRICULUM_LIST_ACTION,
     GET_CURRICULUM_DETAIL_ACTION,
@@ -50,7 +50,30 @@ export default class ClassModule extends VuexModule {
     /* State */
     private classData: IMyClassList[]=[];
     private keepPostItems: IKeepPostList[]=[];
-    private memberInfo: IClassMemberInfo[] = [];
+    private memberInfo: IClassMemberInfo = {
+        joinedAt: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        id: 0,
+        class_id: 0,
+        user_id: 0,
+        nickname: '',
+        profile_image: '',
+        is_bookmarked: 0,
+        schedule_color: 0,
+        level: 0,
+        status: 0,
+        open_level_id: 0,
+        open_level_mobileno: 0,
+        open_level_email: 0,
+        onoff_push_noti: 0,
+        onoff_post_noti: 0,
+        onoff_comment_noti: 0,
+        onoff_schedule_noti: 0,
+        schedule_noti_intime: 0,
+        visited: 0,
+        class_member_auths: [],
+    };
     private count: number = 0;
     private classIdx: number = -1;
     private sideMenuNum: number=0;
@@ -272,6 +295,10 @@ export default class ClassModule extends VuexModule {
         return this.sideMenuNum;
     }
 
+    get memberInfoModel(): IClassMemberInfo {
+        return this.memberInfo;
+    }
+
     /* Mutations */
     @Mutation
     public [UPDATE_SIDE_NUM](num: number): void{
@@ -337,7 +364,7 @@ export default class ClassModule extends VuexModule {
     }
 
     @Mutation
-    public [CLASS_MEMBER_INFO](memberInfo: IClassMemberInfo[] ): void {
+    public [SET_CLASS_MEMBER_INFO](memberInfo: IClassMemberInfo): void {
         this.memberInfo = memberInfo;
         //localStorage.setItem('memberInfo', JSON.stringify(this.memberInfo) );
     }
@@ -426,12 +453,10 @@ export default class ClassModule extends VuexModule {
     }
 
     @Action({rawError: true})
-    public [CLASS_MEMBER_INFO_ACTION](payload: { classId: number, memberId: number }): Promise<IClassMemberInfo[]>{
-
+    public [GET_CLASS_MEMBER_INFO](payload: { classId: number, memberId: number }): Promise<IClassMemberInfo>{
         return ClassMemberService.getClassMemberInfo(payload.classId, payload.memberId)
           .then((data) => {
-              this.context.commit(SET_MEMBER_ID, payload.memberId);
-              this.context.commit(CLASS_MEMBER_INFO, data);
+              this.context.commit(SET_CLASS_MEMBER_INFO, data);
               // console.log(this.memberInfo);
               return Promise.resolve(this.memberInfo);
           })
@@ -442,14 +467,11 @@ export default class ClassModule extends VuexModule {
     }
 
     @Action({rawError: true})
-    public [MODIFY_CLASS_MEMBER_INFO](payload: {classId: number, memberId: number}, data: object): Promise<IClassMemberInfo[]>{
-        //this.context.commit(SET_CLASS_ID, payload.classId);
-
+    public [MODIFY_CLASS_MEMBER_INFO](payload: {classId: number, memberId: number}, data: any): Promise<any>{
         return ClassMemberService.setClassMemberInfo(payload.classId, payload.memberId, data)
-          .then((info) => {
-              this.context.commit(SET_MEMBER_ID, payload.memberId);
-              this.context.commit(CLASS_MEMBER_INFO, info);
-              console.log(this.memberInfo);
+          .then(() => {
+              this.context.commit(SET_CLASS_MEMBER_INFO, data);
+              console.log('수정한 내용 = ', data);
               return Promise.resolve(this.memberInfo);
           })
           .catch((error) => {

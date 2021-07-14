@@ -17,9 +17,9 @@ import {
   DELETE_POST_ACTION,
   POST_TYPE_CHANGE_ACTION,
   GET_POST_DETAIL_ACTION,
-  GET_COMMENTS_ACTION,
-  ADD_COMMENT_ACTION,
-  ADD_REPLY_ACTION,
+  GET_POST_COMMENTS_ACTION,
+  ADD_POST_COMMENT_ACTION,
+  ADD_POST_REPLY_ACTION,
   SELECT_VOTE_ACTION,
   EDIT_POST_ACTION,
   EDIT_POST_TXT_ACTION,
@@ -134,11 +134,11 @@ export default class PostModule extends VuexModule {
     return this.postDetailData;
   }
 
-  get commentItems(): ICommentModel[] {
+  get postCommentItems(): ICommentModel[] {
     return this.commentData;
   }
 
-  get replyItems(): IReplyModel[] {
+  get postReplyItems(): IReplyModel[] {
     return this.replyData;
   }
 
@@ -502,7 +502,7 @@ export default class PostModule extends VuexModule {
   }
 
   @Action({rawError: true})
-  public [GET_COMMENTS_ACTION]( postId: number): Promise<any> {
+  public [GET_POST_COMMENTS_ACTION]( postId: number): Promise<any> {
     return CommentService.getCommentsByPostId(postId)
       .then((data) => {
         // console.log(data);
@@ -540,7 +540,7 @@ export default class PostModule extends VuexModule {
    * @param payload
    */
   @Action({rawError: true})
-  public [ADD_COMMENT_ACTION](payload: {parent_id: number, parent_type: number, member_id: number, comment: string}): Promise<any> {
+  public [ADD_POST_COMMENT_ACTION](payload: {parent_id: number, parent_type: number, member_id: number, comment: string}): Promise<any> {
     return CommentService.setAddComment(payload)
       .then((data) => {
         console.log(data.comment);
@@ -549,7 +549,7 @@ export default class PostModule extends VuexModule {
   }
 
   @Action({rawError: true})
-  public [ADD_REPLY_ACTION](payload: {comment_id: number, member_id: number, comment: string}): Promise<any> {
+  public [ADD_POST_REPLY_ACTION](payload: {comment_id: number, member_id: number, comment: string}): Promise<any> {
     return CommentService.setAddReply(payload)
       .then((data) => {
         console.log(data.commentreply);

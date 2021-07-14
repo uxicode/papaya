@@ -1,115 +1,114 @@
 <!-- start: 공통 팝업 / 파일명 : W.4.5.7.2 (클래스 프로필 설정) -->
 <section class="contents-right">
-    <div class="non-popup">
-        <div class="popup-header">
-            <p class="popup-header-tit">프로필 설정</p>
-            <div class="popup-close">
-                <button class="close" @click="goBack"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-            </div>
-        </div>
-
-        <div class="popup-body">
-            <div class="class-profile">
-                <ul class="profile-list">
-                    <li class="list-item">
-                        <div class="tb-style full">
-                            <div class="tb-cell list-tit">클래스 닉네임</div>
-                            <div class="tb-cell basic-info">
-                                <!-- basic-info-item에 class show -->
-                                <p class="basic-info-item show">{{ memberInfo.nickname }}</p>
-                                <button type="button" class="edit-btn" @click="openNicknameModal(memberInfo.nickname)"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
-                            </div>
-                        </div>
-                    </li>
-                    <li v-for="(item, idx) in profileDataList"
-                        :key="idx"
-                        class="list-item">
-                        <div class="tb-style full">
-                            <div class="tb-cell list-tit">{{ item.type }}</div>
-                            <div class="tb-cell basic-info">
-                                <p>{{ myInfo[item.data] }}</p>
-                                <div class="list-popup">
-                                    <v-menu
-                                            min-width="200px"
-                                            :close-on-click="true">
-                                        <template v-slot:activator="{ on, attrs }">
-                                            <button
-                                                    type="button"
-                                                    class="list-popup-btn"
-                                                    v-bind="attrs"
-                                                    v-on="on">
-                                                <span>{{ openLevelTxt(memberInfo[item.open]) }}</span>
-                                                <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
-                                            </button>
-                                        </template>
-                                        <v-list>
-                                            <v-list-item @click="openLevelModify(item.open, 0)">
-                                                <v-list-item-title>비공개</v-list-item-title>
-                                            </v-list-item>
-                                            <v-list-item @click="openLevelModify(item.open, 1)">
-                                                <v-list-item-title>전체 공개</v-list-item-title>
-                                            </v-list-item>
-                                            <v-list-item @click="openLevelModify(item.open, 2)">
-                                                <v-list-item-title>운영자에게만 공개</v-list-item-title>
-                                            </v-list-item>
-                                        </v-list>
-                                    </v-menu>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="popup-footer">
-            <div class="btn-group rt">
-                <btn type="outline" @btnClick="goBack">취소</btn>
-                <btn type="navi" @btnClick="goBack">저장</btn>
-            </div>
-        </div>
+  <div class="non-popup">
+    <div class="popup-header">
+      <p class="popup-header-tit">프로필 설정</p>
+      <div class="popup-close">
+        <button class="close" @click="goBack"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+      </div>
     </div>
 
-    <!-- start: 공통 팝업 / 파일명 : W.4.5.7.2.1 (클래스 프로필 설정 - 닉네임 변경) -->
-    <transition name="modal">
-        <modal v-if="isNicknameModify" size="540px" body-padding="0" @modalClose="isNicknameModify=false;">
-            <div slot="header">
-                <!-- header custom coding-->
-                <div class="popup-icon profile"></div>
-                <div class="popup-close">
-                    <button class="close" @click="isNicknameModify = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
-                </div>
+    <div class="popup-body">
+      <div class="class-profile">
+        <ul class="profile-list">
+          <li class="list-item">
+            <div class="tb-style full">
+              <div class="tb-cell list-tit">클래스 닉네임</div>
+              <div class="tb-cell basic-info">
+                <!-- basic-info-item에 class show -->
+                <p class="basic-info-item show">{{ classMemberInfo.nickname }}</p>
+                <button type="button" class="edit-btn" @click="openNicknameModal(classMemberInfo.nickname)"><img :src="require('@/assets/images/edit.svg')" alt=""></button>
+              </div>
             </div>
-            <div slot="body">
-                <!-- body custom coding-->
-                <div class="popup-cnt">
-                    <h2 class="popup-tit">클래스 닉네임 변경</h2>
-                    <p class="popup-txt">{{ myClassInfo.name }}에서 사용할 클래스 닉네임을 설정해 주세요.</p>
+          </li>
+          <li v-for="(item, idx) in profileDataList"
+              :key="idx"
+              class="list-item">
+            <div class="tb-style full">
+              <div class="tb-cell list-tit">{{ item.type }}</div>
+              <div class="tb-cell basic-info">
+                <p>{{ myInfo[item.data] }}</p>
+                <div class="list-popup">
+                  <v-menu
+                          min-width="200px"
+                          :close-on-click="true">
+                    <template v-slot:activator="{ on, attrs }">
+                      <button
+                              type="button"
+                              class="list-popup-btn"
+                              v-bind="attrs"
+                              v-on="on">
+                        <span>{{ openLevelTxt(classMemberInfo[item.open]) }}</span>
+                        <img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
+                      </button>
+                    </template>
+                    <v-list>
+                      <v-list-item @click="openLevelModify(item.open, 0)">
+                        <v-list-item-title>비공개</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item @click="openLevelModify(item.open, 1)">
+                        <v-list-item-title>전체 공개</v-list-item-title>
+                      </v-list-item>
+                      <v-list-item @click="openLevelModify(item.open, 2)">
+                        <v-list-item-title>운영자에게만 공개</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
 
-                    <div class="popup-input">
-                        <div class="form-group inline">
-                            <input type="text" class="form-control"
-                                   :class="{'error': isError,
-                                            'approval': isApproval}"
-                                   v-model="tempData"
-                                   style="width:370px;">
-                            <p v-if="showMessage" class="form-message"
-                               :class="{'error': isError, 'approval': isApproval}">{{ msg }}</p>
-                            <btn type="grey" size="sm" @btnClick="checkDuplicateNickname(tempData)">중복확인</btn>
-                        </div>
-                    </div>
-                </div>
+    <div class="popup-footer">
+      <div class="btn-group rt">
+        <btn type="outline" @btnClick="goBack">취소</btn>
+        <btn type="navi" @btnClick="saveData">저장</btn>
+      </div>
+    </div>
+  </div>
+
+  <!-- start: 공통 팝업 / 파일명 : W.4.5.7.2.1 (클래스 프로필 설정 - 닉네임 변경) -->
+  <transition name="modal">
+    <modal v-if="isNicknameModify" size="540px" body-padding="0" @modalClose="isNicknameModify=false;">
+      <div slot="header">
+        <!-- header custom coding-->
+        <div class="popup-icon profile"></div>
+        <div class="popup-close">
+          <button class="close" @click="isNicknameModify = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+        </div>
+      </div>
+      <div slot="body">
+        <!-- body custom coding-->
+        <div class="popup-cnt">
+          <h2 class="popup-tit">클래스 닉네임 변경</h2>
+          <p class="popup-txt">{{ myClassInfo.name }}에서 사용할 클래스 닉네임을 설정해 주세요.</p>
+
+          <div class="popup-input">
+            <div class="form-group inline">
+              <input type="text" class="form-control"
+                     :class="{'error': isError, 'approval': isApproval}"
+                     v-model="tempNickname"
+                     style="width:370px;">
+              <p v-if="showMessage" class="form-message"
+                 :class="{'error': isError, 'approval': isApproval}">{{ msg }}</p>
+              <btn type="grey" size="sm" @btnClick="checkDuplicateNickname(tempNickname)">중복확인</btn>
             </div>
-            <div slot="footer">
-                <!-- footer custom coding-->
-                <div class="btn-group rt">
-                    <btn type="outline" @btnClick="closeNicknameModal">취소</btn>
-                    <btn type="navi" :disabled="isError || tempData===memberInfo.nickname" @btnClick="modifyNickname(tempData)">확인</btn>
-                </div>
-            </div>
-        </modal>
-    </transition>
-    <!-- end: 공통 팝업 -->
+          </div>
+        </div>
+      </div>
+      <div slot="footer">
+        <!-- footer custom coding-->
+        <div class="btn-group rt">
+          <btn type="outline" @btnClick="closeNicknameModal">취소</btn>
+          <btn type="navi" :disabled="isError || tempNickname===classMemberInfo.nickname || !isApproval" @btnClick="modifyNickname(tempNickname)">확인</btn>
+        </div>
+      </div>
+    </modal>
+  </transition>
+  <!-- end: 공통 팝업 -->
 
 </section>
 <!-- end: 공통 팝업 -->
