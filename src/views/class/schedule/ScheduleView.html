@@ -2,9 +2,36 @@
   <div class="cnt-top">
     <h2 class="cnt-tit">일정</h2>
     <div class="pos-right">
-      <v-btn fab text small color="grey darken-2">
-        <v-icon>mdi-cog-outline</v-icon>
-      </v-btn>
+
+
+      <v-menu left bottom  min-width="200px" offset-x>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn fab text small
+                 color="grey darken-2"
+                 v-bind="attrs"
+                 v-on="on">
+            <v-icon>mdi-cog-outline</v-icon>
+          </v-btn>
+          <!--<v-btn
+                  rounded
+                  outlined
+                  v-bind="attrs"
+                  v-on="on"
+                  min-width="100px">
+            <span>{{ typeToLabel[type] }}</span>
+            <v-icon right>mdi-menu-down</v-icon>
+          </v-btn>-->
+        </template>
+        <v-list>
+          <v-list-item> <v-list-item-title> <p class="list-popup-tit">일정 색상 설정</p></v-list-item-title></v-list-item>
+          <v-list-item
+                  v-for="(item, index) in scheduleColor"
+                  :key="index"
+                  @click="onChangeColor( item )">
+            <v-list-item-title ><span class="color-mark pos-rel mgr-10" :style="{'background-color':item.color}"></span>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
   </div>
   <!-- start: 상단 컨트롤러 -->
@@ -121,4 +148,13 @@
            :is-open="isOpenDetailSch"
            @change="onDetailScheduleClose" @delete="onDeleteCheck"></schedule-detail-popup>
   <!-- end: 공통 팝업 -->
+  <confirm-popup
+          :is-open="isConfirmPopupOpen"
+          :title="updateConfirmTitle"
+          :msg="updateConfirmDesc"
+          @confirm="onConfirmClose"></confirm-popup>
+  <notice-popup :is-open="isNoticePopupOpen"
+                :title="updateNoticeTitle"
+                :msg="updateNoticeDesc"
+                @change="onNoticePopupClose"></notice-popup>
 </section>

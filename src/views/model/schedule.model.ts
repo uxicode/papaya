@@ -1,3 +1,4 @@
+import {PartialExcept} from '@/types/types';
 
 interface ITimeModel{
   apm: string;
@@ -59,10 +60,36 @@ interface IAddSchedule{
   evt_startAt: string;  //2021-05-04 18:27:00
   evt_endAt: string;
 }
+
 type NoticeScheduleModel = Pick<IScheduleTotal, 'title' | 'text' | 'updatedAt' | 'owner' | 'user_id'>;
+interface IScheduleOwner{
+  class_id: number;
+  createdAt: Date | string;
+  id: number;
+  is_bookmarked: number;
+  joinedAt: Date | string;
+  level: number;
+  nickname: string;
+  onoff_comment_noti: number;
+  onoff_post_noti: number;
+  onoff_push_noti: number;
+  onoff_schedule_noti: number;
+  open_level_email: number;
+  open_level_id: number;
+  open_level_mobileno: number;
+  profile_image: null | string;
+  schedule_color: number;
+  schedule_noti_intime: number;
+  status: number;
+  updatedAt: Date | string;
+  user_id: number;
+  visited: number;
+}
+
 export {
   ITimeModel,
   IScheduleTotal,
   NoticeScheduleModel,
-  IAddSchedule
+  IAddSchedule,
+  IScheduleOwner
 };

@@ -1,10 +1,8 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
-import {IScheduleTotal, ITimeModel } from '@/views/model/schedule.model';
-import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
+import {IScheduleOwner, IScheduleTotal, ITimeModel} from '@/views/model/schedule.model';
 import {CalendarEvent, CalendarEventParsed} from 'vuetify';
-import {Utils} from '@/utils/utils';
 import { RRule } from 'rrule';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 import Modal from '@/components/modal/modal.vue';
@@ -14,9 +12,13 @@ import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import AddSchedule from '@/views/class/schedule/AddSchedule';
 import ScheduleDetailPopup from '@/views/class/schedule/ScheduleDetailPopup';
+import ConfirmPopup from '@/components/modal/confirmPopup.vue';
+import NoticePopup from '@/components/modal/noticePopup.vue';
+import UserService from '@/api/service/UserService';
+import {IUserMe} from '@/api/model/user.model';
 import WithRender from './ScheduleView.html';
-import {SET_SCHEDULE_DETAIL} from '@/store/mutation-class-types';
 
+const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
 const Schedule = namespace('Schedule');
 
@@ -30,12 +32,16 @@ const Schedule = namespace('Schedule');
         ImagePreview,
         FilePreview,
         AddSchedule,
-        ScheduleDetailPopup
+        ScheduleDetailPopup,
+        ConfirmPopup,
+        NoticePopup
     }
 })
 export default class ScheduleView extends Vue{
 
 
+    @Auth.Action
+    private USER_ME_ACTION!: ()=>Promise<IUserMe>;
 
     @Schedule.Mutation
     private SET_SCHEDULE_DETAIL!: ( data: IScheduleTotal )=> void;
@@ -56,14 +62,15 @@ export default class ScheduleView extends Vue{
     @Schedule.Getter
     private scheduleListItems!: IScheduleTotal[];
 
+    @Auth.Getter
+    private userInfo!: IUserMe;
 
-
-    private imgFileURLItems: string[] = [];
-    private imgFileDatas: any[] = [];
+    // private imgFileURLItems: string[] = [];
+    // private imgFileDatas: any[] = [];
 
     private attachFileItems: any[] = [];
-    private formData!: FormData;
-    private imageLoadedCount: number=0;
+    // private formData!: FormData;
+    // private imageLoadedCount: number=0;
     private isOpenAddSch: boolean=false;
     private isOpenDetailSch: boolean= false;
     // private isTimeSelect: boolean=false;
@@ -78,9 +85,10 @@ export default class ScheduleView extends Vue{
         { text: 'Mon, Wed, Fri', value: [1, 3, 5] },
     ];*/
 
-    private selectedEvent ={};
-    private selectedElement: HTMLElement | null=null;
+    // private selectedEvent ={};
+    // private selectedElement: HTMLElement | null=null;
     private selectedOpen: boolean= false;
+
 
     private typeToLabel = {
         'month': '월간',
@@ -107,7 +115,7 @@ export default class ScheduleView extends Vue{
 
     private startDate: string | number | Date = '';
     private endDate: string | number | Date = '';
-    private isFocusContentsArea: boolean=true;
+    // private isFocusContentsArea: boolean=true;
 
 
     private colors: string[] = [
@@ -123,7 +131,24 @@ export default class ScheduleView extends Vue{
         '#ADC500',
         '#629F00'
     ];
+    private scheduleColor: Array<{id: number, color: string, title: string}>=[
+        {id:0, color: '#8d2600', title: '석류'},
+        {id:1, color: '#f9862a', title: '파파야'},
+        {id:2, color: '#f5b300', title: '귤'},
+        {id:3, color: '#ffd100', title: '바나나'},
+        {id:4, color: '#d8d029', title: '아보카도'},
+        {id:5, color: '#adc500', title: '라임'},
+    ];
+
+    private selectedColor: {id: number, color: string, title: string} = {id:-1, color:'', title:''};
     private loopRangeCount: number | string=10;
+    private noticeTitle: string = '';
+    private confirmTitle: string = '';
+    private noticeDesc: string = '';
+    private confirmDesc: string = '';
+    private isConfirmPopupOpen: boolean=false;
+    private isNoticePopupOpen: boolean=false;
+
     private scheduleData: {
         repeat_type: number,
         repeat_count: number,
@@ -142,8 +167,20 @@ export default class ScheduleView extends Vue{
         endAt: new Date()
     };
 
-    get imgFileDatasModel(): any[] {
-        return this.imgFileDatas;
+    get updateNoticeTitle(): string{
+        return this.noticeTitle;
+    }
+
+    get updateNoticeDesc(): string{
+        return this.noticeDesc;
+    }
+
+    get updateConfirmTitle(): string{
+        return this.confirmTitle;
+    }
+
+    get updateConfirmDesc(): string{
+        return this.confirmDesc;
     }
 
     get attachFileItemsModel(): any[] {
@@ -180,6 +217,8 @@ export default class ScheduleView extends Vue{
             getFormatter: (format: any) => any
         };
     }
+
+
 
     public async created(){
 
@@ -304,15 +343,102 @@ export default class ScheduleView extends Vue{
         // console.log(this.scheduleListsModel[idx]);
         // console.log(this.scheduleListsModel.length, this.events.length);
         const { startAt, endAt, title, text, owner, count, id }=this.scheduleListsModel[idx];
+        const scheduleColorVal=this.getOwnerScheduleColor(owner);
         this.events.push({
             name: title,
             details: text,
-            color: this.colors[ owner? owner.schedule_color : 0 ],
+            color: this.scheduleColor[ scheduleColorVal? scheduleColorVal : 0 ].color,
             start: new Date(startAt),
             end: new Date( endAt ),
             repeat: count,
             timed:true,
             id, // schedule_id (parent_id)
+        });
+    }
+
+    /**
+     * 스케쥴의 소유자인지 체크 후에송 user schedule_color 변경
+     * @param owner
+     * @private
+     */
+    private getOwnerScheduleColor( owner: IScheduleOwner ): number {
+        return  this.getIsOwner(owner.user_id)? this.userInfo.schedule_color : owner.schedule_color;
+    }
+
+    /**
+     * 캘린더의 소유자인지 체크
+     * @param userId
+     * @private
+     */
+    private getIsOwner( userId: number  ): boolean {
+        return (this.userInfo.id === userId);
+    }
+
+    private onChangeColor( item: {id: number, color: string, title: string}) {
+        this.isConfirmPopupOpen=true;
+        this.confirmTitle = '일정 색상 변경';
+        this.confirmDesc = `선택하신 ${item.title} 컬러로 변경하시겠습니다까?`;
+        this.selectedColor=item;
+    }
+
+
+    private onConfirmClose( result: boolean) {
+        this.isConfirmPopupOpen=false;
+        if (result) {
+            this.changeScheduleColor( this.selectedColor )
+              .then(( msg: string | undefined )=>{
+                  console.log('컬러 변경=', msg );
+                  this.isNoticePopupOpen=true;
+                  this.confirmTitle ='';
+                  this.confirmDesc ='';
+                  this.noticeTitle = '일정 색상 변경 완료';
+                  this.noticeDesc = '선택하신 색상으로 변경 되었습니다.';
+              });
+        }
+    }
+
+    private onNoticePopupClose( value: boolean ) {
+        this.isNoticePopupOpen=value;
+        if (!value) {
+            this.noticeTitle = '';
+            this.noticeDesc = '';
+        }
+    }
+
+    private async changeScheduleColor( item: {id: number, color: string, title: string} ) {
+        if( this.userInfo ){
+            console.log('this.userInfo=', this.userInfo);
+            const {user_id}=this.userInfo;
+            try {
+
+                //user info 수정
+                await UserService.setUserInfo(user_id, {schedule_color: item.id})
+                  .then((data)=>{
+                      console.log('컬러 변경=', data);
+                  });
+                //userMe 데이터 갱신 시킴.
+                await this.USER_ME_ACTION()
+                  .then((data)=>{
+                      this.updateOwnerScheduleColor();
+                  });
+                return Promise.resolve('success');
+            } catch (error){
+                return Promise.reject(error);
+            }
+
+        }
+    }
+
+    /**
+     * 캘린더에 지정된 컬러를 재지정해서 엘리먼트 컬러값을 변경( re-render )한다.
+     * @private
+     */
+    private updateOwnerScheduleColor() {
+        this.events.forEach( ( item, idx)=>{
+            const { owner }=this.scheduleListsModel[idx];
+            const scheduleColorVal=this.getOwnerScheduleColor(owner);
+            const color=this.scheduleColor[ scheduleColorVal? scheduleColorVal : 0 ].color;
+            this.events.splice( idx, 1, {...item, color});
         });
     }
 
@@ -366,6 +492,8 @@ export default class ScheduleView extends Vue{
         this.createStart = event.start;
         this.extendOriginal = event.end;
     }
+
+
     /**
      * 일정 생성 데이터 초기화
      * @private
