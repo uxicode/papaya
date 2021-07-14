@@ -44,7 +44,7 @@ export default class ScheduleView extends Vue{
     private GET_SCHEDULE_ACTION!: (payload: { classId: number,  paging: {page_no: number, count: number } }) => Promise<any>;
 
     @Schedule.Action
-    private GET_COMMENTS_ACTION!: (scheduleId: number) => Promise<any>;
+    private GET_SCHEDULE_COMMENTS_ACTION!: (scheduleId: number) => Promise<any>;
 
     @MyClass.Getter
     private classID!: string | number;
@@ -281,7 +281,7 @@ export default class ScheduleView extends Vue{
                 //SET_SCHEDULE_DETAIL
                 this.SET_SCHEDULE_DETAIL( this.scheduleListsModel[findIdx] );
 
-                this.GET_COMMENTS_ACTION(id)
+                this.GET_SCHEDULE_COMMENTS_ACTION(id)
                   .then(() => {
                       // console.log(this.selectedEvent);
                   });

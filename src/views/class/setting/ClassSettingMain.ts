@@ -26,10 +26,10 @@ export default class ClassSettingMain extends Vue{
     private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
 
     @MyClass.Action
-    private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo>;
+    private GET_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo>;
 
     @MyClass.Action
-    private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<IClassMemberInfo>;
+    private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<any>;
 
     @MyClass.Action
     private MODIFY_CLASS_QUESTION!: (payload: {classId: number, questionId: number}, text: {new_question: string}) => Promise<IQuestionInfo[]>;
@@ -152,7 +152,7 @@ export default class ClassSettingMain extends Vue{
      * @private
      */
     private getMyClassMemberInfo(): void {
-        this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.myClassInfo.me.id})
+        this.GET_CLASS_MEMBER_INFO({classId: this.classID, memberId: this.myClassInfo.me.id})
           .then((data: any) => {
               this.classMemberInfo = data.member_info;
 

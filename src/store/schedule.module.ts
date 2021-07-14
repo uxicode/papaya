@@ -9,9 +9,9 @@ import {
 import {
   GET_SCHEDULE_ACTION,
   GET_SCHEDULE_DETAIL_ACTION,
-  GET_COMMENTS_ACTION,
-  ADD_COMMENT_ACTION,
-  ADD_REPLY_ACTION,
+  GET_SCHEDULE_COMMENTS_ACTION,
+  ADD_SCHEDULE_COMMENT_ACTION,
+  ADD_SCHEDULE_REPLY_ACTION,
   ADD_SCHEDULE_ACTION,
   DELETE_SCHEDULE_ACTION
 } from '@/store/action-class-types';
@@ -86,11 +86,11 @@ export default class ScheduleModule extends VuexModule {
     return this.scheduleDetailData;
   }
 
-  get commentItems(): ICommentModel[] {
+  get scheduleCommentItems(): ICommentModel[] {
     return this.commentData;
   }
 
-  get replyItems(): IReplyModel[] {
+  get scheduleReplyItems(): IReplyModel[] {
     return this.replyData;
   }
 
@@ -188,7 +188,7 @@ export default class ScheduleModule extends VuexModule {
   }
 
   @Action({rawError: true})
-  public [GET_COMMENTS_ACTION]( scheduleId: number): Promise<any> {
+  public [GET_SCHEDULE_COMMENTS_ACTION]( scheduleId: number): Promise<any> {
     return CommentService.getCommentsByScheduleId(scheduleId)
         .then((data) => {
           // console.log(data);
@@ -221,7 +221,7 @@ export default class ScheduleModule extends VuexModule {
    * @param payload
    */
   @Action({rawError: true})
-  public [ADD_COMMENT_ACTION](payload: {parent_id: number, parent_type: number, member_id: number, comment: string}): Promise<any> {
+  public [ADD_SCHEDULE_COMMENT_ACTION](payload: {parent_id: number, parent_type: number, member_id: number, comment: string}): Promise<any> {
     return CommentService.setAddComment(payload)
         .then((data) => {
           console.log(data.comment);
@@ -230,7 +230,7 @@ export default class ScheduleModule extends VuexModule {
   }
 
   @Action({rawError: true})
-  public [ADD_REPLY_ACTION](payload: {comment_id: number, member_id: number, comment: string}): Promise<any> {
+  public [ADD_SCHEDULE_REPLY_ACTION](payload: {comment_id: number, member_id: number, comment: string}): Promise<any> {
     return CommentService.setAddReply(payload)
         .then((data) => {
           console.log(data.commentreply);

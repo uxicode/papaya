@@ -29,7 +29,7 @@ import {
     KEEP_POST_LIST_ACTION,
     MAKE_CLASS,
     MYCLASS_HOME,
-    CLASS_MEMBER_INFO_ACTION,
+    GET_CLASS_MEMBER_INFO,
     MODIFY_CLASS_MEMBER_INFO,
     GET_CURRICULUM_LIST_ACTION,
     GET_CURRICULUM_DETAIL_ACTION,
@@ -295,6 +295,10 @@ export default class ClassModule extends VuexModule {
         return this.sideMenuNum;
     }
 
+    get memberInfoModel(): IClassMemberInfo {
+        return this.memberInfo;
+    }
+
     /* Mutations */
     @Mutation
     public [UPDATE_SIDE_NUM](num: number): void{
@@ -449,8 +453,7 @@ export default class ClassModule extends VuexModule {
     }
 
     @Action({rawError: true})
-    public [CLASS_MEMBER_INFO_ACTION](payload: { classId: number, memberId: number }): Promise<IClassMemberInfo>{
-
+    public [GET_CLASS_MEMBER_INFO](payload: { classId: number, memberId: number }): Promise<IClassMemberInfo>{
         return ClassMemberService.getClassMemberInfo(payload.classId, payload.memberId)
           .then((data) => {
               this.context.commit(SET_CLASS_MEMBER_INFO, data);
@@ -464,7 +467,7 @@ export default class ClassModule extends VuexModule {
     }
 
     @Action({rawError: true})
-    public [MODIFY_CLASS_MEMBER_INFO](payload: {classId: number, memberId: number}, data: any): Promise<IClassMemberInfo>{
+    public [MODIFY_CLASS_MEMBER_INFO](payload: {classId: number, memberId: number}, data: any): Promise<any>{
         return ClassMemberService.setClassMemberInfo(payload.classId, payload.memberId, data)
           .then(() => {
               this.context.commit(SET_CLASS_MEMBER_INFO, data);

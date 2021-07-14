@@ -12,8 +12,8 @@ const MyClass = namespace('MyClass');
 
 interface IProfileData {
     type: string;
-    data: any;
-    open: any;
+    data: string;
+    open: string;
 }
 
 @WithRender
@@ -26,10 +26,10 @@ interface IProfileData {
 
 export default class ClassProfile extends Vue {
     @MyClass.Action
-    private CLASS_MEMBER_INFO_ACTION!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo[]>;
+    private GET_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}) => Promise<IClassMemberInfo>;
 
     @MyClass.Action
-    private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<IClassMemberInfo[]>;
+    private MODIFY_CLASS_MEMBER_INFO!: (payload: {classId: number, memberId: number}, data: any) => Promise<any>;
 
     @Auth.Getter
     private userInfo!: IUserMe;
@@ -84,7 +84,7 @@ export default class ClassProfile extends Vue {
      * @private
      */
     private getClassMemberInfo(): void {
-        this.CLASS_MEMBER_INFO_ACTION({classId: this.classID, memberId: this.myClassInfo.me.id})
+        this.GET_CLASS_MEMBER_INFO({classId: this.classID, memberId: this.myClassInfo.me.id})
           .then((data: any) => {
               console.log(`classId = ${this.classID}, memberId = ${this.myClassInfo.me.id}`);
               this.classMemberInfo = data.member_info;
