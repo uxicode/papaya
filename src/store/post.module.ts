@@ -348,7 +348,7 @@ export default class PostModule extends VuexModule {
     });
   }
 
-  @Action
+  @Action({rawError: true})
   public [GET_POST_DETAIL_ACTION](payload: { classId: number, postId: number }): Promise<any>{
     const {classId, postId}=payload;
 
@@ -365,7 +365,7 @@ export default class PostModule extends VuexModule {
       });
   }
 
-  @Action
+  @Action({rawError: true})
   public [EDIT_POST_ACTION](payload: { promise: Array<Promise<any>> }): Promise<any>{
     const {promise} = payload;
 

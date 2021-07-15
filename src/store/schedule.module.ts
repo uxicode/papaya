@@ -15,7 +15,7 @@ import {
   ADD_SCHEDULE_ACTION,
   DELETE_SCHEDULE_ACTION
 } from '@/store/action-class-types';
-import {IScheduleTotal} from '@/views/model/schedule.model';
+import {IScheduleDetail, IScheduleTotal} from '@/views/model/schedule.model';
 import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
 import {PostService} from '@/api/service/PostService';
 import {ScheduleService} from '@/api/service/ScheduleService';
@@ -29,8 +29,7 @@ export default class ScheduleModule extends VuexModule {
 
   /* State */
   private scheduleListData: IScheduleTotal[] = [];
-  private scheduleDetailData: IScheduleTotal = {
-    attachment: [],
+  private scheduleDetailData: IScheduleDetail = {
     board_id: 0,
     class_id: 0,
     count: 0,
@@ -70,8 +69,32 @@ export default class ScheduleModule extends VuexModule {
     type: 0,
     updatedAt: '',
     user_id: 0,
+    attachment: [],
     user_keep_class_schedules: [],
     user_member_id: 0,
+    me: {
+      joinedAt: '',
+      createdAt: '',
+      updatedAt: '',
+      id: 0,
+      class_id: 0,
+      user_id: 0,
+      nickname: '',
+      profile_image: '',
+      is_bookmarked: 0,
+      schedule_color: 0,
+      level: 0,
+      status: 0,
+      open_level_id: 0,
+      open_level_mobileno: 0,
+      open_level_email: 0,
+      onoff_push_noti: 0,
+      onoff_post_noti: 0,
+      onoff_comment_noti: 0,
+      onoff_schedule_noti: 0,
+      schedule_noti_intime: 0,
+      visited: 0,
+    }
   };
 
   private commentData: ICommentModel[] = [];
@@ -82,7 +105,7 @@ export default class ScheduleModule extends VuexModule {
     return this.scheduleListData;
   }
 
-  get scheduleDetailItem(): IScheduleTotal {
+  get scheduleDetailItem(): IScheduleDetail {
     return this.scheduleDetailData;
   }
 
@@ -101,6 +124,11 @@ export default class ScheduleModule extends VuexModule {
   }
 
   @Mutation
+  public [SET_SCHEDULE_DETAIL]( data: IScheduleDetail ){
+    this.scheduleDetailData=data;
+  }
+
+  @Mutation
   public [SET_COMMENTS](data: any){
     this.commentData=data;
   }
@@ -110,10 +138,6 @@ export default class ScheduleModule extends VuexModule {
     this.replyData=data;
   }
 
-  @Mutation
-  public [SET_SCHEDULE_DETAIL]( data: IScheduleTotal ){
-    this.scheduleDetailData=data;
-  }
 
 
   @Mutation
@@ -158,7 +182,6 @@ export default class ScheduleModule extends VuexModule {
   @Action({rawError: true})
   public async [ADD_SCHEDULE_ACTION](payload: { classId: number, formData: FormData }): Promise<any>{
     const {classId, formData}=payload;
-
    /*
    schedule:{
     class_id: 750

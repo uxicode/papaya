@@ -17,6 +17,8 @@ import NoticePopup from '@/components/modal/noticePopup.vue';
 import UserService from '@/api/service/UserService';
 import {IUserMe} from '@/api/model/user.model';
 import WithRender from './ScheduleView.html';
+import {GET_SCHEDULE_DETAIL_ACTION} from '@/store/action-class-types';
+
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
@@ -39,7 +41,6 @@ const Schedule = namespace('Schedule');
 })
 export default class ScheduleView extends Vue{
 
-
     @Auth.Action
     private USER_ME_ACTION!: ()=>Promise<IUserMe>;
 
@@ -47,10 +48,13 @@ export default class ScheduleView extends Vue{
     private SET_SCHEDULE_DETAIL!: ( data: IScheduleTotal )=> void;
 
     @Schedule.Action
-    private GET_SCHEDULE_ACTION!: (payload: { classId: number,  paging: {page_no: number, count: number } }) => Promise<any>;
+    private GET_SCHEDULE_DETAIL_ACTION!: (payload: { classId: number, scheduleId: number })=>Promise<any>;
 
     @Schedule.Action
-    private GET_SCHEDULE_COMMENTS_ACTION!: (scheduleId: number) => Promise<any>;
+    private GET_SCHEDULE_ACTION!: ( payload: { classId: number,  paging: {page_no: number, count: number } }) => Promise<any>;
+
+    @Schedule.Action
+    private GET_SCHEDULE_COMMENTS_ACTION!: ( scheduleId: number ) => Promise<any>;
 
     @MyClass.Getter
     private classID!: string | number;
@@ -84,12 +88,9 @@ export default class ScheduleView extends Vue{
         { text: 'Mon - Fri', value: [1, 2, 3, 4, 5] },
         { text: 'Mon, Wed, Fri', value: [1, 3, 5] },
     ];*/
-
     // private selectedEvent ={};
     // private selectedElement: HTMLElement | null=null;
     private selectedOpen: boolean= false;
-
-
     private typeToLabel = {
         'month': '월간',
         'week': '주간',
@@ -112,12 +113,9 @@ export default class ScheduleView extends Vue{
         end: number,
         timed: boolean
     } | null | undefined;
-
     private startDate: string | number | Date = '';
     private endDate: string | number | Date = '';
     // private isFocusContentsArea: boolean=true;
-
-
     private colors: string[] = [
         '#FF4D4D',
         '#191955',
@@ -139,7 +137,6 @@ export default class ScheduleView extends Vue{
         {id:4, color: '#d8d029', title: '아보카도'},
         {id:5, color: '#adc500', title: '라임'},
     ];
-
     private selectedColor: {id: number, color: string, title: string} = {id:-1, color:'', title:''};
     private loopRangeCount: number | string=10;
     private noticeTitle: string = '';
@@ -148,7 +145,6 @@ export default class ScheduleView extends Vue{
     private confirmDesc: string = '';
     private isConfirmPopupOpen: boolean=false;
     private isNoticePopupOpen: boolean=false;
-
     private scheduleData: {
         repeat_type: number,
         repeat_count: number,
@@ -166,27 +162,21 @@ export default class ScheduleView extends Vue{
         startAt:new Date(),  //2019-11-15 10:00:00
         endAt: new Date()
     };
-
     get updateNoticeTitle(): string{
         return this.noticeTitle;
     }
-
     get updateNoticeDesc(): string{
         return this.noticeDesc;
     }
-
     get updateConfirmTitle(): string{
         return this.confirmTitle;
     }
-
     get updateConfirmDesc(): string{
         return this.confirmDesc;
     }
-
     get attachFileItemsModel(): any[] {
         return this.attachFileItems;
     }
-
     get scheduleListsModel(): IScheduleTotal[]{
         return this.scheduleListItems;
     }
@@ -196,11 +186,9 @@ export default class ScheduleView extends Vue{
     get endDateModel(): string | Date | number{
         return this.endDate;
     }
-
     get scheduleEvents(): any[] {
         return this.events;
     }
-
     get calendarInstance(): Vue & {
         prev: () => void,
         next: () => void,
@@ -247,7 +235,7 @@ export default class ScheduleView extends Vue{
 
         setTimeout(() => {
             this.scheduleListsModel.forEach((item, idx )=>{
-                console.log(idx);
+                // console.log(idx);
                 this.addScheduleEvent(idx);
             });
 
@@ -277,7 +265,8 @@ export default class ScheduleView extends Vue{
             // this.selectedElement = eventObj.nativeEvent.target as HTMLElement;
 
             const {id}=eventObj.event;
-            const findIdx = this.scheduleListsModel.findIndex((item) => item.id === id);
+            console.log('캘린더 id=', id);
+            // const findIdx = this.scheduleListsModel.findIndex((item) => item.id === id);
             setTimeout(() => {
                 this.selectedOpen = true;
 
@@ -287,7 +276,11 @@ export default class ScheduleView extends Vue{
                 header.classList.add('none-index');
 
                 //SET_SCHEDULE_DETAIL
-                this.SET_SCHEDULE_DETAIL( this.scheduleListsModel[findIdx] );
+                // this.SET_SCHEDULE_DETAIL( this.scheduleListsModel[findIdx] );
+                this.GET_SCHEDULE_DETAIL_ACTION( {classId: Number(this.classID), scheduleId: id })
+                  .then( (data)=>{
+                      console.log('캘린더 상세보기');
+                  });
 
                 this.GET_SCHEDULE_COMMENTS_ACTION(id)
                   .then(() => {
@@ -373,15 +366,12 @@ export default class ScheduleView extends Vue{
     private getIsOwner( userId: number  ): boolean {
         return (this.userInfo.id === userId);
     }
-
     private onChangeColor( item: {id: number, color: string, title: string}) {
         this.isConfirmPopupOpen=true;
         this.confirmTitle = '일정 색상 변경';
         this.confirmDesc = `선택하신 ${item.title} 컬러로 변경하시겠습니다까?`;
         this.selectedColor=item;
     }
-
-
     private onConfirmClose( result: boolean) {
         this.isConfirmPopupOpen=false;
         if (result) {
@@ -396,7 +386,6 @@ export default class ScheduleView extends Vue{
               });
         }
     }
-
     private onNoticePopupClose( value: boolean ) {
         this.isNoticePopupOpen=value;
         if (!value) {
@@ -404,7 +393,6 @@ export default class ScheduleView extends Vue{
             this.noticeDesc = '';
         }
     }
-
     private async changeScheduleColor( item: {id: number, color: string, title: string} ) {
         if( this.userInfo ){
             console.log('this.userInfo=', this.userInfo);
@@ -425,10 +413,8 @@ export default class ScheduleView extends Vue{
             } catch (error){
                 return Promise.reject(error);
             }
-
         }
     }
-
     /**
      * 캘린더에 지정된 컬러를 재지정해서 엘리먼트 컬러값을 변경( re-render )한다.
      * @private
@@ -441,29 +427,24 @@ export default class ScheduleView extends Vue{
             this.events.splice( idx, 1, {...item, color});
         });
     }
-
     private addScheduleClose( value: boolean ) {
         this.isOpenAddSch=false;
     }
     private updatePopup(isOpen: boolean) {
         this.isOpenAddSch=isOpen;
     }
-
     private addScheduleOpen(): void{
         const header=document.querySelector('header') as HTMLElement;
         header.classList.add('none-index');
         this.updatePopup(true);
     }
-
     private onDeleteCheck( scheduleId: number) {
         const findIdx=this.events.findIndex((item)=> item.id === scheduleId );
         this.deleteScheduleEvent(findIdx);
     }
-
     private deleteScheduleEvent(idx: number) {
         this.events.splice(idx, 1);
     }
-
     private onDetailScheduleClose(val: boolean) {
         this.isOpenDetailSch=val;
         const header=document.querySelector('header') as HTMLElement;
@@ -492,8 +473,6 @@ export default class ScheduleView extends Vue{
         this.createStart = event.start;
         this.extendOriginal = event.end;
     }
-
-
     /**
      * 일정 생성 데이터 초기화
      * @private
@@ -515,21 +494,15 @@ export default class ScheduleView extends Vue{
         // console.log(this.loopRangeCount);
     }
 
-
     private viewMoreDay( data: { date: any }) {
         this.calendarModel = data.date;
-
         // console.log(data);
         // this.type = 'day';
     }
 
-
-
-
     private getProfileImg(imgUrl: string | null | undefined ): string{
         return ImageSettingService.getProfileImg( imgUrl );
     }
-
 
  /*   private startTimeChange(){
         console.log(this.currentStartTimeModel);

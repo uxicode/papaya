@@ -2,19 +2,16 @@ import {Component, Mixins, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import UtilsMixins from '@/mixin/UtilsMixins';
 import {IClassInfo} from '@/views/model/my-class.model';
-import {IAddSchedule, ITimeModel} from '@/views/model/schedule.model';
+import {IAddSchedule, IScheduleDetail, ITimeModel} from '@/views/model/schedule.model';
 import {ImageFileService} from '@/views/service/preview/ImageFileService';
 import {AttachFileService} from '@/views/service/preview/AttachFileService';
-import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
-import {ADD_SCHEDULE_ACTION} from '@/store/action-class-types';
+import WithRender from './EditSchedule.html';
 import {Utils} from '@/utils/utils';
-import WithRender from './AddSchedule.html';
-
 
 const MyClass = namespace('MyClass');
 const Schedule = namespace('Schedule');
@@ -29,13 +26,16 @@ const Schedule = namespace('Schedule');
     ImagePreview
   }
 })
-export default class AddSchedule extends Mixins(UtilsMixins) {
+export default class EditSchedule extends Mixins(UtilsMixins) {
 
   @Prop(Boolean)
   private isOpen!: boolean;
 
   @Schedule.Action
   private ADD_SCHEDULE_ACTION!: (payload: { classId: number, formData: FormData }) => Promise<any>;
+
+  @Schedule.Getter
+  private scheduleDetailItem!: IScheduleDetail;
 
   @MyClass.Getter
   private classID!: string | number;
@@ -64,7 +64,15 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
 
   private loopRangeModel: string = '반복없음';
-  private loopRangeItems: string[] = ['반복없음', '매일', '매주', '매월', '매년'];
+  //0 - 없음 , 1 - 매일 , 2 - 매주 , 3 - 2주마다 , 4 - 매월 , 5 - 매년
+  private loopRangeItems: Array<{id: number, txt: string}>= [
+    {id:0, txt:'반복없음'},
+    {id:1, txt:'매일'},
+    {id:2, txt:'매주'},
+    {id:3, txt:'2주마다'},
+    {id:4, txt:'매월'},
+    {id:5, txt:'매년'}
+    ];
   private loopRangeCheck: boolean=false;
   private loopRangeCount: number | string=10;
 
@@ -80,7 +88,7 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   }
 
 
-  get currentLoopRangeItems(): string[]{
+  get currentLoopRangeItems(): Array<{id: number, txt: string}>{
     return this.loopRangeItems;
   }
 
@@ -90,6 +98,67 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
 
   get currentEndTimeModel(): string{
     return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
+  }
+
+
+  /**
+   * 클릭한 상세 정보값이 들어오고 난 후에 postData 를 갱신해야 한다.
+   */
+  get scheduleDetailModel(): IScheduleDetail{
+    const { startAt, endAt, id, title, text, count, attachment, param1, type }=this.scheduleDetailItem;
+    // this.alarmData = { alarmAt };
+    this.scheduleData={
+      title,
+      body:text,
+      repeat_type: type,   //0 - 없음 , 1 - 매일 , 2 - 매주 , 3 - 2주마다 , 4 - 매월 , 5 - 매년
+      fullday: param1,
+      repeat_count: count,
+      evt_endAt: endAt,
+      evt_startAt: startAt
+    };
+    /*this.scheduleData.title=title;
+    this.scheduleData.body=text;
+    this.scheduleData.repeat_type=type;
+    this.scheduleData.fullday=param1;
+    this.scheduleData.repeat_count=count;*/
+
+    const findIdx=this.loopRangeItems.findIndex(( item: {id: number, txt: string})=>{
+      return item.id===this.scheduleData.repeat_type;
+    });
+    this.loopRangeModel=this.loopRangeItems[findIdx].txt;
+    this.loopRangeCount=count;
+
+
+    //여기 startAt-->startTimeSelectModel, endAt---> endTimeSelectModel 전환 하는 작업 필요.
+    const startFullDate=new Date(startAt);
+    this.startDatePickerModel=startFullDate.toISOString().substr(0, 10);
+    this.startTimeSelectModel.apm=Utils.getAmPm( startFullDate );
+    this.startTimeSelectModel.hour=Utils.getHours(true, startFullDate );
+    this.startTimeSelectModel.minute=Utils.getMinutes( startFullDate );
+
+    console.log(startFullDate, this.startTimeSelectModel);
+
+
+    const endFullDate=new Date(endAt);
+    this.endDatePickerModel=endFullDate.toISOString().substr(0, 10);
+    this.endTimeSelectModel.apm=Utils.getAmPm( endFullDate );
+    this.endTimeSelectModel.hour=Utils.getHours(true, endFullDate );
+    this.endTimeSelectModel.minute=Utils.getMinutes( endFullDate );
+
+    // this.scheduleData= { title, text };
+
+    if (attachment.length && attachment.length>0) {
+      //이미지 파일이 있을 시 화면에 로드 시켜둠  //imgPreviewInit : mixin 에 정의됨.
+      this.imgFileService.setAttachItems( this.imgPreviewInit(attachment) );
+      //첨부파일 있을시 화면에 로드 시켜둠 //attachFilePreviewInit : mixin 에 정의됨.
+      this.attachFileService.setAttachItems( this.attachFilePreviewInit( attachment) );
+    }
+
+    return this.scheduleDetailItem;
+  }
+
+  get scheduleDataModel() {
+    return this.scheduleData;
   }
 
 
@@ -253,7 +322,7 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
    * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
    * @private
    */
-  private submitAddSchedule(): void{
+  private submitEditSchedule(): void{
     //시나리오 --> 등록 버튼 클릭 > 이미지 추가한 배열값 formdata에 입력 > 전송 >전송 성공후> filesAllClear 호출 > 팝업 닫기
     //이미지 파일 저장.
     this.imgFileService.save( this.formData );

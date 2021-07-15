@@ -2,7 +2,8 @@ import {Component, Mixins, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import UtilsMixins from '@/mixin/UtilsMixins';
 import {IClassInfo} from '@/views/model/my-class.model';
-import {IScheduleTotal} from '@/views/model/schedule.model';
+import {IScheduleDetail, IScheduleTotal} from '@/views/model/schedule.model';
+import MyClassService from '@/api/service/MyClassService';
 import {Utils} from '@/utils/utils';
 import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -14,7 +15,7 @@ import ConfirmPopup from '@/components/modal/confirmPopup.vue';
 import NoticePopup from '@/components/modal/noticePopup.vue';
 import CommentArea from '@/components/comment/CommentArea.vue';
 import CommentBtm from '@/components/comment/CommentBtm.vue';
-import MyClassService from '@/api/service/MyClassService';
+import EditSchedule from '@/views/class/schedule/EditSchedule';
 import WithRender from './ScheduleDetailPopup.html';
 
 const MyClass = namespace('MyClass');
@@ -33,6 +34,7 @@ const Schedule = namespace('Schedule');
     NoticePopup,
     CommentArea,
     CommentBtm,
+    EditSchedule
   }
 })
 export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
@@ -61,13 +63,14 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
   private myClassHomeModel!: IClassInfo;
 
   @Schedule.Getter
-  private scheduleDetailItem!: IScheduleTotal;
+  private scheduleDetailItem!: IScheduleDetail;
 
   private currentUserAuth: number=-1;
   private isPhotoViewer: boolean = false;
   private isConfirmPopupOpen: boolean=false;
   private isNoticePopupOpen: boolean=false;
   private deleteId: number=-1;
+  private isEditPopupOpen: boolean=false;
 
   get scheduleDetailModel(): IScheduleTotal{
     return this.scheduleDetailItem;
@@ -151,6 +154,14 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
 
   private onPhotoViewerStatus(value: boolean) {
     this.isPhotoViewer = value;
+  }
+
+  private onEditSchedule() {
+    this.isEditPopupOpen=true;
+  }
+
+  private onEditClose(value: boolean) {
+    this.isEditPopupOpen=false;
   }
 
 }
