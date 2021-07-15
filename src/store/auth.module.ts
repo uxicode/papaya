@@ -36,7 +36,7 @@ export default class AuthModule extends VuexModule {
   public signupName: string = '';
   public resetPwByVerifyInfo: object = {};
   private refreshToken: string | null= null;
-  private signupPageTitle: string = '';
+  private signupPageTitle: string = '회원가입';
 
   get isAuth(): boolean {
     return !!this.token;

@@ -71,4 +71,31 @@
           msg="우측 하단 다음 버튼을 누르시고 계속 진행해주세요."
           @change="onNoticePopupStatus"></notice-popup>
 
+  <!-- start: 인증 실패 -->
+  <transition name="modal">
+    <modal v-if="isVerifyFail" size="540px" body-padding="0" @modalClose="isVerifyFail=false">
+      <div slot="header">
+        <!-- header custom coding-->
+        <div class="popup-icon error"></div>
+        <div class="popup-close">
+          <button class="close" @click="isVerifyFail=false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+        </div>
+      </div>
+      <div slot="body">
+        <!-- body custom coding-->
+        <div class="popup-cnt" style="text-align: left">
+          <h2 class="popup-tit">만 14세 미만 회원입니다.</h2>
+          <p class="popup-txt">만 14세 미만의 경우 회원가입 시 보호자(법정대리인)의 실명 인증을 통한 가입 동의가 필요합니다.</p>
+        </div>
+      </div>
+      <div slot="footer">
+        <div class="btn-group rt">
+          <btn type="outline" @btnClick="isVerifyFail=false">취소</btn>
+          <btn type="navi" @btnClick="gotoSignUpPage">처음으로</btn>
+        </div>
+      </div>
+    </modal>
+  </transition>
+  <!-- end: 인증 실패 -->
+
 </div>

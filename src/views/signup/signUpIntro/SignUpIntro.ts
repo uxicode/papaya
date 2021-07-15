@@ -14,14 +14,6 @@ export default class SignUpIntro extends Vue {
   @Auth.Getter
   private pageTitle!: string;
 
-  get pageTitleModel(): string {
-    return this.pageTitle;
-  }
-
-  set pageTitleModel( value: string) {
-    this.SET_PAGE_TITLE(value);
-  }
-
   private gotoSignForm(ageType: string | null): void {
     if (ageType === 'under14') {
       this.SET_PAGE_TITLE('만 14세 미만 회원가입');

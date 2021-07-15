@@ -25,6 +25,7 @@ export default class Verify extends Vue {
     private isNoticePopupOpen: boolean = false;
     private under14: boolean = false;
     private isAgreed: boolean = false;
+    private isVerifyFail: boolean = false;
 
     get isVerifyComplete(){
         return this.verifyComplete;
@@ -47,30 +48,29 @@ export default class Verify extends Vue {
 
     private verifyModalOpen(): void {
 
-        // @ts-ignore
-        // const {form_chk} = document;
-        // window.open('', 'popupChk', 'width=500, height=800');
-        // form_chk.action = 'https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb';
-        // form_chk.target = 'popupChk';
-        // form_chk.submit();
-
-        //https://wwwtest.papayaclass.com/api/v1/checkplus_main
+        // 업로드시 url - https://wwwtest.papayaclass.com/api/v1/checkplus_main
+        // 로컬테스트용 url - ../testOpen.html
         const windowOpener=window.open('https://wwwtest.papayaclass.com/api/v1/checkplus_main', '_blank', 'width=500, height=800, status=yes, toolbar=yes');
-
-        // this.verifyComplete = true; // 인증 성공시 실행되어야 하는 부분
 
     }
 
     private onUpdateVerify(val: string){
-        console.log(val);
-        if ( val ){
+        console.log(val); // mobileNum+'_'+age
+        const age = Number(val.split('_')[1]);
+        if ( age >= 14 ){
             this.isNoticePopupOpen = true;
+        } else {
+            this.isVerifyFail = true;
         }
     }
 
     private onNoticePopupStatus(value: boolean) {
         this.isNoticePopupOpen=value;
         this.verifyComplete = true;
+    }
+
+    private gotoSignUpPage() {
+        this.$router.push('/signup');
     }
 
 }
