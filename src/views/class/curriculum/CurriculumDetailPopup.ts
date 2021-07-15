@@ -57,10 +57,21 @@ export default class CurriculumDetailPopup extends Vue {
     private isModifyPopupOpen: boolean=false;
     private cardId: number=-1;
 
+    private currentUserAuth: number=-1;
+
     private courseDetailItem: any = {};
 
     private isOwner( ownerId: number, userId: number): boolean {
         return (ownerId === userId);
+    }
+
+    /**
+     * 게시글 글쓴이와 현재 로그인 유저와 권한이 같은지 체크
+     * @param ownerId
+     * @private
+     */
+    private getIsMember( ownerId: number ): boolean {
+        return ownerId === this.currentUserAuth;
     }
 
     private getProfileImg(imgUrl: string | null | undefined ): string{

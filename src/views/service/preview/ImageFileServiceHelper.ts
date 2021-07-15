@@ -8,26 +8,6 @@ class ImageFileServiceHelper extends ImageFileService{
     this.courseIndex = index;
   }
 
-  //모델에 이미지 파일 추가
-  public load( files: FileList, selector: string ): void{
-    if( !files.length ){ return; }
-
-    this.setImgFilePreviewSave(files);
-
-    //file type input
-    const imgFileInput =document.querySelector(selector) as HTMLInputElement;
-    imgFileInput.value = '';
-  }
-
-  /**
-   * 신규로 add 된 이미지가 있는지 체크
-   */
-  public getAddFiles(){
-    return this.imgFileItems
-        .filter((item) => item.file.name !== undefined)
-        .map((item)=>item.file);
-  }
-
   /**
    *  이미지 파일이 저장된 배열을 전송할 formdata 에 값 대입.
    */
@@ -41,15 +21,22 @@ class ImageFileServiceHelper extends ImageFileService{
     }
   }
 
+  /**
+   * 코스 삭제되었을 때, 첨부파일 삭제 & index 수정
+   * @param saveData
+   * @param idx
+   */
   public deleteImgFileItem(saveData: any, idx: number){
-    const findIdx = saveData.findIndex((item: any) => item.index === idx);
+    while( saveData.findIndex((item: any)=>item.index === idx) > -1 ) {
+      saveData.splice(saveData.findIndex((item: any)=>item.index === idx), 1);
+    }
 
-    // saveData.forEach((item: any)=>{
-    //
-    // })
-
-    saveData.splice(idx, 1);
-    console.log(`남는 데이터 = `, saveData);
+    saveData.filter((item: any)=> {
+      if(item.index > idx){
+        item.index = item.index -1;
+      }
+    });
+    console.log(saveData);
   }
 
   public saveData( formData: FormData, targetData: any ): void {
@@ -59,7 +46,7 @@ class ImageFileServiceHelper extends ImageFileService{
         .filter((item: any) => item.file.name !== undefined)
         .map((item: any)=>item);
 
-    console.log(`addFilesList = `,addFiles);
+    // console.log(`addFilesList = `,addFiles);
 
     //신규 전송할 파일이 없다면 여기서 종료.
     if( addFiles.length<0 ){ return; }
