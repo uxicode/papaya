@@ -5,6 +5,9 @@
   .container-fluid {display: flex;flex: 1 0 auto;max-width: 100%;}
 }
 
+.none-index{
+  z-index: 0 !important;
+}
 // header
 header {
   position: relative;

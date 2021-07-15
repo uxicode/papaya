@@ -4,13 +4,16 @@ import {
   SET_SCHEDULE_DETAIL,
   SET_COMMENTS,
   SET_REPLY,
+  DELETE_SCHEDULE,
 } from '@/store/mutation-class-types';
 import {
-  GET_SCHEDULE_LIST_ACTION,
+  GET_SCHEDULE_ACTION,
   GET_SCHEDULE_DETAIL_ACTION,
   GET_COMMENTS_ACTION,
   ADD_COMMENT_ACTION,
   ADD_REPLY_ACTION,
+  ADD_SCHEDULE_ACTION,
+  DELETE_SCHEDULE_ACTION
 } from '@/store/action-class-types';
 import {IScheduleTotal} from '@/views/model/schedule.model';
 import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
@@ -108,14 +111,24 @@ export default class ScheduleModule extends VuexModule {
   }
 
   @Mutation
-  public [SET_SCHEDULE_DETAIL]( data: any ){
+  public [SET_SCHEDULE_DETAIL]( data: IScheduleTotal ){
     this.scheduleDetailData=data;
   }
 
+
+  @Mutation
+  public [DELETE_SCHEDULE](info: { scheduleId: number }){
+    const {scheduleId} = info;
+    const findIdx=this.scheduleListData.findIndex((item) => item.id === scheduleId );
+    this.scheduleListData.splice(findIdx, 1);
+  }
+
   /* Action */
-  @Action
-  public [GET_SCHEDULE_LIST_ACTION]( payload: { classId: number,  paging: {page_no: number, count: number } }  ): Promise<IScheduleTotal[]>{
-    return ScheduleService.getAllScheduleByClassId( payload.classId, payload.paging)
+  @Action({rawError: true})
+  public [GET_SCHEDULE_ACTION]( payload: { classId: number,  paging: {page_no: number, count: number } }  ): Promise<any>{
+    const {classId, paging }=payload;
+
+    return ScheduleService.getAllScheduleByClassId( classId, paging )
         .then((data) => {
           // console.log(data);
           console.log('scheduleListData=', this.scheduleListData);
@@ -128,7 +141,7 @@ export default class ScheduleModule extends VuexModule {
         });
   }
 
-  @Action
+  @Action({rawError: true})
   public [GET_SCHEDULE_DETAIL_ACTION](payload: { classId: number, scheduleId: number }): Promise<any>{
     return ScheduleService.getScheduleById(payload.classId, payload.scheduleId )
         .then((data) => {
@@ -142,7 +155,61 @@ export default class ScheduleModule extends VuexModule {
         });
   }
 
-  @Action
+  @Action({rawError: true})
+  public async [ADD_SCHEDULE_ACTION](payload: { classId: number, formData: FormData }): Promise<any>{
+    const {classId, formData}=payload;
+
+   /*
+   schedule:{
+    class_id: 750
+    count: 0
+    createdAt: "2021-07-14 00:00:00"
+    deletedYN: false
+    endAt: "2021-07-14 03:30:00"
+    expiredAt: "2021-07-14 03:30:00"
+    id: 1977
+    param1: 0
+    post_type: 1
+    startAt: "2021-07-14 03:30:00"
+    text: "dsadfsdafasf"
+    title: "asdfsadfsa"
+    type: 0
+    updatedAt: "2021-07-14 00:00:00"
+    user_id: 250
+    user_member_id: 844
+   }
+   */
+
+    try{
+      const addSchedule=await ScheduleService.setAddSchedule( Number(classId), formData);
+      const {id}=addSchedule.schedule;
+      const readData=await ScheduleService.getScheduleById( classId, id );
+      const {schedule} = readData;
+      this.scheduleListData.push(schedule);
+      return Promise.resolve(readData);
+    }catch(error){
+      return Promise.reject(error);
+    }
+  }
+
+  /**
+   * 알림글 삭제
+   * @param payload
+   */
+  @Action({rawError: true})
+  public [DELETE_SCHEDULE_ACTION](payload: { classId: string | number, scheduleId: number }): Promise<any>{
+    const {classId, scheduleId }=payload;
+    return ScheduleService.deleteScheduleById( classId, scheduleId )
+      .then((data)=>{
+        this.context.commit(DELETE_SCHEDULE, {scheduleId});
+        return Promise.resolve(data);
+      }).catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
+      });
+  }
+
+  @Action({rawError: true})
   public [GET_COMMENTS_ACTION]( scheduleId: number): Promise<any> {
     return CommentService.getCommentsByScheduleId(scheduleId)
         .then((data) => {
@@ -175,7 +242,7 @@ export default class ScheduleModule extends VuexModule {
    * parent_type: 댓글이 달린 원글 타입. 0 - 알림글 , 1 - 일정글
    * @param payload
    */
-  @Action
+  @Action({rawError: true})
   public [ADD_COMMENT_ACTION](payload: {parent_id: number, parent_type: number, member_id: number, comment: string}): Promise<any> {
     return CommentService.setAddComment(payload)
         .then((data) => {
@@ -184,7 +251,7 @@ export default class ScheduleModule extends VuexModule {
         });
   }
 
-  @Action
+  @Action({rawError: true})
   public [ADD_REPLY_ACTION](payload: {comment_id: number, member_id: number, comment: string}): Promise<any> {
     return CommentService.setAddReply(payload)
         .then((data) => {

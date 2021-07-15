@@ -5,14 +5,14 @@
       <div slot="header">
         <!-- header custom coding-->
         <p class="popup-header-tit">새 일정 등록</p>
-        <div class="popup-close" @click.prevent="popupChange( false )">
+        <div class="popup-close" @click.prevent="popupClose">
           <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
         </div>
       </div>
       <div slot="body">
         <!-- body custom coding-->
         <div class="popup-form">
-          <div class="scroll-body" style="height:70vh">
+          <div class="scroll-body" style="height:50vh">
             <div class="popup-form-top">
               <div class="form-item post-classes selected"> <!-- class 선택 시 form-item에 selected 추가됨 -->
                 <p>

@@ -1,5 +1,8 @@
 import {Component, Mixins, Prop} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import UtilsMixins from '@/mixin/UtilsMixins';
+import {IClassInfo} from '@/views/model/my-class.model';
+import {IAddSchedule, ITimeModel} from '@/views/model/schedule.model';
 import {ImageFileService} from '@/views/service/preview/ImageFileService';
 import {AttachFileService} from '@/views/service/preview/AttachFileService';
 import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
@@ -8,14 +11,13 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
-import WithRender from './AddSchedule.html';
-import {ITimeModel} from '@/views/model/schedule.model';
+import {ADD_SCHEDULE_ACTION} from '@/store/action-class-types';
 import {Utils} from '@/utils/utils';
-import {IClassInfo} from '@/views/model/my-class.model';
-import {namespace} from 'vuex-class';
+import WithRender from './AddSchedule.html';
 
 
 const MyClass = namespace('MyClass');
+const Schedule = namespace('Schedule');
 
 @WithRender
 @Component({
@@ -32,28 +34,24 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   @Prop(Boolean)
   private isOpen!: boolean;
 
+  @Schedule.Action
+  private ADD_SCHEDULE_ACTION!: (payload: { classId: number, formData: FormData }) => Promise<any>;
+
   @MyClass.Getter
   private classID!: string | number;
 
   @MyClass.Getter
   private myClassHomeModel!: IClassInfo;
 
-  private scheduleData: {
-    repeat_type: number,
-    repeat_count: number,
-    fullday: string | boolean,
-    title: string,
-    body: string,
-    startAt: Date,  //2019-11-15 10:00:00
-    endAt: Date;
-  } = {
+  private scheduleData: IAddSchedule= {
     repeat_type: 0,
     repeat_count: 0,
-    fullday: '',
+    fullday: 0,
     title: '',
     body: '',
-    startAt:new Date(),  //2019-11-15 10:00:00
-    endAt: new Date()
+    evt_startAt: '',  //2019-11-15 10:00:00
+    evt_endAt: '',
+    file_count: 0
   };
 
   private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
@@ -100,6 +98,32 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
     // console.log(val, this.currentStartTimeModel );
   }
 
+
+  private getStartAt() {
+    const apm = this.startTimeSelectModel.apm;
+    const hour=( apm === '오후' )? Number( this.startTimeSelectModel.hour ) - 12 : this.startTimeSelectModel.hour;
+    const minute = this.startTimeSelectModel.minute;
+
+    // //2019-11-15 10:00:00
+    return `${this.startDatePickerModel} ${hour}:${minute}`;
+  }
+
+  private getEndAt() {
+    const apm = this.startTimeSelectModel.apm;
+    const hour=( apm === '오후' )? Number( this.endTimeSelectModel.hour ) - 12 : this.endTimeSelectModel.hour;
+    const minute = this.endTimeSelectModel.minute;
+
+    // //2019-11-15 10:00:00
+    return `${this.endDatePickerModel} ${hour}:${minute}`;
+  }
+
+
+  private getDateRangeAt() {
+    let {evt_startAt, evt_endAt} = this.scheduleData;
+    evt_startAt = this.getStartAt();
+    evt_endAt = this.getEndAt();
+    this.scheduleData = {...this.scheduleData, evt_startAt, evt_endAt};
+  }
 
   /**
    * 이미지등록 아이콘 클릭시 > input type=file 에 클릭 이벤트 발생시킴.
@@ -186,6 +210,11 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
     this.$emit('change', value);
   }
 
+  private popupClose() {
+    this.popupChange( false );
+    this.allClear();
+  }
+
 
   /**
    * 일정 등록시  하루종일 표시 유무 - true/false 로 등록하기에 전송시 0/1 로 변환해서 전송필요.
@@ -220,6 +249,7 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   }
 
 
+
   /**
    * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
    * @private
@@ -232,19 +262,22 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
     //파일 저장.
     this.attachFileService.save( this.formData );
 
-
+    //시작/끝 시간
+    this.getDateRangeAt();
 
     //formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.
-    // const temp = JSON.stringify( mergeData );
-    // this.formData.append('data', temp );
+    const temp = JSON.stringify( this.scheduleData );
+    this.formData.append('data', temp );
 
-    //전송이 완료 되었다는 전제하에 아래 구문 수행
-    setTimeout(() => {
-      // this.imgFilesAllClear();
+    this.ADD_SCHEDULE_ACTION({classId: Number(this.classID), formData: this.formData})
+      .then((data) => {
+        console.log(data);
 
-      this.allClear();
-      this.popupChange(false);
-    }, 500);
+        this.allClear();
+        this.popupChange(false);
+
+        this.$emit('submit');
+      });
 
   }
 
@@ -253,6 +286,16 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
     // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
     this.imgFilesAllClear(); //이미지 데이터 비우기
     this.attachFilesAllClear();//파일 데이터 비우기
+    this.scheduleData={
+      repeat_type: 0,
+      repeat_count: 0,
+      fullday: 0,
+      title: '',
+      body: '',
+      evt_startAt: '',  //2019-11-15 10:00:00
+      evt_endAt: '',
+      file_count: 0
+    };
   }
 
 }

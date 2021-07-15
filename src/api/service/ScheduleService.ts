@@ -72,10 +72,22 @@ export class ScheduleService{
    * @param classId
    * @param paging
    */
-  public static getAllScheduleByClassId(classId: string | number, paging: {page_no: number, count: number}={page_no:1, count:10} ): Promise<any>{
+  public static getAllScheduleByClassId(classId: string | number, paging: {page_no: number, count: number}={page_no:1, count:100} ): Promise<any>{
     return request('get', `${CLASS_BASE_URL}/${classId}/schedule`, paging );
   }
 
+  /**
+   * classId  값을 갖는 해당 스케줄 생성.
+   * @param classId
+   * @param formData
+   */
+  public static setAddSchedule(classId: string | number, formData: FormData) {
+    return request('post', `${CLASS_BASE_URL}/${classId}/schedule`, formData );
+  }
+
+  public static deleteScheduleById(classId: string | number, scheduleId: number) {
+    return request('delete', `${CLASS_BASE_URL}/${classId}/schedule/${scheduleId}`);
+  }
 
 
 }
