@@ -1,8 +1,11 @@
 import {Vue, Component, Watch} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import NoticePopup from '@/components/modal/noticePopup.vue';
 import WithRender from './Verify.html';
+
+const Auth = namespace('Auth');
 
 @WithRender
 @Component({
@@ -14,12 +17,22 @@ import WithRender from './Verify.html';
 })
 export default class Verify extends Vue {
 
+    @Auth.Getter
+    private pageTitle!: string;
+
     private verifyComplete: boolean= false;
     private verifyVal: string | number = '';
     private isNoticePopupOpen: boolean = false;
+    private under14: boolean = false;
+    private isAgreed: boolean = false;
 
     get isVerifyComplete(){
         return this.verifyComplete;
+    }
+
+    get isUnder14() {
+        this.under14 = this.pageTitle !== '일반 회원가입';
+        return this.under14;
     }
 
     private historyBack(): void{

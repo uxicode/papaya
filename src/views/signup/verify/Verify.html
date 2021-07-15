@@ -2,7 +2,8 @@
   <div class="form-wrapper">
     <h3 class="form-sub-tit ct">본인인증</h3>
     <div class="form-cnt">
-      <div v-if="!isVerifyComplete" class="form-card">
+      <!-- start: 일반 회원가입 -->
+      <div v-if="!isVerifyComplete && !isUnder14" class="form-card">
         <p class="card-tit">본인 인증을 해주세요.</p>
         <p class="card-txt">14세 이상의 개인은 본인 인증을 통해 가입이 가능합니다.</p>
 
@@ -12,9 +13,32 @@
 
         </div>
       </div>
+      <!-- end: 일반 회원가입 -->
+
+      <!-- start: 만 14세 미만 회원가입 -->
+      <div v-else-if="!isVerifyComplete && isUnder14" class="form-card">
+        <p class="card-tit">보호자 본인확인</p>
+        <p class="card-txt">
+          14세 미만의 회원은 보호자의 동의 절차가 필요합니다.<br>
+          가입자 및 보호자의 개인정보는 본인의 동의없이 공개하지 않을 것이며,<br>
+          "개인정보 보호법"과 "정부의 개인정보 보호 정책" 에 따라 보호받게 됩니다.<br>
+          아래의 체크박스에 동의 후 모바일 인증으로 보호자 본인임을 인증해 주세요.
+        </p>
+
+        <div class="btn-checkbox inline">
+          <input type="checkbox" id="allCheck" v-model="isAgreed">
+          <label for="allCheck" class="lg">법정대리인으로서 피보호자의 파파야 회원가입에 동의합니다.</label>
+        </div>
+
+        <div class="mgt-30">
+          <button type="button" class="btn primary red wd-160" :disabled="!isAgreed" @click="verifyModalOpen">본인 인증하기</button>
+        </div>
+      </div>
+      <!-- end: 만 14세 미만 회원가입 -->
 
       <div v-else class="form-card bg">
-        <p class="card-tit">본인 인증이 완료되었습니다.</p>
+        <p v-if="!isUnder14" class="card-tit">본인 인증이 완료되었습니다.</p>
+        <p v-else class="card-tit">보호자 본인 인증이 완료되었습니다.</p>
         <p class="card-txt">다음 버튼을 통해 회원가입 단계를 계속해서 진행해 주시기 바랍니다.</p>
       </div>
     </div>

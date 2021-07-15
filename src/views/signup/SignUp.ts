@@ -1,8 +1,11 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import TermsCheck from '@/views/signup/termsCheck/TermsCheck';
 import Verify from '@/views/signup/verify/Verify';
 import SignUpForm from '@/views/signup/signUpForm/SignUpForm';
 import WithRender from './SignUp.html';
+
+const Auth = namespace('Auth');
 
 @WithRender
 @Component({
@@ -14,7 +17,9 @@ import WithRender from './SignUp.html';
 })
 export default class SignUp extends Vue {
 
-    private pageTitle: string='일반 회원가입';
+    @Auth.Getter
+    private pageTitle!: string;
+
     private currentStep: number=1;
     private stepTotal: number=3;
 

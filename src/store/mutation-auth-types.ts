@@ -10,4 +10,4 @@ export const SIGN_UP_MOVE: string = 'SIGN_UP_MOVE';
 export const SIGN_UP: string = 'SIGN_UP';
 export const SET_MY_INFO: string = 'SET_MY_INFO';
 export const GET_REFRESH_TOKEN: string = 'GET_REFRESH_TOKEN';
-
+export const SET_PAGE_TITLE: string = 'SET_PAGE_TITLE';

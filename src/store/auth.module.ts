@@ -11,7 +11,7 @@ import {
   SIGN_UP,
   SIGN_UP_MOVE,
   SET_MY_INFO,
-  GET_REFRESH_TOKEN
+  GET_REFRESH_TOKEN, SET_PAGE_TITLE
 } from '@/store/mutation-auth-types';
 import {
   LOGIN_ACTION,
@@ -36,6 +36,7 @@ export default class AuthModule extends VuexModule {
   public signupName: string = '';
   public resetPwByVerifyInfo: object = {};
   private refreshToken: string | null= null;
+  private signupPageTitle: string = '';
 
   get isAuth(): boolean {
     return !!this.token;
@@ -65,7 +66,9 @@ export default class AuthModule extends VuexModule {
     return this.me;
   }
 
-
+  get pageTitle(): string {
+    return this.signupPageTitle;
+  }
 
   @Mutation
   public [USER_EMAIL](value: string): void {
@@ -141,6 +144,11 @@ export default class AuthModule extends VuexModule {
   public [SIGN_UP_MOVE](): void{
     this.signupName= '';
     delete localStorage.signupName;
+  }
+
+  @Mutation
+  public [SET_PAGE_TITLE](title: string): void {
+    this.signupPageTitle = title;
   }
 
   //localstorage 에 있는 token 값 존재 확인하여 데이터를
