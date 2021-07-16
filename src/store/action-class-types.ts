@@ -34,3 +34,4 @@ export const ADD_VOTE_ACTION: string = 'ADD_VOTE_ACTION';
 export const DELETE_VOTE_ACTION: string = 'DELETE_VOTE_ACTION';
 export const ADD_SCHEDULE_ACTION: string = 'ADD_SCHEDULE_ACTION';
 export const DELETE_SCHEDULE_ACTION: string = 'DELETE_SCHEDULE_ACTION';
+export const EDIT_SCHEDULE_ACTION: string = 'EDIT_SCHEDULE_ACTION';

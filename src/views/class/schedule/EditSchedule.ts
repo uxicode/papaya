@@ -10,8 +10,9 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
-import WithRender from './EditSchedule.html';
 import {Utils} from '@/utils/utils';
+import {ScheduleService} from '@/api/service/ScheduleService';
+import WithRender from './EditSchedule.html';
 
 const MyClass = namespace('MyClass');
 const Schedule = namespace('Schedule');
@@ -33,6 +34,9 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
 
   @Schedule.Action
   private ADD_SCHEDULE_ACTION!: (payload: { classId: number, formData: FormData }) => Promise<any>;
+
+  @Schedule.Action
+  private EDIT_SCHEDULE_ACTION!: (payload: { classId: number, scheduleId: number, promise: Array<Promise<any>> })=>Promise<any>;
 
   @Schedule.Getter
   private scheduleDetailItem!: IScheduleDetail;
@@ -75,6 +79,7 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     ];
   private loopRangeCheck: boolean=false;
   private loopRangeCount: number | string=10;
+  private removeFiles: number[]= [];
 
   private formData: FormData=new FormData();
   private imgFileService: ImageFileService=new ImageFileService();
@@ -218,6 +223,11 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
    * @private
    */
   private onRemoveImgPreviewItems(idx: number): void{
+    //파일 제거를 api 통신 하지 않고 배열에 저장해 둔다. ( 최종 수정 버튼을 누를때 해당 제거에 대한 통신을 한다 )
+    const deleteFileId= this.imgFileService.getItemById(idx).file.id;
+    if (deleteFileId) {
+      this.removeFiles.push(deleteFileId);
+    }
     this.imgFileService.remove(idx);
   }
   /**
@@ -225,6 +235,10 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
    * @private
    */
   private onRemoveAllPreview(): void {
+    const fileItems=this.imgFileService.getFileItems();
+    //파일 제거를 api 통신 하지 않고 배열에 저장해 둔다. ( 최종 수정 버튼을 누를때 해당 제거에 대한 통신을 한다 )
+    this.removeToItems(fileItems);
+    //
     this.imgFileService.removeAll();
   }
   /**
@@ -244,9 +258,17 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     this.attachFileService.load(files, '#attachFileInput');
   }
   private removeAllAttachFile(): void {
+    const fileItems=this.attachFileService.getFileItems();
+    //파일 제거를 api 통신 하지 않고 배열에 저장해 둔다. ( 최종 수정 버튼을 누를때 해당 제거에 대한 통신을 한다 )
+    this.removeToItems(fileItems);
     this.attachFileService.removeAll();
   }
   private removeAttachFileItem(idx: number): void{
+    //파일 제거를 api 통신 하지 않고 배열에 저장해 둔다. ( 최종 수정 버튼을 누를때 해당 제거에 대한 통신을 한다 )
+    const deleteFileId= this.attachFileService.getItemById(idx).file.id;
+    if (deleteFileId) {
+      this.removeFiles.push(deleteFileId);
+    }
     this.attachFileService.remove(idx);
   }
   private attachFilesAllClear() {
@@ -254,6 +276,15 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     this.formData.delete('files');
   }
   //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
+
+  private removeToItems( fileItems: any[] ) {
+    const ids=fileItems
+      .map((item) =>(item.file.fieldname) ? item.file.id : '')
+      .filter((item) => item !== '');
+    if (ids.length > 0) {
+      this.removeFiles = [...this.removeFiles, ...ids];
+    }
+  }
 
   private loopRangeCountClickHandler( value: string ){
     this.loopRangeCount=value;
@@ -312,17 +343,42 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     this.scheduleData.body=value;
     const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLTextAreaElement;
     /* scheduleDetailAreaTxt.style.height = String( Utils.autoResizeTextArea(this.scheduleData.body) + 'px');*/
-
     this.txtAreaEleH( scheduleDetailAreaTxt, this.scheduleData.body );
   }
 
 
 
   /**
+   * 알림 데이터 post 전송
+   * @private
+   */
+  private async onEditSubmitSchedule() {
+    // if( !this.isSubmitValidate ){return;}
+
+    //데이터를 전달하기도 전에 this.allClear 하는 문제 해결해야 함.
+    await this.editInfos()
+      .then(()=>{
+        // this.allClear();
+        this.popupChange(false);
+        console.log('editInfos 함수 수정 완료');
+        this.$emit('editComplete');
+      });
+  }
+
+  /**
    * 새일정> 등록 버튼 클릭시 팝업 닫기 및 데이터 전송 (
    * @private
    */
-  private submitEditSchedule(): void{
+  private async editInfos(){
+
+    const { id }= this.scheduleDetailItem;
+    const editPromiseItems = [];
+
+    if (this.removeFiles.length > 0) {
+      //ostService.deletePostFileById(classId, postId, {ids})
+      const removeFiles=ScheduleService.deleteScheduleFileById(Number( this.classID ), id, {ids:this.removeFiles});
+      editPromiseItems.push(removeFiles);
+    }
     //시나리오 --> 등록 버튼 클릭 > 이미지 추가한 배열값 formdata에 입력 > 전송 >전송 성공후> filesAllClear 호출 > 팝업 닫기
     //이미지 파일 저장.
     this.imgFileService.save( this.formData );
@@ -337,18 +393,15 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     const temp = JSON.stringify( this.scheduleData );
     this.formData.append('data', temp );
 
-    this.ADD_SCHEDULE_ACTION({classId: Number(this.classID), formData: this.formData})
+    const allEditInfo=ScheduleService.setScheduleInfoById( Number( this.classID ), id, this.formData );
+    editPromiseItems.push( allEditInfo );
+
+    this.EDIT_SCHEDULE_ACTION({ classId: Number(this.classID), scheduleId: id, promise: editPromiseItems })
       .then((data) => {
-        console.log(data);
-
         this.allClear();
-        this.popupChange(false);
-
-        this.$emit('submit');
       });
 
   }
-
 
   private allClear() {
     // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.

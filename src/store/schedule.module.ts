@@ -4,7 +4,7 @@ import {
   SET_SCHEDULE_DETAIL,
   SET_COMMENTS,
   SET_REPLY,
-  DELETE_SCHEDULE,
+  DELETE_SCHEDULE, EDIT_SCHEDULE,
 } from '@/store/mutation-class-types';
 import {
   GET_SCHEDULE_ACTION,
@@ -13,7 +13,8 @@ import {
   ADD_SCHEDULE_COMMENT_ACTION,
   ADD_SCHEDULE_REPLY_ACTION,
   ADD_SCHEDULE_ACTION,
-  DELETE_SCHEDULE_ACTION
+  DELETE_SCHEDULE_ACTION,
+  EDIT_SCHEDULE_ACTION,
 } from '@/store/action-class-types';
 import {IScheduleDetail, IScheduleTotal} from '@/views/model/schedule.model';
 import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
@@ -96,6 +97,7 @@ export default class ScheduleModule extends VuexModule {
       visited: 0,
     }
   };
+  private scheduleEditIdx: number=-1;
 
   private commentData: ICommentModel[] = [];
   private replyData: IReplyModel[]=[];
@@ -115,6 +117,10 @@ export default class ScheduleModule extends VuexModule {
 
   get scheduleReplyItems(): IReplyModel[] {
     return this.replyData;
+  }
+
+  get schEditId(): number{
+    return this.scheduleEditIdx;
   }
 
   /* Mutation */
@@ -138,6 +144,14 @@ export default class ScheduleModule extends VuexModule {
     this.replyData=data;
   }
 
+  @Mutation
+  public [EDIT_SCHEDULE]( info: { scheduleId: number, editInfo: any }){
+    const {scheduleId, editInfo} = info;
+    const findIdx=this.scheduleListData.findIndex((item) => item.id === scheduleId );
+    this.scheduleListData.splice(findIdx, 1, {...this.scheduleListData[findIdx],  ...editInfo});
+
+    this.scheduleEditIdx=scheduleId;
+  }
 
 
   @Mutation
@@ -213,6 +227,28 @@ export default class ScheduleModule extends VuexModule {
     }catch(error){
       return Promise.reject(error);
     }
+  }
+
+  @Action({rawError: true})
+  public [EDIT_SCHEDULE_ACTION](payload: { classId: number, scheduleId: number, promise: Array<Promise<any>> }): Promise<any>{
+    const {classId, scheduleId, promise} = payload;
+
+    return getAllPromise(promise)
+      .then((data)=>{
+
+        console.log(data);
+
+        ScheduleService.getScheduleById(classId, scheduleId)
+          .then((readData) => {
+            this.context.commit(EDIT_SCHEDULE, {scheduleId, editInfo: readData.schedule});
+            this.context.commit(SET_SCHEDULE_DETAIL, readData.schedule);
+          });
+
+        return Promise.resolve(data);
+      }).catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
+      });
   }
 
   /**

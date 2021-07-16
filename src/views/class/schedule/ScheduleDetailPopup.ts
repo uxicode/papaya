@@ -71,6 +71,7 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
   private isNoticePopupOpen: boolean=false;
   private deleteId: number=-1;
   private isEditPopupOpen: boolean=false;
+  private isEditComplete: boolean=false;
 
   get scheduleDetailModel(): IScheduleTotal{
     return this.scheduleDetailItem;
@@ -162,6 +163,17 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
 
   private onEditClose(value: boolean) {
     this.isEditPopupOpen=false;
+  }
+
+  private onEditComplete() {
+    this.isEditComplete=true;
+  }
+
+  private popupClose() {
+    this.popupChange( false );
+    if (!this.isEditComplete) {
+      this.$emit('editApplyTo');
+    }
   }
 
 }

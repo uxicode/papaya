@@ -1,7 +1,7 @@
 <div>
   <transition name="modal">
     <modal v-if="isOpen && scheduleDetailModel" size="600px" body-padding="0" footerPadding="0"
-           @modalClose="popupChange( false )">
+           @modalClose="popupClose">
       <div slot="header">
         <!-- header custom coding-->
         <p class="popup-header-tit">{{ scheduleDetailModel.title }}</p>
@@ -68,7 +68,7 @@
 
           <div class="popup-feed-detail pdb-40">
             <div class="fd-cnt">
-              <p class="fd-txt">
+              <p class="fd-txt word-bk">
                 {{ scheduleDetailModel.text }}
               </p>
 
@@ -105,7 +105,7 @@
 
   <photo-viewer v-if="isPhotoViewer" :is-photo-viewer="isPhotoViewer" :img-data="imgPreviewInit(scheduleDetailModel.attachment)" @change="onPhotoViewerStatus"></photo-viewer>
 
-  <edit-schedule :is-open="isEditPopupOpen" @change="onEditClose" ></edit-schedule>
+  <edit-schedule :is-open="isEditPopupOpen" @change="onEditClose" @editComplete="onEditComplete"></edit-schedule>
 
   <confirm-popup
           :is-open="isConfirmPopupOpen"

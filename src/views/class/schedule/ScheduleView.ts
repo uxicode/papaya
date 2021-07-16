@@ -66,6 +66,9 @@ export default class ScheduleView extends Vue{
     @Schedule.Getter
     private scheduleListItems!: IScheduleTotal[];
 
+    @Schedule.Getter
+    private schEditId!: number;
+
     @Auth.Getter
     private userInfo!: IUserMe;
 
@@ -450,6 +453,27 @@ export default class ScheduleView extends Vue{
         const header=document.querySelector('header') as HTMLElement;
         header.classList.remove('none-index');
     }
+
+    private onEditSchedule() {
+        if (this.schEditId !== -1) {
+            console.log(this.schEditId);
+            const findIdx = this.scheduleListsModel.findIndex((item) => item.id === this.schEditId);
+            const { startAt, endAt, title, text, owner, count, id }=this.scheduleListsModel[findIdx];
+            const scheduleColorVal=this.getOwnerScheduleColor(owner);
+
+            this.events.splice( findIdx, 1, {
+                name: title,
+                details: text,
+                color: this.scheduleColor[ scheduleColorVal? scheduleColorVal : 0 ].color,
+                start: new Date(startAt),
+                end: new Date( endAt ),
+                repeat: count,
+                timed:true,
+                id, // schedule_id (parent_id)
+            });
+        }
+    }
+
     private setToday() {
         this.calendarModel = '';
     }
