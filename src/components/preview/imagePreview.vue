@@ -87,7 +87,7 @@ export default class ImagePreview extends Vue{
     const photoList=document.querySelector('.add-photo-list') as HTMLElement;
 
     if(this.fileItems){
-      console.log('this.fileItems.length=', this.fileItems?.length);
+      console.log( 'this.fileItems.length=', this.fileItems?.length, this.fileItems );
       const itemLen=this.fileItems.length;
       const rectInfo=photoList.getClientRects();
       // console.log('rectInfo=', rectInfo[0].width);

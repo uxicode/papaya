@@ -3,6 +3,7 @@ import {namespace} from 'vuex-class';
 import { IPostInLinkModel, IPostModel} from '@/views/model/post.model';
 import Modal from '@/components/modal/modal.vue';
 import AddNotifyPopup from '@/views/class/notification/AddNotifyPopup';
+import Btn from '@/components/button/Btn.vue';
 import {CommentService} from '@/api/service/CommentService';
 import {getAllPromise} from '@/types/types';
 import NotificationListView from '@/views/class/notification/NotificationListView';
@@ -17,6 +18,7 @@ const Post = namespace('Post');
     Modal,
     AddNotifyPopup,
     NotificationListView,
+    Btn
   }
 })
 export default class NotificationPage extends Vue {

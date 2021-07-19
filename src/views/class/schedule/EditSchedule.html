@@ -238,7 +238,7 @@
                                 v-for="(item, index) in currentLoopRangeItems"
                                 :key="index"
                                 @click="loopRangeModel=item.txt">
-                          <v-list-item-title>{{ item }}</v-list-item-title>
+                          <v-list-item-title>{{ item.txt }}</v-list-item-title>
                         </v-list-item>
                       </v-list>
                     </v-menu>
@@ -252,7 +252,7 @@
                 <div class="form-box">
                   <div class="form-group">
                     <!--                  <input type="number" class="form-control" value="10">-->
-                    <txt-field input-type="number" v-model="scheduleDataModel.repeat_count" @input="loopRangeCountClickHandler"></txt-field>
+                    <txt-field input-type="number" v-model="scheduleDataModel.repeat_count" @change="loopRangeCountClickHandler"></txt-field>
                   </div>
                 </div>
               </div>

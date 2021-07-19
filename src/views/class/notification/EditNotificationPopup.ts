@@ -28,7 +28,6 @@ import EditVotePopup from '@/views/class/notification/EditVotePopup';
 import UtilsMixins from '@/mixin/UtilsMixins';
 import {PostService} from '@/api/service/PostService';
 import WithRender from './EditNotificationPopup.html';
-import {ADD_VOTE_ACTION, DELETE_VOTE_ACTION} from '@/store/action-class-types';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -55,6 +54,16 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   @Prop(Boolean)
   private isOpen!: boolean;
 
+
+  @Post.Mutation
+  private SET_VOTE!: (data: IReadAbleVote)=> void;
+
+  @Post.Mutation
+  private EDIT_POST!: ( info: { postId: number, editInfo: any })=> void;
+
+  @Post.Mutation
+  private SET_POST_DETAIL!: ( data: IPostModel & IPostInLinkModel)=> void;
+
   @Post.Action
   private ADD_POST_ACTION!: (payload: { classId: number; formData: FormData })=>Promise<any>;
 
@@ -62,13 +71,13 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   private GET_RESERVED_LIST_ACTION!: (classId: number) => Promise<any>;
 
   @Post.Action
-  private EDIT_POST_ACTION!: (payload: { promise: Array<Promise<any>> }) => Promise<any>;
+  private EDIT_POST_ACTION!: (payload: {  classId: number, postId: number, promise: Array<Promise<any>> }) => Promise<any>;
 
-  @Post.Action
-  private DELETE_POST_FILE_ACTION!: (payload: { classId: number, postId: number, ids: number[] })=>Promise<any>;
+/*  @Post.Action
+  private DELETE_POST_FILE_ACTION!: (payload: { classId: number, postId: number, ids: number[] })=>Promise<any>;*/
 
-  @Post.Action
-  private EDIT_POST_TXT_ACTION!: ( payload: { classId: string | number, postId: number, tit: string, txt: string } )=>Promise<any>;
+/*  @Post.Action
+  private EDIT_POST_TXT_ACTION!: ( payload: { classId: string | number, postId: number, tit: string, txt: string } )=>Promise<any>;*/
 
   @Post.Action
   private ADD_VOTE_ACTION!: (payload: { classId: number, postId: number, voteData: IVoteModel})=>Promise<any>;
@@ -91,11 +100,6 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   @Post.Getter
   private replyItems!: any[];
 
-  @Post.Mutation
-  private SET_VOTE!: (data: IReadAbleVote)=> void;
-
-  @Post.Mutation
-  private EDIT_POST!: ( info: { postId: number, editInfo: any })=> void;
 
   private isOpenEditVotePopup: boolean=false;
   private isOpenAddVotePopup: boolean=false;
@@ -278,6 +282,7 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
    * @private
    */
   private onRemoveImgPreviewItems(idx: number): void{
+
     //파일 제거를 api 통신 하지 않고 배열에 저장해 둔다. ( 최종 수정 버튼을 누를때 해당 제거에 대한 통신을 한다 )
     const deleteFileId= this.imgFileService.getItemById(idx).file.id;
     if (deleteFileId) {
@@ -341,6 +346,7 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   }
   //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
 
+
   private removeToItems( fileItems: any[] ) {
     const ids=fileItems
       .map((item) =>(item.file.fieldname) ? item.file.id : '')
@@ -388,6 +394,10 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   }*/
   private onVotePopupClose(value: boolean ) {
     this.isOpenEditVotePopup=value;
+  }
+
+  private onVoteAddPopupClose(value: boolean) {
+    this.isOpenAddVotePopup=value;
   }
 
   private onAddVote( voteData: IVoteModel) {
@@ -481,6 +491,9 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   //end : 예약 알림 미리보기 ================================================
 
 
+  private formDataPlainClear() {
+    this.formData.delete('data');
+  }
 
   private allClear() {
     // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
@@ -492,6 +505,9 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
       link: {title: ''},
       link_item_list: []
     };
+    this.removeFiles=[];
+    this.removeVoteId=-1;
+    this.formDataPlainClear(); // formdata - data 지우기
   }
 
   private editCancel() {
@@ -522,6 +538,8 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
 
     const editPromiseItems = [];
 
+    console.log('this.removeFiles=', this.removeFiles);
+
     if (this.removeFiles.length > 0) {
       //ostService.deletePostFileById(classId, postId, {ids})
       const removeFiles=PostService.deletePostFileById(Number( this.classID ), id, {ids:this.removeFiles});
@@ -550,16 +568,12 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
     const allEditInfo=PostService.setPostInfoAllById( Number( this.classID ), id, this.formData );
     editPromiseItems.push( allEditInfo );
 
-    //파일/이미지 제거가 존재하면 아래실행.
-    this.EDIT_POST_ACTION({ promise: editPromiseItems })
+    console.log('editPromiseItems=', editPromiseItems);
+
+    //수정 데이터 최종 전송
+    this.EDIT_POST_ACTION({ classId: Number(this.classID), postId: id, promise: editPromiseItems })
       .then((data) => {
-        PostService.getPostsById(Number(this.classID), id)
-          .then((readData) => {
-
-            this.allClear();
-
-            this.EDIT_POST({postId: id, editInfo: readData.post});
-          });
+        this.allClear();
       });
 
   }

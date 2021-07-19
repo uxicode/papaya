@@ -118,7 +118,7 @@
   </transition>
 
 <!--  수정시 투표가 없는 경우는 투표 추가 -->
-  <add-vote-popup :is-open="isOpenAddVotePopup" @close="onVotePopupClose" @submit="onAddVote"></add-vote-popup>
+  <add-vote-popup :is-open="isOpenAddVotePopup" @close="onVoteAddPopupClose" @submit="onAddVote"></add-vote-popup>
   <!--  수정시 투표가 있는 경우는 투표 수정-->
   <edit-vote-popup :is-open="isOpenEditVotePopup" @close="onVotePopupClose" @submit="onSubmitBeforeEditVote"></edit-vote-popup>
   <add-link-popup :is-open="isOpenAddLinkPopup" @close="onLinkPopupClose" @submit="onSubmitBeforeEditLink"></add-link-popup>

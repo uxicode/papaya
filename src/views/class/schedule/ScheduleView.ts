@@ -17,7 +17,6 @@ import NoticePopup from '@/components/modal/noticePopup.vue';
 import UserService from '@/api/service/UserService';
 import {IUserMe} from '@/api/model/user.model';
 import WithRender from './ScheduleView.html';
-import {GET_SCHEDULE_DETAIL_ACTION} from '@/store/action-class-types';
 
 
 const Auth = namespace('Auth');
@@ -71,26 +70,25 @@ export default class ScheduleView extends Vue{
 
     @Auth.Getter
     private userInfo!: IUserMe;
-
-    // private imgFileURLItems: string[] = [];
-    // private imgFileDatas: any[] = [];
-
-    private attachFileItems: any[] = [];
     // private formData!: FormData;
-    // private imageLoadedCount: number=0;
     private isOpenAddSch: boolean=false;
     private isOpenDetailSch: boolean= false;
     // private isTimeSelect: boolean=false;
 
+    //초기 캘린더를 월간으로 표시
     private type: string= 'month';
+    // v-calendar 의 :weekday-format="getDay" 와 연동시킴.
     private daysOfWeek: string[] = ['월', '화', '수', '목', '금', '토', '일'];
-    private weekdays: number[] = [1, 2, 3, 4, 5, 6, 0];
-/*    private weekdays: Array<{text: string, value: number[] }>=[
+    /*
+   //상단 head 테이블의 월/화/수/목/금/토/일 배치 하는 예시
+   private weekdays: Array<{text: string, value: number[] }>=[
         { text: 'Sun - Sat', value: [0, 1, 2, 3, 4, 5, 6] },
         { text: 'Mon - Sun', value: [1, 2, 3, 4, 5, 6, 0] },
         { text: 'Mon - Fri', value: [1, 2, 3, 4, 5] },
         { text: 'Mon, Wed, Fri', value: [1, 3, 5] },
     ];*/
+    private weekdays: number[] = [1, 2, 3, 4, 5, 6, 0];
+
     // private selectedEvent ={};
     // private selectedElement: HTMLElement | null=null;
     private selectedOpen: boolean= false;
@@ -104,9 +102,6 @@ export default class ScheduleView extends Vue{
 
     private calendarModel: string=new Date().toISOString().substr(0, 10); ///// '2020-3-01';
     private events: any[] = [];
-    private dragTime: number | null=null;
-    private dragEvent: any | null= null;
-    private dragStart: any | null= null;
     private extendOriginal: any | null= null;
     private createStart: number | null=0;
     private createEvent: {
@@ -118,20 +113,6 @@ export default class ScheduleView extends Vue{
     } | null | undefined;
     private startDate: string | number | Date = '';
     private endDate: string | number | Date = '';
-    // private isFocusContentsArea: boolean=true;
-    private colors: string[] = [
-        '#FF4D4D',
-        '#191955',
-        '#57576D',
-        '#1CDBC9',
-        '#2183DE',
-        '#A062CB',
-        '#FF90AA',
-        '#FF972B',
-        '#FFD100',
-        '#ADC500',
-        '#629F00'
-    ];
     private scheduleColor: Array<{id: number, color: string, title: string}>=[
         {id:0, color: '#8d2600', title: '석류'},
         {id:1, color: '#f9862a', title: '파파야'},
@@ -148,7 +129,7 @@ export default class ScheduleView extends Vue{
     private confirmDesc: string = '';
     private isConfirmPopupOpen: boolean=false;
     private isNoticePopupOpen: boolean=false;
-    private scheduleData: {
+    /*private scheduleData: {
         repeat_type: number,
         repeat_count: number,
         fullday: string | boolean,
@@ -164,7 +145,7 @@ export default class ScheduleView extends Vue{
         body: '',
         startAt:new Date(),  //2019-11-15 10:00:00
         endAt: new Date()
-    };
+    };*/
     get updateNoticeTitle(): string{
         return this.noticeTitle;
     }
@@ -177,9 +158,7 @@ export default class ScheduleView extends Vue{
     get updateConfirmDesc(): string{
         return this.confirmDesc;
     }
-    get attachFileItemsModel(): any[] {
-        return this.attachFileItems;
-    }
+
     get scheduleListsModel(): IScheduleTotal[]{
         return this.scheduleListItems;
     }
@@ -209,10 +188,11 @@ export default class ScheduleView extends Vue{
         };
     }
 
-
+    public beforeRouteLeave(to: any, from: any, next: any) {
+        console.log('beforeRouteUpdate=', to, from, next);
+    }
 
     public async created(){
-
         //새로고침시에 sidemenu 메뉴 활성화 동기화 시킴.
         if (this.$route.query.sideNum && this.$route.query.sideNum !== '') {
             this.$emit('sideNum', Number(this.$route.query.sideNum));
@@ -222,12 +202,10 @@ export default class ScheduleView extends Vue{
           .then(()=>{
               console.log('캘린더 로드 완료.');
           });
-        // await this.calendarInstance.prev();
-        // await this.calendarInstance.next();
 
         const rule = new RRule({
             freq: RRule.WEEKLY,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
-            dtstart: new Date(Date.UTC(2021, 3, 30, 4, 28, 0)),
+            dtstart: new Date( Date.UTC(2021, 3, 30, 4, 28, 0)),
             count: 30,
             interval: 1
         });
@@ -237,8 +215,11 @@ export default class ScheduleView extends Vue{
     public mounted() {
 
         setTimeout(() => {
+            //스케줄 데이터 모델이 전부 안착되면 ---> v-canlendar 가 요구하는 속성값( 이벤트 )이 들어 있는 배열 을 지정해주어야 한다.
             this.scheduleListsModel.forEach((item, idx )=>{
                 // console.log(idx);
+                //캘린더 날짜이벤트가 배열에 지정되면 캘린더에 랜더링 시킨다.
+                //데이터모델 갱신이 아닌 아래 배열( this.events ) 의 갱신이 이루어져야 캘린더의 화면을 갱신시킬 수 있다.
                 this.addScheduleEvent(idx);
             });
 
@@ -256,6 +237,10 @@ export default class ScheduleView extends Vue{
         // console.log(this.classID === Number( this.$route.params.classId ) );
         await this.GET_SCHEDULE_ACTION( { classId: Number(this.classID), paging:{page_no:1, count: 100} })
           .then((data)=>{
+              //이미 배열에 데이터가 들어가 있다면 비우고 재설정.
+              if (this.events && this.events.length > 0) {
+                  this.events = [];
+              }
               console.log( 'getAllScheduleByClassId=', data );
           });
 
@@ -307,6 +292,10 @@ export default class ScheduleView extends Vue{
      * @private
      */
     private updateRange( time: { start: any, end: any } ) {
+        //이미 배열에 데이터가 들어가 있다면 비우고 재설정.
+        if (this.events && this.events.length > 0) {
+            this.events = [];
+        }
         this.scheduleListsModel.forEach((item, idx )=>{
             console.log(idx);
             this.addScheduleEvent(idx);
@@ -344,10 +333,10 @@ export default class ScheduleView extends Vue{
             name: title,
             details: text,
             color: this.scheduleColor[ scheduleColorVal? scheduleColorVal : 0 ].color,
-            start: new Date(startAt),
-            end: new Date( endAt ),
+            start: new Date(startAt).getTime(),
+            end: new Date( endAt ).getTime(),
             repeat: count,
-            timed:true,
+            timed: true,
             id, // schedule_id (parent_id)
         });
     }
@@ -497,192 +486,7 @@ export default class ScheduleView extends Vue{
         this.createStart = event.start;
         this.extendOriginal = event.end;
     }
-    /**
-     * 일정 생성 데이터 초기화
-     * @private
-     */
-    private resetToAddScheduleData() {
-        this.scheduleData = {
-            repeat_type: 0,
-            repeat_count: 0,
-            fullday: '',
-            title: '',
-            body: '',
-            startAt:new Date(),  //2019-11-15 10:00:00
-            endAt: new Date()
-        };
-    }
 
-    private loopRangeCountClickHandler( value: string ){
-        this.loopRangeCount=value;
-        // console.log(this.loopRangeCount);
-    }
-
-    private viewMoreDay( data: { date: any }) {
-        this.calendarModel = data.date;
-        // console.log(data);
-        // this.type = 'day';
-    }
-
-    private getProfileImg(imgUrl: string | null | undefined ): string{
-        return ImageSettingService.getProfileImg( imgUrl );
-    }
-
- /*   private startTimeChange(){
-        console.log(this.currentStartTimeModel);
-    }*/
-
-    /**
-     * drag 시작
-     * @param dragObj
-     * @private
-     */
-    private startDrag( dragObj: { event: any, timed: any }) {
-        // console.log(dragObj.event, dragObj.timed);
-
-        /*
-        dragObj.event=>
-           this.createEvent: {
-                name: string,
-                color: string,
-                start: number,
-                end: number,
-                timed: boolean
-            }*/
-        if (dragObj.event && dragObj.timed) {
-            this.dragEvent = dragObj.event;
-            this.dragTime = null;
-            this.extendOriginal = null;
-        }
-    }
-
-    private startTime(tms: any ) {
-        const mouse = this.toTime(tms);
-
-        if (this.dragEvent && this.dragTime === null) {
-            const start = this.dragEvent.start;
-
-            this.dragTime = mouse - start;
-        } else {
-            this.createStart = this.getTimeStamp(mouse);
-            this.createEvent = {
-                name: `Event #${this.events.length}`,
-                color: this.rndElement(this.colors),
-                start: this.createStart,
-                end: this.createStart,
-                timed: true
-            };
-
-            this.events.push(this.createEvent);
-        }
-    }
-
-
-
-    private mouseMove( tms: {
-        date: Date,
-        day: number,
-        future: boolean,
-        hasDay: boolean,
-        hasTime: boolean,
-        hour: number,
-        minute: number,
-        minutesToPixels: ()=>void,
-        month: number,
-        past: boolean
-        present: boolean
-        time: string,
-        timeDelta: ()=>void,
-        timeToY: ()=>void,
-        week: [],
-        weekday: number,
-        year: number } ) {
-
-        const mouse = this.toTime(tms);
-
-        if (this.dragEvent && this.dragTime !== null ) {
-            const start = this.dragEvent.start;
-            const end = this.dragEvent.end;
-            const duration = end - start;
-            const newStartTime = mouse - this.dragTime;
-            const newStart = this.getTimeStamp(newStartTime);
-            const newEnd = newStart + duration;
-
-            this.dragEvent.start = newStart;
-            this.dragEvent.end = newEnd;
-        } else if (this.createEvent && this.createStart !== null) {
-            const mouseRounded = this.getTimeStamp(mouse, false);
-            const min = Math.min(mouseRounded, this.createStart);
-            const max = Math.max(mouseRounded, this.createStart);
-
-            this.createEvent.start = min;
-            this.createEvent.end = max;
-        }
-
-        // console.log(mouse);
-    }
-
-    private endDrag() {
-        this.dragTime = null;
-        this.dragEvent = null;
-        this.createEvent = null;
-        this.createStart = null;
-        this.extendOriginal = null;
-    }
-    //캘린더 영역에서 완전히 벗어날 때
-    private cancelDrag() {
-        if (this.createEvent) {
-            if (this.extendOriginal) {
-                this.createEvent.end = this.extendOriginal;
-            } else {
-                const i = this.events.indexOf(this.createEvent);
-                if (i !== -1) {
-                    this.events.splice(i, 1);
-                }
-            }
-        }
-
-        this.createEvent = null;
-        this.createStart = null;
-        this.dragTime = null;
-        this.dragEvent = null;
-
-    }
-    //time 은 timestamp 수치
-    private getTimeStamp( time: number, down: boolean = true): number{
-        // console.log( 'time=',typeof time )
-        const roundTo = 15; // minutes
-        const roundDownTime = roundTo * 60 * 1000;
-        return down ? time - time%roundDownTime : time + (roundDownTime - (time % roundDownTime));
-    }
-    // timestamp 를 반환
-    private toTime( tms: {
-        date: Date,
-        day: number,
-        future: boolean,
-        hasDay: boolean,
-        hasTime: boolean,
-        hour: number,
-        minute: number,
-        minutesToPixels: ()=>void,
-        month: number,
-        past: boolean
-        present: boolean
-        time: string,
-        timeDelta: ()=>void,
-        timeToY: ()=>void,
-        week: [],
-        weekday: number,
-        year: number } ): number{
-        // console.log('tms=', typeof tms);
-        return new Date(tms.year, tms.month - 1, tms.day, tms.hour, tms.minute).getTime();
-    }
-    private rndElement(arr: string[]){
-        return arr[this.rnd(0, arr.length - 1)];
-    }
-    private rnd(a: any, b: any): number {
-        return Math.floor((b - a + 1) * Math.random()) + a;
-    }
 
     //파일 다운로드 설정.
     //var filenamesHeader= res.headers['content-disposition'];

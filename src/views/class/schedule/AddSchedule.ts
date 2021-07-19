@@ -14,6 +14,7 @@ import ImagePreview from '@/components/preview/imagePreview.vue';
 import {ADD_SCHEDULE_ACTION} from '@/store/action-class-types';
 import {Utils} from '@/utils/utils';
 import WithRender from './AddSchedule.html';
+import {repeat} from 'rxjs/operators';
 
 
 const MyClass = namespace('MyClass');
@@ -64,9 +65,16 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
 
   private loopRangeModel: string = '반복없음';
-  private loopRangeItems: string[] = ['반복없음', '매일', '매주', '매월', '매년'];
+  private loopRangeItems: Array<{id: number, txt: string}>= [
+    {id:0, txt:'반복없음'},
+    {id:1, txt:'매일'},
+    {id:2, txt:'매주'},
+    {id:3, txt:'2주마다'},
+    {id:4, txt:'매월'},
+    {id:5, txt:'매년'}
+  ];
   private loopRangeCheck: boolean=false;
-  private loopRangeCount: number | string=10;
+  private loopRangeCount: number | string=0;
 
   private formData: FormData=new FormData();
   private imgFileService: ImageFileService=new ImageFileService();
@@ -79,8 +87,7 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
     return this.attachFileService.getItems();
   }
 
-
-  get currentLoopRangeItems(): string[]{
+  get currentLoopRangeItems(): Array<{id: number, txt: string}>{
     return this.loopRangeItems;
   }
 
@@ -100,20 +107,27 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
 
   private getStartAt() {
     const apm = this.startTimeSelectModel.apm;
-    const hour=( apm === '오후' )? Number( this.startTimeSelectModel.hour ) - 12 : this.startTimeSelectModel.hour;
+    const selectHour=Number( this.startTimeSelectModel.hour );
+    const hour=( apm === '오후' )?  selectHour+12 : selectHour;
     const minute = this.startTimeSelectModel.minute;
 
+   //현재 서버에선 -->  evt_startAt = moment(data.evt_startAt).utc().format('YYYY-MM-DD HH:mm:ss'); 처럼 설정되어 있다.
+    // > moment().tz(data.evt_startAt || "Asia/Seoul").format('YYYY-MM-DD  HH:mm:ss') 처럼 바뀌어야 한다.;
+
     // //2019-11-15 10:00:00
-    return `${this.startDatePickerModel} ${hour}:${minute}`;
+    return `${this.startDatePickerModel} ${hour}:${minute}:00`;
   }
 
   private getEndAt() {
-    const apm = this.startTimeSelectModel.apm;
-    const hour=( apm === '오후' )? Number( this.endTimeSelectModel.hour ) - 12 : this.endTimeSelectModel.hour;
+    const apm = this.endTimeSelectModel.apm;
+    const selectHour= Number( this.endTimeSelectModel.hour );
+    const hour=( apm === '오후' )? selectHour+12 : selectHour;
     const minute = this.endTimeSelectModel.minute;
 
+    //현재 서버에선 -->  evt_endAt = moment(data.evt_endAt).utc().format('YYYY-MM-DD HH:mm:ss'); 처럼 설정되어 있다.
+    // > moment().tz(data.evt_endAt || "Asia/Seoul").format('YYYY-MM-DD  HH:mm:ss') 처럼 바뀌어야 한다.;
     // //2019-11-15 10:00:00
-    return `${this.endDatePickerModel} ${hour}:${minute}`;
+    return `${this.endDatePickerModel} ${hour}:${minute}:00`;
   }
 
 
@@ -188,7 +202,10 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
 
   private loopRangeCountClickHandler( value: string ){
     this.loopRangeCount=value;
+    let {repeat_count}=this.scheduleData;
+    repeat_count=Number(this.loopRangeCount);
     // console.log(this.loopRangeCount);
+    this.scheduleData = {...this.scheduleData, repeat_count};
   }
   /**
    * 일정 등록시 타이틀 부분
@@ -244,6 +261,7 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
     const scheduleDetailAreaTxt=this.$refs.scheduleDetailAreaTxt as HTMLTextAreaElement;
     /* scheduleDetailAreaTxt.style.height = String( Utils.autoResizeTextArea(this.scheduleData.body) + 'px');*/
 
+    //Mixins(UtilsMixins)  -- UtilsMixins 의 메서드
     this.txtAreaEleH( scheduleDetailAreaTxt, this.scheduleData.body );
   }
 
@@ -267,6 +285,8 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
     //formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.
     const temp = JSON.stringify( this.scheduleData );
     this.formData.append('data', temp );
+
+    console.log(this.scheduleData, temp );
 
     this.ADD_SCHEDULE_ACTION({classId: Number(this.classID), formData: this.formData})
       .then((data) => {

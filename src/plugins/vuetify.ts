@@ -20,7 +20,7 @@ import Vuetify, {
 import {Ripple, ClickOutside} from 'vuetify/lib/directives';
 import '@mdi/font/css/materialdesignicons.css';
 // import { VuetifyPreset } from 'vuetify/types';
-import 'vuetify/dist/vuetify.min.css';
+// import 'vuetify/dist/vuetify.min.css';
 
 Vue.use( Vuetify, {
   components:{

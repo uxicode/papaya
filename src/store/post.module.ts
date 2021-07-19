@@ -186,7 +186,7 @@ export default class PostModule extends VuexModule {
   }
 
   @Mutation
-  public [SET_POST_DETAIL]( data: any ){
+  public [SET_POST_DETAIL]( data: IPostModel & IPostInLinkModel ){
     this.postDetailData=data;
   }
 
@@ -366,13 +366,22 @@ export default class PostModule extends VuexModule {
   }
 
   @Action({rawError: true})
-  public [EDIT_POST_ACTION](payload: { promise: Array<Promise<any>> }): Promise<any>{
-    const {promise} = payload;
+  public [EDIT_POST_ACTION](payload: {  classId: number, postId: number, promise: Array<Promise<any>> }): Promise<any>{
+    const {classId, postId, promise} = payload;
 
     return getAllPromise(promise)
       .then((data)=>{
 
         console.log(data);
+
+        PostService.getPostsById(classId, postId)
+          .then((readData) => {
+            this.context.commit( EDIT_POST, { postId, editInfo: readData.post} );
+            //리스트에서 알림 수정은 데이터 갱신이 이루어지지만
+            //상세에서 알림 수정은 데이터 갱신이 이루어 지지 않는다. -- > 수정
+            this.context.commit( SET_POST_DETAIL, readData.post );
+
+          });
 
         return Promise.resolve(data);
       }).catch((error) => {
