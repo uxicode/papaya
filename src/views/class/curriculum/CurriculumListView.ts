@@ -59,6 +59,8 @@ export default class CurriculumListView extends Vue {
     private isAddPopupOpen: boolean=false;
     private isModifyPopupOpen: boolean=false;
 
+    private currentUserAuth: number=-1;
+
     private makeCurriculumData: IMakeEducation={
         title: '',
         goal: '',
@@ -116,6 +118,10 @@ export default class CurriculumListView extends Vue {
     private onDetailCurriculumPopupStatus(value: boolean) {
         this.isDetailPopupOpen=value;
         this.courseDetailArray( this.courseDetailData );
+    }
+
+    private getIsOwner(): boolean {
+        return (this.myClassHomeModel.me?.user_id === this.myClassHomeModel.owner_id);
     }
 
     /**

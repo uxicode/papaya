@@ -526,23 +526,11 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
       //ostService.deletePostFileById(classId, postId, {ids})
       const removeFiles=PostService.deletePostFileById(Number( this.classID ), id, {ids:this.removeFiles});
       editPromiseItems.push(removeFiles);
-      /*this.DELETE_POST_FILE_ACTION( { classId: Number( this.classID ), postId: id, ids:this.removeFiles })
-        .then( (deleteResult)=>{
-          console.log(deleteResult);
-          this.removeFiles=[];
-          // this.imgFilesAllClear(); //이미지 데이터 비우기
-          // this.attachFilesAllClear();//파일 데이터 비우기
-        });*/
     }
     //투표 제거가 있다면
     if( this.removeVoteId!==-1 ){
       const removeVoteItem = PostService.deleteVote(this.removeVoteId);
       editPromiseItems.push(removeVoteItem);
-      /*this.DELETE_VOTE_ACTION({postId: id, voteId: this.removeVoteId})
-        .then((deleteVoteResult) => {
-          console.log(deleteVoteResult);
-          this.removeVoteId = -1;
-        });*/
     }
     //이미지 파일 저장.
     this.imgFileService.save( this.formData );
@@ -573,42 +561,6 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
             this.EDIT_POST({postId: id, editInfo: readData.post});
           });
       });
-
-
-
-    //타이틀과 본문 텍스트만 수정된 경우
-   /* if( !this.getValidLink() &&
-      this.voteData===null &&
-      this.alarmData.alarmAt==='' &&
-      this.imgFileService.getAddFiles().length<1 &&
-      this.attachFileService.getAddFiles().length<1 &&
-      this.removeFiles.length <1) {
-      this.EDIT_POST_TXT_ACTION({
-        classId: Number(this.classID),
-        postId: id,
-        tit: this.postData.title,
-        txt: this.postData.text
-      })
-        .then((data) => {
-          console.log(data);
-          this.allClear(); //post 데이터 비우기
-        });
-    }else{
-
-    }*/
-
-    //이게 신규인지 edit 인지 파악필요.
-   /* if (this.voteData !== null && this.isAddVote ) {
-      console.log(this.voteData);
-      this.ADD_VOTE_ACTION( {classId: Number(this.classID), postId: id, voteData: this.voteData})
-        .then((data)=>{
-          console.log('투표 추가 완료', data);
-        });
-    }*/
-
-
-
-    // console.log(this.formData.getAll('data'), this.formData.getAll('files'), id, Number(this.classID));
 
   }
 }

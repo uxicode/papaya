@@ -6,7 +6,7 @@
                 <!-- header custom coding-->
                 <p class="popup-header-tit mgb-0">{{ curriculumDetailModel.title }}</p>
 
-                <div class="popup-btn" v-if="isOwner( curriculumDetailModel.owner.user_id, curriculumDetailModel.user_id)">
+                <div class="popup-btn" v-if="getIsMember(curriculumDetailModel.owner.user_id )">
                     <div class="list-popup">
                         <v-menu
                                 min-width="160px"

@@ -85,9 +85,16 @@ export class ScheduleService{
     return request('post', `${CLASS_BASE_URL}/${classId}/schedule`, formData );
   }
 
+  public static setScheduleInfoById(classId: string | number, scheduleId: number, formData: FormData): Promise<any> {
+    return request('put', `${CLASS_BASE_URL}/${classId}/schedule/${scheduleId}`, formData);
+  }
+
   public static deleteScheduleById(classId: string | number, scheduleId: number) {
     return request('delete', `${CLASS_BASE_URL}/${classId}/schedule/${scheduleId}`);
   }
 
+  public static deleteScheduleFileById(classId: number, scheduleId: number, payload: { ids: number[] }): Promise<any> {
+    return request('delete', `${CLASS_BASE_URL}/${classId}/schedule/${scheduleId}/attachments`, payload);
+  }
 
 }

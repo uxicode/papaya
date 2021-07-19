@@ -1,10 +1,10 @@
 <div>
   <!-- start: 공통 팝업 / 파일명 : W.4.5.3.3.4.2 (일정 만들기) (4.5.3.3.1 ~ 4.5.3.3.4.2) isPopup=false;loopRangeCheck = false-->
   <transition name="modal">
-    <modal v-if="isOpen" size="600px" body-padding="0" >
+    <modal v-if="isOpen && scheduleDetailModel" size="600px" body-padding="0" @modalClose="popupClose">
       <div slot="header">
         <!-- header custom coding-->
-        <p class="popup-header-tit">새 일정 등록</p>
+        <p class="popup-header-tit">일정 수정하기</p>
         <div class="popup-close" @click.prevent="popupClose">
           <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
         </div>
@@ -23,7 +23,7 @@
               </div>
               <div class="form-item">
                 <!--              <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">-->
-                <txt-field add-class="popup-type" placeholder="제목을 20자 이내로 작성해 주세요." v-model="scheduleData.title" @input="addScheduleTitleChange"></txt-field>
+                <txt-field add-class="popup-type" placeholder="제목을 20자 이내로 작성해 주세요." v-model="scheduleDataModel.title" @input="addScheduleTitleChange"></txt-field>
               </div>
             </div>
             <div class="popup-form-cnt">
@@ -31,7 +31,7 @@
                 <p>하루종일</p>
                 <div class="form-box">
                   <div class="form-switcher">
-                    <input type="checkbox" id="toggle1" v-model="scheduleData.fullday"  @input="fulldayCheckChange(  $event.target.value )">
+                    <input type="checkbox" id="toggle1" v-model="scheduleDataModel.fullday"  @input="fulldayCheckChange(  $event.target.value )">
                     <label for="toggle1"></label>
                   </div>
                 </div>
@@ -237,7 +237,7 @@
                         <v-list-item
                                 v-for="(item, index) in currentLoopRangeItems"
                                 :key="index"
-                                @click="loopRangeModel=item">
+                                @click="loopRangeModel=item.txt">
                           <v-list-item-title>{{ item }}</v-list-item-title>
                         </v-list-item>
                       </v-list>
@@ -252,7 +252,7 @@
                 <div class="form-box">
                   <div class="form-group">
                     <!--                  <input type="number" class="form-control" value="10">-->
-                    <txt-field input-type="number" v-model="loopRangeCount" @input="loopRangeCountClickHandler"></txt-field>
+                    <txt-field input-type="number" v-model="scheduleDataModel.repeat_count" @input="loopRangeCountClickHandler"></txt-field>
                   </div>
                 </div>
               </div>
@@ -262,7 +262,7 @@
                 <textarea
                         style="padding: 0 40px;"
                         ref="scheduleDetailAreaTxt"
-                        v-model="scheduleData.body"
+                        v-model="scheduleDataModel.body"
                         class="form-textarea auto-resize"
                         placeholder="일정 내용을 작성해 주세요."
                         @input="scheduleDetailAreaInputHandler( $event.target.value )"></textarea>
@@ -314,7 +314,7 @@
       <div slot="footer">
         <!-- footer custom coding-->
         <div class="btn-group rt pdt-30 pdb-30">
-          <button type="button" class="btn primary navi"  @click="submitAddSchedule">등록</button>
+          <button type="button" class="btn primary navi"  @click="onEditSubmitSchedule">수정하기</button>
         </div>
       </div>
     </modal>

@@ -247,12 +247,32 @@ class Utils{
     return hours + '시 ' + minutes + '분';
   }
 
+  public static getHours( isTwentyFour: boolean, dateValue: Date | number ) {
+    const hours=(typeof dateValue ==='number' )? dateValue : dateValue.getHours();
+    if( isTwentyFour ){
+      return hours;
+    }else{
+      return ( hours>12 )? hours-12 : hours;
+    }
+  }
+
+  public static getMinutes(dateValue: Date | number): number {
+    return (typeof dateValue ==='number' )? dateValue : dateValue.getMinutes();
+  }
+
+
   /**
    * 오전 오후 표시해 주는 시간.
    * @param hours
    */
   public static hoursConvertToApm( hours: number ): string | number{
-    return hours>12? String( '오후 '+( hours-12) ) : hours;
+    const apm = Utils.getAmPm(hours);
+    return String( apm+' '+Utils.getHours( false, hours ) );
+  }
+
+  public static getAmPm( hours: Date | number): string{
+    const targetHours = (typeof hours === 'number') ? hours : hours.getHours();
+    return (targetHours > 12) ? '오후' : '오전';
   }
 
   /**
