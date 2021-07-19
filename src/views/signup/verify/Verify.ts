@@ -1,8 +1,11 @@
 import {Vue, Component, Watch} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import NoticePopup from '@/components/modal/noticePopup.vue';
 import WithRender from './Verify.html';
+
+const Auth = namespace('Auth');
 
 @WithRender
 @Component({
@@ -14,12 +17,23 @@ import WithRender from './Verify.html';
 })
 export default class Verify extends Vue {
 
+    @Auth.Getter
+    private pageTitle!: string;
+
     private verifyComplete: boolean= false;
     private verifyVal: string | number = '';
     private isNoticePopupOpen: boolean = false;
+    private under14: boolean = false;
+    private isAgreed: boolean = false;
+    private isVerifyFail: boolean = false;
 
     get isVerifyComplete(){
         return this.verifyComplete;
+    }
+
+    get isUnder14() {
+        this.under14 = this.pageTitle !== '일반 회원가입';
+        return this.under14;
     }
 
     private historyBack(): void{
@@ -34,30 +48,29 @@ export default class Verify extends Vue {
 
     private verifyModalOpen(): void {
 
-        // @ts-ignore
-        // const {form_chk} = document;
-        // window.open('', 'popupChk', 'width=500, height=800');
-        // form_chk.action = 'https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb';
-        // form_chk.target = 'popupChk';
-        // form_chk.submit();
-
-        //https://wwwtest.papayaclass.com/api/v1/checkplus_main
+        // 업로드시 url - https://wwwtest.papayaclass.com/api/v1/checkplus_main
+        // 로컬테스트용 url - ../testOpen.html
         const windowOpener=window.open('https://wwwtest.papayaclass.com/api/v1/checkplus_main', '_blank', 'width=500, height=800, status=yes, toolbar=yes');
-
-        // this.verifyComplete = true; // 인증 성공시 실행되어야 하는 부분
 
     }
 
     private onUpdateVerify(val: string){
-        console.log(val);
-        if ( val ){
+        console.log(val); // mobileNum+'_'+age
+        const age = Number(val.split('_')[1]);
+        if ( age >= 14 ){
             this.isNoticePopupOpen = true;
+        } else {
+            this.isVerifyFail = true;
         }
     }
 
     private onNoticePopupStatus(value: boolean) {
         this.isNoticePopupOpen=value;
         this.verifyComplete = true;
+    }
+
+    private gotoSignUpPage() {
+        this.$router.push('/signup');
     }
 
 }

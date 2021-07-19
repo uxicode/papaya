@@ -66,8 +66,6 @@ export default class MyProfileMain extends Vue {
         return (this.myInfo)? this.myInfo.email : '';
     }
 
-
-
     /**
      * 정보변경 modal 혹은 dropdown 열기
      * @param key
@@ -189,6 +187,7 @@ export default class MyProfileMain extends Vue {
             .then(() => {
                 this.USER_ME_ACTION().then( ( me: IUserMe)=>{
                     console.log(me.email);
+                    this.myInfo.email = newEmail;
                 });
             });
         this.isModifyEmailModal = !this.isModifyEmailModal;

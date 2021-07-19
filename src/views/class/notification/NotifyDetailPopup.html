@@ -95,16 +95,13 @@
                             </div>
                         </div>
                       <!-- start: 댓글 -->
-                      <!-- 0: 알림 , 1: 일정 -->
-                      <comment-area :parent-type="0"
-                                    :parent-id="postDetailModel.id"
+                      <comment-area :parent-item="postDetailModel"
                                     :member-id="myClassHomeModel.me.id"></comment-area>
                       <!-- end: 댓글 -->
 
                     </div>
                     <div slot="footer">
-                        <comment-btm :parent-type="0"
-                                     :parent-id="postDetailModel.id"
+                        <comment-btm :parent-item="postDetailModel"
                                      :member-id="myClassHomeModel.me.id"></comment-btm>
                     </div>
                 </div>

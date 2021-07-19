@@ -206,6 +206,8 @@ export default class ClassProfile extends Vue {
     }
 
     private async saveData() {
+        // await this.MODIFY_CLASS_MEMBER_INFO({classId: this.classID, memberId: this.myClassInfo.me.id},
+        //     {nickname: this.classMemberInfo.nickname});
         await ClassMemberService.setClassMemberInfo(this.classID, this.myClassInfo.me.id, {nickname: this.classMemberInfo.nickname});
         this.goBack();
     }

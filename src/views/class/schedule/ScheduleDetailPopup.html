@@ -87,17 +87,14 @@
           </div>
 
           <!-- start: 댓글 -->
-          <!-- 0: 알림 , 1: 일정 -->
-          <comment-area :parent-type="1"
-                        :parent-id="scheduleDetailItem.id"
+          <comment-area :parent-item="scheduleDetailModel"
                         :member-id="myClassHomeModel.me.id"></comment-area>
           <!-- end: 댓글 -->
 
         </div>
       </div>
       <div slot="footer">
-        <comment-btm :parent-type="1"
-                     :parent-id="scheduleDetailItem.id"
+        <comment-btm :parent-item="scheduleDetailModel"
                      :member-id="myClassHomeModel.me.id"></comment-btm>
       </div>
     </modal>

@@ -33,14 +33,14 @@ export default class ModifyPassword extends Vue {
         rePwd: '',
     };
 
+    @Auth.Action
+    private LOGIN_ACTION!: (data: any) => Promise<any>;
+
     @Auth.Getter
     private userInfo!: IUserMe;
 
     @Auth.Getter
     private resetPwVerifyInfo!: any;
-
-    @Auth.Action
-    private LOGIN_ACTION!: (data: any) => Promise<any>;
 
     public required(value: string): boolean {
         // console.log( value, !!value);
@@ -77,6 +77,8 @@ export default class ModifyPassword extends Vue {
                 this.isModifiedPwd=true;
                 this.gotoMyProfile();
             });
+        } else {
+            alert('비밀번호가 일치하지 않습니다.');
         }
     }
 

@@ -49,6 +49,8 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
+import {IPostModel} from '@/views/model/post.model';
+import {IScheduleTotal} from '@/views/model/schedule.model';
 import {CommentService} from '@/api/service/CommentService';
 import {Utils} from '@/utils/utils';
 
@@ -57,11 +59,9 @@ const Schedule = namespace('Schedule');
 
 @Component
 export default class CommentArea extends Vue {
-  @Prop(Number)
-  private parentType!: number;
 
-  @Prop(Number)
-  private parentId!: number;
+  @Prop(Object)
+  private parentItem!: Pick<IPostModel | IScheduleTotal, 'post_type' | 'id'> ;
 
   @Prop(Number)
   private memberId!: number;
@@ -96,7 +96,7 @@ export default class CommentArea extends Vue {
   private tempReply: string = '';
 
   get commentItemsModel(): any {
-    if (this.parentType === 0) {
+    if (this.parentItem.post_type === 0) {
       return this.postCommentItems;
     } else {
       return this.scheduleCommentItems;
@@ -104,7 +104,7 @@ export default class CommentArea extends Vue {
   }
 
   get replyItemsModel(): any {
-    if (this.parentType === 0) {
+    if (this.parentItem.post_type === 0) {
       return this.postReplyItems;
     } else {
       return this.scheduleReplyItems;
@@ -112,10 +112,10 @@ export default class CommentArea extends Vue {
   }
 
   private getCommentsType(): any {
-    if (this.parentType === 0) {
-      return this.GET_POST_COMMENTS_ACTION(this.parentId);
+    if (this.parentItem.post_type === 0) {
+      return this.GET_POST_COMMENTS_ACTION(this.parentItem.id);
     } else {
-      return this.GET_SCHEDULE_COMMENTS_ACTION(this.parentId);
+      return this.GET_SCHEDULE_COMMENTS_ACTION(this.parentItem.id);
     }
   }
 
@@ -125,7 +125,7 @@ export default class CommentArea extends Vue {
       member_id: this.memberId,
       comment: this.reply
     };
-    if (this.parentType === 0) {
+    if (this.parentItem.post_type === 0) {
       return this.ADD_POST_REPLY_ACTION(replyData);
     } else {
       return this.ADD_SCHEDULE_REPLY_ACTION(replyData);
