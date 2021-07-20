@@ -1,5 +1,5 @@
 import {request} from '@/api/service/AxiosService';
-import {CLASS_BASE_URL} from '@/api/base';
+import {CLASS_BASE_URL, PERSONAL, USER_KEEP, USER_ME} from '@/api/base';
 
 export class ScheduleService{
 
@@ -96,5 +96,33 @@ export class ScheduleService{
   public static deleteScheduleFileById(classId: number, scheduleId: number, payload: { ids: number[] }): Promise<any> {
     return request('delete', `${CLASS_BASE_URL}/${classId}/schedule/${scheduleId}/attachments`, payload);
   }
+
+  public static setKeepSchedule(payload: { class_id: number, schedule_id: number }): Promise<any> {
+    return request('post', `${USER_KEEP}${CLASS_BASE_URL}/schedule`, payload);
+  }
+
+  public static getKeepSchedule(): Promise<any> {
+    return request('get', `${USER_KEEP}${CLASS_BASE_URL}/schedule`);
+  }
+
+  public static deleteKeepSchedule( scheduleId: number): Promise<any> {
+    return request('get', `${USER_KEEP}${CLASS_BASE_URL}/schedule/${scheduleId}`);
+  }
+
+
+
+  public static setPersonalKeepSchedule(payload: { class_id: number, schedule_id: number }): Promise<any> {
+    return request('post', `${USER_KEEP}${PERSONAL}/schedule`, payload);
+  }
+
+  public static getPersonalKeepSchedule(): Promise<any> {
+    return request('get', `${USER_KEEP}${PERSONAL}/schedule`);
+  }
+
+  public static deletePersonalKeepSchedule( scheduleId: number): Promise<any> {
+    return request('get', `${USER_KEEP}${PERSONAL}/schedule/${scheduleId}`);
+  }
+
+
 
 }

@@ -409,7 +409,6 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
       .then((data) => {
         this.allClear();
       });
-
   }
 
   private formDataPlainClear() {
