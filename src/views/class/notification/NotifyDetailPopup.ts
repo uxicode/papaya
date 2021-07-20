@@ -11,8 +11,9 @@ import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
 import DetailInVotePreview from '@/components/preview/DetailInVotePreview.vue';
 import CommentArea from '@/components/comment/CommentArea.vue';
 import CommentBtm from '@/components/comment/CommentBtm.vue';
-import WithRender from './NotifyDetailPopup.html';
 import UtilsMixins from '@/mixin/UtilsMixins';
+import EditNotificationPopup from '@/views/class/notification/EditNotificationPopup';
+import WithRender from './NotifyDetailPopup.html';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -29,12 +30,22 @@ const Post = namespace('Post');
         DetailInVotePreview,
         CommentArea,
         CommentBtm,
+        EditNotificationPopup
     }
 })
 export default class NotifyDetailPopup extends Mixins(UtilsMixins) {
 
     @Prop(Boolean)
     private isOpen!: boolean;
+
+    @Post.Action
+    private GET_POST_DETAIL_ACTION!: ( payload: { classId: number, postId: number }) =>Promise<any>;
+
+    @Post.Action
+    private POST_TYPE_CHANGE_ACTION!: (payload: { classId: string | number, postId: number })=>Promise<any>;
+
+    @Post.Action
+    private DELETE_POST_ACTION!: (payload: { classId: string | number, postId: number })=>Promise<any>;
 
     @Post.Getter
     private postDetailItem!: IPostModel & IPostInLinkModel;
@@ -46,6 +57,8 @@ export default class NotifyDetailPopup extends Mixins(UtilsMixins) {
     private myClassHomeModel!: IClassInfo;
 
     private isPhotoViewer: boolean = false;
+    private isEditPopupOpen: boolean=false;
+    private detailPostId: number=-1; // 동적으로 변경 안되는 상태
 
     get postDetailModel():  IPostModel & IPostInLinkModel{
         return this.postDetailItem;
@@ -68,6 +81,47 @@ export default class NotifyDetailPopup extends Mixins(UtilsMixins) {
 
     private onPhotoViewerStatus(value: boolean) {
         this.isPhotoViewer = value;
+    }
+
+    private async onEditPost(id: number) {
+        this.detailPostId = id; // update postId
+        console.log(id);
+        await this.GET_POST_DETAIL_ACTION({classId: Number(this.classID), postId: this.detailPostId})
+          .then((data)=>{
+              this.isEditPopupOpen=true;
+          });
+    }
+
+    private onEditClose(  value: boolean ){
+        this.isEditPopupOpen=value;
+    }
+
+    /**
+     * 알림 타입 변경 - 일반 or 공지
+     * @param postIdx
+     * @private
+     */
+    private onPostTypeChange( postIdx: number) {
+        this.POST_TYPE_CHANGE_ACTION({classId: this.classID, postId: postIdx})
+          .then((data)=>{
+              console.log(data);
+              const type=( data.type===0 )? '일반' : '공지';
+              alert(`${type} 게시물로 변경 되었습니다.`);
+          });
+    }
+
+
+    /**
+     * 알림 삭제
+     * @param postIdx
+     * @private
+     */
+    private onDeleteByPostId(postIdx: number) {
+        this.DELETE_POST_ACTION( {classId:Number(this.classID), postId:postIdx})
+          .then((data)=>{
+              console.log(data);
+              alert('요청하신 알림을 삭제 하였습니다.');
+          });
     }
 
 }

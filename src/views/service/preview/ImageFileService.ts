@@ -58,9 +58,12 @@ class ImageFileService implements IFile{
    */
   public remove(idx: number): void {
 
-    const removeItem=this.imgFileItems.splice(idx, 1);
-    if (removeItem[0].url.indexOf('blob') !== -1) {
-      this.removeBlobURL( removeItem[0].url ); // blob url 제거
+    const removeItem=this.imgFileItems[idx];
+    if (removeItem.url.indexOf('blob') !== -1) {
+      this.imgFileItems.splice(idx, 1);
+      this.removeBlobURL( removeItem.url ); // blob url 제거
+    }else{
+      this.imgFileItems.splice(idx, 1);
     }
   }
 

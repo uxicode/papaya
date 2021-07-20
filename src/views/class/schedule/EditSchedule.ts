@@ -78,7 +78,7 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     {id:5, txt:'매년'}
     ];
   private loopRangeCheck: boolean=false;
-  private loopRangeCount: number | string=10;
+  private loopRangeCount: number | string=-1;
   private removeFiles: number[]= [];
 
   private formData: FormData=new FormData();
@@ -174,7 +174,8 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
 
   private getStartAt() {
     const apm = this.startTimeSelectModel.apm;
-    const hour=( apm === '오후' )? Number( this.startTimeSelectModel.hour ) - 12 : this.startTimeSelectModel.hour;
+    const selectHour= Number( this.startTimeSelectModel.hour );
+    const hour=( apm === '오후' )? selectHour+12 : selectHour;
     const minute = this.startTimeSelectModel.minute;
 
     // //2019-11-15 10:00:00
@@ -182,8 +183,9 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
   }
 
   private getEndAt() {
-    const apm = this.startTimeSelectModel.apm;
-    const hour=( apm === '오후' )? Number( this.endTimeSelectModel.hour ) - 12 : this.endTimeSelectModel.hour;
+    const apm = this.endTimeSelectModel.apm;
+    const selectHour= Number( this.endTimeSelectModel.hour );
+    const hour=( apm === '오후' )? selectHour+12 : selectHour;
     const minute = this.endTimeSelectModel.minute;
 
     // //2019-11-15 10:00:00
@@ -286,9 +288,14 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     }
   }
 
-  private loopRangeCountClickHandler( value: string ){
-    this.loopRangeCount=value;
+  private loopRangeCountClickHandler( value: number | string ){
+    this.loopRangeCount=Number( value );
+    console.log(this.loopRangeCount);
+    // let {repeat_count}=this.scheduleData;
+    // repeat_count = this.loopRangeCount;
     // console.log(this.loopRangeCount);
+    // this.scheduleData = {...this.scheduleData, repeat_count};
+    this.scheduleData.repeat_count=this.loopRangeCount;
   }
   /**
    * 일정 등록시 타이틀 부분
@@ -393,6 +400,8 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     const temp = JSON.stringify( this.scheduleData );
     this.formData.append('data', temp );
 
+    // console.log(this.scheduleData);
+
     const allEditInfo=ScheduleService.setScheduleInfoById( Number( this.classID ), id, this.formData );
     editPromiseItems.push( allEditInfo );
 
@@ -401,6 +410,10 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
         this.allClear();
       });
 
+  }
+
+  private formDataPlainClear() {
+    this.formData.delete('data');
   }
 
   private allClear() {
@@ -416,6 +429,7 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
       evt_startAt: '',  //2019-11-15 10:00:00
       evt_endAt: '',
     };
+    this. formDataPlainClear();
   }
 
 }

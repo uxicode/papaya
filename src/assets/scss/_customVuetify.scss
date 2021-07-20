@@ -1,31 +1,71 @@
 
-.form-item>p{margin-bottom:0;}
-.theme--light.v-calendar-weekly .v-calendar-weekly__day:not(:last-child),
-.theme--light.v-calendar-weekly .v-calendar-weekly__head-weekday:not(:last-child){
-  border-right:0;
+//상단 캘린더 툴바 > 컨텐츠 container
+$calendarBorderColor: #f4f5f6;
+.v-toolbar__content{
+  border-bottom:1px solid $calendarBorderColor;
 }
-.v-calendar-weekly__day-label .v-btn{font-size:14px;}
-/*달력 클릭했을때 배경 */
-.theme--light.v-btn:focus {
-  color:#fff;
-  &:before{
-    opacity: 1;
-    background-color:#1d1d4c;
+
+//캘린더>각 주차 별 묶음
+.theme--light.v-calendar-weekly{
+
+  //현재 month 가 아닌 이전/다음 month 의 요일
+  .v-calendar-weekly__day.v-outside,
+  .v-calendar-weekly__head-weekday.v-outside{
+    background-color: transparent;
+    .v-btn__content{
+      color:rgba(15, 15, 21, 0.2);
+    }
   }
-}
-//현재 month 가 아닌 이전/다음 month 의 요일
-.theme--light.v-calendar-weekly .v-calendar-weekly__day.v-outside,
-.theme--light.v-calendar-weekly .v-calendar-weekly__head-weekday.v-outside{
-  background-color: #f9f9f9;
-  .v-btn__content{
-    color:#9d9db2;
+
+  .v-calendar-weekly__day.v-past, //현재 일보다 지난 날짜
+  .v-calendar-weekly__day.v-future,// 현재 일보다 앞선 날짜
+  .v-calendar-weekly__day:not(:last-child),
+  .v-calendar-weekly__head-weekday:not(:last-child),
+  .v-calendar-weekly__head-weekday {
+    border-right: 0;
   }
+  //일별 셀
+  .v-calendar-weekly__day{
+    border-bottom:1px solid $calendarBorderColor;
+  }
+  //1주 묶음
+  .v-calendar-weekly__week{
+    //맨 마지막 주의 날짜 셀들~
+    &:last-child .v-calendar-weekly__day {
+      border-bottom: 0;
+    }
+  }
+
 }
-//달력 상단 요일
+//캘린더>상단 head 요일 group( 텍스트 / 버튼 / 사각 박스 )
 .v-calendar-weekly__head-weekday{
+  padding:6px 4px 0 4px;
   font-size:14px;
 }
 
+
+//캘린더>각 요일>날짜(텍스트/버튼)
+.v-calendar-weekly__day-label{
+  margin:4px 0;
+  .v-btn {
+    font-size: 14px;
+    font-weight: bold;
+    height:32px;
+    width:32px;
+
+    /*달력 클릭했을때 배경 */
+    &:focus {
+      color: #fff;
+      &:before {
+        opacity: 1;
+        background-color: #1d1d4c;
+      }
+    }
+  }
+}
+
+
+.form-item>p{margin-bottom:0;}
 .v-text-field input{font-size:14px;}
 .form-group.time .v-icon{font-size:14px;}
 .time-select-menu.bg-white{
@@ -53,8 +93,12 @@
   }
 }
 
+.theme--light.v-calendar-weekly{
+  border-left:0;
+  border-top:0;
+}
 
-//캘린더 헤더
+
 .v-calendar.v-calendar-events .v-calendar-weekly__head-weekday{margin-right:0;}
 //캘린더 관련 scss 추가
 .v-event-draggable {

@@ -27,18 +27,15 @@
                                     </button>
                                 </template>
                                 <v-list>
-                                    <v-list-item @click="">
-                                        <v-list-item-title>일정 수정</v-list-item-title>
+                                    <v-list-item @click="onEditPost( postDetailModel.id )">
+                                        <v-list-item-title>알림 수정</v-list-item-title>
                                     </v-list-item>
-                                    <v-list-item @click="">
-                                        <v-list-item-title>공지로 등록</v-list-item-title>
-                                    </v-list-item>
-                                    <v-list-item @click="">
-                                        <v-list-item-title>일정 보관</v-list-item-title>
-                                    </v-list-item>
-                                    <v-list-item @click="">
-                                        <v-list-item-title>일정 삭제</v-list-item-title>
-                                    </v-list-item>
+                                  <v-list-item @click="onPostTypeChange( postDetailModel.id )">
+                                    <v-list-item-title>공지로 등록/등록 해제</v-list-item-title>
+                                  </v-list-item>
+                                  <v-list-item @click="onDeleteByPostId( postDetailModel.id )">
+                                    <v-list-item-title>알림 삭제</v-list-item-title>
+                                  </v-list-item>
                                 </v-list>
                             </v-menu>
                         </div>
@@ -114,6 +111,6 @@
         <!-- end: 공통 팝업 -->
 
     </transition>
-
+    <edit-notification-popup :is-open="isEditPopupOpen" @change="onEditClose"></edit-notification-popup>
     <photo-viewer v-if="isPhotoViewer" :is-photo-viewer="isPhotoViewer" :img-data="imgPreviewInit(postDetailModel.attachment)" @change="onPhotoViewerStatus"></photo-viewer>
 </div>
