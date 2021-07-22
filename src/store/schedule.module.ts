@@ -1,24 +1,27 @@
 import {Action, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 import {
-  SET_SCHEDULE_LIST,
-  SET_SCHEDULE_DETAIL,
+  DELETE_KEEP_SCHEDULE,
+  DELETE_SCHEDULE,
+  EDIT_SCHEDULE,
   SET_COMMENTS,
+  SET_KEEP_SCHEDULE,
   SET_REPLY,
-  DELETE_SCHEDULE, EDIT_SCHEDULE,
+  SET_SCHEDULE_DETAIL,
+  SET_SCHEDULE_LIST
 } from '@/store/mutation-class-types';
 import {
-  GET_SCHEDULE_ACTION,
-  GET_SCHEDULE_DETAIL_ACTION,
-  GET_SCHEDULE_COMMENTS_ACTION,
+  ADD_SCHEDULE_ACTION,
   ADD_SCHEDULE_COMMENT_ACTION,
   ADD_SCHEDULE_REPLY_ACTION,
-  ADD_SCHEDULE_ACTION,
   DELETE_SCHEDULE_ACTION,
   EDIT_SCHEDULE_ACTION,
+  GET_SCHEDULE_ACTION,
+  GET_SCHEDULE_COMMENTS_ACTION,
+  GET_SCHEDULE_DETAIL_ACTION,
+  SET_KEEP_SCHEDULE_ACTION
 } from '@/store/action-class-types';
-import {IScheduleDetail, IScheduleTotal} from '@/views/model/schedule.model';
+import {IKeepSchedule, IScheduleDetail, IScheduleTotal} from '@/views/model/schedule.model';
 import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
-import {PostService} from '@/api/service/PostService';
 import {ScheduleService} from '@/api/service/ScheduleService';
 import {CommentService} from '@/api/service/CommentService';
 import {getAllPromise} from '@/types/types';
@@ -27,6 +30,8 @@ import {getAllPromise} from '@/types/types';
   namespaced: true,
 })
 export default class ScheduleModule extends VuexModule {
+
+
 
   /* State */
   private scheduleListData: IScheduleTotal[] = [];
@@ -102,6 +107,8 @@ export default class ScheduleModule extends VuexModule {
   private commentData: ICommentModel[] = [];
   private replyData: IReplyModel[]=[];
 
+  private keepScheduleData: IKeepSchedule[]=[];
+
   /* Getter */
   get scheduleListItems(): IScheduleTotal[] {
     return this.scheduleListData;
@@ -121,6 +128,10 @@ export default class ScheduleModule extends VuexModule {
 
   get schEditId(): number{
     return this.scheduleEditIdx;
+  }
+
+  get keepScheduleItems(): IKeepSchedule[] {
+    return this.keepScheduleData;
   }
 
   /* Mutation */
@@ -148,8 +159,9 @@ export default class ScheduleModule extends VuexModule {
   public [EDIT_SCHEDULE]( info: { scheduleId: number, editInfo: any }){
     const {scheduleId, editInfo} = info;
     const findIdx=this.scheduleListData.findIndex((item) => item.id === scheduleId );
-    this.scheduleListData.splice(findIdx, 1, {...this.scheduleListData[findIdx],  ...editInfo});
-
+    if (findIdx !== -1){
+      this.scheduleListData.splice(findIdx, 1, {...this.scheduleListData[findIdx],  ...editInfo});
+    }
     this.scheduleEditIdx=scheduleId;
   }
 
@@ -158,8 +170,29 @@ export default class ScheduleModule extends VuexModule {
   public [DELETE_SCHEDULE](info: { scheduleId: number }){
     const {scheduleId} = info;
     const findIdx=this.scheduleListData.findIndex((item) => item.id === scheduleId );
-    this.scheduleListData.splice(findIdx, 1);
+    if (findIdx !== -1){
+      this.scheduleListData.splice(findIdx, 1);
+    }
+
   }
+
+  @Mutation
+  public [SET_KEEP_SCHEDULE](info: IKeepSchedule){
+    this.keepScheduleData.push(info);
+  }
+
+  @Mutation
+  public [DELETE_KEEP_SCHEDULE]( info: { scheduleId: number }){
+    const {scheduleId} = info;
+    const findIdx=this.keepScheduleData.findIndex((item) => item.id === scheduleId );
+    if (findIdx !== -1) {
+      this.keepScheduleData.splice(findIdx, 1 );
+    }
+
+  }
+
+
+
 
   /* Action */
   @Action({rawError: true})
@@ -252,21 +285,34 @@ export default class ScheduleModule extends VuexModule {
   }
 
 
-  /**
-   * 알림글 삭제
-   * @param payload
-   */
   @Action({rawError: true})
-  public [DELETE_SCHEDULE_ACTION](payload: { classId: string | number, scheduleId: number }): Promise<any>{
+  public async [DELETE_SCHEDULE_ACTION](payload: { classId: string | number, scheduleId: number }): Promise<unknown>{
     const {classId, scheduleId }=payload;
-    return ScheduleService.deleteScheduleById( classId, scheduleId )
-      .then((data)=>{
-        this.context.commit(DELETE_SCHEDULE, {scheduleId});
-        return Promise.resolve(data);
-      }).catch((error) => {
-        console.log(error);
-        return Promise.reject(error);
-      });
+    try {
+      const deleteSchedule = await ScheduleService.deleteScheduleById(classId, scheduleId);
+      console.log('deleteSchedule=', deleteSchedule);
+      const keepSchedule = await ScheduleService.getKeepSchedule();
+      const keepData: IKeepSchedule[] =await keepSchedule.keep_classschedule_list;
+
+      console.log('keepData=', keepData);
+
+      const matchKeepData =await keepData.filter((item: IKeepSchedule) => item.schedule_id === scheduleId);
+
+      console.log('matchKeepData=', matchKeepData);
+      //
+      if (matchKeepData.length > 0) {
+        ScheduleService.deleteKeepSchedule(matchKeepData[0].id)
+          .then((deleteData) => {
+            this.context.commit(DELETE_KEEP_SCHEDULE, {scheduleId});
+          });
+      }
+      this.context.commit(DELETE_SCHEDULE, {scheduleId});
+
+      return Promise.resolve(deleteSchedule);
+    } catch (error) {
+      console.log(error);
+      return Promise.reject(error);
+    }
   }
 
   @Action({rawError: true})
@@ -288,15 +334,37 @@ export default class ScheduleModule extends VuexModule {
           });
 
           // console.log(replyIdItems);
-          getAllPromise( replyIdPromiseItems )
+          return getAllPromise( replyIdPromiseItems )
               .then(( replyData: any[] )=>{
                 // console.log(replyData);
                 // this.replyData = replyData;
                 this.context.commit(SET_REPLY, replyData);
+
+                return Promise.resolve(replyData);
               });
+
         });
   }
 
+  @Action({rawError: true})
+  public [SET_KEEP_SCHEDULE_ACTION]( payload: { classId: number, scheduleId: number} ): Promise<any> {
+    const {classId, scheduleId}=payload;
+    return ScheduleService.setKeepSchedule({class_id: classId, schedule_id: scheduleId})
+      .then((readData) => {
+        console.log(readData);
+
+        this.context.commit(SET_KEEP_SCHEDULE, readData);
+        return Promise.resolve(readData);
+      });
+  }
+
+
+  /*ScheduleService.setKeepSchedule({class_id: Number(this.classID), schedule_id: this.scheduleDetailItem.id})
+.then((readData) => {
+  console.log(readData);
+  alert('일정이 보관 되었습니다.');
+});
+*/
   /**
    * 댓글 추가
    * parent_type: 댓글이 달린 원글 타입. 0 - 알림글 , 1 - 일정글

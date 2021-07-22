@@ -300,11 +300,23 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
 
   }
 
+  private resetDate() {
+    this.startDatePickerModel = new Date().toISOString().substr(0, 10);
+    this.startTimeSelectModel = {apm: '오전', hour: '12', minute: '30'};
+    this.endDatePickerModel = new Date().toISOString().substr(0, 10);
+    this.endTimeSelectModel = {apm: '오전', hour: '12', minute: '30'};
+  }
+
+  private formDataPlainClear() {
+    this.formData.delete('data');
+  }
 
   private allClear() {
     // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
     this.imgFilesAllClear(); //이미지 데이터 비우기
     this.attachFilesAllClear();//파일 데이터 비우기
+    this.resetDate(); //시작, 종료일시 초기화
+    this.formDataPlainClear(); // data 로 지정한 formData 제거
     this.scheduleData={
       repeat_type: 0,
       repeat_count: 0,
@@ -314,6 +326,8 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
       evt_startAt: '',  //2019-11-15 10:00:00
       evt_endAt: '',
     };
+
+
   }
 
 }

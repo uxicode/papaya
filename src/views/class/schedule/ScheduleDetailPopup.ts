@@ -2,7 +2,7 @@ import {Component, Mixins, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import UtilsMixins from '@/mixin/UtilsMixins';
 import {IClassInfo} from '@/views/model/my-class.model';
-import {IScheduleDetail, IScheduleTotal} from '@/views/model/schedule.model';
+import {IKeepSchedule, IScheduleDetail, IScheduleTotal} from '@/views/model/schedule.model';
 import MyClassService from '@/api/service/MyClassService';
 import {Utils} from '@/utils/utils';
 import TxtField from '@/components/form/txtField.vue';
@@ -18,6 +18,7 @@ import CommentBtm from '@/components/comment/CommentBtm.vue';
 import EditSchedule from '@/views/class/schedule/EditSchedule';
 import WithRender from './ScheduleDetailPopup.html';
 import {ScheduleService} from '@/api/service/ScheduleService';
+import {DELETE_SCHEDULE_ACTION, SET_KEEP_SCHEDULE_ACTION} from '@/store/action-class-types';
 
 const MyClass = namespace('MyClass');
 const Schedule = namespace('Schedule');
@@ -54,7 +55,10 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
   private ADD_SCHEDULE_REPLY_ACTION!: (payload: {comment_id: number, member_id: number, comment: string}) => Promise<any>;
 
   @Schedule.Action
-  private DELETE_SCHEDULE_ACTION!: (payload: { classId: string | number, scheduleId: number })=> Promise<any>;
+  private DELETE_SCHEDULE_ACTION!: (payload: { classId: string | number, scheduleId: number } ) => Promise<unknown>;
+
+  @Schedule.Action
+  private SET_KEEP_SCHEDULE_ACTION!: ( payload: { classId: number, scheduleId: number} )=> Promise<any>;
 
 
   @MyClass.Getter
@@ -118,13 +122,18 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
     this.deleteId=scheduleId;
   }
 
+  /**
+   * 삭제 팝업> 확인버튼 > 삭제 처리
+   * @param result
+   * @private
+   */
   private onDeleteConfirm( result: boolean ) {
     this.isConfirmPopupOpen=false;
 
     if (result) {
       this.DELETE_SCHEDULE_ACTION( {classId:Number(this.classID), scheduleId: this.deleteId })
         .then((data)=>{
-          console.log(data);
+          // console.log(data);
           this.isNoticePopupOpen=true;
           // this.isConfirmPopupOpen=false;
           this.$emit('delete', this.deleteId);
@@ -180,16 +189,18 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
   private onKeepSchedule() {
     ScheduleService.getKeepSchedule()
       .then((data)=>{
-        //보관된 사실이 없을 경우
-        if (data.keep_classschedule_list ) {
-          ScheduleService.setKeepSchedule({class_id: Number(this.classID), schedule_id: this.scheduleDetailItem.id})
-            .then((keepData) => {
-              console.log(keepData);
-            });
-        }else{
+        //보관된 사실이 있는 경우
+        const keepData: IKeepSchedule[]=data.keep_classschedule_list;
+        const matchKeepData=keepData.filter( (item: IKeepSchedule)=>item.schedule_id === this.scheduleDetailItem.id );
 
+        if (matchKeepData.length > 0) {
+          alert('이미 보관된 일정입니다.');
+        }else{
+          this.SET_KEEP_SCHEDULE_ACTION( {classId: Number(this.classID), scheduleId: this.scheduleDetailItem.id})
+            .then( (readData)=>{
+              alert('일정이 보관 되었습니다.');
+            } );
         }
-        console.log( data.keep_classschedule_list.length );
       });
   }
 

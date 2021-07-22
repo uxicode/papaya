@@ -154,11 +154,24 @@ interface IScheduleOwner{
   visited: number;
 }
 
+interface IKeepSchedule{
+  class_id: number;
+  createdAt: string;
+  evt_endAt: string;
+  evt_startAt: string;
+  id: number;
+  repeat_index: number;
+  repeat_type: number;
+  schedule_id: number;
+  user_id: number;
+}
+
 export {
   ITimeModel,
   IScheduleTotal,
   NoticeScheduleModel,
   IAddSchedule,
   IScheduleOwner,
-  IScheduleDetail
+  IScheduleDetail,
+  IKeepSchedule
 };
