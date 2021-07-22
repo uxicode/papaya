@@ -5,6 +5,7 @@ import MyClassService from '@/api/service/MyClassService';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import WithRender from './Bookmark.html';
+import {ScheduleService} from '@/api/service/ScheduleService';
 
 const MyClass = namespace('MyClass');
 
@@ -20,6 +21,7 @@ export default class Bookmark extends Vue {
     private isPostsResetModal: boolean = false;
     private tabIndex: number = 0;
     private postItems: IKeepPostList[]=[];
+    private scheduleItems: any[] = [];
     private myMemberLevel: number = 0;
 
     @MyClass.Action
@@ -75,6 +77,12 @@ export default class Bookmark extends Vue {
      */
     private openScheduleTab(): void {
         this.tabIndex = 1;
+        ScheduleService.getKeepSchedule()
+          .then((data)=>{
+              console.log(data);
+              // this.scheduleItems
+          })
+
     }
 
     /**

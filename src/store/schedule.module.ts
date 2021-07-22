@@ -251,6 +251,7 @@ export default class ScheduleModule extends VuexModule {
       });
   }
 
+
   /**
    * 알림글 삭제
    * @param payload

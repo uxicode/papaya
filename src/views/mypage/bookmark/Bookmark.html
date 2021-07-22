@@ -65,14 +65,43 @@
                         <button type="button" class="btn only-ico-btn sm bookmark active"></button>
 
                         <div class="list-popup">
-                            <button type="button" class="list-popup-btn" @click="listPopupToggle(tabIndex, idx)"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                            <!-- 더보기 -->
+                          <v-menu bottom nudge-right="" min-width="200px" offset-x>
+                            <template v-slot:activator="{ on, attrs }">
+                              <button type="button"
+                                      class="list-popup-btn"
+                                      v-bind="attrs"
+                                      v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
+                              </button>
+                              <!--<v-btn
+                                      rounded
+                                      outlined
+                                      v-bind="attrs"
+                                      v-on="on"
+                                      min-width="100px">
+                                <span>{{ typeToLabel[type] }}</span>
+                                <v-icon right>mdi-menu-down</v-icon>
+                              </v-btn>-->
+                            </template>
+                            <v-list>
+                              <v-list-item @click="">
+                                <v-list-item-title>일정 수정</v-list-item-title>
+                              </v-list-item>
+                              <v-list-item @click="">
+                                <v-list-item-title>일정 보관 해제</v-list-item-title>
+                              </v-list-item>
+                              <v-list-item @click="">
+                                <v-list-item-title>해당 클래스에서 알림 삭제</v-list-item-title>
+                              </v-list-item>
+                            </v-list>
+                          </v-menu>
+                            <!--<button type="button" class="list-popup-btn" @click="listPopupToggle(tabIndex, idx)"><img :src="require('@/assets/images/more.svg')" alt=""></button>
+                            &lt;!&ndash; 더보기 &ndash;&gt;
                             <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
                                 <a href="" class="list-popup-item">알림 수정</a>
                                 <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
                                 <a href="" class="list-popup-item">일정 보관 해제</a>
                                 <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
-                            </div>
+                            </div>-->
                             <!-- 더보기 (일반멤버) -->
                             <!--                                <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">-->
                             <!--                                    <a href="" class="list-popup-item">일정 보관 해제</a>-->

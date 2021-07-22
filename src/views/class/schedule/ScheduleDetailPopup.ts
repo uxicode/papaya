@@ -17,6 +17,7 @@ import CommentArea from '@/components/comment/CommentArea.vue';
 import CommentBtm from '@/components/comment/CommentBtm.vue';
 import EditSchedule from '@/views/class/schedule/EditSchedule';
 import WithRender from './ScheduleDetailPopup.html';
+import {ScheduleService} from '@/api/service/ScheduleService';
 
 const MyClass = namespace('MyClass');
 const Schedule = namespace('Schedule');
@@ -174,6 +175,22 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
     if (!this.isEditComplete) {
       this.$emit('editApplyTo');
     }
+  }
+
+  private onKeepSchedule() {
+    ScheduleService.getKeepSchedule()
+      .then((data)=>{
+        //보관된 사실이 없을 경우
+        if (data.keep_classschedule_list ) {
+          ScheduleService.setKeepSchedule({class_id: Number(this.classID), schedule_id: this.scheduleDetailItem.id})
+            .then((keepData) => {
+              console.log(keepData);
+            });
+        }else{
+
+        }
+        console.log( data.keep_classschedule_list.length );
+      });
   }
 
 }
