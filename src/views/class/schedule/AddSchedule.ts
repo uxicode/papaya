@@ -11,10 +11,7 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
-import {ADD_SCHEDULE_ACTION} from '@/store/action-class-types';
-import {Utils} from '@/utils/utils';
 import WithRender from './AddSchedule.html';
-import {repeat} from 'rxjs/operators';
 
 
 const MyClass = namespace('MyClass');

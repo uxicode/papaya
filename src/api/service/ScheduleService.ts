@@ -125,6 +125,14 @@ export class ScheduleService{
     return request('delete', `${USER_KEEP}${PERSONAL}/schedule/${scheduleId}`);
   }
 
+  public static getAllMySchedule( payload: {from: string, to: string} ): Promise<any>{
+    return request('get', `${CLASS_BASE_URL}/me/all/schedules`, payload );
+  }
+
+  public static getMonthSchedule( classId: number, payload: {from: string, to: string}): Promise<any>{
+    return request('get', `${CLASS_BASE_URL}/class/${classId}/schedule/filter/month`, payload);
+  }
+
 
 
 }

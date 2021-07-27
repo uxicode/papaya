@@ -7,7 +7,9 @@ import {
   SET_KEEP_SCHEDULE,
   SET_REPLY,
   SET_SCHEDULE_DETAIL,
-  SET_SCHEDULE_LIST
+  SET_SCHEDULE_LIST,
+  SET_ALL_MY_CLASS_LIST,
+  SET_ALL_MY_SCHEDULE
 } from '@/store/mutation-class-types';
 import {
   ADD_SCHEDULE_ACTION,
@@ -18,9 +20,10 @@ import {
   GET_SCHEDULE_ACTION,
   GET_SCHEDULE_COMMENTS_ACTION,
   GET_SCHEDULE_DETAIL_ACTION,
-  SET_KEEP_SCHEDULE_ACTION
+  SET_KEEP_SCHEDULE_ACTION,
+  GET_ALL_SCHEDULE_ACTION
 } from '@/store/action-class-types';
-import {IKeepSchedule, IScheduleDetail, IScheduleTotal} from '@/views/model/schedule.model';
+import {IClassListBySchedule, IKeepSchedule, IScheduleDetail, IScheduleTotal} from '@/views/model/schedule.model';
 import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
 import {ScheduleService} from '@/api/service/ScheduleService';
 import {CommentService} from '@/api/service/CommentService';
@@ -109,6 +112,10 @@ export default class ScheduleModule extends VuexModule {
 
   private keepScheduleData: IKeepSchedule[]=[];
 
+  private allMyClassList: IClassListBySchedule[] = [];
+  private allMySchedule: IScheduleTotal[] = [];
+
+
   /* Getter */
   get scheduleListItems(): IScheduleTotal[] {
     return this.scheduleListData;
@@ -134,6 +141,14 @@ export default class ScheduleModule extends VuexModule {
     return this.keepScheduleData;
   }
 
+  get allMyClassListItems(): IClassListBySchedule[] {
+    return this.allMyClassList;
+  }
+
+  get allMyScheduleItems(): IScheduleTotal[] {
+    return this.allMySchedule;
+  }
+
   /* Mutation */
   @Mutation
   public [SET_SCHEDULE_LIST](data: any){
@@ -153,6 +168,16 @@ export default class ScheduleModule extends VuexModule {
   @Mutation
   public [SET_REPLY](data: any){
     this.replyData=data;
+  }
+
+  @Mutation
+  public [SET_ALL_MY_CLASS_LIST](data: IClassListBySchedule[] ){
+    this.allMyClassList=data;
+  }
+
+  @Mutation
+  public [SET_ALL_MY_SCHEDULE](data: IScheduleTotal[] ){
+    this.allMySchedule=data;
   }
 
   @Mutation
@@ -195,6 +220,38 @@ export default class ScheduleModule extends VuexModule {
 
 
   /* Action */
+  ///class/me/all/schedules - 내가 가입한 클래스 일정글 전체 조회
+  @Action({rawError: true})
+  public [GET_ALL_SCHEDULE_ACTION]( payload: { from: string, to: string }  ): Promise<any>{
+    return ScheduleService.getAllMySchedule(payload)
+      .then( (data)=>{
+        /*myclass_list=[
+        {
+          "id": 65,
+          "name": "모여서그냥공부",
+          "g_name": "소모임",
+          "me": {
+          "id": 843,
+            "is_bookmarked": 0,
+            "schedule_color": 0,
+            "level": 3,
+            "status": 1,
+            "class_member_auths": []
+        }
+        }]
+        class_schedule_list : IScheduleTotal =[]
+        */
+        this.context.commit(SET_ALL_MY_CLASS_LIST, data.myclass_list);
+        this.context.commit(SET_ALL_MY_SCHEDULE, data.class_schedule_list);
+
+        return Promise.resolve(data);
+      })
+      .catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
+      });
+  }
+
   @Action({rawError: true})
   public [GET_SCHEDULE_ACTION]( payload: { classId: number,  paging: {page_no: number, count: number } }  ): Promise<any>{
     const {classId, paging }=payload;

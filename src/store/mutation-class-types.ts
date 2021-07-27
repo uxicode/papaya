@@ -27,3 +27,5 @@ export const DELETE_SCHEDULE: string = 'DELETE_SCHEDULE';
 export const EDIT_SCHEDULE: string = 'EDIT_SCHEDULE';
 export const SET_KEEP_SCHEDULE: string = 'SET_KEEP_SCHEDULE';
 export const DELETE_KEEP_SCHEDULE: string = 'DELETE_KEEP_SCHEDULE';
+export const SET_ALL_MY_CLASS_LIST: string = 'SET_ALL_MY_CLASS_LIST';
+export const SET_ALL_MY_SCHEDULE: string = 'SET_ALL_MY_SCHEDULE';

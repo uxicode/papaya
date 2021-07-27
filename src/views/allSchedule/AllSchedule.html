@@ -1,0 +1,355 @@
+<!--<div class="contents home">
+    &lt;!&ndash; start: 공통 팝업 / 파일명 : W.6.3.1 (새 일정 등록 - 대상 클래스 선택) &ndash;&gt;
+    <modal v-if="true">
+        <div slot="header">
+            &lt;!&ndash; header custom coding&ndash;&gt;
+            <p class="popup-header-tit">새 일정 등록</p>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            &lt;!&ndash; body custom coding&ndash;&gt;
+            <div class="popup-form">
+                <div class="popup-form-top">
+                    <div class="form-item post-classes">
+                        <p><span class="icon"><img :src="require('@/assets/images/profile-myplan.svg')" alt=""> <span class="color-mark red"></span></span>클래스를 선택해 주세요.</p>
+                        <div class="post-classes-select">
+                            <div class="list-popup">
+                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
+                                <div class="list-popup-menu pos-right active" style="width:300px; transform:translate3d(42px, 0,0);">
+                                    <p class="list-popup-tit">클래스 선택</p>
+                                    <div class="list-popup-scroll" style="height:280px;">
+                                        <a href="" class="list-popup-item">
+                                            <div class="list-popup-pic"><img :src="require('@/assets/images/profile-myplan.png')" class="thumb" alt=""><span class="color-mark red"></span></div>
+                                            <span class="pdl-52">내 일정</span>
+                                        </a>
+                                        <a href="" class="list-popup-item">
+                                            <div class="list-popup-pic"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""><span class="color-mark yellow"></span></div>
+                                            <span class="pdl-52">1학년 3반 수학</span>
+                                        </a>
+                                        <a href="" class="list-popup-item">
+                                            <div class="list-popup-pic"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""><span class="color-mark blue"></span></div>
+                                            <span class="pdl-52">특목 고등학교 입시 미술반</span>
+                                        </a>
+                                        <a href="" class="list-popup-item">
+                                            <div class="list-popup-pic"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""><span class="color-mark pink"></span></div>
+                                            <span class="pdl-52">6학년 3반 독서부</span>
+                                        </a>
+                                        <a href="" class="list-popup-item">
+                                            <div class="list-popup-pic"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""><span class="color-mark aqua"></span></div>
+                                            <span class="pdl-52">미술 아동반</span>
+                                        </a>
+                                        <a href="" class="list-popup-item">
+                                            <div class="list-popup-pic"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""><span class="color-mark black"></span></div>
+                                            <span class="pdl-52">검정고시반</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">
+                    </div>
+                </div>
+                <div class="popup-form-cnt">
+                    <div class="form-item">
+                        <p>하루종일</p>
+                        <div class="form-box">
+                            <div class="form-switcher">
+                                <input type="checkbox" id="toggle1">
+                                <label for="toggle1"></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <p>시작일시</p>
+                        <div class="form-box">
+                            <div class="form-group date">
+                                <input type="text" class="form-control" size="10" value="2020. 2. 28">
+                                <span class="date-area">2020. 2. 28</span>
+                                <button type="button" class="btn form-btn form-calendar"></button>
+                            </div>
+                            <div class="form-group time">
+                                <input type="text" class="time-control" size="12" value="오후 12시 00분">
+                                <button type="button" class="btn form-btn form-time"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <p>종료일시</p>
+                        <div class="form-box">
+                            <div class="form-group date">
+                                <input type="text" class="form-control" size="10" value="2020. 2. 28">
+                                <span class="date-area">2020. 2. 28</span>
+                                <button type="button" class="btn form-btn form-calendar"></button>
+                            </div>
+                            <div class="form-group time">
+                                <input type="text" class="time-control" size="12" value="오후 12시 00분">
+                                <button type="button" class="btn form-btn form-time"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <p>반복</p>
+                        <div class="form-box">
+                            <div class="list-popup">
+                                <button type="button" class="list-popup-btn"><span>반복 없음</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt=""></button>
+                                <div class="list-popup-menu pos-right" style="transform:translate3d(87px, 0, 0)">
+                                    <a href="" class="list-popup-item">반복 없음</a>
+                                    <a href="" class="list-popup-item">한 번 반복</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-item post-cnt" style="height:154px;">
+                        <textarea class="form-textarea" placeholder="일정 내용을 작성해 주세요."></textarea>
+                    </div>
+                </div>
+
+                <div class="popup-form-btm">
+                    <div class="form-add-btn">
+                        <ul class="clearfix">
+                            <li><a href=""><img :src="require('@/assets/images/image.svg')" alt=""></a></li>
+                            <li><a href=""><img :src="require('@/assets/images/file.svg')" alt=""></a></li>
+                        </ul>
+
+                        <div class="form-temp-save"><a href="" class="txt-btn">임시저장</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            &lt;!&ndash; footer custom coding&ndash;&gt;
+            <div class="btn-group rt">
+                <button type="button" class="btn primary navi" disabled>등록</button>
+            </div>
+        </div>
+    </modal>
+    &lt;!&ndash; end: 공통 팝업 &ndash;&gt;
+</div>-->
+
+<div class="contents home">
+  <v-app style="background-color: transparent">
+    <div class="contents-inner">
+      <div class="contents-group">
+        <!-- 좌측 메뉴 -->
+        <section class="contents-left">
+          <div class="class-notify">
+            <div class="notify-top">
+              <p class="class-tit">클래스별 일정</p>
+            </div>
+            <div class="notify-cnt">
+              <ul class="notify-list">
+                <li>
+                  <a href="" class="all-class active">
+                    <span class="class-photo"><img :src="require('@/assets/images/profile-class.png')" class="thumb" alt=""></span>
+                    <span class="class-name">모든 클래스 일정</span>
+                  </a>
+                </li>
+                <li v-for="( item, index ) in allMyClassListItems" :key="`sch-class${index}`">
+                  <a href="" class="all-class">
+                    <span class="class-photo"><img :src="require('@/assets/images/profile-class.png')" class="thumb" alt=""></span>
+                    <span class="class-name">{{ item.name }}</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 다가오는 일정 영역 -->
+          <div class="classes-todo">
+            <div class="schedule-top">
+              <p class="class-tit">다가오는 일정</p>
+            </div>
+            <div class="schedule-cnt">
+              <ul class="schedule-list">
+                <li>
+                  <div class="date"><span>2. 29</span></div>
+
+                  <div class="detail">
+                    <div class="detail-list">
+                      <div class="item">
+                        <span class="bullet orange"></span>
+                        <p class="schedule-tit">서울여대 동창회 모임</p>
+                        <span class="time">오후 5시 - 8시</span>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+
+              </ul>
+            </div>
+          </div>
+          <!-- 다가오는 일정 영역 -->
+        </section>
+
+        <section class="contents-right" style="position:relative;z-index:0;">
+          <div class="cnt-top">
+            <h2 class="cnt-tit">모든 클래스 일정</h2>
+            <div class="pos-right">
+
+
+              <v-menu left bottom  min-width="200px" offset-x>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn fab text small
+                         color="grey darken-2"
+                         v-bind="attrs"
+                         v-on="on">
+                    <v-icon>mdi-cog-outline</v-icon>
+                  </v-btn>
+                  <!--<v-btn
+                          rounded
+                          outlined
+                          v-bind="attrs"
+                          v-on="on"
+                          min-width="100px">
+                    <span>{{ typeToLabel[type] }}</span>
+                    <v-icon right>mdi-menu-down</v-icon>
+                  </v-btn>-->
+                </template>
+                <v-list>
+                  <v-list-item> <v-list-item-title> <p class="list-popup-tit">일정 색상 설정</p></v-list-item-title></v-list-item>
+                  <v-list-item
+                          v-for="(item, index) in scheduleColor"
+                          :key="index"
+                          @click="onChangeColor( item )">
+                    <v-list-item-title ><span class="color-mark pos-rel mgr-10" :style="{'background-color':item.color}"></span>{{ item.title }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </div>
+          </div>
+          <!-- start: 상단 컨트롤러 -->
+          <v-sheet height="64" rounded>
+            <v-toolbar flat color="white">
+              <v-btn fab text x-small outlined color="grey darken-2" @click="prev">
+                <v-icon small>mdi-chevron-left</v-icon>
+              </v-btn>
+              <v-btn class="ml-2" fab text x-small outlined color="grey darken-2" @click="next">
+                <v-icon small>mdi-chevron-right</v-icon>
+              </v-btn>
+              <v-toolbar-title v-if="$refs.calendar" class="ml-4 ft-bold">{{ $refs.calendar.title }}</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-btn rounded depressed class="mr-4" @click="setToday">오늘</v-btn>
+              <v-menu bottom right>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                          rounded
+                          outlined
+                          v-bind="attrs"
+                          v-on="on"
+                          min-width="100px">
+                    <span>{{ typeToLabel[type] }}</span>
+                    <v-icon right>mdi-menu-down</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item @click="type = 'day'">
+                    <v-list-item-title>일간</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="type = 'week'">
+                    <v-list-item-title>주</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="type = 'month'">
+                    <v-list-item-title>월간</v-list-item-title>
+                  </v-list-item>
+                  <v-list-item @click="type = '4day'">
+                    <v-list-item-title>4 days</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-toolbar>
+          </v-sheet>
+          <!-- end: 상단 컨트롤러 -->
+
+          <!-- start: 캘린더 -->
+          <v-sheet height="674" style="padding:0 20px;">
+            <!--
+                   @click:more="viewDay"
+                    @click:date="viewDay"
+                    @click:event="showEvent"
+                    @click:more="viewMoreDay"
+                    @mousedown:event="startDrag"
+                    @mousedown:time="startTime"
+                    @mousemove:time="mouseMove"
+                    @mouseup:time="endDrag"
+                    @mouseleave.native="cancelDrag"
+                    -->
+            <v-calendar
+                    ref="calendar"
+                    v-model="calendarModel"
+                    color="primary"
+                    :events="scheduleEvents"
+                    :event-color="getEventColor"
+                    :type="type"
+                    :weekdays="weekdays"
+                    :weekday-format="getDay"
+                    :day-format="(timestamp) => new Date(timestamp.date).getDate()"
+                    :month-format="(timestamp)=> (new Date(timestamp.date).getMonth()+1)+'월' "
+                    @change="updateRange"
+                    @click:event="scheduleDetailViewEvent">
+              <template v-slot:event="{ event, timed, eventSummary }">
+                <div class="v-event-draggable" v-html="eventSummary()"></div>
+                <div v-if="timed" class="v-event-drag-bottom" @mousedown.stop="extendBottom(event)"></div>
+              </template>
+            </v-calendar>
+
+            <!-- start: 상세내역 팝업 -->
+            <!--<v-menu
+                    v-model="selectedOpen"
+                    :close-on-content-click="false"
+                    :activator="selectedElement"
+                    offset-x>
+              <v-card color="grey lighten-4" min-width="350px" flat>
+                <v-toolbar :color="selectedEvent.color" dark>
+                  <v-btn icon><v-icon>mdi-pencil</v-icon></v-btn>
+                  <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+                  <v-spacer></v-spacer>
+                  <v-btn icon><v-icon>mdi-heart</v-icon></v-btn>
+                  <v-btn icon><v-icon>mdi-dots-vertical</v-icon></v-btn>
+                </v-toolbar>
+                <v-card-text><span v-html="selectedEvent.details"></span></v-card-text>
+                <v-card-actions>
+                  <v-btn text color="secondary" @click="selectedOpen = false">Cancel</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-menu>-->
+            <!-- end: 상세내역 팝업 -->
+
+          </v-sheet>
+          <!-- end: 캘린더 -->
+
+          <div class="add-schedule">
+            <a href="" class="add-schedule-btn" @click.prevent="addScheduleOpen"></a>
+          </div>
+
+          <!-- start: 공통 팝업 / 파일명 : W.4.5.3.3.4.2 (일정 만들기) (4.5.3.3.1 ~ 4.5.3.3.4.2) isPopup=false;loopRangeCheck = false-->
+          <add-schedule :is-open="isOpenAddSch" @change="addScheduleClose" @submit="onAddScheduleClose"></add-schedule>
+          <!-- end: 공통 팝업 -->
+
+          <!-- start: 공통 팝업 / 파일명 : W.4.5.3.4 (일정 상세) -->
+          <schedule-detail-popup
+                  :is-open="isOpenDetailSch"
+                  @change="onDetailScheduleClose" @delete="onDeleteCheck" @editApplyTo="onEditSchedule"></schedule-detail-popup>
+          <!-- end: 공통 팝업 -->
+          <confirm-popup
+                  :is-open="isConfirmPopupOpen"
+                  :title="updateConfirmTitle"
+                  :msg="updateConfirmDesc"
+                  @confirm="onConfirmClose"></confirm-popup>
+          <notice-popup :is-open="isNoticePopupOpen"
+                        :title="updateNoticeTitle"
+                        :msg="updateNoticeDesc"
+                        @change="onNoticePopupClose"></notice-popup>
+        </section>
+
+      </div>
+    </div>
+
+  </v-app>
+</div>
+
+
+

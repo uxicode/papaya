@@ -198,7 +198,7 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
         }else{
           this.SET_KEEP_SCHEDULE_ACTION( {classId: Number(this.classID), scheduleId: this.scheduleDetailItem.id})
             .then( (readData)=>{
-              alert('일정이 보관 되었습니다.');
+              alert('일정이 보관 되었습니다.\n 보관된 일정은 MY프로필>보관함에서 확인 하실 수 있습니다.');
             } );
         }
       });

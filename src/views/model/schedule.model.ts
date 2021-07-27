@@ -166,6 +166,20 @@ interface IKeepSchedule{
   user_id: number;
 }
 
+interface IClassListBySchedule{
+  id: number;
+  name: string;
+  g_name: string;
+  me: {
+    id: number
+    is_bookmarked: boolean | number,
+    schedule_color: boolean | number,
+    level: number,
+    status: number,
+    class_member_auths: [],
+  };
+}
+
 export {
   ITimeModel,
   IScheduleTotal,
@@ -173,5 +187,6 @@ export {
   IAddSchedule,
   IScheduleOwner,
   IScheduleDetail,
-  IKeepSchedule
+  IKeepSchedule,
+  IClassListBySchedule
 };

@@ -102,8 +102,7 @@
             :day-format="(timestamp) => new Date(timestamp.date).getDate()"
             :month-format="(timestamp)=> (new Date(timestamp.date).getMonth()+1)+'월' "
             @change="updateRange"
-            @click:event="scheduleDetailViewEvent"
-    >
+            @click:event="scheduleDetailViewEvent">
       <template v-slot:event="{ event, timed, eventSummary }">
         <div class="v-event-draggable" v-html="eventSummary()"></div>
         <div v-if="timed" class="v-event-drag-bottom" @mousedown.stop="extendBottom(event)"></div>
