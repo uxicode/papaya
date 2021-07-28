@@ -21,7 +21,8 @@ import {
   GET_SCHEDULE_COMMENTS_ACTION,
   GET_SCHEDULE_DETAIL_ACTION,
   SET_KEEP_SCHEDULE_ACTION,
-  GET_ALL_SCHEDULE_ACTION
+  GET_ALL_SCHEDULE_ACTION,
+  GET_SCHEDULE_BY_MONTH_ACTION
 } from '@/store/action-class-types';
 import {IClassListBySchedule, IKeepSchedule, IScheduleDetail, IScheduleTotal} from '@/views/model/schedule.model';
 import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
@@ -231,7 +232,7 @@ export default class ScheduleModule extends VuexModule {
           "name": "모여서그냥공부",
           "g_name": "소모임",
           "me": {
-          "id": 843,
+             "id": 843,
             "is_bookmarked": 0,
             "schedule_color": 0,
             "level": 3,
@@ -245,6 +246,24 @@ export default class ScheduleModule extends VuexModule {
         this.context.commit(SET_ALL_MY_SCHEDULE, data.class_schedule_list);
 
         return Promise.resolve(data);
+      })
+      .catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
+      });
+  }
+
+  ///class/{class_id}/schedule/filter/month
+  @Action({rawError: true})
+  public [GET_SCHEDULE_BY_MONTH_ACTION]( payload: { classId: number,  month: { from: string, to: string } }  ): Promise<any>{
+    const { classId, month }=payload;
+
+    return ScheduleService.getMonthSchedule( Number( classId ), month )
+      .then((data) => {
+        // console.log(data);
+        console.log('scheduleListData=', this.scheduleListData);
+        this.context.commit(SET_SCHEDULE_LIST, data.class_schedule_list);
+        return Promise.resolve(this.scheduleListData);
       })
       .catch((error) => {
         console.log(error);
