@@ -54,7 +54,7 @@ export default class CurriculumListView extends Vue {
     private isDetailPopupOpen: boolean=false;
     private cardId: number=-1; // 동적으로 변경 안되는 상태
 
-    private isCreateError: boolean = false;
+    private isOpenError: boolean = false;
 
     private isAddPopupOpen: boolean=false;
     private isModifyPopupOpen: boolean=false;
