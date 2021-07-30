@@ -130,7 +130,7 @@ export class ScheduleService{
   }
 
   public static getMonthSchedule( classId: number, payload: {from: string, to: string}): Promise<any>{
-    return request('get', `${CLASS_BASE_URL}/class/${classId}/schedule/filter/month`, payload);
+    return request('get', `${CLASS_BASE_URL}/${classId}/schedule/filter/month`, payload);
   }
 
 

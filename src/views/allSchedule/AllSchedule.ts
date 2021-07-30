@@ -153,6 +153,8 @@ export default class AllSchedule extends Vue {
     private currentDates: number[]=[];
     private currentYears: number=0;
     private currentMonth: number=0;
+    private sideMenuActiveNum: number=-1;
+    private currentClassId: number=-1;
 
 
     /*private scheduleData: {
@@ -268,6 +270,17 @@ export default class AllSchedule extends Vue {
         };
     }
 
+
+    private onClassAllScheduleList() {
+        this.sideMenuActiveNum=-1;
+        this.currentClassId=-1;
+        this.getAllScheduleList()
+          .then(()=>{
+              console.log('캘린더 로드 완료.', this.events);
+              this.updateAllScheduleEvent();
+          });
+    }
+
     /**
      * 초기에 캘린더 이벤트 등 데이터 받아오기.
      * @private
@@ -286,12 +299,24 @@ export default class AllSchedule extends Vue {
           });
     }
 
+    private onClassScheduleList(item: IClassListBySchedule, index: number) {
+
+        this.sideMenuActiveNum=index;
+        this.currentClassId=item.id;
+
+        this.getClassScheduleListById( item.id )
+          .then( ()=>{
+              console.log('클래스별 리스트 호출', this.events);
+              this.updateClassScheduleEvent();
+          });
+    }
+
     //클래스 별 일정 불러오기 ( 좌측 메뉴- 개별 클래스 클릭시 호출해야 함 );
-    private async getClassScheduleListById() {
+    private async getClassScheduleListById( classId: number ) {
         const {from, to}=this.getFromToMonth();
 
         await this.GET_SCHEDULE_BY_MONTH_ACTION( {
-            classId: Number(this.classID),
+            classId,
             month:{ from:`${ this.currentYears}${from}`, to: `${ this.currentYears}${to}`}
         } )
           .then((data)=>{
@@ -373,17 +398,35 @@ export default class AllSchedule extends Vue {
 
         this.events = [];
 
-        this.getAllScheduleList()
-          .then(()=>{
-              // console.log('캘린더 로드 완료.', this.currentMonth);
-              // this.updateRender();
-              // console.log(this.currentMonth, this.currentYears);
-              this.allScheduleItemsModel.forEach((item, idx )=>{
-                  // console.log(idx);
-                  this.addScheduleEvent(idx);
+        if (this.currentClassId !== -1) {
+            this.getClassScheduleListById( this.currentClassId )
+              .then( ()=>{
+                  console.log('클래스별 리스트 호출', this.events);
+                  this.updateClassScheduleEvent();
               });
-          });
+        }else{
+            this.getAllScheduleList()
+              .then(()=>{
+                  // console.log('캘린더 로드 완료.', this.currentMonth);
+                  // this.updateRender();
+                  // console.log(this.currentMonth, this.currentYears);
+                  this.updateAllScheduleEvent();
+              });
+        }
+    }
 
+    private updateAllScheduleEvent() {
+        this.allScheduleItemsModel.forEach((item, idx )=>{
+            // console.log(idx);
+            this.addScheduleEvent(idx);
+        });
+    }
+
+    private updateClassScheduleEvent() {
+        this.scheduleListsModel.forEach((item, idx )=>{
+            // console.log(idx);
+            this.addScheduleEvent(idx);
+        });
     }
 
 

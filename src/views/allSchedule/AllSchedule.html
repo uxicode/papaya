@@ -143,13 +143,13 @@
             <div class="notify-cnt">
               <ul class="notify-list">
                 <li>
-                  <a href="" class="all-class active">
+                  <a href="" class="all-class" :class="{'active': sideMenuActiveNum ===-1}" @click.prevent="onClassAllScheduleList">
                     <span class="class-photo"><img :src="require('@/assets/images/profile-class.png')" class="thumb" alt=""></span>
                     <span class="class-name">모든 클래스 일정</span>
                   </a>
                 </li>
                 <li v-for="( item, index ) in allMyClassListItems" :key="`sch-class${index}`">
-                  <a href="" class="all-class">
+                  <a href="" class="all-class" :class="{'active': sideMenuActiveNum===index }" @click.prevent="onClassScheduleList( item, index )">
                     <span class="class-photo"><img :src="require('@/assets/images/profile-class.png')" class="thumb" alt=""></span>
                     <span class="class-name">{{ item.name }}</span>
                   </a>
