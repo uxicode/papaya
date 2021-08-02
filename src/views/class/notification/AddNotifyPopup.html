@@ -17,7 +17,7 @@
             <div class="popup-form-top">
               <div class="form-item post-classes selected"> <!-- class 선택 시 form-item 에 selected 추가됨 -->
                 <p>
-                  <span class="icon"><img :src="getProfileImg(myClassHomeModel.image_url)" class="icon-img" alt=""></span>
+                  <span class="icon"><img v-once :src="getProfileImg(myClassHomeModel.image_url)" class="icon-img" alt=""></span>
                   <span class="gr-name">{{ myClassHomeModel.g_name }}</span>
                   <strong class="cls-name">{{ myClassHomeModel.name }}</strong>
                 </p>

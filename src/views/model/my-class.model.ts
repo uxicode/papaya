@@ -24,6 +24,29 @@ interface IMyClassList {
         schedule_noti_intime:  number | string;
         visited: number | string;
     };
+    owner: {
+        id: number;
+        joinedAt: Date;
+        createdAt: Date;
+        updatedAt: Date;
+        class_id: number;
+        user_id: number;
+        nickname?:  string;
+        profile_image?: string;
+        is_bookmarked: number | string;
+        schedule_color: number | string;
+        level:  number | string;
+        status:  number | string;
+        open_level_id: number;
+        open_level_mobileno: number | string;
+        open_level_email:  number | string;
+        onoff_push_noti:  number | string;
+        onoff_post_noti: number | string;
+        onoff_comment_noti:  number | string;
+        onoff_schedule_noti: number | string;
+        schedule_noti_intime:  number | string;
+        visited: number | string;
+    };
 }
 /*
 "myclass_list": [

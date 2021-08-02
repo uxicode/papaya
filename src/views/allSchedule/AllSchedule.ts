@@ -1,6 +1,6 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
-import {IClassInfo} from '@/views/model/my-class.model';
+import {IClassInfo, IMyClassList} from '@/views/model/my-class.model';
 import {IClassListBySchedule, IScheduleOwner, IScheduleTotal, ITimeModel} from '@/views/model/schedule.model';
 import {CalendarEvent, CalendarEventParsed} from 'vuetify';
 import { RRule } from 'rrule';
@@ -51,6 +51,9 @@ export default class AllSchedule extends Vue {
     @MyClass.Mutation
     private SET_CLASS_ID!: ( id: number ) => void;
 
+    @MyClass.Action
+    private MYCLASS_LIST_ACTION!: () => Promise<IMyClassList[]>;
+
     @Auth.Action
     private USER_ME_ACTION!: ()=>Promise<IUserMe>;
 
@@ -75,6 +78,9 @@ export default class AllSchedule extends Vue {
 
     @MyClass.Getter
     private myClassHomeModel!: IClassInfo;
+
+    @MyClass.Getter
+    private myClassLists!:  IMyClassList[];
 
     @Schedule.Getter
     private allMyClassListItems!: IClassListBySchedule[]; //모든 클래스 스케줄
@@ -174,6 +180,10 @@ export default class AllSchedule extends Vue {
         startAt:new Date(),  //2019-11-15 10:00:00
         endAt: new Date()
     };*/
+    get myAllClassListModel(): IMyClassList[]{
+        return this.myClassLists;
+    }
+
     get updateNoticeTitle(): string{
         return this.noticeTitle;
     }
@@ -234,11 +244,13 @@ export default class AllSchedule extends Vue {
 
         this.monthCount=0;
 
-        // console.log(new Date().toISOString());
-        await this.getAllScheduleList()
-          .then(()=>{
-              console.log('캘린더 로드 완료.');
+        await this.MYCLASS_LIST_ACTION()
+          .then((data) => {
+              console.log(data);
           });
+
+        // console.log(new Date().toISOString());
+        await this.getAllScheduleList();
 
         const rule = new RRule({
             freq: RRule.WEEKLY,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
@@ -246,8 +258,29 @@ export default class AllSchedule extends Vue {
             count: 30,
             interval: 1
         });
+
+
         // console.log(rule.all());
     }
+
+    public mounted() {
+        console.log('클래스 리스트', this.myClassLists );
+    }
+
+
+    public getProfileImg(imgUrl: string | null | undefined ): string{
+        //프로필 이미지를 세팅 하는 데 있어서 click 등의 이벤트로 인해 데이터 바인딩 즉, 썸네일 이미지가 매번 갱신 된다.
+        //따라서 v-once 디렉티브를 사용하여 데이터 변경 시 업데이트 되지 않는 일회성 보간을 수행할 수 있지만, 같은 노드의 바인딩에도 영향을 미친다는 점을 유의해야 합니다.
+        const resultURL=(imgUrl)? imgUrl : 'profile-class.png';
+        return ImageSettingService.getProfileImg(resultURL);
+    }
+
+    public getScheduleColor(colorNum: string | number){
+        return {
+            [`color${colorNum}`]: true
+        };
+   }
+
 
 
     public headerDepthChange( isDepth: boolean=true ) {
@@ -269,6 +302,7 @@ export default class AllSchedule extends Vue {
             from, to
         };
     }
+
 
 
     private onClassAllScheduleList() {
@@ -299,7 +333,7 @@ export default class AllSchedule extends Vue {
           });
     }
 
-    private onClassScheduleList(item: IClassListBySchedule, index: number) {
+    private onClassScheduleList(item: IMyClassList, index: number) {
 
         this.sideMenuActiveNum=index;
         this.currentClassId=item.id;
@@ -329,6 +363,7 @@ export default class AllSchedule extends Vue {
           });
 
     }
+
 
     private setToday() {
         this.calendarModel = '';

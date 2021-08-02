@@ -92,7 +92,7 @@
                       <div class="tb-style">
                         <div class="tb-cell wd-30">{{ bestItem.rank }}</div>
                         <div class="tb-cell">
-                          <img :src="getProfileImg(  bestItem.class.image_url )" alt="" style="width:32px; height:32px;border-radius:50%;">
+                          <img v-once :src="getProfileImg(  bestItem.class.image_url )" alt="" style="width:32px; height:32px;border-radius:50%;">
                         </div>
                         <div class="tb-cell pdl-10">
                           <span class="group-tit">{{ bestItem.class.g_name }}</span>
