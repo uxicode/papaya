@@ -36,7 +36,7 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   private ADD_SCHEDULE_ACTION!: (payload: { classId: number, formData: FormData }) => Promise<any>;
 
   @MyClass.Getter
-  private classID!: string | number;
+  private classID!: number;
 
   @MyClass.Getter
   private myClassHomeModel!: IClassInfo;
@@ -94,6 +94,10 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
 
   get currentEndTimeModel(): string{
     return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
+  }
+
+  public updated() {
+    console.log('add schecule classID=', this.classID);
   }
 
 

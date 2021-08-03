@@ -151,7 +151,7 @@
                 <li v-for="( item, index ) in myAllClassListModel" :key="`sch-class${index}`">
                   <a href="" class="all-class" :class="{'active': sideMenuActiveNum===index }" @click.prevent="onClassScheduleList( item, index )">
                     <!--v-once 디렉티브를 사용하여 데이터 변경 시 업데이트 되지 않는 일회성 보간을 수행할 수 있지만, 같은 노드의 바인딩에도 영향을 미친다는 점을 유의해야 합니다. -->
-                    <span v-once class="class-photo" :class="getScheduleColor( item.owner.schedule_color )"><img :src="getProfileImg(item.owner.profile_image)" class="thumb" alt=""></span>
+                    <span v-once class="class-photo" :class="getScheduleColor( item )"><img :src="getProfileImg(item.owner.profile_image)" class="thumb" alt=""></span>
                     <span class="class-name">{{ item.name }}</span>
                   </a>
                 </li>
