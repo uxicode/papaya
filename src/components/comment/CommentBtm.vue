@@ -1,7 +1,7 @@
 <template>
   <div class="comment-btm">
     <button type="button" class="btn only-ico-btn"><img :src="require('@/assets/images/image.svg')" alt=""></button>
-    <input v-model="comment" type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;">
+    <input style="width:466px;" type="text" class="form-control popup-type sm" v-model="comment" placeholder="댓글을 작성해 주세요." @keyup.self.enter="addComment">
     <a href="" class="txt-btn ft-14" :class="{'disabled': comment===''}" @click.prevent="addComment">등록</a>
   </div>
 </template>

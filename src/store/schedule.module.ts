@@ -260,9 +260,9 @@ export default class ScheduleModule extends VuexModule {
 
     return ScheduleService.getMonthSchedule( Number( classId ), month )
       .then((data) => {
+        this.context.commit(SET_SCHEDULE_LIST, data.class_schedule_list);
         // console.log(data);
         console.log('scheduleListData=', this.scheduleListData);
-        this.context.commit(SET_SCHEDULE_LIST, data.class_schedule_list);
         return Promise.resolve(this.scheduleListData);
       })
       .catch((error) => {
@@ -293,7 +293,7 @@ export default class ScheduleModule extends VuexModule {
     return ScheduleService.getScheduleById(payload.classId, payload.scheduleId )
         .then((data) => {
           this.context.commit(SET_SCHEDULE_DETAIL, data.schedule);
-          console.log('scheduleDetailData=', this.scheduleDetailData);
+          // console.log('scheduleDetailData=', this.scheduleDetailData);
 
           return Promise.resolve(this.scheduleDetailData);
         }).catch((error) => {

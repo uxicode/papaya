@@ -37,7 +37,7 @@
         </template>
 
         <div class="comment-btm reply hide">
-          <input v-model="reply" type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;">
+          <input v-model="reply" type="text" class="form-control popup-type sm" placeholder="댓글을 작성해 주세요." style="width:466px;" @keyup.self.enter="addReply(item.id)">
           <a href="" class="txt-btn ft-14" :class="{'disabled': reply===''}" @click.prevent="addReply(item.id)">등록</a>
         </div>
       </div>

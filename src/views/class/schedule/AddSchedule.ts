@@ -109,7 +109,7 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   private getStartAt() {
     const apm = this.startTimeSelectModel.apm;
     const selectHour=Number( this.startTimeSelectModel.hour );
-    const hour=( apm === '오후' )?  selectHour+12 : selectHour;
+    const hour=( apm === '오후' && selectHour<12 )?  selectHour+12 : selectHour;
     const minute = this.startTimeSelectModel.minute;
 
    //현재 서버에선 -->  evt_startAt = moment(data.evt_startAt).utc().format('YYYY-MM-DD HH:mm:ss'); 처럼 설정되어 있다.
@@ -122,7 +122,7 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   private getEndAt() {
     const apm = this.endTimeSelectModel.apm;
     const selectHour= Number( this.endTimeSelectModel.hour );
-    const hour=( apm === '오후' )? selectHour+12 : selectHour;
+    const hour=( apm === '오후' && selectHour<12 )? selectHour+12 : selectHour;
     const minute = this.endTimeSelectModel.minute;
 
     //현재 서버에선 -->  evt_endAt = moment(data.evt_endAt).utc().format('YYYY-MM-DD HH:mm:ss'); 처럼 설정되어 있다.

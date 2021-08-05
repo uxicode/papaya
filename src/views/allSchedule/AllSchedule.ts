@@ -159,7 +159,7 @@ export default class AllSchedule extends Vue {
   private currentMonth: number = 0;
   private sideMenuActiveNum: number = -1;
   private currentClassId: number = -1;
-
+  private nextScheduleItems: Array<{ id: number, timestamp: number, date: string, tit: string, time: string }> = [];
 
   /*private scheduleData: {
       repeat_type: number,
@@ -222,6 +222,10 @@ export default class AllSchedule extends Vue {
     return this.events;
   }
 
+  get nextScheduleItemsModel() {
+    return this.nextScheduleItems;
+  }
+
   get calendarInstance(): Vue & {
     title: string,
     prev: () => void,
@@ -256,13 +260,11 @@ export default class AllSchedule extends Vue {
 
     await this.MYCLASS_LIST_ACTION()
       .then((data: IMyClassList[]) => {
-
         /*data.map( (item: IMyClassList )=>{
           console.log(item.me, item );
         });*/
       });
 
-    // console.log(new Date().toISOString());
     await this.getAllScheduleList().then(() => {
       // console.log('캘린더 로드 완료.', this.events);
       this.updateAllScheduleEvent();
@@ -274,14 +276,9 @@ export default class AllSchedule extends Vue {
       count: 30,
       interval: 1
     });
-
-
     // console.log(rule.all());
   }
 
-  public mounted() {
-    console.log('클래스 리스트', this.myClassLists);
-  }
 
 
   public getProfileImg(imgUrl: string | null | undefined): string {
@@ -324,7 +321,20 @@ export default class AllSchedule extends Vue {
     };
   }
 
+  /**
+   * 게시글의 권한이 있는지 체크 ( 현재 api 상 클래스 owner 만 권한이 있다 )
+   */
+  public getIsAuth(): boolean {
+    const findIdx=this.myAllClassListModel.findIndex(( myClassItem: IMyClassList ) => myClassItem.id === this.currentClassId);
+    const { me, owner }=this.myAllClassListModel[findIdx];
+    return (me.id === owner.id);
+  }
 
+
+  /**
+   * 클릭 이벤트 핸들러 - 모든 클래스 알림 메뉴
+   * @private
+   */
   private onClassAllScheduleList() {
     this.sideMenuActiveNum = -1;
     this.currentClassId = -1;
@@ -336,12 +346,28 @@ export default class AllSchedule extends Vue {
   }
 
   /**
+   * 클릭 이벤트 핸들러 - 개별 클래스 알림 메뉴
+   * @param item
+   * @param index
+   * @private
+   */
+  private onClassScheduleList(item: IMyClassList, index: number) {
+    this.sideMenuActiveNum = index;
+    this.currentClassId = item.id;
+    this.SET_CLASS_ID(this.currentClassId);
+    this.getClassScheduleListById(item.id)
+        .then(() => {
+          // console.log('클래스별 리스트 호출', this.events);
+          this.updateClassScheduleEvent();
+        });
+  }
+
+  /**
    * 초기에 캘린더 이벤트 등 데이터 받아오기.
    * @private
    */
   private async getAllScheduleList() {
     const {from, to} = this.getFromToMonth();
-
     await this.GET_ALL_SCHEDULE_ACTION({from: `${this.currentYears}${from}`, to: `${this.currentYears}${to}`})
       .then((data) => {
         //통신이 끝나면 -> store mutation  SET_ALL_MY_SCHEDULE 에 전달되어 getter allMyScheduleItems 으로 스케줄 데이터를 가져온다.
@@ -349,21 +375,6 @@ export default class AllSchedule extends Vue {
         if (this.events && this.events.length > 0) {
           this.events = [];
         }
-        // console.log('getAllScheduleByClassId=', data);
-      });
-  }
-
-  private onClassScheduleList(item: IMyClassList, index: number) {
-
-    this.sideMenuActiveNum = index;
-    this.currentClassId = item.id;
-
-    this.SET_CLASS_ID(this.currentClassId);
-
-    this.getClassScheduleListById(item.id)
-      .then(() => {
-        // console.log('클래스별 리스트 호출', this.events);
-        this.updateClassScheduleEvent();
       });
   }
 
@@ -383,7 +394,6 @@ export default class AllSchedule extends Vue {
           this.events = [];
         }
       });
-
   }
 
 
@@ -399,13 +409,46 @@ export default class AllSchedule extends Vue {
     this.calendarInstance.next();
   }
 
-  //상세내역 팝업
+  /**
+   * 캘린더 이벤트 생성.
+   * @param date
+   * @private
+   */
+  private updateRange(date: { start: any, end: any }) {
+    const {start, end} = date;
+
+    console.log(start.month, end.month);
+
+    this.currentMonth = start.month;
+    this.currentYears = start.year;
+
+    this.events = [];
+
+    //1번째 메뉴 모든 클래스 일정보기가 아닌 경우
+    if (this.sideMenuActiveNum !== -1) {
+      this.getClassScheduleListById(this.currentClassId)
+          .then(() => {
+            console.log('클래스별 리스트 호출', this.events);
+            this.updateClassScheduleEvent();
+          });
+    } else {
+      this.getAllScheduleList()
+          .then(() => {
+            this.updateAllScheduleEvent();
+          });
+    }
+  }
+
+  /**
+   * 캘린더 일정 상세보기 이벤트
+   * @param eventObj
+   * @private
+   */
   private scheduleDetailViewEvent(eventObj: { nativeEvent: MouseEvent, event: CalendarEvent }) {
     // console.log( eventObj.event );
     const open = () => {
       // this.selectedEvent = eventObj.event;
       // this.selectedElement = eventObj.nativeEvent.target as HTMLElement;
-
       const {id, classId} = eventObj.event;
       console.log('캘린더 id=', id);
 
@@ -414,13 +457,10 @@ export default class AllSchedule extends Vue {
       // const findIdx = this.scheduleListsModel.findIndex((item) => item.id === id);
       setTimeout(() => {
         this.selectedOpen = true;
-
         this.isOpenDetailSch = true;
-
         this.headerDepthChange();
 
-        //SET_SCHEDULE_DETAIL
-        // this.SET_SCHEDULE_DETAIL( this.scheduleListsModel[findIdx] );
+        //캘린더 상세 내역 데이타 호출 및 저장 - get scheduleDetailItem(): IScheduleDetail  통해 getter 로 상세 데이터를 가져올 수 있음.
         this.GET_SCHEDULE_DETAIL_ACTION({classId: Number(classId), scheduleId: id})
           .then((data) => {
             // console.log('캘린더 상세보기');
@@ -442,50 +482,47 @@ export default class AllSchedule extends Vue {
     eventObj.nativeEvent.stopPropagation();
   }
 
+
+
   /**
-   * 캘린더 이벤트 생성.
-   * @param date
+   * 모든 클래스 일정 이벤트 지정.
    * @private
    */
-  private updateRange(date: { start: any, end: any }) {
-    const {start, end} = date;
-
-    console.log(start.month, end.month);
-
-    this.currentMonth = start.month;
-    this.currentYears = start.year;
-
-    this.events = [];
-
-    if (this.currentClassId !== -1) {
-      this.getClassScheduleListById(this.currentClassId)
-        .then(() => {
-          console.log('클래스별 리스트 호출', this.events);
-          this.updateClassScheduleEvent();
-        });
-    } else {
-      this.getAllScheduleList()
-        .then(() => {
-          // console.log('캘린더 로드 완료.', this.currentMonth);
-          // this.updateRender();
-          // console.log(this.currentMonth, this.currentYears);
-          this.updateAllScheduleEvent();
-        });
-    }
-  }
-
   private updateAllScheduleEvent() {
     this.allScheduleItemsModel.forEach((item, idx) => {
-      // console.log(idx);
+      this.addScheduleEvent(idx);
+      this.getNextSchedule(idx);
+    });
+  }
+
+  /**
+   * 개별 클래스 일정 이벤트 지정
+   * @private
+   */
+  private updateClassScheduleEvent() {
+    this.scheduleListsModel.forEach((item, idx) => {
       this.addScheduleEvent(idx);
     });
   }
 
-  private updateClassScheduleEvent() {
-    this.scheduleListsModel.forEach((item, idx) => {
-      // console.log(idx);
-      this.addScheduleEvent(idx);
-    });
+  private getNextSchedule( idx: number ) {
+    const {startAt, endAt, title } = this.currentScheduleItems[idx];
+    const today = Date.now();
+    const updateDate = new Date(startAt).getTime();
+    //
+    if (today < updateDate) {
+      const dateResult= Utils.getCustomFormatDate(new Date(startAt), '. ', 2);
+      const startTime = Utils.getFullTimes( new Date(startAt) );
+      const endTime = Utils.getFullTimes( new Date(endAt) );
+      this.nextScheduleItems.push({
+        id:idx,
+        timestamp: updateDate,
+        date:dateResult,
+        tit: title,
+        time: `${startTime} ~ ${endTime}`
+      });
+    }
+
   }
 
 
@@ -499,8 +536,6 @@ export default class AllSchedule extends Vue {
     if (!this.isOpenAddSch) {
       //상단 gnb depth 가 높기에 일정 생성 팝업이 나올때 gnb depth 를 낮춤~
       this.headerDepthChange(false);
-
-      // console.log(this.scheduleListsModel.length, this.events.length);
       this.addScheduleEvent(this.currentScheduleItems.length - 1);
     }
   }
@@ -511,14 +546,9 @@ export default class AllSchedule extends Vue {
    * @private
    */
   private addScheduleEvent(idx: number) {
-    // console.log(this.scheduleListsModel[idx]);
-    // console.log(this.scheduleListsModel.length, this.events.length);
     const {startAt, endAt, title, text, owner, count, id, class_id} = this.currentScheduleItems[idx];
     // console.log(startAt, endAt, title, text, owner, count, id, class_id, this.currentScheduleItems[idx]);
     // const scheduleColorVal = this.getOwnerScheduleColor(owner);
-
-    // console.log(this.currentScheduleItems[idx]);
-
     const {schedule_color}=owner;
 
     this.events.push({
@@ -534,33 +564,8 @@ export default class AllSchedule extends Vue {
     });
   }
 
-  /**
-   * 스케쥴의 소유자인지 체크 후에 user schedule_color 변경
-   * @param owner
-   * @private
-   */
-  private getOwnerScheduleColor(owner: IScheduleOwner): number {
-    console.log(owner.user_id, this.userInfo.id);
-    return this.getIsOwner(owner.user_id)? this.userInfo.schedule_color : owner.schedule_color;
-  }
-
-  /**
-   * 캘린더의 소유자인지 체크
-   * @param userId
-   * @private
-   */
-  private getIsOwner(userId: number): boolean {
-    return (this.userInfo.id === userId);
-  }
-
   private onChangeColor(item: { id: number, color: string, title: string }) {
-
-    const findIdx=this.myAllClassListModel.findIndex(( myClassItem: IMyClassList ) => myClassItem.id === this.currentClassId);
-    const { me, owner }=this.myAllClassListModel[findIdx];
-
-    console.log(me, owner, this.currentClassId );
-
-    if (me.id === owner.id) {
+    if ( this.getIsAuth() ) {
       this.isConfirmPopupOpen = true;
       this.confirmTitle = '일정 색상 변경';
       this.confirmDesc = `선택하신 ${item.title} 컬러로 변경하시겠습니다까?`;
@@ -570,7 +575,6 @@ export default class AllSchedule extends Vue {
       this.noticeTitle = '일정 권한';
       this.noticeDesc = '해당 일정의 컬러 변경 권한이 없습니다.';
     }
-
   }
 
   private onConfirmClose(result: boolean) {
@@ -593,32 +597,19 @@ export default class AllSchedule extends Vue {
 
   private async changeScheduleColor(item: { id: number, color: string, title: string }) {
     if (this.userInfo) {
-      console.log('this.userInfo=', this.userInfo, this.currentClassId);
-      const {user_id} = this.userInfo;
 
       const findIdx=this.myAllClassListModel.findIndex(( myClassItem: IMyClassList ) => myClassItem.id === this.currentClassId);
-      const { me, owner }=this.myAllClassListModel[findIdx];
+      const { me }=this.myAllClassListModel[findIdx];
 
       try {
-        //ClassMemberService.setClassMemberInfo
-        //user info 수정
-
-        console.log(me.id, owner.id);
-
         await ClassMemberService.setClassMemberInfo(this.currentClassId, me.id,{schedule_color: item.id} )
           .then((data) => {
             console.log('컬러 변경=', data);
           });
 
-        //userMe 데이터 갱신 시킴.
-        /*await this.USER_ME_ACTION()
-          .then((data) => {
-            console.log(data);
-            this.updateOwnerScheduleColor();
-          });*/
         await MyClassService.getMyInfoInThisClass(this.currentClassId)
           .then((data)=>{
-            console.log(data);
+            // console.log(data);
             const { schedule_color }=data.result;
             this.updateOwnerScheduleColor( schedule_color );
           });
@@ -636,11 +627,7 @@ export default class AllSchedule extends Vue {
    */
   private updateOwnerScheduleColor( colorValue: number ) {
     const color = this.scheduleColor[colorValue].color;
-
     this.events.forEach((item, idx) => {
-      // const {owner} = this.currentScheduleItems[idx];
-      // console.log( '스케줄 owner=', owner,  '선택한 클래스 owner', );
-      // const scheduleColorVal = this.getOwnerScheduleColor(owner);
       this.events.splice(idx, 1, {...item, color} );
     });
   }
@@ -683,14 +670,15 @@ export default class AllSchedule extends Vue {
   private onEditSchedule() {
     if (this.schEditId !== -1) {
       console.log(this.schEditId);
-      const findIdx = this.allScheduleItemsModel.findIndex((item) => item.id === this.schEditId);
-      const {startAt, endAt, title, text, owner, count, id, class_id} = this.allScheduleItemsModel[findIdx];
-      const scheduleColorVal = this.getOwnerScheduleColor(owner);
+      const findIdx = this.currentScheduleItems.findIndex((item) => item.id === this.schEditId);
+      const {startAt, endAt, title, text, owner, count, id, class_id} = this.currentScheduleItems[findIdx];
+
+      const changeColor = this.scheduleColor[owner.schedule_color].color;
 
       this.events.splice(findIdx, 1, {
         name: title,
         details: text,
-        color: this.scheduleColor[scheduleColorVal ? scheduleColorVal : 0].color,
+        color: changeColor,
         start: new Date(startAt),
         end: new Date(endAt),
         repeat: count,

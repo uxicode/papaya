@@ -251,7 +251,14 @@
     }
   }
 }
-
+.calendar{
+  &--top-round{
+    border-top-left-radius:5px;border-top-right-radius:5px;
+  }
+  &--btm-round{
+    border-bottom-left-radius:5px; border-bottom-right-radius:5px;
+  }
+}
 .class-calendar {
   border-radius: 5px;
   box-shadow: 0 0 10px 0 rgba(15, 15, 21, 0.05);
@@ -264,21 +271,27 @@
   background-color:#fff;
 
   .schedule-top {
-    padding:20px 0 10px 30px;
+    padding:20px 0 0 30px;
+    .tit {
+      font-size: 16px;
+      font-weight: 500;
+      color: #0f0f15;
+    }
   }
 
   .schedule-cnt {
     .schedule-list {
       li {
         position:relative;
-        padding:10px 30px 10px 80px;
+        //padding:10px 30px 10px 80px;
+        padding:10px;
 
         + li {margin-top:10px;}
 
         .date {
-          position:absolute;
+          /*position:absolute;
           top:10px;
-          left:30px;
+          left:30px;*/
           font-weight:500;
           color:#57576d;
         }
@@ -698,10 +711,10 @@
 }
 
 .schedule-list {
-  padding:14px 20px 14px 48px  !important;
+  padding:14px 20px !important;
   border-radius: 5px;
-  border: solid 1px #c9cad5;
-  background:url(../../assets/images/classmenu-plan-outline.svg) no-repeat left 23px top 14px / 18px 18px;
+  //border: solid 1px #c9cad5;
+  //background:url(../../assets/images/classmenu-plan-outline.svg) no-repeat left 23px top 14px / 18px 18px;
   li{color:#57576d;}
 }
 

@@ -354,12 +354,17 @@ body {
   &.full {
     width:100%;
   }
+
 }
 .tb-row {display:table-row;}
 .tb-cell {
   display:table-cell;
   vertical-align:middle;
+  &.top{vertical-align: top;}
+  &.mid{vertical-align: middle;}
+  &.btm{vertical-align: bottom;}
 }
+
 
 
 

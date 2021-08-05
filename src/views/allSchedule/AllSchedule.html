@@ -131,225 +131,239 @@
 </div>-->
 
 <div class="contents home">
-  <v-app style="background-color: transparent">
-    <div class="contents-inner">
-      <div class="contents-group">
-        <!-- 좌측 메뉴 -->
-        <section class="contents-left">
-          <div class="class-notify">
-            <div class="notify-top">
-              <p class="class-tit">클래스별 일정</p>
-            </div>
-            <div class="notify-cnt">
-              <ul class="notify-list" v-if="myAllClassListModel.length>0">
-                <li>
-                  <a href="" class="all-class" :class="{'active': sideMenuActiveNum ===-1}" @click.prevent="onClassAllScheduleList">
-                    <span class="class-photo"><img :src="require('@/assets/images/profile-class.png')" class="thumb" alt=""></span>
-                    <span class="class-name">모든 클래스 일정</span>
-                  </a>
-                </li>
-                <li v-for="( item, index ) in myAllClassListModel" :key="`sch-class${index}`">
-                  <a href="" class="all-class" :class="{'active': sideMenuActiveNum===index }" @click.prevent="onClassScheduleList( item, index )">
-                    <!--v-once 디렉티브를 사용하여 데이터 변경 시 업데이트 되지 않는 일회성 보간을 수행할 수 있지만, 같은 노드의 바인딩에도 영향을 미친다는 점을 유의해야 합니다. -->
-                    <span v-once class="class-photo" :class="getScheduleColor( item )"><img :src="getProfileImg(item.owner.profile_image)" class="thumb" alt=""></span>
-                    <span class="class-name">{{ item.name }}</span>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- 다가오는 일정 영역 -->
-          <div class="classes-todo">
-            <div class="schedule-top">
-              <p class="class-tit">다가오는 일정</p>
-            </div>
-            <div class="schedule-cnt">
-              <ul class="schedule-list">
-                <li>
-                  <div class="date"><span>2. 29</span></div>
-
-                  <div class="detail">
-                    <div class="detail-list">
-                      <div class="item">
-                        <span class="bullet orange"></span>
-                        <p class="schedule-tit">서울여대 동창회 모임</p>
-                        <span class="time">오후 5시 - 8시</span>
-                      </div>
+    <v-app style="background-color: transparent">
+        <div class="contents-inner">
+            <div class="contents-group">
+                <!-- 좌측 메뉴 -->
+                <section class="contents-left">
+                    <div class="class-notify">
+                        <div class="notify-top">
+                            <p class="class-tit">클래스별 일정</p>
+                        </div>
+                        <div class="notify-cnt">
+                            <ul class="notify-list" v-if="myAllClassListModel.length>0">
+                                <li>
+                                    <a href="" class="all-class" :class="{'active': sideMenuActiveNum ===-1}"
+                                       @click.prevent="onClassAllScheduleList">
+                                        <span class="class-photo"><img
+                                                :src="require('@/assets/images/profile-class.png')" class="thumb"
+                                                alt=""></span>
+                                        <span class="class-name">모든 클래스 일정</span>
+                                    </a>
+                                </li>
+                                <li v-for="( item, index ) in myAllClassListModel" :key="`sch-class${index}`">
+                                    <a href="" class="all-class" :class="{'active': sideMenuActiveNum===index }"
+                                       @click.prevent="onClassScheduleList( item, index )">
+                                        <!--v-once 디렉티브를 사용하여 데이터 변경 시 업데이트 되지 않는 일회성 보간을 수행할 수 있지만, 같은 노드의 바인딩에도 영향을 미친다는 점을 유의해야 합니다. -->
+                                        <span v-once class="class-photo" :class="getScheduleColor( item )"><img
+                                                :src="getProfileImg(item.owner.profile_image)" class="thumb"
+                                                alt=""></span>
+                                        <span class="class-name">{{ item.name }}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                  </div>
-                </li>
 
-              </ul>
+                    <!-- 다가오는 일정 영역 -->
+                    <div class="classes-todo">
+                        <div class="schedule-top"><p class="tit">다가오는 일정</p></div>
+                        <div class="schedule-cnt">
+                            <ul class="schedule-list">
+                                <li v-for="(item, index) in nextScheduleItemsModel" :key="`nextSch-${index}`">
+                                    <div class="tb-style full">
+                                        <div class="date tb-cell top" style="width:25%;"><span>{{ item.date }}</span></div>
+
+                                        <div class="detail-list  tb-cell">
+                                            <div class="item">
+                                                <span class="bullet orange"></span>
+                                                <p class="schedule-tit">{{ item.tit }}</p>
+                                                <span class="time">{{ item.time }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- 다가오는 일정 영역 -->
+                </section>
+
+                <section class="contents-right" style="position:relative;z-index:0;">
+                    <div class="cnt-top">
+                        <h2 class="cnt-tit">모든 클래스 일정</h2>
+                        <div class="pos-right">
+
+
+                            <v-menu left bottom min-width="200px" offset-x>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn fab text small
+                                           color="grey darken-2"
+                                           v-bind="attrs"
+                                           v-on="on">
+                                        <v-icon>mdi-cog-outline</v-icon>
+                                    </v-btn>
+                                    <!--<v-btn
+                                            rounded
+                                            outlined
+                                            v-bind="attrs"
+                                            v-on="on"
+                                            min-width="100px">
+                                      <span>{{ typeToLabel[type] }}</span>
+                                      <v-icon right>mdi-menu-down</v-icon>
+                                    </v-btn>-->
+                                </template>
+                                <v-list>
+                                    <v-list-item>
+                                        <v-list-item-title><p class="list-popup-tit">일정 색상 설정</p></v-list-item-title>
+                                    </v-list-item>
+                                    <v-list-item
+                                            v-for="(item, index) in scheduleColor"
+                                            :key="index"
+                                            @click="onChangeColor( item )">
+                                        <v-list-item-title><span class="color-mark pos-rel mgr-10"
+                                                                 :style="{'background-color':item.color}"></span>{{
+                                                item.title
+                                            }}
+                                        </v-list-item-title>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+                        </div>
+                    </div>
+                    <!-- start: 상단 컨트롤러 -->
+                    <v-sheet height="64" class="calendar--top-round">
+                        <v-toolbar flat color="white" style="border-radius: 10px;">
+                            <v-btn fab text x-small outlined color="grey darken-2" @click="prev">
+                                <v-icon small>mdi-chevron-left</v-icon>
+                            </v-btn>
+                            <v-btn class="ml-2" fab text x-small outlined color="grey darken-2" @click="next">
+                                <v-icon small>mdi-chevron-right</v-icon>
+                            </v-btn>
+                            <v-toolbar-title v-if="$refs.calendar" class="ml-4 ft-bold">{{ $refs.calendar.title }}</v-toolbar-title>
+                            <v-spacer></v-spacer>
+                            <v-btn rounded depressed class="mr-4" @click="setToday">오늘</v-btn>
+                            <v-menu bottom right>
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn
+                                            rounded
+                                            outlined
+                                            v-bind="attrs"
+                                            v-on="on"
+                                            min-width="100px">
+                                        <span>{{ typeToLabel[type] }}</span>
+                                        <v-icon right>mdi-menu-down</v-icon>
+                                    </v-btn>
+                                </template>
+                                <v-list>
+                                    <v-list-item @click="type = 'day'">
+                                        <v-list-item-title>일간</v-list-item-title>
+                                    </v-list-item>
+                                    <v-list-item @click="type = 'week'">
+                                        <v-list-item-title>주</v-list-item-title>
+                                    </v-list-item>
+                                    <v-list-item @click="type = 'month'">
+                                        <v-list-item-title>월간</v-list-item-title>
+                                    </v-list-item>
+                                    <v-list-item @click="type = '4day'">
+                                        <v-list-item-title>4 days</v-list-item-title>
+                                    </v-list-item>
+                                </v-list>
+                            </v-menu>
+                        </v-toolbar>
+                    </v-sheet>
+                    <!-- end: 상단 컨트롤러 -->
+
+                    <!-- start: 캘린더 -->
+                    <v-sheet height="674" style="padding:0 20px;"  class="calendar--btm-round">
+                        <!--
+                               @click:more="viewDay"
+                                @click:date="viewDay"
+                                @click:event="showEvent"
+                                @click:more="viewMoreDay"
+                                @mousedown:event="startDrag"
+                                @mousedown:time="startTime"
+                                @mousemove:time="mouseMove"
+                                @mouseup:time="endDrag"
+                                @mouseleave.native="cancelDrag"
+                                -->
+                        <v-calendar
+                                ref="calendar"
+                                v-model="calendarModel"
+                                color="primary"
+                                :events="scheduleEvents"
+                                :event-color="getEventColor"
+                                :type="type"
+                                :weekdays="weekdays"
+                                :weekday-format="getDay"
+                                :day-format="(timestamp) => new Date(timestamp.date).getDate()"
+                                :month-format="(timestamp)=> (new Date(timestamp.date).getMonth()+1)+'월' "
+                                @change="updateRange"
+                                @click:event="scheduleDetailViewEvent">
+                            <template v-slot:event="{ event, timed, eventSummary }">
+                                <div class="v-event-draggable" v-html="eventSummary()"></div>
+                                <div v-if="timed" class="v-event-drag-bottom"
+                                     @mousedown.stop="extendBottom(event)"></div>
+                            </template>
+                        </v-calendar>
+
+                        <!-- start: 상세내역 팝업 -->
+                        <!--<v-menu
+                                v-model="selectedOpen"
+                                :close-on-content-click="false"
+                                :activator="selectedElement"
+                                offset-x>
+                          <v-card color="grey lighten-4" min-width="350px" flat>
+                            <v-toolbar :color="selectedEvent.color" dark>
+                              <v-btn icon><v-icon>mdi-pencil</v-icon></v-btn>
+                              <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
+                              <v-spacer></v-spacer>
+                              <v-btn icon><v-icon>mdi-heart</v-icon></v-btn>
+                              <v-btn icon><v-icon>mdi-dots-vertical</v-icon></v-btn>
+                            </v-toolbar>
+                            <v-card-text><span v-html="selectedEvent.details"></span></v-card-text>
+                            <v-card-actions>
+                              <v-btn text color="secondary" @click="selectedOpen = false">Cancel</v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </v-menu>-->
+                        <!-- end: 상세내역 팝업 -->
+
+                    </v-sheet>
+                    <!-- end: 캘린더 -->
+
+                    <div class="add-schedule">
+                        <a href="" class="add-schedule-btn" @click.prevent="addScheduleOpen"></a>
+                    </div>
+
+                    <!-- start: 공통 팝업 / 파일명 : W.4.5.3.3.4.2 (일정 만들기) (4.5.3.3.1 ~ 4.5.3.3.4.2) isPopup=false;loopRangeCheck = false-->
+                    <add-schedule :is-open="isOpenAddSch" @change="addScheduleClose"
+                                  @submit="onAddScheduleClose"></add-schedule>
+                    <!-- end: 공통 팝업 -->
+
+                    <!-- start: 공통 팝업 / 파일명 : W.4.5.3.4 (일정 상세) -->
+                    <schedule-detail-popup
+                            :is-open="isOpenDetailSch"
+                            @change="onDetailScheduleClose" @delete="onDeleteCheck"
+                            @editApplyTo="onEditSchedule"></schedule-detail-popup>
+                    <!-- end: 공통 팝업 -->
+                    <confirm-popup
+                            :is-open="isConfirmPopupOpen"
+                            :title="updateConfirmTitle"
+                            :msg="updateConfirmDesc"
+                            @confirm="onConfirmClose"></confirm-popup>
+                    <notice-popup :is-open="isNoticePopupOpen"
+                                  :title="updateNoticeTitle"
+                                  :msg="updateNoticeDesc"
+                                  @change="onNoticePopupClose"></notice-popup>
+                </section>
+
             </div>
-          </div>
-          <!-- 다가오는 일정 영역 -->
-        </section>
+        </div>
 
-        <section class="contents-right" style="position:relative;z-index:0;">
-          <div class="cnt-top">
-            <h2 class="cnt-tit">모든 클래스 일정</h2>
-            <div class="pos-right">
-
-
-              <v-menu left bottom  min-width="200px" offset-x>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn fab text small
-                         color="grey darken-2"
-                         v-bind="attrs"
-                         v-on="on">
-                    <v-icon>mdi-cog-outline</v-icon>
-                  </v-btn>
-                  <!--<v-btn
-                          rounded
-                          outlined
-                          v-bind="attrs"
-                          v-on="on"
-                          min-width="100px">
-                    <span>{{ typeToLabel[type] }}</span>
-                    <v-icon right>mdi-menu-down</v-icon>
-                  </v-btn>-->
-                </template>
-                <v-list>
-                  <v-list-item> <v-list-item-title> <p class="list-popup-tit">일정 색상 설정</p></v-list-item-title></v-list-item>
-                  <v-list-item
-                          v-for="(item, index) in scheduleColor"
-                          :key="index"
-                          @click="onChangeColor( item )">
-                    <v-list-item-title ><span class="color-mark pos-rel mgr-10" :style="{'background-color':item.color}"></span>{{ item.title }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-          </div>
-          <!-- start: 상단 컨트롤러 -->
-          <v-sheet height="64" rounded>
-            <v-toolbar flat color="white">
-              <v-btn fab text x-small outlined color="grey darken-2" @click="prev">
-                <v-icon small>mdi-chevron-left</v-icon>
-              </v-btn>
-              <v-btn class="ml-2" fab text x-small outlined color="grey darken-2" @click="next">
-                <v-icon small>mdi-chevron-right</v-icon>
-              </v-btn>
-              <v-toolbar-title v-if="$refs.calendar" class="ml-4 ft-bold">{{ $refs.calendar.title }}</v-toolbar-title>
-              <v-spacer></v-spacer>
-              <v-btn rounded depressed class="mr-4" @click="setToday">오늘</v-btn>
-              <v-menu bottom right>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                          rounded
-                          outlined
-                          v-bind="attrs"
-                          v-on="on"
-                          min-width="100px">
-                    <span>{{ typeToLabel[type] }}</span>
-                    <v-icon right>mdi-menu-down</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item @click="type = 'day'">
-                    <v-list-item-title>일간</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="type = 'week'">
-                    <v-list-item-title>주</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="type = 'month'">
-                    <v-list-item-title>월간</v-list-item-title>
-                  </v-list-item>
-                  <v-list-item @click="type = '4day'">
-                    <v-list-item-title>4 days</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-toolbar>
-          </v-sheet>
-          <!-- end: 상단 컨트롤러 -->
-
-          <!-- start: 캘린더 -->
-          <v-sheet height="674" style="padding:0 20px;">
-            <!--
-                   @click:more="viewDay"
-                    @click:date="viewDay"
-                    @click:event="showEvent"
-                    @click:more="viewMoreDay"
-                    @mousedown:event="startDrag"
-                    @mousedown:time="startTime"
-                    @mousemove:time="mouseMove"
-                    @mouseup:time="endDrag"
-                    @mouseleave.native="cancelDrag"
-                    -->
-            <v-calendar
-                    ref="calendar"
-                    v-model="calendarModel"
-                    color="primary"
-                    :events="scheduleEvents"
-                    :event-color="getEventColor"
-                    :type="type"
-                    :weekdays="weekdays"
-                    :weekday-format="getDay"
-                    :day-format="(timestamp) => new Date(timestamp.date).getDate()"
-                    :month-format="(timestamp)=> (new Date(timestamp.date).getMonth()+1)+'월' "
-                    @change="updateRange"
-                    @click:event="scheduleDetailViewEvent">
-              <template v-slot:event="{ event, timed, eventSummary }">
-                <div class="v-event-draggable" v-html="eventSummary()"></div>
-                <div v-if="timed" class="v-event-drag-bottom" @mousedown.stop="extendBottom(event)"></div>
-              </template>
-            </v-calendar>
-
-            <!-- start: 상세내역 팝업 -->
-            <!--<v-menu
-                    v-model="selectedOpen"
-                    :close-on-content-click="false"
-                    :activator="selectedElement"
-                    offset-x>
-              <v-card color="grey lighten-4" min-width="350px" flat>
-                <v-toolbar :color="selectedEvent.color" dark>
-                  <v-btn icon><v-icon>mdi-pencil</v-icon></v-btn>
-                  <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
-                  <v-spacer></v-spacer>
-                  <v-btn icon><v-icon>mdi-heart</v-icon></v-btn>
-                  <v-btn icon><v-icon>mdi-dots-vertical</v-icon></v-btn>
-                </v-toolbar>
-                <v-card-text><span v-html="selectedEvent.details"></span></v-card-text>
-                <v-card-actions>
-                  <v-btn text color="secondary" @click="selectedOpen = false">Cancel</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-menu>-->
-            <!-- end: 상세내역 팝업 -->
-
-          </v-sheet>
-          <!-- end: 캘린더 -->
-
-          <div class="add-schedule">
-            <a href="" class="add-schedule-btn" @click.prevent="addScheduleOpen"></a>
-          </div>
-
-          <!-- start: 공통 팝업 / 파일명 : W.4.5.3.3.4.2 (일정 만들기) (4.5.3.3.1 ~ 4.5.3.3.4.2) isPopup=false;loopRangeCheck = false-->
-          <add-schedule :is-open="isOpenAddSch" @change="addScheduleClose" @submit="onAddScheduleClose"></add-schedule>
-          <!-- end: 공통 팝업 -->
-
-          <!-- start: 공통 팝업 / 파일명 : W.4.5.3.4 (일정 상세) -->
-          <schedule-detail-popup
-                  :is-open="isOpenDetailSch"
-                  @change="onDetailScheduleClose" @delete="onDeleteCheck" @editApplyTo="onEditSchedule"></schedule-detail-popup>
-          <!-- end: 공통 팝업 -->
-          <confirm-popup
-                  :is-open="isConfirmPopupOpen"
-                  :title="updateConfirmTitle"
-                  :msg="updateConfirmDesc"
-                  @confirm="onConfirmClose"></confirm-popup>
-          <notice-popup :is-open="isNoticePopupOpen"
-                        :title="updateNoticeTitle"
-                        :msg="updateNoticeDesc"
-                        @change="onNoticePopupClose"></notice-popup>
-        </section>
-
-      </div>
-    </div>
-
-  </v-app>
+    </v-app>
 </div>
 
 

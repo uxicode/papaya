@@ -16,9 +16,8 @@ import NoticePopup from '@/components/modal/noticePopup.vue';
 import CommentArea from '@/components/comment/CommentArea.vue';
 import CommentBtm from '@/components/comment/CommentBtm.vue';
 import EditSchedule from '@/views/class/schedule/EditSchedule';
-import WithRender from './ScheduleDetailPopup.html';
 import {ScheduleService} from '@/api/service/ScheduleService';
-import {DELETE_SCHEDULE_ACTION, SET_KEEP_SCHEDULE_ACTION} from '@/store/action-class-types';
+import WithRender from './ScheduleDetailPopup.html';
 
 const MyClass = namespace('MyClass');
 const Schedule = namespace('Schedule');

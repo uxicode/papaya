@@ -47,14 +47,15 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
   @MyClass.Getter
   private myClassHomeModel!: IClassInfo;
 
+  //2019-11-15 10:00:00
   private scheduleData: IAddSchedule= {
     repeat_type: 0,
     repeat_count: 0,
     fullday: 0,
     title: '',
     body: '',
-    evt_startAt: '',  //2019-11-15 10:00:00
-    evt_endAt: '',
+    evt_startAt: '',
+    evt_endAt: ''
   };
 
   private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
@@ -121,6 +122,15 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
       evt_endAt: endAt,
       evt_startAt: startAt
     };
+
+    /*repeat_type: 0,
+      repeat_count: 0,
+      fullday: 0,
+      title: '',
+      body: '',
+      evt_startAt: '',
+      evt_endAt: ''
+      */
     /*this.scheduleData.title=title;
     this.scheduleData.body=text;
     this.scheduleData.repeat_type=type;
@@ -175,7 +185,7 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
   private getStartAt() {
     const apm = this.startTimeSelectModel.apm;
     const selectHour= Number( this.startTimeSelectModel.hour );
-    const hour=( apm === '오후' )? selectHour+12 : selectHour;
+    const hour=( apm === '오후' && selectHour<12  )? selectHour+12 : selectHour;
     const minute = this.startTimeSelectModel.minute;
 
     // //2019-11-15 10:00:00
@@ -185,7 +195,10 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
   private getEndAt() {
     const apm = this.endTimeSelectModel.apm;
     const selectHour= Number( this.endTimeSelectModel.hour );
-    const hour=( apm === '오후' )? selectHour+12 : selectHour;
+    const hour=( apm === '오후' && selectHour<12 )? selectHour+12 : selectHour;
+
+    console.log('hour=', hour, this.endTimeSelectModel.hour );
+
     const minute = this.endTimeSelectModel.minute;
 
     // //2019-11-15 10:00:00
@@ -400,7 +413,7 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     const temp = JSON.stringify( this.scheduleData );
     this.formData.append('data', temp );
 
-    // console.log(this.scheduleData);
+    console.log(temp);
 
     const allEditInfo=ScheduleService.setScheduleInfoById( Number( this.classID ), id, this.formData );
     editPromiseItems.push( allEditInfo );
@@ -419,6 +432,7 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
     this.imgFilesAllClear(); //이미지 데이터 비우기
     this.attachFilesAllClear();//파일 데이터 비우기
+    this.removeFiles = [];
     this.scheduleData={
       repeat_type: 0,
       repeat_count: 0,
@@ -428,7 +442,7 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
       evt_startAt: '',  //2019-11-15 10:00:00
       evt_endAt: '',
     };
-    this. formDataPlainClear();
+    this.formDataPlainClear();
   }
 
 }
