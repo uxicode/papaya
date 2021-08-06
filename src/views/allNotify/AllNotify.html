@@ -1,0 +1,230 @@
+<div class="contents home">
+  <v-app style="background-color: transparent">
+    <div class="contents-inner">
+        <div class="contents-group">
+
+            <section class="contents-left">
+                <div class="class-notify">
+                    <div class="notify-top"><p class="class-tit">클래스별 알림</p></div>
+                    <div class="notify-cnt">
+                        <ul class="notify-list"  v-if="myAllClassListModel.length>0">
+                            <li>
+                                <a href="" class="all-class"  :class="{'active': sideMenuActiveNum ===-1}"
+                                   @click.prevent="onClassAllNotifyList">
+                                    <span class="class-photo"><img :src="require('@/assets/images/profile-class.png')" class="thumb" alt=""></span>
+                                    <span class="class-name">모든 클래스 알림</span>
+                                </a>
+                            </li>
+                            <li v-for="( item, index ) in myAllClassListModel" :key="`notify-class${index}`">
+                                <a href=""  :class="{'active': sideMenuActiveNum===index }"
+                                   @click.prevent="onClassNotifyList( item, index )">
+                                    <span class="class-photo" v-once><img :src="getProfileImg(item.owner.profile_image)" class="thumb" alt=""></span>
+                                    <span class="class-name">{{ item.name }}</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+            </section>
+
+
+          <section class="contents-right">
+            <div class="classes-feed notification" v-if="isPageLoaded">
+              <div class="cnt-top">
+                <h2 class="cnt-tit">알림</h2>
+                <div class="cnt-top-btn">
+                  <!--<v-menu
+                               top  //absolute 위치로 상단 정렬
+                               nudge-bottom="40px" // 하단을 기준으로 추가 px 조절
+                               nudge-left="30px" // 좌측을 기준으로 추가 px 조절 수치가 클수록 왼쪽으로 배치된다.
+                               origin="center center"  // transform-origin
+                               v-model="timeMenu"  // value 값으로 노출
+                               :close-on-content-click // 값이 true -> 메뉴의 컨텐츠를 클릭하면 메뉴를 닫음
+                               :close-on-click  //값이 true -> 활성자의 바깥을 클릭하면 메뉴를 닫음
+                               transition="scale-transition" // 스케일 모션
+                               content-class="time-select-menu bg-white" // 해당 메뉴에 추가 클래스
+                               offset-y   // 메뉴 버튼을 중심으로 y 값으로 정렬 배치
+                               -->
+                  <v-menu
+                          origin="left top"
+                          v-model="startDateMenu"
+                          :close-on-content-click="false"
+                          transition="scale-transition"
+                          offset-y
+                          min-width="auto">
+                    <template v-slot:activator="{ on, attrs }">
+                      <button type="button" class="btn form-btn form-calendar" v-on="on"></button>
+                    </template>
+                    <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
+                    <v-date-picker v-model="startDatePickerModel" no-title @input="startDatePickerChange"></v-date-picker>
+                  </v-menu>
+
+                </div>
+              </div>
+              <div class="top-notify">
+                <div class="accordion">
+                  <!-- accordion 1-->
+                  <div class="accordion-tit">
+                    <a href="javascript:void(0);" class="accordion-btn active" @click.prevent="onReservedMenuDownUp">
+                      <span class="icon"><img :src="require('@/assets/images/time-outline.svg')" class="icon-img" alt=""></span>
+                      <span class="mgl-4">{{ reservedTotalItem }}개의 예약 알림이 있습니다.</span>
+                    </a>
+                  </div>
+
+                  <div class="accordion-cnt" id="accordion1" :class="{'active':reservedChk}" v-if="reservedTotalItem>0" >
+                    <div class="notify-feed" v-for="(item, index) in reservedItems" :key="`reserve-${index}`">
+                      <h3 class="fd-tit">{{ item.title }}</h3>
+                      <p class="fd-schedule">{{item.startAt}}에 등록 예정</p>
+                      <div class="fd-btn">
+                        <div class="list-popup">
+                          <v-menu
+                                  min-width="200px"
+                                  :close-on-click="true">
+                            <template v-slot:activator="{ on, attrs }">
+                              <button v-if="isOwner( item.owner.user_id, item.user_id)"
+                                      type="button"
+                                      class="list-popup-btn"
+                                      v-bind="attrs"
+                                      v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
+                              </button>
+                            </template>
+                            <v-list>
+                              <v-list-item @click="">
+                                <v-list-item-title>알림 수정</v-list-item-title>
+                              </v-list-item>
+                              <v-list-item @click="onDeleteReservedByPostId( item.id )">
+                                <v-list-item-title>알림 삭제</v-list-item-title>
+                              </v-list-item>
+                            </v-list>
+                          </v-menu>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- //accordion 1-->
+                </div>
+              </div>
+
+              <!-- start: 리스트 뷰 :post-list-items="postListItemsModel" -->
+              <notification-list-view v-if="postListItemsModel.length>0"
+                                      :comments-total-items="commentsTotalItemsModel"
+                                      @click:detailPost="onDetailPostOpen"></notification-list-view>
+              <!-- end: 리스트 뷰 -->
+
+
+              <!-- 등록된 알림 없음 -->
+              <div class="no-notify" v-else>
+                <div class="no-data">
+                  <img :src="require('@/assets/images/icn-80-notice-nodata.svg')" alt="">
+                  <p>등록된 알림이 없습니다.</p>
+                  <span>새 알림을 작성해 주세요.</span>
+                  <div class="mgt-20">
+                    <btn type="navi" @btnClick="onAddPostPopupOpen">새 알림 작성</btn>
+                  </div>
+                </div>
+              </div>
+
+              <div class="noti-add">
+                <a href="" class="classes-add-btn" @click.prevent="onAddPostPopupOpen"></a>
+              </div>
+            </div >
+
+            <!-- start: 알림 신규 생성 -->
+            <add-notify-popup :is-open="isAddPopupOpen" @change="onAddPostPopupStatus" @submit="onAddPost"></add-notify-popup>
+            <!-- end: 알림 신규 생성 -->
+
+            <!--  <div class="lds-ripple" v-if="isLoading"><div></div><div></div></div>-->
+          </section>
+        </div>
+
+    </div>
+
+    <!-- start: 공통 팝업 / 파일명 : W.5.2.1 (새 일정 등록 - 대상 클래스 선택) (5.2 ~ 5.2.1) -->
+    <modal v-if="false">
+        <div slot="header">
+            <!-- header custom coding-->
+            <p class="popup-header-tit">새 알림 작성</p>
+            <div class="popup-close">
+                <button class="close"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+            </div>
+        </div>
+        <div slot="body">
+            <!-- body custom coding-->
+            <div class="popup-form">
+                <div class="popup-form-top">
+                    <div class="form-item post-classes">
+                        <p><span class="icon icon-class"></span>클래스를 선택해 주세요.</p>
+                        <div class="post-classes-select">
+                            <div class="list-popup">
+                                <button type="button" class="list-popup-btn"><img :src="require('@/assets/images/arrow-right.svg')" alt=""></button>
+                                <div class="list-popup-menu pos-right active" style="width:300px; transform:translate3d(42px, 0,0);">
+                                    <p class="list-popup-tit">클래스 선택</p>
+                                    <div class="list-popup-scroll" style="height:280px;">
+                                        <a href="" class="list-popup-item">
+                                            <div class="list-popup-pic"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""></div>
+                                            <span class="pdl-52">내 일정</span>
+                                        </a>
+                                        <a href="" class="list-popup-item">
+                                            <div class="list-popup-pic"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""></div>
+                                            <span class="pdl-52">1학년 3반 수학</span>
+                                        </a>
+                                        <a href="" class="list-popup-item">
+                                            <div class="list-popup-pic"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""></div>
+                                            <span class="pdl-52">특목 고등학교 입시 미술반</span>
+                                        </a>
+                                        <a href="" class="list-popup-item">
+                                            <div class="list-popup-pic"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""></div>
+                                            <span class="pdl-52">6학년 3반 독서부</span>
+                                        </a>
+                                        <a href="" class="list-popup-item">
+                                            <div class="list-popup-pic"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""></div>
+                                            <span class="pdl-52">미술 아동반</span>
+                                        </a>
+                                        <a href="" class="list-popup-item">
+                                            <div class="list-popup-pic"><img :src="require('@/assets/images/bg-icon.png')" class="thumb" alt=""></div>
+                                            <span class="pdl-52">검정고시반</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <input type="text" class="form-control popup-type" placeholder="제목을 20자 이내로 작성해 주세요.">
+                    </div>
+                </div>
+                <div class="popup-form-cnt">
+                    <div class="form-item post-cnt" style="height:354px;">
+                        <textarea class="form-textarea" placeholder="알림 내용을 작성해 주세요."></textarea>
+                    </div>
+                </div>
+                <div class="popup-form-btm">
+                    <div class="form-add-btn">
+                        <ul class="clearfix">
+                            <li><a href=""><img :src="require('@/assets/images/image.svg')" alt=""></a></li>
+                            <li><a href=""><img :src="require('@/assets/images/file.svg')" alt=""></a></li>
+                            <li><a href=""><img :src="require('@/assets/images/vote.svg')" alt=""></a></li>
+                            <li><a href=""><img :src="require('@/assets/images/link.svg')" alt=""></a></li>
+                            <li><a href=""><img :src="require('@/assets/images/time-outline.svg')" alt=""></a></li>
+                        </ul>
+                        <div class="form-temp-save"><a href="" class="txt-btn">임시저장</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div slot="footer">
+            <!-- footer custom coding-->
+            <div class="btn-group rt">
+                <button type="button" class="btn primary navi" disabled>등록</button>
+            </div>
+        </div>
+    </modal>
+    <!-- end: 공통 팝업 -->
+  </v-app>
+</div>
+
+
+
+

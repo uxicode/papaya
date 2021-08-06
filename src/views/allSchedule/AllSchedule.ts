@@ -42,7 +42,6 @@ const Schedule = namespace('Schedule');
 })
 export default class AllSchedule extends Vue {
 
-
   @Schedule.Mutation
   private SET_SCHEDULE_DETAIL!: (data: IScheduleTotal) => void;
 
@@ -94,13 +93,49 @@ export default class AllSchedule extends Vue {
 
   @Auth.Getter
   private userInfo!: IUserMe;
-  // private formData!: FormData;
+
+
   private isOpenAddSch: boolean = false;
   private isOpenDetailSch: boolean = false;
-  // private isTimeSelect: boolean=false;
+  private selectedOpen: boolean = false;
+  private isConfirmPopupOpen: boolean = false;
+  private isNoticePopupOpen: boolean = false;
 
+  private noticeTitle: string = '';
+  private confirmTitle: string = '';
+  private noticeDesc: string = '';
+  private confirmDesc: string = '';
   //초기 캘린더를 월간으로 표시
   private type: string = 'month';
+
+  private currentYears: number = 0;
+  private currentMonth: number = 0;
+  private sideMenuActiveNum: number = -1;
+  private currentClassId: number = -1;
+  private events: any[] = [];
+  private currentDates: number[] = [];
+  private createEvent: {
+    name: string,
+    color: string,
+    start: number,
+    end: number,
+    timed: boolean
+  } | null | undefined;
+  private typeToLabel = {
+    'month': '월간',
+    'week': '주간',
+    'day': '일간',
+    '4day': '4일',
+    'custom-daily': '3일',
+  };
+  private scheduleColor: Array<{ id: number, color: string, title: string }> = [
+    {id: 0, color: '#8d2600', title: '석류'},
+    {id: 1, color: '#f9862a', title: '파파야'},
+    {id: 2, color: '#f5b300', title: '귤'},
+    {id: 3, color: '#ffd100', title: '바나나'},
+    {id: 4, color: '#d8d029', title: '아보카도'},
+    {id: 5, color: '#adc500', title: '라임'},
+  ];
   // v-calendar 의 :weekday-format="getDay" 와 연동시킴.
   private daysOfWeek: string[] = ['월', '화', '수', '목', '금', '토', '일'];
   /*
@@ -112,54 +147,14 @@ export default class AllSchedule extends Vue {
       { text: 'Mon, Wed, Fri', value: [1, 3, 5] },
   ];*/
   private weekdays: number[] = [1, 2, 3, 4, 5, 6, 0];
+  private selectedColor: { id: number, color: string, title: string } = {id: -1, color: '', title: ''};
+  private nextScheduleItems: Array<{ id: number, timestamp: number, date: string, tit: string, time: string }> = [];
 
-  // private selectedEvent ={};
-  // private selectedElement: HTMLElement | null=null;
-  private selectedOpen: boolean = false;
-  private typeToLabel = {
-    'month': '월간',
-    'week': '주간',
-    'day': '일간',
-    '4day': '4일',
-    'custom-daily': '3일',
-  };
-
-  private calendarModel: string = new Date().toISOString().substr(0, 10); ///// '2020-3-01';
-  private events: any[] = [];
   private extendOriginal: any | null = null;
   private createStart: number | null = 0;
-  private createEvent: {
-    name: string,
-    color: string,
-    start: number,
-    end: number,
-    timed: boolean
-  } | null | undefined;
   private startDate: string | number | Date = '';
   private endDate: string | number | Date = '';
-  private scheduleColor: Array<{ id: number, color: string, title: string }> = [
-    {id: 0, color: '#8d2600', title: '석류'},
-    {id: 1, color: '#f9862a', title: '파파야'},
-    {id: 2, color: '#f5b300', title: '귤'},
-    {id: 3, color: '#ffd100', title: '바나나'},
-    {id: 4, color: '#d8d029', title: '아보카도'},
-    {id: 5, color: '#adc500', title: '라임'},
-  ];
-  private selectedColor: { id: number, color: string, title: string } = {id: -1, color: '', title: ''};
-  private loopRangeCount: number | string = 10;
-  private noticeTitle: string = '';
-  private confirmTitle: string = '';
-  private noticeDesc: string = '';
-  private confirmDesc: string = '';
-  private isConfirmPopupOpen: boolean = false;
-  private isNoticePopupOpen: boolean = false;
-  private monthCount: number = 0;
-  private currentDates: number[] = [];
-  private currentYears: number = 0;
-  private currentMonth: number = 0;
-  private sideMenuActiveNum: number = -1;
-  private currentClassId: number = -1;
-  private nextScheduleItems: Array<{ id: number, timestamp: number, date: string, tit: string, time: string }> = [];
+  private calendarModel: string = new Date().toISOString().substr(0, 10); ///// '2020-3-01';
 
   /*private scheduleData: {
       repeat_type: number,
@@ -255,20 +250,12 @@ export default class AllSchedule extends Vue {
     this.currentYears = this.currentDates[0];
     this.currentMonth = this.currentDates[1];
 
-    this.monthCount = 0;
-
-
     await this.MYCLASS_LIST_ACTION()
       .then((data: IMyClassList[]) => {
         /*data.map( (item: IMyClassList )=>{
           console.log(item.me, item );
         });*/
       });
-
-    await this.getAllScheduleList().then(() => {
-      // console.log('캘린더 로드 완료.', this.events);
-      this.updateAllScheduleEvent();
-    });
 
     const rule = new RRule({
       freq: RRule.WEEKLY,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
@@ -278,8 +265,6 @@ export default class AllSchedule extends Vue {
     });
     // console.log(rule.all());
   }
-
-
 
   public getProfileImg(imgUrl: string | null | undefined): string {
     //프로필 이미지를 세팅 하는 데 있어서 click 등의 이벤트로 인해 데이터 바인딩 즉, 썸네일 이미지가 매번 갱신 된다.
@@ -332,7 +317,7 @@ export default class AllSchedule extends Vue {
 
 
   /**
-   * 클릭 이벤트 핸들러 - 모든 클래스 알림 메뉴
+   * 클릭 이벤트 핸들러 - 모든 클래스 일정 메뉴
    * @private
    */
   private onClassAllScheduleList() {
@@ -346,7 +331,7 @@ export default class AllSchedule extends Vue {
   }
 
   /**
-   * 클릭 이벤트 핸들러 - 개별 클래스 알림 메뉴
+   * 클릭 이벤트 핸들러 - 개별 클래스 일정 메뉴
    * @param item
    * @param index
    * @private
@@ -375,6 +360,9 @@ export default class AllSchedule extends Vue {
         if (this.events && this.events.length > 0) {
           this.events = [];
         }
+        if (this.nextScheduleItems && this.nextScheduleItems.length > 0) {
+          this.nextScheduleItems = [];
+        }
       });
   }
 
@@ -393,20 +381,66 @@ export default class AllSchedule extends Vue {
         if (this.events && this.events.length > 0) {
           this.events = [];
         }
+        if (this.nextScheduleItems && this.nextScheduleItems.length > 0) {
+          this.nextScheduleItems = [];
+        }
       });
   }
 
 
+  /**
+   * calendar 날짜 지정된 값 초기화 ( 오늘로 맞춰줌 )
+   * @private
+   */
   private setToday() {
     this.calendarModel = '';
   }
 
+  /**
+   * 이전 일자 혹은 월 보기
+   * @private
+   */
   private prev() {
     this.calendarInstance.prev();
   }
 
+  /**
+   * 다음 일자 혹은 월 보기
+   * @private
+   */
   private next() {
     this.calendarInstance.next();
+  }
+
+  /**
+   * more 클릭시 - calendar 를 month 에서 day 보기 옵션으로 전환시킴.
+   * @param option
+   * @private
+   */
+  private viewDay( option: { date: string } ) {
+    console.log(option.date);
+    this.calendarModel = option.date;
+    this.type = 'day';
+  }
+
+
+  /**
+   * 상단 월 달력 header 에 custom 요일 표시
+   * @param d
+   * @private
+   */
+  private getDay(d: any): string {
+    const dayIdx = (d.weekday - 1 < 0) ? this.daysOfWeek.length - 1 : d.weekday - 1;
+    return this.daysOfWeek[dayIdx];
+  }
+
+  /**
+   *
+   * @param event
+   * @private
+   */
+  private getEventColor(event: CalendarEvent): string {
+    return event.color;
   }
 
   /**
@@ -423,6 +457,7 @@ export default class AllSchedule extends Vue {
     this.currentYears = start.year;
 
     this.events = [];
+    this.nextScheduleItems=[];
 
     //1번째 메뉴 모든 클래스 일정보기가 아닌 경우
     if (this.sideMenuActiveNum !== -1) {
@@ -502,19 +537,25 @@ export default class AllSchedule extends Vue {
   private updateClassScheduleEvent() {
     this.scheduleListsModel.forEach((item, idx) => {
       this.addScheduleEvent(idx);
+      this.getNextSchedule(idx);
     });
   }
 
   private getNextSchedule( idx: number ) {
+
     const {startAt, endAt, title } = this.currentScheduleItems[idx];
     const today = Date.now();
     const updateDate = new Date(startAt).getTime();
     //
     if (today < updateDate) {
+
       const dateResult= Utils.getCustomFormatDate(new Date(startAt), '. ', 2);
       const startTime = Utils.getFullTimes( new Date(startAt) );
       const endTime = Utils.getFullTimes( new Date(endAt) );
-      this.nextScheduleItems.push({
+
+      console.log('updateDate=', updateDate);
+      //
+      this.nextScheduleItems.unshift({
         id:idx,
         timestamp: updateDate,
         date:dateResult,
@@ -537,6 +578,7 @@ export default class AllSchedule extends Vue {
       //상단 gnb depth 가 높기에 일정 생성 팝업이 나올때 gnb depth 를 낮춤~
       this.headerDepthChange(false);
       this.addScheduleEvent(this.currentScheduleItems.length - 1);
+      this.getNextSchedule(this.currentScheduleItems.length - 1 );
     }
   }
 
@@ -667,6 +709,10 @@ export default class AllSchedule extends Vue {
     this.headerDepthChange(false);
   }
 
+  /**
+   * 일정 수정
+   * @private
+   */
   private onEditSchedule() {
     if (this.schEditId !== -1) {
       console.log(this.schEditId);
@@ -689,16 +735,12 @@ export default class AllSchedule extends Vue {
     }
   }
 
-  //상단 월 달력 header 에 custom 요일 표시
-  private getDay(d: any) {
-    const dayIdx = (d.weekday - 1 < 0) ? this.daysOfWeek.length - 1 : d.weekday - 1;
-    return this.daysOfWeek[dayIdx];
-  }
 
-  private getEventColor(event: CalendarEvent) {
-    return event.color;
-  }
-
+  /**
+   *
+   * @param event
+   * @private
+   */
   private extendBottom(event: any) {
     // console.log('extendBottom=', event );
     this.createEvent = event;

@@ -207,13 +207,6 @@ export default class ScheduleView extends Vue{
         this.currentYears = this.currentDates[0];
         this.currentMonth = this.currentDates[1];
 
-        // console.log(new Date().toISOString());
-        await this.getScheduleList()
-          .then(()=>{
-              // console.log('캘린더 로드 완료.');
-              this.updateClassScheduleEvent();
-          });
-
         // console.log(Date.UTC(2021, 3, 30, 4, 28, 0));
         const rule = new RRule({
             freq: RRule.WEEKLY,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
@@ -311,7 +304,11 @@ export default class ScheduleView extends Vue{
         this.currentMonth = start.month;
         this.currentYears = start.year;
         this.events = [];
-        this.updateClassScheduleEvent();
+        this.getScheduleList()
+          .then(()=>{
+              // console.log('캘린더 로드 완료.');
+              this.updateClassScheduleEvent();
+          });
     }
 
 
@@ -525,23 +522,63 @@ export default class ScheduleView extends Vue{
         }
     }
 
+
+
+    /**
+     * calendar 날짜 지정된 값 초기화 ( 오늘로 맞춰줌 )
+     * @private
+     */
     private setToday() {
         this.calendarModel = '';
     }
+
+    /**
+     * 이전 일자 혹은 월 보기
+     * @private
+     */
     private prev() {
         this.calendarInstance.prev();
     }
+
+    /**
+     * 다음 일자 혹은 월 보기
+     * @private
+     */
     private next() {
         this.calendarInstance.next();
     }
-    //상단 월 달력 header 에 custom 요일 표시
-    private getDay( d: any ){
-        const dayIdx=( d.weekday - 1<0)? this.daysOfWeek.length-1 : d.weekday - 1;
+
+    /**
+     * more 클릭시 - calendar 를 month 에서 day 보기 옵션으로 전환시킴.
+     * @param option
+     * @private
+     */
+    private viewDay( option: { date: string } ) {
+        console.log(option.date);
+        this.calendarModel = option.date;
+        this.type = 'day';
+    }
+
+
+    /**
+     * 상단 월 달력 header 에 custom 요일 표시
+     * @param d
+     * @private
+     */
+    private getDay(d: any): string {
+        const dayIdx = (d.weekday - 1 < 0) ? this.daysOfWeek.length - 1 : d.weekday - 1;
         return this.daysOfWeek[dayIdx];
     }
-    private getEventColor(event: CalendarEvent) {
+
+    /**
+     *
+     * @param event
+     * @private
+     */
+    private getEventColor(event: CalendarEvent): string {
         return event.color;
     }
+    
     private extendBottom(event: any ) {
         // console.log('extendBottom=', event );
         this.createEvent = event;

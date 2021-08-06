@@ -52,13 +52,15 @@ $calendarBorderColor: #f4f5f6;
     font-weight: bold;
     height:32px;
     width:32px;
+    //검은색으로 변경
+    &.primary{  background-color:#1d1d4c !important;}
 
     /*달력 클릭했을때 배경 */
     &:focus {
       color: #fff;
       &:before {
         opacity: 1;
-        background-color: #1d1d4c;
+        background-color:#1976d2 !important
       }
     }
   }

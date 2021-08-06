@@ -169,23 +169,33 @@
                     <div class="classes-todo">
                         <div class="schedule-top"><p class="tit">다가오는 일정</p></div>
                         <div class="schedule-cnt">
+                          <template v-if="nextScheduleItemsModel.length>0">
                             <ul class="schedule-list">
-                                <li v-for="(item, index) in nextScheduleItemsModel" :key="`nextSch-${index}`">
-                                    <div class="tb-style full">
-                                        <div class="date tb-cell top" style="width:25%;"><span>{{ item.date }}</span></div>
+                              <li v-for="(item, index) in nextScheduleItemsModel" :key="`nextSch-${index}`">
+                                <div class="tb-style full">
+                                  <div class="date tb-cell top" style="width:25%;"><span>{{ item.date }}</span></div>
 
-                                        <div class="detail-list  tb-cell">
-                                            <div class="item">
-                                                <span class="bullet orange"></span>
-                                                <p class="schedule-tit">{{ item.tit }}</p>
-                                                <span class="time">{{ item.time }}</span>
-                                            </div>
-                                        </div>
+                                  <div class="detail-list  tb-cell">
+                                    <div class="item">
+                                      <span class="bullet orange"></span>
+                                      <p class="schedule-tit">{{ item.tit }}</p>
+                                      <span class="time">{{ item.time }}</span>
                                     </div>
-
-                                </li>
-
+                                  </div>
+                                </div>
+                              </li>
                             </ul>
+                          </template>
+                          <template v-else>
+                            <div class="schedule-list">
+                              <div class="detail-list">
+                                <div class="item">
+                                  <p class="schedule-tit none">조회되는 일정이 없습니다.</p>
+                                </div>
+                              </div>
+                            </div>
+                          </template>
+
                         </div>
                     </div>
                     <!-- 다가오는 일정 영역 -->
@@ -301,6 +311,7 @@
                                 :day-format="(timestamp) => new Date(timestamp.date).getDate()"
                                 :month-format="(timestamp)=> (new Date(timestamp.date).getMonth()+1)+'월' "
                                 @change="updateRange"
+                                @click:more="viewDay"
                                 @click:event="scheduleDetailViewEvent">
                             <template v-slot:event="{ event, timed, eventSummary }">
                                 <div class="v-event-draggable" v-html="eventSummary()"></div>
