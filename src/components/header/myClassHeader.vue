@@ -43,9 +43,6 @@ import HeaderMenuView from '@/components/header/headerMenuView.vue';
 import {IMyClassList} from '@/views/model/my-class.model';
 import SelectBox from '@/components/selectbox/SelectBox.vue';
 import {CLASS_BASE_URL} from '@/api/base';
-import {Utils} from '@/utils/utils';
-import {MYCLASS_HOME, MYCLASS_LIST_ACTION} from '@/store/action-class-types';
-import {UPDATE_SIDE_NUM} from '@/store/mutation-class-types';
 
 const SearchStatus = namespace('SearchStatus');
 const Auth = namespace('Auth');
@@ -104,6 +101,8 @@ export default class MyClassHeader extends Vue {
     if (this.isAuth && this.userInfo === null) {
       this.MYCLASS_LIST_ACTION()
           .then((data) => {
+
+            console.log(data);
             this.init();
             this.selectBoxCurrentStatus();
           });

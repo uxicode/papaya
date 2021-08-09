@@ -32,6 +32,18 @@ const routes: RouteConfig[] = [
   ...MyPageRouter,
   ...SearchResultRouter,
   {
+    path: '/all/schedule',
+    name: 'myAllSchedule',
+    beforeEnter: getIsAuth,
+    components: { default: () => import('@/views/allSchedule/AllSchedule'), header: AppHeader, footer: AppFooter },
+  },
+  {
+    path: '/all/notify',
+    name: 'myAllNotify',
+    beforeEnter: getIsAuth,
+    components: { default: () => import('@/views/allNotify/AllNotify'), header: AppHeader, footer: AppFooter },
+  },
+  {
     path: '*',
     name: 'notfound',
     component: () => import('@/views/NotFound.vue'),

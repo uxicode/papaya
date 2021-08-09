@@ -35,8 +35,8 @@
     </div>
   </div>
   <!-- start: 상단 컨트롤러 -->
-  <v-sheet height="64" rounded>
-    <v-toolbar flat color="white">
+  <v-sheet height="64"  class="calendar--top-round">
+    <v-toolbar flat color="white" style="border-radius: 10px;">
       <v-btn fab text x-small outlined color="grey darken-2" @click="prev">
         <v-icon small>mdi-chevron-left</v-icon>
       </v-btn>
@@ -78,7 +78,7 @@
   <!-- end: 상단 컨트롤러 -->
 
   <!-- start: 캘린더 -->
-  <v-sheet height="674" style="padding:0 20px;">
+  <v-sheet height="674" style="padding:0 20px;"   class="calendar--btm-round">
     <!--
            @click:more="viewDay"
             @click:date="viewDay"
@@ -102,8 +102,8 @@
             :day-format="(timestamp) => new Date(timestamp.date).getDate()"
             :month-format="(timestamp)=> (new Date(timestamp.date).getMonth()+1)+'월' "
             @change="updateRange"
-            @click:event="scheduleDetailViewEvent"
-    >
+            @click:more="viewDay"
+            @click:event="scheduleDetailViewEvent">
       <template v-slot:event="{ event, timed, eventSummary }">
         <div class="v-event-draggable" v-html="eventSummary()"></div>
         <div v-if="timed" class="v-event-drag-bottom" @mousedown.stop="extendBottom(event)"></div>

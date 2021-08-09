@@ -96,11 +96,9 @@ input {
 
 html {
   -webkit-touch-callout: none;
-  -webkit-touch-select: none;
   -ms-user-select: none;
   -moz-user-select: none;
   -webkit-user-select: none;
-  -user-select: none;
   -webkit-tap-highlight-color: rgba(0, 165, 181, 0.1);
 }
 
@@ -356,12 +354,17 @@ body {
   &.full {
     width:100%;
   }
+
 }
 .tb-row {display:table-row;}
 .tb-cell {
   display:table-cell;
   vertical-align:middle;
+  &.top{vertical-align: top;}
+  &.mid{vertical-align: middle;}
+  &.btm{vertical-align: bottom;}
 }
+
 
 
 
@@ -504,6 +507,7 @@ body {
   word-wrap: break-word;
   word-break: keep-all;
 }
+
 @import "./customVuetify";
 @import "./transition";
 @import "./layout";

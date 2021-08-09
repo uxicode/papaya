@@ -1,7 +1,9 @@
 <template>
   <div class="fd-inner"  v-if="fileItems!==null && fileItems.length>0">
     <ul class="img-list clearfix">
-      <li class="img-item" v-for="( imgItem, imgIndex ) in getImgFileDataSort(fileItems)"
+      <li class="img-item"
+          :class="cssClassName"
+          v-for="( imgItem, imgIndex ) in getImgFileDataSort(fileItems)"
           :key="`img-${imgIndex}`" >
         <a :href="imgItem[location]"
            :data-count="imgFileMoreNum"
@@ -27,6 +29,13 @@ export default class ListInImgPreview extends Vue{
 
   @Prop(String)
   private location!: string;
+
+  @Prop(String)
+  private readonly addClass: string | undefined;
+
+  get cssClassName(): string{
+    return (this.addClass !== undefined)? this.addClass : '';
+  }
 
   get imgFileMoreNum() {
     return (this.fileItems)? ( this.getImgFileDataSort( this.fileItems ).length>3 )? `+${this.getImgFileDataSort( this.fileItems ).length - 3}` : '' : 0;

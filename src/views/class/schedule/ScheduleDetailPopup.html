@@ -56,7 +56,7 @@
 
               <div class="form-item post-classes selected"> <!-- class 선택 시 form-item에 selected 추가됨 -->
                 <p>
-                  <span class="icon"><img :src="getProfileImg(myClassHomeModel.image_url)" class="icon-img" alt=""></span>
+                  <span class="icon"><img v-once :src="getProfileImg(myClassHomeModel.image_url)" class="icon-img" alt=""></span>
                   <span class="gr-name">{{ myClassHomeModel.g_name }}</span>
                   <strong class="cls-name">{{ myClassHomeModel.name }}</strong>
                 </p>
@@ -75,6 +75,7 @@
               <a href="" @click.prevent="openPhotoViewer">
                 <!-- start: attach 에 이미지파일이 있는 경우 -->
                 <list-in-img-preview
+                        add-class="w254"
                         :file-items="imgPreviewInit( scheduleDetailModel.attachment )"
                         location="location"></list-in-img-preview>
                 <!-- end: attach 에 이미지파일이 있는 경우 -->

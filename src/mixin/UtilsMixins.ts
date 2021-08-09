@@ -14,6 +14,8 @@ export default class UtilsMixins extends Vue {
    * @param imgUrl
    */
   public getProfileImg(imgUrl: string | null | undefined ): string{
+    //프로필 이미지를 세팅 하는 데 있어서 click 등의 이벤트로 인해 데이터 바인딩 즉, 썸네일 이미지가 매번 갱신 된다.
+    //따라서 v-once 디렉티브를 사용하여 데이터 변경 시 업데이트 되지 않는 일회성 보간을 수행할 수 있지만, 같은 노드의 바인딩에도 영향을 미친다는 점을 유의해야 합니다.
     return ImageSettingService.getProfileImg( imgUrl );
   }
 

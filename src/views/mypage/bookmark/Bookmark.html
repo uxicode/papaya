@@ -56,71 +56,77 @@
 
         <!-- start: 보관된 일정 -->
         <div v-else-if="tabIndex === 1" class="bookmark-list">
-            <div class="bookmark-item">
+
+            <template v-if="scheduleItems.length>0">
+              <div class="bookmark-item" v-for="( scheduleItem, index) in myScheduleLists" :key="`sch-${index}`">
                 <div class="item-top">
-                    <span class="bookmark-class">1학년 3반 수학</span>
-                    <p class="bookmark-tit">파파야초등학교 10월 가을 체험학습</p>
+                  <!--<span class="bookmark-class">1학년 3반 수학</span>-->
+                  <p class="bookmark-tit">{{ scheduleItem.title }}</p>
 
-                    <div class="bookmark-option-btn">
-                        <button type="button" class="btn only-ico-btn sm bookmark active"></button>
+                  <div class="bookmark-option-btn">
+                    <button type="button" class="btn only-ico-btn sm bookmark active"></button>
 
-                        <div class="list-popup">
-                          <v-menu bottom nudge-right="" min-width="200px" offset-x>
-                            <template v-slot:activator="{ on, attrs }">
-                              <button type="button"
-                                      class="list-popup-btn"
-                                      v-bind="attrs"
-                                      v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
-                              </button>
-                              <!--<v-btn
-                                      rounded
-                                      outlined
-                                      v-bind="attrs"
-                                      v-on="on"
-                                      min-width="100px">
-                                <span>{{ typeToLabel[type] }}</span>
-                                <v-icon right>mdi-menu-down</v-icon>
-                              </v-btn>-->
-                            </template>
-                            <v-list>
-                              <v-list-item @click="">
-                                <v-list-item-title>일정 수정</v-list-item-title>
-                              </v-list-item>
-                              <v-list-item @click="">
-                                <v-list-item-title>일정 보관 해제</v-list-item-title>
-                              </v-list-item>
-                              <v-list-item @click="">
-                                <v-list-item-title>해당 클래스에서 알림 삭제</v-list-item-title>
-                              </v-list-item>
-                            </v-list>
-                          </v-menu>
-                            <!--<button type="button" class="list-popup-btn" @click="listPopupToggle(tabIndex, idx)"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                            &lt;!&ndash; 더보기 &ndash;&gt;
-                            <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
-                                <a href="" class="list-popup-item">알림 수정</a>
-                                <a href="" class="list-popup-item">다른 클래스에도 등록하기</a>
-                                <a href="" class="list-popup-item">일정 보관 해제</a>
-                                <a href="" class="list-popup-item">해당 클래스에서 알림 삭제</a>
-                            </div>-->
-                            <!-- 더보기 (일반멤버) -->
-                            <!--                                <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">-->
-                            <!--                                    <a href="" class="list-popup-item">일정 보관 해제</a>-->
-                            <!--                                </div>-->
-                        </div>
+                    <div class="list-popup">
+                      <v-menu bottom nudge-right="" min-width="200px" offset-x>
+                        <template v-slot:activator="{ on, attrs }">
+                          <button type="button"
+                                  class="list-popup-btn"
+                                  v-bind="attrs"
+                                  v-on="on"><img :src="require('@/assets/images/more.svg')" alt="">
+                          </button>
+                          <!--<v-btn
+                                  rounded
+                                  outlined
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  min-width="100px">
+                            <span>{{ typeToLabel[type] }}</span>
+                            <v-icon right>mdi-menu-down</v-icon>
+                          </v-btn>-->
+                        </template>
+                        <v-list>
+                          <v-list-item @click="">
+                            <v-list-item-title>일정 수정</v-list-item-title>
+                          </v-list-item>
+                          <v-list-item @click="">
+                            <v-list-item-title>일정 보관 해제</v-list-item-title>
+                          </v-list-item>
+                          <v-list-item @click="">
+                            <v-list-item-title>해당 클래스에서 알림 삭제</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+
                     </div>
+                  </div>
                 </div>
 
                 <div class="item-cnt">
-                    <p class="post-txt">오늘은 3단원을 시작하도록 합니다.</p>
-                    <div class="schedule-box">
-                        <p>2019. 12. 10 오전 10시 - 11시</p>
-                    </div>
-                    <div class="post-sub">
-                        <span>박수한선생님</span>
-                        <span class="date">1분 전</span>
-                    </div>
+                  <p class="post-txt">{{ scheduleItem.text }}</p>
+                  <div class="schedule-box">
+                    <p>{{ scheduleItem.startAt }}</p>
+                  </div>
+                  <div class="post-sub">
+                    <span>{{ scheduleItem.owner.nickname }}</span>
+                    <span class="date">{{ scheduleItem.updatedAt }}</span>
+                  </div>
                 </div>
-            </div>
+              </div>
+            </template>
+            <template v-else>
+              <div  class="no-notify mgt-20">
+                <div class="no-data">
+                  <img :src="require('@/assets/images/icn-80-notice-nodata.svg')" alt="">
+                  <p>보관된 일정이 없습니다.</p>
+                  <span>원하시는 클래스로 이동하셔서<br>일정을 보관 저정해 주세요.</span>
+                  <div class="mgt-20">
+                    <btn type="navi" @btnClick="gotoSchedule">메인( 클래스 리스트 )으로 이동</btn>
+                  </div>
+                </div>
+              </div>
+
+            </template>
+
         </div>
         <!-- end: 보관된 일정 -->
 
@@ -130,20 +136,20 @@
     <transition name="modal">
     <modal v-if="isPostsResetModal" size="540px" body-padding="0" @modalClose="isPostsResetModal=false;">
         <div slot="header">
-            <p class="popup-header-tit">보관된 알림을 비우시겠습니까?</p>
+            <p class="popup-header-tit">{{ tabIndex === 0 ? '보관된 알림을 비우시겠습니까?' : '보관된 일정을 비우시겠습니까?' }}</p>
             <div class="popup-close" @click="isPostsResetModal = false">
                 <button type="button" class="close" ><img :src="require('@/assets/images/close.svg')" alt=""></button>
             </div>
         </div>
         <div slot="body">
             <div class="popup-cnt">
-                <p class="popup-txt">보관된 알림 <span class="fc-red">{{ postItems.length }}</span>개가 모두 보관 해제됩니다. 계속하시겠습니까?</p>
+                <p class="popup-txt">보관된 {{ tabIndex === 0 ? '알림' : '일정'}} <span class="fc-red">{{ tabIndex === 0? postItems.length : scheduleItems.length }}</span>개가 모두 보관 해제됩니다. 계속하시겠습니까?</p>
             </div>
         </div>
         <div slot="footer">
             <div class="btn-group rt">
                 <btn type="outline" @btnClick="isPostsResetModal = false">아니오</btn>
-                <btn type="navi">예</btn>
+                <btn type="navi" @btnClick="onClearKeepData">예</btn>
             </div>
         </div>
     </modal>

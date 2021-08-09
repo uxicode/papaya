@@ -24,6 +24,29 @@ interface IMyClassList {
         schedule_noti_intime:  number | string;
         visited: number | string;
     };
+    owner: {
+        id: number;
+        joinedAt: Date;
+        createdAt: Date;
+        updatedAt: Date;
+        class_id: number;
+        user_id: number;
+        nickname?:  string;
+        profile_image?: string;
+        is_bookmarked: number | string;
+        schedule_color: number | string;
+        level:  number | string;
+        status:  number | string;
+        open_level_id: number;
+        open_level_mobileno: number | string;
+        open_level_email:  number | string;
+        onoff_push_noti:  number | string;
+        onoff_post_noti: number | string;
+        onoff_comment_noti:  number | string;
+        onoff_schedule_noti: number | string;
+        schedule_noti_intime:  number | string;
+        visited: number | string;
+    };
 }
 /*
 "myclass_list": [
@@ -106,7 +129,7 @@ interface IClassInfo{
     contents_updated_type: string | number;
     class_tags: Array< { id: string | number, keyword: string } >;
     class_link: string;
-    me?: {
+    me: {
         class_id: number;
         createdAt: Date
         id: number;
@@ -128,6 +151,29 @@ interface IClassInfo{
         updatedAt: Date;
         user_id: number;
         visited: number;
+    };
+    owner: {
+        class_id: number;
+        createdAt: string;
+        id: number
+        is_bookmarked: number
+        joinedAt: string;
+        level: 1
+        nickname: string
+        onoff_comment_noti: number;
+        onoff_post_noti: number;
+        onoff_push_noti: number;
+        onoff_schedule_noti: number;
+        open_level_email: number;
+        open_level_id: number;
+        open_level_mobileno: number;
+        profile_image: null | string;
+        schedule_color: number;
+        schedule_noti_intime:  number;
+        status:  number;
+        updatedAt: string;
+        user_id:  number;
+        visited:  number;
     };
 }
 // 가입 클래스 - 멤버수 / 비공개-공개 / 클래스 이미지 / 클래스 이름

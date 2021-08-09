@@ -152,6 +152,30 @@ class Utils{
   }
 
   /**
+   * 년월일 표기
+   * @example Utils.getCustomFormatDate( new Date(updateDate), '-', 0 )  updateDate 는 대입할 date 변수  ---> 2021-8-21
+   * @param date
+   * @param flag
+   * @param type - 기본값 0 / 0-년월일 모두 표기 / 1 -년월만 표기 / 2 -월일만 표기
+   */
+  public static getCustomFormatDate(date: Date, flag: string, type: number=0 ) {
+    const dateInfo: number[] =Utils.getTodayFullValue( date );
+    let result: string = '';
+    switch (type) {
+      case 0 :
+        result = `${dateInfo[0]}${flag}${dateInfo[1]}${flag}${dateInfo[2]}`; //년월일 모두 표기
+        break;
+      case 1:
+        result = `${dateInfo[0]}${flag}${dateInfo[1]}`; //년월만 표기
+        break;
+      case 2:
+        result = `${dateInfo[1]}${flag}${dateInfo[2]}`;//월일만 표기
+        break;
+    }
+    return result;
+  }
+
+  /**
    *  윤년 체크
    * @param year
    * @returns {boolean}

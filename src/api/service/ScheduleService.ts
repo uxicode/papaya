@@ -106,10 +106,12 @@ export class ScheduleService{
   }
 
   public static deleteKeepSchedule( scheduleId: number): Promise<any> {
-    return request('get', `${USER_KEEP}${CLASS_BASE_URL}/schedule/${scheduleId}`);
+    return request('delete', `${USER_KEEP}${CLASS_BASE_URL}/schedule/${scheduleId}`);
   }
 
-
+  public static deleteKeepAllSchedule(): Promise<any> {
+    return request('delete', `${USER_KEEP}${CLASS_BASE_URL}/schedule`);
+  }
 
   public static setPersonalKeepSchedule(payload: { class_id: number, schedule_id: number }): Promise<any> {
     return request('post', `${USER_KEEP}${PERSONAL}/schedule`, payload);
@@ -120,7 +122,15 @@ export class ScheduleService{
   }
 
   public static deletePersonalKeepSchedule( scheduleId: number): Promise<any> {
-    return request('get', `${USER_KEEP}${PERSONAL}/schedule/${scheduleId}`);
+    return request('delete', `${USER_KEEP}${PERSONAL}/schedule/${scheduleId}`);
+  }
+
+  public static getAllMySchedule( payload: {from: string, to: string} ): Promise<any>{
+    return request('get', `${CLASS_BASE_URL}/me/all/schedules`, payload );
+  }
+
+  public static getMonthSchedule( classId: number, payload: {from: string, to: string}): Promise<any>{
+    return request('get', `${CLASS_BASE_URL}/${classId}/schedule/filter/month`, payload);
   }
 
 

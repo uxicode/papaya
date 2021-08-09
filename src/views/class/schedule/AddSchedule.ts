@@ -11,10 +11,7 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
-import {ADD_SCHEDULE_ACTION} from '@/store/action-class-types';
-import {Utils} from '@/utils/utils';
 import WithRender from './AddSchedule.html';
-import {repeat} from 'rxjs/operators';
 
 
 const MyClass = namespace('MyClass');
@@ -39,7 +36,7 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   private ADD_SCHEDULE_ACTION!: (payload: { classId: number, formData: FormData }) => Promise<any>;
 
   @MyClass.Getter
-  private classID!: string | number;
+  private classID!: number;
 
   @MyClass.Getter
   private myClassHomeModel!: IClassInfo;
@@ -99,6 +96,10 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
     return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
   }
 
+  public updated() {
+    console.log('add schecule classID=', this.classID);
+  }
+
 
   private addStartApmSchedule( val: string ) {
     // console.log(val, this.currentStartTimeModel );
@@ -108,7 +109,7 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   private getStartAt() {
     const apm = this.startTimeSelectModel.apm;
     const selectHour=Number( this.startTimeSelectModel.hour );
-    const hour=( apm === '오후' )?  selectHour+12 : selectHour;
+    const hour=( apm === '오후' && selectHour<12 )?  selectHour+12 : selectHour;
     const minute = this.startTimeSelectModel.minute;
 
    //현재 서버에선 -->  evt_startAt = moment(data.evt_startAt).utc().format('YYYY-MM-DD HH:mm:ss'); 처럼 설정되어 있다.
@@ -121,7 +122,7 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   private getEndAt() {
     const apm = this.endTimeSelectModel.apm;
     const selectHour= Number( this.endTimeSelectModel.hour );
-    const hour=( apm === '오후' )? selectHour+12 : selectHour;
+    const hour=( apm === '오후' && selectHour<12 )? selectHour+12 : selectHour;
     const minute = this.endTimeSelectModel.minute;
 
     //현재 서버에선 -->  evt_endAt = moment(data.evt_endAt).utc().format('YYYY-MM-DD HH:mm:ss'); 처럼 설정되어 있다.
@@ -300,11 +301,23 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
 
   }
 
+  private resetDate() {
+    this.startDatePickerModel = new Date().toISOString().substr(0, 10);
+    this.startTimeSelectModel = {apm: '오전', hour: '12', minute: '30'};
+    this.endDatePickerModel = new Date().toISOString().substr(0, 10);
+    this.endTimeSelectModel = {apm: '오전', hour: '12', minute: '30'};
+  }
+
+  private formDataPlainClear() {
+    this.formData.delete('data');
+  }
 
   private allClear() {
     // 등록이 완료되고 나면 해당 저장했던 데이터를 초기화 시켜 두고 해당 팝업의  toggle 변수값을 false 를 전달해 팝업을 닫게 한다.
     this.imgFilesAllClear(); //이미지 데이터 비우기
     this.attachFilesAllClear();//파일 데이터 비우기
+    this.resetDate(); //시작, 종료일시 초기화
+    this.formDataPlainClear(); // data 로 지정한 formData 제거
     this.scheduleData={
       repeat_type: 0,
       repeat_count: 0,
@@ -314,6 +327,8 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
       evt_startAt: '',  //2019-11-15 10:00:00
       evt_endAt: '',
     };
+
+
   }
 
 }

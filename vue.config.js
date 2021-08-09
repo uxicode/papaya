@@ -28,7 +28,6 @@ module.exports={
                     loader:"vue-template-loader",
                     exclude:/index.html/
                 },
-
                 /*{
                     test: /\.(png|jpg|gif)$/i,
                     use: [
@@ -44,7 +43,6 @@ module.exports={
                     ],
                 }*//*,
                 */
-
             ]
         },
         plugins: [new BundleAnalyzerPlugin(), new VuetifyLoaderPlugin({

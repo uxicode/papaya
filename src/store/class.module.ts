@@ -125,6 +125,29 @@ export default class ClassModule extends VuexModule {
             updatedAt: new Date(),
             user_id: 45,
             visited: 0
+        },
+        owner: {
+            class_id: 0,
+            createdAt: '',
+            id: 0,
+            is_bookmarked: 0,
+            joinedAt: '',
+            level: 1,
+            nickname: '',
+            onoff_comment_noti: 0,
+            onoff_post_noti: 0,
+            onoff_push_noti: 0,
+            onoff_schedule_noti: 0,
+            open_level_email: 0,
+            open_level_id: 0,
+            open_level_mobileno: 0,
+            profile_image: '',
+            schedule_color: 0,
+            schedule_noti_intime:  0,
+            status:  0,
+            updatedAt: '',
+            user_id:  0,
+            visited:  0
         }
     };
     private curriculumListData: ICurriculumList={

@@ -154,11 +154,39 @@ interface IScheduleOwner{
   visited: number;
 }
 
+interface IKeepSchedule{
+  class_id: number;
+  createdAt: string;
+  evt_endAt: string;
+  evt_startAt: string;
+  id: number;
+  repeat_index: number;
+  repeat_type: number;
+  schedule_id: number;
+  user_id: number;
+}
+
+interface IClassListBySchedule{
+  id: number;
+  name: string;
+  g_name: string;
+  me: {
+    id: number
+    is_bookmarked: boolean | number,
+    schedule_color: boolean | number,
+    level: number,
+    status: number,
+    class_member_auths: [],
+  };
+}
+
 export {
   ITimeModel,
   IScheduleTotal,
   NoticeScheduleModel,
   IAddSchedule,
   IScheduleOwner,
-  IScheduleDetail
+  IScheduleDetail,
+  IKeepSchedule,
+  IClassListBySchedule
 };
