@@ -4,6 +4,17 @@ import {IKeepPostList} from '@/views/model/my-class.model';
 import {IAddVoteModel, IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
 
 export class PostService{
+
+  /**
+   * 내가 가입한 클래스의 모든 알림 조회 (최신 위쪽에 )
+   * @param classId
+   * @param payload
+   */
+  public static getAllMyClassPosts( payload: {page_no: number, count: number} ): Promise<any>{
+    return request('get', `${CLASS_BASE_URL}/me/all/posts`, payload );
+  }
+
+
   /**
    * 클래스 알림 전체 조회 (최신 위쪽에 )
    * @param classId
@@ -22,6 +33,14 @@ export class PostService{
     return request('get', `${CLASS_BASE_URL}/${classId}/posts/${postId}`);
   }
 
+
+  /**
+   * 내가 가입한 클래스에 모든 예약된 알림(게시글) 전체 조회
+   * @param payload
+   */
+  public static getALLMyClassReservedPost( payload: {page_no: number, count: number}={page_no:1, count:100} ): Promise<any>{
+    return  request('get', `${CLASS_BASE_URL}/me/all/posts/reserved`, payload);
+  }
 
   /**
    * 클래스 예약된 알림(게시글) 전체 조회
@@ -102,6 +121,8 @@ export class PostService{
   public static deleteKeepPost( postId: number ): Promise<any> {
     return request('delete', `${USER_BASE_URL}/me/keep/class/post/${postId}` );
   }
+
+
 }
 
 

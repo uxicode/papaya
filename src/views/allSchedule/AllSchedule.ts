@@ -243,20 +243,14 @@ export default class AllSchedule extends Vue {
 
   public async created() {
     //새로고침시에 sidemenu 메뉴 활성화 동기화 시킴.
-    if (this.$route.query.sideNum && this.$route.query.sideNum !== '') {
+    /*if (this.$route.query.sideNum && this.$route.query.sideNum !== '') {
       this.$emit('sideNum', Number(this.$route.query.sideNum));
-    }
+    }*/
     this.currentDates = Utils.getTodayFullValue(new Date());
     this.currentYears = this.currentDates[0];
     this.currentMonth = this.currentDates[1];
 
-    await this.MYCLASS_LIST_ACTION()
-      .then((data: IMyClassList[]) => {
-        /*data.map( (item: IMyClassList )=>{
-          console.log(item.me, item );
-        });*/
-      });
-
+    await this.MYCLASS_LIST_ACTION();
     const rule = new RRule({
       freq: RRule.WEEKLY,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
       dtstart: new Date(Date.UTC(2021, 3, 30, 4, 28, 0)),

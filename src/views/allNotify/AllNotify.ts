@@ -10,6 +10,7 @@ import {getAllPromise} from '@/types/types';
 import WithRender from './AllNotify.html';
 import {IMyClassList} from '../model/my-class.model';
 import ImageSettingService from '../service/profileImg/ImageSettingService';
+import {GET_ALL_MY_CLASS_POST_LIST_ACTION, GET_ALL_MY_CLASS_RESERVED_LIST_ACTION} from '@/store/action-class-types';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -34,6 +35,12 @@ export default class AllNotify extends Vue {
     //// 추가된 목록 /////////
 
     @Post.Action
+    private GET_ALL_MY_CLASS_POST_LIST_ACTION!: ( paging: {page_no: number, count: number } )=>Promise<IPostModel[] & IPostInLinkModel[]>;
+
+    @Post.Action
+    private GET_ALL_MY_CLASS_RESERVED_LIST_ACTION!: ( paging: {page_no: number, count: number })=>Promise<IPostModel[] & IPostInLinkModel[]>;
+
+    @Post.Action
     private GET_POST_LIST_ACTION!: (  payload: { classId: number, paging: {page_no: number, count: number } }) => Promise<IPostModel[] & IPostInLinkModel[]>;
 
     @Post.Action
@@ -54,6 +61,9 @@ export default class AllNotify extends Vue {
 
     @Post.Getter
     private postListItems!: IPostModel[] & IPostInLinkModel[];
+
+    @Post.Getter
+    private allMyClassPostsItems!: IPostModel[] & IPostInLinkModel[];
 
     @Post.Getter
     private reservedItems!: IPostModel[] & IPostInLinkModel[];
@@ -97,28 +107,29 @@ export default class AllNotify extends Vue {
     get myAllClassListModel(): IMyClassList[] {
         return this.myClassLists;
     }
+
+    /*get allMyClassPostsItemsModel() {
+        return this.allMyClassPostsItems;
+    }
+
+    get currentPostList() {
+        return (this.sideMenuActiveNum === -1) ? this.allMyClassPostsItemsModel : this.postListItemsModel;
+    }*/
     ///// 추가된 목록 /////////
 
 
 
     public async created() {
-        console.log( this.$route.query.sideNum );
-        if (this.$route.query.sideNum && this.$route.query.sideNum !== '') {
+        /*if (this.$route.query.sideNum && this.$route.query.sideNum !== '') {
             this.$emit('sideNum', Number(this.$route.query.sideNum));
+        }*/
+        try {
+            await this.MYCLASS_LIST_ACTION();
+            await this.getAllNotifyList();
+        } catch (error){
+            console.log('모든 알림 로드 실패');
         }
 
-        await this.MYCLASS_LIST_ACTION()
-          .then((data: IMyClassList[]) => {
-              /*data.map( (item: IMyClassList )=>{
-                console.log(item.me, item );
-              });*/
-          });
-
-        await this.getList().then(
-          ()=>{
-              this.isPageLoaded=true;
-          }
-        );
     }
 
     public getProfileImg(imgUrl: string | null | undefined): string {
@@ -134,13 +145,11 @@ export default class AllNotify extends Vue {
      * @private
      */
     private onClassAllNotifyList() {
-        this.sideMenuActiveNum = -1;
-        this.currentClassId = -1;
-        /*this.getAllScheduleList()
+        this.getAllNotifyList()
           .then(() => {
-              // console.log('캘린더 로드 완료.', this.events);
-              this.updateAllScheduleEvent();
-          });*/
+              this.sideMenuActiveNum = -1;
+              this.currentClassId = -1;
+          });
     }
 
     /**
@@ -153,29 +162,20 @@ export default class AllNotify extends Vue {
         this.sideMenuActiveNum = index;
         this.currentClassId = item.id;
         this.SET_CLASS_ID(this.currentClassId);
-
-        this.getList().then(
-          ()=>{
+        this.getList( Number( this.currentClassId) )
+          .then(()=>{
               this.isPageLoaded=true;
           });
-       /* this.getClassScheduleListById(item.id)
-          .then(() => {
-              // console.log('클래스별 리스트 호출', this.events);
-              this.updateClassScheduleEvent();
-          });*/
     }
 
+    private async getAllNotifyList() {
+        await this.GET_ALL_MY_CLASS_POST_LIST_ACTION( { page_no:1, count:100 } )
+          .then((data)=>{
+              console.log('모든 알림', data);
+              this.isPageLoaded=true;
+          });
 
-    private getAllNotifyList() {
-
-    }
-
-    private async getList() {
-        //알림 가져오기
-        await this.GET_POST_LIST_ACTION({classId: Number( this.classID ), paging:{page_no:1, count:100} });
-
-        //예약된 알림 가져오기.
-        await this.GET_RESERVED_LIST_ACTION(Number(this.classID));
+        await this.GET_ALL_MY_CLASS_RESERVED_LIST_ACTION({page_no:1, count:100} );
 
         //댓글 총 개수 가져옴
         await getAllPromise( this.getAllCommentsPromiseResult() )
@@ -191,6 +191,26 @@ export default class AllNotify extends Vue {
           });
     }
 
+    private async getList( classId: number) {
+        //알림 가져오기
+        await this.GET_POST_LIST_ACTION({ classId, paging:{page_no:1, count:100} });
+
+        //예약된 알림 가져오기.
+        await this.GET_RESERVED_LIST_ACTION( classId );
+
+        //댓글 총 개수 가져옴
+        await getAllPromise( this.getAllCommentsPromiseResult() )
+          .then((data) => {
+              // console.log(data);
+              const comments=data.map(( item)=>{
+                  return {
+                      id: item.post_id,
+                      total : item.total
+                  };
+              });
+              this.commentsTotalItems = [...comments];
+          });
+    }
 
     private isOwner( ownerId: number, userId: number): boolean {
         return (ownerId === userId);
@@ -202,7 +222,7 @@ export default class AllNotify extends Vue {
     private getAllCommentsPromiseResult() {
         // const commentTotalItems: Array<{ total: any; postId: number, id: number; }> = [];
         const totalPromise: Array<Promise<any>> = [];
-        this.postListItems.forEach((item: IPostModel) => {
+        this.postListItemsModel.forEach((item: IPostModel) => {
             totalPromise.push( CommentService.getCommentsByPostId(item.id) );
         });
         return totalPromise;

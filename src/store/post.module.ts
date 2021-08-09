@@ -8,7 +8,8 @@ import {
   SET_REPLY,
   SET_VOTE,
   EDIT_POST,
-  DELETE_POST
+  DELETE_POST,
+  SET_ALL_MY_CLASS_POST
 } from '@/store/mutation-class-types';
 import {
   GET_POST_LIST_ACTION,
@@ -25,7 +26,9 @@ import {
   EDIT_POST_TXT_ACTION,
   DELETE_POST_FILE_ACTION,
   ADD_VOTE_ACTION,
-  DELETE_VOTE_ACTION
+  DELETE_VOTE_ACTION,
+  GET_ALL_MY_CLASS_POST_LIST_ACTION,
+  GET_ALL_MY_CLASS_RESERVED_LIST_ACTION
 } from '@/store/action-class-types';
 import {IPostInLinkModel, IPostModel, IReadAbleVote, IVoteModel} from '@/views/model/post.model';
 import {ICommentModel, IReplyModel} from '@/views/model/comment.model';
@@ -111,6 +114,7 @@ export default class PostModule extends VuexModule {
   private commentData: ICommentModel[] = [];
   private replyData: IReplyModel[]=[];
   private voteData!: IReadAbleVote;
+  private allMyClassPosts: IPostModel[] & IPostInLinkModel[]= [];
 
 
   /* Getters */
@@ -146,6 +150,15 @@ export default class PostModule extends VuexModule {
     return this.voteData;
   }
 
+  get allMyClassPostsItems(): IPostModel[] & IPostInLinkModel[]{
+    return this.allMyClassPosts;
+  }
+
+  @Mutation
+  public [SET_ALL_MY_CLASS_POST](  items: IPostModel[] & IPostInLinkModel[] ): void{
+    this.allMyClassPosts=items;
+  }
+
   /**
    * 알림 리스트 reverse 및 북마크 초기 상태 지정
    * @param items
@@ -166,6 +179,7 @@ export default class PostModule extends VuexModule {
       }
     });
   }
+
 
   /**
    * 예약 알림 글 데이터 저장
@@ -219,6 +233,23 @@ export default class PostModule extends VuexModule {
     this.postListData.splice(findIdx, 1);
   }
 
+
+  @Action({rawError: true})
+  public [GET_ALL_MY_CLASS_POST_LIST_ACTION]( paging: {page_no: number, count: number } ): Promise<IPostModel[] & IPostInLinkModel[]>{
+    return PostService.getAllMyClassPosts( paging )
+      .then((data) => {
+        console.log(data);
+        // this.postListItems = data.post_list;
+        // console.log('noticeListItems=', this.postListData);
+        this.context.commit(SET_POST_IN_BOOKMARK, data.post_list);
+
+        return Promise.resolve(data.post_list);
+      })
+      .catch((error) => {
+        console.log(error);
+        return Promise.reject(error);
+      });
+  }
 
   /**
    * 알림글 리스트 조회
@@ -329,6 +360,20 @@ export default class PostModule extends VuexModule {
         console.log(error);
         return Promise.reject(error);
       });
+  }
+
+  @Action({rawError: true})
+  public [GET_ALL_MY_CLASS_RESERVED_LIST_ACTION]( paging: {page_no: number, count: number }): Promise<IPostModel[] & IPostInLinkModel[]>{
+    return PostService.getALLMyClassReservedPost( paging )
+      .then((data)=>{
+        // console.log(data);
+        this.context.commit(SET_RESERVED_TOTAL, data.post_listcount);
+        this.context.commit(SET_RESERVED_LIST, data.post_list);
+        return Promise.resolve(this.reservedData);
+      }).catch((error) => {
+      console.log(error);
+      return Promise.reject(error);
+    });
   }
 
 
