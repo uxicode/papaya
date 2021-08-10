@@ -77,9 +77,12 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
   private isEditPopupOpen: boolean=false;
   private isEditComplete: boolean=false;
 
+  private contentsBodyH: number=0;
+
   get scheduleDetailModel(): IScheduleTotal{
     return this.scheduleDetailItem;
   }
+
 
   public created() {
     //currentUserAuth
@@ -91,10 +94,29 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
       }).catch((error) => {
       return Promise.reject( false );
     });
+
+  }
+
+  public mounted() {
+    this.$nextTick(()=>{
+
+      // const contentH= contentEle.clientHeight as number;
+
+      // this.contentsBodyH=(contentH>600)? contentH : 600;
+    });
   }
 
   public getFullDay(date: Date | string): string{
     return Utils.getFullDay( new Date( date )  );
+  }
+
+  public getContentBodyH() {
+    console.log('생성');
+    // const contentEle=document.querySelector('.popup-feed-detail') as HTMLElement;
+    // console.log( contentEle.offsetHeight );
+    this.contentsBodyH=( this.$refs.infoBox as HTMLElement).clientHeight;
+    // this.contentsBodyH=Number( contentEle.clientHeight );
+    return `${ this.contentsBodyH}px`;
   }
 
   /**
@@ -202,5 +224,7 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
         }
       });
   }
+
+
 
 }

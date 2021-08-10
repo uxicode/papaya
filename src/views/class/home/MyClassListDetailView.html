@@ -104,6 +104,7 @@
                     <span class="noti">{{ item.list.type === 0 ? '일반' : '공지' }}</span>
                   </p>
                 </div>
+                <!-- 스케쥴의 더보기 버튼 (  일정 수정/ 일정 보관/ 일정 삭제  )
                 <div class="fd-btn">
                   <div class="list-popup">
                     <v-menu
@@ -122,12 +123,9 @@
                           <v-list-item-title>일정 수정</v-list-item-title>
                         </v-list-item>
                         <v-list-item @click="">
-                          <v-list-item-title>공지로 등록</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item @click="">
                           <v-list-item-title>일정 보관</v-list-item-title>
                         </v-list-item>
-                        <v-list-item @click="">
+                        <v-list-item @click="onDeleteByScheduleId( item.list.id )">
                           <v-list-item-title>일정 삭제</v-list-item-title>
                         </v-list-item>
                       </v-list>
@@ -135,13 +133,15 @@
 
                   </div>
                 </div>
+                -->
               </div>
-              <div class="fd-cnt">
+              <div class="fd-cnt" @click="onScheduleClick( item.list.id )" style="cursor:pointer;">
                 <p class="fd-txt">{{ item.list.text }}</p>
 
                 <div class="fd-inner">
                   <ul class="schedule-list">
-                    <li><a href="">{{ item.list.startAt }} - {{ item.list.endAt }}</a></li>
+<!--                    <li><a href="">{{ item.list.startAt }} - {{ item.list.endAt }}</a></li>-->
+                    <li><p>{{ item.list.startAt }} - {{ item.list.endAt }}</p></li>
                   </ul>
 
                   <!-- start: attach 에 이미지파일이 있는 경우 -->
@@ -277,6 +277,10 @@
 
           </template>
         </template>
+
+        <schedule-detail-popup
+                :is-open="isOpenDetailSch"
+                @change="onDetailScheduleClose" @delete="onDeleteCheck" @editApplyTo="onEditSchedule"></schedule-detail-popup>
       </template>
       <template  v-for="item in allDataModel" v-else>
         <!-- start: 알림 -->
@@ -357,7 +361,15 @@
       </template>
     </template>
 
-
+    <confirm-popup
+            :is-open="isConfirmPopupOpen"
+            :title="updateConfirmTitle"
+            :msg="updateConfirmDesc"
+            @confirm="onConfirmClose"></confirm-popup>
+    <notice-popup :is-open="isNoticePopupOpen"
+                  :title="updateNoticeTitle"
+                  :msg="updateNoticeDesc"
+                  @change="onNoticePopupClose"></notice-popup>
   </div>
 </section>
 
