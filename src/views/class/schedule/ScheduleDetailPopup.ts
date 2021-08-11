@@ -77,10 +77,23 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
   private isEditPopupOpen: boolean=false;
   private isEditComplete: boolean=false;
 
-  private contentsBodyH: number=0;
+  private contentsBodyH: number=500;
+
 
   get scheduleDetailModel(): IScheduleTotal{
     return this.scheduleDetailItem;
+  }
+
+
+  get contentH(): number {
+    //팝업이 열렸을 때만 샐행되어 컨텐츠 사이즈 지정.
+    if (this.isOpen) {
+      setTimeout(() => {
+        const contentEle=( this.$refs.infoBox as HTMLElement );
+        this.contentsBodyH = (contentEle.clientHeight) ? (Number( contentEle.clientHeight )>600)? Number( contentEle.clientHeight ) : this.contentsBodyH : this.contentsBodyH;
+      }, 500 );
+    }
+    return this.contentsBodyH;
   }
 
 
@@ -97,27 +110,11 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
 
   }
 
-  public mounted() {
-    this.$nextTick(()=>{
-
-      // const contentH= contentEle.clientHeight as number;
-
-      // this.contentsBodyH=(contentH>600)? contentH : 600;
-    });
-  }
 
   public getFullDay(date: Date | string): string{
     return Utils.getFullDay( new Date( date )  );
   }
 
-  public getContentBodyH() {
-    console.log('생성');
-    // const contentEle=document.querySelector('.popup-feed-detail') as HTMLElement;
-    // console.log( contentEle.offsetHeight );
-    this.contentsBodyH=( this.$refs.infoBox as HTMLElement).clientHeight;
-    // this.contentsBodyH=Number( contentEle.clientHeight );
-    return `${ this.contentsBodyH}px`;
-  }
 
   /**
    * 게시글 글쓴이와 현재 로그인 유저와 권한이 같은지 체크
@@ -205,6 +202,7 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
     if (!this.isEditComplete) {
       this.$emit('editApplyTo');
     }
+    this.contentsBodyH=500;
   }
 
   private onKeepSchedule() {
