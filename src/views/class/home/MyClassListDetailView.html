@@ -191,7 +191,7 @@
                   </div>
                 </div>
               </div>
-              <div class="fd-cnt">
+              <div class="fd-cnt" @click="onCurriculumClick( item.list.id )" style="cursor: pointer;">
                 <p class="fd-txt">{{ item.list.text }}</p>
                 <p class="fd-txt">총 {{ item.list.course_list.length }}회의 수업이 있습니다.</p>
               </div>
@@ -235,35 +235,36 @@
                   </div>
                 </div>
               </div>
-              <div class="fd-cnt">
+              <div class="fd-cnt" @click.stop="onNotificationClick( item.list.id )">
                 <p class="fd-txt">{{ item.list.text }}</p>
 
                 <div class="fd-inner">
 
-                  <!-- start: attach 에 이미지파일이 있는 경우 -->
-                  <list-in-img-preview :file-items="item.list.attachment" location="location"></list-in-img-preview>
-                  <!-- end: attach 에 이미지파일이 있는 경우 -->
+                  <a href="" @click.prevent.stop="onNotificationClick( item.list.id )">
+                    <!-- start: attach 에 이미지파일이 있는 경우 -->
+                    <list-in-img-preview :file-items="item.list.attachment" location="location"></list-in-img-preview>
+                    <!-- end: attach 에 이미지파일이 있는 경우 -->
 
-                  <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
-                  <list-in-file-preview :file-items="item.list.attachment" name="originalname" location="location"></list-in-file-preview>
-                  <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+                    <!-- start: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
+                    <list-in-file-preview :file-items="item.list.attachment" name="originalname" location="location"></list-in-file-preview>
+                    <!-- end: attach 에 이미지 말고 다른 확장자를 가진 파일 즉 첨부파일인 경우 -->
 
-                  <!-- start:  투표가 있는 경우 -->
-                  <list-in-vote-preview
-                          :file-items="item.list.vote"
-                          title="title"
-                          choice="multi_choice"
-                          finish-at="finishAt"
-                          mode="anonymous_mode"></list-in-vote-preview>
-                  <!-- end:  투표가 있는 경우 -->
+                    <!-- start:  투표가 있는 경우 -->
+                    <list-in-vote-preview
+                            :file-items="item.list.vote"
+                            title="title"
+                            choice="multi_choice"
+                            finish-at="finishAt"
+                            mode="anonymous_mode"></list-in-vote-preview>
+                    <!-- end:  투표가 있는 경우 -->
 
-                  <!-- start: 링크가 있는 경우-->
-                  <list-in-link-preview
-                          :file-items="item.list.link"
-                          title="title"
-                          url="url" children="link_items"></list-in-link-preview>
-                  <!-- end: 링크가 있는 경우 -->
-
+                    <!-- start: 링크가 있는 경우-->
+                    <list-in-link-preview
+                            :file-items="item.list.link"
+                            title="title"
+                            url="url" children="link_items"></list-in-link-preview>
+                    <!-- end: 링크가 있는 경우 -->
+                  </a>
                 </div>
               </div>
 
@@ -278,9 +279,26 @@
           </template>
         </template>
 
+        <!-- start: 일정 상세 팝업 -->
         <schedule-detail-popup
                 :is-open="isOpenDetailSch"
                 @change="onDetailScheduleClose" @delete="onDeleteCheck" @editApplyTo="onEditSchedule"></schedule-detail-popup>
+        <!-- end: 일정 상세 팝업 -->
+
+        <!-- start: 커리큘럼 상세 팝업 -->
+        <curriculum-detail-popup
+                :is-open="isOpenDetailCurriculum"
+                :curriculum-detail-item="curriculumDetailItem"
+                @change="onDetailCurriculumPopupStatus"></curriculum-detail-popup>
+        <!-- end: 커리큘럼 상세 팝업 -->
+
+        <!-- start: 알림 상세 팝업 -->
+        <notify-detail-popup
+                :is-open="isOpenDetailNotification"
+                @change="onDetailPostPopupStatus"></notify-detail-popup>
+        <!-- end: 알림 상세 팝업 -->
+
+
       </template>
       <template  v-for="item in allDataModel" v-else>
         <!-- start: 알림 -->
