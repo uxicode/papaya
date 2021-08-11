@@ -40,7 +40,6 @@ class ImageFileService implements IFile{
     if( !files.length ){ return; }
 
     this.setImgFilePreviewSave(files);
-
     //file type input
     const imgFileInput =document.querySelector(selector) as HTMLInputElement;
     imgFileInput.value = '';
