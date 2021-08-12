@@ -5,10 +5,10 @@
           :class="cssClassName"
           v-for="( imgItem, imgIndex ) in getImgFileDataSort(fileItems)"
           :key="`img-${imgIndex}`" >
-        <a :href="imgItem[location]"
+<!--        href=imgItem[location]-->
+        <a href="javascript:void(0);"
            :data-count="imgFileMoreNum"
-           :class="{'pseudo-del': imgTotalNum }"
-           target="_blank">
+           :class="{'pseudo-del': imgTotalNum }">
           <img :src="imgItem[location]" alt="">
         </a>
       </li>

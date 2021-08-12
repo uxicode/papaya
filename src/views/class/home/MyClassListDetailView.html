@@ -135,7 +135,7 @@
                 </div>
                 -->
               </div>
-              <div class="fd-cnt" @click="onScheduleClick( item.list.id )" style="cursor:pointer;">
+              <div class="fd-cnt" @click.stop.capture="onScheduleClick( item.list.id )" style="cursor:pointer;">
                 <p class="fd-txt">{{ item.list.text }}</p>
 
                 <div class="fd-inner">
@@ -191,7 +191,7 @@
                   </div>
                 </div>
               </div>
-              <div class="fd-cnt" @click="onCurriculumClick( item.list.id )" style="cursor: pointer;">
+              <div class="fd-cnt" @click.capture="onCurriculumClick( item.list.id )" style="cursor: pointer;">
                 <p class="fd-txt">{{ item.list.text }}</p>
                 <p class="fd-txt">총 {{ item.list.course_list.length }}회의 수업이 있습니다.</p>
               </div>
@@ -235,12 +235,12 @@
                   </div>
                 </div>
               </div>
-              <div class="fd-cnt" @click.stop="onNotificationClick( item.list.id )">
+              <div class="fd-cnt" @click.stop="onNotificationClick( item.list.id )" style="cursor:pointer">
                 <p class="fd-txt">{{ item.list.text }}</p>
 
                 <div class="fd-inner">
 
-                  <a href="" @click.prevent.stop="onNotificationClick( item.list.id )">
+                  <a href="javascript:void(0);">
                     <!-- start: attach 에 이미지파일이 있는 경우 -->
                     <list-in-img-preview :file-items="item.list.attachment" location="location"></list-in-img-preview>
                     <!-- end: attach 에 이미지파일이 있는 경우 -->

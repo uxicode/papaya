@@ -172,33 +172,48 @@ export default class MyClassListDetailView extends Vue{
     // console.log('isMember=',  this.memberStatus );
 
     if (isMember.result) {
-      await getAllPromise([
-        ScheduleService.getAllScheduleByClassId( this.classID, { page_no: 1, count:10} ),
-        MyClassService.getAllCurriculumByClassId( this.classID, { page_no: 1, count:10} ),
-        PostService.getAllPostsByClassId( this.classID, { page_no: 1, count:10}),
-      ]).then( ( data: any )=>{
+
+      //paging 처리 필요~
+      const scheduleItems = await ScheduleService.getAllScheduleByClassId(this.classID, {page_no: 1, count: 10});
+      const curriculumItems = await MyClassService.getAllCurriculumByClassId(this.classID, {page_no: 1, count: 10});
+      const postsItems = await PostService.getAllPostsByClassId(this.classID, {page_no: 1, count: 10});
+      //
+
+      //초기 created  시에 해당 api 접속후
+      //각각 컨텐츠의 total = scheduleItems.total / curriculumItems.total / postsItems.post_listcount
+      //total 값으로 페이징 처리 후 -> 스크롤값 end 시 --> 다음 페이징으로 api 로드 -> allData.push 처리
+      const allCollection=[ scheduleItems, curriculumItems, postsItems ];
+      await getAllPromise( allCollection )
+        .then( ( data: any )=>{
 
         const max=getMax<number>([data[0].class_schedule_list.length, data[1].curriculum_list.length, data[2].post_list.length] );
         // console.log(max);
-        // console.log(data[0].class_schedule_list );
+        // console.log( data );
         this.noticeSchedule=data[0].class_schedule_list.filter((item: any) =>item.type===1 );
 
         const allData: any[] = [];
+        const contentsLen=allCollection.length;
 
         for (let i = 0; i < max; i++) {
           allData[i]=[];
-          for (let j = 0; j < data.length; j++) {
-            if (j=== 0) {
-              if (data[j].class_schedule_list[i]!== undefined) {
-                allData[i].push({list: data[j].class_schedule_list[i], name:'schedule'});
+          //
+          for (let j = 0; j <contentsLen; j++) {
+            const ov=allCollection[j];
+            //
+            if (j === 0) {
+              if (ov && ov.class_schedule_list[i]) {
+                const scheduleList=ov.class_schedule_list[i];
+                allData[i].push({list: scheduleList, name:'schedule'});
               }
             }else if (j=== 1) {
-              if (data[j].curriculum_list[i]!== undefined) {
-                allData[i].push({ list: data[j].curriculum_list[i], name:'curriculum'});
+              if (ov && ov.curriculum_list[i]) {
+                const curriculumList=ov.curriculum_list[i];
+                allData[i].push({ list:curriculumList, name:'curriculum'});
               }
             }else if (j=== 2) {
-              if (data[j].post_list[i] !== undefined) {
-                allData[i].push({ list: data[j].post_list[i], name:'post'});
+              if (ov && ov.post_list[i]) {
+                const postList=ov.post_list[i];
+                allData[i].push({ list: postList, name:'post'});
               }
             }
           }
