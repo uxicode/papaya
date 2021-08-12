@@ -47,14 +47,16 @@ export default class ScheduleView extends Vue{
     @Schedule.Mutation
     private SET_SCHEDULE_DETAIL!: ( data: IScheduleTotal )=> void;
 
-    @Schedule.Action
-    private GET_SCHEDULE_DETAIL_ACTION!: (payload: { classId: number, scheduleId: number })=>Promise<any>;
+
 
     @Schedule.Action
     private GET_SCHEDULE_ACTION!: ( payload: { classId: number,  paging: {page_no: number, count: number } }) => Promise<any>;
 
     @Schedule.Action
     private GET_SCHEDULE_BY_MONTH_ACTION!: (payload: { classId: number, month: { from: string, to: string } }) => Promise<any>;
+
+    @Schedule.Action
+    private GET_SCHEDULE_DETAIL_ACTION!: (payload: { classId: number, scheduleId: number })=>Promise<any>;
 
     @Schedule.Action
     private GET_SCHEDULE_COMMENTS_ACTION!: ( scheduleId: number ) => Promise<any>;
@@ -323,10 +325,8 @@ export default class ScheduleView extends Vue{
             console.log('캘린더 id=', id);
             // const findIdx = this.scheduleListsModel.findIndex((item) => item.id === id);
             setTimeout(() => {
-                this.selectedOpen = true;
-
+               /* this.selectedOpen = true;
                 this.isOpenDetailSch=true;
-
                 this.headerDepthChange();
 
                 //SET_SCHEDULE_DETAIL
@@ -339,7 +339,12 @@ export default class ScheduleView extends Vue{
                 this.GET_SCHEDULE_COMMENTS_ACTION(id)
                   .then(() => {
                       // console.log(this.selectedEvent);
-                  });
+                  });*/
+
+                this.selectedOpen = true;
+                this.isOpenDetailSch = true;
+                this.headerDepthChange();
+                this.scheduleDetailView({ id });
             }, 10);
         };
 
@@ -350,6 +355,21 @@ export default class ScheduleView extends Vue{
             open();
         }
         eventObj.nativeEvent.stopPropagation();
+    }
+
+
+    private scheduleDetailView(option: { id: number }): void{
+        const { id }=option;
+
+        //캘린더 상세 내역 데이타 호출 및 저장 - get scheduleDetailItem(): IScheduleDetail  통해 getter 로 상세 데이터를 가져올 수 있음.
+        this.GET_SCHEDULE_DETAIL_ACTION({classId: Number(this.classID), scheduleId: id})
+          .then((data) => {
+              // console.log('캘린더 상세보기');
+          });
+        this.GET_SCHEDULE_COMMENTS_ACTION(id)
+          .then(() => {
+              // console.log(this.selectedEvent);
+          });
     }
 
     /**
@@ -578,7 +598,7 @@ export default class ScheduleView extends Vue{
     private getEventColor(event: CalendarEvent): string {
         return event.color;
     }
-    
+
     private extendBottom(event: any ) {
         // console.log('extendBottom=', event );
         this.createEvent = event;

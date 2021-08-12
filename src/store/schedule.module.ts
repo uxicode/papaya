@@ -113,7 +113,7 @@ export default class ScheduleModule extends VuexModule {
 
   private keepScheduleData: IKeepSchedule[]=[];
 
-  private allMyClassList: IClassListBySchedule[] = [];
+  // private allMyClassList: IClassListBySchedule[] = [];
   private allMySchedule: IScheduleTotal[] = [];
 
 
@@ -142,9 +142,9 @@ export default class ScheduleModule extends VuexModule {
     return this.keepScheduleData;
   }
 
-  get allMyClassListItems(): IClassListBySchedule[] {
+  /*get allMyClassListItems(): IClassListBySchedule[] {
     return this.allMyClassList;
-  }
+  }*/
 
   get allMyScheduleItems(): IScheduleTotal[] {
     return this.allMySchedule;
@@ -171,10 +171,10 @@ export default class ScheduleModule extends VuexModule {
     this.replyData=data;
   }
 
-  @Mutation
+  /*@Mutation
   public [SET_ALL_MY_CLASS_LIST](data: IClassListBySchedule[] ){
     this.allMyClassList=data;
-  }
+  }*/
 
   @Mutation
   public [SET_ALL_MY_SCHEDULE](data: IScheduleTotal[] ){
@@ -242,10 +242,13 @@ export default class ScheduleModule extends VuexModule {
         }]
         class_schedule_list : IScheduleTotal =[]
         */
-        this.context.commit(SET_ALL_MY_CLASS_LIST, data.myclass_list);
-        this.context.commit(SET_ALL_MY_SCHEDULE, data.class_schedule_list);
+        // this.context.commit(SET_ALL_MY_CLASS_LIST, data.myclass_list);
+        // console.log( data.class_schedule_list );
+        this.context.commit(SET_SCHEDULE_LIST, data.class_schedule_list);
 
-        return Promise.resolve(data);
+        // this.context.commit(SET_ALL_MY_SCHEDULE, data.class_schedule_list);
+
+        return Promise.resolve(this.scheduleListData);
       })
       .catch((error) => {
         console.log(error);
@@ -262,7 +265,7 @@ export default class ScheduleModule extends VuexModule {
       .then((data) => {
         this.context.commit(SET_SCHEDULE_LIST, data.class_schedule_list);
         // console.log(data);
-        console.log('scheduleListData=', this.scheduleListData);
+        // console.log('scheduleListData=', this.scheduleListData);
         return Promise.resolve(this.scheduleListData);
       })
       .catch((error) => {

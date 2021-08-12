@@ -70,8 +70,6 @@ export default class AddCoursePopup extends Vue {
     private imgFileService: ImageFileServiceHelper=new ImageFileServiceHelper();
     private attachFileService: AttachFileServiceHelper=new AttachFileServiceHelper();
 
-
-
     get imgFileURLItemsModel(): string[] {
         return this.imgFileService.getItems();
     }
@@ -177,6 +175,7 @@ export default class AddCoursePopup extends Vue {
     private attachFilesAllClear() {
         this.attachFileService.removeAll();
     }
+
     //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
 
     private courseTime(idx: number){

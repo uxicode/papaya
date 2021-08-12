@@ -43,7 +43,12 @@
                                 <p class="add-curr-tit">수업 회차</p>
                                 <div class="form-box">
                                     <div class="form-group">
-                                        <input type="number" class="form-control" v-model="curriculumDetailDataNum" @input="setCourseList($event.target.value)">
+                                        <input type="number"
+                                               class="form-control"
+                                               v-model="curriculumDetailDataNum"
+                                               :readonly="imgAttachData.length > 0 || attachFileData.length > 0"
+                                               @click="inFocus"
+                                               @input="setCourseList($event.target.value)">
                                     </div>
                                 </div>
                             </div>
@@ -107,5 +112,34 @@
             @submit="onAddCourse"
             @receiveImg="receiveImgData"
             @receiveFile="receiveFileData"></add-course-popup>
+
+    <!-- start: 공통 팝업 / (수업 회차 50 초과 입력시 안내 팝업) -->
+    <transition name="modal">
+        <modal v-if="isOpenError" size="540px" body-padding="0" @modalClose="isClassCurr=false">
+            <div slot="header">
+                <!-- header custom coding-->
+                <div class="popup-icon error"></div>
+                <div class="popup-close">
+                    <button class="close" @click="isOpenError = false"><img :src="require('@/assets/images/close.svg')" alt=""></button>
+                </div>
+            </div>
+            <div slot="body">
+                <!-- body custom coding-->
+                <div class="popup-cnt">
+                    <h2 class="popup-tit">{{errorTitle}}</h2>
+                    <p class="popup-txt" v-if="errorMessage!==''">
+                        {{errorMessage}}
+                    </p>
+                </div>
+            </div>
+            <div slot="footer">
+                <!-- footer custom coding-->
+                <div class="btn-group rt">
+                    <btn type="navi" @btnClick="isOpenError = false">확인</btn>
+                </div>
+            </div>
+        </modal>
+    </transition>
+    <!-- end: 공통 팝업 -->
 
 </div>

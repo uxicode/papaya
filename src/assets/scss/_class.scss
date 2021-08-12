@@ -578,6 +578,15 @@
         .writer {font-size:12px;}
       }
     }
+
+    .schedule-list {
+      padding:14px 20px 14px 48px;
+      border-radius: 5px;
+      border: solid 1px #c9cad5;
+      background:url(../../assets/images/classmenu-plan-outline.svg) no-repeat left 23px top 14px / 18px 18px;
+      li{color:#57576d;}
+    }
+
   }
 
   &.notification {
@@ -712,16 +721,6 @@
   }
 }
 
-.schedule-list {
-  overflow-y:auto;
-  overflow-x:hidden;
-  height: 386px;
-  padding:14px 20px !important;
-  border-radius: 5px;
-  //border: solid 1px #c9cad5;
-  //background:url(../../assets/images/classmenu-plan-outline.svg) no-repeat left 23px top 14px / 18px 18px;
-  li{color:#57576d;}
-}
 
 .vote-area {
   position:relative;
@@ -770,7 +769,7 @@
 .link-area {
   position:relative;
   margin-top:10px;
-  padding:20px;
+  padding:14px 20px;
   border:1px solid #c9cad5;
   border-radius:5px;
   overflow: hidden;

@@ -58,7 +58,7 @@ export default class AddCurriculumPopup extends Vue {
 
     /* Modal 오픈 상태값 */
     private isOpenAddCoursePopup: boolean=false;
-
+    private isOpenError: boolean = false;
 
     private courseIdx: number = 0;
 
@@ -76,8 +76,15 @@ export default class AddCurriculumPopup extends Vue {
     private curriculumDetailDataNum: number = 10;
     private eduItems: Array< {title: string }>=[];
 
-    get isSubmitValidate(): boolean{
-        return (this.makeCurriculumData.title !== '' && this.makeCurriculumData.goal !== '');
+    private errorTitle: string = '';
+    private errorMessage: string = '';
+
+    get isSubmitCurriculumTitle(): boolean {
+        return this.makeCurriculumData.title !== '';
+    }
+
+    get isSubmitCurriculumGoal(): boolean{
+        return this.makeCurriculumData.goal !== '';
     }
 
     get currentCourseSettingItems(): string[]{
@@ -113,13 +120,23 @@ export default class AddCurriculumPopup extends Vue {
         return this.eduItems;
     }
 
+    private inFocus(): void{
+        if(this.imgAttachData.length > 0){
+            this.isOpenError = true;
+            this.errorTitle = '교육 회차 수정이 불가능 합니다.';
+            this.errorMessage = '교육 회차에 첨부 파일이 있는 경우 회차 수정이 불가능 합니다.';
+        }
+    }
+
     private setCourseList( num: number ): void{
         if( this.curriculumDetailDataNum >= 0 ){
             this.curriculumDetailDataNum=num;
             this.eduItems.length=num;
 
             if( this.curriculumDetailDataNum > 50){
-                // this.isCreateError = true;
+                this.isOpenError = true;
+                this.errorTitle = '잘못된 회차 설정입니다.';
+                this.errorMessage = '회차 설정은 최대 50회까지 입력할 수 있습니다.';
 
                 num = 50;
                 this.curriculumDetailDataNum=50;
@@ -175,7 +192,19 @@ export default class AddCurriculumPopup extends Vue {
      * @private
      */
     private setCurriculumDataToFormData() {
-        if( !this.isSubmitValidate ){return;}
+        if( !this.isSubmitCurriculumTitle ){
+            this.isOpenError = true;
+            this.errorTitle = '교육 과정 제목을 입력 하세요.';
+            this.errorMessage = '';
+            return;
+        }
+
+        if( !this.isSubmitCurriculumGoal ){
+            this.isOpenError = true;
+            this.errorTitle = '교육 과정 내용을 입력 하세요.';
+            this.errorMessage = '';
+            return;
+        }
 
         if (Utils.isUndefined(this.formData)) {
             this.formData = new FormData();

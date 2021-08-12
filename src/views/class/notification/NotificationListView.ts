@@ -12,11 +12,11 @@ import NotifyDetailPopup from '@/views/class/notification/NotifyDetailPopup';
 import EditNotificationPopup from '@/views/class/notification/EditNotificationPopup';
 import NoticePopup from '@/components/modal/noticePopup.vue';
 import MyClassService from '@/api/service/MyClassService';
-import WithRender from './NotificationListView.html';
 import {IUserMe} from '@/api/model/user.model';
 import {ImageFileService} from '@/views/service/preview/ImageFileService';
 import {AttachFileService} from '@/views/service/preview/AttachFileService';
 import UtilsMixins from '@/mixin/UtilsMixins';
+import WithRender from './NotificationListView.html';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');

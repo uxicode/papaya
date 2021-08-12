@@ -109,7 +109,7 @@ export default class ModifyCurriculumPopup extends Vue {
             this.eduItems.length=num;
 
             if( this.curriculumDetailDataNum > 50){
-                // this.isCreateError = true;
+                // this.isOpenError = true;
 
                 num = 50;
                 this.curriculumDetailDataNum=50;

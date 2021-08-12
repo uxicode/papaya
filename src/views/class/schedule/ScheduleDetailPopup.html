@@ -43,7 +43,7 @@
       </div>
       <div slot="body">
         <!-- body custom coding-->
-        <div class="scroll-body" style="height:70vh;">
+        <div class="scroll-body" :style="{ height:`${contentH}px` }">
           <div class="popup-form">
             <div class="popup-form-top">
               <div class="form-item pd-desc">
@@ -66,7 +66,7 @@
             </div>
           </div>
 
-          <div class="popup-feed-detail pdb-40">
+          <div class="popup-feed-detail pdb-40" ref="infoBox">
             <div class="fd-cnt">
               <p class="fd-txt word-bk">
                 {{ scheduleDetailModel.text }}

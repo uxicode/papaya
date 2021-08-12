@@ -130,7 +130,7 @@
     &lt;!&ndash; end: 공통 팝업 &ndash;&gt;
 </div>-->
 
-<div class="contents home">
+<div class="contents">
     <v-app style="background-color: transparent">
         <div class="contents-inner">
             <div class="contents-group">
@@ -172,7 +172,7 @@
                           <template v-if="nextScheduleItemsModel.length>0">
                             <ul class="schedule-list">
                               <li v-for="(item, index) in nextScheduleItemsModel" :key="`nextSch-${index}`">
-                                <div class="tb-style full">
+                                <div class="tb-style full" @click="onClickNextSchedule( {classId: item.classId, id: item.id} )" style="cursor: pointer">
                                   <div class="date tb-cell top" style="width:25%;"><span>{{ item.date }}</span></div>
 
                                   <div class="detail-list  tb-cell">

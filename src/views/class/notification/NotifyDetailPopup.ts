@@ -60,7 +60,7 @@ export default class NotifyDetailPopup extends Mixins(UtilsMixins) {
     private isEditPopupOpen: boolean=false;
     private detailPostId: number=-1; // 동적으로 변경 안되는 상태
 
-    get postDetailModel():  IPostModel & IPostInLinkModel{
+    get postDetailModel(): IPostModel & IPostInLinkModel{
         return this.postDetailItem;
     }
 

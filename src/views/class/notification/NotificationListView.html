@@ -39,10 +39,10 @@
         </div>
       </div>
     </div>
-    <div class="fd-cnt" @click="onDetailPostOpen(item.id)">
-      <p class="fd-txt">{{ item.text }}</p>
+    <div class="fd-cnt" @click.stop="onDetailPostOpen(item.id)" style="cursor: pointer">
+        <p class="fd-txt">{{ item.text }}</p>
 
-        <a href="" @click.prevent="onDetailPostOpen(item.id)">
+        <a href="" @click.prevent.stop="onDetailPostOpen(item.id)">
             <!-- start: attach 에 이미지파일이 있는 경우 -->
             <list-in-img-preview :file-items="imgPreviewInit( item.attachment )" location="location"></list-in-img-preview>
             <!-- end: attach 에 이미지파일이 있는 경우 -->

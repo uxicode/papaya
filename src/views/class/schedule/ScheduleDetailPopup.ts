@@ -77,9 +77,25 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
   private isEditPopupOpen: boolean=false;
   private isEditComplete: boolean=false;
 
+  private contentsBodyH: number=500;
+
+
   get scheduleDetailModel(): IScheduleTotal{
     return this.scheduleDetailItem;
   }
+
+
+  get contentH(): number {
+    //팝업이 열렸을 때만 샐행되어 컨텐츠 사이즈 지정.
+    if (this.isOpen) {
+      setTimeout(() => {
+        const contentEle=( this.$refs.infoBox as HTMLElement );
+        this.contentsBodyH = (contentEle.clientHeight) ? (Number( contentEle.clientHeight )>600)? Number( contentEle.clientHeight ) : this.contentsBodyH : this.contentsBodyH;
+      }, 500 );
+    }
+    return this.contentsBodyH;
+  }
+
 
   public created() {
     //currentUserAuth
@@ -91,11 +107,14 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
       }).catch((error) => {
       return Promise.reject( false );
     });
+
   }
+
 
   public getFullDay(date: Date | string): string{
     return Utils.getFullDay( new Date( date )  );
   }
+
 
   /**
    * 게시글 글쓴이와 현재 로그인 유저와 권한이 같은지 체크
@@ -183,6 +202,7 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
     if (!this.isEditComplete) {
       this.$emit('editApplyTo');
     }
+    this.contentsBodyH=500;
   }
 
   private onKeepSchedule() {
@@ -202,5 +222,7 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
         }
       });
   }
+
+
 
 }
