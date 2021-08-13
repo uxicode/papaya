@@ -9,6 +9,7 @@ import MyClassListView from '@/views/class/classList/MyClassListView';
 import WithRender from './MyClassListPage.html';
 import {MYCLASS_LIST} from '@/store/mutation-class-types';
 import PagingMixins from '@/mixin/PagingMixins';
+import UtilsMixins from '@/mixin/UtilsMixins';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
