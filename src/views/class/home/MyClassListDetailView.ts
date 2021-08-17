@@ -1,4 +1,4 @@
-import {Vue, Component, Prop, Watch} from 'vue-property-decorator';
+import {Vue, Component, Prop, Watch, Mixins} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {getAllPromise, getMax} from '@/types/types';
 import MyClassService from '@/api/service/MyClassService';
@@ -16,6 +16,7 @@ import ScheduleDetailPopup from '@/views/class/schedule/ScheduleDetailPopup';
 import NotifyDetailPopup from '@/views/class/notification/NotifyDetailPopup';
 import {ICurriculumDetailList} from '@/views/model/my-class.model';
 import CurriculumDetailPopup from '@/views/class/curriculum/CurriculumDetailPopup';
+import PagingMixins from '@/mixin/PagingMixins';
 import WithRender from './MyClassListDetailView.html';
 
 
@@ -38,7 +39,7 @@ const Post = namespace('Post');
     NotifyDetailPopup
   }
 })
-export default class MyClassListDetailView extends Vue{
+export default class MyClassListDetailView extends Mixins(PagingMixins){
 
   private pagingCount: number=1;
 
@@ -55,6 +56,7 @@ export default class MyClassListDetailView extends Vue{
   private isOpenDetailNotification: boolean=false;
 
   private deleteScheduleId: number=-1;
+
 
   //start : 공통 팝업 변수 ================================================
   private isConfirmPopupOpen: boolean = false;
@@ -154,6 +156,25 @@ export default class MyClassListDetailView extends Vue{
     );
   }
 
+
+  public updatePaging( totalNum: number, numOfPage: number ) {
+    //총 페이지 카운트
+    const total=this.getTotalPageCount({total: totalNum, numOfPage});
+    //페이지 카운트 구하기
+    const pageItems = this.getPageNum({ totalPageCount: total, pageSize: total, curPageNum: 1});
+    //마지막 페이지 카운트
+    const lastPage = pageItems[pageItems.length - 1];
+
+    return {
+      total,
+      lastPage
+    };
+  }
+
+  private updateScheduleApiCall( pageNum: number, pageTotal: number ) {
+    const scheduleItems = ScheduleService.getAllScheduleByClassId(this.classID, {page_no: 1, count: this.numOfPage});
+    const {total, lastPage} = this.updatePaging(pageTotal, this.numOfPage);
+  }
   /*public getMax<T>( items: T[] ): T{
     return items.reduce( (a: T, b: T )=>{
       return a>b? a : b;
@@ -172,33 +193,79 @@ export default class MyClassListDetailView extends Vue{
     // console.log('isMember=',  this.memberStatus );
 
     if (isMember.result) {
-      await getAllPromise([
-        ScheduleService.getAllScheduleByClassId( this.classID, { page_no: 1, count:10} ),
-        MyClassService.getAllCurriculumByClassId( this.classID, { page_no: 1, count:10} ),
-        PostService.getAllPostsByClassId( this.classID, { page_no: 1, count:10}),
-      ]).then( ( data: any )=>{
+
+      //paging 처리 필요~
+      const scheduleItems = await ScheduleService.getAllScheduleByClassId(this.classID, {page_no: 1, count: this.numOfPage});
+      const curriculumItems = await MyClassService.getAllCurriculumByClassId(this.classID, {page_no: 1, count:  this.numOfPage});
+      const postsItems = await PostService.getAllPostsByClassId(this.classID, {page_no: 1, count:  this.numOfPage});
+      //
+      //초기 created  시에 해당 api 접속후
+      //각각 컨텐츠의 total = scheduleItems.total / curriculumItems.total / postsItems.post_listcount
+      //total 값으로 페이징 처리 후 -> 스크롤값 end 시 --> 다음 페이징으로 api 로드 -> allData.push 처리
+
+      const scheduleTotal=scheduleItems.total;
+      const curriculumTotal=curriculumItems.total;
+      const postTotal=postsItems.post_listcount;
+
+      const {total, lastPage} = this.updatePaging(scheduleTotal, this.numOfPage);
+
+      //총 페이지 카운트
+      const scheduleTotalPageCount=this.getTotalPageCount({total: scheduleTotal, numOfPage: this.numOfPage});
+      //페이지 카운트 구하기
+      const schedulePageItems = this.getPageNum({ totalPageCount: scheduleTotalPageCount, pageSize: scheduleTotalPageCount, curPageNum: 1});
+      //마지막 페이지 카운트
+      const scheduleLastPageNum = schedulePageItems[schedulePageItems.length - 1];
+      console.log(scheduleTotalPageCount, schedulePageItems );
+
+      //총 페이지 카운트
+      const curriculumTotalPageCount=this.getTotalPageCount({total: curriculumTotal, numOfPage: this.numOfPage});
+      //페이지 카운트 구하기
+      const curriculumPageItems = this.getPageNum({ totalPageCount: curriculumTotalPageCount, pageSize: curriculumTotalPageCount, curPageNum: 1});
+      //마지막 페이지 카운트
+      const curriculumLastPageNum = curriculumPageItems[curriculumPageItems.length - 1];
+      console.log(curriculumTotalPageCount, curriculumPageItems );
+
+      //총 페이지 카운트
+      const postTotalPageCount=this.getTotalPageCount({total: postTotal, numOfPage: this.numOfPage});
+      //페이지 카운트 구하기
+      const postPageItems = this.getPageNum({ totalPageCount: postTotalPageCount, pageSize: postTotalPageCount, curPageNum: 1});
+      //마지막 페이지 카운트
+      const postLastPageNum = postPageItems[postPageItems.length - 1];
+      console.log(postTotalPageCount, postPageItems );
+
+
+      const allCollection=[ scheduleItems, curriculumItems, postsItems ];
+      await getAllPromise( allCollection )
+        .then( ( data: any )=>{
 
         const max=getMax<number>([data[0].class_schedule_list.length, data[1].curriculum_list.length, data[2].post_list.length] );
         // console.log(max);
-        // console.log(data[0].class_schedule_list );
+        // console.log( data );
         this.noticeSchedule=data[0].class_schedule_list.filter((item: any) =>item.type===1 );
 
         const allData: any[] = [];
+        const contentsLen=allCollection.length;
 
         for (let i = 0; i < max; i++) {
           allData[i]=[];
-          for (let j = 0; j < data.length; j++) {
-            if (j=== 0) {
-              if (data[j].class_schedule_list[i]!== undefined) {
-                allData[i].push({list: data[j].class_schedule_list[i], name:'schedule'});
+          //
+          for (let j = 0; j <contentsLen; j++) {
+            const ov=allCollection[j];
+            //
+            if (j === 0) {
+              if (ov && ov.class_schedule_list[i]) {
+                const scheduleList=ov.class_schedule_list[i];
+                allData[i].push({list: scheduleList, name:'schedule'});
               }
             }else if (j=== 1) {
-              if (data[j].curriculum_list[i]!== undefined) {
-                allData[i].push({ list: data[j].curriculum_list[i], name:'curriculum'});
+              if (ov && ov.curriculum_list[i]) {
+                const curriculumList=ov.curriculum_list[i];
+                allData[i].push({ list:curriculumList, name:'curriculum'});
               }
             }else if (j=== 2) {
-              if (data[j].post_list[i] !== undefined) {
-                allData[i].push({ list: data[j].post_list[i], name:'post'});
+              if (ov && ov.post_list[i]) {
+                const postList=ov.post_list[i];
+                allData[i].push({ list: postList, name:'post'});
               }
             }
           }
