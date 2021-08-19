@@ -5,7 +5,7 @@
        <li><router-link :to="{path:'/'}" @click="closeListMenu">홈</router-link></li>
        <li><router-link :to="{path:'/all/notify'}">모든 알림</router-link></li>
        <li><router-link :to="{path:'/all/schedule'}">모든 일정</router-link></li>
-       <li><a href="">자료실</a></li>
+<!--       <li><a href="">자료실</a></li>-->
        <li><a href="#" class="top-search" :class="{'active': isSearchChk}" @click.prevent.stop="onSearch"></a></li>
        <li><a href="#" class="top-alert"></a></li>
        <li>

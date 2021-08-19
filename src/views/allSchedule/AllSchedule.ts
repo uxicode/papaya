@@ -380,7 +380,12 @@ export default class AllSchedule extends Vue {
    */
   private onClickNextSchedule( option: {classId: number, id: number} ) {
     // console.log(option.classId);
-    this.scheduleDetailView(option);
+    this.scheduleDetailView(option)
+      .then(()=>{
+        this.selectedOpen = true;
+        this.isOpenDetailSch = true;
+        console.log('detail schedule');
+      });
   }
 
   /**
@@ -486,10 +491,12 @@ export default class AllSchedule extends Vue {
 
       // const findIdx = this.scheduleListsModel.findIndex((item) => item.id === id);
       setTimeout(() => {
-        this.selectedOpen = true;
-        this.isOpenDetailSch = true;
         this.headerDepthChange();
-        this.scheduleDetailView({classId, id});
+        this.scheduleDetailView({classId, id})
+          .then((msg: string)=>{
+            this.selectedOpen = true;
+            this.isOpenDetailSch = true;
+          });
       }, 10);
     };
 
@@ -502,19 +509,16 @@ export default class AllSchedule extends Vue {
     eventObj.nativeEvent.stopPropagation();
   }
 
-  private scheduleDetailView(option: { classId: number, id: number }): void{
-    const {classId, id}=option;
-
-    //캘린더 상세 내역 데이타 호출 및 저장 - get scheduleDetailItem(): IScheduleDetail  통해 getter 로 상세 데이터를 가져올 수 있음.
-    this.GET_SCHEDULE_DETAIL_ACTION({classId: Number(classId), scheduleId: id})
-      .then((data) => {
-        // console.log('캘린더 상세보기');
-      });
-
-    this.GET_SCHEDULE_COMMENTS_ACTION(id)
-      .then(() => {
-        // console.log(this.selectedEvent);
-      });
+  private async scheduleDetailView(option: { classId: number, id: number }): Promise<string>{
+    try{
+      const {classId, id}=option;
+      //캘린더 상세 내역 데이타 호출 및 저장 - get scheduleDetailItem(): IScheduleDetail  통해 getter 로 상세 데이터를 가져올 수 있음.
+      await this.GET_SCHEDULE_DETAIL_ACTION({classId: Number(classId), scheduleId: id});
+      await this.GET_SCHEDULE_COMMENTS_ACTION(id);
+      return Promise.resolve('detail-success');
+    }catch(error){
+      return Promise.reject('error-schedule');
+    }
   }
 
 

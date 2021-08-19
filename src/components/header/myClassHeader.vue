@@ -95,14 +95,14 @@ export default class MyClassHeader extends Vue {
 
   public created(){
 
-    console.log('myClassLists=', this.myClassLists.length, this.userInfo, this.isAuth );
+    // console.log('myClassLists=', this.myClassLists.length, this.userInfo, this.isAuth );
 
     //로그인한 상태이지만 현재 갱신된 상태이기에 데이터를 재지정 해줄 필요가 있다.
     if (this.isAuth && this.userInfo === null) {
       this.MYCLASS_LIST_ACTION()
           .then((data) => {
 
-            console.log(data);
+            // console.log(data);
             this.init();
             this.selectBoxCurrentStatus();
           });
@@ -145,7 +145,7 @@ export default class MyClassHeader extends Vue {
       this.$router.push({path: `${CLASS_BASE_URL}/${selectClassID}` })
           .then(( )=>{
             this.UPDATE_SIDE_NUM(0);
-            console.log(selectClassID, ':: 해당 클래스 홈 이동');
+            // console.log(selectClassID, ':: 해당 클래스 홈 이동');
             // console.log('MYCLASS_HOME 호출후 this.classID = ', this.classID, localStorage.getItem('classId'), this.classIdModel );
           });
     });

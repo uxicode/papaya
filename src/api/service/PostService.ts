@@ -10,7 +10,7 @@ export class PostService{
    * @param classId
    * @param payload
    */
-  public static getAllMyClassPosts( payload: {page_no: number, count: number} ): Promise<any>{
+  public static getAllMyClassPosts( payload: {page_no: number | undefined, count: number | undefined} ): Promise<any>{
     return request('get', `${CLASS_BASE_URL}/me/all/posts`, payload );
   }
 

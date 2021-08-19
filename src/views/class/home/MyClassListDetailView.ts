@@ -3,7 +3,7 @@ import {namespace} from 'vuex-class';
 import {getAllPromise, getMax} from '@/types/types';
 import MyClassService from '@/api/service/MyClassService';
 import {NoticeScheduleModel} from '@/views/model/schedule.model';
-import {IAttachFileModel, IPostModel} from '@/views/model/post.model';
+import {IAttachFileModel, IPostInLinkModel, IPostModel} from '@/views/model/post.model';
 import {PostService} from '@/api/service/PostService';
 import {ScheduleService} from '@/api/service/ScheduleService';
 import ListInImgPreview from '@/components/preview/ListInImgPreview.vue';
@@ -12,11 +12,14 @@ import ListInVotePreview from '@/components/preview/ListInVotePreview.vue';
 import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
 import ConfirmPopup from '@/components/modal/confirmPopup.vue';
 import NoticePopup from '@/components/modal/noticePopup.vue';
+import ScrollObserver from '@/components/scrollObserver/ScrollObserver.vue';
 import ScheduleDetailPopup from '@/views/class/schedule/ScheduleDetailPopup';
 import NotifyDetailPopup from '@/views/class/notification/NotifyDetailPopup';
 import {ICurriculumDetailList} from '@/views/model/my-class.model';
 import CurriculumDetailPopup from '@/views/class/curriculum/CurriculumDetailPopup';
+import Btn from '@/components/button/Btn.vue';
 import PagingMixins from '@/mixin/PagingMixins';
+
 import WithRender from './MyClassListDetailView.html';
 
 
@@ -36,7 +39,9 @@ const Post = namespace('Post');
     ConfirmPopup,
     NoticePopup,
     CurriculumDetailPopup,
-    NotifyDetailPopup
+    NotifyDetailPopup,
+    Btn,
+    ScrollObserver
   }
 })
 export default class MyClassListDetailView extends Mixins(PagingMixins){
@@ -58,6 +63,22 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
   private deleteScheduleId: number=-1;
 
 
+  private scheduleTotal: number=-1;
+  private curriculumTotal: number=-1;
+  private postTotal: number=-1;
+
+  private scheduleLastPage: number=-1;
+  private curriculumLastPage: number=-1;
+  private postTotalLastPage: number=-1;
+
+  private curSchedulePageNum: number=1;
+  private curCurriculumPageNum: number=1;
+  private curPostPageNum: number=1;
+
+  private contentsInfo: any[] = [];
+
+  private isLoader: boolean=true;
+
   //start : 공통 팝업 변수 ================================================
   private isConfirmPopupOpen: boolean = false;
   private isNoticePopupOpen: boolean = false;
@@ -66,6 +87,9 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
   private noticeDesc: string = '';
   private confirmDesc: string = '';
   //end : 공통 팝업 변수 ================================================
+
+  private noticePost: IPostModel[] & IPostInLinkModel[]=[];
+  private allData: any[] = [];
 
   @Schedule.Action
   private DELETE_SCHEDULE_ACTION!: (payload: { classId: string | number, scheduleId: number } ) => Promise<unknown>;
@@ -94,7 +118,11 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
   @MyClass.Getter
   private curriculumDetailItem!: ICurriculumDetailList;
 
-  private allData: any[] = [];
+
+
+  get loaderModel() {
+    return this.isLoader;
+  }
 
   get noticeScheduleModel(): any[]{
     return this.noticeSchedule;
@@ -152,10 +180,21 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
     this.getClassList().then(
       ()=>{
         this.isPageLoaded=true;
-      }
-    );
+        if (this.allDataModel.length > 0) {
+          // this.scrollObserver( '.loader-checker');
+        }
+      });
+
   }
 
+  public scrollObserver( value: boolean ) {
+    this.isLoader=value;
+    this.updateContents()
+      .then(()=>{
+        this.isLoader=false;
+        console.log('추가 페이지 로드 완료.');
+      });
+  }
 
   public updatePaging( totalNum: number, numOfPage: number ) {
     //총 페이지 카운트
@@ -164,30 +203,115 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
     const pageItems = this.getPageNum({ totalPageCount: total, pageSize: total, curPageNum: 1});
     //마지막 페이지 카운트
     const lastPage = pageItems[pageItems.length - 1];
-
     return {
       total,
       lastPage
     };
   }
-
-  private updateScheduleApiCall( pageNum: number, pageTotal: number ) {
-    const scheduleItems = ScheduleService.getAllScheduleByClassId(this.classID, {page_no: 1, count: this.numOfPage});
-    const {total, lastPage} = this.updatePaging(pageTotal, this.numOfPage);
-  }
-  /*public getMax<T>( items: T[] ): T{
-    return items.reduce( (a: T, b: T )=>{
-      return a>b? a : b;
-    });
-  }*/
-
   //{total_count: 0, post_listcount: 0, post_list: Array(0)}
   //{ total: 0, class_schedule_list: Array(0)}
   // {page_item_count: 5, total: 0, curriculum_list: [], item_count: 0}
+
+  private updateCallApi( name: string ): Promise<any> | null{
+    if (this.isMember) {
+      const findIdx = this.contentsInfo.findIndex((item) => item.name === name);
+      if (findIdx === -1) { return null;}
+
+      const infoOv=this.contentsInfo[findIdx];
+      const {last, count, promise}=infoOv;
+
+      if (last > count) {
+        let pageNum=count;
+        this.contentsInfo.splice(findIdx, 1, {...infoOv, count: ++pageNum});
+        // console.log('findIdx=',findIdx, 'infoOv.count=', infoOv.count);
+        return promise( Number(this.classID), {page_no: infoOv.count, count: this.numOfPage} );
+      }else{
+        return null;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * promise.all 에 대입하기 위한 collection 만들기 -  유효한 promise 만 지정한 배열에 대입하기.
+   * @param items
+   * @param args
+   * @private
+   */
+  private validContents( items: any[], ...args: Array<Promise<any>> ): void{
+    args.forEach((promiseItem)=>{
+      if (promiseItem) {
+        items.push( promiseItem );
+      }
+    });
+  }
+
+  private shuffleContents( promiseItems: any[] ): unknown[] {
+    const allContents: any[] = [];
+    const contentsLen=promiseItems.length;
+
+    for (let i = 0; i < this.numOfPage; i++) {
+      allContents[i]=[];
+      //
+      for (let j = 0; j <contentsLen; j++) {
+        const ov=promiseItems[j];
+        //
+        if (j === 0) {
+          if (ov && ov.class_schedule_list[i]) {
+            const scheduleList=ov.class_schedule_list[i];
+            allContents[i].push({list: scheduleList, name:'schedule'});
+          }
+        }else if (j === 1) {
+          if (ov && ov.curriculum_list[i]) {
+            const curriculumList=ov.curriculum_list[i];
+            allContents[i].push({ list:curriculumList, name:'curriculum'});
+          }
+        }else if (j=== 2) {
+          if (ov && ov.post_list[i]) {
+            const postList=ov.post_list[i];
+            allContents[i].push({ list: postList, name:'post'});
+          }
+        }
+      }
+    }
+
+    return allContents;
+  }
+
+  private async updateContents() {
+    const collections: any[] = [];
+    const scheduleItems=await this.updateCallApi('schedule');
+    const curriculumItems=await this.updateCallApi('curriculum');
+    const postItems=await this.updateCallApi('post');
+
+    this.validContents(collections, scheduleItems, curriculumItems, postItems);
+    // console.log(collections.length);
+    if (collections.length < 1) {
+      return;
+    }
+
+    await getAllPromise( collections )
+      .then( ( items: any )=>{
+
+        // console.log(max);
+        // console.log( items );
+        // this.noticeSchedule=data[0].class_schedule_list.filter((item: any) =>item.type===1 );
+
+        const allItems=this.shuffleContents(collections);
+
+        this.allData = [...this.allData, ...allItems];
+        // console.log(this.allData);
+        // const allData=[ ...data[0].post_list,  ...data[1].class_schedule_list, ...data[2].curriculum_list];
+      }).catch((error)=>{
+        console.log('클래스 홈 error', error );
+      });
+  }
+
+
+
   private async getClassList(){
 
     const isMember= await MyClassService.getMyInfoInThisClass(Number( this.classID ) );
-
     this.memberStatus=isMember.result;
 
     // console.log('isMember=',  this.memberStatus );
@@ -195,9 +319,9 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
     if (isMember.result) {
 
       //paging 처리 필요~
-      const scheduleItems = await ScheduleService.getAllScheduleByClassId(this.classID, {page_no: 1, count: this.numOfPage});
-      const curriculumItems = await MyClassService.getAllCurriculumByClassId(this.classID, {page_no: 1, count:  this.numOfPage});
-      const postsItems = await PostService.getAllPostsByClassId(this.classID, {page_no: 1, count:  this.numOfPage});
+      const scheduleItems = await ScheduleService.getAllScheduleByClassId(this.classID, {page_no: this.curSchedulePageNum, count: this.numOfPage});
+      const curriculumItems = await MyClassService.getAllCurriculumByClassId(this.classID, {page_no: this.curCurriculumPageNum, count:  this.numOfPage});
+      const postsItems = await PostService.getAllPostsByClassId(this.classID, {page_no: this.curPostPageNum, count:  this.numOfPage});
       //
       //초기 created  시에 해당 api 접속후
       //각각 컨텐츠의 total = scheduleItems.total / curriculumItems.total / postsItems.post_listcount
@@ -207,72 +331,27 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
       const curriculumTotal=curriculumItems.total;
       const postTotal=postsItems.post_listcount;
 
-      const {total, lastPage} = this.updatePaging(scheduleTotal, this.numOfPage);
+      const schedulePagingOv= this.updatePaging(scheduleTotal, this.numOfPage);
+      const curriculumPagingOv= this.updatePaging(curriculumTotal, this.numOfPage);
+      const postPagingOv= this.updatePaging(postTotal, this.numOfPage);
 
-      //총 페이지 카운트
-      const scheduleTotalPageCount=this.getTotalPageCount({total: scheduleTotal, numOfPage: this.numOfPage});
-      //페이지 카운트 구하기
-      const schedulePageItems = this.getPageNum({ totalPageCount: scheduleTotalPageCount, pageSize: scheduleTotalPageCount, curPageNum: 1});
-      //마지막 페이지 카운트
-      const scheduleLastPageNum = schedulePageItems[schedulePageItems.length - 1];
-      console.log(scheduleTotalPageCount, schedulePageItems );
-
-      //총 페이지 카운트
-      const curriculumTotalPageCount=this.getTotalPageCount({total: curriculumTotal, numOfPage: this.numOfPage});
-      //페이지 카운트 구하기
-      const curriculumPageItems = this.getPageNum({ totalPageCount: curriculumTotalPageCount, pageSize: curriculumTotalPageCount, curPageNum: 1});
-      //마지막 페이지 카운트
-      const curriculumLastPageNum = curriculumPageItems[curriculumPageItems.length - 1];
-      console.log(curriculumTotalPageCount, curriculumPageItems );
-
-      //총 페이지 카운트
-      const postTotalPageCount=this.getTotalPageCount({total: postTotal, numOfPage: this.numOfPage});
-      //페이지 카운트 구하기
-      const postPageItems = this.getPageNum({ totalPageCount: postTotalPageCount, pageSize: postTotalPageCount, curPageNum: 1});
-      //마지막 페이지 카운트
-      const postLastPageNum = postPageItems[postPageItems.length - 1];
-      console.log(postTotalPageCount, postPageItems );
+      this.contentsInfo.push( { name: 'schedule', total: scheduleItems.total, last: schedulePagingOv.lastPage, count: this.curSchedulePageNum, promise:ScheduleService.getAllScheduleByClassId } );
+      this.contentsInfo.push( { name: 'curriculum', total: curriculumItems.total, last: curriculumPagingOv.lastPage, count: this.curCurriculumPageNum, promise: MyClassService.getAllCurriculumByClassId  } );
+      this.contentsInfo.push( { name: 'post', total: postsItems.post_listcount, last: postPagingOv.lastPage, count: this.curPostPageNum, promise: PostService.getAllPostsByClassId } );
 
 
       const allCollection=[ scheduleItems, curriculumItems, postsItems ];
       await getAllPromise( allCollection )
         .then( ( data: any )=>{
 
-        const max=getMax<number>([data[0].class_schedule_list.length, data[1].curriculum_list.length, data[2].post_list.length] );
         // console.log(max);
         // console.log( data );
         this.noticeSchedule=data[0].class_schedule_list.filter((item: any) =>item.type===1 );
 
-        const allData: any[] = [];
-        const contentsLen=allCollection.length;
+        const allItems=this.shuffleContents( allCollection );
 
-        for (let i = 0; i < max; i++) {
-          allData[i]=[];
-          //
-          for (let j = 0; j <contentsLen; j++) {
-            const ov=allCollection[j];
-            //
-            if (j === 0) {
-              if (ov && ov.class_schedule_list[i]) {
-                const scheduleList=ov.class_schedule_list[i];
-                allData[i].push({list: scheduleList, name:'schedule'});
-              }
-            }else if (j=== 1) {
-              if (ov && ov.curriculum_list[i]) {
-                const curriculumList=ov.curriculum_list[i];
-                allData[i].push({ list:curriculumList, name:'curriculum'});
-              }
-            }else if (j=== 2) {
-              if (ov && ov.post_list[i]) {
-                const postList=ov.post_list[i];
-                allData[i].push({ list: postList, name:'post'});
-              }
-            }
-          }
-        }
-
-        this.allData = [...allData];
-        console.log(this.allData);
+        this.allData = [...allItems];
+        // console.log(this.allData);
         // const allData=[ ...data[0].post_list,  ...data[1].class_schedule_list, ...data[2].curriculum_list];
       }).catch((error)=>{
         console.log('클래스 홈 error', error );
@@ -287,10 +366,54 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
         });
     }
 
+    await PostService.getAllMyClassPosts({page_no: undefined, count: undefined} )
+      .then((data)=>{
+        console.log(data);
+        this.noticePost=data.post_list.filter((item: any) => item.type === 1);
 
+        this.noticePost.forEach(( item: any, index: number ) => {
+          let {isBookmark}=item;
+          //
+          if( item.user_keep_class_posts.length > 0){
+            isBookmark=!isBookmark;
+            this.noticePost.splice(index, 1, {...item, isBookmark} );
+          }
+        });
+      });
   }
 
 
+  //start : 상단 공지 ================================================
+  private onKeepPostClick(idx: number ) {
+
+    const findIdx=this.noticePost.findIndex((ele) => ele.id === idx);
+
+    const targetPost=this.noticePost[findIdx];
+    let { isBookmark } = targetPost;
+
+    console.log('isBookmark=', isBookmark);
+    const { user_keep_class_posts } = targetPost;
+
+    if( isBookmark ){
+      if( user_keep_class_posts!==undefined && Array.isArray(user_keep_class_posts) && user_keep_class_posts.length>0){
+        PostService.deleteKeepPost( user_keep_class_posts[0].id )
+          .then((postData)=>{
+            isBookmark=!isBookmark;
+            user_keep_class_posts.length=0;
+            this.noticePost.splice(findIdx, 1, {...targetPost, isBookmark, user_keep_class_posts} );
+          });
+      }
+    }else{
+      //북마크 되어 있는 상태
+      PostService.setKeepPost({ class_id:Number( this.classID ), post_id: idx })
+        .then((postData: any )=>{
+          // console.log(data);
+          isBookmark=!isBookmark;
+          user_keep_class_posts.push( postData.data );
+          this.noticePost.splice(findIdx, 1, {...targetPost, isBookmark, user_keep_class_posts} );
+        });
+    }
+  }
   private isOwner( ownerId: number, userId: number): boolean {
     return (ownerId === userId);
   }
@@ -300,8 +423,13 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
   }
 
   private getNoticeMainTitle(): string {
-    return ( this.noticeSchedule[this.noticeSchedule.length-1])? this.noticeSchedule[this.noticeSchedule.length-1].title : '';
+    return ( this.noticePost[this.noticePost.length-1])? this.noticePost[this.noticePost.length-1].title : '';
   }
+  //end : 상단 공지 ================================================
+
+
+
+
 
   //start : curriculum ================================================
   private onCurriculumClick(id: number) {
