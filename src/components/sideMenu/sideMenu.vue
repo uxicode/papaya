@@ -249,7 +249,7 @@ export default class SideMenu extends Vue{
         // console.log(data);
         this.isMember = (data.result!==null);
         this.isConfirmed = (this.isMember)&&(this.myClassHomeModel.me?.status === 1);
-        console.log(`가입 신청 여부 : ${this.isMember} / 가입 승인 여부 : ${this.isConfirmed}`);
+        // console.log(`가입 신청 여부 : ${this.isMember} / 가입 승인 여부 : ${this.isConfirmed}`);
       });
   }
 

@@ -2,7 +2,7 @@
   <div class="classes-feed home" v-if="isPageLoaded">
     <h2 class="cnt-tit mgb-30">클래스 홈</h2>
 
-    <div class="top-notify" v-if="this.noticeSchedule.length>0">
+    <div class="top-notify" v-if="this.noticePost.length>0">
       <div class="accordion">
         <!-- accordion 1-->
         <div class="accordion-tit">
@@ -14,7 +14,7 @@
         </div>
 
         <div class="accordion-cnt" id="accordion1"  :class="{'active':isNoticeChk}">
-          <div class="fd-head notify-feed" v-for="(item, index) in noticeScheduleModel" :key="`noticeItem-${index}`">
+          <div class="fd-head notify-feed" v-for="(item, index) in noticePost" :key="`noticeItem-${index}`">
             <h3 class="fd-tit">{{ item.title }}</h3>
             <div class="fd-writer type2">
               <p class="writer">
@@ -23,7 +23,7 @@
               </p>
             </div>
             <div class="fd-btn">
-              <button type="button" class="btn only-ico-btn sm bookmark active"></button>
+              <button type="button" class="btn only-ico-btn sm bookmark" :class="{'active': item.isBookmark }" @click="onKeepPostClick(item.id)"></button>
               <div class="list-popup">
                 <v-menu
                         min-width="200px"
@@ -275,9 +275,18 @@
             </div>
             <!-- end: 알림 -->
 
-
           </template>
         </template>
+        <!--<div class="loader-container">
+          <div class="hollow-dots-spinner">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+        </div>
+
+        <button class="loader-checker" style="visibility: hidden;">loader checker</button>-->
+        <scroll-observer :is-loader="loaderModel" @viewportIn="scrollObserver"></scroll-observer>
 
         <!-- start: 일정 상세 팝업 -->
         <schedule-detail-popup
@@ -375,6 +384,7 @@
             <span class="fd-comment">댓글 12</span>
           </div>-->
         </div>
+
         <!-- end: 알림 -->
       </template>
     </template>

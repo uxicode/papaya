@@ -1,5 +1,6 @@
 <template>
   <button type="button"
+          :id="id"
           :style="`width:${width}px`"
           class="btn"
           :disabled="disabled"
@@ -31,6 +32,9 @@ export default class Btn extends Vue{
 
   @Prop(String)
   private full!: string;
+
+  @Prop(String)
+  private id!: string;
 
   get buttonType(): object{
     return {
