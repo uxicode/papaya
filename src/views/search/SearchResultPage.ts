@@ -269,7 +269,6 @@ export default class SearchResultPage extends Vue {
   }
 
   private afterEnter(el: HTMLElement): void {
-
     // this.isLoading=false;
     el.style.transitionDelay = '';
   }

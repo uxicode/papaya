@@ -2,13 +2,8 @@ import {Vue, Component} from 'vue-property-decorator';
 import NoticeService from '@/api/service/NoticeService';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './NoticeBoard.html';
+import {INotice} from '@/views/model/notice.model';
 
-interface INotice {
-    id: number;
-    title: string;
-    createdAt: Date;
-    content: string;
-}
 
 @WithRender
 @Component({

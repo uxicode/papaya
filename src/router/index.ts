@@ -9,6 +9,8 @@ import MyClassHeader from '@/components/header/myClassHeader.vue';
 import AppHeader from '@/components/header/header.vue';
 import AppFooter from '@/components/footer/footer.vue';
 import {SearchResultRouter} from '@/router/SearchResultRouter';
+import {FooterBoardRouter} from '@/router/FooterRouter';
+import {AllContentsRouter} from '@/router/AllContentsRouter';
 
 Vue.use(VueRouter);
 
@@ -31,18 +33,8 @@ const routes: RouteConfig[] = [
   ...MyClassRouter,
   ...MyPageRouter,
   ...SearchResultRouter,
-  {
-    path: '/all/schedule',
-    name: 'myAllSchedule',
-    beforeEnter: getIsAuth,
-    components: { default: () => import('@/views/allSchedule/AllSchedule'), header: AppHeader, footer: AppFooter },
-  },
-  {
-    path: '/all/notify',
-    name: 'myAllNotify',
-    beforeEnter: getIsAuth,
-    components: { default: () => import('@/views/allNotify/AllNotify'), header: AppHeader, footer: AppFooter },
-  },
+  ...AllContentsRouter, // 모든 일정, 모든 알림
+  ...FooterBoardRouter, // 공지사항 , 고객센터, 이용약관
   {
     path: '*',
     name: 'notfound',
