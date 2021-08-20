@@ -32,10 +32,10 @@ export default class ScrollObserver extends Vue{
     const io = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
       //viewport 에 해당 엘리먼트가 진입시
       if (entries[0].isIntersecting) {
-        this.$emit('viewportIn', true);
+        this.$emit('update', true);
         this.loaderView( this.isLoader );
       }else{
-        this.$emit('viewportIn', false);
+        this.$emit('update', false);
         this.loaderView( this.isLoader );
       }
     }, options );

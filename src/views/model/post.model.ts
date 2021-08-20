@@ -79,6 +79,22 @@ interface IPostModel{
       vote_id: number,
     }>
   };
+  link: {
+    createdAt: Date | string | null,
+    id: number,
+    parent_id: number,
+    title: string,
+    type: 0
+    updatedAt: Date | string |null,
+    link_items: Array<{
+      createdAt: Date | string |null,
+      id:  number,
+      index: number,
+      link_id:  number,
+      updatedAt: Date | string |null,
+      url: string,
+    }>
+  };
   isBookmark: boolean;
 }
 /*acl: "public-read"

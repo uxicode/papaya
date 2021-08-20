@@ -75,24 +75,30 @@
       </div>
     </div>
 
-    <!-- start: 리스트 뷰 :post-list-items="postListItemsModel" -->
-    <notification-list-view v-if="postListItemsModel.length>0"
-                            :comments-total-items="commentsTotalItemsModel"
-                            @click:detailPost="onDetailPostOpen"></notification-list-view>
-    <!-- end: 리스트 뷰 -->
-
-
-    <!-- 등록된 알림 없음 -->
-    <div class="no-notify" v-else>
+    <template v-if="postListItemsModel.length>0">
+      <!-- start: 리스트 뷰 :post-list-items="postListItemsModel" -->
+      <notification-list-view
+              :comments-total-items="commentsTotalItemsModel"
+              @click:detailPost="onDetailPostOpen">
+      </notification-list-view>
+      <!-- start: scroll paging -->
+      <scroll-observer :is-loader="loaderModel" @update="scrollObserver"></scroll-observer>
+      <!-- end: scroll paging -->
+      <!-- end: 리스트 뷰 -->
+    </template>
+    <template v-else>
+      <!-- 등록된 알림 없음 -->
+      <div class="no-notify">
         <div class="no-data">
-            <img :src="require('@/assets/images/icn-80-notice-nodata.svg')" alt="">
-            <p>등록된 알림이 없습니다.</p>
-            <span>새 알림을 작성해 주세요.</span>
-            <div class="mgt-20">
-              <btn type="navi" @btnClick="onAddPostPopupOpen">새 알림 작성</btn>
-            </div>
+          <img :src="require('@/assets/images/icn-80-notice-nodata.svg')" alt="">
+          <p>등록된 알림이 없습니다.</p>
+          <span>새 알림을 작성해 주세요.</span>
+          <div class="mgt-20">
+            <btn type="navi" @btnClick="onAddPostPopupOpen">새 알림 작성</btn>
+          </div>
         </div>
-    </div>
+      </div>
+    </template>
 
     <div class="noti-add">
       <a href="" class="classes-add-btn" @click.prevent="onAddPostPopupOpen"></a>

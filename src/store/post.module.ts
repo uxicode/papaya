@@ -9,7 +9,8 @@ import {
   SET_VOTE,
   EDIT_POST,
   DELETE_POST,
-  SET_ALL_MY_CLASS_POST
+  SET_ALL_MY_CLASS_POST,
+  SET_POST_TOTAL
 } from '@/store/mutation-class-types';
 import {
   GET_POST_LIST_ACTION,
@@ -42,10 +43,10 @@ import {getAllPromise} from '@/types/types';
 export default class PostModule extends VuexModule {
 
   private openAddPopup: boolean= false;
-  private postListData: IPostModel[] & IPostInLinkModel[]= [];
+  private postListData: IPostModel[]= [];
   private reservedTotal: number=0;
-  private reservedData: IPostModel[] & IPostInLinkModel[]= [];
-  private postDetailData: IPostModel & IPostInLinkModel={
+  private reservedData: IPostModel[]= [];
+  private postDetailData: IPostModel={
     attachment: [],
     class_id: 0,
     count: 0,
@@ -114,19 +115,24 @@ export default class PostModule extends VuexModule {
   private commentData: ICommentModel[] = [];
   private replyData: IReplyModel[]=[];
   private voteData!: IReadAbleVote;
-  private allMyClassPosts: IPostModel[] & IPostInLinkModel[]= [];
+  private allMyClassPosts: IPostModel[]= [];
+  private postItemTotal: number=0;
 
 
   /* Getters */
+  get postTotal(): number{
+    return this.postItemTotal;
+  }
+
   get isOpenAddPopup(): boolean{
     return this.openAddPopup;
   }
 
-  get postListItems(): IPostModel[] & IPostInLinkModel[] {
+  get postListItems(): IPostModel[] {
     return this.postListData;
   }
 
-  get reservedItems(): IPostModel[] & IPostInLinkModel[]{
+  get reservedItems(): IPostModel[]{
     return this.reservedData;
   }
 
@@ -134,7 +140,7 @@ export default class PostModule extends VuexModule {
     return this.reservedTotal;
   }
 
-  get postDetailItem(): IPostModel & IPostInLinkModel{
+  get postDetailItem(): IPostModel{
     return this.postDetailData;
   }
 
@@ -150,12 +156,18 @@ export default class PostModule extends VuexModule {
     return this.voteData;
   }
 
-  get allMyClassPostsItems(): IPostModel[] & IPostInLinkModel[]{
+  get allMyClassPostsItems(): IPostModel[]{
     return this.allMyClassPosts;
   }
 
+
   @Mutation
-  public [SET_ALL_MY_CLASS_POST](  items: IPostModel[] & IPostInLinkModel[] ): void{
+  public [SET_POST_TOTAL]( total: number ): void{
+    this.postItemTotal=total;
+  }
+
+  @Mutation
+  public [SET_ALL_MY_CLASS_POST](  items: IPostModel[] ): void{
     this.allMyClassPosts=items;
   }
 
@@ -164,18 +176,26 @@ export default class PostModule extends VuexModule {
    * @param items
    */
   @Mutation
-  public [SET_POST_IN_BOOKMARK](  items: IPostModel[] & IPostInLinkModel[] ): void{
-    this.postListData=items;
+  public [SET_POST_IN_BOOKMARK](  items: IPostModel[] ): void{
+    //기존에 IPostModel[] & IPostInLinkModel[] 타입이였다.
+    //인터섹션 ( & ) 타입으로 지정된 데이터에 아래와 같이 전개연산자로(...)합칠때 에러 발생하니 유의~
+    this.postListData = [...this.postListData, ...items];
     //
     // this.postListData.reverse();
+
+    console.log(this.postListData);
 
 
     this.postListData.forEach(( item: any, index: number ) => {
       let {isBookmark}=item;
+
+      // console.log(item.user_keep_class_posts);
       //
-      if( item.user_keep_class_posts.length > 0){
-        isBookmark=!isBookmark;
-        this.postListData.splice(index, 1, {...item, isBookmark} );
+      if (item.user_keep_class_posts) {
+        if( item.user_keep_class_posts.length > 0){
+          isBookmark=!isBookmark;
+          this.postListData.splice(index, 1, {...item, isBookmark} );
+        }
       }
     });
   }
@@ -200,7 +220,7 @@ export default class PostModule extends VuexModule {
   }
 
   @Mutation
-  public [SET_POST_DETAIL]( data: IPostModel & IPostInLinkModel ){
+  public [SET_POST_DETAIL]( data: IPostModel ){
     this.postDetailData=data;
   }
 
@@ -235,7 +255,7 @@ export default class PostModule extends VuexModule {
 
 
   @Action({rawError: true})
-  public [GET_ALL_MY_CLASS_POST_LIST_ACTION]( paging: {page_no: number, count: number } ): Promise<IPostModel[] & IPostInLinkModel[]>{
+  public [GET_ALL_MY_CLASS_POST_LIST_ACTION]( paging: {page_no: number, count: number } ): Promise<IPostModel[]>{
     return PostService.getAllMyClassPosts( paging )
       .then((data) => {
         console.log(data);
@@ -256,7 +276,7 @@ export default class PostModule extends VuexModule {
    * @param payload
    */
   @Action({rawError: true})
-  public [GET_POST_LIST_ACTION]( payload: { classId: number,  paging: {page_no: number, count: number } }  ): Promise<IPostModel[] & IPostInLinkModel[]>{
+  public [GET_POST_LIST_ACTION]( payload: { classId: number,  paging: {page_no: number, count: number } }  ): Promise<IPostModel[]>{
     return PostService.getAllPostsByClassId( payload.classId, payload.paging)
       .then((data) => {
         // console.log(data);
@@ -264,8 +284,9 @@ export default class PostModule extends VuexModule {
         // console.log('noticeListItems=', this.postListData);
 
         this.context.commit(SET_POST_IN_BOOKMARK, data.post_list);
+        this.context.commit(SET_POST_TOTAL, data.total_count );
 
-        return Promise.resolve(this.postListItems);
+        return Promise.resolve( data.post_list );
       })
       .catch((error) => {
         console.log(error);
@@ -363,7 +384,7 @@ export default class PostModule extends VuexModule {
   }
 
   @Action({rawError: true})
-  public [GET_ALL_MY_CLASS_RESERVED_LIST_ACTION]( paging: {page_no: number, count: number }): Promise<IPostModel[] & IPostInLinkModel[]>{
+  public [GET_ALL_MY_CLASS_RESERVED_LIST_ACTION]( paging: {page_no: number, count: number }): Promise<IPostModel[]>{
     return PostService.getALLMyClassReservedPost( paging )
       .then((data)=>{
         // console.log(data);

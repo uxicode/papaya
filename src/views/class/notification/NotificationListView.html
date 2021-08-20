@@ -4,7 +4,11 @@
       <h3 class="fd-tit">{{ item.title }}</h3>
       <div class="fd-writer type2">
         <p class="writer">
-          <span class="name" :class="{'manager':isOwner( item.owner.user_id, item.user_id)}">{{ item.owner.nickname }}</span>
+          <span class="name" :class="{'manager':isOwner( item.owner.user_id, item.user_id)}">
+            {{ item.owner.nickname }}
+            {{ item.owner.user_id}}
+            {{ item.user_id }}
+          </span>
           <span class="time">{{ item.updatedAt }}</span>
           <span class="noti">{{ item.type===0? '일반' : '공지' }}</span>
         </p>
@@ -40,7 +44,7 @@
       </div>
     </div>
     <div class="fd-cnt" @click.stop="onDetailPostOpen(item.id)" style="cursor: pointer">
-        <p class="fd-txt">{{ item.text }}</p>
+        <p class="fd-txt word-bk">{{ item.text }}</p>
 
         <a href="" @click.prevent.stop="onDetailPostOpen(item.id)">
             <!-- start: attach 에 이미지파일이 있는 경우 -->
@@ -75,10 +79,6 @@
       <span class="fd-comment">댓글 {{ getCommentTotal( item.id ) }}</span>
     </div>
   </div>
-
- <!-- <div class="noti-add">
-    <a href="" class="classes-add-btn" @click.prevent="onAddPostPopupOpen"></a>
-  </div>-->
 
   <notify-detail-popup
           :is-open="isDetailPopupOpen"

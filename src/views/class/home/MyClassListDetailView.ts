@@ -88,7 +88,7 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
   private confirmDesc: string = '';
   //end : 공통 팝업 변수 ================================================
 
-  private noticePost: IPostModel[] & IPostInLinkModel[]=[];
+  private noticePost: IPostModel[]=[];
   private allData: any[] = [];
 
   @Schedule.Action

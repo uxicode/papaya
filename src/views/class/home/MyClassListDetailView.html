@@ -136,7 +136,7 @@
                 -->
               </div>
               <div class="fd-cnt" @click.stop.capture="onScheduleClick( item.list.id )" style="cursor:pointer;">
-                <p class="fd-txt">{{ item.list.text }}</p>
+                <p class="fd-txt word-bk">{{ item.list.text }}</p>
 
                 <div class="fd-inner">
                   <ul class="schedule-list">
@@ -192,7 +192,7 @@
                 </div>
               </div>
               <div class="fd-cnt" @click.capture="onCurriculumClick( item.list.id )" style="cursor: pointer;">
-                <p class="fd-txt">{{ item.list.text }}</p>
+                <p class="fd-txt word-bk">{{ item.list.text }}</p>
                 <p class="fd-txt">총 {{ item.list.course_list.length }}회의 수업이 있습니다.</p>
               </div>
             </div>
@@ -236,7 +236,7 @@
                 </div>
               </div>
               <div class="fd-cnt" @click.stop="onNotificationClick( item.list.id )" style="cursor:pointer">
-                <p class="fd-txt">{{ item.list.text }}</p>
+                <p class="fd-txt word-bk">{{ item.list.text }}</p>
 
                 <div class="fd-inner">
 
@@ -286,7 +286,7 @@
         </div>
 
         <button class="loader-checker" style="visibility: hidden;">loader checker</button>-->
-        <scroll-observer :is-loader="loaderModel" @viewportIn="scrollObserver"></scroll-observer>
+        <scroll-observer :is-loader="loaderModel" @update="scrollObserver"></scroll-observer>
 
         <!-- start: 일정 상세 팝업 -->
         <schedule-detail-popup

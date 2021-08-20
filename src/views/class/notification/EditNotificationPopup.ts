@@ -62,7 +62,7 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   private EDIT_POST!: ( info: { postId: number, editInfo: any })=> void;
 
   @Post.Mutation
-  private SET_POST_DETAIL!: ( data: IPostModel & IPostInLinkModel)=> void;
+  private SET_POST_DETAIL!: ( data: IPostModel)=> void;
 
   @Post.Action
   private ADD_POST_ACTION!: (payload: { classId: number; formData: FormData })=>Promise<any>;
@@ -92,7 +92,7 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   private myClassHomeModel!: IClassInfo;
 
   @Post.Getter
-  private postDetailItem!: IPostModel & IPostInLinkModel;
+  private postDetailItem!: IPostModel;
 
   @Post.Getter
   private commentItems!: any[];
@@ -166,7 +166,7 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   /**
    * 클릭한 상세 정보값이 들어오고 난 후에 postData 를 갱신해야 한다.
    */
-  get postDetailModel():  IPostModel & IPostInLinkModel{
+  get postDetailModel():  IPostModel{
     const {title, text, vote, link, attachment }=this.postDetailItem;
     // this.alarmData = { alarmAt };
     this.postData= { title, text };

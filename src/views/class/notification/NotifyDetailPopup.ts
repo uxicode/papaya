@@ -48,7 +48,7 @@ export default class NotifyDetailPopup extends Mixins(UtilsMixins) {
     private DELETE_POST_ACTION!: (payload: { classId: string | number, postId: number })=>Promise<any>;
 
     @Post.Getter
-    private postDetailItem!: IPostModel & IPostInLinkModel;
+    private postDetailItem!: IPostModel;
 
     @MyClass.Getter
     private classID!: string | number;
@@ -60,7 +60,7 @@ export default class NotifyDetailPopup extends Mixins(UtilsMixins) {
     private isEditPopupOpen: boolean=false;
     private detailPostId: number=-1; // 동적으로 변경 안되는 상태
 
-    get postDetailModel(): IPostModel & IPostInLinkModel{
+    get postDetailModel(): IPostModel{
         return this.postDetailItem;
     }
 
