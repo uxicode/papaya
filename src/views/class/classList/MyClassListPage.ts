@@ -10,6 +10,8 @@ import WithRender from './MyClassListPage.html';
 import {MYCLASS_LIST} from '@/store/mutation-class-types';
 import PagingMixins from '@/mixin/PagingMixins';
 import UtilsMixins from '@/mixin/UtilsMixins';
+import NoticeService from '@/api/service/NoticeService';
+import {INotice} from '@/views/model/notice.model';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
@@ -86,6 +88,7 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
   ];
   // private moreInfos: IClassMember[]=[];
   private moreInfos: ClassEachInfo[]=[];
+  private noticeList: INotice[] = [];
 
   @MyClass.Action
   private MYCLASS_LIST_ACTION!: ()=> Promise<IMyClassList[]>;
@@ -106,6 +109,12 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
 
 
   //start : get method ================================================
+  get noticeListModel(): INotice[] {
+    return this.noticeList;
+  }
+  get noticeTitle(): string{
+    return (this.noticeList.length>0)? this.noticeList[0].title : '';
+  }
   get classIdModel() {
     return this.classID;
   }
@@ -133,6 +142,7 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
  //start : public ================================================
   public created() {
     this.getMyClass();
+    this.getNoticeList();
   }
 
   public setClassItemLists(): void{
@@ -375,9 +385,7 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
       // console.log(data.length);
       //member_count ( 멤버수 )/ is_private ( 공개/비공개 )
       const member=data.map( (item: any ) => {
-
         // console.log(item.classinfo.is_private);
-
         return {
           member_count:item.classinfo.member_count,
           is_private:item.classinfo.is_private,
@@ -442,6 +450,18 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
              // console.log('MYCLASS_HOME 호출후 this.classID = ', this.classID, localStorage.getItem('classId'), this.classIdModel );
            });
        });
+  }
+
+  private getNoticeList() {
+    NoticeService.getAllNotice()
+      .then((data)=>{
+        this.noticeList = data.notice_list;
+      });
+  }
+
+  private onNoticeClick(): void {
+    console.log('공지 클릭');
+    this.$router.push({path: '/noticeBoard'});
   }
 
 

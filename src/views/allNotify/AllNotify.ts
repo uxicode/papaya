@@ -35,13 +35,13 @@ export default class AllNotify extends Vue {
     //// 추가된 목록 /////////
 
     @Post.Action
-    private GET_ALL_MY_CLASS_POST_LIST_ACTION!: ( paging: {page_no: number, count: number } )=>Promise<IPostModel[] & IPostInLinkModel[]>;
+    private GET_ALL_MY_CLASS_POST_LIST_ACTION!: ( paging: {page_no: number, count: number } )=>Promise<IPostModel[]>;
 
     @Post.Action
-    private GET_ALL_MY_CLASS_RESERVED_LIST_ACTION!: ( paging: {page_no: number, count: number })=>Promise<IPostModel[] & IPostInLinkModel[]>;
+    private GET_ALL_MY_CLASS_RESERVED_LIST_ACTION!: ( paging: {page_no: number, count: number })=>Promise<IPostModel[]>;
 
     @Post.Action
-    private GET_POST_LIST_ACTION!: (  payload: { classId: number, paging: {page_no: number, count: number } }) => Promise<IPostModel[] & IPostInLinkModel[]>;
+    private GET_POST_LIST_ACTION!: (  payload: { classId: number, paging: {page_no: number, count: number } }) => Promise<IPostModel[]>;
 
     @Post.Action
     private GET_RESERVED_LIST_ACTION!: (classId: number) => Promise<any>;
@@ -60,19 +60,19 @@ export default class AllNotify extends Vue {
     private classID!: string | number;
 
     @Post.Getter
-    private postListItems!: IPostModel[] & IPostInLinkModel[];
+    private postListItems!: IPostModel[];
 
     @Post.Getter
-    private allMyClassPostsItems!: IPostModel[] & IPostInLinkModel[];
+    private allMyClassPostsItems!: IPostModel[];
 
     @Post.Getter
-    private reservedItems!: IPostModel[] & IPostInLinkModel[];
+    private reservedItems!: IPostModel[];
 
     @Post.Getter
     private reservedTotalItem!: number;
 
 
-    // private postListItems: IPostModel[] & IPostInLinkModel[]= [];
+    // private postListItems: IPostModel[]= [];
     // private reservedItems: any[] = [];
     private reservedTotal: number=0;
     private isAddPopupOpen: boolean=false;

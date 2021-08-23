@@ -3,8 +3,7 @@
     <div class="notice-cnt">
       <p class="notice-tit">
         <strong>Notice</strong>
-        <span>파파야 웹사이트 2.0 업데이트</span>
-        <a href=""><img :src="require('@/assets/images/arrow-right-small.png')" alt="" style="height:16px;"></a>
+        <a href="" @click.prevent="onNoticeClick"><span>{{ noticeTitle | split(15)  }}</span><img :src="require('@/assets/images/arrow-right-small.png')" alt="" style="height:16px;"></a>
       </p>
     </div>
   </div>

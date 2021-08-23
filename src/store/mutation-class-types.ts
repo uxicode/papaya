@@ -30,3 +30,4 @@ export const DELETE_KEEP_SCHEDULE: string = 'DELETE_KEEP_SCHEDULE';
 export const SET_ALL_MY_CLASS_LIST: string = 'SET_ALL_MY_CLASS_LIST';
 export const SET_ALL_MY_SCHEDULE: string = 'SET_ALL_MY_SCHEDULE';
 export const SET_ALL_MY_CLASS_POST: string = 'SET_ALL_MY_CLASS_POST';
+export const SET_POST_TOTAL: string = 'SET_POST_TOTAL';

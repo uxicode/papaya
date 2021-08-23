@@ -11,10 +11,9 @@ import ListInLinkPreview from '@/components/preview/ListInLinkPreview.vue';
 import NotifyDetailPopup from '@/views/class/notification/NotifyDetailPopup';
 import EditNotificationPopup from '@/views/class/notification/EditNotificationPopup';
 import NoticePopup from '@/components/modal/noticePopup.vue';
+
 import MyClassService from '@/api/service/MyClassService';
 import {IUserMe} from '@/api/model/user.model';
-import {ImageFileService} from '@/views/service/preview/ImageFileService';
-import {AttachFileService} from '@/views/service/preview/AttachFileService';
 import UtilsMixins from '@/mixin/UtilsMixins';
 import WithRender from './NotificationListView.html';
 
@@ -33,13 +32,13 @@ const Post = namespace('Post');
     ListInLinkPreview,
     NotifyDetailPopup,
     EditNotificationPopup,
-    NoticePopup
+    NoticePopup,
   }
 })
 export default class NotificationListView extends Mixins(UtilsMixins) {
 /*
   @Prop(Array)
-  private readonly postListItems!: IPostModel[] & IPostInLinkModel[];
+  private readonly postListItems!: IPostModel[];
 */
 
   @Prop(Array)
@@ -65,7 +64,7 @@ export default class NotificationListView extends Mixins(UtilsMixins) {
   private userInfo!: IUserMe | null;
 
   @Post.Getter
-  private postListItems!: IPostModel[] & IPostInLinkModel[];
+  private postListItems!: IPostModel[];
 
   private isDetailPopupOpen: boolean=false;
   private isEditPopupOpen: boolean=false;
@@ -75,10 +74,11 @@ export default class NotificationListView extends Mixins(UtilsMixins) {
   private isNoticePopupOpen: boolean=false;
   private currentUserAuth: number=-1;
 
-
   get detailPostIdModel() {
     return this.detailPostId;
   }
+
+
 
   public created() {
     //currentUserAuth
@@ -92,6 +92,7 @@ export default class NotificationListView extends Mixins(UtilsMixins) {
       return Promise.reject( false );
     });
   }
+
 
 
   public getVoteListLen( item: any ) {
