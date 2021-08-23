@@ -26,7 +26,10 @@
             <button type="button" class="btn form-btn form-calendar" v-on="on"></button>
           </template>
           <!-- no-title //상단에 타이틀 성격의 날짜 없앰  hide-details  상세 텍스트 제거 -->
-          <v-date-picker v-model="startDatePickerModel" no-title @input="startDatePickerChange"></v-date-picker>
+          <v-date-picker v-model="startDatePickerModel" no-title
+                         :event-color="date => date[9] % 2 ? 'red' : 'yellow'"
+                         :events="pickerEvents"
+                         @input="startDatePickerChange"></v-date-picker>
         </v-menu>
 
       </div>

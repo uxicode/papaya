@@ -1,16 +1,16 @@
 import {Component, Mixins, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {getAllPromise} from '@/types/types';
-import { IPostInLinkModel, IPostModel} from '@/views/model/post.model';
+import {IPostModel} from '@/views/model/post.model';
 import {CommentService} from '@/api/service/CommentService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import ScrollObserver from '@/components/scrollObserver/ScrollObserver.vue';
 import AddNotifyPopup from '@/views/class/notification/AddNotifyPopup';
 import NotificationListView from '@/views/class/notification/NotificationListView';
-import WithRender from './NotificationPage.html';
 import PagingMixins from '@/mixin/PagingMixins';
-import {SET_POST_IN_BOOKMARK} from '@/store/mutation-class-types';
+import WithRender from './NotificationPage.html';
+import {Utils} from '@/utils/utils';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -73,6 +73,7 @@ export default class NotificationPage extends Mixins(PagingMixins) {
   private currentPageCount: number=1;
   private numOfPage: number=10;
   private lastPageCount: number=-1;
+  private eventDates: string[] = [];
 
 
   get loaderModel() {
@@ -97,12 +98,43 @@ export default class NotificationPage extends Mixins(PagingMixins) {
     if (this.$route.query.sideNum && this.$route.query.sideNum !== '') {
       this.$emit('sideNum', Number(this.$route.query.sideNum));
     }
+
+    //중복값 카운트
+    const isDup=( arr: any[] )=>{
+      const result: { [key: string]: number } = {};
+      arr.forEach( (x: string) => {
+        result[x]= (result[x] || 0)+1;
+      });
+      return result;
+    };
+
+    const dupNumToArr=( obj: { [key: string]: string | number} )=>{
+      const arr=[];
+      for( const [key, value] of Object.entries(obj) ){
+        console.log(key, value);
+        arr.push({ result: key, count: value });
+      }
+      return arr;
+    };
+
+
+    const uniqArray=(arr: any[]) =>{
+      return [...new Set(arr)];
+    };
+
     this.getList().then(
       (data)=>{
         this.isPageLoaded=true;
         const {lastPage}=this.updatePaging(this.postTotal, this.numOfPage);
         this.lastPageCount=lastPage;
-        console.log('this.lastPageCount=', this.lastPageCount);
+
+        //datepicker 일정 표기할 배열
+        this.eventDates = this.postListItems.map((item) => {
+          // console.log(item);
+          return Utils.getTodayParseFormat( new Date( item.createdAt ) );
+        });
+        const dupCvToArr = dupNumToArr( isDup( this.eventDates ) );
+        console.log('dupCvToArr=', dupCvToArr);
       }
     );
   }
@@ -191,6 +223,26 @@ export default class NotificationPage extends Mixins(PagingMixins) {
   private startDatePickerChange( ) {
     this.startDateMenu = false;
     // console.log(this.startDatePickerModel);
+  }
+
+  private pickerEvents(date: any) {
+    console.log(date);
+    const [, , day] = date.split('-');
+    console.log(day);
+    const [year, month, ]= Utils.getTodayFullValue(new Date());
+    const dayItems=Utils.getDaysInMonth(year, month);
+    const dayNums=Array.from({length: dayItems}, (v, i) => i);
+
+
+    /*
+   if( dayNums.includes( parseInt(day, 10) ) ) {
+     return ['red', '#00f'];
+   }*/
+
+    /*const [,, day] = date.split('-')
+    if ([12, 17, 28].includes(parseInt(day, 10))) return true
+    if ([1, 19, 22].includes(parseInt(day, 10))) return ['red', '#00f']*/
+    return false;
   }
 
   private onAddPostPopupStatus(value: boolean) {
