@@ -223,14 +223,9 @@ export default class NotificationPage extends Mixins(PagingMixins) {
     // console.log(this.startDatePickerModel);
   }
 
-  private onClickPickerDay( day: any ) {
-    console.log(day);
-  }
-
   private pickerEvents(date: any ) {
     //여기서 date 매개변수는 해당 월의 날짜 모두를 호출하기에 해당 날짜개수 만큼 for 문이 돌고 있다고 생각하면 된다.
     const [, month, day] = date.split('-');
-
 
     const matchDate=this.eventDates.map((item)=>{
       const [, cMonth, cDay]=item.result.split('-');
