@@ -39,7 +39,10 @@
                 <p class="add-curr-tit">수업 회차</p>
                 <div class="form-box">
                   <div class="form-group">
-                    <input type="number" class="form-control" v-model="curriculumDetailDataNum" @input="setCourseList($event.target.value)">
+                    <input type="number"
+                           class="form-control"
+                           v-model="curriculumDetailDataNum"
+                           @input="setCourseList($event.target.value)">
                   </div>
                 </div>
               </div>
@@ -98,5 +101,12 @@
         @change="onModifyCoursePopupStatus"
         @modifyCourse="getModifyCourseData">
   </modify-course-popup>
+
+  <notice-popup
+        :is-open="isOpenError"
+        title="수업 회차 초과"
+        msg="수업은 최대 10개까지 생성가능합니다."
+        @change="onDeleteNoticePopupClose">
+  </notice-popup>
 
 </div>

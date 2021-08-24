@@ -1,8 +1,10 @@
 import {Vue, Component, Prop} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import TxtField from '@/components/form/txtField.vue';
-import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
+import Modal from '@/components/modal/modal.vue';
+import NoticePopup from '@/components/modal/noticePopup.vue';
+import ModifyCoursePopup from '@/views/class/curriculum/ModifyCoursePopup';
 import {
     IClassInfo,
     ICurriculumDetailList,
@@ -10,7 +12,6 @@ import {
     IModifyCurriculum,
 } from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
-import ModifyCoursePopup from '@/views/class/curriculum/ModifyCoursePopup';
 import WithRender from './ModifyCurriculumPopup.html';
 
 const MyClass = namespace('MyClass');
@@ -19,8 +20,9 @@ const MyClass = namespace('MyClass');
 @Component({
     components:{
         TxtField,
-        Modal,
         Btn,
+        Modal,
+        NoticePopup,
         ModifyCoursePopup,
     }
 })
@@ -61,8 +63,8 @@ export default class ModifyCurriculumPopup extends Vue {
 
     /* 수정할 값 */
     private formData: FormData = new FormData();
-    private curriculumDetailDataNum: number = 0;
     private eduItems: Array< {title: string }>=[];
+    private curriculumDetailDataNum: number = this.courseListNumModel.length;
 
     private modifyCurriculumData: IModifyCurriculum = {
         title: '',
@@ -82,6 +84,9 @@ export default class ModifyCurriculumPopup extends Vue {
     };
 
     private modifyCourseList: IModifyCourse[] = [];
+
+
+    private isOpenError: boolean = false;
 
     get curriculumDetailItemModel(): any {
         return this.curriculumDetailItem;
@@ -108,12 +113,12 @@ export default class ModifyCurriculumPopup extends Vue {
             this.curriculumDetailDataNum=num;
             this.eduItems.length=num;
 
-            if( this.curriculumDetailDataNum > 50){
-                // this.isOpenError = true;
+            if( this.curriculumDetailDataNum > 10){
+                this.isOpenError = true;
 
-                num = 50;
-                this.curriculumDetailDataNum=50;
-                this.eduItems.length=50;
+                num = 10;
+                this.curriculumDetailDataNum=10;
+                this.eduItems.length=10;
             }
         }
 
@@ -210,6 +215,10 @@ export default class ModifyCurriculumPopup extends Vue {
 
     private popupChange( value: boolean ) {
         this.$emit('change', value);
+    }
+
+    private onDeleteNoticePopupClose( value: boolean ) {
+        this.isOpenError=value;
     }
 
 }
