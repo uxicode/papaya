@@ -208,15 +208,6 @@ export default class ScheduleView extends Vue{
         this.currentDates = Utils.getTodayFullValue(new Date());
         this.currentYears = this.currentDates[0];
         this.currentMonth = this.currentDates[1];
-
-        // console.log(Date.UTC(2021, 3, 30, 4, 28, 0));
-        const rule = new RRule({
-            freq: RRule.WEEKLY,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
-            dtstart: new Date( Date.UTC(2021, 3, 30, 4, 28, 0)),
-            count: 30,
-            interval: 1
-        });
-        // console.log(rule.all());
     }
 
     public headerDepthChange( isDepth: boolean=true ) {
@@ -267,6 +258,7 @@ export default class ScheduleView extends Vue{
         const {from, to} = this.getFromToMonth();
 
         //스케쥴 내용을 다 가져올 필요 없이 현재 해당하는 월의 일정만 가져온다.
+        // schedule.module.ts 에서 scheduleListItems 에 스케줄이 저장된다.
         await this.GET_SCHEDULE_BY_MONTH_ACTION({
             classId: Number( this.classID ),
             month: {from: `${this.currentYears}${from}`, to: `${this.currentYears}${to}`}
@@ -277,8 +269,27 @@ export default class ScheduleView extends Vue{
                 if (this.events && this.events.length > 0) {
                     this.events = [];
                 }
+
+                console.log(data);
             });
 
+
+        // Create a rule:
+        /*const rule = new RRule({
+            freq: RRule.WEEKLY,
+            interval: 5,
+            byweekday: [RRule.MO, RRule.FR],
+            dtstart: new Date(Date.UTC(2012, 1, 1, 10, 30)),
+            until: new Date(Date.UTC(2012, 12, 31))
+        })*/
+        // console.log(Date.UTC(2021, 3, 30, 4, 28, 0));
+        const rule = new RRule({
+            freq: RRule.WEEKLY,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
+            dtstart: new Date( Date.UTC(2021, 3, 30, 4, 28, 0)),
+            count: 30,
+            interval: 1
+        });
+        // console.log(rule.all());
     }
 
     /**
