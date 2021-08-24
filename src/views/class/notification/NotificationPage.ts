@@ -11,6 +11,7 @@ import NotificationListView from '@/views/class/notification/NotificationListVie
 import PagingMixins from '@/mixin/PagingMixins';
 import WithRender from './NotificationPage.html';
 import {Utils} from '@/utils/utils';
+import {RESET_POST_LIST} from '@/store/mutation-class-types';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -38,7 +39,7 @@ export default class NotificationPage extends Mixins(PagingMixins) {
   private DELETE_POST_ACTION!: (payload: { classId: string | number, postId: number })=>Promise<any>;
 
   @Post.Mutation
-  private SET_POST_IN_BOOKMARK!: (  items: IPostModel[] )=>void;
+  private RESET_POST_LIST!: () =>void;
 
   @MyClass.Getter
   private classID!: string | number;
@@ -73,8 +74,7 @@ export default class NotificationPage extends Mixins(PagingMixins) {
   private currentPageCount: number=1;
   private numOfPage: number=10;
   private lastPageCount: number=-1;
-  private eventDates: string[] = [];
-
+  private eventDates: any[] = [];
 
   get loaderModel() {
     return this.isLoader;
@@ -93,51 +93,43 @@ export default class NotificationPage extends Mixins(PagingMixins) {
     return this.commentsTotalItems;
   }
 
+  get currentDate() {
+    return Utils.getCustomFormatDate(new Date(), '-');
+  }
+
   public created() {
-    console.log( this.$route.query.sideNum );
+    // console.log( this.$route.query.sideNum );
     if (this.$route.query.sideNum && this.$route.query.sideNum !== '') {
       this.$emit('sideNum', Number(this.$route.query.sideNum));
     }
 
-    //중복값 카운트
-    const isDup=( arr: any[] )=>{
-      const result: { [key: string]: number } = {};
-      arr.forEach( (x: string) => {
-        result[x]= (result[x] || 0)+1;
-      });
-      return result;
-    };
-
-    const dupNumToArr=( obj: { [key: string]: string | number} )=>{
-      const arr=[];
-      for( const [key, value] of Object.entries(obj) ){
-        console.log(key, value);
-        arr.push({ result: key, count: value });
-      }
-      return arr;
-    };
-
-
-    const uniqArray=(arr: any[]) =>{
-      return [...new Set(arr)];
-    };
-
-    this.getList().then(
-      (data)=>{
+    this.getList()
+      .then((data)=>{
         this.isPageLoaded=true;
         const {lastPage}=this.updatePaging(this.postTotal, this.numOfPage);
         this.lastPageCount=lastPage;
 
         //datepicker 일정 표기할 배열
-        this.eventDates = this.postListItems.map((item) => {
-          // console.log(item);
+        const eventDates = this.postListItems.map((item) => {
           return Utils.getTodayParseFormat( new Date( item.createdAt ) );
         });
-        const dupCvToArr = dupNumToArr( isDup( this.eventDates ) );
-        console.log('dupCvToArr=', dupCvToArr);
-      }
-    );
+        this.eventDates= Utils.getDuplicateArrayCheck( eventDates );
+
+      });
   }
+
+  /**
+   * 이 훅은 해체(뷰 인스턴스 제거)되기 직전에 호출된다. 컴포넌트는 원래 모습과 모든 기능들을 그대로 가지고 있다.
+   * 이벤트 리스너를 제거하거나 reactive subscription 을 제거하고자 할때 사용.
+   */
+  public beforeDestroy() {
+    //store 에 저장되기 때문에 새로고침되지 않는 이상 리스트 내용은 계속 적재 된다.
+    //따라서 다른 컴포넌트로 이동시 리스트 데이터를 비워둔다.
+    this.RESET_POST_LIST();
+  }
+
+
+
 
   private async getList() {
     //알림 가져오기
@@ -166,7 +158,7 @@ export default class NotificationPage extends Mixins(PagingMixins) {
   private scrollObserver( value: boolean ) {
     this.isLoader=value;
 
-    console.log('scrollObserver 실행 ');
+    // console.log('scrollObserver 실행 ');
     //여기에 리스트 업데이트
     this.updateContents()
       .then(()=>{
@@ -180,11 +172,17 @@ export default class NotificationPage extends Mixins(PagingMixins) {
       this.getList()
         .then(() => {
           this.isPageLoaded = true;
+          //datepicker 일정 표기할 배열
+          const eventDates = this.postListItems.map((item) => {
+            return Utils.getTodayParseFormat( new Date( item.createdAt ) );
+          });
+          this.eventDates= Utils.getDuplicateArrayCheck( eventDates );
+          console.log(this.eventDates);
         });
     }else{
       this.currentPageCount=this.lastPageCount;
     }
-    console.log(this.lastPageCount, this.currentPageCount);
+    // console.log(this.lastPageCount, this.currentPageCount);
   }
 
   private updatePaging( totalNum: number, numOfPage: number ) {
@@ -225,23 +223,33 @@ export default class NotificationPage extends Mixins(PagingMixins) {
     // console.log(this.startDatePickerModel);
   }
 
-  private pickerEvents(date: any) {
-    console.log(date);
-    const [, , day] = date.split('-');
+  private onClickPickerDay( day: any ) {
     console.log(day);
-    const [year, month, ]= Utils.getTodayFullValue(new Date());
-    const dayItems=Utils.getDaysInMonth(year, month);
-    const dayNums=Array.from({length: dayItems}, (v, i) => i);
+  }
+
+  private pickerEvents(date: any ) {
+    //여기서 date 매개변수는 해당 월의 날짜 모두를 호출하기에 해당 날짜개수 만큼 for 문이 돌고 있다고 생각하면 된다.
+    const [, month, day] = date.split('-');
 
 
-    /*
-   if( dayNums.includes( parseInt(day, 10) ) ) {
-     return ['red', '#00f'];
-   }*/
+    const matchDate=this.eventDates.map((item)=>{
+      const [, cMonth, cDay]=item.result.split('-');
+      let result=null;
+      //중복값 있을때
+      if (Number(month) === Number(cMonth) && [Number(cDay)].includes( parseInt(day, 10) )) {
+        result=(item.count > 1)? ['red', '#00f'] : true;
+      }else{
+        result=false;
+      }
+      return result;
+    }).filter((item)=>item!==false );
 
-    /*const [,, day] = date.split('-')
-    if ([12, 17, 28].includes(parseInt(day, 10))) return true
-    if ([1, 19, 22].includes(parseInt(day, 10))) return ['red', '#00f']*/
+
+    if (matchDate[0]) {
+      console.log(matchDate[0]);
+      return matchDate[0];
+    }
+
     return false;
   }
 

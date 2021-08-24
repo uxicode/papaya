@@ -10,7 +10,8 @@ import {
   EDIT_POST,
   DELETE_POST,
   SET_ALL_MY_CLASS_POST,
-  SET_POST_TOTAL
+  SET_POST_TOTAL,
+  RESET_POST_LIST
 } from '@/store/mutation-class-types';
 import {
   GET_POST_LIST_ACTION,
@@ -197,6 +198,10 @@ export default class PostModule extends VuexModule {
     });
   }
 
+  @Mutation
+  public [RESET_POST_LIST](): void{
+    this.postListData = [];
+  }
 
   /**
    * 예약 알림 글 데이터 저장
