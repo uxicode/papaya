@@ -96,16 +96,18 @@ export default class ScheduleView extends Vue{
     ];*/
     private weekdays: number[] = [1, 2, 3, 4, 5, 6, 0];
 
+    private mode: string='stack';
+
     // private selectedEvent ={};
     // private selectedElement: HTMLElement | null=null;
     private selectedOpen: boolean= false;
-    private typeToLabel = {
-        'month': '월간',
-        'week': '주간',
-        'day': '일간',
-        '4day': '4일',
-        'custom-daily': '3일',
-    };
+    private selectTypeTxt = '월간';
+    private typeToLabel = [
+        { type:'month', txt:'월간' },
+        { type:'week', txt:'주간' },
+        { type:'day', txt:'일간' },
+        { type:'4day', txt:'4일' },
+    ];
 
     private calendarModel: string=new Date().toISOString().substr(0, 10); ///// '2020-3-01';
     private events: any[] = [];
@@ -167,6 +169,9 @@ export default class ScheduleView extends Vue{
         startAt:new Date(),  //2019-11-15 10:00:00
         endAt: new Date()
     };*/
+    get calendarType(): string {
+        return this.type;
+    }
     get updateNoticeTitle(): string{
         return this.noticeTitle;
     }
@@ -281,7 +286,7 @@ export default class ScheduleView extends Vue{
                     this.events = [];
                 }
 
-                console.log(data);
+
             });
 
 
@@ -295,26 +300,6 @@ export default class ScheduleView extends Vue{
         })*/
         // console.log(Date.UTC(2021, 3, 30, 4, 28, 0));
 
-           //type: repeat_type,
-           //count: repeat_count
-        //0 - 없음 , 1 - 매일 , 2 - 매주 , 3 - 2주마다 , 4 - 매월 , 5 - 매년  /  ( api 서버에 설정되어 있는 값임 )
-        const rruleItems=this.scheduleListItems.filter((item: IScheduleTotal) => item.type !== 0);
-        console.log(rruleItems);
-        const rule = new RRule({
-            freq: RRule.WEEKLY,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
-            dtstart: new Date( Date.UTC(2021, 3, 1, 4, 28) ),
-            until: new Date(Date.UTC(2021, 4, 31)),
-            interval: 1,
-            count: 30
-        });
-
-        rule.all().map( (date: any) =>{
-            console.log( date, Utils.getCustomFormatDate(new Date( date ), '-' ), Utils.getFullTimes( new Date(date) ) );
-            /*DateTime.fromJSDate( date )
-              .toUTC()
-              .setZone('local', { keepLocalTime: true })
-              .toJSDate();*/
-        });
     }
 
     /**
@@ -322,6 +307,52 @@ export default class ScheduleView extends Vue{
      * @private
      */
     private updateClassScheduleEvent() {
+
+        console.log(this.scheduleListItems);
+
+        //type: repeat_type,
+        //count: repeat_count
+        //0 - 없음 , 1 - 매일 , 2 - 매주 , 3 - 2주마다 , 4 - 매월 , 5 - 매년  /  ( api 서버에 설정되어 있는 값임 )
+        const rruleItems=this.scheduleListItems.filter((item: IScheduleTotal) => {
+            // console.log(item.type, item.count);
+            return ( item.type!==0 && item.count>0);
+        });
+        console.log(rruleItems);
+        let toFreq: number=0;
+        const rruleSet = [];
+        rruleItems.forEach((item)=>{
+            if (item.type === 1) {
+                toFreq= RRule.DAILY;
+            }else if (item.type === 2) {
+                toFreq= RRule.WEEKLY;
+            }else if (item.type === 4) {
+                toFreq= RRule.MONTHLY;
+            }else if (item.type === 5) {
+                toFreq =RRule.YEARLY;
+            }
+
+
+            const rule = new RRule({
+                freq: toFreq,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
+                dtstart: new Date( item.startAt ), //new Date( Date.UTC(2021, 3, 1, 4, 28) )
+                until: new Date( Date.UTC(2021, 9, 30, 24, 0) ),
+                interval: 1,
+                count: item.count,
+                byweekday: [RRule.MO, RRule.TU]
+            });
+
+            //카운트 계산 ( 매일/매주/매달/매년 ) , 반복 주기 - 매주 일때 요일 구분해서 데이터 삽입해야 함
+            rule.all().map( (date: any) =>{
+                console.log( date, Utils.getCustomFormatDate(new Date( date ), '-' ), Utils.getFullTimes( new Date(date) ) );
+            });
+            rruleSet.push(rule);
+            // console.log(rule);
+        });
+
+
+
+
+
         //스케줄 데이터 모델이 전부 안착되면 ---> v-canlendar 가 요구하는 속성값( 이벤트 )이 들어 있는 배열 을 지정해주어야 한다.
         this.scheduleListsModel.forEach((item, idx )=>{
             // console.log(idx);
@@ -633,11 +664,22 @@ export default class ScheduleView extends Vue{
 
     /**
      * 상단 월 달력 header 에 custom 요일 표시
-     * @param d
+     * @param dateValue
      * @private
      */
-    private getDay(d: any): string {
-        const dayIdx = (d.weekday - 1 < 0) ? this.daysOfWeek.length - 1 : d.weekday - 1;
+    private getDay( dateValue: {
+        day: number,
+        future: number,
+        hasDay: boolean
+        hasTime: boolean
+        hour: number
+        minute: number
+        month: number
+        past: boolean
+        present: boolean
+        time: string
+        weekday: number } ) {
+        const dayIdx = (dateValue.weekday - 1 < 0) ? this.daysOfWeek.length - 1 : dateValue.weekday - 1;
         return this.daysOfWeek[dayIdx];
     }
 
@@ -648,6 +690,12 @@ export default class ScheduleView extends Vue{
      */
     private getEventColor(event: CalendarEvent): string {
         return event.color;
+    }
+
+
+    private onChangeType( item: { type: string, txt: string }) {
+        this.type = item.type;
+        this.selectTypeTxt=item.txt;
     }
 
     private extendBottom(event: any ) {

@@ -46,6 +46,7 @@
       <v-toolbar-title v-if="$refs.calendar" class="ml-4 ft-bold">{{ $refs.calendar.title }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn rounded depressed class="mr-4" @click="setToday">오늘</v-btn>
+
       <v-menu bottom right>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -54,15 +55,18 @@
                   v-bind="attrs"
                   v-on="on"
                   min-width="100px">
-            <span>{{ typeToLabel[type] }}</span>
+            <span>{{ selectTypeTxt }}</span>
             <v-icon right>mdi-menu-down</v-icon>
           </v-btn>
         </template>
         <v-list>
-          <v-list-item @click="type = 'day'">
-            <v-list-item-title>일간</v-list-item-title>
+          <v-list-item
+                  v-for="( item, index ) in typeToLabel"
+                  :key="`select-opt-${index}`"
+                  @click="onChangeType( item )">
+            <v-list-item-title>{{ item.txt }}</v-list-item-title>
           </v-list-item>
-          <v-list-item @click="type = 'week'">
+          <!--<v-list-item @click="type = 'week'">
             <v-list-item-title>주</v-list-item-title>
           </v-list-item>
           <v-list-item @click="type = 'month'">
@@ -70,7 +74,7 @@
           </v-list-item>
           <v-list-item @click="type = '4day'">
             <v-list-item-title>4 days</v-list-item-title>
-          </v-list-item>
+          </v-list-item>-->
         </v-list>
       </v-menu>
     </v-toolbar>
@@ -96,18 +100,20 @@
             color="primary"
             :events="scheduleEvents"
             :event-color="getEventColor"
-            :type="type"
+            :type="calendarType"
             :weekdays="weekdays"
             :weekday-format="getDay"
             :day-format="(timestamp) => new Date(timestamp.date).getDate()"
             :month-format="(timestamp)=> (new Date(timestamp.date).getMonth()+1)+'월' "
+            :event-overlap-mode="mode"
+            :event-overlap-threshold="30"
             @change="updateRange"
             @click:more="viewDay"
             @click:event="scheduleDetailViewEvent">
-      <template v-slot:event="{ event, timed, eventSummary }">
+     <!-- <template v-slot:event="{ event, timed, eventSummary }">
         <div class="v-event-draggable" v-html="eventSummary()"></div>
         <div v-if="timed" class="v-event-drag-bottom" @mousedown.stop="extendBottom(event)"></div>
-      </template>
+      </template>-->
     </v-calendar>
 
     <!-- start: 상세내역 팝업 -->
