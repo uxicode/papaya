@@ -1,7 +1,6 @@
 <section class="contents-right">
   <div class="classes-feed home" v-if="isPageLoaded">
     <h2 class="cnt-tit mgb-30">클래스 홈</h2>
-
     <div class="top-notify" v-if="this.noticePost.length>0">
       <div class="accordion">
         <!-- accordion 1-->
@@ -78,17 +77,20 @@
         <!-- //accordion 1-->
       </div>
     </div>
-    <div class="no-notify" v-if="allDataModel.length===0">
-      <div class="no-data">
-        <img :src="require('@/assets/images/icn-80-class.svg')" alt="">
-        <p>등록된 게시글이 없습니다.</p>
-        <span>왼편의 메뉴를 통해서 첫 게시글을 작성해 보세요.</span>
-      </div>
+    <template v-if="allDataModel.length===0">
+      <div class="no-notify">
+        <div class="no-data">
+          <img :src="require('@/assets/images/icn-80-class.svg')" alt="">
+          <p>등록된 게시글이 없습니다.</p>
+          <span>왼편의 메뉴를 통해서 첫 게시글을 작성해 보세요.</span>
+        </div>
 
-      <div class="noti-add">
-        <a href="" class="classes-add-btn"></a>
+        <div class="noti-add">
+          <a href="" class="classes-add-btn"></a>
+        </div>
       </div>
-    </div>
+    </template>
+
     <template v-else>
       <template v-if="isMember">
         <template v-for="i in allDataModel.length">
@@ -277,15 +279,6 @@
 
           </template>
         </template>
-        <!--<div class="loader-container">
-          <div class="hollow-dots-spinner">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-          </div>
-        </div>
-
-        <button class="loader-checker" style="visibility: hidden;">loader checker</button>-->
         <scroll-observer :is-loader="loaderModel" @update="scrollObserver"></scroll-observer>
 
         <!-- start: 일정 상세 팝업 -->
@@ -306,7 +299,6 @@
                 :is-open="isOpenDetailNotification"
                 @change="onDetailPostPopupStatus"></notify-detail-popup>
         <!-- end: 알림 상세 팝업 -->
-
 
       </template>
       <template  v-for="item in allDataModel" v-else>

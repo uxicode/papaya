@@ -62,11 +62,12 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
 
   private loopRangeModel: string = '반복없음';
+  //0 - 없음 , 1 - 매일 , 2 - 매주 , 3 - 2주마다 , 4 - 매월 , 5 - 매년  /  ( api 서버에 설정되어 있는 값임 )
   private loopRangeItems: Array<{id: number, txt: string}>= [
     {id:0, txt:'반복없음'},
     {id:1, txt:'매일'},
     {id:2, txt:'매주'},
-    {id:3, txt:'2주마다'},
+    // {id:3, txt:'2주마다'},
     {id:4, txt:'매월'},
     {id:5, txt:'매년'}
   ];
