@@ -285,26 +285,26 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
     const postItems=await this.updateCallApi('post');
 
     this.validContents(collections, scheduleItems, curriculumItems, postItems);
-    // console.log(collections.length);
-    if (collections.length < 1) {
-      return;
+
+    console.log(collections.length);
+    if (collections.length >0) {
+      await getAllPromise( collections )
+        .then( ( items: any )=>{
+
+          // console.log(max);
+          // console.log( items );
+          // this.noticeSchedule=data[0].class_schedule_list.filter((item: any) =>item.type===1 );
+
+          const allItems=this.shuffleContents( collections );
+
+          this.allData = [...this.allData, ...allItems];
+          // console.log(this.allData);
+          // const allData=[ ...data[0].post_list,  ...data[1].class_schedule_list, ...data[2].curriculum_list];
+        }).catch((error)=>{
+          console.log('클래스 홈 error', error );
+        });
     }
 
-    await getAllPromise( collections )
-      .then( ( items: any )=>{
-
-        // console.log(max);
-        // console.log( items );
-        // this.noticeSchedule=data[0].class_schedule_list.filter((item: any) =>item.type===1 );
-
-        const allItems=this.shuffleContents(collections);
-
-        this.allData = [...this.allData, ...allItems];
-        // console.log(this.allData);
-        // const allData=[ ...data[0].post_list,  ...data[1].class_schedule_list, ...data[2].curriculum_list];
-      }).catch((error)=>{
-        console.log('클래스 홈 error', error );
-      });
   }
 
 
@@ -341,7 +341,13 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
 
 
       const allCollection=[ scheduleItems, curriculumItems, postsItems ];
-      await getAllPromise( allCollection )
+
+      this.updateContents()
+        .then(()=>{
+          this.isLoader=false;
+          this.noticeSchedule=scheduleItems.class_schedule_list.filter((item: any) =>item.type===1 );
+        });
+      /*await getAllPromise( allCollection )
         .then( ( data: any )=>{
 
         // console.log(max);
@@ -355,7 +361,7 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
         // const allData=[ ...data[0].post_list,  ...data[1].class_schedule_list, ...data[2].curriculum_list];
       }).catch((error)=>{
         console.log('클래스 홈 error', error );
-      });
+      });*/
     }else{
       await PostService.getAllPostsByClassId( this.classID, { page_no: 1, count:10})
         .then( (data)=>{

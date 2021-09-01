@@ -1,16 +1,17 @@
 import {Component, Mixins, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {getAllPromise} from '@/types/types';
-import { IPostInLinkModel, IPostModel} from '@/views/model/post.model';
+import {IPostModel} from '@/views/model/post.model';
 import {CommentService} from '@/api/service/CommentService';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import ScrollObserver from '@/components/scrollObserver/ScrollObserver.vue';
 import AddNotifyPopup from '@/views/class/notification/AddNotifyPopup';
 import NotificationListView from '@/views/class/notification/NotificationListView';
-import WithRender from './NotificationPage.html';
 import PagingMixins from '@/mixin/PagingMixins';
-import {SET_POST_IN_BOOKMARK} from '@/store/mutation-class-types';
+import WithRender from './NotificationPage.html';
+import {Utils} from '@/utils/utils';
+import {RESET_POST_LIST} from '@/store/mutation-class-types';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -38,7 +39,7 @@ export default class NotificationPage extends Mixins(PagingMixins) {
   private DELETE_POST_ACTION!: (payload: { classId: string | number, postId: number })=>Promise<any>;
 
   @Post.Mutation
-  private SET_POST_IN_BOOKMARK!: (  items: IPostModel[] )=>void;
+  private RESET_POST_LIST!: () =>void;
 
   @MyClass.Getter
   private classID!: string | number;
@@ -73,7 +74,7 @@ export default class NotificationPage extends Mixins(PagingMixins) {
   private currentPageCount: number=1;
   private numOfPage: number=10;
   private lastPageCount: number=-1;
-
+  private eventDates: any[] = [];
 
   get loaderModel() {
     return this.isLoader;
@@ -92,20 +93,43 @@ export default class NotificationPage extends Mixins(PagingMixins) {
     return this.commentsTotalItems;
   }
 
+  get currentDate() {
+    return Utils.getCustomFormatDate(new Date(), '-');
+  }
+
   public created() {
-    console.log( this.$route.query.sideNum );
+    // console.log( this.$route.query.sideNum );
     if (this.$route.query.sideNum && this.$route.query.sideNum !== '') {
       this.$emit('sideNum', Number(this.$route.query.sideNum));
     }
-    this.getList().then(
-      (data)=>{
+
+    this.getList()
+      .then((data)=>{
         this.isPageLoaded=true;
         const {lastPage}=this.updatePaging(this.postTotal, this.numOfPage);
         this.lastPageCount=lastPage;
-        console.log('this.lastPageCount=', this.lastPageCount);
-      }
-    );
+
+        //datepicker 일정 표기할 배열
+        const eventDates = this.postListItems.map((item) => {
+          return Utils.getTodayParseFormat( new Date( item.createdAt ) );
+        });
+        this.eventDates= Utils.getDuplicateArrayCheck( eventDates );
+
+      });
   }
+
+  /**
+   * 이 훅은 해체(뷰 인스턴스 제거)되기 직전에 호출된다. 컴포넌트는 원래 모습과 모든 기능들을 그대로 가지고 있다.
+   * 이벤트 리스너를 제거하거나 reactive subscription 을 제거하고자 할때 사용.
+   */
+  public beforeDestroy() {
+    //store 에 저장되기 때문에 새로고침되지 않는 이상 리스트 내용은 계속 적재 된다.
+    //따라서 다른 컴포넌트로 이동시 리스트 데이터를 비워둔다.
+    this.RESET_POST_LIST();
+  }
+
+
+
 
   private async getList() {
     //알림 가져오기
@@ -134,7 +158,7 @@ export default class NotificationPage extends Mixins(PagingMixins) {
   private scrollObserver( value: boolean ) {
     this.isLoader=value;
 
-    console.log('scrollObserver 실행 ');
+    // console.log('scrollObserver 실행 ');
     //여기에 리스트 업데이트
     this.updateContents()
       .then(()=>{
@@ -148,11 +172,17 @@ export default class NotificationPage extends Mixins(PagingMixins) {
       this.getList()
         .then(() => {
           this.isPageLoaded = true;
+          //datepicker 일정 표기할 배열
+          const eventDates = this.postListItems.map((item) => {
+            return Utils.getTodayParseFormat( new Date( item.createdAt ) );
+          });
+          this.eventDates= Utils.getDuplicateArrayCheck( eventDates );
+          console.log(this.eventDates);
         });
     }else{
       this.currentPageCount=this.lastPageCount;
     }
-    console.log(this.lastPageCount, this.currentPageCount);
+    // console.log(this.lastPageCount, this.currentPageCount);
   }
 
   private updatePaging( totalNum: number, numOfPage: number ) {
@@ -191,6 +221,31 @@ export default class NotificationPage extends Mixins(PagingMixins) {
   private startDatePickerChange( ) {
     this.startDateMenu = false;
     // console.log(this.startDatePickerModel);
+  }
+
+  private pickerEvents(date: any ) {
+    //여기서 date 매개변수는 해당 월의 날짜 모두를 호출하기에 해당 날짜개수 만큼 for 문이 돌고 있다고 생각하면 된다.
+    const [, month, day] = date.split('-');
+
+    const matchDate=this.eventDates.map((item)=>{
+      const [, cMonth, cDay]=item.result.split('-');
+      let result=null;
+      //중복값 있을때
+      if (Number(month) === Number(cMonth) && [Number(cDay)].includes( parseInt(day, 10) )) {
+        result=(item.count > 1)? ['red', '#00f'] : true;
+      }else{
+        result=false;
+      }
+      return result;
+    }).filter((item)=>item!==false );
+
+
+    if (matchDate[0]) {
+      console.log(matchDate[0]);
+      return matchDate[0];
+    }
+
+    return false;
   }
 
   private onAddPostPopupStatus(value: boolean) {

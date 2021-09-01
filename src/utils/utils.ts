@@ -339,6 +339,14 @@ class Utils{
   }
 
   /**
+   * 오늘을 기준으로한 달의 모든 일자 개수 만큼 배열에 내제화시켜 반환
+   */
+  public static getDayItems() {
+    const [year, month, ]= Utils.getTodayFullValue( new Date() );
+    return Array.from({ length: Utils.getDaysInMonth(year, month) }, (v, i) => i);
+  }
+
+  /**
    * 주어진 범위내에 랜덤 수 얻기.
    * @param min
    * @param max
@@ -458,10 +466,51 @@ class Utils{
   }
 
 
+  /**
+   * 배열 값 중 중복된 값 체크하여 카운트 지정시킴
+   * @param arr
+   */
+  public static getDuplicateArrCount( arr: any[] ){
+    const result: { [key: string]: number } = {};
+    arr.forEach( (x: string) => {
+      result[x]= (result[x] || 0)+1;
+    });
+    return result;
+  }
 
+  /**
+   * getDuplicateArrayCount 함수로 중복값 체크된 object 를 배열로 변환
+   * @param obj - { [key: string]: string | number}
+   */
+  public static getDuplicateObjToArr( obj: { [key: string]: string | number} ): Array<{result: string, count: string | number}>{
+    const arr: Array<{result: string, count: string | number}>=[];
+    for( const [key, value] of Object.entries(obj) ){
+      // console.log(key, value);
+      arr.push({ result: key, count: value });
+    }
+    return arr;
+  }
 
+  /**
+   * 중복된 값 체크 하여 카운트 제공 ~
+   * @param arr
+   */
+  public static getDuplicateArrayCheck(arr: any[]): Array<{result: string, count: string | number}> {
+    return Utils.getDuplicateObjToArr(Utils.getDuplicateArrCount(arr));
+  }
 
-  // ({}).toString.call( value ) ==='[object Array]'
+  /**
+   * unique 한 배열 만들기 ( 중복값 제거 후 배열화 )
+   * @param arr
+   */
+  public static uniqArray(arr: any[]){
+    return [...new Set(arr)];
+  }
+
+  public static isArray( value: unknown ): boolean{
+    return ({}).toString.call(value) === '[object Array]';
+  }
+
 
   /*
   어떤 페이지를 로딩하는 데 필요한 전체 시간 계산하기.

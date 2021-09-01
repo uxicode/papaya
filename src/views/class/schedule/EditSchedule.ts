@@ -68,23 +68,27 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
   private endDateMenu: boolean=false;  // 캘린더 셀렉트 열고 닫게 하는 toggle 변수
   private endTimeMenu: boolean=false;  // 시간 셀렉트 열고 닫게 하는 toggle 변수
 
-  private loopRangeModel: string = '반복없음';
-  //0 - 없음 , 1 - 매일 , 2 - 매주 , 3 - 2주마다 , 4 - 매월 , 5 - 매년
+  private loopRangeModel: string = '';
+  //0 - 없음 , 1 - 매일 , 2 - 매주 , 3 - 2주마다 , 4 - 매월 , 5 - 매년  /  ( api 서버에 설정되어 있는 값임 )
   private loopRangeItems: Array<{id: number, txt: string}>= [
     {id:0, txt:'반복없음'},
     {id:1, txt:'매일'},
     {id:2, txt:'매주'},
-    {id:3, txt:'2주마다'},
+    // {id:3, txt:'2주마다'},
     {id:4, txt:'매월'},
     {id:5, txt:'매년'}
     ];
   private loopRangeCheck: boolean=false;
-  private loopRangeCount: number | string=-1;
+  private loopRangeCount: number =-1;
   private removeFiles: number[]= [];
 
   private formData: FormData=new FormData();
   private imgFileService: ImageFileService=new ImageFileService();
   private attachFileService: AttachFileService=new AttachFileService();
+
+  get loopRange() {
+    return this.loopRangeModel;
+  }
 
   get imgFileURLItemsModel(): string[] {
     return this.imgFileService.getItems();
@@ -137,10 +141,9 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     this.scheduleData.fullday=param1;
     this.scheduleData.repeat_count=count;*/
 
-    const findIdx=this.loopRangeItems.findIndex(( item: {id: number, txt: string})=>{
-      return item.id===this.scheduleData.repeat_type;
-    });
+    const findIdx=this.loopRangeIdByTypeId(this.scheduleData.repeat_type);
     this.loopRangeModel=this.loopRangeItems[findIdx].txt;
+
     this.loopRangeCount=count;
 
 
@@ -151,8 +154,7 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     this.startTimeSelectModel.hour=Utils.getHours(true, startFullDate );
     this.startTimeSelectModel.minute=Utils.getMinutes( startFullDate );
 
-    console.log(startFullDate, this.startTimeSelectModel);
-
+    // console.log(startFullDate, this.startTimeSelectModel);
 
     const endFullDate=new Date(endAt);
     this.endDatePickerModel=endFullDate.toISOString().substr(0, 10);
@@ -182,6 +184,15 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
   }
 
 
+  private loopRangeIdByTypeId(type: number): number{
+    return this.loopRangeItems.findIndex((item) => item.id === type);
+  }
+
+  private loopRangeIdByTypeTxt(type: string): number{
+    return this.loopRangeItems.findIndex((item) => item.txt === type);
+  }
+
+
   private getStartAt() {
     const apm = this.startTimeSelectModel.apm;
     const selectHour= Number( this.startTimeSelectModel.hour );
@@ -196,11 +207,9 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     const apm = this.endTimeSelectModel.apm;
     const selectHour= Number( this.endTimeSelectModel.hour );
     const hour=( apm === '오후' && selectHour<12 )? selectHour+12 : selectHour;
-
-    console.log('hour=', hour, this.endTimeSelectModel.hour );
+    // console.log('hour=', hour, this.endTimeSelectModel.hour );
 
     const minute = this.endTimeSelectModel.minute;
-
     // //2019-11-15 10:00:00
     return `${this.endDatePickerModel} ${hour}:${minute}`;
   }
@@ -301,14 +310,22 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     }
   }
 
+  //loopRangeModel=item.txt
+  private loopRangeAt() {
+    const findIdx=this.loopRangeIdByTypeTxt( this.loopRangeModel );
+    this.scheduleData={...this.scheduleData, repeat_type:this.loopRangeItems[findIdx].id,  repeat_count: this.loopRangeCount  };
+  }
+
   private loopRangeCountClickHandler( value: number | string ){
     this.loopRangeCount=Number( value );
-    console.log(this.loopRangeCount);
+
     // let {repeat_count}=this.scheduleData;
     // repeat_count = this.loopRangeCount;
     // console.log(this.loopRangeCount);
     // this.scheduleData = {...this.scheduleData, repeat_count};
-    this.scheduleData.repeat_count=this.loopRangeCount;
+    // this.scheduleData.repeat_count=this.loopRangeCount;
+
+    console.log(this.scheduleData);
   }
   /**
    * 일정 등록시 타이틀 부분
@@ -406,6 +423,8 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     //파일 저장.
     this.attachFileService.save( this.formData );
 
+    this.loopRangeAt();
+
     //시작/끝 시간
     this.getDateRangeAt();
 
@@ -413,7 +432,7 @@ export default class EditSchedule extends Mixins(UtilsMixins) {
     const temp = JSON.stringify( this.scheduleData );
     this.formData.append('data', temp );
 
-    console.log(temp);
+    // console.log(temp);
 
     const allEditInfo=ScheduleService.setScheduleInfoById( Number( this.classID ), id, this.formData );
     editPromiseItems.push( allEditInfo );

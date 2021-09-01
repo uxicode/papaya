@@ -10,7 +10,8 @@ import {
   EDIT_POST,
   DELETE_POST,
   SET_ALL_MY_CLASS_POST,
-  SET_POST_TOTAL
+  SET_POST_TOTAL,
+  RESET_POST_LIST
 } from '@/store/mutation-class-types';
 import {
   GET_POST_LIST_ACTION,
@@ -182,10 +183,7 @@ export default class PostModule extends VuexModule {
     this.postListData = [...this.postListData, ...items];
     //
     // this.postListData.reverse();
-
-    console.log(this.postListData);
-
-
+    // console.log(this.postListData);
     this.postListData.forEach(( item: any, index: number ) => {
       let {isBookmark}=item;
 
@@ -200,6 +198,10 @@ export default class PostModule extends VuexModule {
     });
   }
 
+  @Mutation
+  public [RESET_POST_LIST](): void{
+    this.postListData = [];
+  }
 
   /**
    * 예약 알림 글 데이터 저장
@@ -258,7 +260,7 @@ export default class PostModule extends VuexModule {
   public [GET_ALL_MY_CLASS_POST_LIST_ACTION]( paging: {page_no: number, count: number } ): Promise<IPostModel[]>{
     return PostService.getAllMyClassPosts( paging )
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         // this.postListItems = data.post_list;
         // console.log('noticeListItems=', this.postListData);
         this.context.commit(SET_POST_IN_BOOKMARK, data.post_list);

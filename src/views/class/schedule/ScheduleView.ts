@@ -1,7 +1,7 @@
 import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IClassInfo, IMyClassList} from '@/views/model/my-class.model';
-import {IScheduleOwner, IScheduleTotal, ITimeModel} from '@/views/model/schedule.model';
+import {IScheduleDetail, IScheduleOwner, IScheduleTotal, ITimeModel} from '@/views/model/schedule.model';
 import {CalendarEvent, CalendarEventParsed} from 'vuetify';
 import { RRule } from 'rrule';
 import Modal from '@/components/modal/modal.vue';
@@ -18,6 +18,7 @@ import {Utils} from '@/utils/utils';
 import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
 import WithRender from './ScheduleView.html';
+import {DateTime} from 'rrule/dist/esm/src/datetime';
 
 
 const Auth = namespace('Auth');
@@ -139,7 +140,17 @@ export default class ScheduleView extends Vue{
     private currentYears: number = 0;
     private currentMonth: number = 0;
 
-    /*private scheduleData: {
+    /*
+    //start - 서버에서 설정되는 방식
+    title: title,
+    text: body,
+    type: repeat_type,
+    count: repeat_count,
+    param1: fullday,
+    startAt: evt_startAt,
+    endAt: evt_endAt,
+    //end - 서버에서 설정되는 방식
+    private scheduleData: {
         repeat_type: number,
         repeat_count: number,
         fullday: string | boolean,
@@ -208,15 +219,6 @@ export default class ScheduleView extends Vue{
         this.currentDates = Utils.getTodayFullValue(new Date());
         this.currentYears = this.currentDates[0];
         this.currentMonth = this.currentDates[1];
-
-        // console.log(Date.UTC(2021, 3, 30, 4, 28, 0));
-        const rule = new RRule({
-            freq: RRule.WEEKLY,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
-            dtstart: new Date( Date.UTC(2021, 3, 30, 4, 28, 0)),
-            count: 30,
-            interval: 1
-        });
-        // console.log(rule.all());
     }
 
     public headerDepthChange( isDepth: boolean=true ) {
@@ -267,6 +269,7 @@ export default class ScheduleView extends Vue{
         const {from, to} = this.getFromToMonth();
 
         //스케쥴 내용을 다 가져올 필요 없이 현재 해당하는 월의 일정만 가져온다.
+        // schedule.module.ts 에서 scheduleListItems 에 스케줄이 저장된다.
         await this.GET_SCHEDULE_BY_MONTH_ACTION({
             classId: Number( this.classID ),
             month: {from: `${this.currentYears}${from}`, to: `${this.currentYears}${to}`}
@@ -277,8 +280,41 @@ export default class ScheduleView extends Vue{
                 if (this.events && this.events.length > 0) {
                     this.events = [];
                 }
+
+                console.log(data);
             });
 
+
+        // Create a rule:
+        /*const rule = new RRule({
+            freq: RRule.WEEKLY,
+            interval: 5,
+            byweekday: [RRule.MO, RRule.FR],
+            dtstart: new Date(Date.UTC(2012, 1, 1, 10, 30)),
+            until: new Date(Date.UTC(2012, 12, 31))
+        })*/
+        // console.log(Date.UTC(2021, 3, 30, 4, 28, 0));
+
+           //type: repeat_type,
+           //count: repeat_count
+        //0 - 없음 , 1 - 매일 , 2 - 매주 , 3 - 2주마다 , 4 - 매월 , 5 - 매년  /  ( api 서버에 설정되어 있는 값임 )
+        const rruleItems=this.scheduleListItems.filter((item: IScheduleTotal) => item.type !== 0);
+        console.log(rruleItems);
+        const rule = new RRule({
+            freq: RRule.WEEKLY,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
+            dtstart: new Date( Date.UTC(2021, 3, 1, 4, 28) ),
+            until: new Date(Date.UTC(2021, 4, 31)),
+            interval: 1,
+            count: 30
+        });
+
+        rule.all().map( (date: any) =>{
+            console.log( date, Utils.getCustomFormatDate(new Date( date ), '-' ), Utils.getFullTimes( new Date(date) ) );
+            /*DateTime.fromJSDate( date )
+              .toUTC()
+              .setZone('local', { keepLocalTime: true })
+              .toJSDate();*/
+        });
     }
 
     /**
@@ -400,11 +436,26 @@ export default class ScheduleView extends Vue{
 
         const {schedule_color}=owner;
 
+         /*  아래는 서버에서 저장되는 형태임.
+         class_id: class_id,
+          user_id: user_id,
+          user_member_id: member_id,
+          post_type: ePostType.ClassSchedule,
+          title: title,
+          text: body,
+          type: repeat_type,
+          count: repeat_count,
+          param1: fullday,
+          startAt: evt_startAt,
+          endAt: evt_endAt,
+          expiredAt: expiredAt
+          */
+        //fullday 에 대한 설정을 해야 함.
         this.events.push({
             name: title,
             details: text,
             color: this.scheduleColor[ schedule_color ? (schedule_color > this.scheduleColor.length) ? this.scheduleColor.length : schedule_color : 0].color,
-            start: new Date(startAt).getTime(),
+            start: new Date( startAt ).getTime(),
             end: new Date( endAt ).getTime(),
             repeat: count,
             timed: true,

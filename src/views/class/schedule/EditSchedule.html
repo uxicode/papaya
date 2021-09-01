@@ -227,7 +227,6 @@
                             min-width="180px">
                       <template v-slot:activator="{ on, attrs }">
                         <button type="button" class="list-popup-btn"
-                                v-model="loopRangeModel"
                                 v-bind="attrs"
                                 v-on="on">
                           <span>{{ loopRangeModel }}</span><img :src="require('@/assets/images/arrow-right.svg')" class="sm" alt="">
@@ -252,7 +251,7 @@
                 <div class="form-box">
                   <div class="form-group">
                     <!--                  <input type="number" class="form-control" value="10">-->
-                    <txt-field input-type="number" v-model="scheduleDataModel.repeat_count" @change="loopRangeCountClickHandler"></txt-field>
+                    <txt-field input-type="number" v-model="loopRangeCount" @change="loopRangeCountClickHandler"></txt-field>
                   </div>
                 </div>
               </div>
