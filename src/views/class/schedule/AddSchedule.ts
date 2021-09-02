@@ -202,13 +202,32 @@ export default class AddSchedule extends Mixins(UtilsMixins) {
   }
   //end : 파일 첨부 미리보기 및 파일 업로드 ================================================
 
+  /**
+   * 반복 횟수 설정.
+   * @param value
+   * @private
+   */
   private loopRangeCountClickHandler( value: string ){
     this.loopRangeCount=value;
-    let {repeat_count}=this.scheduleData;
+    let {repeat_count }=this.scheduleData;
     repeat_count=Number(this.loopRangeCount);
     // console.log(this.loopRangeCount);
     this.scheduleData = {...this.scheduleData, repeat_count};
   }
+
+  /**
+   * 반복 타입 설정.
+   * @param item
+   * @private
+   */
+  private loopRangeType( item: { id: number, txt: string }) {
+    this.loopRangeModel=item.txt;
+    let { repeat_type }=this.scheduleData;
+    repeat_type =item.id;
+    this.scheduleData={...this.scheduleData, repeat_type};
+  }
+
+
   /**
    * 일정 등록시 타이틀 부분
    * @param val

@@ -236,8 +236,8 @@
                       <v-list>
                         <v-list-item
                                 v-for="(item, index) in currentLoopRangeItems"
-                                :key="index"
-                                @click="loopRangeModel=item.txt">
+                                :key="`range-item${index}`"
+                                @click="loopRangeType(item)">
                           <v-list-item-title>{{ item.txt }}</v-list-item-title>
                         </v-list-item>
                       </v-list>

@@ -108,6 +108,15 @@ export default class ScheduleView extends Vue{
         { type:'day', txt:'일간' },
         { type:'4day', txt:'4일' },
     ];
+    private weekOfItems=[
+        {id:1, type:RRule.MO, day: 'Mon'},
+        {id:2, type:RRule.TU, day: 'Tue'},
+        {id:3, type:RRule.WE, day: 'Wed'},
+        {id:4, type:RRule.TH, day: 'Thu'},
+        {id:5, type:RRule.FR, day: 'Fri'},
+        {id:6, type:RRule.SA, day: 'Sat'},
+        {id:0, type:RRule.SU, day: 'Sun'}
+    ];
 
     private calendarModel: string=new Date().toISOString().substr(0, 10); ///// '2020-3-01';
     private events: any[] = [];
@@ -302,6 +311,26 @@ export default class ScheduleView extends Vue{
 
     }
 
+    private addDay( fromDate: Date, num: number): Date {
+        const calcDay=fromDate.setDate( Number( fromDate.getDate()+num) );
+        return new Date( calcDay );
+    }
+
+    private getDates( startAt: Date, endAt: Date) {
+        const dateItems= [];
+        const resultAt=endAt.getTime() - startAt.getTime();
+        const calcDay: number = Math.floor( resultAt / (24*60*60*1000) );
+        let curDate: Date= startAt;
+
+        while (curDate < endAt) {
+            dateItems.push( curDate );
+            curDate=this.addDay(curDate, 1);
+        }
+
+        return dateItems;
+    }
+
+
     /**
      * 개별 클래스 일정 이벤트 지정
      * @private
@@ -317,7 +346,7 @@ export default class ScheduleView extends Vue{
             // console.log(item.type, item.count);
             return ( item.type!==0 && item.count>0);
         });
-        console.log(rruleItems);
+        // console.log(rruleItems);
         let toFreq: number=0;
         const rruleSet = [];
         rruleItems.forEach((item)=>{
@@ -332,6 +361,33 @@ export default class ScheduleView extends Vue{
             }
 
 
+            //
+            //1. 초기 요일을 넣은 배열 지정.
+            // console.log(new Date(item.startAt).getDay(), new Date(item.startAt) );
+            //2. 초기 요일을 넣은 배열스에서 startAt 과 endAt 의 요일의 인덱스를 구한다.
+            //3. startAt 과 endAt 의 요일의 인덱스 범위를 구해 사이값 요일을 구한다.
+            // --->인덱스의 범위 결과 5일을 넘는 것에 대한 값을 찾을 수가 없다.
+
+            //1. startAt 과 endAt 의 timestamp 를 구하고
+            //2. endAt - startAt 차이값을 구함
+            //3. 차이값을 일자로 변경.
+            const startAt=new Date(item.startAt);
+            const endAt=new Date(item.endAt);
+
+            const calcDay=this.getDates(startAt, endAt);
+
+            console.log( startAt, calcDay, endAt );
+           /* const startIdx=this.weekOfItems.findIndex((item1) => item1.id === startAt);
+            const endIdx=this.weekOfItems.findIndex((item2) => item2.id === endAt);
+
+            const rrulesRanges=this.weekOfItems.filter(( item3, idx)=> {
+                console.log(idx, startIdx, endIdx);
+                return (idx>startIdx && idx<endIdx);
+            } );*/
+
+            // console.log( rrulesRanges, item.startAt, item.endAt );
+
+
             const rule = new RRule({
                 freq: toFreq,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
                 dtstart: new Date( item.startAt ), //new Date( Date.UTC(2021, 3, 1, 4, 28) )
@@ -343,7 +399,7 @@ export default class ScheduleView extends Vue{
 
             //카운트 계산 ( 매일/매주/매달/매년 ) , 반복 주기 - 매주 일때 요일 구분해서 데이터 삽입해야 함
             rule.all().map( (date: any) =>{
-                console.log( date, Utils.getCustomFormatDate(new Date( date ), '-' ), Utils.getFullTimes( new Date(date) ) );
+                // console.log( date, Utils.getCustomFormatDate(new Date( date ), '-' ), Utils.getFullTimes( new Date(date) ) );
             });
             rruleSet.push(rule);
             // console.log(rule);
@@ -582,7 +638,6 @@ export default class ScheduleView extends Vue{
         this.isOpenAddSch=isOpen;
     }
     private addScheduleOpen(): void{
-
         if ( this.getIsAuth() ) {
             this.headerDepthChange();
             this.updatePopup(true);
