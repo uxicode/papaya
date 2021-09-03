@@ -50,7 +50,7 @@
               <div class="scroll-body" style="height:124px;">
                 <div v-for="(item, index) in curriculumDetailItemModel.course_list" class="add-curr-item" :key="`curriculumDetailDataNum-${index}`">
 
-                  <a href="#" class="add-curr-tit" @click.prevent="onModifyCoursePopupOpen( curriculumDetailItemModel.id, item.id )">
+                  <a href="#" class="add-curr-tit" @click.prevent="onModifyCoursePopupOpen( curriculumDetailItemModel.id, item.id, index )">
                     <span class="curr-num">{{ index+1 }} 회차</span>
                     <span>{{ item.title }}</span>
                   </a>
@@ -70,7 +70,7 @@
                         </template>
                         <v-list>
                           <v-list-item>
-                            <v-list-item-title class="lt" @click="onModifyCoursePopupOpen(cardId, item.id)">수업 내용 수정</v-list-item-title>
+                            <v-list-item-title class="lt" @click="onModifyCoursePopupOpen(cardId, item.id, index)">수업 내용 수정</v-list-item-title>
                           </v-list-item>
                           <v-list-item>
                             <v-list-item-title class="lt" @click="deleteCourse(item.id)">수업 내용 삭제</v-list-item-title>
@@ -98,7 +98,8 @@
 
   <modify-course-popup
         :is-modify-course="isModifyClassCourse"
-        :course-idx="courseId"
+        :course-id="courseId"
+        :course-idx="courseIdx"
         @change="onModifyCoursePopupStatus"
         @modifyCourse="getModifyCourseData">
   </modify-course-popup>

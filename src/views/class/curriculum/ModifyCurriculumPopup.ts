@@ -55,6 +55,7 @@ export default class ModifyCurriculumPopup extends Vue {
 
     private curriculumId: number = 0;
     private courseId: number = 0;
+    private courseIdx: number = 0;
 
     private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
     private CourseSettingsItems: string[] = ['수업 내용 수정', '수업 삭제'];
@@ -178,13 +179,15 @@ export default class ModifyCurriculumPopup extends Vue {
      * @private
      * @param curriculumId
      * @param courseId
+     * @param idx
      */
-    private async onModifyCoursePopupOpen( curriculumId: number, courseId: number) {
+    private async onModifyCoursePopupOpen( curriculumId: number, courseId: number, idx: number) {
         if (courseId > 10) {
             this.courseId = courseId;
             this.curriculumId = curriculumId;
             await this.GET_COURSE_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.curriculumId, courseId: this.courseId});
         }
+        this.courseIdx = idx;
         this.isModifyClassCourse=true;
         console.log(this.courseId);
     }
