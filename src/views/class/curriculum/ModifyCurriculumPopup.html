@@ -42,6 +42,7 @@
                     <input type="number"
                            class="form-control"
                            v-model="curriculumDetailDataNum"
+                           @click="inFocus"
                            @input="setCourseList($event.target.value)">
                   </div>
                 </div>
@@ -104,8 +105,8 @@
 
   <notice-popup
         :is-open="isOpenError"
-        title="수업 회차 초과"
-        msg="수업은 최대 10개까지 생성가능합니다."
+        :title="errorTitle"
+        :msg="errorMessage"
         @change="onDeleteNoticePopupClose">
   </notice-popup>
 

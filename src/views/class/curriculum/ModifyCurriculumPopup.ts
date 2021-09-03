@@ -53,18 +53,16 @@ export default class ModifyCurriculumPopup extends Vue {
 
     private isModifyClassCourse: boolean = false;
 
-    private countCourseNumber: number = 0;
     private curriculumId: number = 0;
     private courseId: number = 0;
 
     private EduSettingsItems: string[] = ['교육과정 수정', '교육과정 삭제'];
-
     private CourseSettingsItems: string[] = ['수업 내용 수정', '수업 삭제'];
 
     /* 수정할 값 */
     private formData: FormData = new FormData();
     private eduItems: Array< {title: string }>=[];
-    private curriculumDetailDataNum: number = this.courseListNumModel.length;
+    private curriculumDetailDataNum: number = 0;
 
     private modifyCurriculumData: IModifyCurriculum = {
         title: '',
@@ -84,9 +82,13 @@ export default class ModifyCurriculumPopup extends Vue {
     };
 
     private modifyCourseList: IModifyCourse[] = [];
+    private imgAttachData: any[] = [];
+    private attachFileData: any[] = [];
 
-
+    /* 회차 수정 에러 팝업 */
     private isOpenError: boolean = false;
+    private errorTitle: string = '교육 회차 수정이 불가능 합니다.';
+    private errorMessage: string = '';
 
     get curriculumDetailItemModel(): any {
         return this.curriculumDetailItem;
@@ -100,34 +102,43 @@ export default class ModifyCurriculumPopup extends Vue {
         return this.CourseSettingsItems;
     }
 
-    /**
-     * 교육과정 수업 회차 설정
-     */
-    get courseListNumModel(): Array< {title: string }>{
-        this.eduItems.length = 10;
-        return this.eduItems;
+    private inFocus(): void{
+        if(this.imgAttachData.length > 0){
+            this.isOpenError = true;
+            this.errorMessage = '교육 회차에 첨부 파일이 있는 경우 회차 수정이 불가능 합니다.';
+        }
     }
 
     private setCourseList( num: number ): void{
-        if( this.curriculumDetailDataNum >= 0 ){
+        const courseListLen = this.curriculumDetailItemModel.course_list.length;
+        if( this.curriculumDetailDataNum >= courseListLen){
             this.curriculumDetailDataNum=num;
             this.eduItems.length=num;
 
+            // 수업 회차 10개 초과 생성 불가
             if( this.curriculumDetailDataNum > 10){
                 this.isOpenError = true;
+                this.errorMessage = '수업 회차는 10회까지 생성 가능합니다.';
 
                 num = 10;
                 this.curriculumDetailDataNum=10;
                 this.eduItems.length=10;
             }
         }
+        // 생성되어 있는 교육 회차 갯수 미만 생성 불가
+        else {
+            this.isOpenError = true;
+            this.errorMessage = '이미 생성된 교육 회차보다 적게 생성할 수 없습니다.';
+            this.curriculumDetailDataNum = courseListLen;
+        }
 
-        this.modifyCurriculumData.course_list = [];
+        this.modifyCurriculumData.course_list = [...this.curriculumDetailItemModel.course_list];
 
-        for (let i = 0; i < num; i++) {
-            this.modifyCurriculumData.course_list.push({
-                index: i,
-                id: i,
+        // 입력한 수에서 기존 교육 회차 갯수를 뺀만큼 리스트에 추가한다.
+        for (let i = 0; i < num-courseListLen; i++) {
+            this.curriculumDetailItemModel.course_list.push({
+                index: num-courseListLen+i+1,
+                id: num-courseListLen+i+1,
                 title: '',
                 startDay: '',
                 startTime: '',
@@ -135,11 +146,6 @@ export default class ModifyCurriculumPopup extends Vue {
                 contents: ''
             });
         }
-    }
-
-
-    private countCourseNum(num: number): void{
-        this.countCourseNumber = num;
     }
 
     /**
@@ -174,13 +180,13 @@ export default class ModifyCurriculumPopup extends Vue {
      * @param courseId
      */
     private async onModifyCoursePopupOpen( curriculumId: number, courseId: number) {
-        this.courseId = courseId;
-        this.curriculumId = curriculumId;
-        await this.GET_COURSE_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.curriculumId, courseId: this.courseId})
-            .then((data)=>{
-                // console.log(data);
-                this.isModifyClassCourse=true;
-            });
+        if (courseId > 10) {
+            this.courseId = courseId;
+            this.curriculumId = curriculumId;
+            await this.GET_COURSE_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.curriculumId, courseId: this.courseId});
+        }
+        this.isModifyClassCourse=true;
+        console.log(this.courseId);
     }
 
     private onModifyCoursePopupStatus(value: boolean) {
@@ -222,9 +228,3 @@ export default class ModifyCurriculumPopup extends Vue {
     }
 
 }
-
-
-
-
-
-
