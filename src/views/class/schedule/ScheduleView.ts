@@ -3,7 +3,7 @@ import {namespace} from 'vuex-class';
 import {IClassInfo, IMyClassList} from '@/views/model/my-class.model';
 import {IScheduleDetail, IScheduleOwner, IScheduleTotal, ITimeModel} from '@/views/model/schedule.model';
 import {CalendarEvent, CalendarEventParsed} from 'vuetify';
-import { RRule } from 'rrule';
+import {RRule, Weekday} from 'rrule';
 import Modal from '@/components/modal/modal.vue';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
@@ -320,10 +320,11 @@ export default class ScheduleView extends Vue{
         const dateItems= [];
         const resultAt=endAt.getTime() - startAt.getTime();
         const calcDay: number = Math.floor( resultAt / (24*60*60*1000) );
-        let curDate: Date= startAt;
 
+        let curDate: Date= startAt;
         while (curDate < endAt) {
-            dateItems.push( curDate );
+            const findIdx = this.weekOfItems.findIndex((item) => item.id === curDate.getDay());
+            dateItems.push( this.weekOfItems[findIdx].type );
             curDate=this.addDay(curDate, 1);
         }
 
@@ -349,18 +350,19 @@ export default class ScheduleView extends Vue{
         // console.log(rruleItems);
         let toFreq: number=0;
         const rruleSet = [];
+
         rruleItems.forEach((item)=>{
-            if (item.type === 1) {
+            const scheduleItem=item;
+
+            if (scheduleItem.type === 1) {
                 toFreq= RRule.DAILY;
-            }else if (item.type === 2) {
+            }else if (scheduleItem.type === 2) {
                 toFreq= RRule.WEEKLY;
-            }else if (item.type === 4) {
+            }else if (scheduleItem.type === 4) {
                 toFreq= RRule.MONTHLY;
-            }else if (item.type === 5) {
+            }else if (scheduleItem.type === 5) {
                 toFreq =RRule.YEARLY;
             }
-
-
             //
             //1. 초기 요일을 넣은 배열 지정.
             // console.log(new Date(item.startAt).getDay(), new Date(item.startAt) );
@@ -371,43 +373,50 @@ export default class ScheduleView extends Vue{
             //1. startAt 과 endAt 의 timestamp 를 구하고
             //2. endAt - startAt 차이값을 구함
             //3. 차이값을 일자로 변경.
-            const startAt=new Date(item.startAt);
-            const endAt=new Date(item.endAt);
+            const startAt=new Date(scheduleItem.startAt);
+            const endAt=new Date(scheduleItem.endAt);
 
-            const calcDay=this.getDates(startAt, endAt);
+            const calcDayItems=this.getDates(startAt, endAt);
 
-            console.log( startAt, calcDay, endAt );
-           /* const startIdx=this.weekOfItems.findIndex((item1) => item1.id === startAt);
-            const endIdx=this.weekOfItems.findIndex((item2) => item2.id === endAt);
-
-            const rrulesRanges=this.weekOfItems.filter(( item3, idx)=> {
-                console.log(idx, startIdx, endIdx);
-                return (idx>startIdx && idx<endIdx);
-            } );*/
-
-            // console.log( rrulesRanges, item.startAt, item.endAt );
+            // calcDay 가 2보다 작으면 즉 반복 요일 수가 1일이므로 그냥 startAt의 요일을 구해와 전달.
+            // console.log( calcDayItems );
 
 
-            const rule = new RRule({
-                freq: toFreq,  //매주 반복  //RRule.DAILY - 매일 반복  //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
-                dtstart: new Date( item.startAt ), //new Date( Date.UTC(2021, 3, 1, 4, 28) )
-                until: new Date( Date.UTC(2021, 9, 30, 24, 0) ),
+            // 아래 세팅 다시 작업
+            //RRule.DAILY 설정일 경우는 설정 필요 없음
+            //RRule.WEEKLY 일 경우 byweekday  일자가 필요 / 단, 반복일자가 7일을 넘어가면 이것도 매일 설정과 같아지니 설정 필요 없음
+
+            let rrulesInfos={
+                freq: toFreq,
+                dtstart: new Date( scheduleItem.startAt ), //new Date( Date.UTC(2021, 3, 1, 4, 28) )
                 interval: 1,
-                count: item.count,
-                byweekday: [RRule.MO, RRule.TU]
-            });
+                count: scheduleItem.count,
+            };
+            //반복일정이 5일이 넘어가면 매일 반복되는 것과 같다.
+            // 매주 반복 - RRule.WEEKLY 일경우
+            if ( scheduleItem.type === 2 && calcDayItems && calcDayItems.length>0 ) {
+                //
+                if (calcDayItems.length > 6) {
+                    const freq: number = RRule.DAILY;
+                    rrulesInfos = {...rrulesInfos, ...{freq} };
+                }else{
+                    const byweekday = calcDayItems;
+                    rrulesInfos = {...rrulesInfos, ...{byweekday} };
+                }
+                //RRule.DAILY - 매일 반복 // 매주 반복 - RRule.WEEKLY    //RRule.MONTHLY - 매월 //RRule.YEARLY - 매년
+                const rule = new RRule(rrulesInfos);
 
-            //카운트 계산 ( 매일/매주/매달/매년 ) , 반복 주기 - 매주 일때 요일 구분해서 데이터 삽입해야 함
-            rule.all().map( (date: any) =>{
-                // console.log( date, Utils.getCustomFormatDate(new Date( date ), '-' ), Utils.getFullTimes( new Date(date) ) );
-            });
-            rruleSet.push(rule);
-            // console.log(rule);
+                //카운트 계산 ( 매일/매주/매달/매년 ) , 반복 주기 - 매주 일때 요일 구분해서 데이터 삽입해야 함
+                rule.all().map( (date: any) =>{
+                    console.log( date, Utils.getCustomFormatDate(new Date( date ), '-' ), Utils.getFullTimes( new Date(date) ) );
+                });
+                // rruleSet 은 추가로 scheduleListsModel  데이터에 추가로 반복 데이터를 merge 한 배열
+                // rule.all() 로 뽑은 date 값은 반복 날짜 [ 단, 현재로써는 범위( 시작과 끝 ) 을 구하지 못한 문제가 있음. ]
+
+                // const chgScheduleItemOv={...scheduleItem, }
+            }
+
         });
-
-
-
-
 
         //스케줄 데이터 모델이 전부 안착되면 ---> v-canlendar 가 요구하는 속성값( 이벤트 )이 들어 있는 배열 을 지정해주어야 한다.
         this.scheduleListsModel.forEach((item, idx )=>{
