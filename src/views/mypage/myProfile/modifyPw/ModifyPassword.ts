@@ -2,6 +2,7 @@ import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IUserMe} from '@/api/model/user.model';
 import UserService from '@/api/service/UserService';
+import EventBus from '@/store/EventBus';
 import Btn from '@/components/button/Btn.vue';
 import TxtField from '@/components/form/txtField.vue';
 import WithRender from './ModifyPassword.html';
@@ -85,7 +86,7 @@ export default class ModifyPassword extends Vue {
     private gotoMyProfile(): void {
         this.$router.push('/myProfile')
             .then(() => {
-                this.$emit('updatePage', '');
+                EventBus.$emit('updateTitle', '');
             });
     }
 }

@@ -132,7 +132,7 @@ export default class CurriculumListView extends Vue {
     private async onModifyCurriculumPopupOpen(id: number) {
         this.cardId = id;
         await this.GET_CURRICULUM_DETAIL_ACTION({classId: Number(this.classID), curriculumId: id})
-            .then((data)=>{
+            .then(()=>{
                 this.isModifyPopupOpen=true;
             });
 
@@ -159,7 +159,7 @@ export default class CurriculumListView extends Vue {
         this.cardId = id; // update postId
 
         await this.GET_CURRICULUM_DETAIL_ACTION({classId: Number(this.classID), curriculumId: this.cardId})
-            .then((data)=>{
+            .then(()=>{
                 this.isDetailPopupOpen=true;
             });
 

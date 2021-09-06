@@ -38,6 +38,9 @@ export default class ModifyCoursePopup extends Vue {
     private isModifyCourse!: boolean;
 
     @Prop(Number)
+    private courseId!: number;
+
+    @Prop(Number)
     private courseIdx!: number;
 
     @MyClass.Action

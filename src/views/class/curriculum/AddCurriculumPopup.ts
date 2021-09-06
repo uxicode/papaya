@@ -63,7 +63,6 @@ export default class AddCurriculumPopup extends Vue {
     private courseIdx: number = 0;
 
     private CourseSettingsItems: string[] = ['수업 내용 수정', '수업 삭제'];
-    private CourseSettingsModel: string = '수업 내용 수정';
 
     private formData: FormData = new FormData();
 

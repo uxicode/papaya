@@ -1,4 +1,5 @@
 import {Vue, Component} from 'vue-property-decorator';
+import EventBus from '@/store/EventBus';
 import MyProfileMain from '@/views/mypage/myProfile/myProfileMain/MyProfileMain';
 import ModifyMobile from '@/views/mypage/myProfile/modifyMobile/ModifyMobile';
 import ModifyPassword from '@/views/mypage/myProfile/modifyPw/ModifyPassword';
@@ -15,14 +16,11 @@ import WithRender from './MyProfile.html';
 export default class MyProfile extends Vue {
     private currentPage: string = '';
 
-    public updated() {
-        window.onpopstate = () => {
-            this.updateTitle(this.currentPage);
-        };
-    }
-
-    private updateTitle(page: string ) {
-        this.currentPage = page;
+    public created() {
+        EventBus.$on('updateTitle', (pageKey: string) => {
+            console.log(pageKey);
+            this.currentPage = pageKey;
+        });
     }
 
     private currentTitle(): string {

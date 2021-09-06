@@ -2,6 +2,7 @@ import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IUserMe} from '@/api/model/user.model';
 import UserService from '@/api/service/UserService';
+import EventBus from '@/store/EventBus';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import WithRender from './MyProfileMain.html';
@@ -97,7 +98,7 @@ export default class MyProfileMain extends Vue {
         this.$router.push(`myProfile/${pageKey}`)
           .then(() => {
               console.log(`${pageKey}로 이동`);
-              this.$emit('updatePage', pageKey); // pageKey 값을 이용하여 상단 타이틀을 갱신
+              EventBus.$emit('updateTitle', pageKey); // pageKey 값을 이용하여 상단 타이틀을 갱신
           });
     }
 
