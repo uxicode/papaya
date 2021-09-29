@@ -14,13 +14,14 @@ import {
   GET_REFRESH_TOKEN, SET_PAGE_TITLE
 } from '@/store/mutation-auth-types';
 import {
-  LOGIN_ACTION,
+  // LOGIN_ACTION,
   FIND_ID_BY_MOBILE,
   FIND_ID_BY_EMAIL,
   AUTH_BY_MOBILE,
   SIGN_UP_ACTION,
   SIGNIN_BY_TOKEN,
-  USER_ME_ACTION
+  USER_ME_ACTION,
+  LoginType
 } from '@/store/action-auth-types';
 
 @Module({
@@ -191,7 +192,8 @@ export default class AuthModule extends VuexModule {
    * @param payload
    */
   @Action({rawError: true})
-  public [LOGIN_ACTION]( payload: { uid: string, password: string }): Promise<any> {
+  public [LoginType.LOGIN_ACTION]( payload: { uid: string, password: string }): Promise<any> {
+    //LOGIN_ACTION
     return AuthService.login(payload.uid, payload.password)
       .then((data: any) => {
         // console.log(data);

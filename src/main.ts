@@ -11,7 +11,7 @@ import './components/validation/validation';
 // import Rx from 'rxjs';
 // import VueRx from 'vue-rx';
 
-/*//공통 이벤트에 대한 후크를 사용하여 서비스 작업자 등록을 단순화한다.*/
+/* //공통 이벤트에 대한 후크를 사용하여 서비스 작업자 등록을 단순화한다.*/
 import './registerServiceWorker';
 //사스 파일은 하나로 통일시키는 것이 좋다 여러개를 여기서 로드 시키면 여러번 호출된다.
 import './assets/scss/common.scss';
