@@ -22,22 +22,13 @@
                     <p class="bookmark-tit">{{ item.title }}</p>
 
                     <div class="bookmark-option-btn">
-                        <button type="button" class="btn only-ico-btn sm bookmark active"></button>
+                        <button type="button" class="btn only-ico-btn sm bookmark active" @click="bookmarkDelete(item)"></button>
 
                         <div class="list-popup">
                             <button type="button" class="list-popup-btn" @click="listPopupToggle(tabIndex, idx)"><img :src="require('@/assets/images/more.svg')" alt=""></button>
-                            <!-- 더보기 (일반멤버) -->
-                            <div v-if="myMemberLevel == 3" class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
-                                <a href="" class="list-popup-item">알림 보관 해제</a>
-                            </div>
-                            <!-- 더보기 (운영자/스탭) -->
-                            <div v-else class="list-popup-menu pos-right"
-                                 style="transform:translate3d(35px, 0, 0);">
-                                <a href="" class="list-popup-item" @click.stop.prevent>알림 수정</a>
-                                <a href="" class="list-popup-item" @click.stop.prevent>해당 클래스의 공지로 등록</a>
-                                <a href="" class="list-popup-item" @click.stop.prevent>다른 클래스에도 등록하기</a>
-                                <a href="" class="list-popup-item" @click.stop.prevent>알림 보관 해제</a>
-                                <a href="" class="list-popup-item" @click.stop.prevent>해당 클래스에서 알림 삭제</a>
+                            <!-- 더보기 -->
+                            <div class="list-popup-menu pos-right" style="transform:translate3d(35px, 0, 0);">
+                                <a href="" class="list-popup-item" @click.stop.prevent="bookmarkDelete(item)">알림 보관 해제</a>
                             </div>
                         </div>
                     </div>
