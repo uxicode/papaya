@@ -67,7 +67,6 @@ export default class ModifyCoursePopup extends Vue {
     private dateMenu: boolean=false;
     private startTimeMenu: boolean=false;
     private endTimeMenu: boolean=false;
-    private datePickerModel: string= new Date().toISOString().substr(0, 10);
     private startTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
     private endTimeSelectModel: ITimeModel={ apm:'오전', hour:'12', minute: '30'};
     private referTimeItems={
@@ -87,7 +86,13 @@ export default class ModifyCoursePopup extends Vue {
         endTime: '',
     };
 
-    private countCourseNumber: number = 0;
+    get datePickerModel(): Date | string {
+        if (this.courseDetailItemModel.startDay !== '') {
+            return this.courseDetailItemModel.startDay;
+        } else {
+            return new Date().toISOString().substr(0, 10);
+        }
+    }
 
     get imgFileURLItemsModel(): string[] {
         return this.imgFileService.getItems();
@@ -97,20 +102,24 @@ export default class ModifyCoursePopup extends Vue {
         return this.attachFileService.getItems();
     }
 
-    get curriculumDetailItemModel(): ICurriculumDetailList {
-        return this.curriculumDetailItem;
-    }
-
     get courseDetailItemModel(): ICurriculumCourseData {
         return this.courseDetailItem;
     }
 
-    get currentStartTimeModel(): string{
-        return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
+    get currentStartTimeModel(): Date | string{
+        if (this.courseDetailItemModel.startTime !== '') {
+            return this.courseDetailItemModel.startTime;
+        } else {
+            return `${this.startTimeSelectModel.apm} ${this.startTimeSelectModel.hour}시 ${this.startTimeSelectModel.minute} 분`;
+        }
     }
 
-    get currentEndTimeModel(): string{
-        return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
+    get currentEndTimeModel(): Date | string{
+        if (this.courseDetailItemModel.endTime !== '') {
+            return this.courseDetailItemModel.endTime;
+        } else {
+            return `${this.endTimeSelectModel.apm} ${this.endTimeSelectModel.hour}시 ${this.endTimeSelectModel.minute} 분`;
+        }
     }
 
     private addStartApmSchedule( val: string ) {
@@ -121,7 +130,7 @@ export default class ModifyCoursePopup extends Vue {
         console.log(val, this.currentEndTimeModel );
     }
 
-    private datePickerChange( ) {
+    private datePickerChange() {
         this.dateMenu = false;
         console.log(this.datePickerModel);
         console.log(typeof this.datePickerModel);
