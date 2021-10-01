@@ -3,11 +3,9 @@
     <div class="fd-head">
       <h3 class="fd-tit">{{ item.title }}</h3>
       <div class="fd-writer type2">
-        <p class="writer">
-          <span class="name" :class="{'manager':isOwner( item.owner.user_id, item.user_id)}">
-            {{ item.owner.nickname }}
-            {{ item.owner.user_id}}
-            {{ item.user_id }}
+        <p class="writer" :class="{'manager':isOwner( item )}" >
+          <span class="name">
+            {{ getNickName(item.owner) }}
           </span>
           <span class="time">{{ item.updatedAt }}</span>
           <span class="noti">{{ item.type===0? '일반' : '공지' }}</span>
@@ -15,7 +13,7 @@
       </div>
       <div class="fd-btn">
         <button type="button" class="btn only-ico-btn sm bookmark" :class="{'active': item.isBookmark }" @click="onKeepPostClick(item.id)"></button>
-        <div class="list-popup" v-if="isEditAuth(  item.owner.user_id )">
+        <div class="list-popup" v-if="isEditAuth(  item.owner )">
           <v-menu
                   min-width="200px"
                   :close-on-click="true">

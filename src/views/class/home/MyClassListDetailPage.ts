@@ -1,10 +1,10 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
+import {IUserMe} from '@/api/model/user.model';
 import SideMenu from '@/components/sideMenu/sideMenu.vue';
 import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import WithRender from './MyClassListDetailPage.html';
-import {IUserMe} from '@/api/model/user.model';
 
 const MyClass = namespace('MyClass');
 const Auth = namespace('Auth');

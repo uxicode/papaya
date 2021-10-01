@@ -295,7 +295,6 @@ export default class ScheduleView extends Vue{
                     this.events = [];
                 }
 
-
             });
 
 
@@ -385,17 +384,19 @@ export default class ScheduleView extends Vue{
             // 아래 세팅 다시 작업
             //RRule.DAILY 설정일 경우는 설정 필요 없음
             //RRule.WEEKLY 일 경우 byweekday  일자가 필요 / 단, 반복일자가 7일을 넘어가면 이것도 매일 설정과 같아지니 설정 필요 없음
-
             let rrulesInfos={
                 freq: toFreq,
                 dtstart: new Date( scheduleItem.startAt ), //new Date( Date.UTC(2021, 3, 1, 4, 28) )
                 interval: 1,
                 count: scheduleItem.count,
             };
-            //반복일정이 5일이 넘어가면 매일 반복되는 것과 같다.
+
+
+
             // 매주 반복 - RRule.WEEKLY 일경우
             if ( scheduleItem.type === 2 && calcDayItems && calcDayItems.length>0 ) {
-                //
+               // 반복일정이 5일이 넘어가면 매일 반복되는 것과 같다.
+                console.log('calcDayItems.length=', calcDayItems.length);
                 if (calcDayItems.length > 6) {
                     const freq: number = RRule.DAILY;
                     rrulesInfos = {...rrulesInfos, ...{freq} };
@@ -407,11 +408,13 @@ export default class ScheduleView extends Vue{
                 const rule = new RRule(rrulesInfos);
 
                 //카운트 계산 ( 매일/매주/매달/매년 ) , 반복 주기 - 매주 일때 요일 구분해서 데이터 삽입해야 함
-                rule.all().map( (date: any) =>{
-                    console.log( date, Utils.getCustomFormatDate(new Date( date ), '-' ), Utils.getFullTimes( new Date(date) ) );
-                });
                 // rruleSet 은 추가로 scheduleListsModel  데이터에 추가로 반복 데이터를 merge 한 배열
                 // rule.all() 로 뽑은 date 값은 반복 날짜 [ 단, 현재로써는 범위( 시작과 끝 ) 을 구하지 못한 문제가 있음. ]
+                rule.all().map( (date: any) =>{
+                    // 20210929 - 일정 시작 / 종료 두가지로 쌍을 이루게 해주어야 한다.
+                    console.log( date, Utils.getCustomFormatDate(new Date( date ), '-' ), Utils.getFullTimes( new Date(date) ) );
+                });
+
 
                 // const chgScheduleItemOv={...scheduleItem, }
             }
@@ -446,7 +449,11 @@ export default class ScheduleView extends Vue{
     }
 
 
-    //상세내역 팝업
+    /**
+     *  상세내역 팝업 open
+     * @param eventObj
+     * @private
+     */
     private scheduleDetailViewEvent(eventObj: { nativeEvent: MouseEvent, event: CalendarEvent} ) {
         // console.log( eventObj.event );
         const open = () => {
@@ -454,25 +461,9 @@ export default class ScheduleView extends Vue{
             // this.selectedElement = eventObj.nativeEvent.target as HTMLElement;
 
             const {id}=eventObj.event;
-            console.log('캘린더 id=', id);
+            // console.log('캘린더 id=', id);
             // const findIdx = this.scheduleListsModel.findIndex((item) => item.id === id);
             setTimeout(() => {
-               /* this.selectedOpen = true;
-                this.isOpenDetailSch=true;
-                this.headerDepthChange();
-
-                //SET_SCHEDULE_DETAIL
-                // this.SET_SCHEDULE_DETAIL( this.scheduleListsModel[findIdx] );
-                this.GET_SCHEDULE_DETAIL_ACTION( {classId: Number(this.classID), scheduleId: id })
-                  .then( (data)=>{
-                      console.log('캘린더 상세보기');
-                  });
-
-                this.GET_SCHEDULE_COMMENTS_ACTION(id)
-                  .then(() => {
-                      // console.log(this.selectedEvent);
-                  });*/
-
                 this.selectedOpen = true;
                 this.isOpenDetailSch = true;
                 this.headerDepthChange();
@@ -490,6 +481,11 @@ export default class ScheduleView extends Vue{
     }
 
 
+    /**
+     * 달력 일정 상세 데이터 가져오기
+     * @param option
+     * @private
+     */
     private scheduleDetailView(option: { id: number }): void{
         const { id }=option;
 

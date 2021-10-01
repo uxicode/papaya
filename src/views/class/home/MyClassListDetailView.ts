@@ -176,6 +176,7 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
   }
 
   public created(): void{
+
     // console.log(this.$route.params.classId, this.$route.query.classIdx, this.classID );
     this.getClassList().then(
       ()=>{
@@ -187,6 +188,7 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
 
   }
 
+  // <scroll-observer> 태그에서 @update 이벤트 핸들러로 호출됨.
   public scrollObserver( value: boolean ) {
     this.isLoader=value;
     this.updateContents()
@@ -286,7 +288,8 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
 
     this.validContents(collections, scheduleItems, curriculumItems, postItems);
 
-    console.log(collections.length);
+    // console.log(collections.length);
+
     if (collections.length >0) {
       await getAllPromise( collections )
         .then( ( items: any )=>{
@@ -311,12 +314,13 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
 
   private async getClassList(){
 
-    const isMember= await MyClassService.getMyInfoInThisClass(Number( this.classID ) );
+    const isMember= await MyClassService.getMyInfoInThisClass( Number( this.classID ) );
     this.memberStatus=isMember.result;
 
-    // console.log('isMember=',  this.memberStatus );
+    console.log('isMember=',  this.memberStatus,  Number( this.classID ) );
 
-    if (isMember.result) {
+    //멤버 일경우
+    if (this.memberStatus) {
 
       //paging 처리 필요~
       const scheduleItems = await ScheduleService.getAllScheduleByClassId(this.classID, {page_no: this.curSchedulePageNum, count: this.numOfPage});
@@ -335,12 +339,15 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
       const curriculumPagingOv= this.updatePaging(curriculumTotal, this.numOfPage);
       const postPagingOv= this.updatePaging(postTotal, this.numOfPage);
 
+
+      this.allData = [];
+      this.contentsInfo = [];
+      this.noticePost=[];
+
       this.contentsInfo.push( { name: 'schedule', total: scheduleItems.total, last: schedulePagingOv.lastPage, count: this.curSchedulePageNum, promise:ScheduleService.getAllScheduleByClassId } );
       this.contentsInfo.push( { name: 'curriculum', total: curriculumItems.total, last: curriculumPagingOv.lastPage, count: this.curCurriculumPageNum, promise: MyClassService.getAllCurriculumByClassId  } );
       this.contentsInfo.push( { name: 'post', total: postsItems.post_listcount, last: postPagingOv.lastPage, count: this.curPostPageNum, promise: PostService.getAllPostsByClassId } );
-
-
-      const allCollection=[ scheduleItems, curriculumItems, postsItems ];
+      // const allCollection=[ scheduleItems, curriculumItems, postsItems ];
 
       this.updateContents()
         .then(()=>{
@@ -362,7 +369,7 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
       }).catch((error)=>{
         console.log('클래스 홈 error', error );
       });*/
-    }else{
+    }else{ //멤버가 아닐 경우
       await PostService.getAllPostsByClassId( this.classID, { page_no: 1, count:10})
         .then( (data)=>{
           // console.log('PostService data', data);
@@ -372,9 +379,10 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
         });
     }
 
+    //알림 글 중에서 공지만 가져온다.
     await PostService.getAllMyClassPosts({page_no: undefined, count: undefined} )
       .then((data)=>{
-        console.log(data);
+        // console.log(data);
         this.noticePost=data.post_list.filter((item: any) => item.type === 1);
 
         this.noticePost.forEach(( item: any, index: number ) => {

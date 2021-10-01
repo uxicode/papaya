@@ -122,7 +122,7 @@ export default class ScheduleDetailPopup extends Mixins(UtilsMixins) {
    * @private
    */
   private getIsMember( ownerId: number ): boolean {
-    console.log( this.currentUserAuth, ownerId );
+    // console.log( this.currentUserAuth, ownerId );
     return ownerId === this.currentUserAuth;
   }
 

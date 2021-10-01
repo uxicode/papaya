@@ -16,6 +16,7 @@ import MyClassService from '@/api/service/MyClassService';
 import {IUserMe} from '@/api/model/user.model';
 import UtilsMixins from '@/mixin/UtilsMixins';
 import WithRender from './NotificationListView.html';
+import {Utils} from '@/utils/utils';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
@@ -99,16 +100,20 @@ export default class NotificationListView extends Mixins(UtilsMixins) {
     return ( item )? ( (item.vote_choices)? item.vote_choices.length: -1) : -1;
   }
 
-  /**
-   *
-   * @param ownerId
-   * @param userId
-   * @private
-   */
-  private isOwner( ownerId: number, userId: number): boolean {
-    // console.log(ownerId, userId);
-    return (ownerId === userId);
+
+  public getNickName(owner: { nickname: string } | null): string {
+    return (owner) ? owner.nickname : '비공개';
   }
+
+  private isOwner( item: IPostModel ): boolean {
+    const {owner, user_id}=item;
+    if (owner) {
+      return ( owner.user_id === user_id );
+    }else{
+      return false;
+    }
+  }
+
 
   /**
    * 게시글 글쓴이와 현재 로그인 유저와 권한이 같은지 체크
@@ -121,11 +126,11 @@ export default class NotificationListView extends Mixins(UtilsMixins) {
 
   /**
    * 게시글 글쓴이와 현재 로그인 유저와 권한이 같은지 체크
-   * @param ownerId
+   * @param owner
    * @private
    */
-  private isEditAuth( ownerId: number ) {
-    return this.getIsMember(ownerId);
+  private isEditAuth( owner: { user_id: number } | null ): boolean{
+    return ( !Utils.isEmpty(owner) && owner!==null )? this.getIsMember( owner.user_id ) : false;
   }
 
 
