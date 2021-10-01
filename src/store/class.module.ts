@@ -574,12 +574,12 @@ export default class ClassModule extends VuexModule {
     }
 
     @Action
-    public [MODIFY_CURRICULUM_ACTION](payload: {classId: number, curriculumId: number, formData: FormData}): Promise<any> {
-        return MyClassService.setCurriculumModify(payload.classId, payload.curriculumId, payload.formData)
+    public [MODIFY_CURRICULUM_ACTION](classId: number, curriculumId: number, formData: FormData): Promise<any> {
+        return MyClassService.setCurriculumModify(classId, curriculumId, formData)
             .then((data) => {
                 console.log('modified curriculum data=', data.curriculum);
                 this.context.commit(SET_CURRICULUM_DETAIL, data.curriculum);
-                const findIdx = this.curriculumListItems.curriculum_list.findIndex((item) => item.id===payload.curriculumId);
+                const findIdx = this.curriculumListItems.curriculum_list.findIndex((item) => item.id===curriculumId);
                 this.curriculumListItems.curriculum_list.splice(findIdx, 1, data.curriculum);
                 return Promise.resolve(this.curriculumDetailData);
             }).catch((error) => {
@@ -589,8 +589,8 @@ export default class ClassModule extends VuexModule {
     }
 
     @Action
-    public [MODIFY_COURSE_ACTION](payload: {classId: number, curriculumId: number, courseId: number, formData: FormData}): Promise<any> {
-        return MyClassService.setEduCourseModify(payload.classId, payload.curriculumId, payload.courseId, payload.formData)
+    public [MODIFY_COURSE_ACTION](classId: number, curriculumId: number, courseId: number, formData: FormData): Promise<any> {
+        return MyClassService.setEduCourseModify(classId, curriculumId, courseId, formData)
             .then((data) => {
                console.log('modified course data=', data.updated_course);
                this.context.commit(SET_COURSE_DETAIL, data.updated_course);

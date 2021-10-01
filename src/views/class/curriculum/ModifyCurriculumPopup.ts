@@ -40,7 +40,7 @@ export default class ModifyCurriculumPopup extends Vue {
     private GET_COURSE_DETAIL_ACTION!: (payload: { classId: number, curriculumId: number, courseId: number }) => Promise<any>;
 
     @MyClass.Action
-    private MODIFY_CURRICULUM_ACTION!: (payload: {classId: number, curriculumId: number, formData: FormData}) => Promise<any>;
+    private MODIFY_CURRICULUM_ACTION!: (classId: number, curriculumId: number, formData: FormData) => Promise<any>;
 
     @MyClass.Getter
     private classID!: number;
@@ -126,6 +126,7 @@ export default class ModifyCurriculumPopup extends Vue {
                 this.eduItems.length=10;
             }
         }
+
         // 생성되어 있는 교육 회차 갯수 미만 생성 불가
         else {
             this.isOpenError = true;
@@ -136,10 +137,11 @@ export default class ModifyCurriculumPopup extends Vue {
         this.modifyCurriculumData.course_list = [...this.curriculumDetailItemModel.course_list];
 
         // 입력한 수에서 기존 교육 회차 갯수를 뺀만큼 리스트에 추가한다.
-        for (let i = 0; i < num-courseListLen; i++) {
+        const addCourseLen = num-courseListLen;
+        for (let i = 0; i < addCourseLen; i++) {
             this.curriculumDetailItemModel.course_list.push({
-                index: num-courseListLen+i+1,
-                id: num-courseListLen+i+1,
+                index: addCourseLen+i+1,
+                id: addCourseLen+i+1,
                 title: '',
                 startDay: '',
                 startTime: '',
@@ -155,7 +157,7 @@ export default class ModifyCurriculumPopup extends Vue {
      * 최종적으로 통신 시에 formData 에 담아서 전송.
      * @private
      */
-    private async modifyConfirm() {
+    private modifyConfirm() {
         console.log(this.modifyCourseList);
         this.modifyCurriculumData = {
             title: this.curriculumDetailItemModel.title,
@@ -163,15 +165,15 @@ export default class ModifyCurriculumPopup extends Vue {
             deleted_course_list: [],
             course_list: this.modifyCourseList,
         };
-        const temp = JSON.stringify( {...this.modifyCurriculumData} );
+        const temp = JSON.stringify(this.modifyCurriculumData);
         this.formData.append('data', temp );
 
-        await this.MODIFY_CURRICULUM_ACTION({classId: this.classID, curriculumId: this.curriculumDetailItemModel.id, formData: this.formData})
+        this.MODIFY_CURRICULUM_ACTION(this.classID, this.curriculumDetailItemModel.id, this.formData)
             .then((res: any) => {
                 console.log(res);
-                this.popupChange(false);
                 this.modifyCourseList = [];
             });
+        this.popupChange(false);
     }
 
     /**
@@ -228,6 +230,12 @@ export default class ModifyCurriculumPopup extends Vue {
 
     private onDeleteNoticePopupClose( value: boolean ) {
         this.isOpenError=value;
+    }
+
+    // 팝업을 등록 버튼 누르지 않고 닫을 시 입력 내용 초기화
+    private initChange(): void {
+        this.curriculumDetailDataNum = 0;
+        this.popupChange(false);
     }
 
 }
