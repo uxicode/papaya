@@ -39,7 +39,10 @@ export default class FileBox extends Vue {
     }
 
     public created() {
-        this.getAllClassAttachmentData();
+      if (this.$route.query.sideNum && this.$route.query.sideNum !== '') {
+        this.$emit('sideNum', Number(this.$route.query.sideNum));
+      }
+      this.getAllClassAttachmentData();
     }
 
   /**

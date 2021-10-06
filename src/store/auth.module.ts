@@ -3,25 +3,33 @@ import {IUser, IUserMe} from '@/api/model/user.model';
 import AuthService from '@/api/service/AuthService';
 import UserService from '@/api/service/UserService';
 import {
-  LOGIN,
-  LOGOUT,
-  GET_TOKEN,
-  USER_ID, USER_EMAIL,
-  VERIFY_BY_MOBILE,
-  SIGN_UP,
-  SIGN_UP_MOVE,
-  SET_MY_INFO,
-  GET_REFRESH_TOKEN, SET_PAGE_TITLE
+  // LOGIN,
+  // LOGOUT,
+  // GET_TOKEN,
+  // USER_ID, USER_EMAIL,
+  // VERIFY_BY_MOBILE,
+  // SIGN_UP,
+  // SIGN_UP_MOVE,
+  // SET_MY_INFO,
+  // GET_REFRESH_TOKEN,
+  // SET_PAGE_TITLE,
+  UserInfoMutationType,
+  LoginMutationType,
+  TokenMutationType,
+  SingUpMutationType,
+  VerifyMutationType, PageInfoMutationType
 } from '@/store/mutation-auth-types';
 import {
   // LOGIN_ACTION,
-  FIND_ID_BY_MOBILE,
-  FIND_ID_BY_EMAIL,
-  AUTH_BY_MOBILE,
-  SIGN_UP_ACTION,
-  SIGNIN_BY_TOKEN,
-  USER_ME_ACTION,
-  LoginType
+  FindWayActionTypes,
+  // FIND_ID_BY_MOBILE,
+  // FIND_ID_BY_EMAIL,
+  AuthWayActionTypes,
+  // AUTH_BY_MOBILE,
+  // SIGN_UP_ACTION,
+  // SIGNIN_BY_TOKEN,
+  // USER_ME_ACTION,
+  LoginActionTypes
 } from '@/store/action-auth-types';
 
 @Module({
@@ -38,6 +46,7 @@ export default class AuthModule extends VuexModule {
   public resetPwByVerifyInfo: object = {};
   private refreshToken: string | null= null;
   private signupPageTitle: string = '회원가입';
+  private mobile: string='00';
 
   get isAuth(): boolean {
     return !!this.token;
@@ -71,18 +80,22 @@ export default class AuthModule extends VuexModule {
     return this.signupPageTitle;
   }
 
+  get mobileNum(): string{
+    return this.mobile;
+  }
+
   @Mutation
-  public [USER_EMAIL](value: string): void {
+  public [UserInfoMutationType.USER_EMAIL](value: string): void {
     this.inputUserEmail = value;
   }
 
   @Mutation
-  public [USER_ID](userId: string): void {
+  public [UserInfoMutationType.USER_ID](userId: string): void {
     this.findId = userId;
   }
 
   @Mutation
-  public [LOGIN](userData: IUser[]): void {
+  public [LoginMutationType.LOGIN](userData: IUser[]): void {
     this.user = userData;
     // console.log('this.token=', JSON.stringify(this.user) );
     localStorage.setItem('user', JSON.stringify(this.user));
@@ -91,13 +104,13 @@ export default class AuthModule extends VuexModule {
   }
 
   @Mutation
-  public [SET_MY_INFO]( me: IUserMe ): void{
+  public [UserInfoMutationType.SET_MY_INFO]( me: IUserMe ): void{
     this.me = me;
     localStorage.setItem('me', JSON.stringify(this.me));
   }
 
   @Mutation
-  public [VERIFY_BY_MOBILE](payload: { userId: string, key: string, mobile: string }): void {
+  public [VerifyMutationType.VERIFY_BY_MOBILE](payload: { userId: string, key: string, mobile: string }): void {
     this.resetPwByVerifyInfo = {
       userId: payload.userId,
       key: payload.key,
@@ -106,7 +119,7 @@ export default class AuthModule extends VuexModule {
   }
 
   @Mutation
-  public [GET_TOKEN](token: string | null): void {
+  public [TokenMutationType.GET_TOKEN](token: string | null): void {
     // console.log('token=', this.token);
     if (token !== null) {
       this.token = token;
@@ -117,7 +130,7 @@ export default class AuthModule extends VuexModule {
   }
 
   @Mutation
-  public [GET_REFRESH_TOKEN]( refreshToken: string | null ): void{
+  public [TokenMutationType.GET_REFRESH_TOKEN]( refreshToken: string | null ): void{
     if (refreshToken !== null) {
       this.refreshToken=refreshToken;
       localStorage.setItem('refresh_token', this.refreshToken);
@@ -126,7 +139,7 @@ export default class AuthModule extends VuexModule {
 
 
   @Mutation
-  public [LOGOUT](): void {
+  public [LoginMutationType.LOGOUT](): void {
     console.log('logout');
     localStorage.removeItem('token');
     localStorage.removeItem('me');
@@ -136,29 +149,34 @@ export default class AuthModule extends VuexModule {
   }
 
   @Mutation
-  public [SIGN_UP]( name: string ): void{
+  public [SingUpMutationType.SIGN_UP]( name: string ): void{
     this.signupName=name;
     localStorage.setItem('signupName', this.signupName );
   }
 
   @Mutation
-  public [SIGN_UP_MOVE](): void{
+  public [SingUpMutationType.SIGN_UP_MOVE](): void{
     this.signupName= '';
     delete localStorage.signupName;
   }
 
   @Mutation
-  public [SET_PAGE_TITLE](title: string): void {
+  public [PageInfoMutationType.SET_PAGE_TITLE](title: string): void {
     this.signupPageTitle = title;
+  }
+
+  @Mutation
+  public [VerifyMutationType.USER_MOBILE]( mobile: string): void {
+    this.mobile = mobile;
   }
 
   //localstorage 에 있는 token 값 존재 확인하여 데이터를
   @Action({rawError: true})
-  public [SIGNIN_BY_TOKEN]( token: string ){
+  public [AuthWayActionTypes.SIGNIN_BY_TOKEN](token: string ){
 
     // console.log('store=', this.context.getters.isAuth );
 
-    this.context.commit(GET_TOKEN, token);
+    this.context.commit(TokenMutationType.GET_TOKEN, token);
 
     /*if( store.getters['Auth/isAuth'] ){
       this.context.commit(GET_TOKEN, token);
@@ -181,7 +199,7 @@ export default class AuthModule extends VuexModule {
     return UserService.getUserMe()
       .then( ( data: any )=>{
         // console.log('UserMe=', data.user );
-        this.context.commit(SET_MY_INFO, data.user );
+        this.context.commit(UserInfoMutationType.SET_MY_INFO, data.user );
         return Promise.resolve('signin status');
       });
   }
@@ -192,7 +210,7 @@ export default class AuthModule extends VuexModule {
    * @param payload
    */
   @Action({rawError: true})
-  public [LoginType.LOGIN_ACTION]( payload: { uid: string, password: string }): Promise<any> {
+  public [LoginActionTypes.LOGIN_ACTION](payload: { uid: string, password: string }): Promise<any> {
     //LOGIN_ACTION
     return AuthService.login(payload.uid, payload.password)
       .then((data: any) => {
@@ -210,11 +228,11 @@ export default class AuthModule extends VuexModule {
 
         // console.log(data.access_token, data.refresh_token);
 
-        this.context.commit(GET_TOKEN, data.access_token );
-        this.context.commit(GET_REFRESH_TOKEN, data.refresh_token );
+        this.context.commit(TokenMutationType.GET_TOKEN, data.access_token );
+        this.context.commit(TokenMutationType.GET_REFRESH_TOKEN, data.refresh_token );
 
         return UserService.getUserMe().then( ( userMe: any)=>{
-            this.context.commit(SET_MY_INFO, userMe.user);
+            this.context.commit(UserInfoMutationType.SET_MY_INFO, userMe.user);
             return Promise.resolve( userMe.user);
           });// 왜인지는 모르겠으나 여기서 promise 를 리턴해주어야 함.
       }).catch((error) => {
@@ -226,9 +244,9 @@ export default class AuthModule extends VuexModule {
    * 마이프로필에서 수정 적용시
    */
   @Action({rawError: true})
-  public [USER_ME_ACTION](): Promise<IUserMe>{
+  public [AuthWayActionTypes.USER_ME_ACTION](): Promise<IUserMe>{
     return UserService.getUserMe().then( ( userMe: any)=>{
-      this.context.commit(SET_MY_INFO, userMe.user);
+      this.context.commit(UserInfoMutationType.SET_MY_INFO, userMe.user);
       return Promise.resolve( userMe.user);
     }).catch( (error: any)=>{
       return Promise.reject(error);
@@ -236,7 +254,7 @@ export default class AuthModule extends VuexModule {
   }
 
   @Action({rawError: true})
-  public [FIND_ID_BY_MOBILE](mobile: string): Promise<any> {
+  public [FindWayActionTypes.FIND_ID_BY_MOBILE](mobile: string): Promise<any> {
     return UserService.getUserIdByMobile(mobile)
       .then((data: any) => {
         /*{
@@ -245,7 +263,7 @@ export default class AuthModule extends VuexModule {
           "message": "아이디 조회 성공."
         }*/
         // console.log('모바일번호로 아이디조회=', data );
-        this.context.commit(USER_ID, data.user_id); //찾은 아이디 값을 store 에 기록
+        this.context.commit(UserInfoMutationType.USER_ID, data.user_id); //찾은 아이디 값을 store 에 기록
         return Promise.resolve(data);
       }).catch((error: any) => {
         return Promise.reject(error);
@@ -253,11 +271,11 @@ export default class AuthModule extends VuexModule {
   }
 
   @Action({rawError: true})
-  public [FIND_ID_BY_EMAIL](email: string): Promise<any> {
+  public [FindWayActionTypes.FIND_ID_BY_EMAIL](email: string): Promise<any> {
     return UserService.getUserIdByEmail(email)
       .then((data: any) => {
-        this.context.commit(USER_ID, data.user_id);
-        this.context.commit(USER_EMAIL, email);
+        this.context.commit(UserInfoMutationType.USER_ID, data.user_id);
+        this.context.commit(UserInfoMutationType.USER_EMAIL, email);
         return Promise.resolve(data);
       }).catch((error: any) => {
         return Promise.reject(error);
@@ -267,12 +285,12 @@ export default class AuthModule extends VuexModule {
   //this.formData.userId, this.formData.mobile
   //getAuthByMobileNum
   @Action({rawError: true})
-  public [AUTH_BY_MOBILE](payload: { userId: string, mobile: string }): Promise<any> {
+  public [AuthWayActionTypes.AUTH_BY_MOBILE](payload: { userId: string, mobile: string }): Promise<any> {
     return AuthService.getAuthByMobileNum(payload.userId, payload.mobile)
       .then((data: any) => {
         // console.log('핸폰번호와 아이디로 인증=', data);
         //{verification_key: "3091612168945547", message: "sms 로 인증번호 발송 성공"}
-        this.context.commit(VERIFY_BY_MOBILE, {
+        this.context.commit(VerifyMutationType.VERIFY_BY_MOBILE, {
           userId: payload.userId,
           mobile: payload.mobile,
           key: data.verification_key,
@@ -285,7 +303,7 @@ export default class AuthModule extends VuexModule {
   }
 
   @Action( {rawError: true})
-  public [SIGN_UP_ACTION]( payload: {
+  public [AuthWayActionTypes.SIGN_UP_ACTION](payload: {
     user_id: string,
     user_password: string,
     fullname: string,
@@ -297,7 +315,7 @@ export default class AuthModule extends VuexModule {
     return UserService.signUp( payload )
       .then( (data: any)=>{
         // console.log('payload.fullname=', payload.fullname, data.user.fullname );
-        this.context.commit(SIGN_UP, payload.fullname );
+        this.context.commit(SingUpMutationType.SIGN_UP, payload.fullname );
         /*
         {
         access_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9......"

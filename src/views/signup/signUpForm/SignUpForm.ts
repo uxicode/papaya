@@ -1,14 +1,16 @@
 import {Component, Vue} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import {Utils} from '@/utils/utils';
 import {ISignUpForm} from '@/views/model/member-form.model';
 import {ISignupModalMsg} from '@/views/model/msg-form.model';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
+import RadioButton from '@/components/radio/RadioButton.vue';
 import UserService from '@/api/service/UserService';
-import WithRender from './SignUpForm.html';
 import AuthService from '@/api/service/AuthService';
-import {namespace} from 'vuex-class';
+import {AuthWayActionTypes} from '@/store/action-auth-types';
+import WithRender from './SignUpForm.html';
 
 const Auth = namespace('Auth');
 
@@ -18,9 +20,17 @@ const Auth = namespace('Auth');
         TxtField,
         Btn,
         Modal,
+        RadioButton
     },
 })
 export default class SignUpForm extends Vue {
+
+
+    @Auth.Action
+    private [AuthWayActionTypes.SIGN_UP_ACTION]!: (data: any) => Promise<any>;
+
+    @Auth.Getter
+    private mobileNum!: number;
 
     private isMobileChk: boolean = false;
     private isEmailChk: boolean = false;
@@ -34,6 +44,8 @@ export default class SignUpForm extends Vue {
     private userAuthByMobileChk: boolean= false; // 버튼 텍스트 교체 참조 변수 - 재전송 or  인증
     private isOpenPopup: boolean = false;
     private currentStatus: string = '';
+    private emailSendType: string = 'no';
+
     private ID_CHECK: string = 'id-check';
     private EMAIL_CHECK: string = 'email-check';
     private MOBILE_STATUS: string = 'mobile';
@@ -67,15 +79,12 @@ export default class SignUpForm extends Vue {
     };
 
 
-    @Auth.Action
-    private SIGN_UP_ACTION!: ( data: any) => Promise<any>;
-
     /**
      * 유효한 모바일 번호인지 체크
      */
     get userMobileState(): boolean {
         const userMobile = Utils.getMobileRegx();
-        return userMobile.test(this.formData.mobile_no);
+        return userMobile.test(  this.formData.mobile_no as string );
     }
 
     /**
@@ -146,6 +155,10 @@ export default class SignUpForm extends Vue {
         return findItem[0].desc;
     }
 
+    public mounted() {
+        this.formData.mobile_no=this.mobileNum;
+        console.log('this.mobileNum=', this.mobileNum);
+    }
 
     public required(value: string): boolean {
         // console.log( value, !!value);
@@ -281,7 +294,7 @@ export default class SignUpForm extends Vue {
             }, 200);
         }
 
-        AuthService.getAuthNumByMobile( this.formData.mobile_no )
+        AuthService.getAuthNumByMobile( this.formData.mobile_no as string )
           .then(( data: any ) => {
               // {success: true,
               // verification_key: "7561614675015945",
@@ -343,17 +356,23 @@ export default class SignUpForm extends Vue {
         });
     }
 
+    private optionChange(value: string ): void {
+        this.emailSendType=value;
+        // this.voteData.vote.type=(this.voteType==='txt')? 0 : 1;
+        this.formData.agree_email=(this.emailSendType === 'yes');
+    }
+
     /**
      * 회원가입>인증부분때문에 실패시 해당 입력필드에 shake error 클래스 적용해야 함.
      * 최종 회원가입 양식 전송
      * @private
      */
     private signupSubmit(): void{
-        // console.log(this.userNameState, this.userIDState, this.pwState, this.isMobileChk, this.isValidEmail);
+        console.log( this.formData, this.userNameState, this.userIDState, this.pwState, this.isMobileChk, this.isValidEmail);
         this.openPopup(this.ERROR_FAIL_SIGNUP);
         if( this.isAllValidation && this.isValidEmail){
 
-            this.SIGN_UP_ACTION( this.formData )
+            this[AuthWayActionTypes.SIGN_UP_ACTION]( this.formData )
               .then( ()=>{
                   this.openPopup(this.SUCCESS_MEMBERSHIP);
               }).catch( () =>{

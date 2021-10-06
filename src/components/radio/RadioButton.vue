@@ -15,7 +15,8 @@
            :id="btnId"
            :value="btnValue"
            :checked="checkedState"
-           @click="update( $event.target.value, $event.target.checked )">
+           @click="update( $event.target.value, $event.target.checked )"
+           :disabled="disabled">
     <label :for="btnId">
       <slot></slot>
     </label>
@@ -36,6 +37,9 @@ export default class RadioButton extends Vue {
 
   @Prop(String)
   public label!: string;
+
+  @Prop(Boolean)
+  public disabled!: boolean;
 
   @Prop([String, Number, Boolean])
   public btnValue!: string | number | boolean;

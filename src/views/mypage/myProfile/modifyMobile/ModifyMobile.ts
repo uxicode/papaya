@@ -10,6 +10,7 @@ import Btn from '@/components/button/Btn.vue';
 import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
 import WithRender from './ModifyMobile.html';
+import {AuthWayActionTypes} from '@/store/action-auth-types';
 
 const Auth = namespace('Auth');
 
@@ -27,7 +28,7 @@ export default class ModifyMobile extends Vue {
     public readonly userInfo!: IUserMe;
 
     @Auth.Action
-    public USER_ME_ACTION!: () => Promise<IUserMe>;
+    public [AuthWayActionTypes.USER_ME_ACTION]!: () => Promise<IUserMe>;
 
     private mobileNo: string = '';
     private userAuthByMobileChk: boolean= false; // 버튼 텍스트 교체 참조 변수 - 재전송 or  인증
@@ -79,7 +80,7 @@ export default class ModifyMobile extends Vue {
     private modifyMobileNo(): void {
         UserService.setUserInfo(this.userInfo.user_id, {mobile_no: this.mobileNo})
           .then(() => {
-              this.USER_ME_ACTION().then( ( me: IUserMe)=>{
+              this[AuthWayActionTypes.USER_ME_ACTION]().then( (me: IUserMe)=>{
                   console.log(me.mobile_no);
               });
           });

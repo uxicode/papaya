@@ -21,8 +21,10 @@
              :type="inputFieldType"
              :placeholder="placeholder"
              :value="inputData"
+             :disabled="disabled"
              @input="inputChange(  $event.target.value )"
-             @keyup="resultValidate( $event.target, passed )" @keyup.enter="onKeyEnter">
+             @keyup="resultValidate( $event.target, passed )"
+             @keyup.enter="onKeyEnter">
       <template v-if="failed">
         <p class="form-message error">{{ errors[0] }}</p>
       </template>
@@ -82,6 +84,9 @@ export default class TxtField extends Vue{
 
   @Prop(Boolean)
   private fail!: boolean;
+
+  @Prop(Boolean)
+  private disabled!: boolean;
 
   // private inputData: string='';
 

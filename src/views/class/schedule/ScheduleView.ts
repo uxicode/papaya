@@ -17,8 +17,8 @@ import {IUserMe} from '@/api/model/user.model';
 import {Utils} from '@/utils/utils';
 import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
+import {AuthWayActionTypes} from '@/store/action-auth-types';
 import WithRender from './ScheduleView.html';
-import {DateTime} from 'rrule/dist/esm/src/datetime';
 
 
 const Auth = namespace('Auth');
@@ -43,7 +43,7 @@ const Schedule = namespace('Schedule');
 export default class ScheduleView extends Vue{
 
     @Auth.Action
-    private USER_ME_ACTION!: ()=>Promise<IUserMe>;
+    private [AuthWayActionTypes.USER_ME_ACTION]!: ()=>Promise<IUserMe>;
 
     @Schedule.Mutation
     private SET_SCHEDULE_DETAIL!: ( data: IScheduleTotal )=> void;
@@ -597,7 +597,6 @@ export default class ScheduleView extends Vue{
 
             const { me }=this.myClassHomeModel;
             try {
-
                 await ClassMemberService.setClassMemberInfo( Number( this.classID ), me.id,{schedule_color: item.id} )
                   .then((data) => {
                       console.log('컬러 변경=', data);

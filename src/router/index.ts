@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueRouter, {RawLocation, RouteConfig} from 'vue-router';
-import {getIsAuth} from '@/router/AuthG uard';
+import {getIsAuth} from '@/router/AuthGuard';
 import {LoginRouter} from '@/router/LoginRouter';
 import {SignUpRouter} from '@/router/SignUpRouter';
 import {MyPageRouter} from '@/router/MyPageRouter';

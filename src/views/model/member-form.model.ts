@@ -15,7 +15,7 @@ interface ISignUpForm{
   user_id: string;
   user_password: string;
   fullname: string;
-  mobile_no: string;
+  mobile_no: string | number;
   email: string;
   agree_marketing: boolean;
   agree_email: boolean;

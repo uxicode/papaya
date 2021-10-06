@@ -86,25 +86,30 @@
                 <tr>
                   <th class="top"><label for="mobile" class="required">모바일 번호</label></th>
                   <td>
-                    <div class="btn-checkbox">
+                    <!--<div class="btn-checkbox">
                       <input type="checkbox" id="allCheck">
                       <label for="allCheck">본인 인증 모바일 번호 불러오기</label>
-                    </div>
-                    <div class="form-group inline mgt-20">
+                    </div>-->
+                    <div class="form-group inline">
                       <!--
                       <input type="text" class="form-control" placeholder="모바일 번호를 입력해 주세요."  style="width:390px">
                       <button type="button" class="btn basic x32 sm outline fill" disabled>인증</button>
                       -->
-                      <txt-field id="mobile"
+                      <!--<txt-field id="mobile"
                                  size="390"
-                                 placeholder="모바일 번호를 입력해 주세요."
+                                 placeholder=""
                                  v-model="formData.mobile_no"
                                  rules="required|mobile"
-                                 valid-name="모바일 번호"></txt-field>
-                      <btn type="outline"
+                                 valid-name="모바일 번호" :disabled="true" ></txt-field>-->
+                      <txt-field id="mobile"
+                                 size="390"
+                                 placeholder=""
+                                 v-model="formData.mobile_no"
+                                 :disabled="true" ></txt-field>
+                      <!--<btn type="outline"
                            size="sm"
                            :disabled="!userMobileState"
-                           @btnClick="getUserAuthByMobile">{{ userAuthByMobileChk? '재전송':'인증' }}</btn>
+                           @btnClick="getUserAuthByMobile">{{ userAuthByMobileChk? '재전송':'인증' }}</btn>-->
                     </div>
 
                     <div class="form-group inline mgt-40" v-show="isMobileChk"  style="position:relative;">
@@ -138,17 +143,31 @@
                       </txt-field>
                       <btn type="outline"
                            size="sm"
-                           :disabled="!userEmailState" @btnClick="emailCheck">인증</btn>
+                           :disabled="!userEmailState" @btnClick="emailCheck">중복체크</btn>
                     </div>
                     <div class="checkbox-group mgt-40">
-                      <div class="btn-radio">
+                      <!--<div class="btn-radio">
                         <input type="radio" name="email" id="radio1" disabled>
                         <label for="radio1">수신</label>
                       </div>
                       <div class="btn-radio">
                         <input type="radio" name="email" id="radio2" disabled>
                         <label for="radio2">미수신</label>
-                      </div>
+                      </div>-->
+                      <radio-button btn-id="chk1"
+                                    radio-name="radio"
+                                    btn-value="yes"
+                                    :active-value="emailSendType"
+                                    v-model="emailSendType"
+                                    :disabled="!isEmailChk"
+                                    @click="optionChange">수신</radio-button>
+                      <radio-button btn-id="chk2"
+                                    radio-name="radio"
+                                    btn-value="no"
+                                    :active-value="emailSendType"
+                                    v-model="emailSendType"
+                                    :disabled="!isEmailChk"
+                                    @click="optionChange">미수신</radio-button>
                       <p class="disabled mgt-7">수신 동의 시 이메일 서비스를 받아 보실 수 있습니다. </p>
                     </div>
                   </td>

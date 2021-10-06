@@ -1,14 +1,14 @@
 import {Vue, Component, Watch} from 'vue-property-decorator';
+import {namespace} from 'vuex-class';
 import {IVerifiedForm} from '@/views/model/member-form.model';
 import RadioButton from '@/components/radio/RadioButton.vue';
 import Btn from '@/components/button/Btn.vue';
 import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
-import WithRender from './ResetPassword.html';
-
-import {namespace} from 'vuex-class';
 import AuthService from '@/api/service/AuthService';
 import {Utils} from '@/utils/utils';
+import {AuthWayActionTypes} from '@/store/action-auth-types';
+import WithRender from './ResetPassword.html';
 
 const Auth = namespace('Auth');
 const History = namespace('History');
@@ -72,7 +72,7 @@ export default class ResetPassword extends Vue {
   private resetPwVerifyInfo!: any;
 
   @Auth.Action
-  private AUTH_BY_MOBILE!: (payload: any) => Promise<any>;
+  private [AuthWayActionTypes.AUTH_BY_MOBILE]!: (payload: any) => Promise<any>;
 
   @History.Mutation
   private HISTORY_PAGE!: (pageName: string) => void;
@@ -234,7 +234,7 @@ export default class ResetPassword extends Vue {
     }
     //this.isMobileChk
     // UserService.getAuthByMobileNum(this.formData.userId, this.formData.mobile)
-    this.AUTH_BY_MOBILE({
+    this[AuthWayActionTypes.AUTH_BY_MOBILE]({
       userId: this.formData.userId,
       mobile: this.formData.mobile,
     }).then((data: any) => {

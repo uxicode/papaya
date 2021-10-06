@@ -4,6 +4,7 @@ import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import NoticePopup from '@/components/modal/noticePopup.vue';
 import WithRender from './Verify.html';
+import {VerifyMutationType} from '@/store/mutation-auth-types';
 
 const Auth = namespace('Auth');
 
@@ -16,6 +17,9 @@ const Auth = namespace('Auth');
     },
 })
 export default class Verify extends Vue {
+
+    @Auth.Mutation
+    private [VerifyMutationType.USER_MOBILE]!: ( mobile: string) => void;
 
     @Auth.Getter
     private pageTitle!: string;
@@ -57,6 +61,8 @@ export default class Verify extends Vue {
     private onUpdateVerify(val: string){
         console.log(val); // mobileNum+'_'+age
         const age = Number(val.split('_')[1]);
+        const mobileNum= val.split('_')[0];
+        this[VerifyMutationType.USER_MOBILE]( mobileNum );
         if ( age >= 14 ){
             this.isNoticePopupOpen = true;
         } else {

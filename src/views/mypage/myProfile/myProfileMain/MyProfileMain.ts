@@ -6,6 +6,7 @@ import EventBus from '@/store/EventBus';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
 import WithRender from './MyProfileMain.html';
+import {AuthWayActionTypes} from '@/store/action-auth-types';
 
 const Auth = namespace('Auth');
 
@@ -22,7 +23,7 @@ export default class MyProfileMain extends Vue {
     private userInfo!: IUserMe;
 
     @Auth.Action
-    private USER_ME_ACTION!: () => Promise<IUserMe>;
+    private [AuthWayActionTypes.USER_ME_ACTION]!: () => Promise<IUserMe>;
 
     get myInfo() {
         // console.log( 'this.userInfo=', this.userInfo );
@@ -119,7 +120,7 @@ export default class MyProfileMain extends Vue {
     private modifyName(newName: string): void {
         UserService.setUserInfo(this.userInfo.user_id, {fullname: this.tempData})
             .then(() => {
-                this.USER_ME_ACTION().then( ( me: IUserMe)=>{
+                this[AuthWayActionTypes.USER_ME_ACTION]().then( (me: IUserMe)=>{
                     console.log(me.fullname);
                 });
             });
@@ -135,7 +136,7 @@ export default class MyProfileMain extends Vue {
         const unDashedBirthday = String(newBirthday.split('-').join(''));
         UserService.setUserInfo(this.userInfo.user_id, {birthday: unDashedBirthday})
           .then(() => {
-              this.USER_ME_ACTION().then( ( me: IUserMe)=>{
+              this[AuthWayActionTypes.USER_ME_ACTION]().then( (me: IUserMe)=>{
                   console.log(me.birthday);
               });
           });
@@ -161,7 +162,7 @@ export default class MyProfileMain extends Vue {
         UserService.setUserInfo(this.userInfo.user_id, {gender: newGender})
             .then(() => {
                 // console.log(data);
-                this.USER_ME_ACTION().then( ( me: IUserMe)=>{
+                this[AuthWayActionTypes.USER_ME_ACTION]().then( (me: IUserMe)=>{
                     console.log(me.gender);
                     this.myInfo.gender = newGender;
                 });
@@ -186,7 +187,7 @@ export default class MyProfileMain extends Vue {
     private modifyEmail(newEmail: string): void {
         UserService.setUserInfo(this.userInfo.user_id, {email: newEmail})
             .then(() => {
-                this.USER_ME_ACTION().then( ( me: IUserMe)=>{
+                this[AuthWayActionTypes.USER_ME_ACTION]().then( (me: IUserMe)=>{
                     console.log(me.email);
                     this.myInfo.email = newEmail;
                 });

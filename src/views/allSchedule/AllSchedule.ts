@@ -21,6 +21,7 @@ import ClassMemberService from '@/api/service/ClassMemberService';
 import MyClassService from '@/api/service/MyClassService';
 import WithRender from './AllSchedule.html';
 import {getMax} from '@/types/types';
+import {AuthWayActionTypes} from '@/store/action-auth-types';
 
 
 const Auth = namespace('Auth');
@@ -53,7 +54,7 @@ export default class AllSchedule extends Vue {
   private MYCLASS_LIST_ACTION!: () => Promise<IMyClassList[]>;
 
   @Auth.Action
-  private USER_ME_ACTION!: () => Promise<IUserMe>;
+  private [AuthWayActionTypes.USER_ME_ACTION]!: () => Promise<IUserMe>;
 
   @Schedule.Action
   private GET_SCHEDULE_DETAIL_ACTION!: (payload: { classId: number, scheduleId: number }) => Promise<any>;

@@ -66,6 +66,7 @@ import {Vue, Component} from 'vue-property-decorator';
 import {namespace} from 'vuex-class';
 import {IUserMe} from '@/api/model/user.model';
 import EventBus from '@/store/EventBus';
+import {LoginMutationType} from '@/store/mutation-auth-types';
 
 const Auth = namespace('Auth');
 const MyClass = namespace('MyClass');
@@ -81,7 +82,7 @@ export default class HeaderMenuView extends Vue {
   private userInfo!: IUserMe;
 
   @Auth.Mutation
-  private LOGOUT!: () => void;
+  private [LoginMutationType.LOGOUT]!: () => void;
 
   @MyClass.Mutation
   private REMOVE_CLASS_DATA!: () => void;
@@ -98,7 +99,7 @@ export default class HeaderMenuView extends Vue {
   }
 
   private isLogout(): void {
-    this.LOGOUT();
+    this[LoginMutationType.LOGOUT]();
     this.REMOVE_CLASS_DATA();
     this.$router.push({path:'/login'});
   }

@@ -4,7 +4,7 @@ import Modal from '@/components/modal/modal.vue';
 import Btn from '@/components/button/Btn.vue';
 import TxtField from '@/components/form/txtField.vue';
 import WithRender from './LoginForm.html';
-import {LoginType} from '@/store/action-auth-types';
+import {LoginActionTypes} from '@/store/action-auth-types';
 
 
 const Auth = namespace('Auth');
@@ -34,7 +34,7 @@ export default class LoginForm extends Vue {
   private HISTORY_PAGE!: (pageName: string) => void;
 
   @Auth.Action
-  private [LoginType.LOGIN_ACTION]!: (data: any) => Promise<any>;
+  private [LoginActionTypes.LOGIN_ACTION]!: (data: any) => Promise<any>;
 
   get rPath(): string {
     return (this.$route.query.rqPath) ? this.$route.query.rqPath as string : '/';
@@ -57,7 +57,7 @@ export default class LoginForm extends Vue {
 
     //빈칸
     if( this.isFieldRequired ){
-      this[LoginType.LOGIN_ACTION]({
+      this[LoginActionTypes.LOGIN_ACTION]({
         uid: this.userId,
         password: this.userPw,
       }).then((data: any) => {

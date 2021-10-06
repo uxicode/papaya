@@ -7,6 +7,7 @@ import TxtField from '@/components/form/txtField.vue';
 import Modal from '@/components/modal/modal.vue';
 import {namespace} from 'vuex-class';
 import WithRender from './FindId.html';
+import {FindWayActionTypes} from '@/store/action-auth-types';
 
 const Auth = namespace('Auth');
 const History = namespace('History');
@@ -69,10 +70,10 @@ export default class FindId extends Vue {
   private USER_EMAIL!: (value: string) => void; */// 이메일 찾기를 통해 해당 값을 store 에 저장
 
   @Auth.Action
-  private FIND_ID_BY_MOBILE!: (mobile: string) => Promise<any>;
+  private [FindWayActionTypes.FIND_ID_BY_MOBILE]!: (mobile: string) => Promise<any>;
 
   @Auth.Action
-  private FIND_ID_BY_EMAIL!: (email: string) => Promise<any>;
+  private [FindWayActionTypes.FIND_ID_BY_EMAIL]!: (email: string) => Promise<any>;
 
   @History.Mutation
   private HISTORY_PAGE!: (pageName: string) => void;
@@ -195,7 +196,7 @@ export default class FindId extends Vue {
    */
   private getUserIdByMobile() {
     //UserService.getUserIdByMobile(this.formData.mobile )
-    this.FIND_ID_BY_MOBILE(this.formData.mobile)
+    this[FindWayActionTypes.FIND_ID_BY_MOBILE](this.formData.mobile)
       .then((data: any) => {
         /*{
         "mobile_no": "01031992443",

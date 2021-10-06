@@ -1,7 +1,7 @@
 import axios, {AxiosResponse, AxiosRequestConfig} from 'axios';
 import router from '@/router';
 import store from '@/store';
-import {GET_REFRESH_TOKEN, GET_TOKEN, LOGOUT} from '@/store/mutation-auth-types';
+import { TokenMutationType, LoginMutationType} from '@/store/mutation-auth-types';
 import {REMOVE_CLASS_DATA} from '@/store/mutation-class-types';
 import AuthService from '@/api/service/AuthService';
 
@@ -22,7 +22,7 @@ const onUnauthorized = () => {
   router.push(`/login?rPath=${encodeURIComponent(location.pathname)}`)
     .then(() => {
       // console.log( res );
-      store.commit(`Auth/${LOGOUT}`);
+      store.commit(`Auth/${[LoginMutationType.LOGOUT]}`);
       store.commit(`MyClass/${REMOVE_CLASS_DATA}`);
     });
 };
@@ -56,8 +56,8 @@ const  definedRefreshToken=async ( error: any )=>{
     error.config.retry=true;
     await AuthService.sendRefreshToken( refresh_token  ).then((data)=>{
       // console.log('access_token='+data.access_token, 'refresh_token='+data.refresh_token);
-      store.commit( `Auth/${GET_TOKEN}`, data.access_token );
-      store.commit( `Auth/${GET_REFRESH_TOKEN}`, data.refresh_token );
+      store.commit( `Auth/${TokenMutationType.GET_TOKEN}`, data.access_token );
+      store.commit( `Auth/${TokenMutationType.GET_REFRESH_TOKEN}`, data.refresh_token );
     });
     return axios(error.config);
   }

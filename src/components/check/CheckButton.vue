@@ -55,7 +55,7 @@ export default class CheckButton extends Vue{
   @Prop( [ Array, Boolean, String ] )
   private bData!: string[] | boolean | string;
 
-  @Prop({default: true})
+  @Prop(Boolean)
   private checked!: boolean;
 
   @Prop(String)
