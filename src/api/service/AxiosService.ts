@@ -1,7 +1,7 @@
-import axios, {AxiosResponse, AxiosRequestConfig} from 'axios';
+import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
 import router from '@/router';
 import store from '@/store';
-import { TokenMutationType, LoginMutationType} from '@/store/mutation-auth-types';
+import {LoginMutationType, TokenMutationType} from '@/store/mutation-auth-types';
 import {REMOVE_CLASS_DATA} from '@/store/mutation-class-types';
 import AuthService from '@/api/service/AuthService';
 
@@ -9,11 +9,6 @@ axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 // axios.defaults.timeout=1000;
-
-
-const cancelTokenSource = axios.CancelToken.source();
-let pendingCount: number=0;
-
 
 /**
  * 로그아웃 시키기
@@ -38,30 +33,13 @@ axios.interceptors.request.use((config: AxiosRequestConfig) => {
   // Do something before request is sent
   // console.log('(localStorage.getItem='+localStorage.getItem('token'));
   config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
-  pendingCount++;
   return config;
 }, (error: any) => {
   // Do something with request error
+  console.log('interceptors.request=' + error);
   return Promise.reject(error);
 });
 
-const  definedRefreshToken=async ( error: any )=>{
-  const { refresh_token }= localStorage;
-  // alert('사용자 세션이 만료되었습니다. 다시 로그인 해주세요~');
-  // console.log(error.config, error.config.retry);
-  //refresh_token
-  // console.log('store.getters.isAuth='+store.getters['Auth/isAuth'], 'refresh_token='+refresh_token);
-  if(error.config.retry===undefined){
-    console.log('refresh_token 구문 접근');
-    error.config.retry=true;
-    await AuthService.sendRefreshToken( refresh_token  ).then((data)=>{
-      // console.log('access_token='+data.access_token, 'refresh_token='+data.refresh_token);
-      store.commit( `Auth/${TokenMutationType.GET_TOKEN}`, data.access_token );
-      store.commit( `Auth/${TokenMutationType.GET_REFRESH_TOKEN}`, data.refresh_token );
-    });
-    return axios(error.config);
-  }
-};
 
 const mismatchAccess=( config: any, data: any )=>{
   if( store.getters['Auth/isAuth'] ){
@@ -75,27 +53,61 @@ const mismatchAccess=( config: any, data: any )=>{
   }
 };
 
+//콜백함수 타입의 배열
+const refreshSubscribers: Array<(token: string) => void> = [];
+let isTokenRefreshCheck: boolean = false;
+//실행 콜백함수 배열 대입.
+const addRefreshSubscriber = (callback: (token: string) => void) => {
+  refreshSubscribers.push( callback );
+};
+//배열에 저장된 콜백함수 실행.
+const getTokenRefreshed = (token: string) => {
+  refreshSubscribers.map( (callback) => callback(token) );
+};
+
+
+//test ex token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcl9pZCI6InRlc3QxMjM0IiwiZnVsbG5hbWUiOiLtmY0iLCJpYXQiOjE1Njg1OTY5NjEsImV4cCI6MTU2ODY4MzM2MX0.0EIZguQhhe3UUCXTX_UGAkAuf0bf18pqEyLTsoAU6mI
 /**
  * response interceptor
  */
 axios.interceptors.response.use((response: AxiosResponse) => {
-  // Do something with response data
-  pendingCount--;
-  // console.log(pendingCount);
-  if (pendingCount > 15) {
-    // console.log(pendingCount);
-    // cancelTokenSource.cancel('데이터 대기 상태가 길어져서 요청을 취소 합니다.');
-    // pendingCount=0;
-  }
   return response;
-}, (error: any) => {
-
+}, async (error: any) => {
   const {status, data, config} = error.response;
   // let errorMsg: any = error;
   // console.log('error=', error);
-  // console.log(':::status=', status);
-  if (status === 401) {
-    definedRefreshToken( error );
+
+  if (status === 401 && data.message==='TokenExpiredError') {
+    if (!isTokenRefreshCheck) {
+      // isTokenRefreshing 이 false 인 경우에만 token refresh 요청
+      isTokenRefreshCheck = true;
+
+      const refreshToken = await localStorage.getItem('refresh_token');
+      const tokenData= await AuthService.sendRefreshToken( refreshToken );
+      const {access_token, refresh_token} = tokenData;
+      // console.log('access_token=' + access_token, '\n refresh_token=' + refresh_token);
+      //header 에 재발급된 token 을 심어놔야 한다.
+      // AuthService.setAuthToken(this.token) 함수가 내부에서 아래 내용을 이미 호출하고 있음.
+      //axios.defaults.headers.common.Authorization = `Bearer ${access_token}`;
+      await store.commit(`Auth/${TokenMutationType.GET_TOKEN}`, access_token);
+      await store.commit(`Auth/${TokenMutationType.GET_REFRESH_TOKEN}`, refresh_token);
+
+      isTokenRefreshCheck = false;
+      // 새로운 토큰으로 지연되었던 요청 진행
+      getTokenRefreshed(access_token);
+
+      console.log('refreshSubscribers=', refreshSubscribers);
+    }
+    // config.headers.Authorization = `Bearer ${access_token}`;
+    ///axios( config );
+    //  token 이 재발급 되는 동안의 요청은 refreshSubscribers 에 저장
+    return new Promise((resolve) => {
+      addRefreshSubscriber((token: string) => {
+        config.headers.Authorization = `Bearer ${token}`;
+        resolve( axios(config) );
+        console.log(':::status=', data, config);
+      });
+    });
   }else if (status === 400) {
     mismatchAccess(config, data);
   }else{
@@ -127,6 +139,7 @@ const request = (method: string, url: string, data: any | null = null ): Promise
     // console.log( res.data )
     return res.data;
   }).catch((error: any) => {
+    console.log(error.response);
     //여기서 별도로 error.response 를 넘겨 줘야 각 api 호출시 catch 부분에서 error 의 인자값을 확인할 수 있다.
     // console.log(`error_code=${error.response.data.error_code}\n${error.response.data.message}\n url=${url}\n method=${method}`);
     throw error.response;

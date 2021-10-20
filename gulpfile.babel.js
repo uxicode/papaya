@@ -1,6 +1,5 @@
 import del from 'del';
 import gulp from 'gulp';
-import cleanCss from 'gulp-clean-css';
 import sassComplie from 'gulp-sass';
 import watch from 'gulp-watch';
 import autoPrefixer from 'gulp-autoprefixer';
@@ -44,9 +43,9 @@ function localSassToCss() {
         .pipe( gulp.dest(paths.css) );
 }
 const paths = {
-    root: 'src',
-    css: 'src/pages/assets/css',
-    scss:'src/pages/assets/scss/*'
+    root: 'markup',
+    css: 'markup/pages/assets/css',
+    scss:'markup/pages/assets/scss/*'
 };
 const cleanClientCss = () => del([`${paths.css}`], {force: true});
 const localWatch = () => {

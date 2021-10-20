@@ -563,12 +563,14 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
 
 
     //formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.
+    console.log('mergedata=', mergeData);
+
     const temp = JSON.stringify( mergeData );
     this.formData.append('data', temp );
     const allEditInfo=PostService.setPostInfoAllById( Number( this.classID ), id, this.formData );
     editPromiseItems.push( allEditInfo );
 
-    console.log('editPromiseItems=', editPromiseItems);
+    // console.log('editPromiseItems=', editPromiseItems);
 
     //수정 데이터 최종 전송
     this.EDIT_POST_ACTION({ classId: Number(this.classID), postId: id, promise: editPromiseItems })

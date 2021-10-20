@@ -524,7 +524,7 @@ export default class ClassModule extends VuexModule {
         return MyClassService.getEduCurList(payload.classId, payload.curriculumId )
             .then((data) => {
                 this.context.commit(SET_CURRICULUM_DETAIL, data.curriculum);
-                console.log('curriculumDetailData=', data.curriculum);
+                // console.log('curriculumDetailData=', data.curriculum);
                 return Promise.resolve(this.curriculumDetailData);
             }).catch((error) => {
                 console.log(error);

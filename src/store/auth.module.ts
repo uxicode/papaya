@@ -120,7 +120,7 @@ export default class AuthModule extends VuexModule {
 
   @Mutation
   public [TokenMutationType.GET_TOKEN](token: string | null): void {
-    // console.log('token=', this.token);
+
     if (token !== null) {
       this.token = token;
       AuthService.setAuthToken(this.token);

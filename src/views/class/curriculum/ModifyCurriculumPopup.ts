@@ -191,7 +191,7 @@ export default class ModifyCurriculumPopup extends Vue {
         }
         this.courseIdx = idx;
         this.isModifyClassCourse=true;
-        console.log(this.courseId);
+        // console.log(this.courseId);
     }
 
     private onModifyCoursePopupStatus(value: boolean) {
