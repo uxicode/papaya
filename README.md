@@ -62,6 +62,19 @@ npm run test:e2e
 ```
 npm run test:unit
 ```
+https://router.vuejs.org/guide/essentials/history-mode.html#example-server-configurations
+
+### HTML5 History Mode 에서 Nginx 설정법
+- https://router.vuejs.org/guide/essentials/history-mode.html#example-server-configurations
+
+**nginx**
+```
+location / {
+  try_files $uri $uri/ /index.html;
+}
+```
+
+
 
 ## 기능 별 화면 
 

@@ -171,7 +171,7 @@ export default class AllNotify extends Vue {
     private async getAllNotifyList() {
         await this.GET_ALL_MY_CLASS_POST_LIST_ACTION( { page_no:1, count:100 } )
           .then((data)=>{
-              console.log('모든 알림', data);
+              // console.log('모든 알림', data);
               this.isPageLoaded=true;
           });
 
