@@ -308,7 +308,7 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
   private async findMemberRange( begin: number, end: number ){
     //현재 api 에서 클래스 멤버 전체 조회시 500개이상 이더라도
     //페이징에 대한 쿼리스트링 전달이 없기에 별도로 프론트에서 페이징처리
-    const items = await this.getMemberRange(begin, end);
+    const items = this.myClassLists;// await this.getMemberRange(begin, end);
     //전체 조회 api 에서 공개 /비공개에 대한 값과 멤버수 등 항목이 없기에 개별 클래스 조회 api 통신해야 한다.
     // 즉  pagination 1개에 16개씩 노출이라서 전체 api 통신 후 16번의 개별 통신을 다시 해야 한다.
     //개별 조회 api promise 를 배열에 담아둔다.
