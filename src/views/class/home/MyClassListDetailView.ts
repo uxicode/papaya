@@ -437,7 +437,7 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
   }
 
   private getNoticeMainTitle(): string {
-    return ( this.noticePost[this.noticePost.length-1])? this.noticePost[this.noticePost.length-1].title : '';
+    return ( this.noticePost[this.noticePost.length-1] )? this.noticePost[this.noticePost.length-1].title : '';
   }
   //end : 상단 공지 ================================================
 

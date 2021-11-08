@@ -8,7 +8,7 @@ import {
   SET_REPLY,
   SET_SCHEDULE_DETAIL,
   SET_SCHEDULE_LIST,
-  SET_ALL_MY_CLASS_LIST,
+  // SET_ALL_MY_CLASS_LIST,
   SET_ALL_MY_SCHEDULE
 } from '@/store/mutation-class-types';
 import {

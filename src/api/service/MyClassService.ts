@@ -15,6 +15,15 @@ class MyClassService {
         return request('get', `${CLASS_BASE_URL}/me/all`);
     }
 
+    /**
+     * 내가 가입한 클래스 전체 조회
+     * @param no
+     * @param limit
+     */
+    public getAllMyClassPaging(no: number, limit: number=10): Promise<IMyClassList> {
+        return request('get', `${CLASS_BASE_URL}/me/all/${limit}/${no}`);
+    }
+
     public getClassInfoById( id: number | string ): Promise<any>{
         return request('get', `${CLASS_BASE_URL}/${id}`);
     }

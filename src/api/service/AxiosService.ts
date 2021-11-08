@@ -5,11 +5,14 @@ import {LoginMutationType, TokenMutationType} from '@/store/mutation-auth-types'
 import {REMOVE_CLASS_DATA} from '@/store/mutation-class-types';
 import AuthService from '@/api/service/AuthService';
 
+//.env 파일 환경 변수는 무조건 VUE_APP_ 이라는 prefix 가 서두에 붙어야 한다.
 axios.defaults.baseURL = process.env.VUE_APP_API_BASE_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 // axios.defaults.timeout=1000;
 
+
+console.log( process.env.VUE_APP_API_BASE_URL );
 /**
  * 로그아웃 시키기
  */
@@ -125,7 +128,6 @@ axios.interceptors.response.use((response: AxiosResponse) => {
         //저장 배열 초기화
         await removeRefreshSubscribers();
       }, 700);
-
     }
     //  token 이 재발급 되는 동안의 요청은 refreshSubscribers 에 저장
     return pendingForCallApi(config);

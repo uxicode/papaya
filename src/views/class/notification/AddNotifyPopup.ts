@@ -283,7 +283,7 @@ export default class AddNotifyPopup extends Vue{
     const voteMergeData = (this.voteData!==null)? {...linkMergeData, ...this.voteData} : {...this.postData};
     const mergeData= (this.alarmData.alarmAt!=='')? {...voteMergeData, ...this.alarmData} : voteMergeData;
 
-    //formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.
+    // formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.
     const temp = JSON.stringify( mergeData );
     this.formData.append('data', temp );
 

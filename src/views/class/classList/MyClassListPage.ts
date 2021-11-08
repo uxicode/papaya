@@ -8,12 +8,16 @@ import MyClassService from '@/api/service/MyClassService';
 import MyClassListView from '@/views/class/classList/MyClassListView';
 <<<<<<< HEAD
 import WithRender from './MyClassListPage.html';
+<<<<<<< HEAD
 import {MYCLASS_LIST} from '@/store/mutation-class-types';
 =======
 // import {MYCLASS_LIST} from '@/store/mutation-class-types';
 >>>>>>> 85e9c9b... 클래스 페이징 처리 수정
+=======
+// import {MYCLASS_LIST} from '@/store/mutation-class-types';
+>>>>>>> fbd2d69... 클래스 페이징 api 추가
 import PagingMixins from '@/mixin/PagingMixins';
-import UtilsMixins from '@/mixin/UtilsMixins';
+// import UtilsMixins from '@/mixin/UtilsMixins';
 import NoticeService from '@/api/service/NoticeService';
 import {INotice} from '@/views/model/notice.model';
 import WithRender from './MyClassListPage.html';
@@ -33,12 +37,17 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
 
   //start : 변수 선언부 ================================================
 <<<<<<< HEAD
+<<<<<<< HEAD
   public numOfPage: number=12; // 더보기 클릭 > 불러올 카드 리스트 개수
   public pageCount: number=0; // 페이징
 =======
   public numOfPage: number=11; // 더보기 클릭 > 불러올 카드 리스트 개수
   public pageCount: number=1; // 페이징
 >>>>>>> 85e9c9b... 클래스 페이징 처리 수정
+=======
+  public numOfPage: number=10; // 더보기 클릭 > 불러올 카드 리스트 개수
+  public pageCount: number=1; // 페이징
+>>>>>>> fbd2d69... 클래스 페이징 api 추가
   // public dummyData: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
   public startNum: number =0;
   public endNum: number =0;
@@ -102,10 +111,14 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
 
   @MyClass.Action
 <<<<<<< HEAD
+<<<<<<< HEAD
   private MYCLASS_LIST_ACTION!: ()=> Promise<IMyClassList[]>;
 =======
   private MYCLASS_LIST_ACTION!: ( payload?: { no: number, limit: number } )=> Promise<IMyClassList[]>;
 >>>>>>> 85e9c9b... 클래스 페이징 처리 수정
+=======
+  private MYCLASS_LIST_ACTION!: (payload: { no: number, limit: number } )=> Promise<IMyClassList[]>;
+>>>>>>> fbd2d69... 클래스 페이징 api 추가
 
   @MyClass.Action
   private MYCLASS_HOME!: ( id: string | number ) => Promise<any>;
@@ -115,6 +128,9 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
 
   @MyClass.Getter
   private myClassLists!: IMyClassList[];
+
+  @MyClass.Getter
+  private myClassListLength!: number;
 
   @MyClass.Getter
   private classID!: number;
@@ -149,7 +165,7 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
   }
 
   get totalCount(): number{
-    return this.originalClassItems.length;
+    return this.myClassListLength;
   }
   //end : get method ================================================
 
@@ -213,6 +229,7 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
       }
     ];
   }
+
  //end : public ================================================
 
   /**
@@ -222,8 +239,11 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
   private getMyClass(): void {
 <<<<<<< HEAD
     console.log(this.myClassLists);
-    this.MYCLASS_LIST_ACTION().then(() =>{
+    console.log('this.pageCount=', this.pageCount);
+    console.log('this.myClassLists.length=', this.myClassLists.length );
+    this.MYCLASS_LIST_ACTION( {no: this.pageCount, limit: this.numOfPage} ).then(() =>{
 
+<<<<<<< HEAD
       // console.log(this.myClassLists);
 =======
     // console.log(this.myClassLists);
@@ -234,10 +254,13 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
 
       // console.log('this.myClassLists=', this.myClassLists);
 >>>>>>> 85e9c9b... 클래스 페이징 처리 수정
+=======
+      console.log('this.myClassLists=', this.myClassLists);
+>>>>>>> fbd2d69... 클래스 페이징 api 추가
 
       //내가 가입한 클래스 목록이 null 이거나 undefined 일경우 재로드
       if (this.myClassLists !== null && this.myClassLists!==undefined) {
-        if (this.myClassLists.length > 0) {
+        if (this.totalCount > 0) {
           // console.log(this.myClassLists);
           this.getUpdateList();
         }
@@ -260,7 +283,8 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
    * this.pageCount 는 더 보기 클릭시 카운팅 하여 paging 처리 한다.
    */
   private getMoreDisplay(): void{
-    this.getUpdateList();
+    // this.getUpdateList();
+    this.getMyClass();
   }
 
 
@@ -274,11 +298,12 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
     this.startNum=begin;
     this.endNum=end;
 
-    // console.log(begin, end);
+    // console.log('start:', begin, '- end:', end);
+
     //총 페이지 카운트
     const totalPageCount=this.getTotalPageCount({total: this.totalCount, numOfPage: this.numOfPage});
     //페이지 카운트 구하기
-    const pageItems = this.getPageNum({ totalPageCount, pageSize: totalPageCount, curPageNum: 1});
+    const pageItems = this.getPageNum({ totalPageCount, pageSize: totalPageCount, curPageNum: this.pageCount});
     // console.log('num=', num, num[this.pageCount]*this.numOfPage );
 
     //마지막 페이지 카운트
@@ -290,6 +315,7 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
     if( this.endNum<= this.totalCount){
       this.createClassCardList({begin, end});
       ++this.pageCount;
+      // ++this.pageNum;
     }else{
       this.endNum=this.totalCount;
       this.pageCount=lastPageNum;
@@ -348,7 +374,7 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
     }
 
 
-    //현재 페이지가 pageCount와 같을 때를 유의하며 (page-1)을 하고
+    //현재 페이지가 pageCount 와 같을 때를 유의하며 (page-1)을 하고
      // +1은 첫페이지가 0이나 10이 아니라 1이나 11로 하기 위함임
     let begin: number;
 
@@ -356,7 +382,7 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
     let end: number ;
 
 
-    if( this.pageCount===0 ){
+    if( (this.pageCount-1)===0 ){
       begin=0;
       end=this.numOfPage;
     }else{

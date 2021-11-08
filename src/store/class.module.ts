@@ -11,11 +11,11 @@ import {
 } from '@/views/model/my-class.model';
 import MyClassService from '@/api/service/MyClassService';
 import {
-    MYCLASS_LIST,
+    // MYCLASS_LIST,
     KEEP_POST_LIST,
     CREATE_CLASS_LIST,
     SET_CLASS_ID,
-    SET_MYCLASS_HOME_DATA,
+    // SET_MYCLASS_HOME_DATA,
     REMOVE_CLASS_DATA,
     SET_CLASS_MEMBER_INFO,
     SET_MEMBER_ID,
@@ -23,6 +23,7 @@ import {
     SET_CURRICULUM_LIST,
     SET_CURRICULUM_DETAIL,
     SET_COURSE_DETAIL,
+    MyClassMutation
 } from '@/store/mutation-class-types';
 import {
     MYCLASS_LIST_ACTION,
@@ -277,10 +278,15 @@ export default class ClassModule extends VuexModule {
         is_private: false,
         image_url:''
     };
+    private myClassListLen: number=0;
 
     /* Getters */
     get myClassLists():  IMyClassList[]{
         return this.classData;
+    }
+
+    get myClassListLength(): number{
+        return this.myClassListLen;
     }
 
     get createdClassInfo(): IMakeClassInfo {
@@ -324,6 +330,11 @@ export default class ClassModule extends VuexModule {
 
     /* Mutations */
     @Mutation
+    public [MyClassMutation.SET_MY_CLASS_TOTAL](num: number): void{
+        this.myClassListLen=num;
+    }
+
+    @Mutation
     public [UPDATE_SIDE_NUM](num: number): void{
         this.sideMenuNum=num;
     }
@@ -334,7 +345,7 @@ export default class ClassModule extends VuexModule {
     }
 
     @Mutation
-    public [SET_MYCLASS_HOME_DATA]( info: IClassInfo ): void{
+    public [MyClassMutation.SET_MYCLASS_HOME_DATA]( info: IClassInfo ): void{
         this.myClassHomeData=info;
         localStorage.setItem('homeData', JSON.stringify(this.myClassHomeData) );
     }
@@ -366,7 +377,7 @@ export default class ClassModule extends VuexModule {
     }
 
     @Mutation
-    public [MYCLASS_LIST](classData: IMyClassList[] ): void {
+    public [MyClassMutation.MYCLASS_LIST](classData: IMyClassList[] ): void {
         this.classData =classData;
 
         // console.log(this.classData);
@@ -409,6 +420,7 @@ export default class ClassModule extends VuexModule {
     /* Actions */
     @Action({rawError: true})
 <<<<<<< HEAD
+<<<<<<< HEAD
     public [MYCLASS_LIST_ACTION](): Promise<IMyClassList[]> {
         return MyClassService.getAllMyClass()
 =======
@@ -425,15 +437,25 @@ export default class ClassModule extends VuexModule {
 
         return func(payload)
 >>>>>>> 85e9c9b... 클래스 페이징 처리 수정
+=======
+    public [MYCLASS_LIST_ACTION]( payload: { no: number, limit: number } ): Promise<IMyClassList[]> {
+        const {no, limit} = payload;
+
+        console.log('MYCLASS_LIST_ACTION, no=', no, '::limit=', limit);
+
+        return MyClassService.getAllMyClassPaging(no, limit)
+>>>>>>> fbd2d69... 클래스 페이징 api 추가
             .then((data: any) => {
 
                 // console.log(router.currentRoute);
                 if (router.currentRoute.name === 'myClassList') {
-                    console.log('현재 route name=', router.currentRoute);
+                    // console.log('현재 route name=', router.currentRoute);
                     this.context.commit(SET_CLASS_ID, -1);
                 }
 
-                this.context.commit(MYCLASS_LIST, data.myclass_list);
+                this.context.commit(MyClassMutation.MYCLASS_LIST, data.myclass_list);
+                this.context.commit(MyClassMutation.SET_MY_CLASS_TOTAL, data.total_count);
+
                 return Promise.resolve(data.myclass_list);
             }).catch((error: any) => {
                 console.log(error);
@@ -480,7 +502,7 @@ export default class ClassModule extends VuexModule {
 
         return MyClassService.getClassInfoById( id )
           .then( (data)=>{
-              this.context.commit(SET_MYCLASS_HOME_DATA, data.classinfo );
+              this.context.commit(MyClassMutation.SET_MYCLASS_HOME_DATA, data.classinfo );
               // console.log('통신 후 vuex MYCLASS_HOME=', this.classID, '::리스트 클릭 id=', id, this.classIdx );
               return Promise.resolve( this.myClassHomeData );
           }).catch((error)=>{
