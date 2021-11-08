@@ -419,32 +419,12 @@ export default class ClassModule extends VuexModule {
 
     /* Actions */
     @Action({rawError: true})
-<<<<<<< HEAD
-<<<<<<< HEAD
-    public [MYCLASS_LIST_ACTION](): Promise<IMyClassList[]> {
-        return MyClassService.getAllMyClass()
-=======
-    public [MYCLASS_LIST_ACTION]( payload?: { no: number, limit: number } ): Promise<IMyClassList[]> {
-
-        // const fetchMyClassList=( payload )? MyClassService.getAllMyClassPaging : MyClassService.getAllMyClass;
-
-        // console.log('MYCLASS_LIST_ACTION, no=', no, '::limit=', limit);
-
-        const func = (...args: any[]) => {
-            console.log(args[0]);
-            return (args[0]) ? MyClassService.getAllMyClassPaging(args[0].no, args[0].limit) : MyClassService.getAllMyClass();
-        };
-
-        return func(payload)
->>>>>>> 85e9c9b... 클래스 페이징 처리 수정
-=======
     public [MYCLASS_LIST_ACTION]( payload: { no: number, limit: number } ): Promise<IMyClassList[]> {
         const {no, limit} = payload;
 
         console.log('MYCLASS_LIST_ACTION, no=', no, '::limit=', limit);
 
         return MyClassService.getAllMyClassPaging(no, limit)
->>>>>>> fbd2d69... 클래스 페이징 api 추가
             .then((data: any) => {
 
                 // console.log(router.currentRoute);
