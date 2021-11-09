@@ -419,12 +419,18 @@ export default class ClassModule extends VuexModule {
 
     /* Actions */
     @Action({rawError: true})
-    public [MYCLASS_LIST_ACTION]( payload: { no: number, limit: number } ): Promise<IMyClassList[]> {
-        const {no, limit} = payload;
+    public [MYCLASS_LIST_ACTION]( payload?: { no: number, limit: number } ): Promise<IMyClassList[]> {
 
-        console.log('MYCLASS_LIST_ACTION, no=', no, '::limit=', limit);
+        // const fetchMyClassList=( payload )? MyClassService.getAllMyClassPaging : MyClassService.getAllMyClass;
 
-        return MyClassService.getAllMyClassPaging(no, limit)
+        // console.log('MYCLASS_LIST_ACTION, no=', no, '::limit=', limit);
+
+        const func = (...args: any[]) => {
+            console.log(args[0]);
+            return (args[0]) ? MyClassService.getAllMyClassPaging(args[0].no, args[0].limit) : MyClassService.getAllMyClass();
+        };
+
+        return func(payload)
             .then((data: any) => {
 
                 // console.log(router.currentRoute);
