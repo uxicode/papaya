@@ -36,7 +36,7 @@ import {
   namespaced: true,
 })
 export default class AuthModule extends VuexModule {
-  public token?: string | null= null; //멤버 변수는 state 로 이용된다.
+  public token?: string | null = null; //멤버 변수는 state 로 이용된다.
   public findId: string = '';
   public user: IUser[] =[];
   public me: IUserMe | null =null;
@@ -210,7 +210,7 @@ export default class AuthModule extends VuexModule {
    * @param payload
    */
   @Action({rawError: true})
-  public [LoginActionTypes.LOGIN_ACTION](payload: { uid: string, password: string }): Promise<any> {
+  public [LoginActionTypes.LOGIN_ACTION]( payload: { uid: string, password: string }): Promise<any> {
     //LOGIN_ACTION
     return AuthService.login(payload.uid, payload.password)
       .then((data: any) => {

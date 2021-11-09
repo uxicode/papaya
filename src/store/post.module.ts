@@ -283,7 +283,7 @@ export default class PostModule extends VuexModule {
       .then((data) => {
         // console.log(data);
         // this.postListItems = data.post_list;
-        // console.log('noticeListItems=', this.postListData);
+        console.log('noticeListItems=', this.postListData);
 
         this.context.commit(SET_POST_IN_BOOKMARK, data.post_list);
         this.context.commit(SET_POST_TOTAL, data.total_count );

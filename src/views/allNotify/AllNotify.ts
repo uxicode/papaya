@@ -7,10 +7,12 @@ import AddNotifyPopup from '@/views/class/notification/AddNotifyPopup';
 import NotificationListView from '@/views/class/notification/NotificationListView';
 import {CommentService} from '@/api/service/CommentService';
 import {getAllPromise} from '@/types/types';
-import WithRender from './AllNotify.html';
 import {IMyClassList} from '../model/my-class.model';
 import ImageSettingService from '../service/profileImg/ImageSettingService';
 import {GET_ALL_MY_CLASS_POST_LIST_ACTION, GET_ALL_MY_CLASS_RESERVED_LIST_ACTION} from '@/store/action-class-types';
+import WithRender from './AllNotify.html';
+import {RESET_POST_LIST} from '@/store/mutation-class-types';
+import {Mutation} from 'vuex-module-decorators';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -25,10 +27,29 @@ const Post = namespace('Post');
     }
 })
 export default class AllNotify extends Vue {
+    ///// 추가된 목록 /////////
+
+
+    get reservedChk(): boolean {
+        return this.isReservedChk;
+    }
+
+    get postListItemsModel() {
+        return this.postListItems;
+    }
+
+    get commentsTotalItemsModel() {
+        return this.commentsTotalItems;
+    }
 
     ///// 추가된 목록 /////////
-    @MyClass.Mutation
-    private SET_CLASS_ID!: (id: number) => void;
+    get myAllClassListModel(): IMyClassList[] {
+        return this.myClassLists;
+    }
+
+
+
+    ///// 추가된 목록 /////////
 
     @MyClass.Action
     private MYCLASS_LIST_ACTION!: () => Promise<IMyClassList[]>;
@@ -49,12 +70,16 @@ export default class AllNotify extends Vue {
     @Post.Action
     private DELETE_POST_ACTION!: (payload: { classId: string | number, postId: number })=>Promise<any>;
 
+    @Post.Mutation
+    private RESET_POST_LIST!: () => void;
+
+    @MyClass.Mutation
+    private SET_CLASS_ID!: (id: number) => void;
 
     ///// 추가된 목록 /////////
     @MyClass.Getter
     private myClassLists!: IMyClassList[];
     ///// 추가된 목록 /////////
-
 
     @MyClass.Getter
     private classID!: string | number;
@@ -88,25 +113,6 @@ export default class AllNotify extends Vue {
     ///// 추가된 목록 /////////
     private sideMenuActiveNum: number = -1;
     private currentClassId: number = -1;
-    ///// 추가된 목록 /////////
-
-
-    get reservedChk(): boolean {
-        return this.isReservedChk;
-    }
-
-    get postListItemsModel() {
-        return this.postListItems;
-    }
-
-    get commentsTotalItemsModel() {
-        return this.commentsTotalItems;
-    }
-
-    ///// 추가된 목록 /////////
-    get myAllClassListModel(): IMyClassList[] {
-        return this.myClassLists;
-    }
 
     /*get allMyClassPostsItemsModel() {
         return this.allMyClassPostsItems;
@@ -161,7 +167,9 @@ export default class AllNotify extends Vue {
     private onClassNotifyList(item: IMyClassList, index: number) {
         this.sideMenuActiveNum = index;
         this.currentClassId = item.id;
+
         this.SET_CLASS_ID(this.currentClassId);
+        this.RESET_POST_LIST();
         this.getList( Number( this.currentClassId) )
           .then(()=>{
               this.isPageLoaded=true;
