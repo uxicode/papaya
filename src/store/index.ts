@@ -23,7 +23,7 @@ const store = new Vuex.Store({
   },
 });
 
-const {classId, homeData, token} = localStorage;
+const { classId, homeData, token} = localStorage;
 // console.log('vue store index.ts/ localStorage 추출값 classId=', classId);
 // console.log('vue store index.ts/ localStorage 추출값 homeData=', homeData);
 // const {token} = localStorage;
