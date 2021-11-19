@@ -77,7 +77,9 @@ export class PostService{
   public static setUserVoteSelect( voteId: string | number, memberId: number, payload: { vote_choice_ids: number[] }): Promise<any>{
     return request('post', `/vote/${voteId}/member/${memberId}/select`, payload);
   }
-
+  public static setUserVoteCancel( voteId: string | number, memberId: number, payload: { vote_choice_ids: number[] }): Promise<any>{
+    return request('delete', `/vote/${voteId}/member/${memberId}/select`, payload);
+  }
   /**
    * 게시글 수정 - 공지/일반으로 변경 혹은 게시글( 제목/내용 수정  )
    * @param classId

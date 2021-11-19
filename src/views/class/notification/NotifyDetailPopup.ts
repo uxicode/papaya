@@ -14,6 +14,7 @@ import CommentBtm from '@/components/comment/CommentBtm.vue';
 import UtilsMixins from '@/mixin/UtilsMixins';
 import EditNotificationPopup from '@/views/class/notification/EditNotificationPopup';
 import WithRender from './NotifyDetailPopup.html';
+import { PostService } from '@/api/service/PostService';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -62,6 +63,25 @@ export default class NotifyDetailPopup extends Mixins(UtilsMixins) {
 
     get postDetailModel(): IPostModel{
         return this.postDetailItem;
+    }
+
+    public onChangeVoteCheck(value: string | number | boolean, checked: boolean) {
+        // console.log(value, checked, this.detailPostId);
+        const {vote, user_member_id, id}=this.postDetailItem;
+
+        const fetchVoteSelect=(checked)? PostService.setUserVoteSelect : PostService.setUserVoteCancel;
+        fetchVoteSelect(vote.id, user_member_id, {vote_choice_ids:[ Number(value) ]})
+          .then(( data: any )=>{
+              this.GET_POST_DETAIL_ACTION({classId: Number(this.classID), postId: id })
+                .then(( postData: IPostModel )=>{
+                    // this.isEditPopupOpen=true;
+                    console.log(postData.vote);
+                });
+          })
+          .catch((error: any)=>{
+              console.log('투표 데이터가 반영되지 않았습니다.');
+          });
+
     }
 
     private popupChange( value: boolean ) {

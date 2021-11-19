@@ -72,13 +72,15 @@
 
 
                                  <!-- start: 투표가 있는 경우 -->
-                                  <detail-in-vote-preview :items="postDetailModel.vote"
-                                                   choices-list="vote_choices"
-                                                   user-choices="user_choices"
-                                                   title="title"
-                                                   choice="multi_choice"
-                                                   finish-at="finishAt"
-                                                   mode="anonymous_mode"></detail-in-vote-preview>
+                              <detail-in-vote-preview :items="postDetailModel.vote"
+                                                      :member-id="postDetailModel.user_member_id"
+                                                      choices-list="vote_choices"
+                                                      user-choices="user_choices"
+                                                      title="title"
+                                                      choice="multi_choice"
+                                                      finish-at="finishAt"
+                                                      mode="anonymous_mode"
+                                                      @checked="onChangeVoteCheck"></detail-in-vote-preview>
                                  <!-- end: 투표가 있는 경우 -->
 
                                 <!-- start: 링크가 있는 경우-->

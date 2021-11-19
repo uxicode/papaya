@@ -14,7 +14,7 @@
         </ul>
       </div>
       <div class="vote-checkbox" v-if="items[choicesList]!==null">
-        <div class="vote-select" v-for="(choiceItem, index) in checkModel" :key="`choiceItem-${index}`">
+        <div class="vote-select" v-for="(choiceItem, index) in items[choicesList]" :key="`choiceItem-${index}`">
           <!--<div class="btn-radio">
             <input type="radio" name="email" id="radio1">
             <label for="radio1">경주<br><span><em class="vote-current">0</em>명</span></label>
@@ -23,9 +23,9 @@
           <check-button :btn-id="`check-${index}`"
                         :check-name="`check-${index}`"
                         type="round"
-                        :checked="choiceItem.chk"
+                        :checked="getChoiceCheck"
                         :btn-value="choiceItem.id"
-                        @click="optionFindChange">{{ choiceItem.text }}<br><span><em class="vote-current">{{choiceItem.len}}</em>명</span></check-button>
+                        @click="optionFindChange">{{ choiceItem.text }}<br><span><em class="vote-current">{{ choiceItem[userChoices].length }}</em>명</span></check-button>
 
           <!--<radio-button :btn-id="`radio-${index}`"
                         radio-name="radio"
@@ -70,6 +70,9 @@ export default class DetailInVotePreview extends Vue{
   ]
   */
   @Prop(String)
+  private memberId!: string | number;
+
+  @Prop(String)
   private choicesList!: string;
 
   @Prop(String)
@@ -87,24 +90,13 @@ export default class DetailInVotePreview extends Vue{
   @Prop(String)
   private mode!: string;  //anonymous_mode
 
-  private userSelectItems: Array<{ id: number, text: string, len: number, chk: boolean; }> = [];
 
-  get checkModel() {
-    // console.log(this.items[this.choicesList]);
-    if (this.items[this.choicesList] ) {
-      this.userSelectItems=this.items[this.choicesList].map( ( item: any | any[] )=>{
-        return {
-          id: item.id,
-          text: item.text,
-          len: (item.user_choices.length) ? item.user_choices.length : 0,
-          chk: (item.user_choices.length > 0)
-        };
-      });
-    }
-
-    return this.userSelectItems;
+  public getChoiceCheck( choiceItem: any ) {
+    const findItem=choiceItem[this.userChoices].filter( (item: any)=>{
+      return item.member_id === Number( this.memberId );
+    } );
+    return findItem.length>0;
   }
-
 
   // private radioValue: string = '';
 
@@ -117,19 +109,7 @@ export default class DetailInVotePreview extends Vue{
   //class - 724 / postid - 1302 /  vote - 206 ( 369, 370, 371 )
   public optionFindChange(value: string | number | boolean, checked: boolean) {
 
-    const findIdx = this.userSelectItems.findIndex((item: { id: number, text: string, len: number, chk: boolean }) => {
-      return Number(item.id) === Number(value);
-    });
-    if (findIdx === -1) {
-      return;
-    }
-    const targetObj = this.userSelectItems[findIdx];
-    let {chk}=targetObj;
-    chk = checked;
-    this.userSelectItems.splice( findIdx, 1, {...targetObj, chk});
-
-    // this.btnValue=value;
-    // this.$emit('click', this.currentValue, this.checked );
+    this.$emit('checked', value, checked );
   }
 
 }

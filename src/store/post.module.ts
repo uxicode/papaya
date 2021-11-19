@@ -422,17 +422,20 @@ export default class PostModule extends VuexModule {
 
     return PostService.getPostsById(classId, postId)
       .then((data) => {
-        this.context.commit(SET_POST_DETAIL, data.post);
+        const vote_choices=data.post.vote.vote_choices;
+        // sort 하는 이유는 투표를 선택시 선택된 항목이 데이터 배열 내에서 순서가 바뀌어서 전달 될 때가 있기 때문..
+        vote_choices.sort( (a: any, b: any )=>{
+          return a.index-b.index;
+        });
         // this.postDetailData = data.post;
-        console.log('postDetailData=', this.postDetailData);
+        this.context.commit(SET_POST_DETAIL, {...data.post, ...{ vote_choices } } );
 
-        return Promise.resolve(this.postDetailData);
+        return Promise.resolve(data.post);
       }).catch((error) => {
         console.log(error);
         return Promise.reject(error);
       });
   }
-
   @Action({rawError: true})
   public [EDIT_POST_ACTION](payload: {  classId: number, postId: number, promise: Array<Promise<any>> }): Promise<any>{
     const {classId, postId, promise} = payload;
