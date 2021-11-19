@@ -23,7 +23,7 @@
           <check-button :btn-id="`check-${index}`"
                         :check-name="`check-${index}`"
                         type="round"
-                        :checked="getChoiceCheck"
+                        :checked="getChoiceCheck( choiceItem )"
                         :btn-value="choiceItem.id"
                         @click="optionFindChange">{{ choiceItem.text }}<br><span><em class="vote-current">{{ choiceItem[userChoices].length }}</em>명</span></check-button>
 
