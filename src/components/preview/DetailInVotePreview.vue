@@ -69,7 +69,7 @@ export default class DetailInVotePreview extends Vue{
     }
   ]
   */
-  @Prop(String)
+  @Prop([String, Number])
   private memberId!: string | number;
 
   @Prop(String)

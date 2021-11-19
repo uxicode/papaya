@@ -25,8 +25,8 @@ private allChecked: boolean = true;
            :name="checkName"
            :id="btnId"
            :value="btnValue"
-           v-model="checked"
-           @click="update( $event.target.value, $event.target.checked )">
+           :checked="checked"
+           @change="update( $event.target.value, $event.target.checked )">
     <label :for="btnId">
       <slot></slot>
     </label>
