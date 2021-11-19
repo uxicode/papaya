@@ -17,7 +17,7 @@
             <h3 class="fd-tit">{{ item.title }}</h3>
             <div class="fd-writer type2">
               <p class="writer">
-                <span class="name" :class="{'manager': isOwner( item.owner.user_id, item.user_id) }">{{ item.owner.nickname }}</span>
+                <span class="name" :class="{'manager': isOwner( item ) }">{{ item.owner? item.owner.nickname : '익명'  }}</span>
                 <span class="time">{{ item.updatedAt }}</span>
               </p>
             </div>
@@ -29,7 +29,7 @@
                         :close-on-click="true">
                   <template v-slot:activator="{ on, attrs }">
                     <button
-                            v-if="isOwner( item.owner.user_id, item.user_id)"
+                            v-if="isOwner( item )"
                             type="button"
                             class="list-popup-btn"
                             v-bind="attrs"
@@ -101,7 +101,7 @@
                 <h3 class="fd-tit">{{ item.list.title }}</h3>
                 <div class="fd-writer type2">
                   <p class="writer">
-                    <span class="name" :class="{'manager':isOwner( item.list.owner.user_id, item.list.user_id)}">{{  item.list.owner.nickname }}</span>
+                    <span class="name" :class="{'manager':isOwner( item.list )}">{{  item.list.owner? item.list.owner.nickname : '익명'  }}</span>
                     <span class="time">{{ item.list.updatedAt }}</span>
                     <span class="noti">{{ item.list.type === 0 ? '일반' : '공지' }}</span>
                   </p>
@@ -165,13 +165,13 @@
                 <h3 class="fd-tit">{{ item.list.title }}</h3>
                 <div class="fd-writer type2">
                   <p class="writer">
-                    <span class="name" :class="{'manager':isOwner( item.list.owner.user_id, item.list.user_id)}">{{ item.list.owner.nickname }}</span>
+                    <span class="name" :class="{'manager':isOwner( item.list )}">{{ item.list.owner? item.list.owner.nickname : '익명'  }}</span>
                     <span class="time">{{ item.list.updatedAt }}</span>
                   </p>
                 </div>
                 <div class="fd-btn">
                   <div class="list-popup">
-                    <v-menu  v-if="isOwner( item.list.owner.user_id, item.list.user_id)"
+                    <v-menu  v-if="isOwner( item.list )"
                              min-width="200px"
                              :close-on-click="true">
                       <template v-slot:activator="{ on, attrs }">
@@ -206,13 +206,13 @@
                 <h3 class="fd-tit">{{ item.list.title }}</h3>
                 <div class="fd-writer type2">
                   <p class="writer">
-                    <span class="name crown" :class="{'manager':isOwner( item.list.owner.user_id, item.list.user_id)}">{{ item.list.owner.nickname }}</span>
+                    <span class="name crown" :class="{'manager':isOwner( item.list )}">{{ item.list.owner? item.list.owner.nickname : '익명' }}</span>
                     <span class="time">{{ item.list.updatedAt }}</span>
                   </p>
                 </div>
                 <div class="fd-btn">
                   <div class="list-popup">
-                    <v-menu  v-if="isOwner( item.list.owner.user_id, item.list.user_id)"
+                    <v-menu  v-if="isOwner( item.list )"
                              min-width="200px"
                              :close-on-click="true">
                       <template v-slot:activator="{ on, attrs }">
@@ -308,13 +308,13 @@
             <h3 class="fd-tit">{{ item.title }}</h3>
             <div class="fd-writer type2">
               <p class="writer">
-                <span class="name crown" :class="{'manager':isOwner( item.owner.user_id, item.user_id)}">{{ item.owner.nickname }}</span>
+                <span class="name crown" :class="{'manager':isOwner( item.owner )}">{{ item.owner? item.owner.nickname : '익명' }}</span>
                 <span class="time">{{ item.updatedAt }}</span>
               </p>
             </div>
             <div class="fd-btn">
               <div class="list-popup">
-                <v-menu  v-if="isOwner( item.owner.user_id, item.user_id)"
+                <v-menu  v-if="isOwner( item.owner )"
                          min-width="200px"
                          :close-on-click="true">
                   <template v-slot:activator="{ on, attrs }">

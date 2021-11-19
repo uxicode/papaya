@@ -34,7 +34,7 @@
 .home-classes {
   position:relative;
   margin-top:-110px;
-  margin-bottom:432px;
+  //margin-bottom:432px;
 
   .list-align {
     @include pos-abs($right:0, $top:0);

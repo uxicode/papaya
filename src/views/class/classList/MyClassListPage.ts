@@ -7,6 +7,7 @@ import {IUserMe} from '@/api/model/user.model';
 import MyClassService from '@/api/service/MyClassService';
 import MyClassListView from '@/views/class/classList/MyClassListView';
 // import {MYCLASS_LIST} from '@/store/mutation-class-types';
+import Btn from '@/components/button/Btn.vue';
 import PagingMixins from '@/mixin/PagingMixins';
 // import UtilsMixins from '@/mixin/UtilsMixins';
 import NoticeService from '@/api/service/NoticeService';
@@ -21,7 +22,8 @@ const MyClass = namespace('MyClass');
 @WithRender
 @Component({
   components:{
-    MyClassListView
+    MyClassListView,
+    Btn
   }
 })
 export default class MyClassListPage extends Mixins(PagingMixins) {
@@ -89,6 +91,8 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
   // private moreInfos: IClassMember[]=[];
   private moreInfos: ClassEachInfo[]=[];
   private noticeList: INotice[] = [];
+  private totalPageCount: number=0;
+
 
   @MyClass.Action
   private MYCLASS_LIST_ACTION!: ( payload?: { no: number, limit: number } )=> Promise<IMyClassList[]>;
@@ -146,6 +150,11 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
   public created() {
     this.getMyClass();
     this.getNoticeList();
+
+  }
+
+  public mounted() {
+    this.totalPageCount=this.getTotalPageCount( { total: this.totalCount, numOfPage: this.numOfPage } );
   }
 
   public setClassItemLists(): void{
@@ -202,6 +211,7 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
       }
     ];
   }
+
 
  //end : public ================================================
 
@@ -272,7 +282,7 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
     // console.log( this.endNum, this.totalCount );
 
     //마지막 범위 숫자가 총 개수 보다 크지 않으면 카드리스트를 생성시킴.
-    if( this.endNum<= this.totalCount){
+    if( this.endNum<this.totalCount){
       this.createClassCardList({begin, end});
       ++this.pageCount;
       // ++this.pageNum;
@@ -349,7 +359,7 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
       begin=this.pageCount*this.numOfPage-1;
       end = (this.pageCount*this.numOfPage)+this.numOfPage-2;
     }
-    // console.log('begin=', begin, 'end=', end);
+    console.log('begin=', begin, 'end=', end);
 
     return {
       begin,
@@ -443,7 +453,12 @@ export default class MyClassListPage extends Mixins(PagingMixins) {
       });*/
     });
   }
-  private moreClickEventHandler(): void {
+
+  /**
+   * 더보기 클
+   * @private
+   */
+  private onClickViewMoreEventHandler(): void {
     this.getMoreDisplay();
   }
   /**

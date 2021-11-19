@@ -27,6 +27,7 @@ export default class MyClassListView extends Vue{
   @Prop([String, Number])
   private listTotal: string | number | undefined;
 
+
   @Prop(Array)
   private classListData: IMyClassList[] | undefined;
 
@@ -45,6 +46,10 @@ export default class MyClassListView extends Vue{
 
   get classMoreInfo(): ClassEachInfo[]{
     return this.moreInfo;
+  }
+
+  public mounted() {
+    console.log( this.listTotal );
   }
 
 
@@ -141,13 +146,7 @@ export default class MyClassListView extends Vue{
     }
   }
 
-  /**
-   * 더보기 클릭
-   * @private
-   */
-  private moreInfoClick(): void {
-    this.$emit('moreClick');
-  }
+
 
   /**
    * 클래스 만들기 페이지로 이동

@@ -188,6 +188,15 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
 
   }
 
+  public isOwner( item: any ): boolean {
+    if (item.owner) {
+      const {owner, user_id}=item;
+      return (owner.user_id === user_id );
+    }else{
+      return false;
+    }
+  }
+
   // <scroll-observer> 태그에서 @update 이벤트 핸들러로 호출됨.
   public scrollObserver( value: boolean ) {
     this.isLoader=value;
@@ -428,9 +437,7 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
         });
     }
   }
-  private isOwner( ownerId: number, userId: number): boolean {
-    return (ownerId === userId);
-  }
+
 
   private onNoticeMenuClick() {
     this.isNoticeChk = !this.isNoticeChk;

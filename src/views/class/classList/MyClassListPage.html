@@ -24,6 +24,9 @@
           :start-num="startNum"
           :end-num="endNum"
           @updateBookmark="updateBookmark"
-          @moreClick="moreClickEventHandler"
           @listClick="gotoClassListDetailView"></my-class-list-view>
+
+
+  <div style="margin-bottom:230px;text-align: center;"><btn @btnClick="onClickViewMoreEventHandler" v-if="totalCount>numOfPage">더보기 </btn></div>
+
 </div>
