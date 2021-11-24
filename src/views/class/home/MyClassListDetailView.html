@@ -308,13 +308,13 @@
             <h3 class="fd-tit">{{ item.title }}</h3>
             <div class="fd-writer type2">
               <p class="writer">
-                <span class="name crown" :class="{'manager':isOwner( item.owner )}">{{ item.owner? item.owner.nickname : '익명' }}</span>
+                <span class="name crown" :class="{'manager':isOwner( item )}">{{ item.owner? item.owner.nickname : '익명' }}</span>
                 <span class="time">{{ item.updatedAt }}</span>
               </p>
             </div>
             <div class="fd-btn">
               <div class="list-popup">
-                <v-menu  v-if="isOwner( item.owner )"
+                <v-menu  v-if="isOwner( item )"
                          min-width="200px"
                          :close-on-click="true">
                   <template v-slot:activator="{ on, attrs }">

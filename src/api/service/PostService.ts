@@ -86,7 +86,7 @@ export class PostService{
    * @param postId
    * @param payload
    */
-  public static setPostById( classId: string | number, postId: number, payload: {type: number, title: string, text: string}): Promise<any>{
+  public static setPostById( classId: string | number, postId: number, payload: {type: number, title: string, text: string, alarmAt?: string}): Promise<any>{
     return request('put', `${CLASS_BASE_URL}/${classId}/posts/${postId}`, payload);
   }
 

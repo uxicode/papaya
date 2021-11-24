@@ -14,16 +14,9 @@
       <div class="fd-btn">
         <button type="button" class="btn only-ico-btn sm bookmark" :class="{'active': item.isBookmark }" @click="onKeepPostClick(item.id)"></button>
         <div class="list-popup" v-if="isEditAuth(  item.owner )">
-          <v-menu
-                  min-width="200px"
-                  :close-on-click="true">
+          <v-menu min-width="200px" :close-on-click="true">
             <template v-slot:activator="{ on, attrs }" >
-              <button
-                      type="button"
-                      class="list-popup-btn"
-                      v-bind="attrs"
-                      v-on="on" ><img :src="require('@/assets/images/more.svg')" alt="">
-              </button>
+              <button type="button" class="list-popup-btn" v-bind="attrs" v-on="on" ><img :src="require('@/assets/images/more.svg')" alt=""></button>
               <!-- v-if="getIsMember(  item.owner.user_id )"-->
             </template>
             <v-list>

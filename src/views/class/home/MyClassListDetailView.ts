@@ -48,19 +48,20 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
 
   private pagingCount: number=1;
 
-  private numOfPage: number=10;
+  private numOfPage: number=5;
   private mChk: boolean=false;
   private isNoticeChk: boolean=false;
   private isPageLoaded: boolean=false;
   private memberStatus: object | null=null;
   private noticeSchedule: NoticeScheduleModel[] = [];
-  private  commentsTotalItems: any[]=[];
+  private commentsTotalItems: any[]=[];
 
   private isOpenDetailSch: boolean= false;
   private isOpenDetailCurriculum: boolean=false;
   private isOpenDetailNotification: boolean=false;
 
   private deleteScheduleId: number=-1;
+  private currentPageCount: number=1;
 
 
   private scheduleTotal: number=-1;
@@ -191,6 +192,7 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
   public isOwner( item: any ): boolean {
     if (item.owner) {
       const {owner, user_id}=item;
+      // console.log( 'item=', item );
       return (owner.user_id === user_id );
     }else{
       return false;
@@ -222,67 +224,67 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
   //{total_count: 0, post_listcount: 0, post_list: Array(0)}
   //{ total: 0, class_schedule_list: Array(0)}
   // {page_item_count: 5, total: 0, curriculum_list: [], item_count: 0}
-
   private updateCallApi( name: string ): Promise<any> | null{
-    if (this.isMember) {
-      const findIdx = this.contentsInfo.findIndex((item) => item.name === name);
-      if (findIdx === -1) { return null;}
+    /*if (this.isMember) {
 
-      const infoOv=this.contentsInfo[findIdx];
-      const {last, count, promise}=infoOv;
+    }*/
+    const findIdx = this.contentsInfo.findIndex((item) => item.name === name);
+    if (findIdx === -1) { return null;}
 
-      if (last > count) {
-        let pageNum=count;
-        this.contentsInfo.splice(findIdx, 1, {...infoOv, count: ++pageNum});
-        // console.log('findIdx=',findIdx, 'infoOv.count=', infoOv.count);
-        return promise( Number(this.classID), {page_no: infoOv.count, count: this.numOfPage} );
-      }else{
-        return null;
-      }
+    const infoOv=this.contentsInfo[findIdx];
+    const {last, count, promise}=infoOv;
+    // console.log( infoOv );
+
+    if (last >=count) {
+      let pageNum=count;
+      this.contentsInfo.splice(findIdx, 1, {...infoOv, count: ++pageNum});
+      console.log('findIdx=',findIdx, 'infoOv.count=', infoOv.count);
+      //전달된 promise -> api 통신
+      return promise( Number(this.classID), {page_no: count, count: this.numOfPage} );
+    }else{
+      return null;
     }
-    return null;
-  }
-
-  /**
-   * promise.all 에 대입하기 위한 collection 만들기 -  유효한 promise 만 지정한 배열에 대입하기.
-   * @param items
-   * @param args
-   * @private
-   */
-  private validContents( items: any[], ...args: Array<Promise<any>> ): void{
-    args.forEach((promiseItem)=>{
-      if (promiseItem) {
-        items.push( promiseItem );
-      }
-    });
   }
 
   private shuffleContents( promiseItems: any[] ): unknown[] {
     const allContents: any[] = [];
-    const contentsLen=promiseItems.length;
+    const fetchItemLen=promiseItems.length;
 
     for (let i = 0; i < this.numOfPage; i++) {
       allContents[i]=[];
+      // console.log( i%fetchItemLen, Math.floor( i/fetchItemLen) );
+      /*const col=i%fetchItemLen;
+      const row=Math.floor( i/fetchItemLen);
+      const ov=promiseItems[row];
+      console.log( ov, row );*/
+      // const scheduleList=ov.class_schedule_list[col];
+      // const curriculumList=ov.curriculum_list[col];
+      // const postList=ov.post_list[col];
+
+
       //
-      for (let j = 0; j <contentsLen; j++) {
-        const ov=promiseItems[j];
-        //
-        if (j === 0) {
-          if (ov && ov.class_schedule_list[i]) {
-            const scheduleList=ov.class_schedule_list[i];
-            allContents[i].push({list: scheduleList, name:'schedule'});
-          }
-        }else if (j === 1) {
-          if (ov && ov.curriculum_list[i]) {
-            const curriculumList=ov.curriculum_list[i];
-            allContents[i].push({ list:curriculumList, name:'curriculum'});
-          }
-        }else if (j=== 2) {
-          if (ov && ov.post_list[i]) {
-            const postList=ov.post_list[i];
-            allContents[i].push({ list: postList, name:'post'});
-          }
+      for (let j = 0; j <fetchItemLen; j++) {
+         const ov=promiseItems[j];
+         //
+         // console.log( ov, promiseItems[j],'::j=', j  );
+         if (ov) {
+
+           // console.log( Math.floor(i/fetchItemLen),  j );
+         if (j === 0) {
+             if (ov.class_schedule_list[i]) {
+               allContents[i].push({list: ov.class_schedule_list[i], name:'schedule'});
+             }
+           }else if (j === 1) {
+             if ( ov.curriculum_list[i]) {
+                allContents[i].push({ list:ov.curriculum_list[i], name:'curriculum'});
+              }
+           }else if (j=== 2) {
+             if (ov.post_list[i]) {
+               allContents[i].push({ list: ov.post_list[i], name:'post'});
+             }
+           }
         }
+
       }
     }
 
@@ -295,31 +297,37 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
     const curriculumItems=await this.updateCallApi('curriculum');
     const postItems=await this.updateCallApi('post');
 
-    this.validContents(collections, scheduleItems, curriculumItems, postItems);
+    // console.log( scheduleItems, curriculumItems, postItems );
+    //  scheduleItems,  curriculumItems, postItems
+    const promiseItemPush=(): Array<Promise<any>> =>{
+      [scheduleItems, curriculumItems, postItems].forEach( (promiseItem)=>{
+        if (promiseItem) {
+          collections.push( promiseItem );
+        }
+      } );
+      return collections;
+    };
 
-    // console.log(collections.length);
-
-    if (collections.length >0) {
-      await getAllPromise( collections )
-        .then( ( items: any )=>{
-
-          // console.log(max);
-          // console.log( items );
-          // this.noticeSchedule=data[0].class_schedule_list.filter((item: any) =>item.type===1 );
-
-          const allItems=this.shuffleContents( collections );
-
-          this.allData = [...this.allData, ...allItems];
-          // console.log(this.allData);
-          // const allData=[ ...data[0].post_list,  ...data[1].class_schedule_list, ...data[2].curriculum_list];
-        }).catch((error)=>{
+    const allPromise = ( fetchItems: Array<Promise<any>> ) =>{
+      if (fetchItems.length >0) {
+        getAllPromise( fetchItems )
+          .then( ( items: any )=>{
+            // console.log( 'getAllPromise item=', items );
+            const allItems=this.shuffleContents( fetchItems );
+            this.allData = [...this.allData, ...allItems];
+            console.log( this.allData );
+          }).catch((error)=>{
           console.log('클래스 홈 error', error );
         });
-    }
+      }
+    };
+
+    const getFetchItems =await promiseItemPush();
+    // console.log( 'getFetchItems=', getFetchItems );
+    await allPromise( getFetchItems );
+    // console.log(collections.length);
 
   }
-
-
 
   private async getClassList(){
 
@@ -340,25 +348,27 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
       //각각 컨텐츠의 total = scheduleItems.total / curriculumItems.total / postsItems.post_listcount
       //total 값으로 페이징 처리 후 -> 스크롤값 end 시 --> 다음 페이징으로 api 로드 -> allData.push 처리
 
-      const scheduleTotal=scheduleItems.total;
-      const curriculumTotal=curriculumItems.total;
-      const postTotal=postsItems.post_listcount;
-
-      const schedulePagingOv= this.updatePaging(scheduleTotal, this.numOfPage);
-      const curriculumPagingOv= this.updatePaging(curriculumTotal, this.numOfPage);
-      const postPagingOv= this.updatePaging(postTotal, this.numOfPage);
-
+      // console.log( scheduleItems, curriculumItems, postsItems );
 
       this.allData = [];
       this.contentsInfo = [];
       this.noticePost=[];
 
-      this.contentsInfo.push( { name: 'schedule', total: scheduleItems.total, last: schedulePagingOv.lastPage, count: this.curSchedulePageNum, promise:ScheduleService.getAllScheduleByClassId } );
-      this.contentsInfo.push( { name: 'curriculum', total: curriculumItems.total, last: curriculumPagingOv.lastPage, count: this.curCurriculumPageNum, promise: MyClassService.getAllCurriculumByClassId  } );
-      this.contentsInfo.push( { name: 'post', total: postsItems.post_listcount, last: postPagingOv.lastPage, count: this.curPostPageNum, promise: PostService.getAllPostsByClassId } );
-      // const allCollection=[ scheduleItems, curriculumItems, postsItems ];
+      const contentSort=()=>{
+        const scheduleTotal=scheduleItems.total;
+        const curriculumTotal=curriculumItems.total;
+        const postTotal=postsItems.total_count;////post_listcount;
 
-      this.updateContents()
+        const schedulePagingOv= this.updatePaging(scheduleTotal, this.numOfPage);
+        const curriculumPagingOv= this.updatePaging(curriculumTotal, this.numOfPage);
+        const postPagingOv= this.updatePaging(postTotal, this.numOfPage);
+
+        this.contentsInfo.push( { name: 'schedule', total: scheduleTotal, last: schedulePagingOv.lastPage, count: this.curSchedulePageNum, promise:ScheduleService.getAllScheduleByClassId } );
+        this.contentsInfo.push( { name: 'curriculum', total: curriculumTotal, last: curriculumPagingOv.lastPage, count: this.curCurriculumPageNum, promise: MyClassService.getAllCurriculumByClassId  } );
+        this.contentsInfo.push( { name: 'post', total: postTotal, last: postPagingOv.lastPage, count: this.curPostPageNum, promise: PostService.getAllPostsByClassId } );
+      };
+      await contentSort();
+      await this.updateContents()
         .then(()=>{
           this.isLoader=false;
           this.noticeSchedule=scheduleItems.class_schedule_list.filter((item: any) =>item.type===1 );

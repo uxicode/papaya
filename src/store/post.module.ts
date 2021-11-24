@@ -422,13 +422,17 @@ export default class PostModule extends VuexModule {
 
     return PostService.getPostsById(classId, postId)
       .then((data) => {
-        const vote_choices=data.post.vote.vote_choices;
-        // sort 하는 이유는 투표를 선택시 선택된 항목이 데이터 배열 내에서 순서가 바뀌어서 전달 될 때가 있기 때문..
-        vote_choices.sort( (a: any, b: any )=>{
-          return a.index-b.index;
-        });
-        // this.postDetailData = data.post;
-        this.context.commit(SET_POST_DETAIL, {...data.post, ...{ vote_choices } } );
+        if (data.post.vote) {
+          const vote_choices=data.post.vote.vote_choices;
+          // sort 하는 이유는 투표를 선택시 선택된 항목이 데이터 배열 내에서 순서가 바뀌어서 전달 될 때가 있기 때문..
+          vote_choices.sort( (a: any, b: any )=>{
+            return a.index-b.index;
+          });
+          // this.postDetailData = data.post;
+          this.context.commit(SET_POST_DETAIL, {...data.post, ...{ vote_choices } } );
+        }else{
+          this.context.commit(SET_POST_DETAIL, data.post );
+        }
 
         return Promise.resolve(data.post);
       }).catch((error) => {
@@ -451,7 +455,6 @@ export default class PostModule extends VuexModule {
             //리스트에서 알림 수정은 데이터 갱신이 이루어지지만
             //상세에서 알림 수정은 데이터 갱신이 이루어 지지 않는다. -- > 수정
             this.context.commit( SET_POST_DETAIL, readData.post );
-
           });
 
         return Promise.resolve(data);

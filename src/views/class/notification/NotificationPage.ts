@@ -8,10 +8,12 @@ import Btn from '@/components/button/Btn.vue';
 import ScrollObserver from '@/components/scrollObserver/ScrollObserver.vue';
 import AddNotifyPopup from '@/views/class/notification/AddNotifyPopup';
 import NotificationListView from '@/views/class/notification/NotificationListView';
+import EditNotificationPopup from '@/views/class/notification/EditNotificationPopup';
+import NoticePopup from '@/components/modal/noticePopup.vue';
 import PagingMixins from '@/mixin/PagingMixins';
-import WithRender from './NotificationPage.html';
 import {Utils} from '@/utils/utils';
 import {RESET_POST_LIST} from '@/store/mutation-class-types';
+import WithRender from './NotificationPage.html';
 
 const MyClass = namespace('MyClass');
 const Post = namespace('Post');
@@ -22,6 +24,8 @@ const Post = namespace('Post');
     Modal,
     AddNotifyPopup,
     NotificationListView,
+    EditNotificationPopup,
+    NoticePopup,
     Btn,
     ScrollObserver
   }
@@ -31,6 +35,9 @@ export default class NotificationPage extends Mixins(PagingMixins) {
 
   @Post.Action
   private GET_POST_LIST_ACTION!: (  payload: { classId: number, paging: {page_no: number, count: number } }) => Promise<IPostModel[]>;
+
+  @Post.Action
+  private GET_POST_DETAIL_ACTION!: ( payload: { classId: number, postId: number }) =>Promise<any>;
 
   @Post.Action
   private GET_RESERVED_LIST_ACTION!: (classId: number) => Promise<any>;
@@ -57,24 +64,26 @@ export default class NotificationPage extends Mixins(PagingMixins) {
   private postTotal!: number;
 
 
-  // private postListItems: IPostModel[]= [];
-  // private reservedItems: any[] = [];
-  private reservedTotal: number=0;
   private isAddPopupOpen: boolean=false;
-  private commentsTotalItems: any[] = [];
-
   private isPageLoaded: boolean=false;
-
-  //datepicker
-  private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
   private startDateMenu: boolean=false;
   private isReservedChk: boolean=false;
   private isLoader: boolean=false;
+  private isEditPopupOpen: boolean=false;
+  private isNoticePopupOpen: boolean=false;
 
+  // private reservedItems: any[] = [];
+  private reservedTotal: number=0;
+  // private postListItems: IPostModel[]= [];
   private currentPageCount: number=1;
+
   private numOfPage: number=10;
   private lastPageCount: number=-1;
   private eventDates: any[] = [];
+  private commentsTotalItems: any[] = [];
+
+  //datepicker
+  private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
 
   get loaderModel() {
     return this.isLoader;
@@ -116,6 +125,16 @@ export default class NotificationPage extends Mixins(PagingMixins) {
         this.eventDates= Utils.getDuplicateArrayCheck( eventDates );
 
       });
+  }
+
+  public isOwner( item: any ): boolean {
+    if (item.owner) {
+      const {owner, user_id, user_member_id}=item;
+      console.log( item );
+      return (owner.user_id === user_id );
+    }else{
+      return false;
+    }
   }
 
   /**
@@ -198,9 +217,9 @@ export default class NotificationPage extends Mixins(PagingMixins) {
     };
   }
 
-  private isOwner( ownerId: number, userId: number): boolean {
+/*  private isOwner( ownerId: number, userId: number): boolean {
     return (ownerId === userId);
-  }
+  }*/
   /**
    * 댓글 총 개수 api 배열에 담아 두기.
    * @private
@@ -278,7 +297,14 @@ export default class NotificationPage extends Mixins(PagingMixins) {
   }
 
   private onDetailPostOpen(id: number) {
-    console.log('클릭');
+     this.GET_POST_DETAIL_ACTION({classId: Number(this.classID), postId: id })
+       .then( (data)=>{
+         this.isEditPopupOpen=true;
+       });
+  }
+
+  private onEditClose(  value: boolean ){
+    this.isEditPopupOpen=value;
   }
 
 

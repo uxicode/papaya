@@ -473,6 +473,16 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   private onAddReservation( alarmData: { alarmAt: string } ) {
     this.isOpenAddReservation=false;
     this.alarmData=alarmData;
+
+
+    //this.postData
+    const { id, type, title, text }= this.postDetailItem;
+    const {alarmAt}=this.alarmData;
+    //Number(this.classID)
+    PostService.setPostById( Number(this.classID), id, {type, title, text, alarmAt})
+      .then( (data)=>{
+        console.log( data );
+      });
   }
   private onReservationPopupClose(value: boolean ) {
     this.isOpenAddReservation=value;
@@ -559,13 +569,13 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
     //링크 데이터가 존재 한다면 기존 postData 에 merge 한다.
     const linkMergeData = (this.getValidLink())? {...this.postData, ...this.linkData} : {...this.postData};
     const voteMergeData = (this.voteData!==null)? {...linkMergeData, ...this.voteData} : {...linkMergeData};
-    const mergeData= (this.alarmData.alarmAt!=='')? {...voteMergeData, ...this.alarmData} : {...voteMergeData};
+    // const mergeData= (this.alarmData.alarmAt!=='')? {...voteMergeData, ...this.alarmData} : {...voteMergeData};
 
 
     //formdata 에 데이터를 적용하려면 문자열 타입 직렬화 해야 한다.
-    console.log('mergedata=', mergeData);
+    console.log('mergedata=', voteMergeData);
 
-    const temp = JSON.stringify( mergeData );
+    const temp = JSON.stringify( voteMergeData );
     this.formData.append('data', temp );
     const allEditInfo=PostService.setPostInfoAllById( Number( this.classID ), id, this.formData );
     editPromiseItems.push( allEditInfo );

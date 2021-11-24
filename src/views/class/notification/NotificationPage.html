@@ -15,13 +15,7 @@
                      content-class="time-select-menu bg-white" // 해당 메뉴에 추가 클래스
                      offset-y   // 메뉴 버튼을 중심으로 y 값으로 정렬 배치
                      -->
-        <v-menu
-                origin="left top"
-                v-model="startDateMenu"
-                :close-on-content-click="false"
-                transition="scale-transition"
-                offset-y
-                min-width="auto">
+        <v-menu origin="left top" v-model="startDateMenu" :close-on-content-click="false" transition="scale-transition" offset-y min-width="auto">
           <template v-slot:activator="{ on, attrs }">
             <button type="button" class="btn form-btn form-calendar" v-on="on"></button>
           </template>
@@ -56,7 +50,7 @@
                         min-width="200px"
                         :close-on-click="true">
                   <template v-slot:activator="{ on, attrs }">
-                    <button v-if="isOwner( item.owner.user_id, item.user_id)"
+                    <button v-if="isOwner( item )"
                             type="button"
                             class="list-popup-btn"
                             v-bind="attrs"
@@ -64,7 +58,7 @@
                     </button>
                   </template>
                   <v-list>
-                    <v-list-item @click="">
+                    <v-list-item @click="onDetailPostOpen(item.id)">
                       <v-list-item-title>알림 수정</v-list-item-title>
                     </v-list-item>
                     <v-list-item @click="onDeleteReservedByPostId( item.id )">
@@ -113,6 +107,10 @@
   <!-- start: 알림 신규 생성 -->
   <add-notify-popup :is-open="isAddPopupOpen" @change="onAddPostPopupStatus" @submit="onAddPost"></add-notify-popup>
   <!-- end: 알림 신규 생성 -->
+
+  <edit-notification-popup :is-open="isEditPopupOpen" @change="onEditClose"></edit-notification-popup>
+
+  <notice-popup :is-open="isNoticePopupOpen" title="접근 권한 안내" msg="해당 알림에 대한 수정 권한이 없습니다."></notice-popup>
 
 <!--  <div class="lds-ripple" v-if="isLoading"><div></div><div></div></div>-->
 </section>
