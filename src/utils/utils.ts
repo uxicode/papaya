@@ -511,6 +511,17 @@ class Utils{
     return ({}).toString.call(value) === '[object Array]';
   }
 
+  public static getUUID(): string{
+    let dt = new Date().getTime();
+    return String( 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx' ).replace( /[xy]/g, (c: any)=>{
+      // tslint:disable-next-line:no-bitwise
+      const r=(dt + Math.random() * 16)%16 | 0;
+      dt=Math.floor( dt / 16 );
+      // tslint:disable-next-line:no-bitwise
+      return (c === 'x' ? r : ( r & 0x3 | 0x8)).toString( 16 );
+    } );
+  }
+
 
   /*
   어떤 페이지를 로딩하는 데 필요한 전체 시간 계산하기.

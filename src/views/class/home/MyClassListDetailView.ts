@@ -21,6 +21,7 @@ import Btn from '@/components/button/Btn.vue';
 import PagingMixins from '@/mixin/PagingMixins';
 
 import WithRender from './MyClassListDetailView.html';
+import { Utils } from '@/utils/utils';
 
 
 
@@ -161,6 +162,10 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
     return this.curriculumDetailItem.course_list;
   }
 
+  get uuid() {
+    return Utils.getUUID();
+  }
+
   //myClassHeader 에서 select 로 가입클래스를 선택하면 classId 및 클래스 홈의 데이를 변경하는  MYCLASS_HOME() action 함수를  ㅌ
   // 호출 하지만 정작 컨텐츠가 해당 사항을 반영하지 못하기에 ( classId 가 바뀌는 것을 header 와 sidemenu 만 인지된다. ) 아래처럼 watch 를 써서 classId 를 체크 하게 한다.
   //
@@ -197,6 +202,10 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
     }else{
       return false;
     }
+  }
+
+  public getRandom( min: number, max: number): number {
+    return Utils.getRandomNum( min, max );
   }
 
   // <scroll-observer> 태그에서 @update 이벤트 핸들러로 호출됨.
@@ -248,51 +257,60 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
 
   private shuffleContents( promiseItems: any[] ): unknown[] {
     const allContents: any[] = [];
-    const fetchItemLen=promiseItems.length;
+    // const fetchItemLen=promiseItems.length;
 
-    for (let i = 0; i < this.numOfPage; i++) {
-      allContents[i]=[];
+    /*for (let i = 0; i < this.numOfPage; i++) {
+      // allContents[i]=[];
       // console.log( i%fetchItemLen, Math.floor( i/fetchItemLen) );
-      /*const col=i%fetchItemLen;
+      const col=i%fetchItemLen;
       const row=Math.floor( i/fetchItemLen);
       const ov=promiseItems[row];
-      console.log( ov, row );*/
-      // const scheduleList=ov.class_schedule_list[col];
-      // const curriculumList=ov.curriculum_list[col];
-      // const postList=ov.post_list[col];
+      console.log( ov, row );
+      const scheduleList=ov.class_schedule_list[col];
+      const curriculumList=ov.curriculum_list[col];
+      const postList=ov.post_list[col];
+    }*/
 
+    promiseItems.forEach((ov: any)=>{
+      if (ov.hasOwnProperty( 'class_schedule_list' )) {
+        allContents.push({list: ov.class_schedule_list, name:'schedule'});
+      }else if (ov.hasOwnProperty( 'curriculum_list' )) {
+        allContents.push({ list: ov.curriculum_list, name:'curriculum'});
+      }else if (ov.hasOwnProperty( 'post_list' )) {
+        allContents.push({ list: ov.post_list, name:'post'});
+      }
+    });
+    /*for (let i=0; i<fetchItemLen;i++) {
+      //updateCallApi 로 통신한 promise items
+      const ov=promiseItems[i];
 
       //
-      for (let j = 0; j <fetchItemLen; j++) {
-         const ov=promiseItems[j];
-         //
-         // console.log( ov, promiseItems[j],'::j=', j  );
-         if (ov) {
+      // console.log( ov, promiseItems[j],'::j=', j  );
+      if (ov) {
 
-           // console.log( Math.floor(i/fetchItemLen),  j );
-         if (j === 0) {
-             if (ov.class_schedule_list[i]) {
-               allContents[i].push({list: ov.class_schedule_list[i], name:'schedule'});
-             }
-           }else if (j === 1) {
-             if ( ov.curriculum_list[i]) {
-                allContents[i].push({ list:ov.curriculum_list[i], name:'curriculum'});
-              }
-           }else if (j=== 2) {
-             if (ov.post_list[i]) {
-               allContents[i].push({ list: ov.post_list[i], name:'post'});
-             }
-           }
+        // console.log( Math.floor(i/fetchItemLen),  j );
+        if (j === 0) {
+          if (ov.class_schedule_list[i]) {
+            allContents.push({list: ov.class_schedule_list[i], name:'schedule'});
+          }
+        }else if (j === 1) {
+          if ( ov.curriculum_list[i]) {
+            allContents.push({ list:ov.curriculum_list[i], name:'curriculum'});
+          }
+        }else if (j=== 2) {
+          if (ov.post_list[i]) {
+            allContents.push({ list: ov.post_list[i], name:'post'});
+          }
         }
-
       }
-    }
+
+    }*/
 
     return allContents;
   }
 
   private async updateContents() {
-    const collections: any[] = [];
+
     const scheduleItems=await this.updateCallApi('schedule');
     const curriculumItems=await this.updateCallApi('curriculum');
     const postItems=await this.updateCallApi('post');
@@ -300,6 +318,7 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
     // console.log( scheduleItems, curriculumItems, postItems );
     //  scheduleItems,  curriculumItems, postItems
     const promiseItemPush=(): Array<Promise<any>> =>{
+      const collections: any[] = [];
       [scheduleItems, curriculumItems, postItems].forEach( (promiseItem)=>{
         if (promiseItem) {
           collections.push( promiseItem );
@@ -313,7 +332,7 @@ export default class MyClassListDetailView extends Mixins(PagingMixins){
         getAllPromise( fetchItems )
           .then( ( items: any )=>{
             // console.log( 'getAllPromise item=', items );
-            const allItems=this.shuffleContents( fetchItems );
+            const allItems=this.shuffleContents( items );
             this.allData = [...this.allData, ...allItems];
             console.log( this.allData );
           }).catch((error)=>{

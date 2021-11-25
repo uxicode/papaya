@@ -52,7 +52,7 @@ export default class ScrollObserver extends Vue{
   }
 
   public getElement( selector: string ) {
-    return document.querySelector(selector) as Element;
+    return document.querySelector(selector) as HTMLElement;
   }
 
   public loaderView( isLoading: boolean= true) {

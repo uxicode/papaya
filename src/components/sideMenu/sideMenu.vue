@@ -124,8 +124,11 @@ export default class SideMenu extends Vue{
   private isConfirmed: boolean=false; // 가입 승인 여부
 
   get isOwner(): boolean{
-    // console.log(this.myClassHomeModel);
-    return (this.myClassHomeModel.owner_id === this.myClassHomeModel.me.user_id);
+    if (this.myClassHomeModel.me) {
+      return (this.myClassHomeModel.owner_id === this.myClassHomeModel.me.user_id);
+    }else{
+      return false;
+    }
   }
 
   get sideMenuModel(): ISideMenu[]{
