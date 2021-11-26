@@ -1,6 +1,3 @@
-import {IScheduleTotal} from '@/views/model/schedule.model';
-import {PartialExcept} from '@/types/types';
-
 interface IPostModel{
   attachment: [];
   class_id: number;
@@ -154,6 +151,7 @@ interface ICreatePost{
 
 interface IVoteModel{
   vote: {
+    id?: number;
     parent_id: number;
     type: number;
     title: string;

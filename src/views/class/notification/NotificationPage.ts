@@ -79,16 +79,24 @@ export default class NotificationPage extends Mixins(PagingMixins) {
 
   private numOfPage: number=10;
   private lastPageCount: number=-1;
+  private editType: string='post';
   private eventDates: any[] = [];
   private commentsTotalItems: any[] = [];
 
   //datepicker
   private startDatePickerModel: string= new Date().toISOString().substr(0, 10);
 
+  get editTypeModel() {
+    return this.editType;
+  }
+
+  set editTypeModel(value: string) {
+    this.editType=value;
+  }
+
   get loaderModel() {
     return this.isLoader;
   }
-
 
   get reservedChk(): boolean {
     return this.isReservedChk;
@@ -296,7 +304,7 @@ export default class NotificationPage extends Mixins(PagingMixins) {
     await this.GET_RESERVED_LIST_ACTION(Number(this.classID));
   }
 
-  private onDetailPostOpen(id: number) {
+  private onEditReservedOpen(id: number) {
      this.GET_POST_DETAIL_ACTION({classId: Number(this.classID), postId: id })
        .then( (data)=>{
          this.isEditPopupOpen=true;

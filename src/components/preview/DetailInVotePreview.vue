@@ -14,26 +14,32 @@
         </ul>
       </div>
       <div class="vote-checkbox" v-if="items[choicesList]!==null">
-        <div class="vote-select" v-for="(choiceItem, index) in items[choicesList]" :key="`choiceItem-${index}`">
-          <!--<div class="btn-radio">
-            <input type="radio" name="email" id="radio1">
-            <label for="radio1">경주<br><span><em class="vote-current">0</em>명</span></label>
-          </div>-->
 
-          <check-button :btn-id="`check-${index}`"
-                        :check-name="`check-${index}`"
-                        type="round"
-                        :checked="getChoiceCheck( choiceItem )"
-                        :btn-value="choiceItem.id"
-                        @click="optionFindChange">{{ choiceItem.text }}<br><span><em class="vote-current">{{ choiceItem[userChoices].length }}</em>명</span></check-button>
+        <template v-if="isMultipleChoice()">
+          <div class="vote-select" v-for="(choiceItem, index) in items[choicesList]" :key="`choiceItem-${index}-chk`">
+            <!--<div class="btn-radio">
+             <input type="radio" name="email" id="radio1">
+             <label for="radio1">경주<br><span><em class="vote-current">0</em>명</span></label>
+           </div>-->
 
-          <!--<radio-button :btn-id="`radio-${index}`"
+            <check-button :btn-id="`check-${index}`"
+                          :check-name="`check-${index}`"
+                          type="round"
+                          :checked="getChoiceCheck( choiceItem )"
+                          :btn-value="choiceItem.id"
+                          @click="optionFindChange">{{ choiceItem.text }}<br><span><em class="vote-current">{{ choiceItem[userChoices].length }}</em>명</span></check-button>
+          </div>
+        </template>
+        <template v-else>
+          <div class="vote-select" v-for="(choiceItem, index) in items[choicesList]" :key="`choiceItem-${index}-rad`">
+          <radio-button :btn-id="`radio-${index}`"
                         radio-name="radio"
-                        :btn-value="item.text"
-                        :active-value="radioValue"
-                        v-model="radioValue"
-                        @click="optionFindChange">{{ item.text }}<br><span><em class="vote-current">0</em>명</span></radio-button>-->
-        </div>
+                        :btn-value="choiceItem.id"
+                        :active-value="( getChoiceCheck(choiceItem) )? choiceItem.id : ''"
+                        @click="optionFindChange">{{ choiceItem.text }}<br><span><em class="vote-current">{{ choiceItem[userChoices].length }}</em>명</span></radio-button>
+          </div>
+        </template>
+
       </div>
     </div>
   </div>
@@ -98,7 +104,9 @@ export default class DetailInVotePreview extends Vue{
     return findItem.length>0;
   }
 
-  // private radioValue: string = '';
+  public isMultipleChoice(): boolean{
+    return this.items[this.choice];
+  }
 
   public isVote(item: Date | null): boolean {
     if (item === null) {return true;}
@@ -108,9 +116,9 @@ export default class DetailInVotePreview extends Vue{
   }
   //class - 724 / postid - 1302 /  vote - 206 ( 369, 370, 371 )
   public optionFindChange(value: string | number | boolean, checked: boolean) {
-
     this.$emit('checked', value, checked );
   }
+
 
 }
 </script>

@@ -42,6 +42,7 @@
 
         <div class="accordion-cnt" id="accordion1" :class="{'active':reservedChk}" v-if="reservedTotalItem>0" >
           <div class="notify-feed" v-for="(item, index) in reservedItems" :key="`reserve-${index}`">
+            {{item}}
             <h3 class="fd-tit">{{ item.title }}</h3>
             <p class="fd-schedule">{{item.startAt}}에 등록 예정</p>
             <div class="fd-btn">
@@ -58,7 +59,7 @@
                     </button>
                   </template>
                   <v-list>
-                    <v-list-item @click="onDetailPostOpen(item.id)">
+                    <v-list-item @click="onEditReservedOpen(item.id)">
                       <v-list-item-title>알림 수정</v-list-item-title>
                     </v-list-item>
                     <v-list-item @click="onDeleteReservedByPostId( item.id )">
@@ -76,10 +77,8 @@
 
     <template v-if="postListItemsModel.length>0">
       <!-- start: 리스트 뷰 :post-list-items="postListItemsModel" -->
-      <notification-list-view
-              :comments-total-items="commentsTotalItemsModel"
-              @click:detailPost="onDetailPostOpen">
-      </notification-list-view>
+<!--         @click:detailPost="onDetailPostOpen"-->
+      <notification-list-view :comments-total-items="commentsTotalItemsModel" ></notification-list-view>
       <!-- start: scroll paging -->
       <scroll-observer :is-loader="loaderModel" @update="scrollObserver"></scroll-observer>
       <!-- end: scroll paging -->
@@ -108,7 +107,7 @@
   <add-notify-popup :is-open="isAddPopupOpen" @change="onAddPostPopupStatus" @submit="onAddPost"></add-notify-popup>
   <!-- end: 알림 신규 생성 -->
 
-  <edit-notification-popup :is-open="isEditPopupOpen" @change="onEditClose"></edit-notification-popup>
+  <edit-notification-popup :is-open="isEditPopupOpen" @change="onEditClose" ></edit-notification-popup>
 
   <notice-popup :is-open="isNoticePopupOpen" title="접근 권한 안내" msg="해당 알림에 대한 수정 권한이 없습니다."></notice-popup>
 

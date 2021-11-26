@@ -1,5 +1,5 @@
 import {request} from '@/api/service/AxiosService';
-import {CLASS_BASE_URL, USER_BASE_URL} from '@/api/base';
+import {CLASS_BASE_URL, USER_BASE_URL, VOTE_BASE_URL} from '@/api/base';
 import {IKeepPostList} from '@/views/model/my-class.model';
 import {IAddVoteModel, IPostInLinkModel, IPostModel, IVoteModel} from '@/views/model/post.model';
 
@@ -67,18 +67,22 @@ export class PostService{
 
 
   public static setAddVote(classId: string | number, vote: IAddVoteModel ): Promise<any>{
-    return request('post', '/vote', vote );
+    return request('post', `${VOTE_BASE_URL}`, vote );
   }
 
   public static deleteVote( voteId: number): Promise<any>{
-    return request('delete', `/vote/${voteId}`);
+    return request('delete', `${VOTE_BASE_URL}/${voteId}`);
+  }
+
+  public static deleteVoteListById( voteId: number, voteChoiceId: number): Promise<any>{
+    return request('delete', `${VOTE_BASE_URL}/${voteId}/vote_choice/${voteChoiceId}`);
   }
 
   public static setUserVoteSelect( voteId: string | number, memberId: number, payload: { vote_choice_ids: number[] }): Promise<any>{
-    return request('post', `/vote/${voteId}/member/${memberId}/select`, payload);
+    return request('post', `${VOTE_BASE_URL}/${voteId}/member/${memberId}/select`, payload);
   }
   public static setUserVoteCancel( voteId: string | number, memberId: number, payload: { vote_choice_ids: number[] }): Promise<any>{
-    return request('delete', `/vote/${voteId}/member/${memberId}/select`, payload);
+    return request('delete', `${VOTE_BASE_URL}/${voteId}/member/${memberId}/select`, payload);
   }
   /**
    * 게시글 수정 - 공지/일반으로 변경 혹은 게시글( 제목/내용 수정  )

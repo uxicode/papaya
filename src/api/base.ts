@@ -11,3 +11,4 @@ export const SCHOOL_URL: string = '/school';
 export const USER_ME: string = '/users/me';
 export const USER_KEEP: string = 'users/me/keep';
 export const PERSONAL: string = '/personal';
+export const VOTE_BASE_URL: string = '/vote';

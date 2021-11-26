@@ -10,6 +10,7 @@ import Modal from '@/components/modal/modal.vue';
 import ImagePreview from '@/components/preview/imagePreview.vue';
 import FilePreview from '@/components/preview/filePreview.vue';
 import WithRender from '@/views/class/notification/EditVotePopup.html';
+import { PostService } from '@/api/service/PostService';
 
 
 const MyClass = namespace('MyClass');
@@ -63,6 +64,7 @@ export default class EditVotePopup extends Vue {
   private voteData: IVoteModel= {
     vote: {
       parent_id:-1,
+      id:0,
       type: 0,
       title: 'none',
       multi_choice: 0,
@@ -95,7 +97,7 @@ export default class EditVotePopup extends Vue {
 
   get readVoteData(): IVoteModel{
     this.resetData();
-    console.log(this.voteData);
+    console.log('voteData=', this.voteData);
     return this.voteData;
   }
 
@@ -132,7 +134,7 @@ export default class EditVotePopup extends Vue {
         type,
         vote_choices
       } = this.voteItems;
-      console.log(this.voteItems);
+      // console.log(this.voteItems);
       //투표
       this.voteType=( type===0 )? 'txt' : 'date';
 
@@ -145,6 +147,7 @@ export default class EditVotePopup extends Vue {
       this.voteData= {
         vote: {
           parent_id,
+          id,
           type,
           title,
           multi_choice,
@@ -219,7 +222,7 @@ export default class EditVotePopup extends Vue {
   }
 
   private checkMove(e: MoveEvent<any> ) {
-    window.console.log('Future index: ' + e.draggedContext.futureIndex);
+    console.log('Future index: ' + e.draggedContext.futureIndex);
   }
 
   private onDragStart() {
@@ -259,6 +262,24 @@ export default class EditVotePopup extends Vue {
 
   private onVoteSubmit() {
     this.voteData.vote.type=(this.voteType==='txt')? 0 : 1;
+
+    this.voteData.vote_choice_list.forEach((item, idx)=>{
+      console.log(item.text==='', item.text );
+      if( item.text===''){
+        const voteID=this.voteItems.id;
+        const {id}=this.voteItems.vote_choices[idx];
+        this.voteData.vote_choice_list.splice(idx, 1);
+
+        if (id) {
+          PostService.deleteVoteListById( voteID, id )
+            .then((data)=>{
+              console.log( 'deleteVoteListById call=', data );
+            });
+        }
+
+      }
+    });
+    // this.voteData.vote_choice_list[idx].text
     this.$emit('submit', this.voteData);
   }
 

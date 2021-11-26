@@ -3,11 +3,10 @@ import {namespace} from 'vuex-class';
 import {IClassInfo} from '@/views/model/my-class.model';
 import {Utils} from '@/utils/utils';
 import {
-  IAttachFileModel,
   ICreatePost,
   ILinkModel,
-  IPostInLinkModel,
-  IPostModel, IReadAbleVote,
+  IPostModel,
+  IReadAbleVote,
   IVoteModel
 } from '@/views/model/post.model';
 import AddVotePopup from '@/views/class/notification/AddVotePopup';
@@ -15,7 +14,6 @@ import AddLinkPopup from '@/views/class/notification/AddLinkPopup';
 import AddReservationPopup from '@/views/class/notification/AddReservationPopup';
 import {ImageFileService} from '@/views/service/preview/ImageFileService';
 import {AttachFileService} from '@/views/service/preview/AttachFileService';
-import ImageSettingService from '@/views/service/profileImg/ImageSettingService';
 import TxtField from '@/components/form/txtField.vue';
 import Btn from '@/components/button/Btn.vue';
 import Modal from '@/components/modal/modal.vue';
@@ -54,6 +52,9 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   @Prop(Boolean)
   private isOpen!: boolean;
 
+  @Prop(String)
+  private editType!: string;
+
 
   @Post.Mutation
   private SET_VOTE!: (data: IReadAbleVote)=> void;
@@ -73,12 +74,6 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   @Post.Action
   private EDIT_POST_ACTION!: (payload: {  classId: number, postId: number, promise: Array<Promise<any>> }) => Promise<any>;
 
-/*  @Post.Action
-  private DELETE_POST_FILE_ACTION!: (payload: { classId: number, postId: number, ids: number[] })=>Promise<any>;*/
-
-/*  @Post.Action
-  private EDIT_POST_TXT_ACTION!: ( payload: { classId: string | number, postId: number, tit: string, txt: string } )=>Promise<any>;*/
-
   @Post.Action
   private ADD_VOTE_ACTION!: (payload: { classId: number, postId: number, voteData: IVoteModel})=>Promise<any>;
 
@@ -94,8 +89,8 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
   @Post.Getter
   private postDetailItem!: IPostModel;
 
-  @Post.Getter
-  private commentItems!: any[];
+  /*@Post.Getter
+  private commentItems!: any[];*/
 
   @Post.Getter
   private replyItems!: any[];
@@ -155,9 +150,9 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
     return ( this.linkData )? this.linkData.link.title : null;
   }
 
-  get commentItemsModel() {
+  /*get commentItemsModel() {
     return this.commentItems;
-  }
+  }*/
 
   get replyItemsModel() {
     return this.replyItems;
@@ -167,7 +162,7 @@ export default class EditNotificationPopup extends  Mixins(UtilsMixins){
    * 클릭한 상세 정보값이 들어오고 난 후에 postData 를 갱신해야 한다.
    */
   get postDetailModel():  IPostModel{
-    const {title, text, vote, link, attachment }=this.postDetailItem;
+    const {title, text, vote, link, attachment }=this.postDetailItem;//(this.editType==='post')?
     // this.alarmData = { alarmAt };
     this.postData= { title, text };
 
