@@ -503,12 +503,12 @@ export default class ClassModule extends VuexModule {
     @Action({rawError: true})
     public [GET_CLASS_MEMBER_INFO](payload: { classId: number, memberId: number }): Promise<IClassMemberInfo>{
         return ClassMemberService.getClassMemberInfo(payload.classId, payload.memberId)
-          .then((data) => {
+          .then((data: IClassMemberInfo) => {
               this.context.commit(SET_CLASS_MEMBER_INFO, data);
               // console.log(this.memberInfo);
               return Promise.resolve(this.memberInfo);
           })
-          .catch((error) => {
+          .catch((error: any) => {
               console.log(error);
               return Promise.reject(error);
           });
