@@ -14,8 +14,7 @@
   vuetify 는 typescript / vue-template-compiler 가 먼저 깔려 있고 이미 프로젝트가 진행된 상태라면
   ```vue add vuetify``` 명령어가 아닌 npm install vuetify --save 로 직접 설치 하는 것이 바람직하다.
 
-## Swagger api URL
-- http://211.254.212.184:8089/api-docs/#/
+
 
 ## Web publishing  ( scss compile )
 ```
